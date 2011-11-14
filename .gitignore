@@ -1,0 +1,15 @@
+target/
+*/target/
+*/bin-debug/
+*~
+.actionScriptProperties
+.flexConfig.xml
+.flexProperties
+.flexLibProperties
+.project
+.settings/
+.classpath
+mydlp-ui-domain-as3/src/main/flex/com/mydlp/ui/domain/*.as
+mydlp-ui-webapp/hsqldb/MyDLP.log
+mydlp-ui-webapp/hsqldb/MyDLP.properties
+mydlp-ui-webapp/hsqldb/MyDLP.script

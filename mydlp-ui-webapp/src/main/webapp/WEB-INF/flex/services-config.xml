@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<services-config>
+  <services>
+    <service-include file-path="remoting-config.xml" />
+
+    <default-channels>
+      <channel ref="my-amf"/>
+    </default-channels>
+  </services>
+
+  <channels>
+    <channel-definition id="my-amf" class="mx.messaging.channels.AMFChannel">
+      <endpoint url="http://{server.name}:{server.port}/spring/messagebroker/amf" class="flex.messaging.endpoints.AMFEndpoint" />
+    <!-- 
+ 
+      <endpoint url="http://localhost:8080/spring/messagebroker/amf" class="flex.messaging.endpoints.AMFEndpoint" />
+       -->
+      
+      <properties>
+        <polling-enabled>false</polling-enabled>
+      </properties>
+    </channel-definition>
+  </channels>
+</services-config>

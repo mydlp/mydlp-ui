@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>com.mydlp.ui</groupId>
+    <artifactId>mydlp-ui</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+  </parent>
+
+  <!-- The Basics -->
+  <groupId>com.mydlp.ui</groupId>
+  <artifactId>mydlp-ui-flex</artifactId>
+  <packaging>swf</packaging>
+  <name>mydlp-ui Flex Application</name>
+  <url>http://www.mydlp.com/</url>
+  
+  <dependencies>
+    <dependency>
+      <groupId>com.mydlp.ui</groupId>
+      <artifactId>mydlp-ui-domain-as3</artifactId>
+      <version>${mydlp-ui.version}</version>
+      <type>swc</type>
+    </dependency>
+    <dependency>
+      <groupId>com.adobe.flex.framework</groupId>
+      <artifactId>flex-framework</artifactId>
+      <version>${flex.version}</version>
+      <type>pom</type>
+    </dependency>
+    <dependency> 
+      <groupId>dpHibernate</groupId> 
+      <artifactId>dpHibernate</artifactId> 
+      <version>2.0-RC6</version> 
+      <type>swc</type>
+    </dependency>
+  </dependencies>
+
+  <!-- Build Settings -->
+  <build>
+    <sourceDirectory>src/main/flex</sourceDirectory>
+    <plugins>
+      <plugin>
+        <groupId>org.sonatype.flexmojos</groupId>
+        <artifactId>flexmojos-maven-plugin</artifactId>
+        <version>${flexmojos.version}</version>
+        <extensions>true</extensions>
+        <configuration>
+          <debug>true</debug>
+          <coverageViewerPath />
+          <storepass />
+          <services>${basedir}/../mydlp-ui-webapp/src/main/webapp/WEB-INF/flex/services-config.xml</services> 
+        </configuration>
+	    <dependencies>
+          <dependency>
+            <groupId>com.adobe.flex</groupId>
+            <artifactId>compiler</artifactId>
+            <version>${flex.version}</version>
+            <type>pom</type>
+          </dependency>	
+	    </dependencies>
+      </plugin>
+    </plugins>
+  </build>
+
+</project>

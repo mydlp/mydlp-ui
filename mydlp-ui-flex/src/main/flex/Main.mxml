@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Application xmlns:fx="http://ns.adobe.com/mxml/2009" xmlns:s="library://ns.adobe.com/flex/spark"
+               xmlns:mx="library://ns.adobe.com/flex/mx" 
+			   xmlns:api="com.mydlp.ui.flex.api.*"
+			   minHeight="768" minWidth="1024"
+			   applicationComplete="{ro.getInventory.send()}" >
+	
+	<fx:Declarations>
+		<api:RemoteEntity id="ro" destination="inventoryBRS" />
+	</fx:Declarations>
+
+    <s:Panel>
+      <mx:Tree id="messagesView" width="500"  labelField="name"
+			   dataProvider="{ro.getInventory.lastResult}"
+			   showRoot="false" />
+    </s:Panel>
+</s:Application>

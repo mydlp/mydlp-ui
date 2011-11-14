@@ -1,0 +1,58 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.mydlp.ui</groupId>
+  <artifactId>mydlp-ui</artifactId>
+  <packaging>pom</packaging>
+  <version>1.0.0-SNAPSHOT</version>
+
+  <properties>
+    <mydlp-ui.version>1.0.0-SNAPSHOT</mydlp-ui.version>
+    <flex.version>4.5.0.20967</flex.version>
+    <flexmojos.version>4.0-RC2</flexmojos.version>
+    <dpHibernate.version>2.0-RC6</dpHibernate.version>
+    <org.springframework.version>3.0.6.RELEASE</org.springframework.version>
+    <spring-flex.version>1.0.3.RELEASE</spring-flex.version>
+    <org.hibernate.version>3.6.8.Final</org.hibernate.version>
+    <jpa.version>2.0-cr-1</jpa.version>
+    <aspectj.version>1.6.11</aspectj.version>
+
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+
+  <modules>
+    <module>mydlp-ui-domain</module>
+    <module>mydlp-ui-domain-as3</module>
+    <module>mydlp-ui-flex</module>
+    <module>mydlp-ui-dao</module>
+    <module>mydlp-ui-remoting-blazeds</module>
+    <module>mydlp-ui-webapp</module>
+  </modules>  
+
+  <repositories>
+    <repository>
+      <id>flex-mojos-repository</id>
+      <url>http://repository.sonatype.org/content/groups/flexgroup</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>	
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+  </repositories>
+  
+  <pluginRepositories>
+    <pluginRepository>
+      <id>flex-mojos-plugin-repository</id>
+      <url>http://repository.sonatype.org/content/groups/flexgroup</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </pluginRepository>
+  </pluginRepositories>
+
+</project>
