@@ -1,4 +1,4 @@
-package com.mydlp.ui.flex.api
+package com.mydlp.ui.api
 {
 	import flash.utils.flash_proxy;
 	

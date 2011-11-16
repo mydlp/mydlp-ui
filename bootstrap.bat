@@ -6,8 +6,6 @@ cmd /c "mvn install:install-file -DgroupId=dpHibernate -DartifactId=dpHibernate 
 
 cmd /c "mvn clean"
 
-cmd /c "cd mydlp-ui-domain-as3\src\main\flex\com\mydlp\ui\domain && del /q *"
-
 cmd /c "mvn install"
 
 cmd /c "cd mydlp-ui-domain && mvn eclipse:eclipse"

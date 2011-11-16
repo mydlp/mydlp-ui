@@ -9,11 +9,11 @@ alter table InventoryBase add constraint FKD4AAB62DD4393567 foreign key (categor
 DISCONNECT
 /*C3*/SET SCHEMA PUBLIC
 CONNECT USER SA
-INSERT INTO INVENTORYBASE VALUES('InventoryCategory',1,'cat1',NULL,NULL,NULL,NULL)
-INSERT INTO INVENTORYBASE VALUES('InventoryCategory',2,'cat2',NULL,NULL,NULL,NULL)
+INSERT INTO INVENTORYBASE VALUES('InventoryCategory',1,NULL,'inventory.networks',NULL,NULL,NULL)
+INSERT INTO INVENTORYBASE VALUES('InventoryCategory',2,NULL,'inventory.matchers',NULL,NULL,NULL)
 INSERT INTO INVENTORYBASE VALUES('InventoryCategory',3,'cat3',NULL,NULL,NULL,1)
-INSERT INTO INVENTORYBASE VALUES('InventoryItem',4,'item1',NULL,1,'Matcher',1)
-INSERT INTO INVENTORYBASE VALUES('InventoryItem',5,'item21',NULL,2,'Matcher',2)
-INSERT INTO INVENTORYBASE VALUES('InventoryItem',6,'item22',NULL,3,'Matcher',2)
-INSERT INTO INVENTORYBASE VALUES('InventoryItem',7,'item3',NULL,4,'Matcher',3)
+INSERT INTO INVENTORYBASE VALUES('InventoryItem',4,NULL,'inventory.networks.all',1,'Network',1)
+INSERT INTO INVENTORYBASE VALUES('InventoryItem',5,NULL,'inventory.matchers.iban',1,'Matcher',2)
+INSERT INTO INVENTORYBASE VALUES('InventoryItem',6,NULL,'inventory.matchers.cc',2,'Matcher',2)
+INSERT INTO INVENTORYBASE VALUES('InventoryItem',7,'my matcher',NULL,4,'Matcher',3)
 DISCONNECT

@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Tree xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx"
+		 labelField="label"
+		 width="300" height="100%"
+		 showRoot="false"
+		 allowMultipleSelection="true"
+		 creationComplete="populateTree()"
+		 dataProvider="{ro.getInventory.lastResult}" xmlns:api="com.mydlp.ui.api.*">
+	<fx:Script>
+		<![CDATA[
+			import com.mydlp.ui.domain.InventoryCategory;
+			import com.mydlp.ui.domain.InventoryItem;
+			import com.mydlp.ui.util.LangUtil;
+			
+			import mx.collections.ArrayCollection;
+			
+			[Bindable]
+			public var inventoryArray:ArrayCollection = new ArrayCollection();
+			
+			public var ddObject:Object;
+		
+			/*
+			dragEnabled="true" dropEnabled="true" 
+			dragEnter="onDragEnter(event)" dragDrop="dragAndDropHandler(event)"
+			
+			protected function onDragEnter(event:DragEvent):void
+			{
+				ddObject = this.parentApplication["inventoryTree"]["selectedItem"];
+			}
+			
+			protected function dragAndDropHandler(event:DragEvent):void
+			{
+				var dropParent:int;
+				var myIndex:int;
+				this.selectedIndex = this.calculateDropIndex();
+				trace("ID:" + this.selectedItem["id"]);//must be fixed!! eger itemi alip aldigi yere birakirsa categoryid sini set ettigim icin sikinti cikiyor. 
+				ddObject["categoryId"] = this.selectedItem["id"];
+				if(ddObject["className"] == "InventoryItem")
+					DAOUtil.save("InventoryItem", ddObject, successHandler);
+				if(ddObject["className"] == "InventoryCategory")
+					DAOUtil.save("InventoryCategory", ddObject, successHandler);
+			}
+			*/
+			
+			protected function populateTree():void
+			{
+				ro.getInventory.send();
+				populateContextMenu();
+				//this.addEventListener(MouseEvent.MOUSE_DOWN, mouseDown);
+			}
+			
+			protected function populateContextMenu(): void {
+				if (!this.contextMenu) {
+					this.contextMenu = new ContextMenu();
+				}
+				
+				contextMenu.hideBuiltInItems();
+				
+				var newItem:ContextMenuItem  = new ContextMenuItem(LangUtil.getString("messages", "inventory.contextmenu.new"));
+				var removeItem:ContextMenuItem  = new ContextMenuItem(LangUtil.getString("messages", "inventory.contextmenu.remove"));
+				var removeAllItem:ContextMenuItem  = new ContextMenuItem(LangUtil.getString("messages", "inventory.contextmenu.removeall"));
+				var editItem:ContextMenuItem  = new ContextMenuItem(LangUtil.getString("messages", "inventory.contextmenu.edit"));
+				var cloneItem:ContextMenuItem  = new ContextMenuItem(LangUtil.getString("messages", "inventory.contextmenu.clone"));
+				
+				contextMenu.customItems.push(newItem);
+				contextMenu.customItems.push(removeItem);
+				contextMenu.customItems.push(removeAllItem);
+				contextMenu.customItems.push(editItem);
+				contextMenu.customItems.push(cloneItem);
+				
+				contextMenu.addEventListener(ContextMenuEvent.MENU_SELECT, 
+					function(event:ContextMenuEvent):void {
+						/*
+						var rightClickItemRenderer:IListItemRenderer;
+						
+						if (event.mouseTarget is IListItemRenderer)
+						rightClickItemRenderer = IListItemRenderer(event.mouseTarget);
+						else if (event.mouseTarget.parent is IListItemRenderer)
+						rightClickItemRenderer = IListItemRenderer(event.mouseTarget.parent);
+						
+						if (rightClickItemRenderer != null)
+						{
+						var rightClickIndex:int = itemRendererToIndex(rightClickItemRenderer);
+						
+						if (rightClickIndex >=0 && (this.selectedIndices == null || this.selectedIndices.length <= 1))
+						{
+						this.selectedIndex = rightClickIndex;
+						}
+						
+						}
+						*/
+						
+						newItem.enabled = false;
+						removeItem.enabled = false;
+						removeAllItem.enabled = false;
+						editItem.enabled = false;
+						cloneItem.enabled = false;
+						
+						if (selectedItems.length > 1 )
+						{
+							removeAllItem.enabled = true;
+						} 
+						else if (selectedItems.length == 1 ) 
+						{
+							if (selectedItem is InventoryCategory) 
+							{
+								newItem.enabled = true;
+								editItem.enabled = true;
+								removeAllItem.enabled = true;
+							} 
+							else if (selectedItem is InventoryItem) 
+							{ 
+								removeItem.enabled = true;
+								editItem.enabled = true;
+								cloneItem.enabled = true;
+								removeItem.enabled = true;
+							}
+						}
+						
+					});
+				
+				newItem.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, newItemHandler);
+				removeItem.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, removeItemHandler);
+				removeAllItem.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, removeAllItemHandler);
+				editItem.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, editItemHandler);
+				cloneItem.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, cloneItemHandler);
+			}
+			
+			protected function newItemHandler(event:ContextMenuEvent):void
+			{
+				//InteractionUtil.newPopup(this.parentApplication, NewDialog);
+			}
+			
+			protected function removeItemHandler(event:ContextMenuEvent):void
+			{
+				/*
+				if(this.parentApplication["inventoryTree"]["selectedItem"]["className"] == "InventoryItem" && this.parentApplication["inventoryTree"]["selectedItem"]["type"] == "Network")
+					InteractionUtil.newPopup(this.parentApplication, DeleteNetwork);
+				if(this.parentApplication["inventoryTree"]["selectedItem"]["type"] == "Matcher")
+					InteractionUtil.newPopup(this.parentApplication, DeleteMatcher);
+				*/
+			}
+			
+			protected function removeAllItemHandler(event:ContextMenuEvent):void
+			{
+				/*
+				InteractionUtil.newPopup(this.parentApplication, DeleteInventoryCategory);
+				*/
+			}
+			
+			protected function editItemHandler(event:ContextMenuEvent):void
+			{
+				/*
+				if(this.parentApplication["inventoryTree"]["selectedItem"]["className"] == "InventoryCategory")
+					InteractionUtil.newPopup(this.parentApplication, EditCategoryDialog);
+				if(this.parentApplication["inventoryTree"]["selectedItem"]["className"] == "InventoryItem" && this.parentApplication["inventoryTree"]["selectedItem"]["type"] == "Network")
+					InteractionUtil.newPopup(this.parentApplication, EditNetworkDialog);
+				if(this.parentApplication["inventoryTree"]["selectedItem"]["type"] == "Matcher")
+					InteractionUtil.newPopup(this.parentApplication, EditMatcherDialog);
+				*/
+			}
+			
+			protected function cloneItemHandler(event:ContextMenuEvent):void
+			{
+				
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<fx:Declarations>
+		<api:RemoteEntity id="ro" destination="inventoryBRS" />
+	</fx:Declarations>
+</mx:Tree>

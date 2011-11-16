@@ -52,6 +52,9 @@
           <coverageViewerPath />
           <storepass />
           <services>${basedir}/../mydlp-ui-webapp/src/main/webapp/WEB-INF/flex/services-config.xml</services> 
+          <localesCompiled>
+            <locale>en_US</locale>
+          </localesCompiled>
         </configuration>
 	    <dependencies>
           <dependency>
