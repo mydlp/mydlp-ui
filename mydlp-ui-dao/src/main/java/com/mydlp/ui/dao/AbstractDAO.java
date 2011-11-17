@@ -11,4 +11,5 @@ public abstract class AbstractDAO extends HibernateDaoSupport {
 		setSessionFactory(sessionFactory);
 	}
 
+
 }

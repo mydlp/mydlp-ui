@@ -31,6 +31,11 @@
       <version>${jpa.version}</version>
     </dependency>
     <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-core</artifactId>
+      <version>${org.hibernate.version}</version>
+    </dependency>
+    <dependency>
       <groupId>dpHibernate</groupId>
       <artifactId>dpHibernate-core</artifactId>
       <version>${dpHibernate.version}</version>

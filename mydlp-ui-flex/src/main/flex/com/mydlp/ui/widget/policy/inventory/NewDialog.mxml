@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:TitleWindow xmlns:fx="http://ns.adobe.com/mxml/2009" 
+				xmlns:s="library://ns.adobe.com/flex/spark" 
+				xmlns:mx="library://ns.adobe.com/flex/mx" layout="absolute"
+				title="@Resource(bundle = 'messages', key = 'inventory.newdialog.title')" 
+				showCloseButton="true" close="close()">
+	<fx:Script>
+		<![CDATA[
+			import com.mydlp.ui.util.InteractionUtil;
+			
+			import mx.events.CloseEvent;
+			import mx.managers.PopUpManager;
+			
+			protected function close():void
+			{
+				InteractionUtil.closePopup(this);
+			}
+			
+			protected function categoryHandler():void
+			{
+				close();
+				InteractionUtil.newPopup(this.parentApplication, NewCategoryDialog);
+			}
+			protected function networkHandler():void
+			{
+				close();
+				InteractionUtil.newPopup(this.parentApplication, NewNetworkDialog);
+			}
+			protected function matcherHandler():void
+			{
+				close();
+				//InteractionUtil.newPopup(this.parentApplication, NewMatcherDialog);
+			}
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	
+	<mx:VBox>
+		<mx:Label text="@Resource(bundle = 'messages', key = 'inventory.newdialog.message')"/>
+		<mx:Button label="@Resource(bundle = 'messages', key = 'inventory.newdialog.category')" click="categoryHandler()"/>
+		<mx:Button label="@Resource(bundle = 'messages', key = 'inventory.newdialog.network')" click="networkHandler()"/>
+		<mx:Button label="@Resource(bundle = 'messages', key = 'inventory.newdialog.matcher')" click="matcherHandler()"/>
+		<mx:Button label="@Resource(bundle = 'messages', key = 'inventory.newdialog.group')"/>
+	</mx:VBox>
+	
+</mx:TitleWindow>

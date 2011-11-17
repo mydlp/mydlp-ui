@@ -15,7 +15,7 @@ package com.mydlp.ui.domain {
 		
 		public function get label():String 
 		{
-			if (this.name == null && this.name == null ) 
+			if (this.name == null && this.nameKey == null ) 
 			{
 				return "";
 			}

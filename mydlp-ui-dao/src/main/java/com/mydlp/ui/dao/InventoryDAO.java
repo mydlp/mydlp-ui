@@ -9,5 +9,6 @@ public interface InventoryDAO {
 
 	public List<InventoryCategory> getInventory();
 	
-	public void save(InventoryBase i);
+	public InventoryBase save(InventoryBase i);
+	
 }

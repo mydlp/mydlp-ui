@@ -18,9 +18,11 @@ public class InventoryDAOImpl extends AbstractDAO implements InventoryDAO {
 			"from InventoryCategory i where i.category is null"
 		);
 	}
-	
-	@Transactional(readOnly=false)
-	public void save(InventoryBase i ) {
+
+	@Override
+	public InventoryBase save(InventoryBase i) {
 		getHibernateTemplate().save(i);
+		return i;
 	}
+	
 }

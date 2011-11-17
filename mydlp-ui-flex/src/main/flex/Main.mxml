@@ -3,9 +3,7 @@
                xmlns:mx="library://ns.adobe.com/flex/mx" 
 			   xmlns:api="com.mydlp.ui.api.*"
 			   minHeight="768" minWidth="1024" xmlns:inventory="com.mydlp.ui.widget.policy.inventory.*">
-	
 
-    <s:Panel>
-      <inventory:InvetoryTree id="inventoryTree" />
-    </s:Panel>
+    <inventory:InventoryTree id="inventoryTree" />
+    
 </s:Application>

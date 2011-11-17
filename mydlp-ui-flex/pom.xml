@@ -25,6 +25,12 @@
       <type>swc</type>
     </dependency>
     <dependency>
+      <groupId>com.mydlp.ui</groupId>
+      <artifactId>mydlp-ui-flex-framework</artifactId>
+      <version>${mydlp-ui.version}</version>
+      <type>swc</type>
+    </dependency>
+    <dependency>
       <groupId>com.adobe.flex.framework</groupId>
       <artifactId>flex-framework</artifactId>
       <version>${flex.version}</version>
