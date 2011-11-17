@@ -50,6 +50,7 @@
   <modules>
     <module>mydlp-ui-domain</module>
     <module>mydlp-ui-domain-as3</module>
+    <module>mydlp-ui-flex-framework</module>
     <module>mydlp-ui-flex</module>
     <module>mydlp-ui-dao</module>
     <module>mydlp-ui-remoting-blazeds</module>

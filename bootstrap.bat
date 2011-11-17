@@ -20,3 +20,5 @@ cmd /c "cd mydlp-ui-domain-as3 && mvn org.sonatype.flexmojos:flexmojos-maven-plu
 
 cmd /c "cd mydlp-ui-flex && mvn org.sonatype.flexmojos:flexmojos-maven-plugin:3.9:flashbuilder"
 
+cmd /c "cd mydlp-ui-flex-framework && mvn org.sonatype.flexmojos:flexmojos-maven-plugin:3.9:flashbuilder"
+

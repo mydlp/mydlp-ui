@@ -1,0 +1,5 @@
+<?xml version="1.0"?>
+<componentPackage>
+	<component id="remote" class="com.mydlp.ui.mxml.RemoteObject"/>
+	<component id="method" class="com.mydlp.ui.mxml.Operation"/>
+</componentPackage>
