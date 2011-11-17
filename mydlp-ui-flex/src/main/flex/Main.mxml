@@ -3,7 +3,26 @@
                xmlns:mx="library://ns.adobe.com/flex/mx" 
 			   xmlns:api="com.mydlp.ui.api.*"
 			   minHeight="768" minWidth="1024" xmlns:inventory="com.mydlp.ui.widget.policy.inventory.*">
+	<fx:Style source="../styles/general.css" />
 
-    <inventory:InventoryTree id="inventoryTree" />
-    
+	<mx:Panel title="Tree Control Example" height="75%" width="75%" 
+			  paddingTop="10" paddingLeft="10" paddingRight="10" paddingBottom="10">
+		
+		<mx:VBox width="100%" >
+			<mx:Button label="Add Rule" />
+		</mx:VBox>
+		
+		<mx:HDividedBox width="100%" height="100%">
+			
+			
+			<inventory:InventoryTree id="inventoryTree"/>
+			
+			<!--	
+			<policy:RuleContainer id = "ruleContainer" />
+			-->
+			
+			
+		</mx:HDividedBox>
+		
+	</mx:Panel>
 </s:Application>

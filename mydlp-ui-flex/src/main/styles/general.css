@@ -1,0 +1,61 @@
+/* CSS file */
+@namespace s "library://ns.adobe.com/flex/spark";
+@namespace mx "library://ns.adobe.com/flex/mx";
+@namespace local "com.mydlp.ui.widget.*";
+@namespace policy "com.mydlp.ui.widget.policy.*";
+@namespace general "com.mydlp.ui.widget.general.*";
+@namespace inventory "com.mydlp.ui.widget.policy.inventory.*";
+
+/*
+policy|Rule {
+	borderStyle: solid;
+	borderVisible: true;
+	paddingBottom: 5;
+	paddingLeft: 5;
+	paddingRight: 5;
+	paddingTop: 5;
+	horizontalGap: 2;
+	verticalGap: 0;
+}
+
+policy|RuleItemBox#labelBox {
+	backgroundColor: #FFDDCC;
+}
+
+policy|RuleItemBox#labelBox #nameLabel {
+	fontWeight: bold;
+}
+
+policy|RuleItemBox#actorBox {
+	backgroundColor: #FFFFCC;
+}
+
+policy|RuleItemBox#matcherBox {
+	backgroundColor: #00FFCC;
+}
+
+policy|RuleItemBox#actionBox {
+	backgroundColor: #99FFCC;
+}
+
+policy|RuleItemBox#miscBox {
+	backgroundColor: #00CCFF;
+}
+*/
+
+inventory|NewDialog mx|VBox {
+	horizontalAlign: center;
+	paddingBottom: 20;
+	paddingLeft: 10;
+	paddingRight: 10;
+	paddingTop: 10;
+}
+
+inventory|NewMatcherDialog s|ComboBox{
+	horizontalAlign: center;
+	paddingBottom: 10;
+	paddingLeft: 10;
+	paddingRight: 10;
+	paddingTop: 10;
+}
+
