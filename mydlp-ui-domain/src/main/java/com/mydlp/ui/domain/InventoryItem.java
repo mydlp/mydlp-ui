@@ -22,7 +22,7 @@ public class InventoryItem extends InventoryBase {
 
 	@Any(metaColumn = @Column(name = "itemType"))
 	@AnyMetaDef(idType = "long", metaType = "string", metaValues = {
-			@MetaValue(targetEntity = Network.class, value = "Network"),})
+			@MetaValue(targetEntity = Network.class, value = "Network")})
 	@JoinColumn(name = "itemId")
 	@Cascade(value = {CascadeType.ALL})
 	public AbstractEntity getItem() {
