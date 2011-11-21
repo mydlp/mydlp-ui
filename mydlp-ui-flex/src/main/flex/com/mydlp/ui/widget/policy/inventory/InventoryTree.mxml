@@ -173,6 +173,6 @@
 	</fx:Script>
 	
 	<fx:Declarations>
-		<my:remote id="re" destination="inventoryBRS" />
+		<my:remote id="re" destination="inventoryBRS"/>
 	</fx:Declarations>
 </mx:Tree>

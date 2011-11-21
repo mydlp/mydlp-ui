@@ -17,10 +17,20 @@
       <param-value>ALWAYS</param-value>
     </init-param>    
   </filter>
+  
+  <filter>
+    <filter-name>springSecurityFilterChain</filter-name>
+    <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+  </filter>
 
   <filter-mapping>  
     <filter-name>openSessionInViewFilter</filter-name>  
     <url-pattern>/spring/*</url-pattern>
+  </filter-mapping>
+  
+  <filter-mapping>
+    <filter-name>springSecurityFilterChain</filter-name>
+    <url-pattern>/*</url-pattern>
   </filter-mapping>
     
   <listener>
