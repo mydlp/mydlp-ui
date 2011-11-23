@@ -15,7 +15,7 @@
     <security:intercept-url pattern="/static/**" filters="none"/>
     <security:intercept-url pattern="/login.jsp" filters="none"/>
     <security:intercept-url pattern="/**" access="ROLE_USER"/>
-    <security:form-login login-page="/login.jsp" authentication-failure-url="/login.jsp?login_error=1"/>
+    <security:form-login login-page="/login.jsp" authentication-failure-url="/login.jsp?authfailed=true"/>
     <security:logout/>
   </security:http>
   
