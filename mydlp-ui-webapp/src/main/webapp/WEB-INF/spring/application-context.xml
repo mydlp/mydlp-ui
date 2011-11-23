@@ -21,6 +21,7 @@
 
   <context:annotation-config />
   <context:component-scan base-package="com.mydlp" />
+  <aop:aspectj-autoproxy/>
   
   <import resource="application-persistence.xml"/>
   <import resource="application-dpHibernate.xml"/>

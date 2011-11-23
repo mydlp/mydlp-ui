@@ -9,7 +9,7 @@ import com.mydlp.ui.domain.InventoryBase;
 import com.mydlp.ui.domain.InventoryCategory;
 
 @Secured(AuthSecurityRole.ROLE_USER)
-public interface InventoryBRS {
+public interface InventoryService {
 
 	public List<InventoryCategory> getInventory();
 	

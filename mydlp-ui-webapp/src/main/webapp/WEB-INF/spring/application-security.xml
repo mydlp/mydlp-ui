@@ -13,8 +13,9 @@
   
   <security:http auto-config="true">
     <security:intercept-url pattern="/static/**" filters="none"/>
+    <security:intercept-url pattern="/login.jsp" filters="none"/>
     <security:intercept-url pattern="/**" access="ROLE_USER"/>
-    <security:form-login />
+    <security:form-login login-page="/login.jsp" authentication-failure-url="/login.jsp?login_error=1"/>
     <security:logout/>
   </security:http>
   
