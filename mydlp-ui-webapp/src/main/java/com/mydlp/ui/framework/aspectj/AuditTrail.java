@@ -38,10 +38,11 @@ public class AuditTrail {
         } finally {
             time = System.currentTimeMillis() - time;
             logger.info(
+            		"Procedure " +
             		prettifyClassName(pjp.getTarget().getClass()) + "." +
             		pjp.getSignature().getName() +
             		argsToAuditString(pjp.getArgs()) +
-            		" procedure is called by " +
+            		" has been called by " +
             		"'" + request.getRemoteUser() + "' " +
             		"from " + request.getRemoteAddr() + ", " +
             		"and completed in " + time.toString() + "ms."

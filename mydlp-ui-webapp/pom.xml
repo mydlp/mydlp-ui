@@ -194,13 +194,30 @@
       <plugin>
         <groupId>org.sonatype.flexmojos</groupId>
         <artifactId>flexmojos-maven-plugin</artifactId>
-        <version>${flexmojos.version}</version>
+        <version>3.2.0</version>
         <executions>
           <execution>
             <goals>
-              <goal>wrapper</goal>
               <goal>copy-flex-resources</goal>
             </goals>
+          </execution>
+          <execution>
+            <id>wrapper generation</id>
+            <goals>
+              <goal>wrapper</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${project.build.directory}/${project.build.finalName}</outputDirectory>
+              <templateOutputDirectory>${project.build.directory}/templates</templateOutputDirectory>
+              <parameters>
+                <swf>mydlp-ui-flex-${project.version}</swf>
+                <title>MyDLP UI</title>
+                <width>100%</width>
+                <height>100%</height>
+                <bgcolor>#FFFFFF</bgcolor>
+              </parameters>
+              <htmlName>index</htmlName>
+            </configuration>
           </execution>
         </executions>
         <configuration>
