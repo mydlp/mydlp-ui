@@ -12,7 +12,6 @@ import com.mydlp.ui.domain.AuthUser;
 @Repository("userDAO")
 @Transactional
 public class UserDAOImpl extends AbstractDAO implements UserDAO {
-
 	@Override
 	public AuthUser findByName(String username) {
 		DetachedCriteria criteria = 
