@@ -94,15 +94,10 @@ public class SchemaManagerImpl extends AbstractDAO implements SchemaManager {
 		try {
 			Object object = Class.forName(granuleClassName).newInstance();
 			AbstractGranule granule = (AbstractGranule) object;
-			
 			granule.setHibernateTemplate(getHibernateTemplate());
 			granule.execute();
 			granule.setHibernateTemplate(null);
-			
-			
-		} catch (InstantiationException 
-				| IllegalAccessException
-				| ClassNotFoundException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
