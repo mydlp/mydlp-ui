@@ -1,16 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:TextInput xmlns:fx="http://ns.adobe.com/mxml/2009" 
 				xmlns:s="library://ns.adobe.com/flex/spark" 
-				xmlns:mx="library://ns.adobe.com/flex/mx">
+				xmlns:mx="library://ns.adobe.com/flex/mx"
+				change="changeHandler(event)"
+				>
 	<fx:Script>
 		<![CDATA[
-			public function convertIpToInt():uint
+			import mx.events.FlexEvent;
+			
+			private var _numberValue:uint;
+			
+			protected function changeHandler(event:Event):void
 			{
-				var result:uint;
 				var tempIp:Array=text.split(".");
-				result = ((int)(tempIp[0])*16777216) + ((int)(tempIp[1])*65536) + ((int)(tempIp[2])*256) + (int)(tempIp[3]);
-				return result;
+				_numberValue = ((int)(tempIp[0])*16777216) + ((int)(tempIp[1])*65536) + ((int)(tempIp[2])*256) + (int)(tempIp[3]);
+				dispatchEvent(new Event("numberValueChanged"));
 			}
+			
+			[Bindable(event=numberValueChanged)]
+			public function get numberValue():Number
+			{
+				return _numberValue;
+			}
+			
+			public function set numberValue(value:Number):void
+			{
+				if (isNaN(value))
+				{
+					text = "0.0.0.0";
+					_numberValue = 0;
+				}
+				else
+				{
+					var rNumber:Number = new Number(value);
+					var tString:String = "";
+					var i4:int;
+					var i3:int;
+					var i2:int;
+					var i1:int;
+					i4 = rNumber%256;
+					rNumber -= i4;
+					i3 = rNumber%256;
+					rNumber -= i3;
+					i2 = rNumber%256;
+					rNumber -= i2;
+					i1 = rNumber;
+					tString = i1 + "." + i2 + "." + i3 + "." + i4;
+					text = tString;
+					_numberValue = value;
+				}
+				dispatchEvent(new Event("numberValueChanged"));
+			}
+			
 		]]>
 	</fx:Script>
 </mx:TextInput>

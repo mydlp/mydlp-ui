@@ -9,7 +9,7 @@ package com.mydlp.ui.util
 		{
 			var value:String = ResourceManager.getInstance().getString( module, key );
 			
-			return value ? value : "";
+			return value ? value : key;
 		}
 	}
 }

@@ -2,8 +2,42 @@
 <s:Application xmlns:fx="http://ns.adobe.com/mxml/2009" xmlns:s="library://ns.adobe.com/flex/spark"
                xmlns:mx="library://ns.adobe.com/flex/mx" 
 			   xmlns:api="com.mydlp.ui.api.*"
-			   minHeight="768" minWidth="1024" xmlns:inventory="com.mydlp.ui.widget.policy.inventory.*">
+			   xmlns:my="http://www.mydlp.com/flex/my"
+			   minHeight="768" minWidth="1024" 
+			   xmlns:inventory="com.mydlp.ui.widget.policy.inventory.*"
+			   usePreloader="true"
+			   applicationComplete="applicationCompleteHandler(event)"
+			   >
 	<fx:Style source="../styles/general.css" />
+	
+	<fx:Script>
+		<![CDATA[
+			import com.mydlp.ui.widget.general.ClosableTitleWindow;
+			
+			import mx.controls.Alert;
+			import mx.events.FlexEvent;
+			import mx.rpc.events.FaultEvent;
+			
+			import org.dphibernate.rpc.HibernateManaged;
+			
+			public var currentPopup:ClosableTitleWindow = null;
+			
+			protected function applicationCompleteHandler(event:FlexEvent):void
+			{
+				HibernateManaged.defaultHibernateService = this.dataAccessService;
+			}
+			
+			protected function faultHandler(event:FaultEvent):void
+			{
+				Alert.show(event.fault.toString());
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<fx:Declarations>
+		<my:remote id="dataAccessService" destination="dataAccessService" fault="faultHandler(event)"/>
+	</fx:Declarations>
 
 	<mx:Panel title="Tree Control Example" height="75%" width="75%" 
 			  paddingTop="10" paddingLeft="10" paddingRight="10" paddingBottom="10">

@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<general:ClosableTitleWindow xmlns:fx="http://ns.adobe.com/mxml/2009" 
+				xmlns:s="library://ns.adobe.com/flex/spark" 
+				xmlns:mx="library://ns.adobe.com/flex/mx"
+				xmlns:general="com.mydlp.ui.widget.general.*"
+				xmlns:my="http://www.mydlp.com/flex/my"
+				layout="absolute"
+				visible="false"
+				>
+	
+	<fx:Script>
+		<![CDATA[
+			import com.mydlp.ui.domain.AbstractEntity;
+			import com.mydlp.ui.domain.InventoryBase;
+			import com.mydlp.ui.domain.InventoryCategory;
+			import com.mydlp.ui.util.ClassMember;
+			import com.mydlp.ui.util.InteractionUtil;
+			import com.mydlp.ui.util.LangUtil;
+			import com.mydlp.ui.util.ReflectionUtil;
+			import com.mydlp.ui.widget.general.IpAddressInput;
+			
+			import flash.utils.getQualifiedClassName;
+			
+			import flashx.textLayout.container.ISandboxSupport;
+			
+			import mx.binding.utils.BindingUtils;
+			import mx.containers.FormItem;
+			import mx.controls.Alert;
+			import mx.controls.Button;
+			import mx.controls.TextInput;
+			import mx.core.FlexGlobals;
+			import mx.events.FlexEvent;
+			
+			public var formObject:Object = null;
+			
+			protected var simpleName:String = null;
+			protected var qualifiedName:String = null;
+			
+			protected var isAnInventoryItem:Boolean = false;
+			
+			protected var cButton:Button = new Button();
+			
+			protected function getQualifiedName(): String
+			{
+				if (qualifiedName == null)
+				{
+					qualifiedName = getQualifiedClassName(formObject);
+				}
+				return qualifiedName;
+			}
+			
+			protected function getClassName(qualifiedName:String): String
+			{
+				var s:String = new String(qualifiedName);
+				var li:Number = s.lastIndexOf(":");
+				return s.substring(li+1); 
+			}
+			
+			
+			protected function getSimpleName(): String
+			{
+				if (simpleName == null)
+				{
+					simpleName = getClassName(getQualifiedName());
+				}
+				return simpleName;
+			}
+			
+			protected function getObjectName(targetObject:Object): String
+			{
+				var targetObjectName:String = getQualifiedClassName(targetObject);
+				if (targetObjectName == getQualifiedName())
+					return getSimpleName();
+				else 
+					return getClassName(targetObjectName);
+			}
+			
+			public function populateClassMembers(targetObject:Object): void
+			{
+				var classMembers:Array = ReflectionUtil.getClassMembers(targetObject as Object);
+				
+				var sDebug:String = ""
+				for each (var classMember2:ClassMember in classMembers)
+					sDebug += classMember2.name + ":" + classMember2.type + "\n";
+				Alert.show(sDebug);
+				
+				for each (var classMember:ClassMember in classMembers)
+				{
+					var displayObject:DisplayObject = null;
+					
+					if (classMember.name == "category" && classMember.type == InventoryCategory)
+					{
+						isAnInventoryItem = true;
+						if (targetObject.id == null || isNaN(targetObject.id) ) // means that this is a new object
+							if (FlexGlobals.topLevelApplication.inventoryTree.selectedItem == null)
+								continue;
+							else if (FlexGlobals.topLevelApplication.inventoryTree.selectedItem is InventoryCategory)
+								targetObject[classMember.name] = FlexGlobals.topLevelApplication.inventoryTree.selectedItem;
+							else if (FlexGlobals.topLevelApplication.inventoryTree.selectedItem is InventoryBase)
+								targetObject[classMember.name] = FlexGlobals.topLevelApplication.inventoryTree.selectedItem.category;
+						continue;
+					}
+					else if 
+						(
+							classMember.name == "children" ||
+							classMember.name == "nameKey" ||
+							classMember.name == "id"
+						)
+					{
+						continue;
+					}
+					else if (getSimpleName() == "InventoryItem" && classMember.name == "item")
+					{
+						populateClassMembers(targetObject.item);
+						continue;
+					}
+					else if (
+							( classMember.name == "ipBase" || classMember.name == "ipMask" )
+							&& classMember.type == String)
+					{
+						var ipInput:IpAddressInput = new IpAddressInput();
+						ipInput.numberValue = targetObject[classMember.name];
+						BindingUtils.bindProperty(targetObject, classMember.name, ipInput, "numberValue");
+						displayObject = ipInput;
+					}
+					else
+					{
+						var textInput:TextInput = new TextInput();
+						textInput.text = targetObject[classMember.name];
+						BindingUtils.bindProperty(targetObject, classMember.name, textInput, "text");
+						displayObject = textInput;
+					}
+					
+					if (displayObject != null)
+					{
+						var fi:FormItem = new FormItem();
+						fi.label = LangUtil.getString("messages", "generic.edit." + getObjectName(targetObject) + "." + classMember.name + ".label");
+						fi.addChild(displayObject);
+						form.addChild(fi);
+					}
+				}
+			}
+			
+			public function populateCreateButton(): void
+			{	
+				cButton.label = LangUtil.getString("messages", "generic.edit." + getSimpleName() + ".createButton.label"),
+					cButton.addEventListener(MouseEvent.CLICK, createButtonClickHandler);
+				var cbfi:FormItem = new FormItem();
+				cbfi.addChild(cButton);
+				form.addChild(cbfi);
+			}
+				
+			
+			public function populate(): void
+			{
+				title = LangUtil.getString("messages", "generic.edit." + getSimpleName() + ".title");
+				
+				populateClassMembers(formObject);
+				
+				populateCreateButton();
+				visible = true;
+			}
+			
+			protected function createButtonClickHandler(event:Event): void
+			{
+				re.save(formObject);
+				cButton.enabled = false;
+			}
+			
+			protected function okHandler(event:Event): void
+			{
+				InteractionUtil.closePopup(this);
+				Alert.show(	LangUtil.getString("messages", "generic.edit." + getSimpleName() + ".ok.message"),
+							LangUtil.getString("messages", "generic.edit." + getSimpleName() + ".title"));
+				if (isAnInventoryItem)
+					FlexGlobals.topLevelApplication.inventoryTree.refreshTree();
+				title = LangUtil.getString("messages", "generic.edit." + getSimpleName() + ".title");
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<fx:Declarations>
+		<my:remote id="re" destination="genericBRS" >
+			<my:method name="save" result="okHandler(event)" />
+		</my:remote>
+	</fx:Declarations>
+	
+	<mx:Form id="form" />
+	
+</general:ClosableTitleWindow>

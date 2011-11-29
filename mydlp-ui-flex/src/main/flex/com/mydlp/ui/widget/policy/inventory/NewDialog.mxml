@@ -6,8 +6,16 @@
 				showCloseButton="true" close="close()">
 	<fx:Script>
 		<![CDATA[
+			import com.mydlp.ui.domain.InventoryCategory;
+			import com.mydlp.ui.domain.InventoryItem;
+			import com.mydlp.ui.domain.Network;
+			import com.mydlp.ui.util.ClassMember;
 			import com.mydlp.ui.util.InteractionUtil;
+			import com.mydlp.ui.util.ReflectionUtil;
 			
+			import flash.utils.describeType;
+			
+			import mx.controls.Alert;
 			import mx.events.CloseEvent;
 			import mx.managers.PopUpManager;
 			
@@ -19,12 +27,14 @@
 			protected function categoryHandler():void
 			{
 				close();
-				InteractionUtil.newPopup(this.parentApplication, NewCategoryDialog);
+				InteractionUtil.newEditDialog(new InventoryCategory());
 			}
 			protected function networkHandler():void
 			{
 				close();
-				InteractionUtil.newPopup(this.parentApplication, NewNetworkDialog);
+				var i:InventoryItem = new InventoryItem();
+				i.item = new Network();
+				InteractionUtil.newEditDialog(i);
 			}
 			protected function matcherHandler():void
 			{

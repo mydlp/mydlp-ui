@@ -132,7 +132,7 @@
 			
 			protected function newItemHandler(event:ContextMenuEvent):void
 			{
-				InteractionUtil.newPopup(this.parentApplication, NewDialog);
+				InteractionUtil.newPopup(NewDialog);
 			}
 			
 			protected function removeItemHandler(event:ContextMenuEvent):void
@@ -154,14 +154,7 @@
 			
 			protected function editItemHandler(event:ContextMenuEvent):void
 			{
-				/*
-				if(this.parentApplication["inventoryTree"]["selectedItem"]["className"] == "InventoryCategory")
-					InteractionUtil.newPopup(this.parentApplication, EditCategoryDialog);
-				if(this.parentApplication["inventoryTree"]["selectedItem"]["className"] == "InventoryItem" && this.parentApplication["inventoryTree"]["selectedItem"]["type"] == "Network")
-					InteractionUtil.newPopup(this.parentApplication, EditNetworkDialog);
-				if(this.parentApplication["inventoryTree"]["selectedItem"]["type"] == "Matcher")
-					InteractionUtil.newPopup(this.parentApplication, EditMatcherDialog);
-				*/
+				InteractionUtil.newEditDialog(selectedItem);
 			}
 			
 			protected function cloneItemHandler(event:ContextMenuEvent):void

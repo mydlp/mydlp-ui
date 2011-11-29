@@ -3,10 +3,14 @@
 				xmlns:s="library://ns.adobe.com/flex/spark" 
 				xmlns:mx="library://ns.adobe.com/flex/mx"
 				layout="absolute"
-				close="InteractionUtil.closePopup(this)" showCloseButton="true">
+				close="InteractionUtil.closePopup(this)" 
+				showCloseButton="true" 
+				initialize="{FlexGlobals.topLevelApplication.currentPopup = this}">
 	<fx:Script>
 		<![CDATA[
 			import com.mydlp.ui.util.InteractionUtil;
+			
+			import mx.core.FlexGlobals;
 		]]>
 	</fx:Script>
 	<fx:Declarations>

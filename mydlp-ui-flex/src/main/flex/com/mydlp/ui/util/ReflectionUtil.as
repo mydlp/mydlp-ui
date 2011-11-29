@@ -10,7 +10,7 @@ package com.mydlp.ui.util
 
 	public class ReflectionUtil
 	{
-		public static function getClassMembers(className:Class): Array
+		public static function getClassMembers(className:*): Array
 		{
 			var classMembers:ArrayList = new ArrayList();
 			var description:XML = describeType(className);

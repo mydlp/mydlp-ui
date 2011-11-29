@@ -39,7 +39,7 @@
     <dependency> 
       <groupId>dpHibernate</groupId> 
       <artifactId>dpHibernate</artifactId> 
-      <version>2.0-RC6</version> 
+      <version>${dpHibernate.version}</version> 
       <type>swc</type>
     </dependency>
   </dependencies>
