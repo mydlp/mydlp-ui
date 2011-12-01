@@ -15,7 +15,6 @@
 			import com.mydlp.ui.domain.InventoryCategory;
 			import com.mydlp.ui.domain.InventoryItem;
 			import com.mydlp.ui.domain.Item;
-			import com.mydlp.ui.domain.Network;
 			import com.mydlp.ui.util.ClassMember;
 			import com.mydlp.ui.util.InteractionUtil;
 			import com.mydlp.ui.util.LangUtil;
@@ -27,6 +26,7 @@
 			import flashx.textLayout.container.ISandboxSupport;
 			
 			import mx.binding.utils.BindingUtils;
+			import mx.collections.ListCollectionView;
 			import mx.containers.FormItem;
 			import mx.controls.Alert;
 			import mx.controls.Button;
@@ -100,10 +100,10 @@
 					}
 					else if 
 						(
-							classMember.name == "children" ||
-							classMember.name == "nameKey" ||
 							classMember.name == "id" ||
-							(classMember.name == "inventoryHolder" && classMember.type == InventoryItem)
+							classMember.name == "nameKey" ||
+							(classMember.name == "children" && classMember.type == ListCollectionView)||
+							(classMember.name == "coupledInventoryItem" && classMember.type == InventoryItem)
 						)
 					{
 						continue;
@@ -111,13 +111,13 @@
 					else if (getSimpleName() == "InventoryItem" && classMember.name == "item")
 					{
 						if (targetObject.item != null && targetObject.item is Item)
-							(targetObject.item as Item).inventoryHolder = targetObject as InventoryItem;
+							(targetObject.item as Item).coupledInventoryItem = targetObject as InventoryItem;
 						populateClassMembers(targetObject.item);
 						continue;
 					}
 					else if (
 							( classMember.name == "ipBase" || classMember.name == "ipMask" )
-							&& classMember.type == String)
+							&& classMember.type == Number)
 					{
 						var ipInput:IpAddressInput = new IpAddressInput();
 						ipInput.numberValue = targetObject[classMember.name];

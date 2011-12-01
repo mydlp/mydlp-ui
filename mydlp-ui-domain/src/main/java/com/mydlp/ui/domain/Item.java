@@ -14,15 +14,15 @@ public abstract class Item extends AbstractEntity {
 	 */
 	private static final long serialVersionUID = 8242570014953319497L;
 	
-	protected InventoryItem inventoryHolder;
+	protected InventoryItem coupledInventoryItem;
 
 	@OneToOne(mappedBy="item")
-	public InventoryItem getInventoryHolder() {
-		return inventoryHolder;
+	public InventoryItem getCoupledInventoryItem() {
+		return coupledInventoryItem;
 	}
 
-	public void setInventoryHolder(InventoryItem inventoryHolder) {
-		this.inventoryHolder = inventoryHolder;
+	public void setCoupledInventoryItem(InventoryItem coupledInventoryItem) {
+		this.coupledInventoryItem = coupledInventoryItem;
 	}
-	
+
 }

@@ -40,10 +40,13 @@
 					var i1:int;
 					i4 = rNumber%256;
 					rNumber -= i4;
+					rNumber /= 256;
 					i3 = rNumber%256;
 					rNumber -= i3;
+					rNumber /= 256;
 					i2 = rNumber%256;
 					rNumber -= i2;
+					rNumber /= 256;
 					i1 = rNumber;
 					tString = i1 + "." + i2 + "." + i3 + "." + i4;
 					text = tString;
