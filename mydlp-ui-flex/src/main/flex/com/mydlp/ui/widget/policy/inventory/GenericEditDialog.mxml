@@ -13,6 +13,9 @@
 			import com.mydlp.ui.domain.AbstractEntity;
 			import com.mydlp.ui.domain.InventoryBase;
 			import com.mydlp.ui.domain.InventoryCategory;
+			import com.mydlp.ui.domain.InventoryItem;
+			import com.mydlp.ui.domain.Item;
+			import com.mydlp.ui.domain.Network;
 			import com.mydlp.ui.util.ClassMember;
 			import com.mydlp.ui.util.InteractionUtil;
 			import com.mydlp.ui.util.LangUtil;
@@ -79,11 +82,6 @@
 			{
 				var classMembers:Array = ReflectionUtil.getClassMembers(targetObject as Object);
 				
-				var sDebug:String = ""
-				for each (var classMember2:ClassMember in classMembers)
-					sDebug += classMember2.name + ":" + classMember2.type + "\n";
-				Alert.show(sDebug);
-				
 				for each (var classMember:ClassMember in classMembers)
 				{
 					var displayObject:DisplayObject = null;
@@ -104,13 +102,16 @@
 						(
 							classMember.name == "children" ||
 							classMember.name == "nameKey" ||
-							classMember.name == "id"
+							classMember.name == "id" ||
+							(classMember.name == "inventoryHolder" && classMember.type == InventoryItem)
 						)
 					{
 						continue;
 					}
 					else if (getSimpleName() == "InventoryItem" && classMember.name == "item")
 					{
+						if (targetObject.item != null && targetObject.item is Item)
+							(targetObject.item as Item).inventoryHolder = targetObject as InventoryItem;
 						populateClassMembers(targetObject.item);
 						continue;
 					}

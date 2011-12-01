@@ -3,7 +3,7 @@ package com.mydlp.ui.domain;
 import javax.persistence.Entity;
 
 @Entity
-public class Network extends AbstractEntity {
+public class Network extends Item {
 
 	/**
 	 * 

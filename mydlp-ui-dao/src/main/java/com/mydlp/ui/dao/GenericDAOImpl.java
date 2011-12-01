@@ -14,5 +14,5 @@ public class GenericDAOImpl extends AbstractDAO implements GenericDAO {
 		getHibernateTemplate().saveOrUpdate(i);
 		return i;
 	}
-	
+
 }
