@@ -10,14 +10,16 @@
 			
 			private var _numberValue:uint;
 			
+			private static const NUMBER_VALUE_CHANGE_EVENT:String = "numberValueChanged";
+			
 			protected function changeHandler(event:Event):void
 			{
 				var tempIp:Array=text.split(".");
 				_numberValue = ((int)(tempIp[0])*16777216) + ((int)(tempIp[1])*65536) + ((int)(tempIp[2])*256) + (int)(tempIp[3]);
-				dispatchEvent(new Event("numberValueChanged"));
+				dispatchEvent(new Event(NUMBER_VALUE_CHANGE_EVENT));
 			}
 			
-			[Bindable(event=numberValueChanged)]
+			[Bindable(event=NUMBER_VALUE_CHANGE_EVENT)]
 			public function get numberValue():Number
 			{
 				return _numberValue;
@@ -52,7 +54,7 @@
 					text = tString;
 					_numberValue = value;
 				}
-				dispatchEvent(new Event("numberValueChanged"));
+				dispatchEvent(new Event(NUMBER_VALUE_CHANGE_EVENT));
 			}
 			
 		]]>

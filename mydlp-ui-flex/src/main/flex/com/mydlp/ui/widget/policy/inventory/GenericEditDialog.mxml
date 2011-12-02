@@ -52,7 +52,7 @@
 				return qualifiedName;
 			}
 			
-			protected function getClassName(qualifiedName:String): String
+			protected static function getClassName(qualifiedName:String): String
 			{
 				var s:String = new String(qualifiedName);
 				var li:Number = s.lastIndexOf(":");
@@ -108,7 +108,7 @@
 					{
 						continue;
 					}
-					else if (getSimpleName() == "InventoryItem" && classMember.name == "item")
+					else if (targetObject is InventoryItem && classMember.name == "item")
 					{
 						if (targetObject.item != null && targetObject.item is Item)
 							(targetObject.item as Item).coupledInventoryItem = targetObject as InventoryItem;

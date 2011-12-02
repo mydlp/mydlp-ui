@@ -8,11 +8,11 @@ import javax.persistence.OneToOne;
 @Entity
 @Inheritance(strategy=InheritanceType.JOINED)
 public abstract class Item extends AbstractEntity {
-
+	
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 8242570014953319497L;
+	private static final long serialVersionUID = 576253609821429052L;
 	
 	protected InventoryItem coupledInventoryItem;
 
