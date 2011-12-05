@@ -35,5 +35,31 @@ package com.mydlp.ui.util
 			return classMembers.toArray();
 		}
 		
+		public static function hasMember(className:*, memberName:String): Boolean
+		{
+			var classMembers:Array = ReflectionUtil.getClassMembers(className);
+			for each (var classMember:ClassMember in classMembers)
+				if (classMember.name == memberName)
+					return true;
+			return false;
+		}
+		
+		public static function hasMemberOfType(className:*, memberName:String, memberType:Class): Boolean
+		{
+			var classMembers:Array = ReflectionUtil.getClassMembers(className);
+			for each (var classMember:ClassMember in classMembers)
+			if (classMember.name == memberName && classMember.type == memberType)
+				return true;
+			return false;
+		}
+		
+		public static function hasMemberType(className:*, memberType:Class): Boolean
+		{
+			var classMembers:Array = ReflectionUtil.getClassMembers(className);
+			for each (var classMember:ClassMember in classMembers)
+			if (classMember.type == memberType)
+				return true;
+			return false;
+		}
 	}
 }

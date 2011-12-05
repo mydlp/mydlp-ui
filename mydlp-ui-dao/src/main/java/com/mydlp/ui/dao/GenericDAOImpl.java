@@ -15,4 +15,9 @@ public class GenericDAOImpl extends AbstractDAO implements GenericDAO {
 		return i;
 	}
 
+	@Override
+	public void remove(AbstractEntity i) {
+		getHibernateTemplate().delete(i);
+	}
+
 }

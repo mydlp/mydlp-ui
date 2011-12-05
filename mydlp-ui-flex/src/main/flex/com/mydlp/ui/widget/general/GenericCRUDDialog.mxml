@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<general:ClosableTitleWindow xmlns:fx="http://ns.adobe.com/mxml/2009" 
+				xmlns:s="library://ns.adobe.com/flex/spark" 
+				xmlns:mx="library://ns.adobe.com/flex/mx"
+				xmlns:general="com.mydlp.ui.widget.general.*"
+				xmlns:my="http://www.mydlp.com/flex/my"
+				layout="absolute"
+				visible="false"
+				>
+	
+	<fx:Script>
+		<![CDATA[
+			public var formObject:Object = null;
+			
+			protected var simpleName:String = null;
+			protected var qualifiedName:String = null;
+			
+			protected function getQualifiedName(): String
+			{
+				if (qualifiedName == null)
+				{
+					qualifiedName = getQualifiedClassName(formObject);
+				}
+				return qualifiedName;
+			}
+			
+			protected static function getClassName(qualifiedName:String): String
+			{
+				var s:String = new String(qualifiedName);
+				var li:Number = s.lastIndexOf(":");
+				return s.substring(li+1); 
+			}
+			
+			
+			protected function getSimpleName(): String
+			{
+				if (simpleName == null)
+				{
+					simpleName = getClassName(getQualifiedName());
+				}
+				return simpleName;
+			}
+			
+			protected function getObjectName(targetObject:Object): String
+			{
+				var targetObjectName:String = getQualifiedClassName(targetObject);
+				if (targetObjectName == getQualifiedName())
+					return getSimpleName();
+				else 
+					return getClassName(targetObjectName);
+			}
+						
+			public function populate(): void
+			{
+				visible = true;
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<fx:Declarations>
+	</fx:Declarations>
+	
+</general:ClosableTitleWindow>

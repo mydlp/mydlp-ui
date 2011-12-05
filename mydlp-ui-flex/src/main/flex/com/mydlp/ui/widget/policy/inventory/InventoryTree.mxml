@@ -8,13 +8,19 @@
 		 showRoot="false"
 		 allowMultipleSelection="true"
 		 creationComplete="populateTree()"
-		 dataProvider="{re.getInventory.lastResult}" >
+		 dataProvider="@{inventory}" >
 	<fx:Script>
 		<![CDATA[
 			import com.mydlp.ui.domain.InventoryCategory;
 			import com.mydlp.ui.domain.InventoryItem;
 			import com.mydlp.ui.util.InteractionUtil;
 			import com.mydlp.ui.util.LangUtil;
+			
+			import mx.collections.ListCollectionView;
+			import mx.rpc.events.ResultEvent;
+			
+			[Bindable]
+			protected var inventory:Object;
 			
 			//	public var ddObject:Object;
 		
@@ -41,9 +47,20 @@
 			}
 			*/
 			
+			protected var tempOpenItems:Object;
+			
 			public function refreshTree(): void
 			{
-				re.getInventory.send();
+				tempOpenItems = openItems;
+				invalidateList();
+				re.getInventory();
+			}
+			
+			protected function getInventoryHandler(event:ResultEvent): void
+			{
+				inventory = event.result as ListCollectionView;
+				openItems = tempOpenItems;
+				validateNow();
 			}
 			
 			protected function populateTree():void
@@ -73,27 +90,7 @@
 				contextMenu.customItems.push(cloneItem);
 				
 				contextMenu.addEventListener(ContextMenuEvent.MENU_SELECT, 
-					function(event:ContextMenuEvent):void {
-						/*
-						var rightClickItemRenderer:IListItemRenderer;
-						
-						if (event.mouseTarget is IListItemRenderer)
-						rightClickItemRenderer = IListItemRenderer(event.mouseTarget);
-						else if (event.mouseTarget.parent is IListItemRenderer)
-						rightClickItemRenderer = IListItemRenderer(event.mouseTarget.parent);
-						
-						if (rightClickItemRenderer != null)
-						{
-						var rightClickIndex:int = itemRendererToIndex(rightClickItemRenderer);
-						
-						if (rightClickIndex >=0 && (this.selectedIndices == null || this.selectedIndices.length <= 1))
-						{
-						this.selectedIndex = rightClickIndex;
-						}
-						
-						}
-						*/
-						
+					function(event:ContextMenuEvent):void {			
 						newItem.enabled = false;
 						removeItem.enabled = false;
 						removeAllItem.enabled = false;
@@ -137,19 +134,12 @@
 			
 			protected function removeItemHandler(event:ContextMenuEvent):void
 			{
-				/*
-				if(this.parentApplication["inventoryTree"]["selectedItem"]["className"] == "InventoryItem" && this.parentApplication["inventoryTree"]["selectedItem"]["type"] == "Network")
-					InteractionUtil.newPopup(this.parentApplication, DeleteNetwork);
-				if(this.parentApplication["inventoryTree"]["selectedItem"]["type"] == "Matcher")
-					InteractionUtil.newPopup(this.parentApplication, DeleteMatcher);
-				*/
+				InteractionUtil.newDeleteDialog(selectedItem);
 			}
 			
 			protected function removeAllItemHandler(event:ContextMenuEvent):void
 			{
-				/*
-				InteractionUtil.newPopup(this.parentApplication, DeleteInventoryCategory);
-				*/
+				InteractionUtil.newDeleteDialog(selectedItem);
 			}
 			
 			protected function editItemHandler(event:ContextMenuEvent):void
@@ -166,6 +156,8 @@
 	</fx:Script>
 	
 	<fx:Declarations>
-		<my:remote id="re" destination="inventoryBRS"/>
+		<my:remote id="re" destination="inventoryBRS">
+			<my:method name="getInventory" result="getInventoryHandler(event)" />
+		</my:remote>
 	</fx:Declarations>
 </mx:Tree>

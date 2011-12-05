@@ -2,6 +2,7 @@ package com.mydlp.ui.domain;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 
@@ -15,10 +16,11 @@ public class InventoryCategory extends InventoryBase {
 	
 	protected List<InventoryBase> children;
 	
-	@OneToMany(mappedBy="category")
+	@OneToMany(mappedBy="category", cascade={CascadeType.ALL})
 	public List<InventoryBase> getChildren() {
 		return children;
 	}
+	
 	public void setChildren(List<InventoryBase> children) {
 		this.children = children;
 	}

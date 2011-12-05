@@ -11,6 +11,7 @@ target/
 .classpath
 mydlp-ui-domain-as3/src/main/flex/com/mydlp/ui/domain/*.as
 !mydlp-ui-domain-as3/src/main/flex/com/mydlp/ui/domain/AbstractNamedEntity.as
+!mydlp-ui-domain-as3/src/main/flex/com/mydlp/ui/domain/AbstractEntity.as
 mydlp-ui-webapp/hsqldb/MyDLP.log
 mydlp-ui-webapp/hsqldb/MyDLP.properties
 mydlp-ui-webapp/hsqldb/MyDLP.script

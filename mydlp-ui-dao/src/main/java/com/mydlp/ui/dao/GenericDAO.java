@@ -6,4 +6,6 @@ public interface GenericDAO {
 
 	public AbstractEntity save(AbstractEntity i);
 	
+	public void remove(AbstractEntity i);
+	
 }

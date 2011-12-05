@@ -24,5 +24,10 @@ public class InventoryDAOImpl extends AbstractDAO implements InventoryDAO {
 		getHibernateTemplate().saveOrUpdate(i);
 		return i;
 	}
+
+	@Override
+	public void remove(InventoryBase i) {
+		getHibernateTemplate().delete(i);
+	}
 	
 }

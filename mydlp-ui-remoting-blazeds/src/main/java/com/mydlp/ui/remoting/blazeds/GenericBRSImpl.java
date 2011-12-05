@@ -10,7 +10,7 @@ import com.mydlp.ui.domain.InventoryBase;
 
 @Service("genericBRS")
 @RemotingDestination
-public class GenericEditBRSImpl implements GenericEditService
+public class GenericBRSImpl implements GenericService
 {
 	@Autowired
 	protected GenericDAO genericDAO;
@@ -25,6 +25,15 @@ public class GenericEditBRSImpl implements GenericEditService
 			return inventoryService.save((InventoryBase) item);
 
 		return genericDAO.save(item);
+	}
+
+	@Override
+	public void remove(AbstractEntity item) {
+		// delegating to related services to inherit authorization meta.
+		if (item instanceof InventoryBase)
+			inventoryService.remove((InventoryBase) item);
+		else
+			genericDAO.remove(item);
 	}
 	
 	

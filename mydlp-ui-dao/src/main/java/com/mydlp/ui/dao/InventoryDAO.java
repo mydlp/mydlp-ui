@@ -11,4 +11,5 @@ public interface InventoryDAO {
 	
 	public InventoryBase save(InventoryBase i);
 	
+	public void remove(InventoryBase i);
 }

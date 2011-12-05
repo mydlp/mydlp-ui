@@ -15,4 +15,5 @@ public interface InventoryService {
 	
 	public InventoryBase save(InventoryBase item);
 
+	public void remove(InventoryBase item);
 }
