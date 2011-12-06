@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 
 import com.mydlp.ui.dao.InventoryDAO;
 import com.mydlp.ui.domain.InventoryBase;
-import com.mydlp.ui.domain.InventoryCategory;
 
 @Service("inventoryBRS")
 @RemotingDestination
@@ -16,7 +15,7 @@ public class InventoryBRSImpl implements InventoryService
 {
 	@Autowired
 	protected InventoryDAO inventoryDAO;
-	
+
 	public InventoryDAO getInventoryDAO() {
 		return inventoryDAO;
 	}
@@ -26,7 +25,7 @@ public class InventoryBRSImpl implements InventoryService
 	}
 
 	@Override
-	public List<InventoryCategory> getInventory() {
+	public List<InventoryBase> getInventory() {
 		return getInventoryDAO().getInventory();
 	}
 
