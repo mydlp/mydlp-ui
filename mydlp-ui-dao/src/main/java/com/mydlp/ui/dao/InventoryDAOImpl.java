@@ -6,16 +6,15 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.mydlp.ui.domain.InventoryBase;
-import com.mydlp.ui.domain.InventoryCategory;
 
 @Repository("inventoryDAO")
 @Transactional
 public class InventoryDAOImpl extends AbstractDAO implements InventoryDAO {
 
 	@SuppressWarnings("unchecked")
-	public List<InventoryCategory> getInventory() {
+	public List<InventoryBase> getInventory() {
 		return getHibernateTemplate().find(
-			"from InventoryCategory i where i.category is null"
+			"from InventoryBase i where i.category is null"
 		);
 	}
 

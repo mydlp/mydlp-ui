@@ -8,44 +8,32 @@
 		 showRoot="false"
 		 allowMultipleSelection="true"
 		 creationComplete="populateTree()"
-		 dataProvider="@{inventory}" >
+		 dataProvider="@{inventory}"
+		 dragEnabled="true" 
+		 dropEnabled="true"
+		 dragDrop="onDragDrop(event)"
+		 >
 	<fx:Script>
 		<![CDATA[
+			import com.mydlp.ui.domain.AbstractEntity;
+			import com.mydlp.ui.domain.InventoryBase;
 			import com.mydlp.ui.domain.InventoryCategory;
 			import com.mydlp.ui.domain.InventoryItem;
+			import com.mydlp.ui.domain.Item;
 			import com.mydlp.ui.util.InteractionUtil;
 			import com.mydlp.ui.util.LangUtil;
+			import com.mydlp.ui.util.ReflectionUtil;
 			
+			import mx.collections.ArrayCollection;
 			import mx.collections.ListCollectionView;
+			import mx.controls.listClasses.IListItemRenderer;
+			import mx.events.DragEvent;
+			import mx.managers.DragManager;
 			import mx.rpc.events.ResultEvent;
+			import mx.utils.ObjectUtil;
 			
 			[Bindable]
 			protected var inventory:Object;
-			
-			//	public var ddObject:Object;
-		
-			/*
-			dragEnabled="true" dropEnabled="true" 
-			dragEnter="onDragEnter(event)" dragDrop="dragAndDropHandler(event)"
-			
-			protected function onDragEnter(event:DragEvent):void
-			{
-				ddObject = this.parentApplication["inventoryTree"]["selectedItem"];
-			}
-			
-			protected function dragAndDropHandler(event:DragEvent):void
-			{
-				var dropParent:int;
-				var myIndex:int;
-				this.selectedIndex = this.calculateDropIndex();
-				trace("ID:" + this.selectedItem["id"]);//must be fixed!! eger itemi alip aldigi yere birakirsa categoryid sini set ettigim icin sikinti cikiyor. 
-				ddObject["categoryId"] = this.selectedItem["id"];
-				if(ddObject["className"] == "InventoryItem")
-					DAOUtil.save("InventoryItem", ddObject, successHandler);
-				if(ddObject["className"] == "InventoryCategory")
-					DAOUtil.save("InventoryCategory", ddObject, successHandler);
-			}
-			*/
 			
 			protected var tempOpenItems:Object;
 			
@@ -54,6 +42,11 @@
 				tempOpenItems = openItems;
 				invalidateList();
 				re.getInventory();
+			}
+			
+			protected function saveAllHandler(event:ResultEvent): void
+			{
+				refreshTree();
 			}
 			
 			protected function getInventoryHandler(event:ResultEvent): void
@@ -67,7 +60,6 @@
 			{
 				populateContextMenu();
 				refreshTree();
-				//this.addEventListener(MouseEvent.MOUSE_DOWN, mouseDown);
 			}
 			
 			protected function populateContextMenu(): void {
@@ -149,7 +141,47 @@
 			
 			protected function cloneItemHandler(event:ContextMenuEvent):void
 			{
+				InteractionUtil.newEditDialog(ReflectionUtil.cloneDomainObject(selectedItem));
+			}
+			
+			protected function onDragDrop(event:DragEvent):void
+			{
+				event.preventDefault();
+				hideDropFeedback(event);
 				
+				var dropIndex:int = calculateDropIndex();
+				var renderer:IListItemRenderer = indexToItemRenderer(dropIndex);
+				var parentCategory:InventoryCategory = null;
+				if (renderer == null)
+				{
+					parentCategory = null;
+				}
+				else
+				{
+					var dropTarget:InventoryBase = renderer.data as InventoryBase;
+					if (renderer.data is InventoryCategory)
+					{
+						parentCategory = dropTarget as InventoryCategory;
+						expandItem(parentCategory, true);
+					}
+					else
+						parentCategory = dropTarget.category;
+				}
+				
+				var itemsToSave:ListCollectionView = new ArrayCollection();
+				if (event.dragSource.hasFormat("treeItems"))
+					for each (var item:Object in event.dragSource.dataForFormat('treeItems') as Array)
+				{
+					var dragSource:InventoryBase = item as InventoryBase;
+					if (dragSource != parentCategory && dragSource.category != parentCategory)
+					{
+						dragSource.category = parentCategory;
+						itemsToSave.addItem(dragSource);
+					}
+				}
+				
+				if (itemsToSave.length > 0)
+					re.saveAll(itemsToSave);
 			}
 			
 		]]>
@@ -158,6 +190,7 @@
 	<fx:Declarations>
 		<my:remote id="re" destination="inventoryBRS">
 			<my:method name="getInventory" result="getInventoryHandler(event)" />
+			<my:method name="saveAll" result="saveAllHandler(event)" />
 		</my:remote>
 	</fx:Declarations>
 </mx:Tree>

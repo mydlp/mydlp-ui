@@ -14,6 +14,8 @@ public interface InventoryService {
 	public List<InventoryCategory> getInventory();
 	
 	public InventoryBase save(InventoryBase item);
+	
+	public void saveAll(List<InventoryBase> items);
 
 	public void remove(InventoryBase item);
 }

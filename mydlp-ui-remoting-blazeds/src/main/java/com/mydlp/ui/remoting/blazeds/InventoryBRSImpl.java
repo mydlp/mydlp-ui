@@ -39,4 +39,11 @@ public class InventoryBRSImpl implements InventoryService
 	public void remove(InventoryBase item) {
 		inventoryDAO.remove(item);
 	}
+
+	@Override
+	public void saveAll(List<InventoryBase> items) {
+		for (InventoryBase item: items) {
+			 getInventoryDAO().save(item);
+		}
+	}
 }

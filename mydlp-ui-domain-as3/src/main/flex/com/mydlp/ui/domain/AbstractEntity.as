@@ -17,21 +17,16 @@ package com.mydlp.ui.domain {
     public class AbstractEntity extends AbstractEntityBase implements IUID {
 		
 		private var _uid:String = null;
-
-		private function generateUID(): void
-		{
-			_uid = getQualifiedClassName(this) + ":" + id.toString();
-		}
 		
-		public function get uid():String {
+		public function get uid():String
+		{
 			if (_uid == null)
-				generateUID();
+				_uid = getQualifiedClassName(this) + ":" + id.toString();
 			return _uid;
 		}
 		
-		public function set uid(value:String):void {
-			if (_uid == null)
-				generateUID();
+		public function set uid(value:String):void
+		{
 		}
     }
 }
