@@ -16,22 +16,14 @@ public class InventoryBRSImpl implements InventoryService
 	@Autowired
 	protected InventoryDAO inventoryDAO;
 
-	public InventoryDAO getInventoryDAO() {
-		return inventoryDAO;
-	}
-
-	public void setInventoryDAO(InventoryDAO inventoryDAO) {
-		this.inventoryDAO = inventoryDAO;
-	}
-
 	@Override
 	public List<InventoryBase> getInventory() {
-		return getInventoryDAO().getInventory();
+		return inventoryDAO.getInventory();
 	}
 
 	@Override
 	public InventoryBase save(InventoryBase item) {
-		return getInventoryDAO().save(item);
+		return inventoryDAO.save(item);
 	}
 
 	@Override
@@ -42,7 +34,7 @@ public class InventoryBRSImpl implements InventoryService
 	@Override
 	public void saveAll(List<InventoryBase> items) {
 		for (InventoryBase item: items) {
-			 getInventoryDAO().save(item);
+			 inventoryDAO.save(item);
 		}
 	}
 }

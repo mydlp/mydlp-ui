@@ -9,12 +9,16 @@ import javax.annotation.PostConstruct;
 
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Restrictions;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
 import org.springframework.core.type.classreading.MetadataReader;
 import org.springframework.core.type.classreading.MetadataReaderFactory;
 import org.springframework.core.type.filter.TypeFilter;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.TransactionCallbackWithoutResult;
+import org.springframework.transaction.support.TransactionTemplate;
 
 import com.mydlp.ui.dao.AbstractDAO;
 import com.mydlp.ui.dao.DAOUtil;
@@ -26,6 +30,9 @@ public class SchemaManagerImpl extends AbstractDAO implements SchemaManager {
 	private static final String SCHEMA_REVISION_KEY = "schema.revision";
 	
 	private static final String UPDATE_GRANULE_PACKAGE = "com.mydlp.ui.schema.granules";
+	
+	@Autowired
+	protected TransactionTemplate transactionTemplate;
 	
 	protected Integer getSchemaRevision() {
 		DetachedCriteria criteria = 
@@ -93,9 +100,14 @@ public class SchemaManagerImpl extends AbstractDAO implements SchemaManager {
 	protected void executeGranule(String granuleClassName) {
 		try {
 			Object object = Class.forName(granuleClassName).newInstance();
-			AbstractGranule granule = (AbstractGranule) object;
+			final AbstractGranule granule = (AbstractGranule) object;
 			granule.setHibernateTemplate(getHibernateTemplate());
-			granule.execute();
+			transactionTemplate.execute(new TransactionCallbackWithoutResult() {
+				@Override
+				protected void doInTransactionWithoutResult(TransactionStatus arg0) {
+					granule.execute();
+				}
+			});
 			granule.setHibernateTemplate(null);
 		} catch (Exception e) {
 			e.printStackTrace();

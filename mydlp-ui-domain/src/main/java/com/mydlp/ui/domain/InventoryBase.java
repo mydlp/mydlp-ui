@@ -4,8 +4,8 @@ import javax.persistence.Entity;
 import javax.persistence.Inheritance;
 import javax.persistence.ManyToOne;
 
-@Inheritance
 @Entity
+@Inheritance
 public abstract class InventoryBase extends AbstractNamedEntity {
 	
 	/**

@@ -2,6 +2,8 @@ package com.mydlp.ui.dao;
 
 import java.util.List;
 
+import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,9 +15,10 @@ public class InventoryDAOImpl extends AbstractDAO implements InventoryDAO {
 
 	@SuppressWarnings("unchecked")
 	public List<InventoryBase> getInventory() {
-		return getHibernateTemplate().find(
-			"from InventoryBase i where i.category is null"
-		);
+		DetachedCriteria criteria = 
+				DetachedCriteria.forClass(InventoryBase.class)
+					.add(Restrictions.isNull("category"));
+		return getHibernateTemplate().findByCriteria(criteria);
 	}
 
 	@Override
