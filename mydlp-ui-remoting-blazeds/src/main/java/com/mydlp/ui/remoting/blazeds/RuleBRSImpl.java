@@ -31,5 +31,4 @@ public class RuleBRSImpl implements RuleService
 		ruleDAO.remove(rule);
 	}
 
-
 }

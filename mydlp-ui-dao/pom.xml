@@ -11,7 +11,7 @@
   <groupId>com.mydlp.ui</groupId>
   <artifactId>mydlp-ui-dao</artifactId>
   <packaging>jar</packaging>
-  <name>mydlp-ui Data Access Objects</name>
+  <name>MyDLP UI Data Access Objects</name>
   <url>http://www.mydlp.com</url>
   
   <properties>

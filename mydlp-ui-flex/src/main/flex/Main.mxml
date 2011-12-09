@@ -6,7 +6,7 @@
 			   minHeight="768" minWidth="1024" 
 			   xmlns:inventory="com.mydlp.ui.widget.policy.inventory.*"
 			   usePreloader="true"
-			   applicationComplete="applicationCompleteHandler(event)"
+			   applicationComplete="applicationCompleteHandler(event)" xmlns:rule="com.mydlp.ui.widget.policy.rule.*"
 			   >
 	<fx:Style source="../styles/general.css" />
 	
@@ -51,10 +51,7 @@
 			
 			<inventory:InventoryTree id="inventoryTree"/>
 			
-			<!--	
-			<policy:RuleContainer id = "ruleContainer" />
-			-->
-			
+			<rule:RuleContainer id="ruleContainer" />
 			
 		</mx:HDividedBox>
 		

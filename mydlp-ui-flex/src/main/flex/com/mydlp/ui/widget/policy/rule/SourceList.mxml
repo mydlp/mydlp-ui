@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rule:RuleBoxComponentList xmlns:fx="http://ns.adobe.com/mxml/2009" 
+						   xmlns:s="library://ns.adobe.com/flex/spark" 
+						   xmlns:mx="library://ns.adobe.com/flex/mx" 
+						   xmlns:rule="com.mydlp.ui.widget.policy.rule.*"
+						   initialize="onInitialize(event)"
+						   >
+	<fx:Script>
+		<![CDATA[
+			import avmplus.getQualifiedClassName;
+			
+			import com.mydlp.ui.domain.ItemBase;
+			import com.mydlp.ui.domain.Network;
+			import com.mydlp.ui.domain.RuleItem;
+			
+			import mx.collections.ArrayCollection;
+			import mx.collections.ListCollectionView;
+			import mx.events.FlexEvent;
+			
+			protected var matcherDataProvider:ArrayCollection = new ArrayCollection();
+			
+			protected function onInitialize(event:FlexEvent):void
+			{
+				refreshList();
+				itemList.itemRenderer = new ClassFactory(RuleItemRenderer);
+				//itemList.labelFunction = 
+			}
+			/*
+			public function matcherLabelFunction(value:RuleItem):String
+			{
+				return value.coupledInventoryItem.label;
+			}
+			*/
+			public function refreshList(): void
+			{
+				itemList.invalidateDisplayList();
+				var ruleItems:ListCollectionView = ruleObject.ruleItems;
+				for (var i:* in ruleItems)
+				{
+					if (ruleItems[i].item is Network)
+						matcherDataProvider.addItem(ruleItems[i]);
+				}
+				itemList.dataProvider = matcherDataProvider;
+				itemList.validateNow();
+			}
+			
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+</rule:RuleBoxComponentList>

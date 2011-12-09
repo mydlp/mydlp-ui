@@ -14,7 +14,7 @@
   <groupId>com.mydlp.ui</groupId>
   <artifactId>mydlp-ui-flex-framework</artifactId>
   <packaging>swc</packaging>
-  <name>mydlp-ui Flex Framework</name>
+  <name>MyDLP UI Flex Framework</name>
   <url>http://www.mydlp.com/</url>
   
   <dependencies>

@@ -46,7 +46,7 @@ public class _000_00003_Rules extends AbstractGranule {
 		mr.setName("Mail Rule");
 		
 		EndpointRule er = new EndpointRule();
-		er.setPriority(new Long(8000));
+		er.setPriority(new Long(800));
 		er.setEnabled(true);
 		er.setName("EP Rule");
 		

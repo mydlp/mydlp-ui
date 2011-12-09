@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx"
+		 xmlns:my="http://www.mydlp.com/flex/my"
+		 xmlns:rule="com.mydlp.ui.widget.policy.rule.*"
+		 width="750"
+		 creationComplete="refreshRules()">
+	<fx:Script>
+		<![CDATA[
+			import avmplus.getQualifiedClassName;
+			
+			import com.mydlp.ui.domain.EndpointRule;
+			import com.mydlp.ui.domain.MailRule;
+			import com.mydlp.ui.domain.WebRule;
+			
+			import mx.collections.ArrayCollection;
+			import mx.collections.ListCollectionView;
+			import mx.events.FlexEvent;
+			import mx.rpc.events.ResultEvent;
+			
+			[Bindable]
+			protected var ruleDP:ListCollectionView = new ArrayCollection();;
+			
+			protected function refreshRules():void
+			{
+				//TODO: maintain scrool position
+				ruleList.invalidateDisplayList();
+				ruleDP.removeAll();
+				re.getRules();
+			}
+			
+			protected function getRulesHandler(event:ResultEvent): void
+			{
+				var rules:ArrayCollection = event.result as ArrayCollection;
+				for (var i:* in rules) 
+				{
+					var ruleBox:RuleBox = null;
+					if (rules[i] is WebRule)
+					{
+						ruleBox = new WebRuleBox();
+						ruleBox.ruleObject = rules[i] as WebRule;
+					}
+					else if (rules[i] is MailRule)
+					{
+						ruleBox = new MailRuleBox();
+						ruleBox.ruleObject = rules[i] as MailRule;
+					}
+					else if (rules[i] is EndpointRule)
+					{
+						ruleBox = new EndpointRuleBox();
+						ruleBox.ruleObject = rules[i] as EndpointRule;
+					}
+					else
+						throw new Error("Unknown rule type;");
+					
+					ruleDP.addItem(ruleBox);
+				}
+				ruleList.validateNow();
+			}
+			
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<my:remote id="re" destination="ruleBRS">
+			<my:method name="getRules" result="getRulesHandler(event)" />
+		</my:remote>
+	</fx:Declarations>
+	
+	<mx:Button label="@Resource(key='rules.addrule', bundle='messages')" />
+	
+	<s:List id="ruleList" dataProvider="{ruleDP}" width="750" 
+			itemRenderer="spark.skins.spark.DefaultComplexItemRenderer"/>
+
+</mx:VBox>

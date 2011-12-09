@@ -5,9 +5,10 @@
 @namespace policy "com.mydlp.ui.widget.policy.*";
 @namespace general "com.mydlp.ui.widget.general.*";
 @namespace inventory "com.mydlp.ui.widget.policy.inventory.*";
+@namespace rule "com.mydlp.ui.widget.policy.rule.*";
 
-/*
-policy|Rule {
+
+rule|RuleBox {
 	borderStyle: solid;
 	borderVisible: true;
 	paddingBottom: 5;
@@ -18,30 +19,29 @@ policy|Rule {
 	verticalGap: 0;
 }
 
-policy|RuleItemBox#labelBox {
+rule|RuleBoxComponentBase#labelBox {
 	backgroundColor: #FFDDCC;
 }
 
-policy|RuleItemBox#labelBox #nameLabel {
+rule|RuleBoxComponentBase#labelBox #nameLabel {
 	fontWeight: bold;
 }
 
-policy|RuleItemBox#actorBox {
+rule|RuleBoxComponentBase#actorBox {
 	backgroundColor: #FFFFCC;
 }
 
-policy|RuleItemBox#matcherBox {
+rule|RuleBoxComponentBase#matcherBox {
 	backgroundColor: #00FFCC;
 }
 
-policy|RuleItemBox#actionBox {
+rule|RuleBoxComponentBase#actionBox {
 	backgroundColor: #99FFCC;
 }
 
-policy|RuleItemBox#miscBox {
+rule|RuleBoxComponentBase#miscBox {
 	backgroundColor: #00CCFF;
 }
-*/
 
 inventory|NewDialog mx|VBox {
 	horizontalAlign: center;
@@ -51,9 +51,9 @@ inventory|NewDialog mx|VBox {
 	paddingTop: 10;
 }
 
-inventory|NewMatcherDialog s|ComboBox{
+general|GenericDeleteDialog mx|VBox {
 	horizontalAlign: center;
-	paddingBottom: 10;
+	paddingBottom: 20;
 	paddingLeft: 10;
 	paddingRight: 10;
 	paddingTop: 10;

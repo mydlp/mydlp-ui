@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:HGroup xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx"
+		 xmlns:my="http://www.mydlp.com/flex/my" 
+		 xmlns:domain="com.mydlp.ui.domain.*" 
+		 xmlns:rule="com.mydlp.ui.widget.policy.rule.*" 
+		 >
+	<fx:Script>
+		<![CDATA[
+			[Bindable]
+			public var ruleObject:* = null;
+		]]>
+	</fx:Script>
+	
+	<fx:Declarations>
+	</fx:Declarations>
+	
+	<s:states>
+		<s:State name="defaultState"/>
+		<s:State name="webRule"/>
+		<s:State name="mailRule"/>
+	</s:states>
+	
+	<rule:RuleBoxComponentBase id="labelBox" width="150" height="100%" >
+		<mx:Label id="nameLabel" text="{ruleObject.label}"/>
+	</rule:RuleBoxComponentBase>
+	
+	<rule:SourceList id="sourceList" includeIn="webRule,mailRule" width="150" height="100%"/>
+	
+	<rule:SourceList id="matcherList" width="150" height="100%"/>
+	
+	<rule:ActionBox id="actionBox" width="100" height="100%"  />
+	
+</s:HGroup>

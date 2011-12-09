@@ -14,7 +14,7 @@
   <groupId>com.mydlp.ui</groupId>
   <artifactId>mydlp-ui-flex</artifactId>
   <packaging>swf</packaging>
-  <name>mydlp-ui Flex Application</name>
+  <name>MyDLP UI Flex Application</name>
   <url>http://www.mydlp.com/</url>
   
   <dependencies>

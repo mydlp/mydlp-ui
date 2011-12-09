@@ -61,7 +61,8 @@
 							classMember.name == "id" ||
 							classMember.name == "nameKey" ||
 							(classMember.name == "children" && classMember.type == ListCollectionView)||
-							(classMember.name == "coupledInventoryItem" && classMember.type == InventoryItem)
+							(classMember.name == "coupledInventoryItem" && classMember.type == InventoryItem) ||
+							(classMember.name == "coupledRuleItems" && classMember.type == ListCollectionView)
 						)
 					{
 						continue;

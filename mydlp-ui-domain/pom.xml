@@ -11,7 +11,7 @@
   <groupId>com.mydlp.ui</groupId>
   <artifactId>mydlp-ui-domain</artifactId>
   <packaging>jar</packaging>
-  <name>mydlp-ui Domain Objects</name>
+  <name>MyDLP UI Domain Objects</name>
   <url>http://www.mydlp.com</url>
   
   <properties>
