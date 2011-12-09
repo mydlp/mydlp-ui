@@ -110,8 +110,8 @@
 				InteractionUtil.closePopup(this);
 				Alert.show(	LangUtil.getString("messages", "generic.delete." + getSimpleName() + ".ok.message"),
 							LangUtil.getString("messages", "generic.delete." + getSimpleName() + ".title"));
-				if (isAnInventoryItem)
-					FlexGlobals.topLevelApplication.inventoryTree.refreshTree();
+				
+				FlexGlobals.topLevelApplication.refresh();
 			}
 			
 		]]>

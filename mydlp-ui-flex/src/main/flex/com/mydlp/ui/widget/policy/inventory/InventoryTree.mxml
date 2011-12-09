@@ -173,7 +173,10 @@
 					for each (var item:Object in event.dragSource.dataForFormat('treeItems') as Array)
 				{
 					var dragSource:InventoryBase = item as InventoryBase;
-					if (dragSource != parentCategory && dragSource.category != parentCategory)
+					if (dragSource != parentCategory && 
+						dragSource.category != parentCategory &&
+						isValidTargetCategory(dragSource, parentCategory)
+						)
 					{
 						dragSource.category = parentCategory;
 						itemsToSave.addItem(dragSource);
@@ -182,6 +185,15 @@
 				
 				if (itemsToSave.length > 0)
 					re.saveAll(itemsToSave);
+			}
+			
+			protected function isValidTargetCategory(dragSource:InventoryBase, targetCategory:InventoryCategory): Boolean
+			{
+				if (targetCategory == null)
+					return true;
+				if (dragSource == targetCategory)
+					return false;
+				return isValidTargetCategory(dragSource, targetCategory.category);
 			}
 			
 		]]>

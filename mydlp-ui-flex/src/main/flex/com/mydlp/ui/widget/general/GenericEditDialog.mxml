@@ -32,8 +32,6 @@
 			import mx.core.FlexGlobals;
 			import mx.events.FlexEvent;
 			
-			protected var isAnInventoryItem:Boolean = false;
-			
 			protected var cButton:Button = new Button();
 			
 			public function populateClassMembers(targetObject:Object): void
@@ -46,7 +44,6 @@
 					
 					if (classMember.name == "category" && classMember.type == InventoryCategory)
 					{
-						isAnInventoryItem = true;
 						if (targetObject.id == null || isNaN(targetObject.id) ) // means that this is a new object
 							if (FlexGlobals.topLevelApplication.inventoryTree.selectedItem == null)
 								continue;
@@ -133,8 +130,8 @@
 				InteractionUtil.closePopup(this);
 				Alert.show(	LangUtil.getString("messages", "generic.edit." + getSimpleName() + ".ok.message"),
 							LangUtil.getString("messages", "generic.edit." + getSimpleName() + ".title"));
-				if (isAnInventoryItem)
-					FlexGlobals.topLevelApplication.inventoryTree.refreshTree();
+				
+				FlexGlobals.topLevelApplication.refresh();
 			}
 			
 		]]>

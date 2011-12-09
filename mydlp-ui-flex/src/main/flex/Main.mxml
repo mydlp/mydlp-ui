@@ -32,6 +32,12 @@
 				Alert.show(event.fault.toString());
 			}
 			
+			public function refresh(): void
+			{
+				inventoryTree.refreshTree();
+				ruleContainer.refreshRules();
+			}
+			
 		]]>
 	</fx:Script>
 	

@@ -22,7 +22,7 @@
 			[Bindable]
 			protected var ruleDP:ListCollectionView = new ArrayCollection();;
 			
-			protected function refreshRules():void
+			public function refreshRules():void
 			{
 				//TODO: maintain scrool position
 				ruleList.invalidateDisplayList();
