@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:VBox xmlns:fx="http://ns.adobe.com/mxml/2009" 
+<s:SkinnableContainer xmlns:fx="http://ns.adobe.com/mxml/2009" 
 		 xmlns:s="library://ns.adobe.com/flex/spark" 
 		 xmlns:mx="library://ns.adobe.com/flex/mx"
 		 xmlns:my="http://www.mydlp.com/flex/my"
 		 xmlns:rule="com.mydlp.ui.widget.policy.rule.*"
-		 width="750"
-		 creationComplete="refreshRules()">
+		 width="100%" height="100%"
+		 minWidth="700"
+		 creationComplete="onCreationComplete(event)">
 	<fx:Script>
 		<![CDATA[
 			import avmplus.getQualifiedClassName;
@@ -59,6 +60,11 @@
 				ruleList.validateNow();
 			}
 			
+			protected function onCreationComplete(event:FlexEvent):void
+			{
+				refreshRules();
+			}
+			
 		]]>
 	</fx:Script>
 	<fx:Declarations>
@@ -67,9 +73,13 @@
 		</my:remote>
 	</fx:Declarations>
 	
-	<mx:Button label="@Resource(key='rules.addrule', bundle='messages')" />
+	<s:layout>
+		<s:VerticalLayout/>
+	</s:layout>
 	
-	<s:List id="ruleList" dataProvider="{ruleDP}" width="750" 
+	<s:Button label="@Resource(key='rules.addrule', bundle='messages')" />
+	
+	<s:List id="ruleList" dataProvider="{ruleDP}" width="100%" height="100%"
 			itemRenderer="spark.skins.spark.DefaultComplexItemRenderer"/>
 
-</mx:VBox>
+</s:SkinnableContainer>

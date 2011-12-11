@@ -4,7 +4,6 @@
 				xmlns:mx="library://ns.adobe.com/flex/mx"
 				xmlns:general="com.mydlp.ui.widget.general.*"
 				xmlns:my="http://www.mydlp.com/flex/my"
-				layout="absolute"
 				visible="false"
 				>
 	

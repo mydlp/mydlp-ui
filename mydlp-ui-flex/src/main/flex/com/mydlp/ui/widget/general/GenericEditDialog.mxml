@@ -8,7 +8,6 @@
 	
 	<fx:Script>
 		<![CDATA[
-			import com.mydlp.ui.widget.general.input.IpAddressInput;
 			import com.mydlp.ui.domain.AbstractEntity;
 			import com.mydlp.ui.domain.InventoryBase;
 			import com.mydlp.ui.domain.InventoryCategory;
@@ -18,6 +17,7 @@
 			import com.mydlp.ui.util.InteractionUtil;
 			import com.mydlp.ui.util.LangUtil;
 			import com.mydlp.ui.util.ReflectionUtil;
+			import com.mydlp.ui.widget.general.input.IpAddressInput;
 			
 			import flash.utils.getQualifiedClassName;
 			
@@ -25,12 +25,14 @@
 			
 			import mx.binding.utils.BindingUtils;
 			import mx.collections.ListCollectionView;
-			import mx.containers.FormItem;
 			import mx.controls.Alert;
-			import mx.controls.Button;
-			import mx.controls.TextInput;
 			import mx.core.FlexGlobals;
+			import mx.core.IVisualElement;
 			import mx.events.FlexEvent;
+			
+			import spark.components.Button;
+			import spark.components.FormItem;
+			import spark.components.TextInput;
 			
 			protected var cButton:Button = new Button();
 			
@@ -40,7 +42,7 @@
 				
 				for each (var classMember:ClassMember in classMembers)
 				{
-					var displayObject:DisplayObject = null;
+					var visualElement:IVisualElement = null;
 					
 					if (classMember.name == "category" && classMember.type == InventoryCategory)
 					{
@@ -78,22 +80,22 @@
 						var ipInput:IpAddressInput = new IpAddressInput();
 						ipInput.numberValue = targetObject[classMember.name];
 						BindingUtils.bindProperty(targetObject, classMember.name, ipInput, "numberValue");
-						displayObject = ipInput;
+						visualElement = ipInput;
 					}
 					else
 					{
 						var textInput:TextInput = new TextInput();
 						textInput.text = targetObject[classMember.name];
 						BindingUtils.bindProperty(targetObject, classMember.name, textInput, "text");
-						displayObject = textInput;
+						visualElement = textInput;
 					}
 					
-					if (displayObject != null)
+					if (visualElement != null)
 					{
 						var fi:FormItem = new FormItem();
 						fi.label = LangUtil.getString("messages", "generic.edit." + getObjectName(targetObject) + "." + classMember.name + ".label");
-						fi.addChild(displayObject);
-						form.addChild(fi);
+						fi.addElement(visualElement);
+						form.addElement(fi);
 					}
 				}
 			}
@@ -103,8 +105,8 @@
 				cButton.label = LangUtil.getString("messages", "generic.edit." + getSimpleName() + ".createButton.label");
 				cButton.addEventListener(MouseEvent.CLICK, createButtonClickHandler);
 				var cbfi:FormItem = new FormItem();
-				cbfi.addChild(cButton);
-				form.addChild(cbfi);
+				cbfi.addElement(cButton);
+				form.addElement(cbfi);
 			}
 				
 			
@@ -143,6 +145,6 @@
 		</my:remote>
 	</fx:Declarations>
 	
-	<mx:Form id="form" />
+	<s:Form id="form" />
 	
 </general:GenericCRUDDialog>

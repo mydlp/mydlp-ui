@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:TitleWindow xmlns:fx="http://ns.adobe.com/mxml/2009" 
+<general:ClosableTitleWindow xmlns:fx="http://ns.adobe.com/mxml/2009" 
 				xmlns:s="library://ns.adobe.com/flex/spark" 
-				xmlns:mx="library://ns.adobe.com/flex/mx" layout="absolute"
+				xmlns:mx="library://ns.adobe.com/flex/mx" 
+				xmlns:general="com.mydlp.ui.widget.general.*"
 				title="@Resource(bundle = 'messages', key = 'inventory.newdialog.title')" 
-				showCloseButton="true" close="close()">
+				>
 	<fx:Script>
 		<![CDATA[
 			import com.mydlp.ui.domain.InventoryCategory;
@@ -47,12 +48,15 @@
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
 	</fx:Declarations>
 	
-	<mx:VBox>
-		<mx:Label text="@Resource(bundle = 'messages', key = 'inventory.newdialog.message')"/>
-		<mx:Button label="@Resource(bundle = 'messages', key = 'inventory.newdialog.category')" click="categoryHandler()"/>
-		<mx:Button label="@Resource(bundle = 'messages', key = 'inventory.newdialog.network')" click="networkHandler()"/>
-		<mx:Button label="@Resource(bundle = 'messages', key = 'inventory.newdialog.matcher')" click="matcherHandler()"/>
-		<mx:Button label="@Resource(bundle = 'messages', key = 'inventory.newdialog.group')"/>
-	</mx:VBox>
+	<s:Group>
+		<s:layout>
+			<s:VerticalLayout horizontalAlign="center"/>
+		</s:layout>
+		<s:Label text="@Resource(bundle = 'messages', key = 'inventory.newdialog.message')"/>
+		<s:Button label="@Resource(bundle = 'messages', key = 'inventory.newdialog.category')" click="categoryHandler()"/>
+		<s:Button label="@Resource(bundle = 'messages', key = 'inventory.newdialog.network')" click="networkHandler()"/>
+		<s:Button label="@Resource(bundle = 'messages', key = 'inventory.newdialog.matcher')" click="matcherHandler()"/>
+		<s:Button label="@Resource(bundle = 'messages', key = 'inventory.newdialog.group')"/>
+	</s:Group>
 	
-</mx:TitleWindow>
+</general:ClosableTitleWindow>

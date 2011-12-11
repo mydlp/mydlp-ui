@@ -1,26 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:VBox xmlns:fx="http://ns.adobe.com/mxml/2009" 
+<s:SkinnableContainer xmlns:fx="http://ns.adobe.com/mxml/2009" 
 		 xmlns:s="library://ns.adobe.com/flex/spark" 
 		 xmlns:mx="library://ns.adobe.com/flex/mx" width="100">
-	<fx:Script>
-		<![CDATA[
-			
-			private static const RULE_OBJECT_CHANGE_EVENT:String = "ruleObjectChanged";
-			
-			[Bindable(event=RULE_OBJECT_CHANGE_EVENT)]
-			protected function get ruleObject(): *
-			{
-				return (parent as RuleBox).ruleObject;
-			}
-			
-			protected function set ruleObjecet(value:*): void
-			{
-				dispatchEvent(new Event(RULE_OBJECT_CHANGE_EVENT));
-			}
-			
-		]]>
-	</fx:Script>
-	<fx:Declarations>
-		<!-- Place non-visual elements (e.g., services, value objects) here -->
-	</fx:Declarations>
-</mx:VBox>
+	<s:layout>
+		<s:VerticalLayout/>
+	</s:layout>
+</s:SkinnableContainer>

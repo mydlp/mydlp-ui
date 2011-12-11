@@ -52,14 +52,14 @@
 		    <namespace>http://www.mydlp.com/flex/my</namespace>
 		  </includeNamespaces>
         </configuration>
-	<dependencies>
+        <dependencies>
           <dependency>
             <groupId>com.adobe.flex</groupId>
             <artifactId>compiler</artifactId>
             <version>${flex.version}</version>
             <type>pom</type>
           </dependency>	
-	</dependencies>
+        </dependencies>
       </plugin>
     </plugins>
   </build>

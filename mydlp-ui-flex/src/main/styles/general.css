@@ -7,7 +7,6 @@
 @namespace inventory "com.mydlp.ui.widget.policy.inventory.*";
 @namespace rule "com.mydlp.ui.widget.policy.rule.*";
 
-
 rule|RuleBox {
 	borderStyle: solid;
 	borderVisible: true;
@@ -27,23 +26,24 @@ rule|RuleBoxComponentBase#labelBox #nameLabel {
 	fontWeight: bold;
 }
 
-rule|RuleBoxComponentBase#actorBox {
+rule|RuleBoxComponentBase#sourceList {
 	backgroundColor: #FFFFCC;
 }
 
-rule|RuleBoxComponentBase#matcherBox {
-	backgroundColor: #00FFCC;
+rule|RuleBoxComponentBase#matcherList {
+	backgroundColor: #99AACC;
 }
 
-rule|RuleBoxComponentBase#actionBox {
+rule|ActionBox {
 	backgroundColor: #99FFCC;
 }
 
-rule|RuleBoxComponentBase#miscBox {
-	backgroundColor: #00CCFF;
+rule|ActionBox s|Label {
+	fontWeight: bold;
+	color: red;
 }
 
-inventory|NewDialog mx|VBox {
+inventory|NewDialog s|VGroup {
 	horizontalAlign: center;
 	paddingBottom: 20;
 	paddingLeft: 10;
@@ -51,7 +51,7 @@ inventory|NewDialog mx|VBox {
 	paddingTop: 10;
 }
 
-general|GenericDeleteDialog mx|VBox {
+general|GenericDeleteDialog s|VGroup {
 	horizontalAlign: center;
 	paddingBottom: 20;
 	paddingLeft: 10;
@@ -59,3 +59,7 @@ general|GenericDeleteDialog mx|VBox {
 	paddingTop: 10;
 }
 
+s|ItemRenderer {
+	contentBackgroundAlpha: 0;
+}
+	

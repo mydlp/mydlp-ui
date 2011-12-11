@@ -1,20 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
-<s:HGroup xmlns:fx="http://ns.adobe.com/mxml/2009" 
+<s:SkinnableContainer xmlns:fx="http://ns.adobe.com/mxml/2009" 
 		 xmlns:s="library://ns.adobe.com/flex/spark" 
 		 xmlns:mx="library://ns.adobe.com/flex/mx"
 		 xmlns:my="http://www.mydlp.com/flex/my" 
 		 xmlns:domain="com.mydlp.ui.domain.*" 
 		 xmlns:rule="com.mydlp.ui.widget.policy.rule.*" 
+		 creationComplete="onCreationComplete(event)"
 		 >
 	<fx:Script>
 		<![CDATA[
+			import com.mydlp.ui.domain.Network;
+			
+			import mx.collections.ArrayCollection;
+			import mx.collections.ListCollectionView;
+			import mx.events.FlexEvent;
 			[Bindable]
 			public var ruleObject:* = null;
+			
+			[Bindable]
+			protected var sourceDataProvider:ArrayCollection = new ArrayCollection();
+			
+			public function refreshDataProviders(): void
+			{
+				var ruleItems:ListCollectionView = ruleObject.ruleItems;
+				for (var i:* in ruleItems)
+				{
+					if (ruleItems[i].item is Network)
+						sourceDataProvider.addItem(ruleItems[i]);
+				}
+			}
+			
+			protected function onCreationComplete(event:FlexEvent):void
+			{
+				invalidateDisplayList();
+				refreshDataProviders();
+				validateNow();
+			}
+			
 		]]>
 	</fx:Script>
 	
 	<fx:Declarations>
 	</fx:Declarations>
+	
+	<s:layout>
+		<s:HorizontalLayout/>
+	</s:layout>
 	
 	<s:states>
 		<s:State name="defaultState"/>
@@ -23,13 +54,16 @@
 	</s:states>
 	
 	<rule:RuleBoxComponentBase id="labelBox" width="150" height="100%" >
-		<mx:Label id="nameLabel" text="{ruleObject.label}"/>
+		<s:Label id="nameLabel" text="{ruleObject.label}"/>
 	</rule:RuleBoxComponentBase>
 	
-	<rule:SourceList id="sourceList" includeIn="webRule,mailRule" width="150" height="100%"/>
+	<rule:SourceList id="sourceList" includeIn="webRule,mailRule" 
+					 width="150" height="100%"
+					 dataProvider="{sourceDataProvider}"/>
 	
-	<rule:SourceList id="matcherList" width="150" height="100%"/>
+	<rule:SourceList id="matcherList" width="150" height="100%"
+					 dataProvider="{sourceDataProvider}"/>
 	
-	<rule:ActionBox id="actionBox" width="100" height="100%"  />
+	<rule:ActionBox id="actionBox" width="100" height="100%" action="@{ruleObject.action}" />
 	
-</s:HGroup>
+</s:SkinnableContainer>

@@ -2,9 +2,14 @@
 <rule:RuleBoxComponentBase xmlns:fx="http://ns.adobe.com/mxml/2009" 
 					xmlns:s="library://ns.adobe.com/flex/spark" 
 					xmlns:mx="library://ns.adobe.com/flex/mx" 
-					xmlns:rule="com.mydlp.ui.widget.policy.rule.*"
-					>
-	<mx:HBox>
-		<mx:Label text="{ruleObject.action}" />
-	</mx:HBox>
+					xmlns:rule="com.mydlp.ui.widget.policy.rule.*">
+	<fx:Script>
+		<![CDATA[
+			import com.mydlp.ui.domain.Rule;
+			
+			[Bindable]
+			public var action:String = Rule.ACTION_PASS;
+		]]>
+	</fx:Script>
+	<s:Label text="{action}" />
 </rule:RuleBoxComponentBase>

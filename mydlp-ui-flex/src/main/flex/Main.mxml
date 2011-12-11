@@ -45,21 +45,12 @@
 		<my:remote id="dataAccessService" destination="dataAccessService" fault="faultHandler(event)"/>
 	</fx:Declarations>
 
-	<mx:Panel title="Tree Control Example" height="75%" width="75%" 
-			  paddingTop="10" paddingLeft="10" paddingRight="10" paddingBottom="10">
-		
-		<mx:VBox width="100%" >
-			<mx:Button label="Add Rule" />
+	<mx:TabNavigator borderStyle="solid" width="100%" height="100%">
+		<mx:VBox id="policyTab" label="Policy" width="100%" height="100%">
+			<mx:HDividedBox width="100%" height="100%">
+				<inventory:InventoryTree id="inventoryTree"/>
+				<rule:RuleContainer id="ruleContainer" />
+			</mx:HDividedBox>
 		</mx:VBox>
-		
-		<mx:HDividedBox width="100%" height="100%">
-			
-			
-			<inventory:InventoryTree id="inventoryTree"/>
-			
-			<rule:RuleContainer id="ruleContainer" />
-			
-		</mx:HDividedBox>
-		
-	</mx:Panel>
+	</mx:TabNavigator>
 </s:Application>

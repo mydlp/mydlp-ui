@@ -5,8 +5,8 @@
 						   xmlns:rule="com.mydlp.ui.widget.policy.rule.*">
 	<fx:Declarations>
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
-		<mx:ListCollectionView id="itemListDataProvider" />
+		<mx:ListCollectionView id="dataProvider" />
 	</fx:Declarations>
 	
-	<s:List id="itemList" dataProvider="{itemListDataProvider}"/>
+	<s:List id="itemList" dataProvider="{dataProvider}" width="100%" height="100%"/>
 </rule:RuleBoxComponentBase>

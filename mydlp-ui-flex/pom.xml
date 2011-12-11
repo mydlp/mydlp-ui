@@ -32,6 +32,13 @@
     </dependency>
     <dependency>
       <groupId>com.adobe.flex.framework</groupId>
+      <artifactId>spark</artifactId>
+      <version>${flex.version}</version>
+      <type>swc</type>
+      <scope>theme</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.adobe.flex.framework</groupId>
       <artifactId>flex-framework</artifactId>
       <version>${flex.version}</version>
       <type>pom</type>
@@ -54,13 +61,23 @@
         <version>${flexmojos.version}</version>
         <extensions>true</extensions>
         <configuration>
-          <debug>true</debug>
+          <compilerWarnings>
+            <warn-no-constructor>false</warn-no-constructor>
+          </compilerWarnings>
           <coverageViewerPath />
           <storepass />
           <services>${basedir}/../mydlp-ui-webapp/src/main/webapp/WEB-INF/flex/services-config.xml</services> 
           <localesCompiled>
             <locale>en_US</locale>
           </localesCompiled>
+          <quality>${flex.quality}</quality>
+          <optimize>${flex.optimize}</optimize>
+          <debug>${flex.debug}</debug>
+          <strict>true</strict>
+          <themes>
+            <theme>${settings.localRepository}/com/adobe/flex/framework/spark/${flex.version}/spark-${flex.version}-theme.css</theme>
+          </themes>
+          <removeUnusedRsls>true</removeUnusedRsls>
         </configuration>
 	    <dependencies>
           <dependency>
