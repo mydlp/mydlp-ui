@@ -8,5 +8,5 @@
 		<mx:ListCollectionView id="dataProvider" />
 	</fx:Declarations>
 	
-	<s:List id="itemList" dataProvider="{dataProvider}" width="100%" height="100%"/>
+	<s:List id="itemList" dataProvider="{dataProvider}" width="100%" height="100%" />
 </rule:RuleBoxComponentBase>
