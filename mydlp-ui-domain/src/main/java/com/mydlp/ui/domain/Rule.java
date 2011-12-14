@@ -2,6 +2,7 @@ package com.mydlp.ui.domain;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Inheritance;
 import javax.persistence.OneToMany;
@@ -53,7 +54,7 @@ public abstract class Rule extends AbstractNamedEntity {
 		this.action = action;
 	}
 
-	@OneToMany(mappedBy="rule")
+	@OneToMany(mappedBy="rule", cascade={CascadeType.ALL})
 	public List<RuleItem> getRuleItems() {
 		return ruleItems;
 	}

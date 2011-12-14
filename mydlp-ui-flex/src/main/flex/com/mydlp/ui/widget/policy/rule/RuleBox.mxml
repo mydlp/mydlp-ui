@@ -68,7 +68,8 @@
 	
 	<rule:SourceList id="sourceList" includeIn="webRule,mailRule" 
 					 width="150" height="100%"
-					 dataProvider="{sourceDataProvider}"/>
+					 dataProvider="{sourceDataProvider}"
+					 ruleObject="{ruleObject}"/>
 	
 	<rule:SourceList id="matcherList" width="150" height="100%"
 					 dataProvider="{sourceDataProvider}"/>
