@@ -18,6 +18,7 @@
 			import mx.collections.ArrayCollection;
 			import mx.collections.ListCollectionView;
 			import mx.controls.Alert;
+			import mx.core.FlexGlobals;
 			import mx.core.IUIComponent;
 			import mx.events.DragEvent;
 			import mx.events.FlexEvent;
@@ -39,7 +40,7 @@
 			{
 				var dropTarget:IUIComponent = dragEvent.currentTarget as IUIComponent;
 				DragManager.acceptDragDrop(dropTarget);
-				DragManager.showFeedback(DragManager.NONE);
+				DragManager.showFeedback(DragManager.COPY);
 			}
 			
 			protected function getRulesHandler(event:ResultEvent): void
@@ -80,12 +81,17 @@
 			{
 				// TODO Auto-generated method stub
 			}
+			protected function removeRuleItemHandler(event:ResultEvent): void
+			{
+				FlexGlobals.topLevelApplication.refresh();
+			}
 			
 		]]>
 	</fx:Script>
 	<fx:Declarations>
 		<my:remote id="re" destination="ruleBRS">
 			<my:method name="getRules" result="getRulesHandler(event)" />
+			<my:method name="removeRuleItem" result="removeRuleItemHandler(event)" />
 		</my:remote>
 	</fx:Declarations>
 	

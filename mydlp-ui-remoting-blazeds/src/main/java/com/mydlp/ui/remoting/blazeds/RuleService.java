@@ -6,6 +6,7 @@ import org.springframework.security.access.annotation.Secured;
 
 import com.mydlp.ui.domain.AuthSecurityRole;
 import com.mydlp.ui.domain.Rule;
+import com.mydlp.ui.domain.RuleItem;
 
 @Secured(AuthSecurityRole.ROLE_USER)
 public interface RuleService {
@@ -15,4 +16,6 @@ public interface RuleService {
 	public Rule save(Rule rule);
 
 	public void remove(Rule rule);
+	
+	public void removeRuleItem(RuleItem ruleItem);
 }

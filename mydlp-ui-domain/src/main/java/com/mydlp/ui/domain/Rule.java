@@ -2,11 +2,8 @@ package com.mydlp.ui.domain;
 
 import java.util.List;
 
-<<<<<<< HEAD
 import javax.persistence.CascadeType;
-=======
 import javax.persistence.Column;
->>>>>>> 137c45a51f523ba6cf315bfe4635a3dfdb5706ec
 import javax.persistence.Entity;
 import javax.persistence.Inheritance;
 import javax.persistence.OneToMany;

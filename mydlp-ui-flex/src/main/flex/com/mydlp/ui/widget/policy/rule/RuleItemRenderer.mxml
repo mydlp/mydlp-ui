@@ -6,9 +6,32 @@
 				autoDrawBackground="true"
 				creationComplete="{ruleItemObject = data as RuleItem;}">
 	
+	<fx:Script>
+		<![CDATA[
+			import mx.core.FlexGlobals;
+			protected function removeRuleItem(event:MouseEvent):void
+			{
+				FlexGlobals.topLevelApplication.ruleContainer.re.removeRuleItem(ruleItemObject);
+			}
+		]]>
+	</fx:Script>
+	
+	
 	<fx:Declarations>
 		<domain:RuleItem id="ruleItemObject"/>
 	</fx:Declarations>
+	
+	<s:states>
+		<s:State name="normal" />
+		<s:State name="hovered" />
+		<s:State name="selected" />
+	</s:states>
+	
+	<s:layout>
+		<s:HorizontalLayout />
+	</s:layout>
+	
+	<s:Button label="-" includeIn="hovered, selected" click="removeRuleItem(event)"/>
 	
 	<s:Label text="{ruleItemObject.item.coupledInventoryItem.label}"/>
 	

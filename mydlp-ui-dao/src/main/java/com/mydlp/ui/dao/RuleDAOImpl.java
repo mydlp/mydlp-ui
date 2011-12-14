@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.mydlp.ui.domain.Rule;
+import com.mydlp.ui.domain.RuleItem;
 
 @Repository("ruleDAO")
 @Transactional
@@ -32,6 +33,11 @@ public class RuleDAOImpl extends AbstractDAO implements RuleDAO {
 	@Transactional(readOnly=false)
 	public void remove(Rule r) {
 		getHibernateTemplate().delete(r);
+	}
+
+	@Override
+	public void removeRuleItem(RuleItem ri) {
+		getHibernateTemplate().delete(ri);
 	}
 	
 }
