@@ -7,11 +7,34 @@
 						   >
 	<fx:Script>
 		<![CDATA[
+			import com.mydlp.ui.util.InteractionUtil;
+			
+			import mx.core.DragSource;
+			import mx.core.IUIComponent;
+			import mx.events.DragEvent;
 			import mx.events.FlexEvent;
+			import mx.managers.DragManager;
 			
 			protected function onInitialize(event:FlexEvent):void
 			{
+				this.addEventListener(DragEvent.DRAG_ENTER, allowDrop);
+				this.addEventListener(DragEvent.DRAG_DROP, acceptDrop);
 				itemList.itemRenderer = new ClassFactory(RuleItemRenderer);
+			}
+			
+			protected function allowDrop(dragEvent:DragEvent):void
+			{
+				var dropTarget:IUIComponent = dragEvent.currentTarget as IUIComponent;
+				DragManager.acceptDragDrop(dropTarget);
+			}
+			
+			protected function acceptDrop(dragEvent:DragEvent):void
+			{
+				var dragSource:DragSource = dragEvent.dragSource;
+				var dragInitiator:IUIComponent = dragEvent.dragInitiator;
+				var dropTarget:Object = dragEvent.currentTarget;
+				DragManager.showFeedback(DragManager.COPY);
+				//dropped object will be saved here.
 			}
 			
 		]]>
