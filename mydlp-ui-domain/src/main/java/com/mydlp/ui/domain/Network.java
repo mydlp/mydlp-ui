@@ -1,5 +1,6 @@
 package com.mydlp.ui.domain;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 
 @Entity
@@ -14,6 +15,7 @@ public class Network extends Item {
 	
 	protected Long ipMask;
 
+	@Column(nullable=false)
 	public Long getIpBase() {
 		return ipBase;
 	}
@@ -22,6 +24,7 @@ public class Network extends Item {
 		this.ipBase = ipBase;
 	}
 
+	@Column(nullable=false)
 	public Long getIpMask() {
 		return ipMask;
 	}

@@ -1,8 +1,118 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:SkinnableContainer xmlns:fx="http://ns.adobe.com/mxml/2009" 
 		  xmlns:s="library://ns.adobe.com/flex/spark" 
+		  xmlns:my="http://www.mydlp.com/flex/my"
 		  xmlns:mx="library://ns.adobe.com/flex/mx">
+	<fx:Script>
+		<![CDATA[
+			import com.mydlp.ui.domain.DataFormat;
+			
+			import mx.collections.ArrayCollection;
+			import mx.events.DragEvent;
+			import mx.rpc.events.ResultEvent;
+			
+			[Bindable]
+			protected var otherDataFormats:ListCollectionView;
+			
+			[Bindable]
+			protected var allDataFormats:ListCollectionView;
+			
+			protected function removeClickHandler(event:MouseEvent):void
+			{
+				dfList.dataGroup.invalidateDisplayList();
+				for each (var o:Object in dfList.selectedIndices)
+					dataFormats.removeItemAt(o as int);
+				dfList.validateNow();
+				
+				refreshLists();
+			}
+			
+			protected function refreshLists(): void
+			{
+				odfList.dataGroup.invalidateDisplayList();
+				if (allDataFormats == null)
+					re.getDataFormats();
+				else
+					populateOtherDataFormats();
+			}
+			
+			protected function expandClickHandler(event:MouseEvent):void
+			{
+				if (currentState == "normal")
+				{
+					currentState = "expanded";
+					refreshLists();
+				}
+				else if (currentState == "expanded")
+				{
+					currentState = "normal";
+				}
+			}
+			
+			protected function getDataFormatsHandler(event:ResultEvent): void
+			{
+				allDataFormats = event.result as ListCollectionView;
+				populateOtherDataFormats();
+			}
+			
+			protected function populateOtherDataFormats(): void
+			{
+				otherDataFormats = new ArrayCollection();
+				
+				if (dataFormats != null)
+					for each (var ndf:Object in allDataFormats)
+				{
+					var addFlag:Boolean = true;
+					for each (var cdf:Object in dataFormats)
+					if ((cdf as DataFormat).id == (ndf as DataFormat).id)
+					{
+						addFlag = false;
+						break;
+					}
+					if (addFlag)
+						otherDataFormats.addItem(ndf);
+				}
+				odfList.validateNow();
+			}
+			
+		]]>
+	</fx:Script>
 	<fx:Declarations>
-		<!-- Place non-visual elements (e.g., services, value objects) here -->
+		<mx:ListCollectionView id="dataFormats" />
+		
+		<my:remote id="re" destination="dataFormatBRS">
+			<my:method name="getDataFormats" result="getDataFormatsHandler(event)" />
+		</my:remote>
 	</fx:Declarations>
+	
+	<s:states>
+		<s:State name="normal"/>
+		<s:State name="expanded" />
+	</s:states>
+	
+	<s:layout>
+		<s:HorizontalLayout />
+	</s:layout>
+	
+	<s:Group>
+		<s:layout>
+			<s:VerticalLayout />
+		</s:layout>
+		<s:Button label="Remove" click="removeClickHandler(event)"/>
+		<s:List id="dfList" dataProvider="{dataFormats}" dropEnabled="true"
+				itemRenderer="com.mydlp.ui.widget.general.input.DataFormatRenderer" />
+	</s:Group>
+	
+	<s:Button label="Expand" click="expandClickHandler(event)"/>
+	
+	<s:Group includeIn="expanded">
+		<s:layout>
+			<s:VerticalLayout />
+		</s:layout>
+		<s:List id="odfList" dataProvider="{otherDataFormats}" 
+				dragEnabled="true" dragMoveEnabled="true" 
+				itemRenderer="com.mydlp.ui.widget.general.input.DataFormatRenderer" />
+	</s:Group>
+	
+	
 </s:SkinnableContainer>

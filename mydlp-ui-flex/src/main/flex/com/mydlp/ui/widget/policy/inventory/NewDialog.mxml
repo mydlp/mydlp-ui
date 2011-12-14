@@ -7,6 +7,8 @@
 				>
 	<fx:Script>
 		<![CDATA[
+			import com.mydlp.ui.domain.InformationDescription;
+			import com.mydlp.ui.domain.InformationType;
 			import com.mydlp.ui.domain.InventoryCategory;
 			import com.mydlp.ui.domain.InventoryItem;
 			import com.mydlp.ui.domain.Network;
@@ -37,10 +39,14 @@
 				i.item = new Network();
 				InteractionUtil.newEditDialog(i);
 			}
-			protected function matcherHandler():void
+			protected function informationTypeHandler():void
 			{
 				close();
-				//InteractionUtil.newPopup(this.parentApplication, NewMatcherDialog);
+				var i:InventoryItem = new InventoryItem();
+				var it:InformationType = new InformationType();
+				it.informationDescription = new InformationDescription();
+				i.item = new InformationType();
+				InteractionUtil.newEditDialog(i);	
 			}
 		]]>
 	</fx:Script>
@@ -55,7 +61,7 @@
 		<s:Label text="@Resource(bundle = 'messages', key = 'inventory.newdialog.message')"/>
 		<s:Button label="@Resource(bundle = 'messages', key = 'inventory.newdialog.category')" click="categoryHandler()"/>
 		<s:Button label="@Resource(bundle = 'messages', key = 'inventory.newdialog.network')" click="networkHandler()"/>
-		<s:Button label="@Resource(bundle = 'messages', key = 'inventory.newdialog.matcher')" click="matcherHandler()"/>
+		<s:Button label="@Resource(bundle = 'messages', key = 'inventory.newdialog.informationType')" click="informationTypeHandler()"/>
 		<s:Button label="@Resource(bundle = 'messages', key = 'inventory.newdialog.group')"/>
 	</s:Group>
 	

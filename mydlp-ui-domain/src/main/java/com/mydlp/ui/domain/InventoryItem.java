@@ -2,6 +2,7 @@ package com.mydlp.ui.domain;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 
 @Entity
@@ -15,6 +16,7 @@ public class InventoryItem extends InventoryBase {
 	protected Item item;
 	
 	@OneToOne(cascade={CascadeType.ALL})
+	@JoinColumn(nullable=false)
 	public Item getItem() {
 		return item;
 	}

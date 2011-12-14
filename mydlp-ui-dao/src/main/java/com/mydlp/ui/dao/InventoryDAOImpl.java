@@ -22,12 +22,14 @@ public class InventoryDAOImpl extends AbstractDAO implements InventoryDAO {
 	}
 
 	@Override
+	@Transactional(readOnly=false)
 	public InventoryBase save(InventoryBase i) {
 		getHibernateTemplate().saveOrUpdate(i);
 		return i;
 	}
 
 	@Override
+	@Transactional(readOnly=false)
 	public void remove(InventoryBase i) {
 		getHibernateTemplate().delete(i);
 	}

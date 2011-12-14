@@ -37,7 +37,7 @@ public class Matcher extends AbstractEntity {
 	public void setMatcherParams(List<MatcherParam> matcherParams) {
 		this.matcherParams = matcherParams;
 	}
-
+	
 	@OneToOne(mappedBy="matcher")
 	public InformationFeature getCoupledInformationFeature() {
 		return coupledInformationFeature;
