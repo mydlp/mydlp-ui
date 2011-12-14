@@ -15,7 +15,7 @@ public class Config extends AbstractNamedEntity{
 	
 	protected String value;
 
-	@Column(unique=true)
+	@Column(unique=true, nullable=false)
 	public String getKey() {
 		return key;
 	}

@@ -1,7 +1,9 @@
 package com.mydlp.ui.domain;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
@@ -11,14 +13,16 @@ public class InformationFeature extends AbstractEntity {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 3968983054132222633L;
-	
+	private static final long serialVersionUID = -3781602205466140955L;
+
 	protected Long score;
 	
 	protected Matcher matcher;
 	
 	protected InformationDescription informationDescription;
 
+	
+	@Column(nullable=false)
 	public Long getScore() {
 		return score;
 	}
@@ -28,6 +32,7 @@ public class InformationFeature extends AbstractEntity {
 	}
 
 	@OneToOne(cascade={CascadeType.ALL})
+	@JoinColumn(nullable=false)
 	public Matcher getMatcher() {
 		return matcher;
 	}
@@ -37,6 +42,7 @@ public class InformationFeature extends AbstractEntity {
 	}
 
 	@ManyToOne
+	@JoinColumn(nullable=false)
 	public InformationDescription getInformationDescription() {
 		return informationDescription;
 	}
@@ -45,5 +51,5 @@ public class InformationFeature extends AbstractEntity {
 			InformationDescription informationDescription) {
 		this.informationDescription = informationDescription;
 	}
-
+	
 }

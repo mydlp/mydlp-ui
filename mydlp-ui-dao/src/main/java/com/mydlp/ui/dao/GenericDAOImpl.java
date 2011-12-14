@@ -10,12 +10,14 @@ import com.mydlp.ui.domain.AbstractEntity;
 public class GenericDAOImpl extends AbstractDAO implements GenericDAO {
 
 	@Override
+	@Transactional(readOnly=false)
 	public AbstractEntity save(AbstractEntity i) {
 		getHibernateTemplate().saveOrUpdate(i);
 		return i;
 	}
 
 	@Override
+	@Transactional(readOnly=false)
 	public void remove(AbstractEntity i) {
 		getHibernateTemplate().delete(i);
 	}

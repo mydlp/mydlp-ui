@@ -9,6 +9,8 @@
 	<fx:Script>
 		<![CDATA[
 			import com.mydlp.ui.domain.AbstractEntity;
+			import com.mydlp.ui.domain.InformationDescription;
+			import com.mydlp.ui.domain.InformationType;
 			import com.mydlp.ui.domain.InventoryBase;
 			import com.mydlp.ui.domain.InventoryCategory;
 			import com.mydlp.ui.domain.InventoryItem;
@@ -17,6 +19,7 @@
 			import com.mydlp.ui.util.InteractionUtil;
 			import com.mydlp.ui.util.LangUtil;
 			import com.mydlp.ui.util.ReflectionUtil;
+			import com.mydlp.ui.widget.general.input.DataFormatInput;
 			import com.mydlp.ui.widget.general.input.IpAddressInput;
 			
 			import flash.utils.getQualifiedClassName;
@@ -24,6 +27,7 @@
 			import flashx.textLayout.container.ISandboxSupport;
 			
 			import mx.binding.utils.BindingUtils;
+			import mx.collections.ArrayCollection;
 			import mx.collections.ListCollectionView;
 			import mx.controls.Alert;
 			import mx.core.FlexGlobals;
@@ -61,7 +65,8 @@
 							classMember.name == "nameKey" ||
 							(classMember.name == "children" && classMember.type == ListCollectionView)||
 							(classMember.name == "coupledInventoryItem" && classMember.type == InventoryItem) ||
-							(classMember.name == "coupledRuleItems" && classMember.type == ListCollectionView)
+							(classMember.name == "coupledRuleItems" && classMember.type == ListCollectionView) ||
+							classMember.type == InformationDescription
 						)
 					{
 						continue;
@@ -81,6 +86,18 @@
 						ipInput.numberValue = targetObject[classMember.name];
 						BindingUtils.bindProperty(targetObject, classMember.name, ipInput, "numberValue");
 						visualElement = ipInput;
+					}
+					else if (targetObject is InformationType && 
+							classMember.name == "dataFormats" && 
+							classMember.type == ListCollectionView)
+					{
+						var dfInput:DataFormatInput = new DataFormatInput();
+						if (targetObject[classMember.name] == null)
+							dfInput.dataFormats = new ArrayCollection();
+						else
+							dfInput.dataFormats = targetObject[classMember.name];
+						BindingUtils.bindProperty(targetObject, classMember.name, dfInput, "dataFormats");
+						visualElement = dfInput;
 					}
 					else
 					{

@@ -1,6 +1,7 @@
 package com.mydlp.ui.domain;
 
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 @Entity
@@ -16,6 +17,7 @@ public class RuleItem extends AbstractEntity {
 	protected Rule rule;
 
 	@ManyToOne
+	@JoinColumn(nullable=false)
 	public Item getItem() {
 		return item;
 	}
@@ -25,6 +27,7 @@ public class RuleItem extends AbstractEntity {
 	}
 
 	@ManyToOne
+	@JoinColumn(nullable=false)
 	public Rule getRule() {
 		return rule;
 	}

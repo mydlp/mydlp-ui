@@ -28,7 +28,7 @@ public class InformationType extends Item {
 		this.dataFormats = dataFormats;
 	}
 
-	@OneToOne(cascade={CascadeType.ALL})
+	@OneToOne(mappedBy="informationType", cascade={CascadeType.ALL})
 	public InformationDescription getInformationDescription() {
 		return informationDescription;
 	}

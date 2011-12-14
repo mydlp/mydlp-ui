@@ -22,12 +22,14 @@ public class RuleDAOImpl extends AbstractDAO implements RuleDAO {
 	}
 
 	@Override
+	@Transactional(readOnly=false)
 	public Rule save(Rule r) {
 		getHibernateTemplate().saveOrUpdate(r);
 		return r;
 	}
 
 	@Override
+	@Transactional(readOnly=false)
 	public void remove(Rule r) {
 		getHibernateTemplate().delete(r);
 	}

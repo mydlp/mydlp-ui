@@ -34,23 +34,23 @@
 			protected function getRulesHandler(event:ResultEvent): void
 			{
 				var rules:ArrayCollection = event.result as ArrayCollection;
-				for (var i:* in rules) 
+				for each (var rule:* in rules) 
 				{
 					var ruleBox:RuleBox = null;
-					if (rules[i] is WebRule)
+					if (rule is WebRule)
 					{
 						ruleBox = new WebRuleBox();
-						ruleBox.ruleObject = rules[i] as WebRule;
+						ruleBox.ruleObject = rule as WebRule;
 					}
-					else if (rules[i] is MailRule)
+					else if (rule is MailRule)
 					{
 						ruleBox = new MailRuleBox();
-						ruleBox.ruleObject = rules[i] as MailRule;
+						ruleBox.ruleObject = rule as MailRule;
 					}
-					else if (rules[i] is EndpointRule)
+					else if (rule is EndpointRule)
 					{
 						ruleBox = new EndpointRuleBox();
-						ruleBox.ruleObject = rules[i] as EndpointRule;
+						ruleBox.ruleObject = rule as EndpointRule;
 					}
 					else
 						throw new Error("Unknown rule type;");

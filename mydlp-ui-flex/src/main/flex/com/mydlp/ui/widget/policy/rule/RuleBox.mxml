@@ -23,10 +23,10 @@
 			public function refreshDataProviders(): void
 			{
 				var ruleItems:ListCollectionView = ruleObject.ruleItems;
-				for (var i:* in ruleItems)
+				for each (var ruleItem:* in ruleItems)
 				{
-					if (ruleItems[i].item is Network)
-						sourceDataProvider.addItem(ruleItems[i]);
+					if (ruleItem.item is Network)
+						sourceDataProvider.addItem(ruleItem);
 				}
 			}
 			

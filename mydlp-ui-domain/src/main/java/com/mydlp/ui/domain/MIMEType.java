@@ -1,5 +1,6 @@
 package com.mydlp.ui.domain;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 
 @Entity
@@ -12,6 +13,7 @@ public class MIMEType extends AbstractEntity {
 
 	protected String mimeType;
 
+	@Column(nullable=false)
 	public String getMimeType() {
 		return mimeType;
 	}

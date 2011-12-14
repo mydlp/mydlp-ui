@@ -2,6 +2,7 @@ package com.mydlp.ui.domain;
 
 import java.util.List;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Inheritance;
 import javax.persistence.OneToMany;
@@ -29,6 +30,7 @@ public abstract class Rule extends AbstractNamedEntity {
 	
 	protected List<RuleItem> ruleItems;
 	
+	@Column(nullable=false)
 	public Long getPriority() {
 		return priority;
 	}
@@ -37,6 +39,7 @@ public abstract class Rule extends AbstractNamedEntity {
 		this.priority = priority;
 	}
 
+	@Column(nullable=false)
 	public Boolean getEnabled() {
 		return enabled;
 	}
@@ -45,6 +48,7 @@ public abstract class Rule extends AbstractNamedEntity {
 		this.enabled = enabled;
 	}
 
+	@Column(nullable=false)
 	public String getAction() {
 		return action;
 	}
