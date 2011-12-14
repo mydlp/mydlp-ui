@@ -19,7 +19,7 @@
 			
 			protected function removeClickHandler(event:MouseEvent):void
 			{
-				dfList.invalidateDisplayList();
+				dfList.dataGroup.invalidateDisplayList();
 				for each (var o:Object in dfList.selectedIndices)
 					dataFormats.removeItemAt(o as int);
 				dfList.validateNow();
@@ -29,7 +29,7 @@
 			
 			protected function refreshLists(): void
 			{
-				odfList.invalidateDisplayList();
+				odfList.dataGroup.invalidateDisplayList();
 				if (allDataFormats == null)
 					re.getDataFormats();
 				else
@@ -72,7 +72,6 @@
 					if (addFlag)
 						otherDataFormats.addItem(ndf);
 				}
-				
 				odfList.validateNow();
 			}
 			

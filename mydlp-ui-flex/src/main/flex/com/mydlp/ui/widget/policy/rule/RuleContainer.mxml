@@ -30,7 +30,7 @@
 			public function refreshRules():void
 			{
 				//TODO: maintain scrool position
-				ruleList.invalidateDisplayList();
+				ruleList.dataGroup.invalidateDisplayList();
 				ruleDP.removeAll();
 				re.getRules();
 			}

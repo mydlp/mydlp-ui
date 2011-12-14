@@ -2,13 +2,7 @@
 <s:ItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009" 
 				xmlns:s="library://ns.adobe.com/flex/spark" 
 				xmlns:mx="library://ns.adobe.com/flex/mx" 
-				autoDrawBackground="false" 
-				xmlns:domain="com.mydlp.ui.domain.*"
-				creationComplete="{dataFormat = data as DataFormat}">
-	
-	<fx:Declarations>
-		<domain:DataFormat id="dataFormat" />
-	</fx:Declarations>
+				autoDrawBackground="false" >
 	
 	<s:states>
 		<s:State name="normal" />
@@ -16,5 +10,5 @@
 		<s:State name="selected" />
 	</s:states>
 	
-	<s:Label text="{dataFormat.label}" backgroundColor.hovered="yellow" backgroundColor.selected="green" />
+	<s:Label text="{data.label}" backgroundColor.hovered="yellow" backgroundColor.selected="green" />
 </s:ItemRenderer>
