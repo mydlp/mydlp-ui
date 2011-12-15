@@ -4,12 +4,31 @@
 				xmlns:mx="library://ns.adobe.com/flex/mx" 
 				autoDrawBackground="false"
 				creationComplete="{data = data as RuleItem;}">
+	
 	<fx:Script>
 		<![CDATA[
 			import com.mydlp.ui.domain.RuleItem;
+			
+			import mx.core.FlexGlobals;
+			protected function removeRuleItem(event:MouseEvent):void
+			{
+				FlexGlobals.topLevelApplication.ruleContainer.re.removeRuleItem(data);
+			}
 		]]>
 	</fx:Script>
 	
-	<s:Label text="{data.item.coupledInventoryItem.label}"/>
+	<s:states>
+		<s:State name="normal" />
+		<s:State name="hovered" />
+		<s:State name="selected" />
+	</s:states>
 	
+	<s:layout>
+		<s:HorizontalLayout />
+	</s:layout>
+	
+	<s:Button label="-" includeIn="hovered, selected" click="removeRuleItem(event)"/>
+	
+	<s:Label text="{data.item.coupledInventoryItem.label}"/>
+
 </s:ItemRenderer>

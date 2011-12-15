@@ -2,18 +2,24 @@
 <rule:RuleBoxComponentList xmlns:fx="http://ns.adobe.com/mxml/2009" 
 						   xmlns:s="library://ns.adobe.com/flex/spark" 
 						   xmlns:mx="library://ns.adobe.com/flex/mx" 
+						   xmlns:my="http://www.mydlp.com/flex/my"
 						   xmlns:rule="com.mydlp.ui.widget.policy.rule.*"
-						   initialize="onInitialize(event)"
+						   initialize="onInitialize(event)" xmlns:domain="com.mydlp.ui.domain.*"
 						   >
 	<fx:Script>
 		<![CDATA[
+			import com.mydlp.ui.domain.Item;
+			import com.mydlp.ui.domain.RuleItem;
+			import com.mydlp.ui.domain.RuleItemBase;
 			import com.mydlp.ui.util.InteractionUtil;
 			
 			import mx.core.DragSource;
+			import mx.core.FlexGlobals;
 			import mx.core.IUIComponent;
 			import mx.events.DragEvent;
 			import mx.events.FlexEvent;
 			import mx.managers.DragManager;
+			import mx.rpc.events.ResultEvent;
 			
 			protected function onInitialize(event:FlexEvent):void
 			{
@@ -26,6 +32,7 @@
 			{
 				var dropTarget:IUIComponent = dragEvent.currentTarget as IUIComponent;
 				DragManager.acceptDragDrop(dropTarget);
+				//will be controlled whether it is acceptable or not. like: this.id == "sourceList"
 			}
 			
 			protected function acceptDrop(dragEvent:DragEvent):void
@@ -35,8 +42,27 @@
 				var dropTarget:Object = dragEvent.currentTarget;
 				DragManager.showFeedback(DragManager.COPY);
 				//dropped object will be saved here.
+				
+				//var sourceItem:Item = FlexGlobals.topLevelApplication.inventoryTree.selectedItem.item;
+				
+				var newItem:RuleItem = new RuleItem();
+				newItem.item = FlexGlobals.topLevelApplication.inventoryTree.selectedItem.item;
+				newItem.rule = ruleObject;
+				ruleObject.ruleItems.addItem(newItem);
+				re.save(ruleObject);
+			}
+			
+			protected function saveHandler(event:ResultEvent):void
+			{
+				FlexGlobals.topLevelApplication.refresh();
 			}
 			
 		]]>
 	</fx:Script>
+	<fx:Declarations>
+		<my:remote id="re" destination="ruleBRS">
+			<my:method name="save" result="saveHandler(event)"/>
+		</my:remote>
+		<domain:Rule id="ruleObject" />
+	</fx:Declarations>
 </rule:RuleBoxComponentList>

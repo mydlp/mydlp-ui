@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.mydlp.ui.dao.RuleDAO;
 import com.mydlp.ui.domain.Rule;
+import com.mydlp.ui.domain.RuleItem;
 
 @Service("ruleBRS")
 @RemotingDestination
@@ -29,6 +30,11 @@ public class RuleBRSImpl implements RuleService
 	@Override
 	public void remove(Rule rule) {
 		ruleDAO.remove(rule);
+	}
+
+	@Override
+	public void removeRuleItem(RuleItem ruleItem) {
+		ruleDAO.removeRuleItem(ruleItem);
 	}
 
 }
