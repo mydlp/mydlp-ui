@@ -3,18 +3,17 @@
 				xmlns:s="library://ns.adobe.com/flex/spark" 
 				xmlns:mx="library://ns.adobe.com/flex/mx" 
 				autoDrawBackground="false" 
-				creationComplete="{data = data as DataFormat;}">
+				creationComplete="{data = data as InformationFeature;}">
 	<fx:Script>
 		<![CDATA[
-			import com.mydlp.ui.domain.DataFormat;
+			import com.mydlp.ui.domain.InformationFeature;
 		]]>
 	</fx:Script>
-	
 	<s:states>
 		<s:State name="normal" />
 		<s:State name="hovered" />
 		<s:State name="selected" />
 	</s:states>
 	
-	<s:Label text="{data.label}" backgroundColor.hovered="yellow" backgroundColor.selected="green" />
+	<s:Label text="{data.matcher.functionName + ' - ' + data.score }" backgroundColor.hovered="yellow" backgroundColor.selected="green" />
 </s:ItemRenderer>

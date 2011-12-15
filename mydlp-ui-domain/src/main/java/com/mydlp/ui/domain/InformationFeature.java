@@ -4,7 +4,6 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
 @Entity
@@ -13,14 +12,11 @@ public class InformationFeature extends AbstractEntity {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -3781602205466140955L;
+	private static final long serialVersionUID = -5842428509062650962L;
 
 	protected Long score;
 	
 	protected Matcher matcher;
-	
-	protected InformationDescription informationDescription;
-
 	
 	@Column(nullable=false)
 	public Long getScore() {
@@ -40,16 +36,4 @@ public class InformationFeature extends AbstractEntity {
 	public void setMatcher(Matcher matcher) {
 		this.matcher = matcher;
 	}
-
-	@ManyToOne
-	@JoinColumn(nullable=false)
-	public InformationDescription getInformationDescription() {
-		return informationDescription;
-	}
-
-	public void setInformationDescription(
-			InformationDescription informationDescription) {
-		this.informationDescription = informationDescription;
-	}
-	
 }

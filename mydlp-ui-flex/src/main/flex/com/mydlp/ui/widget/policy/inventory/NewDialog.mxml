@@ -43,8 +43,6 @@
 			{
 				close();
 				var i:InventoryItem = new InventoryItem();
-				var it:InformationType = new InformationType();
-				it.informationDescription = new InformationDescription();
 				i.item = new InformationType();
 				InteractionUtil.newEditDialog(i);	
 			}

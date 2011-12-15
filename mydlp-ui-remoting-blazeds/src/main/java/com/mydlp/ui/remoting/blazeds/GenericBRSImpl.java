@@ -24,7 +24,6 @@ public class GenericBRSImpl implements GenericService
 
 	@Override
 	public AbstractEntity save(AbstractEntity item) {
-		System.out.println(item.getClass().getSimpleName() + item.getId());
 		// delegating to related services to inherit authorization meta.
 		if (item instanceof InventoryBase)
 			return inventoryService.save((InventoryBase) item);

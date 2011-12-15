@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 
@@ -28,7 +29,8 @@ public class InformationType extends Item {
 		this.dataFormats = dataFormats;
 	}
 
-	@OneToOne(mappedBy="informationType", cascade={CascadeType.ALL})
+	@OneToOne(cascade={CascadeType.ALL})
+	@JoinColumn(nullable=false)
 	public InformationDescription getInformationDescription() {
 		return informationDescription;
 	}

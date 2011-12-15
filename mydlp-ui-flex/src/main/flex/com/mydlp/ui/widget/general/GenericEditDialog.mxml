@@ -20,6 +20,7 @@
 			import com.mydlp.ui.util.LangUtil;
 			import com.mydlp.ui.util.ReflectionUtil;
 			import com.mydlp.ui.widget.general.input.DataFormatInput;
+			import com.mydlp.ui.widget.general.input.InformationFeatureInput;
 			import com.mydlp.ui.widget.general.input.IpAddressInput;
 			
 			import flash.utils.getQualifiedClassName;
@@ -62,11 +63,12 @@
 					else if 
 						(
 							classMember.name == "id" ||
+							classMember.name == "optimisticLockVersion" ||
 							classMember.name == "nameKey" ||
 							(classMember.name == "children" && classMember.type == ListCollectionView)||
 							(classMember.name == "coupledInventoryItem" && classMember.type == InventoryItem) ||
 							(classMember.name == "coupledRuleItems" && classMember.type == ListCollectionView) ||
-							classMember.type == InformationDescription
+							(classMember.name == "informationType" && classMember.type == InformationType) 
 						)
 					{
 						continue;
@@ -98,6 +100,29 @@
 							dfInput.dataFormats = targetObject[classMember.name];
 						BindingUtils.bindProperty(targetObject, classMember.name, dfInput, "dataFormats");
 						visualElement = dfInput;
+					}
+					else if (targetObject is InformationDescription &&
+							classMember.name == "features" && 
+							classMember.type == ListCollectionView)
+					{
+						var ifInput:InformationFeatureInput = new InformationFeatureInput();
+						if (targetObject[classMember.name] == null)
+							ifInput.informationFeatures = new ArrayCollection();
+						else
+							ifInput.informationFeatures = targetObject[classMember.name];
+						trace("GED> " + getQualifiedClassName(targetObject[classMember.name]));
+						BindingUtils.bindProperty(targetObject, classMember.name, ifInput, "informationFeatures");
+						visualElement = ifInput;
+					}
+					else if (targetObject is InformationType &&
+							classMember.name == "informationDescription" && 
+							classMember.type == InformationDescription)
+					{
+						if (targetObject[classMember.name] == null)
+							targetObject[classMember.name] = new InformationDescription();
+						
+						populateClassMembers(targetObject[classMember.name]);
+						continue;
 					}
 					else
 					{

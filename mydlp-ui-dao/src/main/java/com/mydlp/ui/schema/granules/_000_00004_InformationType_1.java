@@ -48,7 +48,7 @@ public class _000_00004_InformationType_1 extends AbstractGranule {
 		
 		InformationDescription id = new InformationDescription();
 		id.setThreshold(new Long(500));
-		ift.setInformationDescription(id);
+		//ift.setInformationDescription(id);
 		List<InformationFeature> ifts = new ArrayList<InformationFeature>();
 		ifts.add(ift);
 		id.setFeatures(ifts);
@@ -58,7 +58,7 @@ public class _000_00004_InformationType_1 extends AbstractGranule {
 		List<DataFormat> dfs = new ArrayList<DataFormat>();
 		dfs.add(df);
 		it.setDataFormats(dfs);
-		id.setInformationType(it);
+		//id.setInformationType(it);
 		
 		InventoryItem ii = new InventoryItem();
 		ii.setName("Example Information Type");

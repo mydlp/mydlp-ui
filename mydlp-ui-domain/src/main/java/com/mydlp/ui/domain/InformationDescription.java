@@ -5,9 +5,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 
 @Entity
 public class InformationDescription extends AbstractEntity {
@@ -20,8 +18,6 @@ public class InformationDescription extends AbstractEntity {
 	protected Long threshold;
 	
 	protected List<InformationFeature> features;
-	
-	protected InformationType informationType;
 
 	@Column(nullable=false)
 	public Long getThreshold() {
@@ -32,25 +28,13 @@ public class InformationDescription extends AbstractEntity {
 		this.threshold = threshold;
 	}
 
-	@OneToMany(mappedBy="informationDescription", 
-			cascade={CascadeType.REMOVE, CascadeType.PERSIST})
+	@OneToMany(cascade={CascadeType.ALL})
 	public List<InformationFeature> getFeatures() {
 		return features;
 	}
 	
 	public void setFeatures(List<InformationFeature> features) {
 		this.features = features;
-	}
-	
-	@OneToOne
-	@JoinColumn(nullable=false)
-	public InformationType getInformationType() {
-		return informationType;
-	}
-	
-
-	public void setInformationType(InformationType informationType) {
-		this.informationType = informationType;
 	}
 
 }

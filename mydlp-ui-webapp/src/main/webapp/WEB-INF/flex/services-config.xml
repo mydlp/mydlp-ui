@@ -20,4 +20,12 @@
       </properties>
     </channel-definition>
   </channels>
+  
+  <logging>
+    <target class="flex.messaging.log.ConsoleTarget" level="Error">
+      <properties>
+        <prefix>[BlazeDS]</prefix>
+      </properties>
+    </target>
+  </logging>
 </services-config>
