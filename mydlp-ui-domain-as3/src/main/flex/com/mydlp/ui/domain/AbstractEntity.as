@@ -6,11 +6,13 @@
  */
 
 package com.mydlp.ui.domain {
-	import avmplus.getQualifiedClassName;
-	
 	import flash.net.getClassByAlias;
+	import flash.utils.getQualifiedClassName;
 	
+	import mx.core.FlexGlobals;
 	import mx.core.IUID;
+	import mx.rpc.AsyncToken;
+	import mx.rpc.IResponder;
 
     [Managed]
     [RemoteClass(alias="com.mydlp.ui.domain.AbstractEntity")]
@@ -28,5 +30,15 @@ package com.mydlp.ui.domain {
 		public function set uid(value:String):void
 		{
 		}
-    }
+		
+		override public function deleteRecord(responder:IResponder=null):AsyncToken
+		{
+			return FlexGlobals.topLevelApplication.genericRE.remove(this);
+		}
+		
+		override public function save(responder:IResponder=null):AsyncToken
+		{
+			return FlexGlobals.topLevelApplication.genericRE.save(this);
+		}
+   }
 }

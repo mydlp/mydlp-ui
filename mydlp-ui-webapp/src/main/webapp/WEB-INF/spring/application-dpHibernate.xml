@@ -59,17 +59,16 @@
     <property name="pageSize" value="10" />
   </bean>
   <bean id="dpHibernateDeserializer" class="org.dphibernate.serialization.HibernateDeserializer" scope="prototype" />
+
   
   <!--  
     Handles entity updates (CRUD).  Required if using entity persistence. 
-  -->
   <bean id="objectChangeUpdater" class="org.dphibernate.persistence.state.AuthenticatedObjectChangeUpdater" scope="prototype" />
-  
-  <!--  
+
     Used in update process, for resolving proxies back to the entity 
-  -->
   <bean id="hibernateProxyResolver" class="org.dphibernate.persistence.state.DbProxyResolver" scope="prototype">
     <constructor-arg ref="sessionFactory" />
   </bean>
-  
+-->  
+
 </beans>

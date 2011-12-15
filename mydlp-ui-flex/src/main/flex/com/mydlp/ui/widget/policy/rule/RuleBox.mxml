@@ -5,7 +5,9 @@
 		 xmlns:my="http://www.mydlp.com/flex/my" 
 		 xmlns:domain="com.mydlp.ui.domain.*" 
 		 xmlns:rule="com.mydlp.ui.widget.policy.rule.*" 
-		 initialize="onCreationComplete(event)"
+		 creationComplete="onCreationComplete(event)"
+		 dragEnter="onDragEnter(event)"
+		 dragDrop="onDragDrop(event)"
 		 >
 	<fx:Script>
 		<![CDATA[
@@ -49,23 +51,23 @@
 			
 			protected function onCreationComplete(event:FlexEvent):void
 			{
-				this.addEventListener(DragEvent.DRAG_ENTER, allowDrop);
-				this.addEventListener(DragEvent.DRAG_DROP, acceptDrop);
 				invalidateDisplayList();
 				refreshDataProviders();
 				validateNow();
 			}
 			
-			protected function allowDrop(dragEvent:DragEvent):void
+			protected function onDragEnter(dragEvent:DragEvent):void
 			{
 				var dropTarget:IUIComponent = dragEvent.currentTarget as IUIComponent;
 				var dragInitiator:IUIComponent = dragEvent.dragInitiator;
-				DragManager.acceptDragDrop(dropTarget);
+				
 				if(FlexGlobals.topLevelApplication.inventoryTree.selectedItem.item is Network && this.currentState != "webRule")
-						DragManager.showFeedback(DragManager.NONE);
+					DragManager.showFeedback(DragManager.NONE);
+				else
+					DragManager.acceptDragDrop(dropTarget);
 			}
 			
-			protected function acceptDrop(dragEvent:DragEvent):void
+			protected function onDragDrop(dragEvent:DragEvent):void
 			{
 				var dragSource:DragSource = dragEvent.dragSource;
 				var dragInitiator:IUIComponent = dragEvent.dragInitiator;
@@ -74,7 +76,7 @@
 	
 				var sourceItem:Item = FlexGlobals.topLevelApplication.inventoryTree.selectedItem.item;
 				
-				if(sourceItem is Network && (this.currentState == "webRule" || this.currentState == "mailRule"))
+				if(sourceItem is Network && (this.currentState == "webRule" ))
 					saveDroppedObject(sourceItem);
 				else if(sourceItem is InformationType)
 					saveDroppedObject(sourceItem);
@@ -111,13 +113,14 @@
 		<s:State name="defaultState"/>
 		<s:State name="webRule"/>
 		<s:State name="mailRule"/>
+		<s:State name="endpointRule"/>
 	</s:states>
 	
 	<rule:RuleBoxComponentBase id="labelBox" width="150" height="100%" >
 		<s:Label id="nameLabel" text="{ruleObject.label}"/>
 	</rule:RuleBoxComponentBase>
 	
-	<rule:RuleItemList id="sourceList" includeIn="webRule,mailRule" 
+	<rule:RuleItemList id="sourceList" includeIn="webRule" 
 					 width="150" height="100%"
 					 dataProvider="{sourceDataProvider}"
 					 />

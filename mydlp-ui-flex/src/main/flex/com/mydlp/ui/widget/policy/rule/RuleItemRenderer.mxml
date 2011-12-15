@@ -12,7 +12,7 @@
 			import mx.core.FlexGlobals;
 			protected function removeRuleItem(event:MouseEvent):void
 			{
-				FlexGlobals.topLevelApplication.ruleContainer.re.removeRuleItem(data);
+				data.deleteRecord();
 			}
 		]]>
 	</fx:Script>
