@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<general:ClosableTitleWindow xmlns:fx="http://ns.adobe.com/mxml/2009" 
+<popup:ClosableTitleWindow xmlns:fx="http://ns.adobe.com/mxml/2009" 
 				xmlns:s="library://ns.adobe.com/flex/spark" 
 				xmlns:mx="library://ns.adobe.com/flex/mx" 
 				xmlns:general="com.mydlp.ui.widget.general.*"
-				title="@Resource(bundle = 'messages', key = 'inventory.newdialog.title')" 
+				title="@Resource(bundle = 'messages', key = 'inventory.newdialog.title')" xmlns:popup="com.mydlp.ui.widget.general.popup.*" 
 				>
 	<fx:Script>
 		<![CDATA[
@@ -63,4 +63,4 @@
 		<s:Button label="@Resource(bundle = 'messages', key = 'inventory.newdialog.group')"/>
 	</s:Group>
 	
-</general:ClosableTitleWindow>
+</popup:ClosableTitleWindow>

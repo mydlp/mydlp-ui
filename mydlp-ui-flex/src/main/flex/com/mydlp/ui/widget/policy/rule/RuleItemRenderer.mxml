@@ -3,17 +3,12 @@
 				xmlns:s="library://ns.adobe.com/flex/spark" 
 				xmlns:mx="library://ns.adobe.com/flex/mx" 
 				autoDrawBackground="false"
-				creationComplete="{data = data as RuleItem;}">
+				creationComplete="{data = data as RuleItem;}"
+				height="20">
 	
 	<fx:Script>
 		<![CDATA[
 			import com.mydlp.ui.domain.RuleItem;
-			
-			import mx.core.FlexGlobals;
-			protected function removeRuleItem(event:MouseEvent):void
-			{
-				data.deleteRecord();
-			}
 		]]>
 	</fx:Script>
 	
@@ -24,11 +19,13 @@
 	</s:states>
 	
 	<s:layout>
-		<s:HorizontalLayout />
+		<s:HorizontalLayout verticalAlign="middle" 
+				paddingLeft="2" paddingRight="2"/>
 	</s:layout>
+	<s:BitmapImage source="{data.item.coupledInventoryItem.icon}" />
+	<s:Label text="{data.item.coupledInventoryItem.label}" maxWidth="150"/>
+	<mx:Spacer includeIn="selected" width="100%"/>	
+	<s:Button includeIn="selected" styleName="removeButtonStyle" 
+			  click="{data.deleteRecord()}" />
 	
-	<s:Button label="-" includeIn="hovered, selected" click="removeRuleItem(event)"/>
-	
-	<s:Label text="{data.item.coupledInventoryItem.label}"/>
-
 </s:ItemRenderer>

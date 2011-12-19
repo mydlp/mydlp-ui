@@ -1,8 +1,8 @@
 // ActionScript file
 package com.mydlp.ui.util
 {
-	import com.mydlp.ui.widget.general.GenericDeleteDialog;
-	import com.mydlp.ui.widget.general.GenericEditDialog;
+	import com.mydlp.ui.widget.general.popup.GenericDeleteDialog;
+	import com.mydlp.ui.widget.general.popup.GenericEditDialog;
 	
 	import flash.display.DisplayObject;
 	

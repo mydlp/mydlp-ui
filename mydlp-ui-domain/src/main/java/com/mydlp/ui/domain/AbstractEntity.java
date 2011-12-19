@@ -5,7 +5,6 @@ import java.io.Serializable;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
-import javax.persistence.Version;
 
 import org.dphibernate.core.HibernateProxy;
 
@@ -19,8 +18,6 @@ public abstract class AbstractEntity extends HibernateProxy implements Serializa
 
 	protected Integer id;
 
-	protected Integer optimisticLockVersion;
-	
 	@Id
 	@GeneratedValue
 	public Integer getId() {
@@ -31,13 +28,4 @@ public abstract class AbstractEntity extends HibernateProxy implements Serializa
 		this.id = id;
 	}
 	
-	@Version
-	public Integer getOptimisticLockVersion() {
-		return optimisticLockVersion;
-	}
-
-	public void setOptimisticLockVersion(Integer optimisticLockVersion) {
-		this.optimisticLockVersion = optimisticLockVersion;
-	}
-
 }

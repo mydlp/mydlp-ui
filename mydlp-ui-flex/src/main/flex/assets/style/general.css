@@ -1,0 +1,37 @@
+/* CSS file */
+@namespace s "library://ns.adobe.com/flex/spark";
+@namespace mx "library://ns.adobe.com/flex/mx";
+@namespace local "com.mydlp.ui.widget.*";
+@namespace policy "com.mydlp.ui.widget.policy.*";
+@namespace general "com.mydlp.ui.widget.general.*";
+@namespace inventory "com.mydlp.ui.widget.policy.inventory.*";
+@namespace rule "com.mydlp.ui.widget.policy.rule.*";
+@namespace popup "com.mydlp.ui.widget.general.popup.*";
+
+rule|RuleBox {
+	backgroundColor: #DDDDDD;
+}
+
+rule|RuleBox s|SkinnableContainer#labelBox #nameLabel {
+	fontWeight: bold;
+}
+
+s|Application {
+	fontSize: "12";
+}
+
+.removeButtonStyle {
+	skinClass: ClassReference("com.mydlp.ui.skin.RemoveButtonSkin")
+}
+
+.editButtonStyle {
+	skinClass: ClassReference("com.mydlp.ui.skin.EditButtonSkin")
+}
+
+.addButtonStyle {
+	skinClass: ClassReference("com.mydlp.ui.skin.AddButtonSkin")
+}
+
+.copyButtonStyle {
+	skinClass: ClassReference("com.mydlp.ui.skin.CopyButtonSkin")
+}

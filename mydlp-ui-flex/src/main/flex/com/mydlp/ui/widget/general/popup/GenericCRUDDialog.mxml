@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<general:ClosableTitleWindow xmlns:fx="http://ns.adobe.com/mxml/2009" 
+<popup:ClosableTitleWindow xmlns:fx="http://ns.adobe.com/mxml/2009" 
 				xmlns:s="library://ns.adobe.com/flex/spark" 
 				xmlns:mx="library://ns.adobe.com/flex/mx"
 				xmlns:general="com.mydlp.ui.widget.general.*"
 				xmlns:my="http://www.mydlp.com/flex/my"
-				visible="false"
+				visible="false" xmlns:popup="com.mydlp.ui.widget.general.popup.*"
 				>
 	
 	<fx:Script>
@@ -60,4 +60,4 @@
 	<fx:Declarations>
 	</fx:Declarations>
 	
-</general:ClosableTitleWindow>
+</popup:ClosableTitleWindow>

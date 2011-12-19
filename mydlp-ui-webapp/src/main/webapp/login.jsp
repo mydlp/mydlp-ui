@@ -21,7 +21,7 @@
         <img src="static/images/logo.png" />
       </a>
 
-      <h3>Login with Username and Password (Custom Page)</h3>
+      <h3>Login with Username and Password</h3>
 
 
         <form name='f' action="<c:url value='j_spring_security_check' />" method='POST'>

@@ -1,0 +1,41 @@
+<s:SparkButtonSkin xmlns:fx="http://ns.adobe.com/mxml/2009" 
+             xmlns:s="library://ns.adobe.com/flex/spark" 
+             xmlns:fb="http://ns.adobe.com/flashbuilder/2009"
+			 width="20" height="20"
+             alpha.disabled="0.5">
+	
+	<fx:Declarations>
+		<fx:Object id="bitmapSource" />
+	</fx:Declarations>
+     
+    <fx:Metadata>
+        <![CDATA[ 
+        [HostComponent("spark.components.Button")]
+        ]]>
+    </fx:Metadata>
+	
+	<s:states>
+		<s:State name="up" />
+		<s:State name="over" />
+		<s:State name="down" />
+		<s:State name="disabled" />
+	</s:states>
+	
+	<s:Rect includeIn="over, down" 
+		height="100%" width="100%" radiusX="3">
+		<s:fill>
+			<!-- gradient fill colors - default ratios are 0,1 -->
+			<s:LinearGradient rotation="90">
+				<s:GradientEntry color="#fabe00"
+								 color.down="#cc6600"/>
+				<s:GradientEntry color="#e17b00"
+								 color.down="#ff9900"/>
+			</s:LinearGradient>
+		</s:fill>
+	</s:Rect>
+	
+	<s:BitmapImage source="{bitmapSource}" 
+				   width="16" height="16" 
+				   top="2" right="2" bottom="2" left="2"/>
+    
+</s:SparkButtonSkin>

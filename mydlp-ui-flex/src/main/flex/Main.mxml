@@ -8,11 +8,11 @@
 			   usePreloader="true"
 			   applicationComplete="applicationCompleteHandler(event)" xmlns:rule="com.mydlp.ui.widget.policy.rule.*"
 			   >
-	<fx:Style source="../styles/general.css" />
+	<fx:Style source="/assets/style/general.css" />
 	
 	<fx:Script>
 		<![CDATA[
-			import com.mydlp.ui.widget.general.ClosableTitleWindow;
+			import com.mydlp.ui.widget.general.popup.ClosableTitleWindow;
 			
 			import mx.controls.Alert;
 			import mx.events.FlexEvent;

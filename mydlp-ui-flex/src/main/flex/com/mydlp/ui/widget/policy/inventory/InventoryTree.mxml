@@ -4,7 +4,7 @@
 		 xmlns:mx="library://ns.adobe.com/flex/mx"
 		 xmlns:my="http://www.mydlp.com/flex/my"
 		 labelField="label"
-		 width="300" height="100%"
+		 width="400" height="100%"
 		 showRoot="false"
 		 allowMultipleSelection="true"
 		 creationComplete="populateTree()"
@@ -12,9 +12,13 @@
 		 dragEnabled="true" 
 		 dropEnabled="true"
 		 dragDrop="onDragDrop(event)"
+		 itemRenderer="com.mydlp.ui.widget.policy.inventory.InvetoryItemRenderer"
+		 folderOpenIcon="@Embed('/assets/icons/16x16/folder.png')"
+		 folderClosedIcon="@Embed('/assets/icons/16x16/folder.png')"
 		 >
 	<fx:Script>
 		<![CDATA[
+			import com.mydlp.ui.widget.general.popup.NewDialog;
 			import com.mydlp.ui.domain.AbstractEntity;
 			import com.mydlp.ui.domain.InventoryBase;
 			import com.mydlp.ui.domain.InventoryCategory;
@@ -58,90 +62,8 @@
 			
 			protected function populateTree():void
 			{
-				populateContextMenu();
+				//populateContextMenu();
 				refreshTree();
-			}
-			
-			protected function populateContextMenu(): void {
-				if (!this.contextMenu) {
-					contextMenu = new ContextMenu();
-				}
-				contextMenu = new ContextMenu();
-				contextMenu.hideBuiltInItems();
-				
-				var newItem:ContextMenuItem  = new ContextMenuItem(LangUtil.getString("messages", "inventory.contextmenu.new"));
-				var removeItem:ContextMenuItem  = new ContextMenuItem(LangUtil.getString("messages", "inventory.contextmenu.remove"));
-				var removeAllItem:ContextMenuItem  = new ContextMenuItem(LangUtil.getString("messages", "inventory.contextmenu.removeall"));
-				var editItem:ContextMenuItem  = new ContextMenuItem(LangUtil.getString("messages", "inventory.contextmenu.edit"));
-				var cloneItem:ContextMenuItem  = new ContextMenuItem(LangUtil.getString("messages", "inventory.contextmenu.clone"));
-				
-				contextMenu.customItems.push(newItem);
-				contextMenu.customItems.push(removeItem);
-				contextMenu.customItems.push(removeAllItem);
-				contextMenu.customItems.push(editItem);
-				contextMenu.customItems.push(cloneItem);
-				
-				contextMenu.addEventListener(ContextMenuEvent.MENU_SELECT, 
-					function(event:ContextMenuEvent):void {			
-						newItem.enabled = false;
-						removeItem.enabled = false;
-						removeAllItem.enabled = false;
-						editItem.enabled = false;
-						cloneItem.enabled = false;
-						
-						if (selectedItems.length > 1 )
-						{
-							removeAllItem.enabled = true;
-						} 
-						else if (selectedItems.length == 1 ) 
-						{
-							if (selectedItem is InventoryCategory) 
-							{
-								newItem.enabled = true;
-								editItem.enabled = true;
-								removeAllItem.enabled = true;
-							} 
-							else if (selectedItem is InventoryItem) 
-							{ 
-								removeItem.enabled = true;
-								editItem.enabled = true;
-								cloneItem.enabled = true;
-								removeItem.enabled = true;
-							}
-						}
-						
-					});
-				
-				newItem.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, newItemHandler);
-				removeItem.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, removeItemHandler);
-				removeAllItem.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, removeAllItemHandler);
-				editItem.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, editItemHandler);
-				cloneItem.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, cloneItemHandler);
-			}
-			
-			protected function newItemHandler(event:ContextMenuEvent):void
-			{
-				InteractionUtil.newPopup(NewDialog);
-			}
-			
-			protected function removeItemHandler(event:ContextMenuEvent):void
-			{
-				InteractionUtil.newDeleteDialog(selectedItem);
-			}
-			
-			protected function removeAllItemHandler(event:ContextMenuEvent):void
-			{
-				InteractionUtil.newDeleteDialog(selectedItem);
-			}
-			
-			protected function editItemHandler(event:ContextMenuEvent):void
-			{
-				InteractionUtil.newEditDialog(selectedItem);
-			}
-			
-			protected function cloneItemHandler(event:ContextMenuEvent):void
-			{
-				InteractionUtil.newEditDialog(ReflectionUtil.cloneDomainObject(selectedItem));
 			}
 			
 			protected function onDragDrop(event:DragEvent):void
