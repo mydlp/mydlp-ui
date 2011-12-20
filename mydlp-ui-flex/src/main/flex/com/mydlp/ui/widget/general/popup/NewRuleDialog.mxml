@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<popup:ClosableTitleWindow xmlns:fx="http://ns.adobe.com/mxml/2009" 
+				xmlns:s="library://ns.adobe.com/flex/spark" 
+				xmlns:mx="library://ns.adobe.com/flex/mx" 
+				title="@Resource(bundle = 'messages', key = 'inventory.newdialog.addrule.title')" 
+				xmlns:popup="com.mydlp.ui.widget.general.popup.*" 
+				creationComplete="onCreationComplete(event)"
+				>
+	<fx:Script>
+		<![CDATA[
+			import com.mydlp.ui.domain.EndpointRule;
+			import com.mydlp.ui.domain.MailRule;
+			import com.mydlp.ui.domain.Rule;
+			import com.mydlp.ui.domain.WebRule;
+			import com.mydlp.ui.util.InteractionUtil;
+			import com.mydlp.ui.widget.policy.rule.RuleBox;
+			
+			import mx.collections.ArrayCollection;
+			import mx.core.FlexGlobals;
+			import mx.events.FlexEvent;
+			
+			protected var recommendedPriority:int = 1000;
+			
+			protected function close():void
+			{
+				InteractionUtil.closePopup(this);
+			}
+			
+			protected function ruleHandler(rule:Rule): void
+			{
+				rule.priority = recommendedPriority;
+				rule.enabled = true;
+				rule.action = Rule.ACTION_PASS;
+				rule.ruleItems = new ArrayCollection();
+				InteractionUtil.newEditDialog(rule);
+				close();
+			}
+			
+			protected function webRuleHandler():void
+			{
+				ruleHandler(new WebRule());
+			}
+			protected function mailRuleHandler():void
+			{
+				ruleHandler(new MailRule());
+			}
+			protected function endpointRuleHandler():void
+			{
+				ruleHandler(new EndpointRule());
+			}
+			
+			protected function onCreationComplete(event:FlexEvent):void
+			{
+				if (FlexGlobals.topLevelApplication.ruleContainer.ruleList.dataProvider.length > 0)
+				{
+					var ruleBox:RuleBox = FlexGlobals.topLevelApplication.ruleContainer.ruleList.dataProvider.getItemAt(0);
+					recommendedPriority = (ruleBox.ruleObject as Rule).priority + 100;
+				}
+			}
+			
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	
+	<s:Group>
+		<s:layout>
+			<s:VerticalLayout horizontalAlign="center"/>
+		</s:layout>
+		<s:Label text="@Resource(bundle = 'messages', key = 'inventory.newdialog.addrule')"/>
+		<s:Button skinClass="com.mydlp.ui.skin.WebRuleBitmapLabelButton16Skin" label="@Resource(bundle = 'messages', key = 'inventory.newdialog.webrule')" click="webRuleHandler()"/>
+		<s:Button skinClass="com.mydlp.ui.skin.MailRuleBitmapLabelButton16Skin" label="@Resource(bundle = 'messages', key = 'inventory.newdialog.mailrule')" click="mailRuleHandler()"/>
+		<s:Button skinClass="com.mydlp.ui.skin.EndpointRuleBitmapLabelButton16Skin" label="@Resource(bundle = 'messages', key = 'inventory.newdialog.endpointrule')" click="endpointRuleHandler()"/>
+	</s:Group>
+	
+</popup:ClosableTitleWindow>

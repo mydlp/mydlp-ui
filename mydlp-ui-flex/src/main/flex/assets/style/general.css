@@ -16,22 +16,26 @@ rule|RuleBox s|SkinnableContainer#labelBox #nameLabel {
 	fontWeight: bold;
 }
 
+rule|RuleContainer s|Group s|Button {
+	fontSize: "32"
+}
+
 s|Application {
 	fontSize: "12";
 }
 
 .removeButtonStyle {
-	skinClass: ClassReference("com.mydlp.ui.skin.RemoveButtonSkin")
+	skinClass: ClassReference("com.mydlp.ui.skin.RemoveBitmapButton16Skin");
 }
 
 .editButtonStyle {
-	skinClass: ClassReference("com.mydlp.ui.skin.EditButtonSkin")
+	skinClass: ClassReference("com.mydlp.ui.skin.EditBitmapButton16Skin");
 }
 
 .addButtonStyle {
-	skinClass: ClassReference("com.mydlp.ui.skin.AddButtonSkin")
+	skinClass: ClassReference("com.mydlp.ui.skin.AddBitmapButton16Skin");
 }
 
 .copyButtonStyle {
-	skinClass: ClassReference("com.mydlp.ui.skin.CopyButtonSkin")
+	skinClass: ClassReference("com.mydlp.ui.skin.CopyBitmapButton16Skin");
 }

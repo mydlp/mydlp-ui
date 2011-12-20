@@ -1,11 +1,12 @@
 <s:SparkButtonSkin xmlns:fx="http://ns.adobe.com/mxml/2009" 
              xmlns:s="library://ns.adobe.com/flex/spark" 
              xmlns:fb="http://ns.adobe.com/flashbuilder/2009"
-			 width="20" height="20"
+			 width="{bitmapSize + 4}" height="{bitmapSize + 4}"
              alpha.disabled="0.5">
 	
 	<fx:Declarations>
 		<fx:Object id="bitmapSource" />
+		<fx:int id="bitmapSize" />
 	</fx:Declarations>
      
     <fx:Metadata>
@@ -34,8 +35,20 @@
 		</s:fill>
 	</s:Rect>
 	
-	<s:BitmapImage source="{bitmapSource}" 
-				   width="16" height="16" 
-				   top="2" right="2" bottom="2" left="2"/>
+	<s:Group top="2" right="2" bottom="2" left="2">
+		<s:layout>
+			<s:HorizontalLayout />
+		</s:layout>
+		<s:BitmapImage source="{bitmapSource}" width="{bitmapSize}" height="{bitmapSize}" />
+		<s:Label id="labelDisplay" verticalAlign="middle" maxDisplayedLines="1">
+			<s:filters>
+				<s:DropShadowFilter distance="1" blurX="0" blurY="0" color="#000000" alpha=".4" angle="270"/>
+			</s:filters>
+		</s:Label>
+	</s:Group>
+	
+	
+	
+	
     
 </s:SparkButtonSkin>

@@ -14,6 +14,8 @@
 			import com.mydlp.ui.domain.EndpointRule;
 			import com.mydlp.ui.domain.MailRule;
 			import com.mydlp.ui.domain.WebRule;
+			import com.mydlp.ui.util.InteractionUtil;
+			import com.mydlp.ui.widget.general.popup.NewRuleDialog;
 			
 			import mx.collections.ArrayCollection;
 			import mx.collections.ListCollectionView;
@@ -86,10 +88,17 @@
 	</fx:Declarations>
 	
 	<s:layout>
-		<s:VerticalLayout/>
+		<s:VerticalLayout gap="5"/>
 	</s:layout>
 	
-	<s:Button label="@Resource(key='rules.addrule', bundle='messages')" />
+	<s:Group>
+		<s:layout>
+			<s:HorizontalLayout />
+		</s:layout>
+		<s:Button skinClass="com.mydlp.ui.skin.AddBitmapLabelButton32Skin" label="@Resource(key='rules.addrule', bundle='messages')"
+				  click="{InteractionUtil.newPopup(NewRuleDialog)}"/>
+	</s:Group>
+	
 	
 	<s:List id="ruleList" dataProvider="{ruleDP}" width="100%" height="100%"
 			itemRenderer="spark.skins.spark.DefaultComplexItemRenderer"/>

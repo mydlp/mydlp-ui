@@ -66,6 +66,10 @@
 							classMember.name == "optimisticLockVersion" ||
 							classMember.name == "nameKey" ||
 							classMember.name == "icon" ||
+							(classMember.name == "ruleItems" && classMember.type == ListCollectionView) ||
+							classMember.name == "enabled" ||
+							classMember.name == "priority" ||
+							classMember.name == "action" ||
 							(classMember.name == "children" && classMember.type == ListCollectionView)||
 							(classMember.name == "coupledInventoryItem" && classMember.type == InventoryItem) ||
 							(classMember.name == "coupledRuleItems" && classMember.type == ListCollectionView) ||
@@ -89,6 +93,7 @@
 						ipInput.numberValue = targetObject[classMember.name];
 						BindingUtils.bindProperty(targetObject, classMember.name, ipInput, "numberValue");
 						visualElement = ipInput;
+						visualElement.width = 160;
 					}
 					else if (targetObject is InformationType && 
 							classMember.name == "dataFormats" && 
@@ -111,7 +116,6 @@
 							ifInput.informationFeatures = new ArrayCollection();
 						else
 							ifInput.informationFeatures = targetObject[classMember.name];
-						trace("GED> " + getQualifiedClassName(targetObject[classMember.name]));
 						BindingUtils.bindProperty(targetObject, classMember.name, ifInput, "informationFeatures");
 						visualElement = ifInput;
 					}
@@ -131,6 +135,7 @@
 						textInput.text = targetObject[classMember.name];
 						BindingUtils.bindProperty(targetObject, classMember.name, textInput, "text");
 						visualElement = textInput;
+						visualElement.width = 160;
 					}
 					
 					if (visualElement != null)

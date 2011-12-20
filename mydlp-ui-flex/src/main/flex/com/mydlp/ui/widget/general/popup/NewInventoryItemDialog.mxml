@@ -60,7 +60,6 @@
 		<s:Button label="@Resource(bundle = 'messages', key = 'inventory.newdialog.category')" click="categoryHandler()"/>
 		<s:Button label="@Resource(bundle = 'messages', key = 'inventory.newdialog.network')" click="networkHandler()"/>
 		<s:Button label="@Resource(bundle = 'messages', key = 'inventory.newdialog.informationType')" click="informationTypeHandler()"/>
-		<s:Button label="@Resource(bundle = 'messages', key = 'inventory.newdialog.group')"/>
 	</s:Group>
 	
 </popup:ClosableTitleWindow>

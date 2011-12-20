@@ -24,6 +24,7 @@ package com.mydlp.ui.util
 			for each (var i:XML in description..accessor){
 				var memberName:String = i.@name;
 				if (
+					memberName == "icon" ||
 					memberName == "prototype" ||
 					memberName == "proxyInitialized" ||
 					memberName == "proxyKey" ||

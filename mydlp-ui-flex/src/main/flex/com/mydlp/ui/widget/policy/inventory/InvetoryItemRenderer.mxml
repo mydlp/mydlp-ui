@@ -10,7 +10,7 @@
 			import com.mydlp.ui.domain.InventoryItem;
 			import com.mydlp.ui.util.InteractionUtil;
 			import com.mydlp.ui.util.ReflectionUtil;
-			import com.mydlp.ui.widget.general.popup.NewDialog;
+			import com.mydlp.ui.widget.general.popup.NewInventoryItemDialog;
 		]]>
 	</fx:Script>
 	
@@ -36,7 +36,7 @@
 				<s:HorizontalLayout gap="1" />
 			</s:layout>
 			<s:Button styleName="addButtonStyle"
-					  click="{InteractionUtil.newPopup(NewDialog)}" 
+					  click="{InteractionUtil.newPopup(NewInventoryItemDialog)}" 
 					  visible="{treeListData.item is InventoryCategory}"/>
 			<s:Button styleName="copyButtonStyle"
 					  click="{InteractionUtil.newEditDialog(ReflectionUtil.cloneDomainObject(treeListData.item))}" 

@@ -18,7 +18,7 @@
 		 >
 	<fx:Script>
 		<![CDATA[
-			import com.mydlp.ui.widget.general.popup.NewDialog;
+			import com.mydlp.ui.widget.general.popup.NewInventoryItemDialog;
 			import com.mydlp.ui.domain.AbstractEntity;
 			import com.mydlp.ui.domain.InventoryBase;
 			import com.mydlp.ui.domain.InventoryCategory;

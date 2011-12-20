@@ -91,26 +91,26 @@
 	</s:states>
 	
 	<s:layout>
-		<s:HorizontalLayout />
+		<s:HorizontalLayout verticalAlign="middle" gap="2"/>
 	</s:layout>
 	
 	<s:Group>
-		<s:layout>
-			<s:VerticalLayout />
-		</s:layout>
-		<s:Button label="Remove" click="removeClickHandler(event)"/>
-		<s:List id="dfList" dataProvider="{dataFormats}" dropEnabled="true"
+		<s:List id="dfList" dataProvider="{dataFormats}" dropEnabled="true" width="160"
 				itemRenderer="com.mydlp.ui.widget.general.input.DataFormatRenderer" />
 	</s:Group>
 	
-	<s:Button label="Expand" click="expandClickHandler(event)"/>
+	<s:Group>
+		<s:layout>
+			<s:VerticalLayout gap="2"/>
+		</s:layout>
+		<mx:Spacer height="100%" />
+		<s:Button skinClass="com.mydlp.ui.skin.RemoveBitmapButton32Skin" click="removeClickHandler(event)"/>
+		<s:Button skinClass="com.mydlp.ui.skin.AddBitmapButton32Skin" click="expandClickHandler(event)"/>
+	</s:Group>
 	
 	<s:Group includeIn="expanded">
-		<s:layout>
-			<s:VerticalLayout />
-		</s:layout>
 		<s:List id="odfList" dataProvider="{otherDataFormats}" 
-				dragEnabled="true" dragMoveEnabled="true" 
+				dragEnabled="true" dragMoveEnabled="true" width="160"
 				itemRenderer="com.mydlp.ui.widget.general.input.DataFormatRenderer" />
 	</s:Group>
 	

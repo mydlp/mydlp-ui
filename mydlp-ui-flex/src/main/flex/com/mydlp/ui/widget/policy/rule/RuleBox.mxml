@@ -127,12 +127,12 @@
 	</s:SkinnableContainer>
 	
 	<rule:RuleItemList id="sourceList" includeIn="webRule" 
-					 width="200" height="100%"
+					 width="210" height="100%"
 					 dataProvider="{sourceDataProvider}"
 					 />
 	
 	<rule:RuleItemList id="matcherList" 
-					 width="200" height="100%"
+					 width="210" height="100%"
 					 dataProvider="{matcherDataProvider}" 
 					 />
 	
