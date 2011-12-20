@@ -12,6 +12,7 @@
 	<fx:Script>
 		<![CDATA[
 			import com.mydlp.ui.domain.InformationType;
+			import com.mydlp.ui.domain.InventoryCategory;
 			import com.mydlp.ui.domain.Item;
 			import com.mydlp.ui.domain.Matcher;
 			import com.mydlp.ui.domain.Network;
@@ -61,7 +62,9 @@
 				var dropTarget:IUIComponent = dragEvent.currentTarget as IUIComponent;
 				var dragInitiator:IUIComponent = dragEvent.dragInitiator;
 				
-				if(FlexGlobals.topLevelApplication.inventoryTree.selectedItem.item is Network && this.currentState != "webRule")
+				if(FlexGlobals.topLevelApplication.inventoryTree.selectedItem is InventoryCategory)
+					DragManager.showFeedback(DragManager.NONE);
+				else if(FlexGlobals.topLevelApplication.inventoryTree.selectedItem.item is Network && this.currentState != "webRule")
 					DragManager.showFeedback(DragManager.NONE);
 				else
 					DragManager.acceptDragDrop(dropTarget);
