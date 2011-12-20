@@ -22,4 +22,11 @@ public class UserDAOImpl extends AbstractDAO implements UserDAO {
 		return DAOUtil.getSingleResult(list);
 	}
 	
+	@SuppressWarnings("unchecked")
+	public List<AuthUser> getUsers() {
+		DetachedCriteria criteria = 
+				DetachedCriteria.forClass(AuthUser.class);
+		return getHibernateTemplate().findByCriteria(criteria);
+	}
+	
 }

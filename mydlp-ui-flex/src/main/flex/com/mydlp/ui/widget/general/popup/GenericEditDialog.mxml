@@ -36,6 +36,7 @@
 			import mx.events.FlexEvent;
 			
 			import spark.components.Button;
+			import spark.components.CheckBox;
 			import spark.components.FormItem;
 			import spark.components.TextInput;
 			
@@ -71,6 +72,7 @@
 							classMember.name == "priority" ||
 							classMember.name == "action" ||
 							(classMember.name == "children" && classMember.type == ListCollectionView)||
+							(classMember.name == "roles" && classMember.type == ListCollectionView)||
 							(classMember.name == "coupledInventoryItem" && classMember.type == InventoryItem) ||
 							(classMember.name == "coupledRuleItems" && classMember.type == ListCollectionView) ||
 							(classMember.name == "informationType" && classMember.type == InformationType) 
@@ -128,6 +130,14 @@
 						
 						populateClassMembers(targetObject[classMember.name]);
 						continue;
+					}
+					
+					else if(classMember.type == Boolean)
+					{
+						var checkBox:CheckBox = new CheckBox();
+						checkBox.selected = targetObject[classMember.name];
+						BindingUtils.bindProperty(targetObject, classMember.name, checkBox, "selected");
+						visualElement = checkBox;
 					}
 					else
 					{

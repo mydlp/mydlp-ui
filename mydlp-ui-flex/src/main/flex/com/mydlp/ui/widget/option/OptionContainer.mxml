@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark"
+		 xmlns:my="http://www.mydlp.com/flex/my"
+		 xmlns:mx="library://ns.adobe.com/flex/mx" width="400" height="300"
+		 creationComplete="onCreationComplete(event)">
+	<fx:Script>
+		<![CDATA[
+			import com.mydlp.ui.domain.AuthUser;
+			import com.mydlp.ui.util.InteractionUtil;
+			
+			import mx.collections.ArrayCollection;
+			import mx.collections.ListCollectionView;
+			import mx.rpc.events.ResultEvent;
+			
+			[Bindable]
+			protected var userDP:ListCollectionView = new ArrayCollection();
+			
+			protected function onCreationComplete(event:Event):void
+			{
+				re.getUsers();
+			}
+			
+			protected function getUsersHandler(event:ResultEvent):void
+			{
+				var users:ArrayCollection = event.result as ArrayCollection;
+				for each(var user:* in users)
+					userDP.addItem(user);
+			}
+		]]>
+	</fx:Script>
+	
+	
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+		<my:remote id="re" destination="userBRS">
+			<my:method name="getUsers" result="getUsersHandler(event)" />
+		</my:remote>
+	</fx:Declarations>
+	<s:Button label="New User" click="{InteractionUtil.newEditDialog(new AuthUser())}"/>
+
+	<s:List id="userList" dataProvider="{userDP}" itemRenderer="com.mydlp.ui.widget.option.UserRenderer"/>
+</s:Group>
