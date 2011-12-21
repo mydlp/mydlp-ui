@@ -16,7 +16,10 @@
 			import com.mydlp.ui.domain.Item;
 			import com.mydlp.ui.domain.Matcher;
 			import com.mydlp.ui.domain.Network;
+			import com.mydlp.ui.domain.Rule;
 			import com.mydlp.ui.domain.RuleItem;
+			import com.mydlp.ui.util.InteractionUtil;
+			import com.mydlp.ui.util.ReflectionUtil;
 			
 			import flashx.textLayout.formats.ITabStopFormat;
 			
@@ -29,6 +32,8 @@
 			import mx.events.FlexEvent;
 			import mx.managers.DragManager;
 			import mx.rpc.events.ResultEvent;
+			
+			import spark.components.supportClasses.ItemRenderer;
 			[Bindable]
 			public var ruleObject:* = null;
 			
@@ -121,12 +126,31 @@
 	
 	<s:SkinnableContainer id="labelBox" width="175" height="100%">
 		<s:layout>
-			<s:VerticalLayout horizontalAlign="center" verticalAlign="middle" gap="2"/>
+			<s:VerticalLayout horizontalAlign="center" verticalAlign="middle" gap="2"
+							  paddingTop="10" paddingBottom="10"/>
 		</s:layout>
 		<s:BitmapImage includeIn="webRule" source="@Embed('/assets/icons/32x32/wireless.png')"/>
 		<s:BitmapImage includeIn="mailRule" source="@Embed('/assets/icons/32x32/mail.png')"/>
 		<s:BitmapImage includeIn="endpointRule" source="@Embed('/assets/icons/32x32/computer.png')"/>
 		<s:Label id="nameLabel" text="{ruleObject.label}"/>
+		<s:Spacer height="25"/>
+		<!--
+		Below should be refined
+		-->
+		<s:Group visible="{FlexGlobals.topLevelApplication.ruleContainer.ruleList.selectedItem == null ? false : 
+				 ruleObject.id == FlexGlobals.topLevelApplication.ruleContainer.ruleList.selectedItem.ruleObject.id}">
+				<s:layout>
+				<s:HorizontalLayout gap="2"/>
+			</s:layout>
+			<s:Button styleName="copyButtonStyle"
+					  click="{	var clone:Rule = ReflectionUtil.cloneDomainObject(ruleObject);
+					  			clone.priority -= 10;
+					  			InteractionUtil.newEditDialog(clone)}" />
+			<s:Button styleName="editButtonStyle" 
+					  click="{InteractionUtil.newEditDialog(ruleObject)}" />
+			<s:Button styleName="removeButtonStyle" 
+					  click="{InteractionUtil.newDeleteDialog(ruleObject)}" />
+		</s:Group>
 	</s:SkinnableContainer>
 	
 	<rule:RuleItemList id="sourceList" includeIn="webRule" 
