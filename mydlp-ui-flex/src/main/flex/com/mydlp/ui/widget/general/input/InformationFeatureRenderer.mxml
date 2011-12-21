@@ -15,5 +15,10 @@
 		<s:State name="selected" />
 	</s:states>
 	
-	<s:Label text="{data.matcher.functionName + ' - ' + data.score }" backgroundColor.hovered="yellow" backgroundColor.selected="green" />
+	<s:layout>
+		<s:HorizontalLayout verticalAlign="middle" 
+							paddingLeft="2" paddingRight="2"/>
+	</s:layout>
+	<s:Label text="{data.matcher.functionName + ' - ' + data.score }" />
+	<mx:Spacer includeIn="selected" width="100%"/>
 </s:ItemRenderer>
