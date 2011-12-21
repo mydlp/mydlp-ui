@@ -12,4 +12,6 @@ public interface UserService {
 
 	public List<AuthUser> getUsers();	
 	
+	public void remove(AuthUser item);
+	
 }

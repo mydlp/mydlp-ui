@@ -20,5 +20,12 @@ public class UserBRSImpl implements UserService
 	public List<AuthUser> getUsers() {
 		return userDAO.getUsers();
 	}
+
+	@Override
+	public void remove(AuthUser item) {
+		userDAO.remove(item);
+	}
+	
+	
 	
 }

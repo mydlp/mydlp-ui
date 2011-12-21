@@ -7,6 +7,12 @@
 @namespace inventory "com.mydlp.ui.widget.policy.inventory.*";
 @namespace rule "com.mydlp.ui.widget.policy.rule.*";
 @namespace popup "com.mydlp.ui.widget.general.popup.*";
+@namespace option "com.mydlp.ui.widget.option.*";
+
+option|OptionContainer{
+	fontWeight:bold;
+	fontSize: "20";
+}
 
 rule|RuleBox {
 	backgroundColor: #DDDDDD;

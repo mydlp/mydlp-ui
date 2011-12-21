@@ -9,7 +9,21 @@
 			import com.mydlp.ui.domain.AuthUser;
 		]]>
 	</fx:Script>
+
+	<s:states>
+		<s:State name="normal" />
+		<s:State name="hovered" />
+		<s:State name="selected" />
+	</s:states>
+	
+	<s:layout>
+		<s:HorizontalLayout verticalAlign="middle" 
+							paddingLeft="2" paddingRight="2"/>
+	</s:layout>
 	
 	<s:Label text="{data.username}"/>
+	
+	<s:Button includeIn="selected, hovered" styleName="removeButtonStyle" 
+			  click="{data.deleteRecord()}" />
 	
 </s:ItemRenderer>
