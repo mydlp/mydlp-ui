@@ -38,6 +38,7 @@
 			{
 				inventoryTree.refreshTree();
 				ruleContainer.refreshRules();
+				optionContainer.refreshUsers();
 			}
 			
 			protected function genericResultHandler(event:ResultEvent):void

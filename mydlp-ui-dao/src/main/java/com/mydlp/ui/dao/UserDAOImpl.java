@@ -29,4 +29,10 @@ public class UserDAOImpl extends AbstractDAO implements UserDAO {
 		return getHibernateTemplate().findByCriteria(criteria);
 	}
 	
+	@Override
+	@Transactional(readOnly=false)
+	public void remove(AuthUser i) {
+		getHibernateTemplate().delete(i);
+	}
+	
 }

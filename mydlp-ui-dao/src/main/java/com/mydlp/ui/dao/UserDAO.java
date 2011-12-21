@@ -10,4 +10,6 @@ public interface UserDAO {
 	
 	public List<AuthUser> getUsers();
 	
+	public void remove(AuthUser i);
+	
 }
