@@ -1,10 +1,6 @@
 package com.mydlp.ui.domain;
 
-import java.util.List;
-
 import javax.persistence.Entity;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 
 @Entity
 public class AuthSecurityRole extends AbstractEntity {
@@ -18,8 +14,6 @@ public class AuthSecurityRole extends AbstractEntity {
 	public static final String ROLE_ADMIN = "ROLE_ADMIN";
 
 	protected String roleName;
-	
-	protected List<AuthUser> users;
 
 	public String getRoleName() {
 		return roleName;
@@ -27,16 +21,6 @@ public class AuthSecurityRole extends AbstractEntity {
 
 	public void setRoleName(String roleName) {
 		this.roleName = roleName;
-	}
-
-	@ManyToMany
-	@JoinTable
-	public List<AuthUser> getUsers() {
-		return users;
-	}
-
-	public void setUsers(List<AuthUser> users) {
-		this.users = users;
 	}
 		
 }

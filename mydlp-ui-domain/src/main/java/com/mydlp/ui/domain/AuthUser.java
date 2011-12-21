@@ -48,7 +48,8 @@ public class AuthUser extends AbstractEntity {
 	public void setIsActive(Boolean isActive) {
 		this.isActive = isActive;
 	}
-	@ManyToMany(mappedBy="users")
+	
+	@ManyToMany
 	public List<AuthSecurityRole> getRoles() {
 		return roles;
 	}
