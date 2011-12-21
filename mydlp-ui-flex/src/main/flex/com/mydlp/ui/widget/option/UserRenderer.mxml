@@ -7,6 +7,7 @@
 	<fx:Script>
 		<![CDATA[
 			import com.mydlp.ui.domain.AuthUser;
+			import com.mydlp.ui.util.InteractionUtil;
 		]]>
 	</fx:Script>
 
@@ -22,8 +23,14 @@
 	</s:layout>
 	
 	<s:Label text="{data.username}"/>
-	
-	<s:Button includeIn="selected, hovered" styleName="removeButtonStyle" 
-			  click="{data.deleteRecord()}" />
+	<s:Group>
+		<s:layout>
+			<s:HorizontalLayout gap="2"/>
+		</s:layout>
+		<s:Button includeIn="hovered, selected" styleName="editButtonStyle" 
+				  click="{InteractionUtil.newEditDialog(data)}"/>
+		<s:Button includeIn="selected, hovered" styleName="removeButtonStyle" 
+				  click="{data.deleteRecord()}" />
+	</s:Group>
 	
 </s:ItemRenderer>

@@ -42,6 +42,7 @@
 			import spark.components.TextInput;
 			
 			protected var cButton:Button = new Button();
+			protected var formItemOrder:ListCollectionView = new ArrayCollection();
 			
 			public var deleteList:ListCollectionView;
 			

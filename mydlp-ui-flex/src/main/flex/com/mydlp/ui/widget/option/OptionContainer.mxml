@@ -18,7 +18,7 @@
 			
 			public function refreshUsers():void
 			{
-				userList.dataGroup.invalidateDisplayList();
+				userList.invalidateDisplayList();
 				userDP.removeAll();
 				re.getUsers();
 			}
@@ -34,6 +34,12 @@
 			{
 				refreshUsers();
 			}
+			
+			protected function deleteClick(event:MouseEvent):void
+			{
+				userList.selectedItem.deleterecord();
+			}
+			
 		]]>
 	</fx:Script>
 	
@@ -46,6 +52,26 @@
 	</fx:Declarations>
 	<s:Button label="New User" click="{InteractionUtil.newEditDialog(new AuthUser())}"/>
 
-	<s:List id="userList" x="153" y="26" dataProvider="{userDP}"
-			itemRenderer="com.mydlp.ui.widget.option.UserRenderer"/>
+	<!--<s:List id="userList" x="153" y="26" dataProvider="{userDP}"
+			itemRenderer="com.mydlp.ui.widget.option.UserRenderer"/>-->
+	
+	
+	
+	<s:DataGrid id="userList" x="66" y="41" width="285" height="108" dataProvider="{userDP}">
+		<s:columns>
+			<s:ArrayList>
+				<s:GridColumn dataField="User name">
+					<s:itemRenderer>
+						<fx:Component>
+							<s:GridItemRenderer>
+								<s:Label text="{data.username}"/>
+							</s:GridItemRenderer>
+						</fx:Component>
+					</s:itemRenderer>
+				</s:GridColumn>
+				<s:GridColumn dataField="email"/>
+				<s:GridColumn dataField="buttons" itemRenderer="com.mydlp.ui.widget.option.GridItemRenderer"/>
+			</s:ArrayList>
+		</s:columns>
+	</s:DataGrid>
 </s:SkinnableContainer>
