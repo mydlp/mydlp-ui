@@ -16,7 +16,7 @@
 			[Bindable]
 			protected var userDP:ListCollectionView = new ArrayCollection();
 			
-			protected function onCreationComplete(event:Event):void
+			public function refreshUsers():void
 			{
 				userList.dataGroup.invalidateDisplayList();
 				userDP.removeAll();
@@ -29,6 +29,10 @@
 				for each(var user:* in users)
 					userDP.addItem(user);
 				userList.validateNow();
+			}
+			protected function onCreationComplete(event:Event):void
+			{
+				refreshUsers();
 			}
 		]]>
 	</fx:Script>
