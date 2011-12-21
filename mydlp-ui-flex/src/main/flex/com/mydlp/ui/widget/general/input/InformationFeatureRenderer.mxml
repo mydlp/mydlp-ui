@@ -19,6 +19,6 @@
 		<s:HorizontalLayout verticalAlign="middle" 
 							paddingLeft="2" paddingRight="2"/>
 	</s:layout>
-	<s:Label text="{data.matcher.functionName + ' - ' + data.score }" />
+	<s:Label text="{data.label}" />
 	<mx:Spacer includeIn="selected" width="100%"/>
 </s:ItemRenderer>

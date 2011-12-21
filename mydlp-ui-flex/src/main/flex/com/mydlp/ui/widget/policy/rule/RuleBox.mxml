@@ -134,6 +134,9 @@
 		<s:BitmapImage includeIn="endpointRule" source="@Embed('/assets/icons/32x32/computer.png')"/>
 		<s:Label id="nameLabel" text="{ruleObject.label}" maxWidth="110"/>
 		<s:Spacer height="10"/>
+		<!--
+			TODO: Below statemente should be refined.
+		-->
 		<s:Group visible="{FlexGlobals.topLevelApplication.ruleContainer.ruleList.selectedItem == null ? false : 
 				 ruleObject.id == FlexGlobals.topLevelApplication.ruleContainer.ruleList.selectedItem.ruleObject.id}">
 			<s:layout>

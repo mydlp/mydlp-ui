@@ -1,5 +1,7 @@
 package com.mydlp.ui.remoting.blazeds;
 
+import java.util.List;
+
 import org.springframework.security.access.annotation.Secured;
 
 import com.mydlp.ui.domain.AbstractEntity;
@@ -11,5 +13,7 @@ public interface GenericService {
 	public AbstractEntity save(AbstractEntity item);
 	
 	public void remove(AbstractEntity item);
+	
+	public void removeAll(List<AbstractEntity> items);
 
 }

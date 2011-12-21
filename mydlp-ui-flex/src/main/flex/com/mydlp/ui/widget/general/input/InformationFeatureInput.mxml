@@ -3,26 +3,148 @@
 		  xmlns:s="library://ns.adobe.com/flex/spark" 
 		  xmlns:my="http://www.mydlp.com/flex/my"
 		  xmlns:mx="library://ns.adobe.com/flex/mx" 
-		  xmlns:domain="com.mydlp.ui.domain.*">
+		  xmlns:domain="com.mydlp.ui.domain.*" 
+		  xmlns:input="com.mydlp.ui.widget.general.input.*">
+	
+	<fx:Script>
+		<![CDATA[
+			import com.mydlp.ui.domain.InformationFeature;
+			import com.mydlp.ui.domain.Matcher;
+			import com.mydlp.ui.domain.RegularExpression;
+			import com.mydlp.ui.widget.general.popup.GenericEditDialog;
+			
+			import mx.core.FlexGlobals;
+			protected function saveNewFeature(event:MouseEvent):void
+			{
+				var ift:InformationFeature = new InformationFeature();
+				var m:Matcher = new Matcher();
+				if (matcherCombobox.selectedItem.data == "cc")
+				{
+					m.functionName = "cc_match";
+				}
+				else if (matcherCombobox.selectedItem.data == "ssn")
+				{
+					m.functionName = "ssn_match";
+				}
+				else if (matcherCombobox.selectedItem.data == "iban")
+				{
+					m.functionName = "iban_match";
+				}
+				else if (matcherCombobox.selectedItem.data == "trid")
+				{
+					m.functionName = "trid_match";
+				}
+				else if (matcherCombobox.selectedItem.data == "keyword")
+				{
+					m.functionName = "keyword_match";
+					var r:RegularExpression = new RegularExpression();
+					// TODO: there should be regex validation. escaping special characters.
+					r.regex = keywordValue.text;
+					r.matcher = m;
+					m.matcherParams = new ArrayCollection();
+					m.matcherParams.addItem(r);
+				}
+				else
+					throw new Error("Unknown matcher!!!");
+				
+				ift.matcher = m;
+				ift.weight = int(featureWeight.text);
+			
+				informationFeatures.addItem(ift);
+				ifList.validateNow();
+				
+				featureWeight.text = "";
+				matcherCombobox.selectedItem = null;
+				keywordValue.text = "";
+				currentState = "normal";
+			}
+			
+			protected function removeClickHandler(event:MouseEvent):void
+			{
+				ifList.dataGroup.invalidateDisplayList();
+				for each (var o:Object in ifList.selectedIndices)
+				{
+					informationFeatures.removeItemAt(o as int);
+					(FlexGlobals.topLevelApplication.currentPopup as GenericEditDialog)
+							.deleteList.addItem(
+								informationFeatures.getItemAt(o as int)
+							);
+				}
+				ifList.validateNow();
+			}
+			
+		]]>
+	</fx:Script>
+	
 	
 	<fx:Declarations>
 		<mx:ListCollectionView id="informationFeatures"/>
+		
+		<s:ArrayCollection id="matcherDefinitions">
+			<input:MatcherDefinition data="cc" />
+			<input:MatcherDefinition data="ssn" />
+			<input:MatcherDefinition data="iban" />
+			<input:MatcherDefinition data="trid" />
+			<input:MatcherDefinition data="keyword" />
+		</s:ArrayCollection>
 	</fx:Declarations>
 	
 	<s:states>
 		<s:State name="normal"/>
-		<s:State name="expanded" />
+		<s:State name="expanded" stateGroups="expandGroup"/>
+		<s:State name="cc" stateGroups="expandGroup"/>
+		<s:State name="ssn" stateGroups="expandGroup"/>
+		<s:State name="iban" stateGroups="expandGroup"/>
+		<s:State name="trid" stateGroups="expandGroup"/>
+		<s:State name="keyword" stateGroups="expandGroup"/>
 	</s:states>
 	
 	<s:layout>
-		<s:VerticalLayout />
+		<s:HorizontalLayout  verticalAlign="middle"/>
 	</s:layout>
 	
-	
 	<s:Group>
+		<s:layout>
+			<s:HorizontalLayout verticalAlign="middle" gap="2"/>
+		</s:layout>
 		<s:List id="ifList" dataProvider="{informationFeatures}" 
 				itemRenderer="com.mydlp.ui.widget.general.input.InformationFeatureRenderer" />
+		
+		<s:Group>
+			<s:layout>
+				<s:VerticalLayout gap="2" />
+			</s:layout>
+			<s:Button skinClass="com.mydlp.ui.skin.AddBitmapButton32Skin" 
+					  click="{currentState = ( currentState == 'normal' ? 'expanded': 'normal' )}"/>
+			<s:Button skinClass="com.mydlp.ui.skin.RemoveBitmapButton32Skin" click="removeClickHandler(event)"/>
+		</s:Group>
 	</s:Group>
-	
+	<s:Spacer width="15" />
+	<s:BorderContainer includeIn="expandGroup">
+		<s:layout>
+			<s:HorizontalLayout verticalAlign="middle" gap="4"/>
+		</s:layout>
+		<s:Group>
+			<s:layout>
+				<s:VerticalLayout horizontalAlign="center" />
+			</s:layout>
+			<s:Form>
+				<s:FormItem label="@Resource(bundle = 'messages', key = 'matcher.combobox.label')" >
+					<s:ComboBox id="matcherCombobox" dataProvider="{matcherDefinitions}" 
+					change="{currentState = (matcherCombobox.selectedItem == null ? 'expanded' : matcherCombobox.selectedItem.data)}"
+					creationComplete="{currentState = (matcherCombobox.selectedItem == null ? 'expanded' : matcherCombobox.selectedItem.data)}"
+					/>
+				</s:FormItem>
+				<s:FormItem label="@Resource(bundle = 'messages', key = 'matcher.weight.label')" >
+					<s:TextInput id="featureWeight" />
+				</s:FormItem>
+				<s:FormItem includeIn="keyword" label="@Resource(bundle = 'messages', key = 'matcher.keyword.keywordValue.label')" >
+					<s:TextInput id="keywordValue" />
+				</s:FormItem>
+			</s:Form>			
+		</s:Group>
+		
+		<s:Button skinClass="com.mydlp.ui.skin.SaveBitmapButton32Skin" click="saveNewFeature(event)"/>
+	</s:BorderContainer>
 	
 </s:SkinnableContainer>

@@ -42,7 +42,7 @@ public class _000_00004_InformationType_1 extends AbstractGranule {
 		m.setFunctionName("cc_match");
 		
 		InformationFeature ift = new InformationFeature();
-		ift.setScore(new Long(501));
+		ift.setWeight(new Long(501));
 		ift.setMatcher(m);
 		m.setCoupledInformationFeature(ift);
 		

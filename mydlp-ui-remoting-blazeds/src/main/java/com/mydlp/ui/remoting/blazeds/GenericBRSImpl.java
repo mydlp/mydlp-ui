@@ -1,5 +1,7 @@
 package com.mydlp.ui.remoting.blazeds;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.flex.remoting.RemotingDestination;
 import org.springframework.stereotype.Service;
@@ -42,6 +44,13 @@ public class GenericBRSImpl implements GenericService
 			ruleService.remove((Rule) item);
 		else
 			genericDAO.remove(item);
+	}
+
+	@Override
+	public void removeAll(List<AbstractEntity> items) {
+		for (AbstractEntity abstractEntity : items) {
+			remove(abstractEntity);
+		}
 	}
 	
 	

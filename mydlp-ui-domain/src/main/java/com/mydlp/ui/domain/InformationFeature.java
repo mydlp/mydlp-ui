@@ -14,17 +14,17 @@ public class InformationFeature extends AbstractEntity {
 	 */
 	private static final long serialVersionUID = -5842428509062650962L;
 
-	protected Long score;
+	protected Long weight;
 	
 	protected Matcher matcher;
 	
 	@Column(nullable=false)
-	public Long getScore() {
-		return score;
+	public Long getWeight() {
+		return weight;
 	}
 
-	public void setScore(Long score) {
-		this.score = score;
+	public void setWeight(Long weight) {
+		this.weight = weight;
 	}
 
 	@OneToOne(cascade={CascadeType.ALL})

@@ -99,9 +99,9 @@
 				itemRenderer="com.mydlp.ui.widget.general.input.DataFormatRenderer" />
 	</s:Group>
 	
-	<s:Group>
+	<s:Group height="100%">
 		<s:layout>
-			<s:VerticalLayout gap="2"/>
+			<s:VerticalLayout gap="2" verticalAlign="bottom"/>
 		</s:layout>
 		<mx:Spacer height="100%" />
 		<s:Button skinClass="com.mydlp.ui.skin.RemoveBitmapButton32Skin" click="removeClickHandler(event)"/>
