@@ -55,7 +55,8 @@
 				
 				featureWeight.text = "";
 				matcherCombobox.selectedItem = null;
-				keywordValue.text = "";
+				if (keywordValue != null)
+					keywordValue.text = "";
 				currentState = "normal";
 			}
 			
@@ -64,11 +65,11 @@
 				ifList.dataGroup.invalidateDisplayList();
 				for each (var o:Object in ifList.selectedIndices)
 				{
-					informationFeatures.removeItemAt(o as int);
 					(FlexGlobals.topLevelApplication.currentPopup as GenericEditDialog)
 							.deleteList.addItem(
 								informationFeatures.getItemAt(o as int)
 							);
+					informationFeatures.removeItemAt(o as int);		
 				}
 				ifList.validateNow();
 			}
