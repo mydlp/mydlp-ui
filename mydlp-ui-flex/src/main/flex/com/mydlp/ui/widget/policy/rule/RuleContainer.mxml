@@ -13,6 +13,7 @@
 			
 			import com.mydlp.ui.domain.EndpointRule;
 			import com.mydlp.ui.domain.MailRule;
+			import com.mydlp.ui.domain.Rule;
 			import com.mydlp.ui.domain.WebRule;
 			import com.mydlp.ui.util.InteractionUtil;
 			import com.mydlp.ui.widget.general.popup.NewRuleDialog;
@@ -68,7 +69,7 @@
 					}
 					else
 						throw new Error("Unknown rule type;");
-					
+					ruleBox.uid = (ruleBox.ruleObject as Rule).uid;
 					ruleDP.addItem(ruleBox);
 				}
 				ruleList.validateNow();

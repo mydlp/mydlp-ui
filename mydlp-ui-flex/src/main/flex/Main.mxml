@@ -36,9 +36,12 @@
 			
 			public function refresh(): void
 			{
-				inventoryTree.refreshTree();
-				ruleContainer.refreshRules();
-				optionContainer.refreshUsers();
+				if (inventoryTree != null)
+					inventoryTree.refreshTree();
+				if (ruleContainer != null)
+					ruleContainer.refreshRules();
+				if (optionContainer != null)
+					optionContainer.refreshUsers();
 			}
 			
 			protected function genericResultHandler(event:ResultEvent):void
