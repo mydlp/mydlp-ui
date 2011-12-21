@@ -6,10 +6,13 @@ package com.mydlp.ui.util
 	import com.mydlp.ui.domain.InventoryCategory;
 	import com.mydlp.ui.domain.InventoryItem;
 	import com.mydlp.ui.domain.Item;
+	import com.mydlp.ui.domain.Rule;
+	import com.mydlp.ui.domain.RuleItem;
 	
 	import flash.utils.describeType;
 	import flash.utils.getDefinitionByName;
 	
+	import mx.collections.ArrayCollection;
 	import mx.collections.ArrayList;
 	import mx.collections.ListCollectionView;
 	import mx.controls.Alert;
@@ -102,6 +105,20 @@ package com.mydlp.ui.util
 					{
 						targetObject.item = cloneDomainObject(sourceObject.item);
 						(targetObject.item as Item).coupledInventoryItem = targetObject as InventoryItem;
+					}
+					else if (	sourceObject is Rule && 
+								classMember.name == "ruleItems" && 
+								classMember.type == ListCollectionView)
+					{
+						var ris:ListCollectionView = new ArrayCollection();
+						for each (var o:Object in sourceObject[classMember.name] as ListCollectionView)
+						{
+							var ri:RuleItem = new RuleItem();
+							ri.rule = targetObject as Rule;
+							ri.item = (o as RuleItem).item;
+							ris.addItem(ri);
+						}
+						targetObject[classMember.name] = ris;
 					}
 					else
 					{
