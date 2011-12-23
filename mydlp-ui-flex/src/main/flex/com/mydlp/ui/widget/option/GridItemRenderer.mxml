@@ -7,7 +7,7 @@
 		<![CDATA[
 			import com.mydlp.ui.domain.AuthUser;
 			override public function prepare(hasBeenRecycled:Boolean):void {
-				//lblData.text = data
+				//user.text = data.username
 				
 			}
 			

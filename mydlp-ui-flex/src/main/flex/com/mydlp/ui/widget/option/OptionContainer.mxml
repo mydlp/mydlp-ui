@@ -40,9 +40,22 @@
 				userList.selectedItem.deleterecord();
 			}
 			
+			protected function mouseMoveOnDataGrid(event:MouseEvent):void
+			{
+				if(userList.selectedItem != null)
+					this.currentState = "clicked";
+				else
+					this.currentState = "default";
+			}
+			
 		]]>
 	</fx:Script>
 	
+	
+	<s:states>
+		<s:State name = "default"/>
+		<s:State name = "clicked"/>
+	</s:states>
 	
 	<fx:Declarations>
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
@@ -57,7 +70,7 @@
 	
 	
 	
-	<s:DataGrid id="userList" x="66" y="41" width="285" height="108" dataProvider="{userDP}">
+	<s:DataGrid id="userList" x="66" y="41" width="285" height="108" dataProvider="{userDP}" gridClick="mouseMoveOnDataGrid(event)" >
 		<s:columns>
 			<s:ArrayList>
 				<s:GridColumn dataField="User name">
@@ -70,7 +83,7 @@
 					</s:itemRenderer>
 				</s:GridColumn>
 				<s:GridColumn dataField="email"/>
-				<s:GridColumn dataField="buttons" itemRenderer="com.mydlp.ui.widget.option.GridItemRenderer"/>
+				<s:GridColumn includeIn="clicked" dataField="buttons" itemRenderer="com.mydlp.ui.widget.option.GridItemRenderer"/>
 			</s:ArrayList>
 		</s:columns>
 	</s:DataGrid>
