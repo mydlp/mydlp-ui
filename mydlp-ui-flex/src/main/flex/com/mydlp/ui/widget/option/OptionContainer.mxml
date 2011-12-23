@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<s:SkinnableContainer xmlns:fx="http://ns.adobe.com/mxml/2009" 
-		 xmlns:s="library://ns.adobe.com/flex/spark"
-		 xmlns:my="http://www.mydlp.com/flex/my"
-		 xmlns:mx="library://ns.adobe.com/flex/mx" width="400" height="300"
-		 creationComplete="onCreationComplete(event)">
+<s:SkinnableContainer xmlns:fx="http://ns.adobe.com/mxml/2009"
+					  xmlns:s="library://ns.adobe.com/flex/spark"
+					  xmlns:my="http://www.mydlp.com/flex/my"
+					  xmlns:mx="library://ns.adobe.com/flex/mx"
+					  width="400" height="300" creationComplete="onCreationComplete(event)"
+					  width.clicked="800" height.clicked="350"
+					  width.default="800" height.default="350">
 	<fx:Script>
 		<![CDATA[
 			import com.mydlp.ui.domain.AuthUser;
@@ -63,14 +65,19 @@
 			<my:method name="getUsers" result="getUsersHandler(event)" />
 		</my:remote>
 	</fx:Declarations>
-	<s:Button label="New User" click="{InteractionUtil.newEditDialog(new AuthUser())}"/>
+	<s:Button label="New User" click="{InteractionUtil.newEditDialog(new AuthUser())}"
+			  x.clicked="714" y.clicked="319"
+			  x.default="714" y.default="321" height.default="19"/>
 
 	<!--<s:List id="userList" x="153" y="26" dataProvider="{userDP}"
 			itemRenderer="com.mydlp.ui.widget.option.UserRenderer"/>-->
 	
 	
 	
-	<s:DataGrid id="userList" x="66" y="41" width="285" height="108" dataProvider="{userDP}" gridClick="mouseMoveOnDataGrid(event)" >
+	<s:DataGrid id="userList" x="66" y="41" width="285" height="108" dataProvider="{userDP}"
+				gridClick="mouseMoveOnDataGrid(event)"
+				x.clicked="10" y.clicked="10" width.clicked="780" height.clicked="302"
+				x.default="10" y.default="10" width.default="780" height.default="304">
 		<s:columns>
 			<s:ArrayList>
 				<s:GridColumn dataField="User name">
@@ -83,7 +90,8 @@
 					</s:itemRenderer>
 				</s:GridColumn>
 				<s:GridColumn dataField="email"/>
-				<s:GridColumn includeIn="clicked" dataField="buttons" itemRenderer="com.mydlp.ui.widget.option.GridItemRenderer"/>
+				<s:GridColumn dataField="isActive" itemRenderer="com.mydlp.ui.widget.option.ActiveGridItemRenderer"/>
+				<s:GridColumn includeIn="clicked" dataField="buttons" itemRenderer="com.mydlp.ui.widget.option.GridItemRenderer" sortable="false"/>
 			</s:ArrayList>
 		</s:columns>
 	</s:DataGrid>
