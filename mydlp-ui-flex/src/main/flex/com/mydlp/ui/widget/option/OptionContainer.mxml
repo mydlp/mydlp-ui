@@ -82,19 +82,19 @@
 			<my:method name="getUsers" result="getUsersHandler(event)" />
 		</my:remote>
 	</fx:Declarations>
-	<s:Group  x="550" y="320">
+	<s:Group  x="425" y="320">
 		
 		<s:layout>
 			<s:HorizontalLayout gap="2"/>
 		</s:layout>
-		
-		<s:Button id="deleteUser" label="Delete User" icon="removeButtonStyle"
+			
+		<s:Button id="deleteUser" label = "Delete User" icon = "@Embed(source='/assets/icons/16x16/trash.png')"
 				  click="deleteClick(event)" enabled="false"
 				  height="19"/>
-		<s:Button id="editUser" label="Edit User"
+		<s:Button id="editUser" label="Edit User" icon = "@Embed(source='/assets/icons/16x16/edit.png')"
 				  click="editClick(event)" enabled="false"
 				  height="19"/>
-		<s:Button id="newUser" label="New User"
+		<s:Button id="newUser" label="New User" icon = "@Embed(source='/assets/icons/16x16/add.png')"
 				  click="{InteractionUtil.newEditDialog(new AuthUser())}"
 				  height="19"/>
 	</s:Group>
