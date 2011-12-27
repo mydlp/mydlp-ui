@@ -82,45 +82,53 @@
 			<my:method name="getUsers" result="getUsersHandler(event)" />
 		</my:remote>
 	</fx:Declarations>
-	<s:Group  x="425" y="320">
-		
+	<s:Group width="832" height="352">
 		<s:layout>
-			<s:HorizontalLayout gap="2"/>
+			<s:VerticalLayout gap="5" horizontalAlign="right"/>
 		</s:layout>
+		
+		
+	
+		<!--<s:List id="userList" x="153" y="26" dataProvider="{userDP}"
+				itemRenderer="com.mydlp.ui.widget.option.UserRenderer"/>-->
+		
+		
+		
+		<s:DataGrid id="userList" x="0" y="0" width="789" height="312" dataProvider="{userDP}"
+					gridClick="mouseMoveOnDataGrid(event)" textAlign="center" textAlignLast="center">
+			<s:columns>
+				<s:ArrayList>
+					<s:GridColumn dataField="User name" sortable="false">
+						<s:itemRenderer>
+							<fx:Component>
+								<s:GridItemRenderer>
+									<s:Label text="{data.username}"/>
+								</s:GridItemRenderer>
+							</fx:Component>
+						</s:itemRenderer>
+					</s:GridColumn>
+					<s:GridColumn dataField="email"/>
+					<s:GridColumn dataField="isActive" itemRenderer="com.mydlp.ui.widget.option.ActiveGridItemRenderer"/>
+					<!--<s:GridColumn includeIn="clicked" dataField="buttons" itemRenderer="com.mydlp.ui.widget.option.GridItemRenderer" sortable="false"/>-->
+				</s:ArrayList>
+			</s:columns>
+		</s:DataGrid>
+		
+		<s:Group>
 			
-		<s:Button id="deleteUser" label = "Delete User" icon = "@Embed(source='/assets/icons/16x16/trash.png')"
-				  click="deleteClick(event)" enabled="false"
-				  height="19"/>
-		<s:Button id="editUser" label="Edit User" icon = "@Embed(source='/assets/icons/16x16/edit.png')"
-				  click="editClick(event)" enabled="false"
-				  height="19"/>
-		<s:Button id="newUser" label="New User" icon = "@Embed(source='/assets/icons/16x16/add.png')"
-				  click="{InteractionUtil.newEditDialog(new AuthUser())}"
-				  height="19"/>
+			<s:layout>
+				<s:HorizontalLayout gap="2"/>
+			</s:layout>
+			
+			<s:Button id="deleteUser" label = "Delete User" icon = "@Embed(source='/assets/icons/16x16/trash.png')"
+					  click="deleteClick(event)" enabled="false"
+					  height="19"/>
+			<s:Button id="editUser" label="Edit User" icon = "@Embed(source='/assets/icons/16x16/edit.png')"
+					  click="editClick(event)" enabled="false"
+					  height="19"/>
+			<s:Button id="newUser" label="New User" icon = "@Embed(source='/assets/icons/16x16/add.png')"
+					  click="{InteractionUtil.newEditDialog(new AuthUser())}"
+					  height="19"/>
+		</s:Group>
 	</s:Group>
-
-	<!--<s:List id="userList" x="153" y="26" dataProvider="{userDP}"
-			itemRenderer="com.mydlp.ui.widget.option.UserRenderer"/>-->
-	
-	
-	
-	<s:DataGrid id="userList" x="0" y="0" width="789" height="312" dataProvider="{userDP}"
-				gridClick="mouseMoveOnDataGrid(event)">
-		<s:columns>
-			<s:ArrayList>
-				<s:GridColumn dataField="User name">
-					<s:itemRenderer>
-						<fx:Component>
-							<s:GridItemRenderer>
-								<s:Label text="{data.username}"/>
-							</s:GridItemRenderer>
-						</fx:Component>
-					</s:itemRenderer>
-				</s:GridColumn>
-				<s:GridColumn dataField="email"/>
-				<s:GridColumn dataField="isActive" itemRenderer="com.mydlp.ui.widget.option.ActiveGridItemRenderer"/>
-				<!--<s:GridColumn includeIn="clicked" dataField="buttons" itemRenderer="com.mydlp.ui.widget.option.GridItemRenderer" sortable="false"/>-->
-			</s:ArrayList>
-		</s:columns>
-	</s:DataGrid>
 </s:SkinnableContainer>
