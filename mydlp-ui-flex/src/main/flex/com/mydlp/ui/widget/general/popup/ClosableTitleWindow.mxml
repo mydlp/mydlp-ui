@@ -3,12 +3,17 @@
 				xmlns:s="library://ns.adobe.com/flex/spark" 
 				xmlns:mx="library://ns.adobe.com/flex/mx"
 				close="InteractionUtil.closePopup(this)" 
-				initialize="{FlexGlobals.topLevelApplication.currentPopup = this}">
+				initialize="{init(event)}">
 	<fx:Script>
 		<![CDATA[
 			import com.mydlp.ui.util.InteractionUtil;
 			
 			import mx.core.FlexGlobals;
+			
+			public function init(event:Event):void
+			{
+				FlexGlobals.topLevelApplication.currentPopup = this;
+			}
 		]]>
 	</fx:Script>
 	<fx:Declarations>

@@ -17,7 +17,7 @@
 			import com.mydlp.ui.domain.InventoryItem;
 			import com.mydlp.ui.domain.Item;
 			import com.mydlp.ui.util.ClassMember;
-			import com.mydlp.ui.util.EditDialagPopUpElements;
+			import com.mydlp.ui.util.EditDialogPopUpElements;
 			import com.mydlp.ui.util.InteractionUtil;
 			import com.mydlp.ui.util.LangUtil;
 			import com.mydlp.ui.util.ReflectionUtil;
@@ -186,7 +186,7 @@
 						var fi:FormItem = new FormItem();
 						fi.label = LangUtil.getString("messages", "generic.edit." + getObjectName(targetObject) + "." + classMember.name + ".label");
 						fi.addElement(visualElement);
-						sourceLabelList.push(new EditDialagPopUpElements(index, fi));
+						sourceLabelList.push(new EditDialogPopUpElements(index, fi));
 					}
 				}
 			}
@@ -195,7 +195,7 @@
 			{
 				sourceLabelList.sortOn("order", Array.DESCENDING, Array.NUMERIC);
 				for(var i:int = sourceLabelList.length-1; i >= 0; i--){
-					var tempElement:EditDialagPopUpElements = sourceLabelList[i] as EditDialagPopUpElements;
+					var tempElement:EditDialogPopUpElements = sourceLabelList[i] as EditDialogPopUpElements;
 					if(tempElement != null){
 						var tempFormItem:FormItem = tempElement.vs;
 						form.addElement(tempFormItem);

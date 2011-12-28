@@ -5,6 +5,9 @@ package com.mydlp.ui.util
 	import com.mydlp.ui.widget.general.popup.GenericEditDialog;
 	
 	import flash.display.DisplayObject;
+	import flash.ui.Mouse;
+	import flash.ui.MouseCursor;
+	import flash.ui.MouseCursorData;
 	
 	import mx.core.Application;
 	import mx.core.FlexGlobals;
@@ -17,7 +20,7 @@ package com.mydlp.ui.util
 		public static function newPopup(className:Class): void
 		{
 			var popup:IFlexDisplayObject = PopUpManager.createPopUp(FlexGlobals.topLevelApplication as DisplayObject , className, true);
-			PopUpManager.centerPopUp(popup);
+			popup.move(FlexGlobals.topLevelApplication.mouseX + 10, FlexGlobals.topLevelApplication.mouseY + 10);
 		}
 		
 		public static function closePopup(popup:Object): void
