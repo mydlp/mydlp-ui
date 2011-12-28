@@ -17,6 +17,7 @@
 			import com.mydlp.ui.domain.InventoryItem;
 			import com.mydlp.ui.domain.Item;
 			import com.mydlp.ui.util.ClassMember;
+			import com.mydlp.ui.util.EditDialagPopUpElements;
 			import com.mydlp.ui.util.InteractionUtil;
 			import com.mydlp.ui.util.LangUtil;
 			import com.mydlp.ui.util.ReflectionUtil;
@@ -46,12 +47,8 @@
 			
 			public var deleteList:ListCollectionView;
 			
-			protected var simpleFormItems:ArrayCollection = new ArrayCollection();
-			protected var complexFormItems:ArrayCollection = new ArrayCollection();
 			
-			
-			protected var objectName:ArrayCollection = new ArrayCollection();
-			protected var classMemberName:ArrayCollection = new ArrayCollection();
+			protected var sourceLabelList:Array = new Array();
 			
 			
 			
@@ -110,14 +107,10 @@
 						BindingUtils.bindProperty(targetObject, classMember.name, ipInput, "numberValue");
 						visualElement = ipInput;
 						visualElement.width = 160;
-						if(classMember.name == "ipBase"){
-							simpleFormItems.addItemAt(ipInput, 2);
+						if(classMember.name == "ipBase")
 							index = 2;
-						}
-						else{
-							simpleFormItems.addItemAt(ipInput, 1);
+						else
 							index = 1;
-						}
 					}
 					else if (targetObject is InformationType && 
 							classMember.name == "dataFormats" && 
@@ -130,7 +123,6 @@
 							dfInput.dataFormats = targetObject[classMember.name];
 						BindingUtils.bindProperty(targetObject, classMember.name, dfInput, "dataFormats");
 						visualElement = dfInput;
-						complexFormItems.addItemAt(dfInput, 1);
 						index = 9;
 					}
 					else if (targetObject is InformationDescription &&
@@ -144,7 +136,6 @@
 							ifInput.informationFeatures = targetObject[classMember.name];
 						BindingUtils.bindProperty(targetObject, classMember.name, ifInput, "informationFeatures");
 						visualElement = ifInput;
-						complexFormItems.addItemAt(ifInput, 0);
 						index = 8;
 					}
 					else if (targetObject is InformationType &&
@@ -164,7 +155,6 @@
 						checkBox.selected = targetObject[classMember.name];
 						BindingUtils.bindProperty(targetObject, classMember.name, checkBox, "selected");
 						visualElement = checkBox;
-						simpleFormItems.addItemAt(checkBox, 6);
 						index = 6;
 					}
 					else
@@ -175,23 +165,18 @@
 						visualElement = textInput;
 						visualElement.width = 160;
 						if(classMember.name == "name"){
-							simpleFormItems.addItemAt(textInput, 0);
 							index = 0;
 						}
 						else if(classMember.name == "username"){
-							simpleFormItems.addItemAt(textInput, 3);
 							index = 3;
 						}
 						else if(classMember.name == "email"){
-							simpleFormItems.addItemAt(textInput, 4);
 							index = 4;
 						}
 						else if(classMember.name == "password"){
-							simpleFormItems.addItemAt(textInput, 5);
 							index = 5;
 						}
 						else if(classMember.name == "threshold"){
-							simpleFormItems.addItemAt(textInput, 7);
 							index = 7;
 						}
 					}
@@ -201,11 +186,22 @@
 						var fi:FormItem = new FormItem();
 						fi.label = LangUtil.getString("messages", "generic.edit." + getObjectName(targetObject) + "." + classMember.name + ".label");
 						fi.addElement(visualElement);
-						form.addElement(fi);
+						sourceLabelList.push(new EditDialagPopUpElements(index, fi));
 					}
 				}
 			}
 			
+			public function populateEachFormItem():void
+			{
+				sourceLabelList.sortOn("order", Array.DESCENDING, Array.NUMERIC);
+				for(var i:int = sourceLabelList.length-1; i >= 0; i--){
+					var tempElement:EditDialagPopUpElements = sourceLabelList[i] as EditDialagPopUpElements;
+					if(tempElement != null){
+						var tempFormItem:FormItem = tempElement.vs;
+						form.addElement(tempFormItem);
+					}
+				}
+			}
 			public function populateCreateButton(): void
 			{	
 				cButton.label = LangUtil.getString("messages", "generic.edit." + getSimpleName() + ".createButton.label");
@@ -223,6 +219,8 @@
 				title = LangUtil.getString("messages", "generic.edit." + getSimpleName() + ".title");
 				
 				populateClassMembers(formObject);
+				
+				populateEachFormItem();
 				
 				populateCreateButton();
 				
