@@ -2,17 +2,69 @@
 <s:SkinnableContainer xmlns:fx="http://ns.adobe.com/mxml/2009" 
 					xmlns:s="library://ns.adobe.com/flex/spark" 
 					xmlns:mx="library://ns.adobe.com/flex/mx" 
-					xmlns:rule="com.mydlp.ui.widget.policy.rule.*">
+					xmlns:rule="com.mydlp.ui.widget.policy.rule.*"
+					>
 	<fx:Script>
 		<![CDATA[
 			import com.mydlp.ui.domain.Rule;
 			
+			import mx.events.FlexEvent;
+			
+			import spark.events.IndexChangeEvent;
+			
 			[Bindable]
 			public var action:String = Rule.ACTION_PASS;
+			[Bindable]
+			public var actionBoxRuleObject:Rule;
+			
+			
+			protected function actionListChange(event:IndexChangeEvent):void
+			{
+				if(actionList.selectedItem == "PASS")
+					actionBoxRuleObject.action = Rule.ACTION_PASS;
+				else if(actionList.selectedItem == "BLOCK")
+					actionBoxRuleObject.action = Rule.ACTION_BLOCK;
+				else if(actionList.selectedItem == "LOG")
+					actionBoxRuleObject.action = Rule.ACTION_LOG;
+				else if(actionList.selectedItem == "QUARANTINE")
+					actionBoxRuleObject.action = Rule.ACTION_QUARANTINE;
+				else if(actionList.selectedItem == "ARCHIVE")
+					actionBoxRuleObject.action = Rule.ACTION_ARCHIVE;
+				
+				actionBoxRuleObject.save();
+			}
+			
+			protected function setSelectedIndex(event:FlexEvent):void
+			{
+				if(actionBoxRuleObject.action == Rule.ACTION_PASS)
+					actionList.selectedIndex = 0;
+				else if(actionBoxRuleObject.action == Rule.ACTION_BLOCK)
+					actionList.selectedIndex = 1;
+				else if(actionBoxRuleObject.action == Rule.ACTION_LOG)
+					actionList.selectedIndex = 2;
+				else if(actionBoxRuleObject.action == Rule.ACTION_QUARANTINE)
+					actionList.selectedIndex = 3;
+				else if(actionBoxRuleObject.action == Rule.ACTION_ARCHIVE)
+					actionList.selectedIndex = 4;
+			}
+			
 		]]>
 	</fx:Script>
+	<s:states>
+		<s:State name="default"/>
+		<s:State name="onClick"/>
+	</s:states>
 	<s:layout>
 		<s:VerticalLayout horizontalAlign="center" verticalAlign="middle" />
 	</s:layout>
-	<s:Label text="{action}" />
+	<s:Label includeIn="default" text="{actionBoxRuleObject.action}" />
+	<s:DropDownList includeIn="onClick" id="actionList" change="actionListChange(event)" creationComplete="setSelectedIndex(event)">
+		<mx:ArrayCollection>
+			<fx:String>PASS</fx:String>
+			<fx:String>BLOCK</fx:String>
+			<fx:String>LOG</fx:String>
+			<fx:String>QUARANTINE</fx:String>
+			<fx:String>ARCHIVE</fx:String>
+		</mx:ArrayCollection>
+	</s:DropDownList> 
 </s:SkinnableContainer>
