@@ -18,6 +18,7 @@
 			import com.mydlp.ui.domain.Network;
 			import com.mydlp.ui.domain.Rule;
 			import com.mydlp.ui.domain.RuleItem;
+			import com.mydlp.ui.domain.WebRule;
 			import com.mydlp.ui.util.InteractionUtil;
 			import com.mydlp.ui.util.ReflectionUtil;
 			
@@ -25,6 +26,7 @@
 			
 			import mx.collections.ArrayCollection;
 			import mx.collections.ListCollectionView;
+			import mx.controls.Alert;
 			import mx.core.DragSource;
 			import mx.core.FlexGlobals;
 			import mx.core.IUIComponent;
@@ -104,6 +106,17 @@
 				FlexGlobals.topLevelApplication.refresh();
 			}
 			
+			protected function moveUpClick(event:MouseEvent):void
+			{
+				//var temp:WebRule = FlexGlobals.topLevelApplication.ruleContainer.ruleList.selectedItem as WebRule;
+				//Alert.show((temp.priority).toString(), "hede");
+			}
+			
+			protected function moveDownClick(event:MouseEvent):void
+			{
+				
+			}
+			
 		]]>
 	</fx:Script>
 	
@@ -122,6 +135,7 @@
 		<s:State name="webRule"/>
 		<s:State name="mailRule"/>
 		<s:State name="endpointRule"/>
+		<s:State name="selected"/>
 	</s:states>
 	
 	<s:SkinnableContainer id="labelBox" width="125" height="100%">
@@ -142,10 +156,21 @@
 			<s:layout>
 				<s:HorizontalLayout gap="2"/>
 			</s:layout>
+			
+			<!--<s:Group>
+				<s:layout>
+					<s:VerticalLayout gap="2"/>
+				</s:layout>-->
+				<s:Button styleName="upButtonStyle"
+						  click="moveUpClick(event)"/>
+				<s:Button styleName="downButtonStyle"
+						  click="moveDownClick(event)"/>
+			<!--</s:Group> -->
+			
 			<s:Button styleName="copyButtonStyle"
 					  click="{	var clone:Rule = ReflectionUtil.cloneDomainObject(ruleObject);
-					  clone.priority -= 10;
-					  InteractionUtil.newEditDialog(clone)}" />
+					  			clone.priority -= 10;
+					  			InteractionUtil.newEditDialog(clone)}" />
 			<s:Button styleName="editButtonStyle" 
 					  click="{InteractionUtil.newEditDialog(ruleObject)}" />
 			<s:Button styleName="removeButtonStyle" 
@@ -167,5 +192,14 @@
 	
 	<rule:ActionBox id="actionBox" width="120" height="100%" actionBoxRuleObject="@{ruleObject}" 
 					currentState="{FlexGlobals.topLevelApplication.ruleContainer.ruleList.selectedItem == this ? 'onClick' : 'default'}"/>
+	<!--<s:Group width="100">
+		<s:layout >
+			<s:VerticalLayout gap="2"/>
+		</s:layout>
+		<s:Button visible="{FlexGlobals.topLevelApplication.ruleContainer.ruleList.selectedItem == this ? true : false}"
+				  id="moveUp" label="Move Up" click="moveUpClick(event)"/>
+		<s:Button visible="{FlexGlobals.topLevelApplication.ruleContainer.ruleList.selectedItem == this ? true : false}"
+				  id="moveDown" label="Move Down" click="moveDownClick(event)"/>
+	</s:Group>-->
 	
 </s:SkinnableContainer>
