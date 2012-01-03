@@ -30,6 +30,14 @@ s|Application {
 	fontSize: "12";
 }
 
+.upButtonStyle {
+	skinClass: ClassReference("com.mydlp.ui.skin.UpBitmapButton16Skin");
+}
+
+.downButtonStyle {
+	skinClass: ClassReference("com.mydlp.ui.skin.DownBitmapButton16Skin");
+}
+
 .removeButtonStyle {
 	skinClass: ClassReference("com.mydlp.ui.skin.RemoveBitmapButton16Skin");
 }

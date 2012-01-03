@@ -157,15 +157,10 @@
 				<s:HorizontalLayout gap="2"/>
 			</s:layout>
 			
-			<!--<s:Group>
-				<s:layout>
-					<s:VerticalLayout gap="2"/>
-				</s:layout>-->
-				<s:Button styleName="upButtonStyle"
+			<s:Button styleName="upButtonStyle"
 						  click="moveUpClick(event)"/>
-				<s:Button styleName="downButtonStyle"
+			<s:Button styleName="downButtonStyle"
 						  click="moveDownClick(event)"/>
-			<!--</s:Group> -->
 			
 			<s:Button styleName="copyButtonStyle"
 					  click="{	var clone:Rule = ReflectionUtil.cloneDomainObject(ruleObject);
