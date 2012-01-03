@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Tree xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx"
+		 xmlns:my="http://www.mydlp.com/flex/my"
+		 labelField="label"
+		 width="400" height="100%"
+		 showRoot="false"
+		 allowMultipleSelection="true"
+		 creationComplete="populateTree()"
+		 dataProvider="@{inventory}"
+		 dragEnabled="true" 
+		 dropEnabled="true"
+		 dragDrop="onDragDrop(event)"
+		 itemRenderer="com.mydlp.ui.widget.policy.inventory.InvetoryItemRenderer"
+		 folderOpenIcon="@Embed('/assets/icons/16x16/folder.png')"
+		 folderClosedIcon="@Embed('/assets/icons/16x16/folder.png')"
+		 >
+	<fx:Script>
+		<![CDATA[
+			import com.mydlp.ui.widget.general.popup.NewInventoryItemDialog;
+			import com.mydlp.ui.domain.AbstractEntity;
+			import com.mydlp.ui.domain.InventoryBase;
+			import com.mydlp.ui.domain.InventoryCategory;
+			import com.mydlp.ui.domain.InventoryItem;
+			import com.mydlp.ui.domain.Item;
+			import com.mydlp.ui.util.InteractionUtil;
+			import com.mydlp.ui.util.LangUtil;
+			import com.mydlp.ui.util.ReflectionUtil;
+			
+			import mx.collections.ArrayCollection;
+			import mx.collections.ListCollectionView;
+			import mx.controls.listClasses.IListItemRenderer;
+			import mx.events.DragEvent;
+			import mx.managers.DragManager;
+			import mx.rpc.events.ResultEvent;
+			import mx.utils.ObjectUtil;
+			
+			[Bindable]
+			protected var inventory:Object;
+			
+			protected var tempOpenItems:Object;
+			
+			public function refreshTree(): void
+			{
+				tempOpenItems = openItems;
+				invalidateList();
+				re.getInventory();
+			}
+			
+			protected function saveAllHandler(event:ResultEvent): void
+			{
+				refreshTree();
+			}
+			
+			protected function getInventoryHandler(event:ResultEvent): void
+			{
+				inventory = event.result as ListCollectionView;
+				openItems = tempOpenItems;
+				validateNow();
+			}
+			
+			protected function populateTree():void
+			{
+				//populateContextMenu();
+				refreshTree();
+			}
+			
+			protected function onDragDrop(event:DragEvent):void
+			{
+				event.preventDefault();
+				hideDropFeedback(event);
+				
+				var dropIndex:int = calculateDropIndex();
+				var renderer:IListItemRenderer = indexToItemRenderer(dropIndex);
+				var parentCategory:InventoryCategory = null;
+				if (renderer == null)
+				{
+					parentCategory = null;
+				}
+				else
+				{
+					var dropTarget:InventoryBase = renderer.data as InventoryBase;
+					if (renderer.data is InventoryCategory)
+					{
+						parentCategory = dropTarget as InventoryCategory;
+						expandItem(parentCategory, true);
+					}
+					else
+						parentCategory = dropTarget.category;
+				}
+				
+				var itemsToSave:ListCollectionView = new ArrayCollection();
+				if (event.dragSource.hasFormat("treeItems"))
+					for each (var item:Object in event.dragSource.dataForFormat('treeItems') as Array)
+				{
+					var dragSource:InventoryBase = item as InventoryBase;
+					if (dragSource != parentCategory && 
+						dragSource.category != parentCategory &&
+						isValidTargetCategory(dragSource, parentCategory)
+					)
+					{
+						dragSource.category = parentCategory;
+						itemsToSave.addItem(dragSource);
+					}
+				}
+				
+				if (itemsToSave.length > 0)
+					re.saveAll(itemsToSave);
+			}
+			
+			protected function isValidTargetCategory(dragSource:InventoryBase, targetCategory:InventoryCategory): Boolean
+			{
+				if (targetCategory == null)
+					return true;
+				if (dragSource == targetCategory)
+					return false;
+				return isValidTargetCategory(dragSource, targetCategory.category);
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<fx:Declarations>
+		<my:remote id="re" destination="inventoryBRS">
+			<my:method name="getInventory" result="getInventoryHandler(event)" />
+			<my:method name="saveAll" result="saveAllHandler(event)" />
+		</my:remote>
+	</fx:Declarations>
+</mx:Tree>

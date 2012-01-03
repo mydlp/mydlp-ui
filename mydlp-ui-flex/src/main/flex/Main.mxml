@@ -6,7 +6,7 @@
 			   minHeight="768" minWidth="1024" 
 			   xmlns:inventory="com.mydlp.ui.widget.policy.inventory.*"
 			   usePreloader="true"
-			   applicationComplete="applicationCompleteHandler(event)" xmlns:rule="com.mydlp.ui.widget.policy.rule.*" xmlns:option="com.mydlp.ui.widget.option.*"
+			   applicationComplete="applicationCompleteHandler(event)" xmlns:rule="com.mydlp.ui.widget.policy.rule.*" xmlns:option="com.mydlp.ui.widget.option.*" xmlns:dataformat="com.mydlp.ui.widget.dataformat.*"
 			   >
 	<fx:Style source="/assets/style/general.css" />
 	
@@ -70,6 +70,11 @@
 		<mx:VBox id="optionTab" label="Option" width="100%" height="100%">
 			<mx:HDividedBox width="100%" height="100%">
 				<option:OptionContainer id="optionContainer" />
+			</mx:HDividedBox>
+		</mx:VBox>
+		<mx:VBox id="dataFormat" label="Data Formats" width="100%" height="100%">
+			<mx:HDividedBox width="100%" height="100%">
+				<dataformat:DataFormatTree id="dataFormatContainer"/>
 			</mx:HDividedBox>
 		</mx:VBox>
 	</mx:TabNavigator>
