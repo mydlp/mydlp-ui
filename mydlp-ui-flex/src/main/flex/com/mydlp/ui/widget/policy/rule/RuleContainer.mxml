@@ -6,22 +6,17 @@
 		 xmlns:rule="com.mydlp.ui.widget.policy.rule.*"
 		 width="100%" height="100%"
 		 minWidth="700"
-		 creationComplete="onCreationComplete(event)">
+		 creationComplete="onCreationComplete(event)" xmlns:util="com.mydlp.ui.util.*">
 	<fx:Script>
 		<![CDATA[
-			import avmplus.getQualifiedClassName;
-			
 			import com.mydlp.ui.domain.EndpointRule;
 			import com.mydlp.ui.domain.MailRule;
-			import com.mydlp.ui.domain.Rule;
 			import com.mydlp.ui.domain.WebRule;
 			import com.mydlp.ui.util.InteractionUtil;
 			import com.mydlp.ui.widget.general.popup.NewRuleDialog;
 			
 			import mx.collections.ArrayCollection;
 			import mx.collections.ListCollectionView;
-			import mx.controls.Alert;
-			import mx.core.FlexGlobals;
 			import mx.core.IUIComponent;
 			import mx.events.DragEvent;
 			import mx.events.FlexEvent;
@@ -34,8 +29,8 @@
 			public function refreshRules():void
 			{
 				//TODO: maintain scrool position
-				ruleList.dataGroup.invalidateDisplayList();
-				ruleDP.removeAll();
+				//ruleList.invalidateDisplayList();
+				//ruleList.dataGroup.invalidateDisplayList();
 				re.getRules();
 			}
 			
@@ -48,30 +43,26 @@
 			
 			protected function getRulesHandler(event:ResultEvent): void
 			{
-				var rules:ArrayCollection = event.result as ArrayCollection;
-				for each (var rule:* in rules) 
+				var ruleDP2:ArrayCollection = event.result as ArrayCollection;
+				for each (var rule:* in ruleDP) 
 				{
-					var ruleBox:RuleBox = new RuleBox();
 					if (rule is WebRule)
 					{
-						ruleBox.currentState = "webRule";
-						ruleBox.ruleObject = rule as WebRule;
+						rule = rule as WebRule;
 					}
 					else if (rule is MailRule)
 					{
-						ruleBox.currentState = "mailRule";
-						ruleBox.ruleObject = rule as MailRule;
+						rule = rule as MailRule;
 					}
 					else if (rule is EndpointRule)
 					{
-						ruleBox.currentState = "endpointRule";
-						ruleBox.ruleObject = rule as EndpointRule;
+						rule = rule as EndpointRule;
 					}
 					else
 						throw new Error("Unknown rule type;");
-					ruleBox.uid = (ruleBox.ruleObject as Rule).uid;
-					ruleDP.addItem(ruleBox);
 				}
+				ruleList.invalidateList();
+				ruleDP = ruleDP2;
 				ruleList.validateNow();
 			}
 			
@@ -102,7 +93,7 @@
 	</s:Group>
 	
 	
-	<s:List id="ruleList" dataProvider="{ruleDP}" width="100%" height="100%"
-			itemRenderer="spark.skins.spark.DefaultComplexItemRenderer"/>
+	<util:MyList id="ruleList" dataProvider="{ruleDP}" width="100%" height="100%"
+			itemRenderer="com.mydlp.ui.widget.policy.rule.RuleBoxRenderer"/>
 
 </s:SkinnableContainer>

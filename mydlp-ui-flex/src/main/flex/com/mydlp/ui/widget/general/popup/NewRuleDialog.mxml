@@ -13,7 +13,6 @@
 			import com.mydlp.ui.domain.Rule;
 			import com.mydlp.ui.domain.WebRule;
 			import com.mydlp.ui.util.InteractionUtil;
-			import com.mydlp.ui.widget.policy.rule.RuleBox;
 			
 			import mx.collections.ArrayCollection;
 			import mx.core.FlexGlobals;
@@ -53,8 +52,8 @@
 			{
 				if (FlexGlobals.topLevelApplication.ruleContainer.ruleList.dataProvider.length > 0)
 				{
-					var ruleBox:RuleBox = FlexGlobals.topLevelApplication.ruleContainer.ruleList.dataProvider.getItemAt(0);
-					recommendedPriority = (ruleBox.ruleObject as Rule).priority + 100;
+					var rule:Rule = FlexGlobals.topLevelApplication.ruleContainer.ruleList.dataProvider.getItemAt(0);
+					recommendedPriority = rule.priority + 100;
 				}
 			}
 			
