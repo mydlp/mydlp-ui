@@ -1,20 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<s:SkinnableContainer xmlns:fx="http://ns.adobe.com/mxml/2009" 
-		 xmlns:s="library://ns.adobe.com/flex/spark" 
-		 xmlns:mx="library://ns.adobe.com/flex/mx"
-		 xmlns:my="http://www.mydlp.com/flex/my" 
-		 xmlns:domain="com.mydlp.ui.domain.*" 
-		 xmlns:rule="com.mydlp.ui.widget.policy.rule.*" 
-		 creationComplete="onCreationComplete(event)"
-		 dragEnter="onDragEnter(event)"
-		 dragDrop="onDragDrop(event)"
-		 >
+<s:ItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009" 
+				xmlns:s="library://ns.adobe.com/flex/spark" 
+				xmlns:mx="library://ns.adobe.com/flex/mx"
+				xmlns:rule="com.mydlp.ui.widget.policy.rule.*"
+				xmlns:my="http://www.mydlp.com/flex/my" 
+				autoDrawBackground="true"
+				creationComplete="onCreationComplete(event)" 
+				xmlns:util="com.mydlp.ui.util.*" 
+				dragEnter="onDragEnter(event)"
+				dragDrop="onDragDrop(event)"
+				>
 	<fx:Script>
 		<![CDATA[
+			import com.mydlp.ui.domain.EndpointRule;
 			import com.mydlp.ui.domain.InformationType;
 			import com.mydlp.ui.domain.InventoryCategory;
 			import com.mydlp.ui.domain.Item;
-			import com.mydlp.ui.domain.Matcher;
+			import com.mydlp.ui.domain.MailRule;
 			import com.mydlp.ui.domain.Network;
 			import com.mydlp.ui.domain.Rule;
 			import com.mydlp.ui.domain.RuleItem;
@@ -22,11 +24,8 @@
 			import com.mydlp.ui.util.InteractionUtil;
 			import com.mydlp.ui.util.ReflectionUtil;
 			
-			import flashx.textLayout.formats.ITabStopFormat;
-			
 			import mx.collections.ArrayCollection;
 			import mx.collections.ListCollectionView;
-			import mx.controls.Alert;
 			import mx.core.DragSource;
 			import mx.core.FlexGlobals;
 			import mx.core.IUIComponent;
@@ -35,7 +34,6 @@
 			import mx.managers.DragManager;
 			import mx.rpc.events.ResultEvent;
 			
-			import spark.components.supportClasses.ItemRenderer;
 			[Bindable]
 			public var ruleObject:* = null;
 			
@@ -45,20 +43,51 @@
 			[Bindable]
 			protected var matcherDataProvider:ArrayCollection = new ArrayCollection();
 			
+			protected function onCreationComplete(event:FlexEvent):void
+			{
+				if (data is WebRule)
+				{
+					currentState = "webRule";
+				}
+				else if (data is MailRule)
+				{
+					currentState = "mailRule";
+				}
+				else if (data is EndpointRule)
+				{
+					currentState = "endpointRule";
+				}
+				else
+					throw new Error("Unknown rule type;");
+				
+				ruleObject = data;
+				refresh();
+			}
+			
 			public function refreshDataProviders(): void
 			{
+				var sourceDataProvider1:ArrayCollection = new ArrayCollection();
+				var matcherDataProvider1:ArrayCollection = new ArrayCollection();
+				
 				var ruleItems:ListCollectionView = ruleObject.ruleItems;
 				for each (var ruleItem:* in ruleItems)
 				{
 					if (ruleItem.item is Network)
-						sourceDataProvider.addItem(ruleItem);
+						sourceDataProvider1.addItem(ruleItem);
 					else if (ruleItem.item is InformationType)
-						matcherDataProvider.addItem(ruleItem);
+						matcherDataProvider1.addItem(ruleItem);
 				}
+				
+				sourceDataProvider = sourceDataProvider1;
+				matcherDataProvider = matcherDataProvider1;
+				
+				//sourceList.invalidateList();
+				//matcherList.invalidateList();
 			}
 			
-			protected function onCreationComplete(event:FlexEvent):void
+			public function refresh():void
 			{
+				if (ruleObject == null) return;
 				invalidateDisplayList();
 				refreshDataProviders();
 				validateNow();
@@ -83,7 +112,7 @@
 				var dragInitiator:IUIComponent = dragEvent.dragInitiator;
 				var dropTarget:Object = dragEvent.currentTarget;
 				DragManager.showFeedback(DragManager.COPY);
-	
+				
 				var sourceItem:Item = FlexGlobals.topLevelApplication.inventoryTree.selectedItem.item;
 				
 				if(sourceItem is Network && (this.currentState == "webRule" ))
@@ -116,7 +145,6 @@
 			{
 				
 			}
-			
 		]]>
 	</fx:Script>
 	
@@ -135,7 +163,6 @@
 		<s:State name="webRule"/>
 		<s:State name="mailRule"/>
 		<s:State name="endpointRule"/>
-		<s:State name="selected"/>
 	</s:states>
 	
 	<s:SkinnableContainer id="labelBox" width="125" height="100%">
@@ -149,52 +176,45 @@
 		<s:Label id="nameLabel" text="{ruleObject.label}" maxWidth="110"/>
 		<s:Spacer height="10"/>
 		<!--
-			TODO: Below statemente should be refined.
+		TODO: Below statemente should be refined.
 		-->
 		<s:Group visible="{FlexGlobals.topLevelApplication.ruleContainer.ruleList.selectedItem == null ? false : 
-				 ruleObject.id == FlexGlobals.topLevelApplication.ruleContainer.ruleList.selectedItem.ruleObject.id}">
+				 ruleObject.id == FlexGlobals.topLevelApplication.ruleContainer.ruleList.selectedItem.id}">
 			<s:layout>
 				<s:HorizontalLayout gap="2"/>
 			</s:layout>
 			
 			<s:Button styleName="upButtonStyle"
-						  click="moveUpClick(event)"/>
+					  click="moveUpClick(event)"/>
 			<s:Button styleName="downButtonStyle"
-						  click="moveDownClick(event)"/>
+					  click="moveDownClick(event)"/>
 			
 			<s:Button styleName="copyButtonStyle"
 					  click="{	var clone:Rule = ReflectionUtil.cloneDomainObject(ruleObject);
-					  			clone.priority -= 10;
-					  			InteractionUtil.newEditDialog(clone)}" />
+					  clone.priority -= 10;
+					  InteractionUtil.newEditDialog(clone)}" />
 			<s:Button styleName="editButtonStyle" 
 					  click="{InteractionUtil.newEditDialog(ruleObject)}" />
 			<s:Button styleName="removeButtonStyle" 
 					  click="{InteractionUtil.newDeleteDialog(ruleObject)}" />
 		</s:Group>
-
+		
 		
 	</s:SkinnableContainer>
 	
-	<rule:RuleItemList id="sourceList" includeIn="webRule" 
-					 width="210" height="100%"
-					 dataProvider="{sourceDataProvider}"
-					 />
+	<util:MyList id="sourceList" includeIn="webRule" 
+					   width="210" height="100%"
+					   dataProvider="{sourceDataProvider}"
+					   itemRenderer="com.mydlp.ui.widget.policy.rule.RuleItemRenderer"
+					   />
 	
-	<rule:RuleItemList id="matcherList" 
-					 width="210" height="100%"
-					 dataProvider="{matcherDataProvider}" 
-					 />
+	<util:MyList id="matcherList" 
+					   width="210" height="100%"
+					   dataProvider="{matcherDataProvider}"
+					   itemRenderer="com.mydlp.ui.widget.policy.rule.RuleItemRenderer"
+					   />
 	
 	<rule:ActionBox id="actionBox" width="120" height="100%" actionBoxRuleObject="@{ruleObject}" 
-					currentState="{FlexGlobals.topLevelApplication.ruleContainer.ruleList.selectedItem == this ? 'onClick' : 'default'}"/>
-	<!--<s:Group width="100">
-		<s:layout >
-			<s:VerticalLayout gap="2"/>
-		</s:layout>
-		<s:Button visible="{FlexGlobals.topLevelApplication.ruleContainer.ruleList.selectedItem == this ? true : false}"
-				  id="moveUp" label="Move Up" click="moveUpClick(event)"/>
-		<s:Button visible="{FlexGlobals.topLevelApplication.ruleContainer.ruleList.selectedItem == this ? true : false}"
-				  id="moveDown" label="Move Down" click="moveDownClick(event)"/>
-	</s:Group>-->
+					currentState="{FlexGlobals.topLevelApplication.ruleContainer.ruleList.selectedItem.id == ruleObject.id ? 'onClick' : 'default'}"/>
 	
-</s:SkinnableContainer>
+</s:ItemRenderer>
