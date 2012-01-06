@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Tree xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx"
+		 xmlns:my="http://www.mydlp.com/flex/my"
+		 labelField="label"
+		 width="400" height="100%"
+		 showRoot="false"
+		 creationComplete="populateTree()"
+		 dataProvider="@{objects}"
+		 itemRenderer="com.mydlp.ui.widget.policy.inventory.InvetoryItemRenderer"
+		 folderOpenIcon="@Embed('/assets/icons/16x16/folder.png')"
+		 folderClosedIcon="@Embed('/assets/icons/16x16/folder.png')"
+		 >
+	<fx:Script>
+		<![CDATA[
+			import mx.collections.ListCollectionView;
+			import mx.rpc.events.ResultEvent;
+			
+			[Bindable]
+			protected var objects:Object;
+			
+			protected var tempOpenItems:Object;
+			
+			public function refreshTree(): void
+			{
+				tempOpenItems = openItems;
+				invalidateList();
+				re.getObjects();
+			}
+			
+			protected function saveAllHandler(event:ResultEvent): void
+			{
+				refreshTree();
+			}
+			
+			protected function getObjectsHandler(event:ResultEvent): void
+			{
+				objects = event.result as ListCollectionView;
+				openItems = tempOpenItems;
+				validateNow();
+			}
+			
+			protected function populateTree():void
+			{
+				//populateContextMenu();
+				refreshTree();
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<fx:Declarations>
+		<my:remote id="re" destination="objectsBRS">
+			<my:method name="getObjects" result="getObjectsHandler(event)" />
+		</my:remote>
+	</fx:Declarations>
+</mx:Tree>
