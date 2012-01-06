@@ -6,19 +6,29 @@
 		 labelField="label"
 		 width="400" height="100%"
 		 showRoot="false"
+		 allowMultipleSelection="false"
 		 creationComplete="populateTree()"
-		 dataProvider="@{objects}"
-		 itemRenderer="com.mydlp.ui.widget.policy.inventory.InvetoryItemRenderer"
+		 dataProvider="{DPForTree}"
+		 itemRenderer="com.mydlp.ui.widget.objects.ObjectsTreeRenderer"
 		 folderOpenIcon="@Embed('/assets/icons/16x16/folder.png')"
 		 folderClosedIcon="@Embed('/assets/icons/16x16/folder.png')"
 		 >
 	<fx:Script>
 		<![CDATA[
+			import com.mydlp.ui.domain.DataFormat;
+			
+			import mx.collections.ArrayCollection;
 			import mx.collections.ListCollectionView;
 			import mx.rpc.events.ResultEvent;
 			
 			[Bindable]
 			protected var objects:Object;
+			
+			[Bindable]
+			protected var DPForTree:ListCollectionView = new ArrayCollection();
+			
+			protected var childrenForDataFormats:ArrayCollection = new ArrayCollection();
+			protected var childrenForOthers:ArrayCollection = new ArrayCollection();
 			
 			protected var tempOpenItems:Object;
 			
@@ -37,18 +47,35 @@
 			protected function getObjectsHandler(event:ResultEvent): void
 			{
 				objects = event.result as ListCollectionView;
+				for each(var item:* in objects)
+				{
+					if(item is DataFormat )
+						childrenForDataFormats.addItem(item);
+					else
+						childrenForOthers.addItem(item);
+				}
 				openItems = tempOpenItems;
 				validateNow();
 			}
 			
 			protected function populateTree():void
 			{
-				//populateContextMenu();
+				var parentDataFormats:Object = new Object();
+				parentDataFormats["label"] = "Data Formats";
+				parentDataFormats["children"] = childrenForDataFormats;
+				DPForTree.addItem(parentDataFormats);
+				
+				var parentOthers:Object = new Object();
+				parentOthers["label"] = "Others";
+				parentOthers["children"] = childrenForOthers;
+				DPForTree.addItem(parentOthers);
+				
 				refreshTree();
 			}
 			
 		]]>
 	</fx:Script>
+	
 	
 	<fx:Declarations>
 		<my:remote id="re" destination="objectsBRS">
