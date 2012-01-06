@@ -8,6 +8,7 @@
 		 showRoot="false"
 		 allowMultipleSelection="false"
 		 creationComplete="populateTree()"
+		 change="onChange(event)"
 		 dataProvider="{DPForTree}"
 		 itemRenderer="com.mydlp.ui.widget.objects.ObjectsTreeRenderer"
 		 folderOpenIcon="@Embed('/assets/icons/16x16/folder.png')"
@@ -15,10 +16,13 @@
 		 >
 	<fx:Script>
 		<![CDATA[
+			import com.mydlp.ui.domain.AbstractEntity;
 			import com.mydlp.ui.domain.DataFormat;
+			import com.mydlp.ui.util.InteractionUtil;
 			
 			import mx.collections.ArrayCollection;
 			import mx.collections.ListCollectionView;
+			import mx.events.ListEvent;
 			import mx.rpc.events.ResultEvent;
 			
 			[Bindable]
@@ -71,6 +75,14 @@
 				DPForTree.addItem(parentOthers);
 				
 				refreshTree();
+			}
+			
+			protected function onChange(event:ListEvent):void
+			{
+				if(selectedItem != null && selectedItem is AbstractEntity)
+				{
+					//InteractionUtil.newEditDialog(selectedItem);
+				}
 			}
 			
 		]]>
