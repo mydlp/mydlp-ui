@@ -37,4 +37,19 @@ public class RuleBRSImpl implements RuleService
 		ruleDAO.removeRuleItem(ruleItem);
 	}
 
+	@Override
+	public void ruleUp(Rule r) {
+		ruleDAO.ruleUp(r);
+	}
+
+	@Override
+	public void ruleDown(Rule r) {
+		ruleDAO.ruleDown(r);
+	}
+
+	@Override
+	public void balanceRulePriority() {
+		ruleDAO.balanceRulePriority();
+	}
+
 }

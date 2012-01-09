@@ -130,27 +130,19 @@
 				re.save(ruleObject);
 			}
 			
-			protected function saveHandler(event:ResultEvent):void
+			protected function changeHandler(event:ResultEvent):void
 			{
 				FlexGlobals.topLevelApplication.refresh();
 			}
 			
-			protected function moveUpClick(event:MouseEvent):void
-			{
-				//var temp:WebRule = FlexGlobals.topLevelApplication.ruleContainer.ruleList.selectedItem as WebRule;
-				//Alert.show((temp.priority).toString(), "hede");
-			}
-			
-			protected function moveDownClick(event:MouseEvent):void
-			{
-				
-			}
 		]]>
 	</fx:Script>
 	
 	<fx:Declarations>
 		<my:remote id="re" destination="ruleBRS">
-			<my:method name="save" result="saveHandler(event)"/>
+			<my:method name="save" result="changeHandler(event)"/>
+			<my:method name="ruleUp" result="changeHandler(event)"/>
+			<my:method name="ruleDown" result="changeHandler(event)"/>
 		</my:remote>
 	</fx:Declarations>
 	
@@ -185,9 +177,9 @@
 			</s:layout>
 			
 			<s:Button styleName="upButtonStyle"
-					  click="moveUpClick(event)"/>
+					  click="{re.ruleUp(ruleObject)}"/>
 			<s:Button styleName="downButtonStyle"
-					  click="moveDownClick(event)"/>
+					  click="{re.ruleDown(ruleObject)}"/>
 			
 			<s:Button styleName="copyButtonStyle"
 					  click="{	var clone:Rule = ReflectionUtil.cloneDomainObject(ruleObject);

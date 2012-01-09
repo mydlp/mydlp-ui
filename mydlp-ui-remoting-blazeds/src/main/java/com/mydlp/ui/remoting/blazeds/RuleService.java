@@ -18,4 +18,10 @@ public interface RuleService {
 	public void remove(Rule rule);
 	
 	public void removeRuleItem(RuleItem ruleItem);
+	
+	public void ruleUp(Rule r);
+	
+	public void ruleDown(Rule r);
+	
+	public void balanceRulePriority();
 }

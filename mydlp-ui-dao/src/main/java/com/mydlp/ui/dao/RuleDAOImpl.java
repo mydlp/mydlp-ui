@@ -1,5 +1,6 @@
 package com.mydlp.ui.dao;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.hibernate.criterion.DetachedCriteria;
@@ -13,6 +14,8 @@ import com.mydlp.ui.domain.RuleItem;
 @Repository("ruleDAO")
 @Transactional
 public class RuleDAOImpl extends AbstractDAO implements RuleDAO {
+	
+	public static final Long DEFAULT_PRIORITY_DISTANCE = new Long(100);
 
 	@SuppressWarnings("unchecked")
 	public List<Rule> getRules() {
@@ -36,8 +39,66 @@ public class RuleDAOImpl extends AbstractDAO implements RuleDAO {
 	}
 
 	@Override
+	@Transactional(readOnly=false)
 	public void removeRuleItem(RuleItem ri) {
 		getHibernateTemplate().delete(ri);
 	}
+
+	@Override
+	@Transactional(readOnly=false)
+	public void ruleUp(Rule r) {
+		List<Rule> rules = getRules();
+		int itemIndex = findRuleIndex(rules, r);
+		
+		if (itemIndex == 0)
+			return;
+		
+		Collections.swap(rules, itemIndex, itemIndex -1);
+		balanceRulePriority(rules);
+	}
+
+	@Override
+	@Transactional(readOnly=false)
+	public void ruleDown(Rule r) {
+		List<Rule> rules = getRules();
+		int itemIndex = findRuleIndex(rules, r);
+		
+		if (itemIndex == (rules.size() - 1))
+			return;
+		
+		Collections.swap(rules, itemIndex, itemIndex + 1);
+		balanceRulePriority(rules);
+	}
+	
+	protected int findRuleIndex(List<Rule> rules, Rule r)
+	{
+		for (int i = 0; i < rules.size(); i++) {
+			Rule rt = rules.get(i);
+			if (rt.getId().equals(r.getId()))
+			{
+				return i;
+			}
+		}
+		
+		throw new RuntimeException("Rule not found in database");
+	}
+
+	@Override
+	@Transactional(readOnly=false)
+	public void balanceRulePriority() {
+		List<Rule> rules = getRules();
+		balanceRulePriority(rules);
+	}
+	
+	@Transactional(readOnly=false)
+	protected void balanceRulePriority(List<Rule> rules) {
+		Long p = ( rules.size() + 1 ) * DEFAULT_PRIORITY_DISTANCE;
+		for (Rule rule : rules) {
+			rule.setPriority(p);
+			p -= DEFAULT_PRIORITY_DISTANCE;
+			save(rule);
+		}
+	}
+	
 	
 }
