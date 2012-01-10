@@ -216,7 +216,7 @@
 					   itemRenderer="com.mydlp.ui.widget.policy.rule.RuleItemRenderer"
 					   />
 	
-	<rule:ActionBox id="actionBox" width="120" height="100%" actionBoxRuleObject="@{ruleObject}" 
+	<rule:ActionBox id="actionBox" width="150" height="100%" actionBoxRuleObject="@{ruleObject}" 
 					currentState="{ruleList.selectedItem.id == ruleObject.id ? 'onClick' : 'default'}"/>
 	
 </s:ItemRenderer>

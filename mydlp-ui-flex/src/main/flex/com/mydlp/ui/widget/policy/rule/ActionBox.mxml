@@ -8,14 +8,29 @@
 		<![CDATA[
 			import com.mydlp.ui.domain.Rule;
 			
+			import mx.collections.ArrayCollection;
+			import mx.collections.ListCollectionView;
 			import mx.events.FlexEvent;
 			
 			import spark.events.IndexChangeEvent;
 			
 			[Bindable]
 			public var action:String = Rule.ACTION_PASS;
+
 			[Bindable]
 			public var actionBoxRuleObject:Rule;
+			
+			[Bindable]
+			protected var actions:ListCollectionView = 
+				new ArrayCollection(
+					new Array(
+						Rule.ACTION_PASS,
+						Rule.ACTION_BLOCK,
+						Rule.ACTION_LOG,
+						Rule.ACTION_QUARANTINE,
+						Rule.ACTION_ARCHIVE
+					)
+				);
 			
 			
 			protected function actionListChange(event:IndexChangeEvent):void
@@ -55,16 +70,38 @@
 		<s:State name="onClick"/>
 	</s:states>
 	<s:layout>
-		<s:VerticalLayout horizontalAlign="center" verticalAlign="middle" />
+		<s:VerticalLayout horizontalAlign="left" verticalAlign="middle" />
 	</s:layout>
-	<s:Label includeIn="default" text="{actionBoxRuleObject.action}" />
-	<s:DropDownList includeIn="onClick" id="actionList" change="actionListChange(event)" creationComplete="setSelectedIndex(event)">
-		<mx:ArrayCollection>
-			<fx:String>PASS</fx:String>
-			<fx:String>BLOCK</fx:String>
-			<fx:String>LOG</fx:String>
-			<fx:String>QUARANTINE</fx:String>
-			<fx:String>ARCHIVE</fx:String>
-		</mx:ArrayCollection>
-	</s:DropDownList> 
+	
+	<s:Group includeIn="default" >
+		<s:layout>
+			<s:VerticalLayout/>
+		</s:layout>
+		<s:Spacer height="5" />
+		<s:Group>
+			<s:layout>
+				<s:HorizontalLayout />
+			</s:layout>
+			<s:Spacer width="20" />
+			<s:Label text="{actionBoxRuleObject.action}" />
+		</s:Group>  
+	</s:Group>
+	
+	<s:Group includeIn="onClick" >
+		<s:layout>
+			<s:VerticalLayout/>
+		</s:layout>
+		<s:Spacer height="2" />
+		<s:Group>
+			<s:layout>
+				<s:HorizontalLayout />
+			</s:layout>
+			<s:Spacer width="13" />
+			<s:DropDownList id="actionList" width="120"
+							dataProvider="{actions}" 
+							change="actionListChange(event)" 
+							creationComplete="setSelectedIndex(event)" />
+		</s:Group>
+	</s:Group>
+	
 </s:SkinnableContainer>
