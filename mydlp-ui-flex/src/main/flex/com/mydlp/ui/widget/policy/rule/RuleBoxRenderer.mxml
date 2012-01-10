@@ -24,6 +24,8 @@
 			import com.mydlp.ui.util.InteractionUtil;
 			import com.mydlp.ui.util.ReflectionUtil;
 			
+			import flash.utils.getQualifiedClassName;
+			
 			import mx.collections.ArrayCollection;
 			import mx.collections.ListCollectionView;
 			import mx.core.DragSource;
@@ -34,6 +36,9 @@
 			import mx.managers.DragManager;
 			import mx.rpc.events.ResultEvent;
 			
+			import spark.components.Application;
+			import spark.components.List;
+			
 			[Bindable]
 			public var ruleObject:* = null;
 			
@@ -42,6 +47,9 @@
 			
 			[Bindable]
 			protected var matcherDataProvider:ArrayCollection = new ArrayCollection();
+			
+			[Bindable]
+			protected var ruleList:List = FlexGlobals.topLevelApplication.ruleContainer.ruleList;
 			
 			protected function onCreationComplete(event:FlexEvent):void
 			{
@@ -170,15 +178,17 @@
 		<!--
 		TODO: Below statemente should be refined.
 		-->
-		<s:Group visible="{FlexGlobals.topLevelApplication.ruleContainer.ruleList.selectedItem == null ? false : 
-				 ruleObject.id == FlexGlobals.topLevelApplication.ruleContainer.ruleList.selectedItem.id}">
+		<s:Group visible="{ruleList.selectedItem == null ? false : 
+				 ruleObject.id == ruleList.selectedItem.id}">
 			<s:layout>
 				<s:HorizontalLayout gap="2"/>
 			</s:layout>
 			
-			<s:Button styleName="upButtonStyle"
+			<s:Button styleName="upButtonStyle" 
+					  enabled="{itemIndex != 0}"
 					  click="{re.ruleUp(ruleObject)}"/>
-			<s:Button styleName="downButtonStyle"
+			<s:Button styleName="downButtonStyle" 
+					  enabled="{itemIndex != ruleList.dataProvider.length - 1}"
 					  click="{re.ruleDown(ruleObject)}"/>
 			
 			<s:Button styleName="copyButtonStyle"
@@ -207,6 +217,6 @@
 					   />
 	
 	<rule:ActionBox id="actionBox" width="120" height="100%" actionBoxRuleObject="@{ruleObject}" 
-					currentState="{FlexGlobals.topLevelApplication.ruleContainer.ruleList.selectedItem.id == ruleObject.id ? 'onClick' : 'default'}"/>
+					currentState="{ruleList.selectedItem.id == ruleObject.id ? 'onClick' : 'default'}"/>
 	
 </s:ItemRenderer>
