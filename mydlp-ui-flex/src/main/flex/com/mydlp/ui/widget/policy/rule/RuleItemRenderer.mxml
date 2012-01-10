@@ -4,7 +4,7 @@
 				xmlns:mx="library://ns.adobe.com/flex/mx" 
 				autoDrawBackground="true"
 				creationComplete="{data = data as RuleItem;}"
-				height="20">
+				width="100%" height="20">
 	
 	<fx:Script>
 		<![CDATA[

@@ -73,6 +73,9 @@
 		<s:VerticalLayout horizontalAlign="left" verticalAlign="middle" />
 	</s:layout>
 	
+	<!--
+		should align using padding prop.
+	-->
 	<s:Group includeIn="default" >
 		<s:layout>
 			<s:VerticalLayout/>
