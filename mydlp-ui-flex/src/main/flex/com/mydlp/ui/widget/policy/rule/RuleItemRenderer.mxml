@@ -4,7 +4,8 @@
 				xmlns:mx="library://ns.adobe.com/flex/mx" 
 				autoDrawBackground="true"
 				creationComplete="{data = data as RuleItem;}"
-				width="100%" height="20">
+				width="100%"
+				height="20">
 	
 	<fx:Script>
 		<![CDATA[
@@ -18,14 +19,24 @@
 		<s:State name="selected" />
 	</s:states>
 	
-	<s:layout>
-		<s:HorizontalLayout verticalAlign="middle" 
-				paddingLeft="2" paddingRight="2"/>
-	</s:layout>
-	<s:BitmapImage source="{data.item.coupledInventoryItem.icon}" />
-	<s:Label text="{data.item.coupledInventoryItem.label}" maxWidth="150"/>
-	<mx:Spacer includeIn="selected" width="100%"/>	
-	<s:Button includeIn="selected" styleName="removeButtonStyle" 
-			  click="{data.deleteRecord()}" />
+	<s:Rect left="0" right="0" top="0" bottom="0"
+			includeIn="hovered,selected">
+		<s:fill>
+			<s:SolidColor color="0x000000"
+						  alpha="0.12" alpha.selected="0.18" />
+		</s:fill>
+	</s:Rect>
+	
+	<s:Group width="100%" height="100%">
+		<s:layout>
+			<s:HorizontalLayout verticalAlign="middle"
+					paddingLeft="2" paddingRight="2"/>
+		</s:layout>
+		<s:BitmapImage source="{data.item.coupledInventoryItem.icon}" />
+		<s:Label text="{data.item.coupledInventoryItem.label}" maxWidth="150"/>
+		<mx:Spacer includeIn="selected" width="100%"/>	
+		<s:Button includeIn="selected" styleName="removeButtonStyle" 
+				  click="{data.deleteRecord()}" />	
+	</s:Group>
 	
 </s:ItemRenderer>

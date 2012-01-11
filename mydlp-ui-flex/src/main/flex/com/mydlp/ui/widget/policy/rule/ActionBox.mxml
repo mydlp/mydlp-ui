@@ -77,35 +77,30 @@
 	<!--
 		should align using padding prop.
 	-->
-	<s:Group includeIn="normal" >
+	<s:Group includeIn="normal, hovered" >
 		<s:layout>
-			<s:VerticalLayout/>
+			<s:HorizontalLayout />
 		</s:layout>
-		<s:Spacer height="5" />
-		<s:Group>
-			<s:layout>
-				<s:HorizontalLayout />
-			</s:layout>
-			<s:Spacer width="20" />
-			<s:Label text="{actionBoxRuleObject.action}" />
-		</s:Group>  
+		<s:Spacer width="20" />
+		<s:Label text="{actionBoxRuleObject.action}" />
 	</s:Group>
 	
 	<s:Group includeIn="selected" >
 		<s:layout>
 			<s:VerticalLayout/>
 		</s:layout>
-		<s:Spacer height="2" />
 		<s:Group>
 			<s:layout>
 				<s:HorizontalLayout />
 			</s:layout>
 			<s:Spacer width="13" />
 			<s:DropDownList id="actionList" width="120"
+							contentBackgroundAlpha="1"
 							dataProvider="{actions}" 
 							change="actionListChange(event)" 
 							creationComplete="setSelectedIndex(event)" />
 		</s:Group>
+		<s:Spacer height="19" />
 	</s:Group>
 	
 </s:SkinnableContainer>

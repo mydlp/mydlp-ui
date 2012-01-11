@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx" 
+		 xmlns:rule="com.mydlp.ui.widget.policy.rule.*">
+	<fx:Script>
+		<![CDATA[
+			import mx.collections.ListCollectionView;
+			[Bindable]
+			public var listDataProvider:ListCollectionView;
+			
+		]]>
+	</fx:Script>
+	<s:states>
+		<s:State name="normal" />
+		<s:State name="noitem" />
+	</s:states>
+	
+	<s:layout>
+		<s:VerticalLayout horizontalAlign="center" verticalAlign="middle" />
+	</s:layout>
+	
+	<s:Label includeIn="noitem" text="ALL" />
+	
+	<rule:RList	includeIn="normal" 
+				width="100%"
+				height="100%"
+				dataProvider="{listDataProvider}"
+				itemRenderer="com.mydlp.ui.widget.policy.rule.RuleItemRenderer"
+				/>
+	
+</s:Group>

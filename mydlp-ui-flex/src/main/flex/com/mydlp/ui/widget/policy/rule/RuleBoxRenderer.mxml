@@ -4,7 +4,7 @@
 				xmlns:mx="library://ns.adobe.com/flex/mx"
 				xmlns:rule="com.mydlp.ui.widget.policy.rule.*"
 				xmlns:my="http://www.mydlp.com/flex/my" 
-				autoDrawBackground="true"
+				autoDrawBackground="false"
 				creationComplete="onCreationComplete(event)" 
 				xmlns:util="com.mydlp.ui.util.*" 
 				dragEnter="onDragEnter(event)"
@@ -170,60 +170,80 @@
 		<s:State name="selected" />
 	</s:states>
 	
-	<s:layout>
-		<s:HorizontalLayout verticalAlign="middle"/>
-	</s:layout>
+	<s:Rect includeIn="hovered, selected"
+		left="0" right="0" top="0" bottom="0" >
+		<s:fill>
+			<s:SolidColor color.selected="0xCEDBEF"
+						  color.hovered="0xDEEBFF" 
+						  alpha="1"  />
+		</s:fill>
+	</s:Rect>
 	
-	<s:SkinnableContainer id="labelBox" width="160">
+	<s:Rect left="0" right="0" top="0" bottom="0" >
+		<s:stroke>
+			<s:SolidColorStroke color="0xAEBBCF" alpha="0.3" weight="3"/>
+		</s:stroke>
+	</s:Rect>
+	
+	<s:Group top="3" bottom="3" left="3" right="3">
 		<s:layout>
-			<s:VerticalLayout horizontalAlign="left" verticalAlign="middle"
-							  paddingLeft="10"
-							  paddingTop="2" 
-							  paddingBottom="2"/>
+			<s:HorizontalLayout verticalAlign="middle"/>
 		</s:layout>
-		<s:Group>
-			<s:layout>
-				<s:HorizontalLayout gap="6" verticalAlign="middle"/>
-			</s:layout>
-			<s:BitmapImage id="ruleTypeImage" />
-			<s:Label id="nameLabel" text="{ruleObject.label}" maxWidth="110"/>
-		</s:Group>
 		
-		<s:Group includeIn="selected">
+		<s:Group id="labelBox" width="160">
 			<s:layout>
-				<s:HorizontalLayout gap="2"/>
+				<s:VerticalLayout horizontalAlign="left" verticalAlign="middle"
+								  paddingLeft="10"
+								  paddingTop="2" 
+								  paddingBottom="2"/>
 			</s:layout>
+			<s:Group>
+				<s:layout>
+					<s:HorizontalLayout gap="6" verticalAlign="middle"/>
+				</s:layout>
+				<s:BitmapImage id="ruleTypeImage" />
+				<s:Label id="nameLabel" text="{ruleObject.label}" maxWidth="110"/>
+			</s:Group>
 			
-			<s:Button styleName="upButtonStyle" 
-					  enabled="{itemIndex != 0}"
-					  click="{re.ruleUp(ruleObject)}"/>
-			<s:Button styleName="downButtonStyle" 
-					  enabled="{itemIndex != ruleList.dataProvider.length - 1}"
-					  click="{re.ruleDown(ruleObject)}"/>
-			<s:Button styleName="copyButtonStyle"
-					  click="{	var clone:Rule = ReflectionUtil.cloneDomainObject(ruleObject);
-					  clone.priority -= 10;
-					  InteractionUtil.newEditDialog(clone)}" />
-			<s:Button styleName="editButtonStyle" 
-					  click="{InteractionUtil.newEditDialog(ruleObject)}" />
-			<s:Button styleName="removeButtonStyle" 
-					  click="{InteractionUtil.newDeleteDialog(ruleObject)}" />
+			<s:Group includeIn="selected">
+				<s:layout>
+					<s:HorizontalLayout gap="2"/>
+				</s:layout>
+				
+				<s:Button styleName="upButtonStyle" 
+						  enabled="{itemIndex != 0}"
+						  click="{re.ruleUp(ruleObject)}"/>
+				<s:Button styleName="downButtonStyle" 
+						  enabled="{itemIndex != ruleList.dataProvider.length - 1}"
+						  click="{re.ruleDown(ruleObject)}"/>
+				<s:Button styleName="copyButtonStyle"
+						  click="{	var clone:Rule = ReflectionUtil.cloneDomainObject(ruleObject);
+						  clone.priority -= 50;
+						  InteractionUtil.newEditDialog(clone)}" />
+				<s:Button styleName="editButtonStyle" 
+						  click="{InteractionUtil.newEditDialog(ruleObject)}" />
+				<s:Button styleName="removeButtonStyle" 
+						  click="{InteractionUtil.newDeleteDialog(ruleObject)}" />
+			</s:Group>
+			
 		</s:Group>
 		
-	</s:SkinnableContainer>
-	
-	<util:MyList id="sourceList"
-					   width="210"
-					   dataProvider="{sourceDataProvider}"
-					   itemRenderer="com.mydlp.ui.widget.policy.rule.RuleItemRenderer"
-					   />
-	
-	<util:MyList id="matcherList" 
-					   width="210"
-					   dataProvider="{matcherDataProvider}"
-					   itemRenderer="com.mydlp.ui.widget.policy.rule.RuleItemRenderer"
-					   />
-	
-	<rule:ActionBox id="actionBox" width="150" actionBoxRuleObject="@{ruleObject}" />
-	
+		<rule:RSpacer />
+		
+		<rule:RuleItemBox width="210"
+						  listDataProvider="{sourceDataProvider}"
+						  currentState="{sourceDataProvider.length == 0 ? 'noitem' : 'normal'}" />
+		
+		<rule:RSpacer />
+		
+		<rule:RuleItemBox width="210"
+						  listDataProvider="{matcherDataProvider}"
+						  currentState="{matcherDataProvider.length == 0 ? 'noitem' : 'normal'}" />
+		
+		<rule:RSpacer />
+		
+		<rule:ActionBox id="actionBox" width="150" 
+						actionBoxRuleObject="@{ruleObject}" 
+						currentState="{this.currentState}"/>
+	</s:Group>
 </s:ItemRenderer>

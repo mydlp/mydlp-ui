@@ -14,10 +14,6 @@ option|OptionContainer{
 	fontSize: "20";
 }
 
-rule|RuleBox {
-	backgroundColor: #DDDDDD;
-}
-
 rule|RuleBox s|SkinnableContainer#labelBox #nameLabel {
 	fontWeight: bold;
 }

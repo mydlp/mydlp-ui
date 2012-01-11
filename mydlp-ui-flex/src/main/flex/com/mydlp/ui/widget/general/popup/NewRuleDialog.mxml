@@ -18,7 +18,7 @@
 			import mx.core.FlexGlobals;
 			import mx.events.FlexEvent;
 			
-			protected var recommendedPriority:int = 1000;
+			protected var recommendedPriority:int = 100000;
 			
 			protected function close():void
 			{
