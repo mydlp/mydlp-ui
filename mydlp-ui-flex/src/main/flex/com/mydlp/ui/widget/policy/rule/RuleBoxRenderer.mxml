@@ -42,6 +42,16 @@
 			[Bindable]
 			public var ruleObject:* = null;
 			
+			[Embed('/assets/icons/32x32/wireless.png')]
+			public static const webRuleIcon:Class;
+			
+			[Embed('/assets/icons/32x32/mail.png')]
+			public static const mailRuleIcon:Class;
+			
+			[Embed('/assets/icons/32x32/computer.png')]
+			public static const endpointRuleIcon:Class;
+			
+			
 			[Bindable]
 			protected var sourceDataProvider:ArrayCollection = new ArrayCollection();
 			
@@ -55,15 +65,15 @@
 			{
 				if (data is WebRule)
 				{
-					currentState = "webRule";
+					ruleTypeImage.source = webRuleIcon;
 				}
 				else if (data is MailRule)
 				{
-					currentState = "mailRule";
+					ruleTypeImage.source = mailRuleIcon;
 				}
 				else if (data is EndpointRule)
 				{
-					currentState = "endpointRule";
+					ruleTypeImage.source = endpointRuleIcon;
 				}
 				else
 					throw new Error("Unknown rule type;");
@@ -123,7 +133,7 @@
 				
 				var sourceItem:Item = FlexGlobals.topLevelApplication.inventoryTree.selectedItem.item;
 				
-				if(sourceItem is Network && (this.currentState == "webRule" ))
+				if (sourceItem is Network && ruleObject is WebRule)
 					saveDroppedObject(sourceItem);
 				else if(sourceItem is InformationType)
 					saveDroppedObject(sourceItem);
@@ -154,16 +164,15 @@
 		</my:remote>
 	</fx:Declarations>
 	
+	<s:states>
+		<s:State name="normal" />
+		<s:State name="hovered" />
+		<s:State name="selected" />
+	</s:states>
+	
 	<s:layout>
 		<s:HorizontalLayout verticalAlign="middle"/>
 	</s:layout>
-	
-	<s:states>
-		<s:State name="defaultState"/>
-		<s:State name="webRule"/>
-		<s:State name="mailRule"/>
-		<s:State name="endpointRule"/>
-	</s:states>
 	
 	<s:SkinnableContainer id="labelBox" width="160">
 		<s:layout>
@@ -176,13 +185,11 @@
 			<s:layout>
 				<s:HorizontalLayout gap="6" verticalAlign="middle"/>
 			</s:layout>
-			<s:BitmapImage includeIn="webRule" source="@Embed('/assets/icons/32x32/wireless.png')"/>
-			<s:BitmapImage includeIn="mailRule" source="@Embed('/assets/icons/32x32/mail.png')"/>
-			<s:BitmapImage includeIn="endpointRule" source="@Embed('/assets/icons/32x32/computer.png')"/>
+			<s:BitmapImage id="ruleTypeImage" />
 			<s:Label id="nameLabel" text="{ruleObject.label}" maxWidth="110"/>
 		</s:Group>
 		
-		<s:Group visible="{ruleList.selectedItem == null ? false : ruleObject.id == ruleList.selectedItem.id}">
+		<s:Group includeIn="selected">
 			<s:layout>
 				<s:HorizontalLayout gap="2"/>
 			</s:layout>
@@ -193,7 +200,6 @@
 			<s:Button styleName="downButtonStyle" 
 					  enabled="{itemIndex != ruleList.dataProvider.length - 1}"
 					  click="{re.ruleDown(ruleObject)}"/>
-			
 			<s:Button styleName="copyButtonStyle"
 					  click="{	var clone:Rule = ReflectionUtil.cloneDomainObject(ruleObject);
 					  clone.priority -= 10;
@@ -203,7 +209,6 @@
 			<s:Button styleName="removeButtonStyle" 
 					  click="{InteractionUtil.newDeleteDialog(ruleObject)}" />
 		</s:Group>
-		
 		
 	</s:SkinnableContainer>
 	
@@ -219,7 +224,6 @@
 					   itemRenderer="com.mydlp.ui.widget.policy.rule.RuleItemRenderer"
 					   />
 	
-	<rule:ActionBox id="actionBox" width="150" actionBoxRuleObject="@{ruleObject}" 
-					currentState="{ruleList.selectedItem.id == ruleObject.id ? 'onClick' : 'default'}"/>
+	<rule:ActionBox id="actionBox" width="150" actionBoxRuleObject="@{ruleObject}" />
 	
 </s:ItemRenderer>

@@ -66,8 +66,9 @@
 		]]>
 	</fx:Script>
 	<s:states>
-		<s:State name="default"/>
-		<s:State name="onClick"/>
+		<s:State name="normal" />
+		<s:State name="hovered" />
+		<s:State name="selected" />
 	</s:states>
 	<s:layout>
 		<s:VerticalLayout horizontalAlign="left" verticalAlign="middle" />
@@ -76,7 +77,7 @@
 	<!--
 		should align using padding prop.
 	-->
-	<s:Group includeIn="default" >
+	<s:Group includeIn="normal" >
 		<s:layout>
 			<s:VerticalLayout/>
 		</s:layout>
@@ -90,7 +91,7 @@
 		</s:Group>  
 	</s:Group>
 	
-	<s:Group includeIn="onClick" >
+	<s:Group includeIn="selected" >
 		<s:layout>
 			<s:VerticalLayout/>
 		</s:layout>
