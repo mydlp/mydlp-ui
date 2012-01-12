@@ -14,11 +14,10 @@ import com.mydlp.ui.domain.InformationType;
 import com.mydlp.ui.domain.InventoryBase;
 import com.mydlp.ui.domain.InventoryCategory;
 import com.mydlp.ui.domain.InventoryItem;
-import com.mydlp.ui.domain.MIMEType;
 import com.mydlp.ui.domain.Matcher;
 import com.mydlp.ui.schema.AbstractGranule;
 
-public class _000_00004_InformationType_1 extends AbstractGranule {
+public class _000_00005_InformationType_1 extends AbstractGranule {
 
 	@Override
 	protected void callback() {
@@ -29,14 +28,12 @@ public class _000_00004_InformationType_1 extends AbstractGranule {
 		List<InventoryCategory> list = getHibernateTemplate().findByCriteria(criteria);
 		InventoryCategory documentTypes = DAOUtil.getSingleResult(list);
 		
-		MIMEType mt = new MIMEType();
-		mt.setMimeType("text/plain");
-		
-		DataFormat df = new DataFormat();
-		df.setName("Example Data Format");
-		List<MIMEType> mts = new ArrayList<MIMEType>();
-		mts.add(mt);
-		df.setMimeTypes(mts);
+		DetachedCriteria criteria2 = 
+				DetachedCriteria.forClass(DataFormat.class)
+					.add(Restrictions.eq("nameKey", "dataFormat.all.label"));
+		@SuppressWarnings("unchecked")
+		List<DataFormat> list2 = getHibernateTemplate().findByCriteria(criteria2);
+		DataFormat df = DAOUtil.getSingleResult(list2);
 		
 		Matcher m = new Matcher();
 		m.setFunctionName("cc_match");
@@ -70,8 +67,6 @@ public class _000_00004_InformationType_1 extends AbstractGranule {
 		dtc.add(ii);
 		documentTypes.setChildren(dtc);
 		
-		getHibernateTemplate().saveOrUpdate(mt);
-		getHibernateTemplate().saveOrUpdate(df);
 		getHibernateTemplate().saveOrUpdate(documentTypes);
 		getHibernateTemplate().saveOrUpdate(ii);
 		

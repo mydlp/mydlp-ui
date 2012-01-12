@@ -7,7 +7,7 @@ import com.mydlp.ui.domain.DataFormat;
 import com.mydlp.ui.domain.MIMEType;
 import com.mydlp.ui.schema.AbstractGranule;
 
-public class _000_00005_Data_Formats extends AbstractGranule {
+public class _000_00004_Data_Formats extends AbstractGranule {
 
 	@Override
 	protected void callback() {
@@ -15,7 +15,7 @@ public class _000_00005_Data_Formats extends AbstractGranule {
 		mt.setMimeType("mydlp-internal/all");
 		
 		DataFormat df = new DataFormat();
-		df.setName("All");
+		df.setNameKey("dataFormat.all.label");
 		List<MIMEType> mts = new ArrayList<MIMEType>();
 		mts.add(mt);
 		df.setMimeTypes(mts);
