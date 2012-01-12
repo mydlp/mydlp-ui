@@ -232,7 +232,7 @@
 			
 			protected function okHandler(event:Event): void
 			{
-				InteractionUtil.closePopup(this);
+				InteractionUtil.closeCurrentPopup();
 				Alert.show(	LangUtil.getString("messages", "generic.edit." + getSimpleName() + ".ok.message"),
 							LangUtil.getString("messages", "generic.edit." + getSimpleName() + ".title"));
 				

@@ -103,12 +103,12 @@
 			
 			protected function cancelButtonClickHandler(event:Event): void
 			{
-				InteractionUtil.closePopup(this);
+				InteractionUtil.closeCurrentPopup();
 			}
 			
 			protected function okHandler(event:Event): void
 			{
-				InteractionUtil.closePopup(this);
+				InteractionUtil.closeCurrentPopup();
 				Alert.show(	LangUtil.getString("messages", "generic.delete." + getSimpleName() + ".ok.message"),
 							LangUtil.getString("messages", "generic.delete." + getSimpleName() + ".title"));
 				
