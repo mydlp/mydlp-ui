@@ -4,60 +4,28 @@
 				xmlns:mx="library://ns.adobe.com/flex/mx"
 				xmlns:general="com.mydlp.ui.widget.general.*"
 				xmlns:my="http://www.mydlp.com/flex/my"
-				visible="false" xmlns:popup="com.mydlp.ui.widget.general.popup.*"
+				xmlns:popup="com.mydlp.ui.widget.general.popup.*"
+				visible="false"
+				initialize="{addElement(container)}"
 				>
 	
 	<fx:Script>
 		<![CDATA[
-			public var formObject:Object = null;
+			public var container:GenericCRUDContainer = null;
 			
-			protected var simpleName:String = null;
-			protected var qualifiedName:String = null;
-			
-			protected function getQualifiedName(): String
-			{
-				if (qualifiedName == null)
-				{
-					qualifiedName = getQualifiedClassName(formObject);
-				}
-				return qualifiedName;
-			}
-			
-			protected static function getClassName(qualifiedName:String): String
-			{
-				var s:String = new String(qualifiedName);
-				var li:Number = s.lastIndexOf(":");
-				return s.substring(li+1); 
-			}
-			
-			
-			protected function getSimpleName(): String
-			{
-				if (simpleName == null)
-				{
-					simpleName = getClassName(getQualifiedName());
-				}
-				return simpleName;
-			}
-			
-			protected function getObjectName(targetObject:Object): String
-			{
-				var targetObjectName:String = getQualifiedClassName(targetObject);
-				if (targetObjectName == getQualifiedName())
-					return getSimpleName();
-				else 
-					return getClassName(targetObjectName);
-			}
-						
 			public function populate(): void
 			{
+				container.populate();
+				title = container.windowTitle;
 				visible = true;
+			}
+			
+			public function set formObject(value:Object): void
+			{
+				container.formObject = value;
 			}
 			
 		]]>
 	</fx:Script>
-	
-	<fx:Declarations>
-	</fx:Declarations>
 	
 </popup:ClosableTitleWindow>

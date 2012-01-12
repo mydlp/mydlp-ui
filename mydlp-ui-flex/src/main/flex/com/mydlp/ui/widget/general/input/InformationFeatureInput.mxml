@@ -11,7 +11,9 @@
 			import com.mydlp.ui.domain.InformationFeature;
 			import com.mydlp.ui.domain.Matcher;
 			import com.mydlp.ui.domain.RegularExpression;
-			import com.mydlp.ui.widget.general.popup.GenericEditDialog;
+			import com.mydlp.ui.widget.general.popup.GenericEditContainer;
+			
+			import flash.utils.getQualifiedClassName;
 			
 			import mx.core.FlexGlobals;
 			protected function saveNewFeature(event:MouseEvent):void
@@ -65,7 +67,9 @@
 				ifList.dataGroup.invalidateDisplayList();
 				for each (var o:Object in ifList.selectedIndices)
 				{
-					(FlexGlobals.topLevelApplication.currentPopup as GenericEditDialog)
+					// below should be refined [IFInput > FormItem > Form > GEContainer]
+					(this.parent.parent.parent.parent.parent.parent.parent.parent.parent 
+									as GenericEditContainer)
 							.deleteList.addItem(
 								informationFeatures.getItemAt(o as int)
 							);

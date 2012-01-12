@@ -28,6 +28,15 @@ package com.mydlp.ui.util
 			PopUpManager.removePopUp(popup as IFlexDisplayObject);
 		}
 		
+		public static function closeCurrentPopup(): void
+		{
+			if (FlexGlobals.topLevelApplication.currentPopup != null)
+			{
+				closePopup(FlexGlobals.topLevelApplication.currentPopup);
+				FlexGlobals.topLevelApplication.currentPopup = null;
+			}
+		}
+		
 		public static function newCRUDDialog(object:Object, dialog:Class): void
 		{
 			newPopup(dialog);
