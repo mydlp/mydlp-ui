@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:List xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		xmlns:s="library://ns.adobe.com/flex/spark" 
+		xmlns:mx="library://ns.adobe.com/flex/mx"
+		contentBackgroundAlpha="0"
+		selectionColor="0xCEDBEF"
+		rollOverColor="0xDEEBFF"
+		borderVisible="false"
+		requireSelection="false"
+		initialize="onInitialize(event)"
+		>
+	<fx:Script>
+		<![CDATA[
+			import mx.controls.listClasses.IListItemRenderer;
+			import mx.events.FlexEvent;
+			import mx.events.ItemClickEvent;
+			
+			import spark.events.IndexChangeEvent;
+			
+			//protected var isItemClicked:Boolean = false;
+			
+			public function invalidateList():void
+			{
+				var _itemRenderer:IFactory = itemRenderer;
+				itemRenderer = null;
+				itemRenderer = _itemRenderer;
+			}
+			
+			protected function onInitialize(event:FlexEvent):void
+			{
+				
+				this.addEventListener(ItemClickEvent.ITEM_CLICK, onItemClick);
+				this.addEventListener(IndexChangeEvent.CHANGE, onChange);
+				this.addEventListener(MouseEvent.CLICK, onMouseClick);
+			}
+			
+			protected function onMouseClick(event:MouseEvent):void
+			{
+				/*
+				if (!isItemClicked)
+				{
+					selectedIndex = -1;
+					RuleItemList.regulateSelection();
+				}
+				isItemClicked = false;
+				*/
+			}
+			
+			protected function onItemClick(event:ItemClickEvent):void
+			{
+				//isItemClicked = true;
+				RuleItemList.regulateSelection();
+			}
+			
+			protected function onChange(event:IndexChangeEvent):void
+			{
+				//isItemClicked = true;
+				RuleItemList.regulateSelection();
+			}
+			
+			public static function resetRuleItemListList(): void
+			{
+				RuleItemList.resetListList();
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<s:layout>
+		<s:VerticalLayout useVirtualLayout="false" requestedMinRowCount="1"/>
+	</s:layout>
+</s:List>

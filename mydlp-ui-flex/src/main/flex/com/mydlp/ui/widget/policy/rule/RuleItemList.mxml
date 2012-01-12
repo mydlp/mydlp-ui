@@ -22,7 +22,7 @@
 			
 			import spark.events.IndexChangeEvent;
 			
-			protected static var selectedList:RList = null;
+			protected static var selectedList:RuleItemList = null;
 			protected static var lists:ListCollectionView = new ArrayCollection();
 			
 			public function invalidateList():void
@@ -38,34 +38,31 @@
 				this.addEventListener(ItemClickEvent.ITEM_CLICK, onItemClick);
 				this.addEventListener(IndexChangeEvent.CHANGE, onChange);
 				
-				if (autoDeselect)
-				{
-					lists.addItem(this);
-				}
+				lists.addItem(this);
 			}
 			
 			protected function onItemClick(event:ItemClickEvent):void
 			{
-				if (autoDeselect) selectedList = this;
+				selectedList = this;
 				regulateSelection();
 			}
 			
 			protected function onChange(event:IndexChangeEvent):void
 			{
-				if (autoDeselect) selectedList = this;
+				selectedList = this;
 				regulateSelection();
 			}
 			
 			public static function resetListList(): void
 			{
-				RList.lists = new ArrayCollection();
+				RuleItemList.lists = new ArrayCollection();
 			}
 			
 			public static function regulateSelection(): void
 			{
-				for each (var l:RList in RList.lists)
+				for each (var l:RuleItemList in RuleItemList.lists)
 				{
-					if (ObjectUtil.compare(l, RList.selectedList) != 0)
+					if (ObjectUtil.compare(l, RuleItemList.selectedList) != 0)
 					{
 						deselect(l);
 					}
@@ -73,19 +70,21 @@
 								(
 									l.selectedItem == null ||
 									! l.selectedItem is RuleItem ||
+									FlexGlobals.topLevelApplication.
+									ruleContainer.ruleList.selectedIndex == -1 ||
 									l.selectedItem.rule.id != 
 											FlexGlobals.topLevelApplication.
 												ruleContainer.ruleList.selectedItem.id
 								)
 							)
 					{
-						RList.selectedList = null;
+						RuleItemList.selectedList = null;
 						deselect(l);
 					}
 				}
 			}
 			
-			protected static function deselect(l:RList): void
+			protected static function deselect(l:RuleItemList): void
 			{
 				if (l.selectedIndex == -1)
 					return;
@@ -95,10 +94,6 @@
 			}
 		]]>
 	</fx:Script>
-	
-	<fx:Declarations>
-		<fx:Boolean id="autoDeselect" />
-	</fx:Declarations>
 	
 	<s:layout>
 		<s:VerticalLayout useVirtualLayout="false" requestedMinRowCount="1"/>

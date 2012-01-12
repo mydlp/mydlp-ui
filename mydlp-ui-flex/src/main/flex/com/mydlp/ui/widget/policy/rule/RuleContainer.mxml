@@ -62,7 +62,7 @@
 					else
 						throw new Error("Unknown rule type;");
 				}
-				RList.resetListList();
+				RuleList.resetRuleItemListList();
 				ruleList.invalidateList();
 				ruleDP = ruleDP2;
 				ruleList.validateNow();
@@ -95,9 +95,8 @@
 	</s:Group>
 	
 	
-	<rule:RList id="ruleList" dataProvider="{ruleDP}" 
+	<rule:RuleList id="ruleList" dataProvider="{ruleDP}" 
 				width="100%" height="100%"
-				autoDeselect="false"
 			itemRenderer="com.mydlp.ui.widget.policy.rule.RuleBoxRenderer"/>
 
 </s:SkinnableContainer>

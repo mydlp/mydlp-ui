@@ -17,13 +17,13 @@
 	</s:states>
 	
 	<s:layout>
-		<s:VerticalLayout horizontalAlign="center" verticalAlign="middle" />
+		<s:VerticalLayout horizontalAlign="center" verticalAlign="middle" 
+						  paddingBottom="4" paddingTop="4"/>
 	</s:layout>
 	
 	<s:Label includeIn="noitem" text="ALL" />
 	
-	<rule:RList	includeIn="normal" 
-				autoDeselect="true"
+	<rule:RuleItemList	includeIn="normal" 
 				width="100%"
 				height="100%"
 				dataProvider="{listDataProvider}"

@@ -118,7 +118,8 @@
 				
 				if(FlexGlobals.topLevelApplication.inventoryTree.selectedItem is InventoryCategory)
 					DragManager.showFeedback(DragManager.NONE);
-				else if(FlexGlobals.topLevelApplication.inventoryTree.selectedItem.item is Network && this.currentState != "webRule")
+				else if(FlexGlobals.topLevelApplication.inventoryTree.selectedItem.item is Network
+						&& ruleObject is WebRule)
 					DragManager.showFeedback(DragManager.NONE);
 				else
 					DragManager.acceptDragDrop(dropTarget);
@@ -141,6 +142,10 @@
 			
 			protected function saveDroppedObject(sourceItem:Item):void
 			{
+				for each (var ri:RuleItem in ruleObject.ruleItems)
+					if (ri.item.id == sourceItem.id)
+						return;
+				
 				var newItem:RuleItem = new RuleItem();
 				newItem.item = sourceItem;
 				newItem.rule = ruleObject;
