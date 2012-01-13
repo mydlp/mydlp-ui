@@ -2,7 +2,9 @@
 <s:SkinnableContainer xmlns:fx="http://ns.adobe.com/mxml/2009" 
 		  xmlns:s="library://ns.adobe.com/flex/spark" 
 		  xmlns:my="http://www.mydlp.com/flex/my"
-		  xmlns:mx="library://ns.adobe.com/flex/mx">
+		  xmlns:mx="library://ns.adobe.com/flex/mx"
+		  width="100%"
+		  height="150" creationComplete="{refreshLists()}">
 	<fx:Script>
 		<![CDATA[
 			import com.mydlp.ui.domain.DataFormat;
@@ -27,6 +29,16 @@
 				refreshLists();
 			}
 			
+			protected function addClickHandler(event:MouseEvent):void
+			{
+				dfList.dataGroup.invalidateDisplayList();
+				for each (var o:Object in odfList.selectedIndices)
+					dataFormats.addItem(otherDataFormats.getItemAt(o as int));
+				dfList.validateNow();
+				
+				refreshLists();
+			}
+			
 			protected function refreshLists(): void
 			{
 				odfList.dataGroup.invalidateDisplayList();
@@ -34,19 +46,6 @@
 					re.getDataFormats();
 				else
 					populateOtherDataFormats();
-			}
-			
-			protected function expandClickHandler(event:MouseEvent):void
-			{
-				if (currentState == "normal")
-				{
-					currentState = "expanded";
-					refreshLists();
-				}
-				else if (currentState == "expanded")
-				{
-					currentState = "normal";
-				}
 			}
 			
 			protected function getDataFormatsHandler(event:ResultEvent): void
@@ -85,32 +84,35 @@
 		</my:remote>
 	</fx:Declarations>
 	
-	<s:states>
-		<s:State name="normal"/>
-		<s:State name="expanded" />
-	</s:states>
-	
 	<s:layout>
 		<s:HorizontalLayout verticalAlign="middle" gap="2"/>
 	</s:layout>
 	
-	<s:Group>
-		<s:List id="dfList" dataProvider="{dataFormats}" dropEnabled="true" width="160"
+	<s:Group width="43%" height="100%">
+		<s:layout>
+			<s:VerticalLayout gap="2"/>
+		</s:layout>
+		<s:Label text="@Resource(bundle = 'messages', key = 'generic.edit.input.dataFormats.odfList.label')" />
+		<s:List id="odfList" dataProvider="{otherDataFormats}" 
+				width="100%" height="80%" 
 				itemRenderer="com.mydlp.ui.widget.general.input.DataFormatRenderer" />
 	</s:Group>
 	
-	<s:Group height="100%">
+	<s:Group width="14%" height="100%">
 		<s:layout>
-			<s:VerticalLayout gap="2" verticalAlign="bottom"/>
+			<s:VerticalLayout gap="2" verticalAlign="middle" horizontalAlign="center"/>
 		</s:layout>
-		<mx:Spacer height="100%" />
-		<s:Button skinClass="com.mydlp.ui.skin.RemoveBitmapButton32Skin" click="removeClickHandler(event)"/>
-		<s:Button skinClass="com.mydlp.ui.skin.AddBitmapButton32Skin" click="expandClickHandler(event)"/>
+		<s:Button skinClass="com.mydlp.ui.skin.RightBitmapButton32Skin" click="addClickHandler(event)"/>
+		<s:Button skinClass="com.mydlp.ui.skin.LeftBitmapButton32Skin" click="removeClickHandler(event)" enabled="{dfList.selectedIndex != -1}"/>
 	</s:Group>
 	
-	<s:Group includeIn="expanded">
-		<s:List id="odfList" dataProvider="{otherDataFormats}" 
-				dragEnabled="true" dragMoveEnabled="true" width="160"
+	<s:Group width="43%" height="100%">
+		<s:layout>
+			<s:VerticalLayout gap="2"/>
+		</s:layout>
+		<s:Label text="@Resource(bundle = 'messages', key = 'generic.edit.input.dataFormats.dfList.label')" />
+		<s:List id="dfList" dataProvider="{dataFormats}" 
+				width="100%" height="80%"
 				itemRenderer="com.mydlp.ui.widget.general.input.DataFormatRenderer" />
 	</s:Group>
 	

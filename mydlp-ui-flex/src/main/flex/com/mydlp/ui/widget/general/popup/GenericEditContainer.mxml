@@ -5,6 +5,7 @@
 				xmlns:general="com.mydlp.ui.widget.general.*"
 				xmlns:my="http://www.mydlp.com/flex/my" 
 				xmlns:popup="com.mydlp.ui.widget.general.popup.*"
+				width="400"
 				>
 	
 	<fx:Script>
@@ -17,7 +18,6 @@
 			import com.mydlp.ui.domain.InventoryItem;
 			import com.mydlp.ui.domain.Item;
 			import com.mydlp.ui.util.ClassMember;
-			import com.mydlp.ui.util.EditDialogPopUpElements;
 			import com.mydlp.ui.util.InteractionUtil;
 			import com.mydlp.ui.util.LangUtil;
 			import com.mydlp.ui.util.ReflectionUtil;
@@ -34,12 +34,10 @@
 			import mx.collections.ListCollectionView;
 			import mx.controls.Alert;
 			import mx.core.FlexGlobals;
-			import mx.core.IVisualElement;
 			import mx.events.FlexEvent;
 			
 			import spark.components.Button;
 			import spark.components.CheckBox;
-			import spark.components.FormItem;
 			import spark.components.TextInput;
 			
 			protected var cButton:Button = new Button();
@@ -56,7 +54,7 @@
 				
 				for each (var classMember:ClassMember in classMembers)
 				{
-					var visualElement:IVisualElement = null;
+					var inputLabel:InputLabel = null;
 					
 					if (classMember.name == "category" && classMember.type == InventoryCategory)
 					{
@@ -102,8 +100,10 @@
 						var ipInput:IpAddressInput = new IpAddressInput();
 						ipInput.numberValue = targetObject[classMember.name];
 						BindingUtils.bindProperty(targetObject, classMember.name, ipInput, "numberValue");
-						visualElement = ipInput;
-						visualElement.width = 160;
+						ipInput.width = 160;
+						inputLabel = new HorizontalInputLabel()
+						inputLabel.addElement(ipInput);
+						
 						if(classMember.name == "ipBase")
 							index = 2;
 						else
@@ -119,8 +119,9 @@
 						else
 							dfInput.dataFormats = targetObject[classMember.name];
 						BindingUtils.bindProperty(targetObject, classMember.name, dfInput, "dataFormats");
-						visualElement = dfInput;
-						index = 9;
+						inputLabel = new VerticalInputLabel()
+						inputLabel.addElement(dfInput);
+						index = 8;
 					}
 					else if (targetObject is InformationDescription &&
 							classMember.name == "features" && 
@@ -132,8 +133,9 @@
 						else
 							ifInput.informationFeatures = targetObject[classMember.name];
 						BindingUtils.bindProperty(targetObject, classMember.name, ifInput, "informationFeatures");
-						visualElement = ifInput;
-						index = 8;
+						inputLabel = new VerticalInputLabel()
+						inputLabel.addElement(ifInput);
+						index = 9;
 					}
 					else if (targetObject is InformationType &&
 							classMember.name == "informationDescription" && 
@@ -151,7 +153,8 @@
 						var checkBox:CheckBox = new CheckBox();
 						checkBox.selected = targetObject[classMember.name];
 						BindingUtils.bindProperty(targetObject, classMember.name, checkBox, "selected");
-						visualElement = checkBox;
+						inputLabel = new HorizontalInputLabel()
+						inputLabel.addElement(checkBox);
 						index = 6;
 					}
 					else
@@ -159,8 +162,9 @@
 						var textInput:TextInput = new TextInput();
 						textInput.text = targetObject[classMember.name];
 						BindingUtils.bindProperty(targetObject, classMember.name, textInput, "text");
-						visualElement = textInput;
-						visualElement.width = 160;
+						textInput.width = 160;
+						inputLabel = new HorizontalInputLabel()
+						inputLabel.addElement(textInput);
 						if(classMember.name == "name"){
 							index = 0;
 						}
@@ -178,12 +182,10 @@
 						}
 					}
 					
-					if (visualElement != null)//index tuttum ama gerek yok sanirim, direk burada edip string olarak tutarim!
+					if (inputLabel != null)//index tuttum ama gerek yok sanirim, direk burada edip string olarak tutarim!
 					{
-						var fi:FormItem = new FormItem();
-						fi.label = LangUtil.getString("messages", "generic.edit." + getObjectName(targetObject) + "." + classMember.name + ".label");
-						fi.addElement(visualElement);
-						sourceLabelList.push(new EditDialogPopUpElements(index, fi));
+						inputLabel.label = LangUtil.getString("messages", "generic.edit." + getObjectName(targetObject) + "." + classMember.name + ".label");
+						sourceLabelList.push(new InputLabelIndexTuple(index, inputLabel));
 					}
 				}
 			}
@@ -192,10 +194,10 @@
 			{
 				sourceLabelList.sortOn("order", Array.DESCENDING, Array.NUMERIC);
 				for(var i:int = sourceLabelList.length-1; i >= 0; i--){
-					var tempElement:EditDialogPopUpElements = sourceLabelList[i] as EditDialogPopUpElements;
+					var tempElement:InputLabelIndexTuple = sourceLabelList[i] as InputLabelIndexTuple;
 					if(tempElement != null){
-						var tempFormItem:FormItem = tempElement.vs;
-						form.addElement(tempFormItem);
+						var tempInputLabel:InputLabel = tempElement.vs;
+						editForm.addElement(tempInputLabel);
 					}
 				}
 			}
@@ -203,9 +205,9 @@
 			{	
 				cButton.label = LangUtil.getString("messages", "generic.edit." + getSimpleName() + ".createButton.label");
 				cButton.addEventListener(MouseEvent.CLICK, createButtonClickHandler);
-				var cbfi:FormItem = new FormItem();
-				cbfi.addElement(cButton);
-				form.addElement(cbfi);
+				var cbil:HorizontalInputLabel = new HorizontalInputLabel();
+				cbil.addElement(cButton);
+				editForm.addElement(cbil);
 			}
 				
 			
@@ -257,6 +259,15 @@
 		</my:remote>
 	</fx:Declarations>
 	
-	<s:Form id="form" />
+	<s:Group width="100%" height="100%">
+		<s:layout>
+			<s:VerticalLayout horizontalAlign="center" verticalAlign="middle" />
+		</s:layout>
+		<s:Group id="editForm" width="100%" height="100%">
+			<s:layout>
+				<s:VerticalLayout horizontalAlign="left" verticalAlign="middle"/>
+			</s:layout>
+		</s:Group>
+	</s:Group>
 	
 </popup:GenericCRUDContainer>

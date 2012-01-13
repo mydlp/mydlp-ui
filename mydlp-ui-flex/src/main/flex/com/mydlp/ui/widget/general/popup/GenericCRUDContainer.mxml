@@ -58,7 +58,4 @@
 		]]>
 	</fx:Script>
 	
-	<fx:Declarations>
-	</fx:Declarations>
-	
 </s:SkinnableContainer>
