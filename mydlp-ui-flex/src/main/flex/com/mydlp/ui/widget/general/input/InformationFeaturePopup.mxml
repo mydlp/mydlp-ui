@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:TitleWindow xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			   xmlns:s="library://ns.adobe.com/flex/spark" 
+			   xmlns:mx="library://ns.adobe.com/flex/mx"
+			   xmlns:input="com.mydlp.ui.widget.general.input.*"
+			   close="{close()}"
+			   visible="false"
+			   title="@Resource(bundle = 'messages', key = 'feature.matcher.title.label')"
+			   >
+	
+	<fx:Script>
+		<![CDATA[
+			import com.mydlp.ui.domain.InformationFeature;
+			import com.mydlp.ui.domain.Matcher;
+			import com.mydlp.ui.domain.RegularExpression;
+			import com.mydlp.ui.util.InteractionUtil;
+			
+			import mx.events.FlexEvent;
+			
+			public var informationFeatureInput:InformationFeatureInput = null;
+			
+			[Bindable]
+			public var informationFeatureObject:InformationFeature = null;
+			
+			protected function close(): void
+			{
+				InteractionUtil.closePopup(this);
+			}
+			
+			protected function addNewFeature(event:MouseEvent):void
+			{
+				var isEdit:Boolean = false;
+				if (informationFeatureObject == null)
+					informationFeatureObject = new InformationFeature();
+				else 
+					isEdit = true;
+				
+				var m:Matcher = null;
+				if (informationFeatureObject.matcher == null)
+				{
+					m = new Matcher();
+					informationFeatureObject.matcher = m;
+				}
+				else
+				{
+					m = informationFeatureObject.matcher;
+				}
+				
+				if (matcherCombobox.selectedItem.data == "cc")
+				{
+					m.functionName = "cc";
+				}
+				else if (matcherCombobox.selectedItem.data == "ssn")
+				{
+					m.functionName = "ssn";
+				}
+				else if (matcherCombobox.selectedItem.data == "iban")
+				{
+					m.functionName = "iban";
+				}
+				else if (matcherCombobox.selectedItem.data == "trid")
+				{
+					m.functionName = "trid";
+				}
+				else if (matcherCombobox.selectedItem.data == "keyword")
+				{
+					m.functionName = "keyword";
+					var r:RegularExpression = null;
+					if (m.matcherParams == null)
+					{
+						r = new RegularExpression();
+						m.matcherParams = new ArrayCollection();
+						m.matcherParams.addItem(r);
+						r.matcher = m;
+					}
+					else
+					{
+						r = m.matcherParams.getItemAt(0) as RegularExpression;
+					}
+					
+					// TODO: there should be regex validation. escaping special characters.
+					r.regex = keywordValue.text;
+				}
+				else
+					throw new Error("Unknown matcher!!!");
+				
+				informationFeatureObject.weight = int(featureWeight.text);
+				
+				if (!isEdit)
+					informationFeatureInput.addInformationFeature(informationFeatureObject);
+				
+				close();
+			}
+			
+			public function populate():void
+			{
+				if (informationFeatureObject != null)
+				{
+					featureWeight.text = informationFeatureObject.weight.toString();
+					
+					for (var i:int; i < matcherDefinitions.length; i++)
+					{
+						if ( (matcherDefinitions.getItemAt(i) as MatcherDefinition).data == informationFeatureObject.matcher.functionName )
+						{
+							matcherCombobox.selectedIndex = i;
+							break;
+						}
+					}
+				}
+				
+				visible = true;
+			}
+			
+		]]>
+	</fx:Script>
+	
+	
+	<fx:Declarations>
+		<s:ArrayCollection id="matcherDefinitions">
+			<input:MatcherDefinition data="cc" />
+			<input:MatcherDefinition data="ssn" />
+			<input:MatcherDefinition data="iban" />
+			<input:MatcherDefinition data="trid" />
+			<input:MatcherDefinition data="keyword" />
+		</s:ArrayCollection>
+	</fx:Declarations>
+	
+	<s:states>
+		<s:State name="normal"/>
+		<s:State name="cc" />
+		<s:State name="ssn" />
+		<s:State name="iban" />
+		<s:State name="trid" />
+		<s:State name="keyword" />
+	</s:states>
+	
+	<s:layout>
+		<s:VerticalLayout horizontalAlign="center" gap="5"
+						  paddingLeft="8" paddingRight="8"
+						  paddingTop="5" paddingBottom="5"/>
+	</s:layout>
+	<s:Form>
+		<s:FormItem label="@Resource(bundle = 'messages', key = 'matcher.combobox.label')" >
+			<s:ComboBox id="matcherCombobox" dataProvider="{matcherDefinitions}" 
+						change="{currentState = (matcherCombobox.selectedItem == null ? 'normal' : matcherCombobox.selectedItem.data)}"
+						creationComplete="{currentState = (matcherCombobox.selectedItem == null ? 'normal' : matcherCombobox.selectedItem.data)}"
+						/>
+		</s:FormItem>
+		<s:FormItem label="@Resource(bundle = 'messages', key = 'matcher.weight.label')" >
+			<s:TextInput id="featureWeight"/>
+		</s:FormItem>
+		<s:FormItem includeIn="keyword" label="@Resource(bundle = 'messages', key = 'matcher.keyword.keywordValue.label')" >
+			<s:TextInput id="keywordValue" creationComplete="{
+						 if (informationFeatureObject != null)
+						 	keywordValue.text = informationFeatureObject.matcher.matcherParams.getItemAt(0).regex;
+						 }"/>
+		</s:FormItem>
+	</s:Form>			
+	
+	<s:Group>
+		<s:layout>
+			<s:HorizontalLayout horizontalAlign="right" verticalAlign="middle" gap="10"/>
+		</s:layout>
+		<s:Button label="@Resource(bundle = 'messages', key = 'matcher.button.save.label')" click="addNewFeature(event)"/>
+		<s:Button label="@Resource(bundle = 'messages', key = 'matcher.button.cancel.label')" click="{close()}"/>
+	</s:Group>
+</s:TitleWindow>

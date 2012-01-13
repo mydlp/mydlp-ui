@@ -3,6 +3,8 @@
 				xmlns:s="library://ns.adobe.com/flex/spark" 
 				xmlns:mx="library://ns.adobe.com/flex/mx" 
 				autoDrawBackground="true" 
+				width="100%"
+				height="24"
 				creationComplete="{data = data as InformationFeature;}">
 	<fx:Script>
 		<![CDATA[
@@ -17,7 +19,7 @@
 	
 	<s:layout>
 		<s:HorizontalLayout verticalAlign="middle" 
-							paddingLeft="2" paddingRight="2"/>
+							paddingLeft="3" paddingRight="3"/>
 	</s:layout>
 	<s:Label text="{data.label}" />
 	<mx:Spacer includeIn="selected" width="100%"/>

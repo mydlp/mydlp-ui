@@ -17,10 +17,11 @@ package com.mydlp.ui.util
 	public class InteractionUtil
 	{
 		
-		public static function newPopup(className:Class): void
+		public static function newPopup(className:Class): IFlexDisplayObject
 		{
 			var popup:IFlexDisplayObject = PopUpManager.createPopUp(FlexGlobals.topLevelApplication as DisplayObject , className, true);
 			popup.move(FlexGlobals.topLevelApplication.mouseX + 10, FlexGlobals.topLevelApplication.mouseY + 10);
+			return popup;
 		}
 		
 		public static function closePopup(popup:Object): void

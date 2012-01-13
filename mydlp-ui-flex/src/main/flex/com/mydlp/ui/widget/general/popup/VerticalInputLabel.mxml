@@ -18,14 +18,14 @@
 	
 	<s:Group width="100%" height="100%">
 		<s:layout>
-			<s:VerticalLayout verticalAlign="middle" gap="3" />
+			<s:VerticalLayout verticalAlign="middle" gap="5" paddingTop="2"/>
 		</s:layout>
 		
-		<s:Group width="{labelWidth}" height="100%">
+		<s:Group width="100%" height="100%">
 			<s:layout>
 				<s:HorizontalLayout verticalAlign="middle" horizontalAlign="left" />
 			</s:layout>
-			<s:Label width="{labelWidth > 20 ? labelWidth - 10 : labelWidth}" text="{label}" fontWeight="bold"/>
+			<s:Label width="{labelWidth}" text="{label}" fontWeight="bold"/>
 		</s:Group>
 		
 		<s:Group id="container" width="100%" height="100%">

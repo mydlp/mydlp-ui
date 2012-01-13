@@ -100,7 +100,7 @@
 						var ipInput:IpAddressInput = new IpAddressInput();
 						ipInput.numberValue = targetObject[classMember.name];
 						BindingUtils.bindProperty(targetObject, classMember.name, ipInput, "numberValue");
-						ipInput.width = 160;
+						ipInput.percentWidth = 100;
 						inputLabel = new HorizontalInputLabel()
 						inputLabel.addElement(ipInput);
 						
@@ -128,6 +128,7 @@
 							classMember.type == ListCollectionView)
 					{
 						var ifInput:InformationFeatureInput = new InformationFeatureInput();
+						ifInput.deleteList = this.deleteList;
 						if (targetObject[classMember.name] == null)
 							ifInput.informationFeatures = new ArrayCollection();
 						else
@@ -162,7 +163,7 @@
 						var textInput:TextInput = new TextInput();
 						textInput.text = targetObject[classMember.name];
 						BindingUtils.bindProperty(targetObject, classMember.name, textInput, "text");
-						textInput.width = 160;
+						textInput.percentWidth = 100;
 						inputLabel = new HorizontalInputLabel()
 						inputLabel.addElement(textInput);
 						if(classMember.name == "name"){

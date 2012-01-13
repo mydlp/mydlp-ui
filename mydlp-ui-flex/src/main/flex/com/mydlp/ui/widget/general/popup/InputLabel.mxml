@@ -5,10 +5,10 @@
 		 width="100%">
 	<fx:Declarations>
 		<fx:String id="label" />
-		<fx:Number id="labelWidth">150</fx:Number>
+		<fx:Number id="labelWidth">120</fx:Number>
 	</fx:Declarations>
 	<s:layout>
 		<s:VerticalLayout paddingTop="3" paddingBottom="3" 
-					   paddingLeft="6" paddingRight="6" />
+					   paddingLeft="12" paddingRight="12" />
 	</s:layout>
 </s:Group>
