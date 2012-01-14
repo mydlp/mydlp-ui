@@ -3,7 +3,9 @@
 				xmlns:s="library://ns.adobe.com/flex/spark" 
 				xmlns:mx="library://ns.adobe.com/flex/mx"
 				xmlns:general="com.mydlp.ui.widget.general.*"
-				xmlns:my="http://www.mydlp.com/flex/my" xmlns:popup="com.mydlp.ui.widget.general.popup.*"
+				xmlns:my="http://www.mydlp.com/flex/my" 
+				xmlns:popup="com.mydlp.ui.widget.general.popup.*"
+				width="400"
 				>
 	
 	<fx:Script>
@@ -17,9 +19,11 @@
 			import com.mydlp.ui.util.ReflectionUtil;
 			
 			import mx.controls.Alert;
+			import mx.controls.Spacer;
 			import mx.core.FlexGlobals;
 			
 			import spark.components.Button;
+			import spark.components.HGroup;
 			import spark.components.Label;
 			
 			protected var isAnInventoryItem:Boolean = false;
@@ -34,8 +38,18 @@
 				deleteButton.addEventListener(MouseEvent.CLICK, deleteButtonClickHandler);
 				cancelButton.label = LangUtil.getString("messages", "generic.delete." + getSimpleName() + ".cancelButton.label");
 				cancelButton.addEventListener(MouseEvent.CLICK, cancelButtonClickHandler);
-				vbox.addElement(deleteButton);
-				vbox.addElement(cancelButton);
+				var buttonGroup:HGroup = new HGroup();
+				buttonGroup.percentHeight = 100;
+				buttonGroup.percentWidth = 100;
+				var spacer1:Spacer = new Spacer();
+				spacer1.percentWidth = 100;
+				var spacer2:Spacer = new Spacer();
+				spacer2.width = 10;
+				buttonGroup.addElement(spacer1);
+				buttonGroup.addElement(deleteButton);
+				buttonGroup.addElement(spacer2);
+				buttonGroup.addElement(cancelButton);
+				deleteForm.addElement(buttonGroup);
 			}
 			
 			public function populateDialogMessage(): void
@@ -65,7 +79,7 @@
 				{
 					var dialogMessage:Label = new Label();
 					dialogMessage.text = message;
-					vbox.addElement(dialogMessage);
+					deleteForm.addElement(dialogMessage);
 				}
 				
 				if (formObject is InventoryCategory)
@@ -77,7 +91,7 @@
 				{
 					var dialogMessage2:Label = new Label();
 					dialogMessage2.text = message2;
-					vbox.addElement(dialogMessage2);
+					deleteForm.addElement(dialogMessage2);
 				}
 			}
 			
@@ -124,9 +138,11 @@
 		</my:remote>
 	</fx:Declarations>
 	
-	<s:Group id="vbox">
+	<s:Group id="deleteForm" width="100%" height="100%">
 		<s:layout>
-			<s:VerticalLayout horizontalAlign="center"/>
+			<s:VerticalLayout horizontalAlign="center" gap="3"
+							  paddingTop="6" paddingBottom="6"
+							  paddingLeft="10" paddingRight="10"/>
 		</s:layout>
 	</s:Group>
 </popup:GenericCRUDContainer>
