@@ -24,7 +24,7 @@
 	<s:Label includeIn="noitem" text="ALL" />
 	
 	<rule:RuleItemList	includeIn="normal" 
-				width="100%"
+				width="{this.width - 4}"
 				height="100%"
 				dataProvider="{listDataProvider}"
 				itemRenderer="com.mydlp.ui.widget.policy.rule.RuleItemRenderer"

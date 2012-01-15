@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:MXTreeItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009" 
+					  xmlns:s="library://ns.adobe.com/flex/spark" 
+					  xmlns:mx="library://ns.adobe.com/flex/mx">
+	<fx:Script>
+		<![CDATA[
+			import com.mydlp.ui.domain.InventoryCategory;
+			import com.mydlp.ui.domain.InventoryItem;
+			import com.mydlp.ui.util.InteractionUtil;
+			import com.mydlp.ui.util.ReflectionUtil;
+			import com.mydlp.ui.widget.general.popup.NewInventoryItemDialog;
+		]]>
+	</fx:Script>
+	
+	<s:states>
+		<s:State name="normal" />            
+		<s:State name="hovered" />
+		<s:State name="selected" />
+	</s:states>
+	<s:HGroup left="0" right="0" top="0" bottom="0" 
+			  verticalAlign="middle" 
+			  paddingTop="2" paddingBottom="2">
+		<s:Rect id="indentationSpacer" width="{treeListData.indent}" percentHeight="100" alpha="0">
+			<s:fill>
+				<s:SolidColor color="0xFFFFFF" />
+			</s:fill>
+		</s:Rect>
+		<s:Group id="disclosureGroup">
+			<s:BitmapImage source="{treeListData.disclosureIcon}" visible="{treeListData.hasChildren}" />
+		</s:Group>
+		<s:BitmapImage source="{treeListData.icon}" />
+		<s:Label id="labelField" text="{treeListData.label}" paddingTop="2" width="100%"/>
+		<s:Spacer width="10" />
+		<s:HGroup width="85" height="20" verticalAlign="middle" >
+			<s:HGroup id="actions" includeIn="selected" gap="1">
+				<s:Button styleName="addButtonStyle"
+						  click="{InteractionUtil.newPopup(NewInventoryItemDialog)}" 
+						  visible="{treeListData.item is InventoryCategory}"/>
+				<s:Button styleName="copyButtonStyle"
+						  click="{InteractionUtil.newEditDialog(ReflectionUtil.cloneDomainObject(treeListData.item))}" 
+						  visible="{treeListData.item is InventoryItem}"/>
+				<s:Button styleName="editButtonStyle" 
+						  click="{InteractionUtil.newEditDialog(treeListData.item)}" />
+				<s:Button styleName="removeButtonStyle" 
+						  click="{InteractionUtil.newDeleteDialog(treeListData.item)}" />
+			</s:HGroup>
+		</s:HGroup>
+		
+		
+	</s:HGroup>
+</s:MXTreeItemRenderer>

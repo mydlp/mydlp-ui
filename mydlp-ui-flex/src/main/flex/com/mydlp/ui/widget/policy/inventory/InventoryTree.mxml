@@ -11,8 +11,9 @@
 		 dataProvider="@{inventory}"
 		 dragEnabled="true" 
 		 dropEnabled="true"
+		 variableRowHeight="true"
 		 dragDrop="onDragDrop(event)"
-		 itemRenderer="com.mydlp.ui.widget.policy.inventory.InvetoryItemRenderer"
+		 itemRenderer="com.mydlp.ui.widget.policy.inventory.InventoryItemRenderer"
 		 folderOpenIcon="@Embed('/assets/icons/16x16/folder.png')"
 		 folderClosedIcon="@Embed('/assets/icons/16x16/folder.png')"
 		 >
@@ -44,7 +45,6 @@
 			public function refreshTree(): void
 			{
 				tempOpenItems = openItems;
-				invalidateList();
 				re.getInventory();
 			}
 			
@@ -55,6 +55,9 @@
 			
 			protected function getInventoryHandler(event:ResultEvent): void
 			{
+				invalidateList();
+				invalidateDisplayList();
+				invalidateSize();
 				inventory = event.result as ListCollectionView;
 				openItems = tempOpenItems;
 				validateNow();

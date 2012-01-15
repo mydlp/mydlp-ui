@@ -235,13 +235,13 @@
 		
 		<rule:RSpacer />
 		
-		<rule:RuleItemBox width="210"
+		<rule:RuleItemBox width="260"
 						  listDataProvider="{sourceDataProvider}"
 						  currentState="{sourceDataProvider.length == 0 ? 'noitem' : 'normal'}" />
 		
 		<rule:RSpacer />
 		
-		<rule:RuleItemBox width="210"
+		<rule:RuleItemBox width="260"
 						  listDataProvider="{matcherDataProvider}"
 						  currentState="{matcherDataProvider.length == 0 ? 'noitem' : 'normal'}" />
 		
