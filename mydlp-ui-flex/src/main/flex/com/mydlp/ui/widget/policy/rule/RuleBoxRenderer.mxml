@@ -98,12 +98,8 @@
 					else if (ruleItem.item is InformationType)
 						matcherDataProvider1.addItem(ruleItem);
 				}
-				
 				sourceDataProvider = sourceDataProvider1;
 				matcherDataProvider = matcherDataProvider1;
-				
-				//sourceList.invalidateList();
-				//matcherList.invalidateList();
 			}
 			
 			public function refresh():void
