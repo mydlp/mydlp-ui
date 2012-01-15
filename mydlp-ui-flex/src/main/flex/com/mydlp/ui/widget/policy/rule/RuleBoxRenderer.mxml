@@ -17,6 +17,7 @@
 			import com.mydlp.ui.domain.EndpointRule;
 			import com.mydlp.ui.domain.InformationType;
 			import com.mydlp.ui.domain.InventoryCategory;
+			import com.mydlp.ui.domain.InventoryItem;
 			import com.mydlp.ui.domain.Item;
 			import com.mydlp.ui.domain.MailRule;
 			import com.mydlp.ui.domain.Network;
@@ -113,6 +114,30 @@
 				validateNow();
 			}
 			
+			protected function acceptDrop(): void
+			{
+				DragManager.showFeedback(DragManager.COPY);
+				highlightOn();
+			}
+			
+			protected function rejectDrop(): void
+			{
+				DragManager.showFeedback(DragManager.NONE);
+				highlightOff();
+			}
+			
+			protected function highlightOn(): void
+			{
+				normalBorder.visible=false;
+				highlightBorder.visible=true;	
+			}
+			
+			protected function highlightOff(): void
+			{
+				normalBorder.visible=true;
+				highlightBorder.visible=false;	
+			}
+			
 			protected function onDragEnter(dragEvent:DragEvent):void
 			{
 				DragManager.acceptDragDrop(dragEvent.currentTarget as IUIComponent);
@@ -121,35 +146,28 @@
 			protected function onDragOver(event:DragEvent):void
 			{
 				var treeItem:* = FlexGlobals.topLevelApplication.inventoryTree.selectedItem;
-				if(treeItem is InventoryCategory)
-					DragManager.showFeedback(DragManager.NONE);
-				else if (treeItem.item is InformationType)
-					DragManager.showFeedback(DragManager.COPY);
-				else if ( treeItem.item is Network && 
-						(ruleObject is WebRule || ruleObject is EndpointRule) )
-					DragManager.showFeedback(DragManager.COPY);
-				else
-					DragManager.showFeedback(DragManager.NONE);    		
+				if(treeItem is InventoryItem)
+					if (treeItem.item is InformationType)
+						acceptDrop();
+					else if ( treeItem.item is Network && 
+							(ruleObject is WebRule || ruleObject is EndpointRule) )
+						acceptDrop();
+					else
+						rejectDrop();
+				else 
+					rejectDrop();
 			}
 			
 			protected function onDragExit(event:DragEvent):void
 			{
-				DragManager.showFeedback(DragManager.NONE);    		
+				rejectDrop();    		
 			}
 			
 			protected function onDragDrop(dragEvent:DragEvent):void
 			{
-				var dragSource:DragSource = dragEvent.dragSource;
-				var dragInitiator:IUIComponent = dragEvent.dragInitiator;
-				var dropTarget:Object = dragEvent.currentTarget;
-				DragManager.showFeedback(DragManager.COPY);
-				
 				var sourceItem:Item = FlexGlobals.topLevelApplication.inventoryTree.selectedItem.item;
-				
-				if (sourceItem is Network && ruleObject is WebRule)
-					saveDroppedObject(sourceItem);
-				else if(sourceItem is InformationType)
-					saveDroppedObject(sourceItem);
+				saveDroppedObject(sourceItem);
+				highlightOff();
 			}
 			
 			protected function saveDroppedObject(sourceItem:Item):void
@@ -196,9 +214,18 @@
 		</s:fill>
 	</s:Rect>
 	
-	<s:Rect left="0" right="0" top="0" bottom="0" >
+	<s:Rect id="normalBorder" left="0" right="0" top="0" bottom="0" >
 		<s:stroke>
 			<s:SolidColorStroke color="0xAEBBCF" alpha="0.3" weight="3"/>
+		</s:stroke>
+	</s:Rect>
+	
+	<s:Rect id="highlightBorder" left="0" right="0" top="0" bottom="0" visible="false">
+		<s:stroke>
+			<s:LinearGradientStroke rotation="90" weight="3">
+				<s:GradientEntry color="#fabe00"/>
+				<s:GradientEntry color="#e17b00"/>
+			</s:LinearGradientStroke>
 		</s:stroke>
 	</s:Rect>
 	
