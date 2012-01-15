@@ -17,13 +17,13 @@ import com.mydlp.ui.domain.InventoryItem;
 import com.mydlp.ui.domain.Matcher;
 import com.mydlp.ui.schema.AbstractGranule;
 
-public class _000_00005_InformationType_1 extends AbstractGranule {
+public class _000_00014_InformationType_Predefined_SSN extends AbstractGranule {
 
 	@Override
 	protected void callback() {
 		DetachedCriteria criteria = 
 				DetachedCriteria.forClass(InventoryCategory.class)
-					.add(Restrictions.eq("nameKey", "inventory.documentTypes"));
+					.add(Restrictions.eq("nameKey", "inventory.informationTypes.predefined"));
 		@SuppressWarnings("unchecked")
 		List<InventoryCategory> list = getHibernateTemplate().findByCriteria(criteria);
 		InventoryCategory documentTypes = DAOUtil.getSingleResult(list);
@@ -36,15 +36,15 @@ public class _000_00005_InformationType_1 extends AbstractGranule {
 		DataFormat df = DAOUtil.getSingleResult(list2);
 		
 		Matcher m = new Matcher();
-		m.setFunctionName("cc_match");
+		m.setFunctionName("ssn");
 		
 		InformationFeature ift = new InformationFeature();
-		ift.setWeight(new Long(501));
+		ift.setWeight(new Long(1));
 		ift.setMatcher(m);
 		m.setCoupledInformationFeature(ift);
 		
 		InformationDescription id = new InformationDescription();
-		id.setThreshold(new Long(500));
+		id.setThreshold(new Long(1));
 		//ift.setInformationDescription(id);
 		List<InformationFeature> ifts = new ArrayList<InformationFeature>();
 		ifts.add(ift);
@@ -58,7 +58,7 @@ public class _000_00005_InformationType_1 extends AbstractGranule {
 		//id.setInformationType(it);
 		
 		InventoryItem ii = new InventoryItem();
-		ii.setName("Example Information Type");
+		ii.setNameKey("informationType.predefined.ssn");
 		ii.setItem(it);
 		it.setCoupledInventoryItem(ii);
 		

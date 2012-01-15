@@ -46,23 +46,8 @@
 					m = informationFeatureObject.matcher;
 				}
 				
-				if (matcherCombobox.selectedItem.data == "cc")
-				{
-					m.functionName = "cc";
-				}
-				else if (matcherCombobox.selectedItem.data == "ssn")
-				{
-					m.functionName = "ssn";
-				}
-				else if (matcherCombobox.selectedItem.data == "iban")
-				{
-					m.functionName = "iban";
-				}
-				else if (matcherCombobox.selectedItem.data == "trid")
-				{
-					m.functionName = "trid";
-				}
-				else if (matcherCombobox.selectedItem.data == "keyword")
+				
+				if (matcherCombobox.selectedItem.data == "keyword")
 				{
 					m.functionName = "keyword";
 					var r:RegularExpression = null;
@@ -82,7 +67,9 @@
 					r.regex = keywordValue.text;
 				}
 				else
-					throw new Error("Unknown matcher!!!");
+				{
+					m.functionName = matcherCombobox.selectedItem.data ;
+				}
 				
 				informationFeatureObject.weight = int(featureWeight.text);
 				
@@ -121,6 +108,9 @@
 			<input:MatcherDefinition data="ssn" />
 			<input:MatcherDefinition data="iban" />
 			<input:MatcherDefinition data="trid" />
+			<input:MatcherDefinition data="canada_sin" />
+			<input:MatcherDefinition data="france_insee" />
+			<input:MatcherDefinition data="uk_nino" />
 			<input:MatcherDefinition data="keyword" />
 		</s:ArrayCollection>
 	</fx:Declarations>
@@ -131,6 +121,9 @@
 		<s:State name="ssn" />
 		<s:State name="iban" />
 		<s:State name="trid" />
+		<s:State name="canada_sin" />
+		<s:State name="france_insee" />
+		<s:State name="uk_nino" />
 		<s:State name="keyword" />
 	</s:states>
 	

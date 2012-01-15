@@ -11,14 +11,14 @@ public class _000_00001_InventoryCategories extends AbstractGranule {
 		networks.setNameKey("inventory.networks");
 		getHibernateTemplate().save(networks);
 		
-		InventoryCategory documentTypes = new InventoryCategory();
-		documentTypes.setNameKey("inventory.documentTypes");
-		InventoryCategory predefinedDocumentTypes = new InventoryCategory();
-		predefinedDocumentTypes.setNameKey("inventory.documentTypes.predefined");
-		predefinedDocumentTypes.setCategory(documentTypes);
+		InventoryCategory informationTypes = new InventoryCategory();
+		informationTypes.setNameKey("inventory.informationTypes");
+		InventoryCategory predefinedInformationTypes = new InventoryCategory();
+		predefinedInformationTypes.setNameKey("inventory.informationTypes.predefined");
+		predefinedInformationTypes.setCategory(informationTypes);
 		
-		getHibernateTemplate().saveOrUpdate(documentTypes);
-		getHibernateTemplate().saveOrUpdate(predefinedDocumentTypes);
+		getHibernateTemplate().saveOrUpdate(informationTypes);
+		getHibernateTemplate().saveOrUpdate(predefinedInformationTypes);
 		
 		
 		InventoryCategory users = new InventoryCategory();
