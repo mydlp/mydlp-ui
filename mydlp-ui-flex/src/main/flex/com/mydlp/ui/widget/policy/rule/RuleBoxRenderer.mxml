@@ -8,6 +8,8 @@
 				creationComplete="onCreationComplete(event)" 
 				xmlns:util="com.mydlp.ui.util.*" 
 				dragEnter="onDragEnter(event)"
+				dragOver="onDragOver(event)"
+				dragExit="onDragExit(event)"
 				dragDrop="onDragDrop(event)"
 				>
 	<fx:Script>
@@ -113,16 +115,26 @@
 			
 			protected function onDragEnter(dragEvent:DragEvent):void
 			{
-				var dropTarget:IUIComponent = dragEvent.currentTarget as IUIComponent;
-				var dragInitiator:IUIComponent = dragEvent.dragInitiator;
-				
-				if(FlexGlobals.topLevelApplication.inventoryTree.selectedItem is InventoryCategory)
+				DragManager.acceptDragDrop(dragEvent.currentTarget as IUIComponent);
+			}
+			
+			protected function onDragOver(event:DragEvent):void
+			{
+				var treeItem:* = FlexGlobals.topLevelApplication.inventoryTree.selectedItem;
+				if(treeItem is InventoryCategory)
 					DragManager.showFeedback(DragManager.NONE);
-				else if(FlexGlobals.topLevelApplication.inventoryTree.selectedItem.item is Network
-						&& ruleObject is WebRule)
-					DragManager.showFeedback(DragManager.NONE);
+				else if (treeItem.item is InformationType)
+					DragManager.showFeedback(DragManager.COPY);
+				else if ( treeItem.item is Network && 
+						(ruleObject is WebRule || ruleObject is EndpointRule) )
+					DragManager.showFeedback(DragManager.COPY);
 				else
-					DragManager.acceptDragDrop(dropTarget);
+					DragManager.showFeedback(DragManager.NONE);    		
+			}
+			
+			protected function onDragExit(event:DragEvent):void
+			{
+				DragManager.showFeedback(DragManager.NONE);    		
 			}
 			
 			protected function onDragDrop(dragEvent:DragEvent):void

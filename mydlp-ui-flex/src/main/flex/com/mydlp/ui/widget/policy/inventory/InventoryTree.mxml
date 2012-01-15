@@ -13,13 +13,13 @@
 		 dropEnabled="true"
 		 variableRowHeight="true"
 		 dragDrop="onDragDrop(event)"
+		 dragExit="onDragExit(event)"
 		 itemRenderer="com.mydlp.ui.widget.policy.inventory.InventoryItemRenderer"
 		 folderOpenIcon="@Embed('/assets/icons/16x16/folder.png')"
 		 folderClosedIcon="@Embed('/assets/icons/16x16/folder.png')"
 		 >
 	<fx:Script>
 		<![CDATA[
-			import com.mydlp.ui.widget.general.popup.NewInventoryItemDialog;
 			import com.mydlp.ui.domain.AbstractEntity;
 			import com.mydlp.ui.domain.InventoryBase;
 			import com.mydlp.ui.domain.InventoryCategory;
@@ -28,6 +28,7 @@
 			import com.mydlp.ui.util.InteractionUtil;
 			import com.mydlp.ui.util.LangUtil;
 			import com.mydlp.ui.util.ReflectionUtil;
+			import com.mydlp.ui.widget.general.popup.NewInventoryItemDialog;
 			
 			import mx.collections.ArrayCollection;
 			import mx.collections.ListCollectionView;
@@ -119,6 +120,11 @@
 				if (dragSource == targetCategory)
 					return false;
 				return isValidTargetCategory(dragSource, targetCategory.category);
+			}
+			
+			protected function onDragExit(event:DragEvent):void
+			{
+				DragManager.showFeedback(DragManager.NONE);
 			}
 			
 		]]>
