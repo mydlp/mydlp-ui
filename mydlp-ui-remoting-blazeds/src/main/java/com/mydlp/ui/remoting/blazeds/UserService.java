@@ -14,4 +14,6 @@ public interface UserService {
 	
 	public void remove(AuthUser item);
 	
+	public AuthUser getCurrentUser();
+	
 }

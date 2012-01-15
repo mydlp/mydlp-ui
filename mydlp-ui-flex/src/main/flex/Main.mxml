@@ -3,10 +3,14 @@
                xmlns:mx="library://ns.adobe.com/flex/mx" 
 			   xmlns:api="com.mydlp.ui.api.*"
 			   xmlns:my="http://www.mydlp.com/flex/my"
-			   minHeight="768" minWidth="1024" 
 			   xmlns:inventory="com.mydlp.ui.widget.policy.inventory.*"
+			   xmlns:rule="com.mydlp.ui.widget.policy.rule.*" 
+			   xmlns:option="com.mydlp.ui.widget.option.*" 
+			   xmlns:objects="com.mydlp.ui.widget.objects.*"
+			   xmlns:toolbar="com.mydlp.ui.widget.toolbar.*"
+			   minHeight="800" minWidth="1280" 
 			   usePreloader="true"
-			   applicationComplete="applicationCompleteHandler(event)" xmlns:rule="com.mydlp.ui.widget.policy.rule.*" xmlns:option="com.mydlp.ui.widget.option.*" xmlns:objects="com.mydlp.ui.widget.objects.*"
+			   applicationComplete="onCreationComplete(event)" 
 			   >
 	<fx:Style source="/assets/style/general.css" />
 	
@@ -23,7 +27,7 @@
 			
 			public var currentPopup:ClosableTitleWindow = null;
 			
-			protected function applicationCompleteHandler(event:FlexEvent):void
+			protected function onCreationComplete(event:FlexEvent):void
 			{
 				HibernateManaged.defaultHibernateService = this.dataAccessService;
 				
@@ -60,6 +64,12 @@
 		</my:remote>
 	</fx:Declarations>
 
+	<s:layout>
+		<s:VerticalLayout paddingTop="5"/>
+	</s:layout>
+	
+	<toolbar:TopToolbar id="topToolbar" />
+	
 	<mx:TabNavigator borderStyle="solid" width="100%" height="100%">
 		<mx:VBox id="policyTab" label="Policy" width="100%" height="100%">
 			<mx:HDividedBox width="100%" height="100%">
