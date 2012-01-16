@@ -46,10 +46,9 @@
 	</s:layout>
 	
 	<s:Label id="userLabel" />
-	<s:Spacer width="5" />
+	<s:Spacer width="4" />
 	<s:Button skinClass="com.mydlp.ui.skin.SettingsBitmapButton16Skin" 
 			  toolTip="@Resource(bundle = 'messages', key = 'toptoolbar.settings')"/>
-	<s:Spacer width="5" />
 	<s:Button skinClass="com.mydlp.ui.skin.CloseBitmapButton16Skin" 
 			  click="{navigateToURL(new URLRequest ('j_spring_security_logout'), '_self')}"
 			  toolTip="@Resource(bundle = 'messages', key = 'toptoolbar.logout')"/>

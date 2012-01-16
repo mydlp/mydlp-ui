@@ -3,6 +3,6 @@
 						xmlns:s="library://ns.adobe.com/flex/spark" 
 						xmlns:mx="library://ns.adobe.com/flex/mx" 
 						xmlns:skin="com.mydlp.ui.skin.*"
-						bitmapSource="@Embed('/assets/icons/16x16/add.png')"
+						bitmapSource="@Embed('/assets/icons/16x16/tools.png')"
 						bitmapSize="16">
 </skin:GenericBitmapButtonSkin>
