@@ -15,7 +15,6 @@
 			import mx.rpc.events.ResultEvent;
 			import mx.validators.EmailValidator;
 			
-			[Bindable]
 			protected var currentUser:AuthUser = null;
 			
 			protected function onCreationComplete(event:FlexEvent):void
@@ -25,7 +24,11 @@
 			
 			protected function getCurrentUserHandler(event:ResultEvent): void
 			{
-				currentUser = event.result as AuthUser
+				currentUser = event.result as AuthUser;
+				
+				if (currentUser != null)
+					userLabel.text = 	LangUtil.getString("messages", "toptoolbar.loggedinas") + " " +
+										currentUser.username + " <" +currentUser.email + ">";
 			}
 			
 		]]>
@@ -39,15 +42,12 @@
 	</fx:Declarations>
 	
 	<s:layout>
-		<s:HorizontalLayout verticalAlign="middle" horizontalAlign="right"
-							paddingRight="20"/>
+		<s:HorizontalLayout verticalAlign="middle" horizontalAlign="right"/>
 	</s:layout>
 	
-	<s:Label text="{LangUtil.getString('messages', 'toptoolbar.loggedinas') + ' ' 
-			 		+ currentUser.username + ' &lt;' +currentUser.email + '&gt;'}" 
-			 fontWeight="bold"/>
-	<s:Spacer width="20" />
+	<s:Label id="userLabel" />
+	<s:Spacer width="5" />
 	<s:Button skinClass="com.mydlp.ui.skin.CloseBitmapButton16Skin" 
-			  click="{navigateToURL(new URLRequest('j_spring_security_logout'), '_self')}"
+			  click="{navigateToURL(new URLRequest ('j_spring_security_logout'), '_self')}"
 			  toolTip="@Resource(bundle = 'messages', key = 'toptoolbar.logout')"/>
 </s:Group>

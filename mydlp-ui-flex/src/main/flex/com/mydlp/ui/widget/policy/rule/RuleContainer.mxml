@@ -86,7 +86,7 @@
 		<s:VerticalLayout gap="5"/>
 	</s:layout>
 	
-	<s:Group>
+	<s:Group width="100%">
 		<s:layout>
 			<s:HorizontalLayout />
 		</s:layout>

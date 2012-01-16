@@ -6,6 +6,7 @@
 		 labelField="label"
 		 width="400" height="100%"
 		 showRoot="false"
+		 borderVisible="false"
 		 allowMultipleSelection="true"
 		 creationComplete="populateTree()"
 		 dataProvider="@{inventory}"

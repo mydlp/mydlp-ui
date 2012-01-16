@@ -65,27 +65,51 @@
 	</fx:Declarations>
 
 	<s:layout>
-		<s:VerticalLayout paddingTop="5"/>
+		<s:VerticalLayout gap="0" paddingTop="4" paddingBottom="24"
+						  paddingLeft="24" paddingRight="24"/>
 	</s:layout>
 	
 	<toolbar:TopToolbar id="topToolbar" />
 	
-	<mx:TabNavigator borderStyle="solid" width="100%" height="100%">
-		<mx:VBox id="policyTab" label="Policy" width="100%" height="100%">
-			<mx:HDividedBox width="100%" height="100%">
-				<inventory:InventoryTree id="inventoryTree"/>
-				<rule:RuleContainer id="ruleContainer" />
-			</mx:HDividedBox>
-		</mx:VBox>
-		<mx:VBox id="optionTab" label="Option" width="100%" height="100%">
-			<mx:HDividedBox width="100%" height="100%">
-				<option:OptionContainer id="optionContainer" />
-			</mx:HDividedBox>
-		</mx:VBox>
-		<mx:VBox id="objectsTab" label="objects" width="100%" height="100%">
-			<mx:HDividedBox width="100%" height="100%">
-				<objects:ObjectsContainer id="objectsTree"/>
-			</mx:HDividedBox>
-		</mx:VBox>
-	</mx:TabNavigator>
+	<s:Spacer height="5" width="100%" />
+	
+	<s:TabBar dataProvider="{vs}" width="100%" fontWeight="bold" fontSize="14"/>
+	
+	<s:Group width="100%" height="100%">
+		<s:Rect left="0" right="0" top="0" bottom="0" >
+			<s:stroke>
+				<s:SolidColorStroke color="0xACADAF" weight="3"/>
+			</s:stroke>
+		</s:Rect>
+		<s:VGroup paddingTop="6" paddingBottom="6" paddingLeft="6" paddingRight="6" width="100%" height="100%">
+			<mx:ViewStack id="vs" width="100%" height="100%">
+				<s:NavigatorContent label="@Resource(bundle = 'messages', key = 'maintab.dashboard')" width="100%" height="100%">
+				</s:NavigatorContent>
+				<s:NavigatorContent label="@Resource(bundle = 'messages', key = 'maintab.policy')" width="100%" height="100%">
+					<s:layout>
+						<s:HorizontalLayout gap="10" />
+					</s:layout>
+					<inventory:InventoryTree id="inventoryTree"/>
+					<rule:RSpacer />
+					<rule:RuleContainer id="ruleContainer" />
+				</s:NavigatorContent>
+				<s:NavigatorContent label="@Resource(bundle = 'messages', key = 'maintab.objects')" width="100%" height="100%">
+					<mx:HDividedBox width="100%" height="100%">
+						<objects:ObjectsContainer id="objectsTree"/>
+					</mx:HDividedBox>
+				</s:NavigatorContent>
+				<s:NavigatorContent label="@Resource(bundle = 'messages', key = 'maintab.options')" width="100%" height="100%">
+					<mx:HDividedBox width="100%" height="100%">
+						<option:OptionContainer id="optionContainer" />
+					</mx:HDividedBox>
+				</s:NavigatorContent>
+				<s:NavigatorContent label="@Resource(bundle = 'messages', key = 'maintab.logs')" width="100%" height="100%">
+				</s:NavigatorContent>
+				<s:NavigatorContent label="@Resource(bundle = 'messages', key = 'maintab.archive')" width="100%" height="100%">
+				</s:NavigatorContent>
+				<s:NavigatorContent label="@Resource(bundle = 'messages', key = 'maintab.revisions')" width="100%" height="100%">
+				</s:NavigatorContent>
+			</mx:ViewStack>
+		</s:VGroup>
+	</s:Group>
 </s:Application>

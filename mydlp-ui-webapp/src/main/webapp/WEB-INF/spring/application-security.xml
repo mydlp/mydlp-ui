@@ -17,7 +17,7 @@
     <security:intercept-url pattern="/favicon.ico" filters="none"/>
     <security:intercept-url pattern="/**" access="ROLE_USER"/>
     <security:form-login login-page="/login.jsp" authentication-failure-url="/login.jsp?authfailed=true"/>
-    <security:logout/>
+    <security:logout logout-success-url="/login.jsp"/>
   </security:http>
   
   <bean id="daoAuthenticationProvider" class="org.springframework.security.authentication.dao.DaoAuthenticationProvider">
