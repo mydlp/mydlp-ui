@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:SkinnableContainer xmlns:fx="http://ns.adobe.com/mxml/2009" 
+					  xmlns:s="library://ns.adobe.com/flex/spark" 
+					  xmlns:my="http://www.mydlp.com/flex/my"
+					  xmlns:mx="library://ns.adobe.com/flex/mx"
+					  width="100%"
+					  height="150" creationComplete="{refreshLists()}">
+	<fx:Script>
+		<![CDATA[
+			import com.mydlp.ui.domain.DataFormat;
+			import com.mydlp.ui.domain.MIMEType;
+			
+			import mx.collections.ArrayCollection;
+			import mx.events.DragEvent;
+			import mx.rpc.events.ResultEvent;
+			
+			[Bindable]
+			protected var otherMIMETypes:ListCollectionView;
+			
+			[Bindable]
+			protected var allMIMETypes:ListCollectionView;
+			
+			
+			protected function refreshLists(): void
+			{
+				odfList.dataGroup.invalidateDisplayList();
+				if (allMIMETypes == null)
+					re.getMIMETypes();
+				else
+					populateOtherDataFormats();
+			}
+			
+			protected function getMIMETypesHandler(event:ResultEvent): void
+			{
+				allMIMETypes = event.result as ListCollectionView;
+				populateOtherDataFormats();
+			}
+			
+			protected function populateOtherDataFormats(): void
+			{
+				otherMIMETypes = new ArrayCollection();
+				
+				if (mimeTypes != null)
+					for each (var ndf:Object in allMIMETypes)
+				{
+					var addFlag:Boolean = false;
+					for each (var cdf:Object in mimeTypes)
+					if ((cdf as MIMEType).id == (ndf as MIMEType).id)
+					{
+						addFlag = true;
+						break;
+					}
+					if (addFlag)
+						otherMIMETypes.addItem(ndf);
+				}
+				odfList.validateNow();
+			}
+			
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<mx:ListCollectionView id="mimeTypes" />
+		
+		<my:remote id="re" destination="MIMETypeBRS">
+			<my:method name="getMIMETypes" result="getMIMETypesHandler(event)" />
+		</my:remote>
+	</fx:Declarations>
+	
+	<s:layout>
+		<s:HorizontalLayout verticalAlign="middle" gap="2"/>
+	</s:layout>
+	
+	<s:Group width="43%" height="100%">
+		<s:layout>
+			<s:VerticalLayout gap="2"/>
+		</s:layout>
+		<s:Label text="@Resource(bundle = 'messages', key = 'generic.edit.input.dataFormats.odfList.label')" />
+		<s:List id="odfList" dataProvider="{otherMIMETypes}" 
+				width="100%" height="80%" 
+				itemRenderer="com.mydlp.ui.widget.general.input.MIMETypeRenderer" />
+	</s:Group>
+	
+	
+</s:SkinnableContainer>

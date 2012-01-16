@@ -4,7 +4,7 @@
 		 xmlns:mx="library://ns.adobe.com/flex/mx"
 		 xmlns:my="http://www.mydlp.com/flex/my"
 		 labelField="label"
-		 width="400" height="100%"
+		 width="600" height="560"
 		 showRoot="false"
 		 allowMultipleSelection="false"
 		 creationComplete="populateTree()"

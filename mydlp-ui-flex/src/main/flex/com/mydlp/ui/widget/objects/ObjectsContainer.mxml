@@ -9,8 +9,10 @@
 	<fx:Script>
 		<![CDATA[
 			import com.mydlp.ui.domain.AbstractEntity;
+			import com.mydlp.ui.util.InteractionUtil;
 			
 			import mx.core.FlexGlobals;
+			
 			
 			
 		]]>
@@ -19,14 +21,25 @@
 		
 	</fx:Declarations>
 	
+	<s:Group>
 		
-	<mx:VBox>
-		<mx:HDividedBox width="100%" height="100%">	
-			<objects:ObjectsTree id="objectsTree" height="100%" width="100%"/>
-			<!--<s:TextArea id="deneme" text="deneme Yapiyorum" height="100%" width="50%" 
-						visible="{objectsTree.selectedItem == null ? false: objectsTree.selectedItem is AbstractEntity ? true:false}"/> -->
-		</mx:HDividedBox>
-	</mx:VBox>
+		<s:layout>
+			<s:VerticalLayout gap="2"/>
+		</s:layout>
+		
+		<mx:VBox>
+			<mx:HDividedBox width="500" height="400">	
+				<objects:ObjectsTree id="objectsTree" height="500" width="400"/>
+			</mx:HDividedBox>
+		</mx:VBox>
+		
+		<!--<s:TextArea id="deneme"
+					visible="{objectsTree.selectedItem == null ? false: objectsTree.selectedItem is AbstractEntity ? true:false}"
+					x="602" y="-3" width="100%" height="100%" text="deneme Yapiyorum"/>-->
+		
+		<s:Button label="Edit" id="editButton" enabled="{objectsTree.selectedItem == null ? false: objectsTree.selectedItem is AbstractEntity ? true:false}"
+				  click="{InteractionUtil.newEditDialog(objectsTree.selectedItem)}"/>
+	</s:Group>
 	
 	
 </s:SkinnableContainer>

@@ -11,6 +11,7 @@
 	<fx:Script>
 		<![CDATA[
 			import com.mydlp.ui.domain.AbstractEntity;
+			import com.mydlp.ui.domain.DataFormat;
 			import com.mydlp.ui.domain.InformationDescription;
 			import com.mydlp.ui.domain.InformationType;
 			import com.mydlp.ui.domain.InventoryBase;
@@ -24,6 +25,7 @@
 			import com.mydlp.ui.widget.general.input.DataFormatInput;
 			import com.mydlp.ui.widget.general.input.InformationFeatureInput;
 			import com.mydlp.ui.widget.general.input.IpAddressInput;
+			import com.mydlp.ui.widget.general.input.MimeTypeInput;
 			
 			import flash.utils.getQualifiedClassName;
 			
@@ -81,7 +83,7 @@
 							(classMember.name == "roles" && classMember.type == ListCollectionView)||
 							(classMember.name == "coupledInventoryItem" && classMember.type == InventoryItem) ||
 							(classMember.name == "coupledRuleItems" && classMember.type == ListCollectionView) ||
-							(classMember.name == "informationType" && classMember.type == InformationType) 
+							(classMember.name == "informationType" && classMember.type == InformationType)
 						)
 					{
 						continue;
@@ -123,6 +125,22 @@
 						inputLabel.addElement(dfInput);
 						index = 8;
 					}
+					
+					else if(targetObject is DataFormat &&
+							classMember.name == "mimeTypes" &&
+							classMember.type == ListCollectionView)
+					{
+						var mtInput:MimeTypeInput = new MimeTypeInput();
+						if (targetObject[classMember.name] == null)
+							mtInput.mimeTypes = new ArrayCollection();
+						else
+							mtInput.mimeTypes = targetObject[classMember.name];
+						BindingUtils.bindProperty(targetObject, classMember.name, mtInput, "mimeTypes");
+						inputLabel = new VerticalInputLabel()
+						inputLabel.addElement(mtInput);
+						index = 8;
+					}
+					
 					else if (targetObject is InformationDescription &&
 							classMember.name == "features" && 
 							classMember.type == ListCollectionView)
