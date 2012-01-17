@@ -32,8 +32,24 @@
 			protected function addClickHandler(event:MouseEvent):void
 			{
 				dfList.dataGroup.invalidateDisplayList();
+				
+				if (dataFormats.length == 1 && (dataFormats.getItemAt(0) as DataFormat).nameKey == "dataFormat.all.label")
+					dataFormats.removeAll();
+				
 				for each (var o:Object in odfList.selectedIndices)
-					dataFormats.addItem(otherDataFormats.getItemAt(o as int));
+				{
+					var df:DataFormat = otherDataFormats.getItemAt(o as int) as DataFormat;
+					if (df.nameKey == "dataFormat.all.label")
+					{
+						dataFormats.removeAll();
+						dataFormats.addItem(df);
+						break;
+					}
+					else
+					{
+						dataFormats.addItem(df);
+					}
+				}
 				dfList.validateNow();
 				
 				refreshLists();
@@ -60,17 +76,17 @@
 				
 				if (dataFormats != null)
 					for each (var ndf:Object in allDataFormats)
-				{
-					var addFlag:Boolean = true;
-					for each (var cdf:Object in dataFormats)
-					if ((cdf as DataFormat).id == (ndf as DataFormat).id)
 					{
-						addFlag = false;
-						break;
+						var addFlag:Boolean = true;
+						for each (var cdf:Object in dataFormats)
+						if ((cdf as DataFormat).id == (ndf as DataFormat).id)
+						{
+							addFlag = false;
+							break;
+						}
+						if (addFlag)
+							otherDataFormats.addItem(ndf);
 					}
-					if (addFlag)
-						otherDataFormats.addItem(ndf);
-				}
 				odfList.validateNow();
 			}
 			
