@@ -4,11 +4,11 @@
 		 xmlns:mx="library://ns.adobe.com/flex/mx"
 		 xmlns:my="http://www.mydlp.com/flex/my"
 		 labelField="label"
-		 width="600" height="560"
+		 width="600" height="100%"
 		 showRoot="false"
+		 borderVisible="false"
 		 allowMultipleSelection="false"
 		 creationComplete="populateTree()"
-		 change="onChange(event)"
 		 dataProvider="{DPForTree}"
 		 itemRenderer="com.mydlp.ui.widget.objects.ObjectsTreeRenderer"
 		 folderOpenIcon="@Embed('/assets/icons/16x16/folder.png')"
@@ -22,6 +22,7 @@
 			
 			import mx.collections.ArrayCollection;
 			import mx.collections.ListCollectionView;
+			import mx.core.FlexGlobals;
 			import mx.events.ListEvent;
 			import mx.rpc.events.ResultEvent;
 			
@@ -38,6 +39,9 @@
 			
 			public function refreshTree(): void
 			{
+				if(FlexGlobals.topLevelApplication.objectsContainer.objectsTree.selectedItem == null ||
+				    !FlexGlobals.topLevelApplication.objectsContainer.objectsTree.selectedItem is AbstractEntity)
+					FlexGlobals.topLevelApplication.objectsContainer.editFormContainer.visible = false;
 				tempOpenItems = openItems;
 				invalidateList();
 				re.getObjects();
@@ -51,6 +55,9 @@
 			protected function getObjectsHandler(event:ResultEvent): void
 			{
 				objects = event.result as ListCollectionView;
+				childrenForDataFormats.removeAll();
+				childrenForOthers.removeAll();
+				//DPForTree.removeAll();
 				for each(var item:* in objects)
 				{
 					if(item is DataFormat )
@@ -66,24 +73,20 @@
 			{
 				var parentDataFormats:Object = new Object();
 				parentDataFormats["label"] = "Data Formats";
+				parentDataFormats["containerType"] = "DataFormat";
 				parentDataFormats["children"] = childrenForDataFormats;
 				DPForTree.addItem(parentDataFormats);
 				
 				var parentOthers:Object = new Object();
 				parentOthers["label"] = "Others";
+				parentOthers["containerType"] = "none";
 				parentOthers["children"] = childrenForOthers;
 				DPForTree.addItem(parentOthers);
 				
 				refreshTree();
 			}
 			
-			protected function onChange(event:ListEvent):void
-			{
-				if(selectedItem != null && selectedItem is AbstractEntity)
-				{
-					//InteractionUtil.newEditDialog(selectedItem);
-				}
-			}
+			
 			
 		]]>
 	</fx:Script>
