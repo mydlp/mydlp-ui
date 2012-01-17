@@ -43,14 +43,19 @@
   -->
   <bean id="dataAccessService" class="org.dphibernate.services.SpringLazyLoadService" autowire="constructor">
     <flex:remoting-destination />
+    <constructor-arg ref="policySessionFactory" />
   </bean>
   <!-- 
     ProxyBatchLoader enabled batched loading of objects.  A single request is sent for many objects,
     rather than several individual requests.  This is optional, but provides significant performance improvements
   -->
-  <bean id="proxyBatchLoader" class="org.dphibernate.services.ProxyBatchLoader" autowire="constructor" />
-  <!-- Required -->
-  <bean id="hibernateSessionFilter" class="org.dphibernate.filters.SpringHibernateSessionServletFilter" />
+  <bean id="proxyBatchLoader" class="org.dphibernate.services.ProxyBatchLoader" autowire="constructor" >
+    <constructor-arg ref="policySessionFactory" />
+  </bean>
+  <!-- Required 
+  <bean id="hibernateSessionFilter" class="org.dphibernate.filters.SpringHibernateSessionServletFilter" >
+    <property name="sessionFactory" ref="policySessionFactory"/>
+  </bean>-->
   <!--
     The main serializer. Converts outbound POJO's to ASObjects with
     dpHibernate proxies for lazy loading. Required
@@ -60,7 +65,6 @@
   </bean>
   <bean id="dpHibernateDeserializer" class="org.dphibernate.serialization.HibernateDeserializer" scope="prototype" />
 
-  
   <!--  
     Handles entity updates (CRUD).  Required if using entity persistence. 
   <bean id="objectChangeUpdater" class="org.dphibernate.persistence.state.AuthenticatedObjectChangeUpdater" scope="prototype" />

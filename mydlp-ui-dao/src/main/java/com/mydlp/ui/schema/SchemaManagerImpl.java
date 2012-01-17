@@ -10,6 +10,7 @@ import javax.annotation.PostConstruct;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
 import org.springframework.core.type.classreading.MetadataReader;
@@ -20,18 +21,19 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.springframework.transaction.support.TransactionTemplate;
 
-import com.mydlp.ui.dao.AbstractDAO;
+import com.mydlp.ui.dao.AbstractPolicyDAO;
 import com.mydlp.ui.dao.DAOUtil;
 import com.mydlp.ui.domain.Config;
 
 @Service
-public class SchemaManagerImpl extends AbstractDAO implements SchemaManager {
+public class SchemaManagerImpl extends AbstractPolicyDAO implements SchemaManager {
 	
 	private static final String SCHEMA_REVISION_KEY = "schema.revision";
 	
 	private static final String UPDATE_GRANULE_PACKAGE = "com.mydlp.ui.schema.granules";
 	
 	@Autowired
+	@Qualifier("policyTransactionTemplate")
 	protected TransactionTemplate transactionTemplate;
 	
 	protected Integer getSchemaRevision() {

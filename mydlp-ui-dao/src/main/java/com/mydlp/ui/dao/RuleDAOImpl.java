@@ -13,7 +13,7 @@ import com.mydlp.ui.domain.RuleItem;
 
 @Repository("ruleDAO")
 @Transactional
-public class RuleDAOImpl extends AbstractDAO implements RuleDAO {
+public class RuleDAOImpl extends AbstractPolicyDAO implements RuleDAO {
 	
 	public static final Long DEFAULT_PRIORITY_DISTANCE = new Long(100);
 

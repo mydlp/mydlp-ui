@@ -88,7 +88,7 @@
 	
 	<s:Group width="100%">
 		<s:layout>
-			<s:HorizontalLayout />
+			<s:HorizontalLayout paddingTop="10" paddingBottom="5"/>
 		</s:layout>
 		<s:Button skinClass="com.mydlp.ui.skin.AddBitmapLabelButton32Skin" label="@Resource(key='rules.addrule', bundle='messages')"
 				  click="{InteractionUtil.newPopup(NewRuleDialog)}"/>
