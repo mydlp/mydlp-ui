@@ -131,6 +131,7 @@
 							classMember.type == ListCollectionView)
 					{
 						var mtInput:MimeTypeInput = new MimeTypeInput();
+						mtInput.deleteList = this.deleteList;
 						if (targetObject[classMember.name] == null)
 							mtInput.mimeTypes = new ArrayCollection();
 						else

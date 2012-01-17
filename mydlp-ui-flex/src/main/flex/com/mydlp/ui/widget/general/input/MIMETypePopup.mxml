@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:TitleWindow xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			   xmlns:s="library://ns.adobe.com/flex/spark" 
+			   xmlns:mx="library://ns.adobe.com/flex/mx"
+			   xmlns:input="com.mydlp.ui.widget.general.input.*"
+			   close="{close()}"
+			   visible="false"
+			   title="@Resource(bundle = 'messages', key = 'mimetype.title.label')"
+			   >
+	
+	<fx:Script>
+		<![CDATA[
+			import com.mydlp.ui.domain.MIMEType;
+			import com.mydlp.ui.util.InteractionUtil;
+			
+			import mx.events.FlexEvent;
+			
+			public var mimeTypeInput:MimeTypeInput = null;
+			
+			[Bindable]
+			public var mimeTypeObject:MIMEType = null;
+			
+			protected function close(): void
+			{
+				InteractionUtil.closePopup(this);
+			}
+			
+			protected function addNewFeature(event:MouseEvent):void
+			{
+				var isEdit:Boolean = false;
+				if (mimeTypeObject == null)
+					mimeTypeObject = new MIMEType();
+				else 
+					isEdit = true;
+				
+				mimeTypeObject.mimeType = mimeTypeName.text;
+				
+				if (!isEdit)
+					mimeTypeInput.addMimeType(mimeTypeObject);
+				
+				close();
+			}
+			
+			public function populate():void
+			{
+				if (mimeTypeObject != null)
+				{
+					mimeTypeName.text = mimeTypeObject.mimeType.toString();
+				}
+				
+				visible = true;
+			}
+			
+			
+		]]>
+	</fx:Script>
+	
+	
+	<fx:Declarations>
+		
+	</fx:Declarations>
+	
+	
+	<s:layout>
+		<s:VerticalLayout horizontalAlign="center" gap="5"
+						  paddingLeft="8" paddingRight="8"
+						  paddingTop="5" paddingBottom="5"/>
+	</s:layout>
+	<s:Form>
+		<s:FormItem label="@Resource(bundle = 'messages', key = 'mimetype.name.label')" >
+			<s:TextInput id="mimeTypeName"/>
+		</s:FormItem>
+	</s:Form>			
+	
+	<s:Group>
+		<s:layout>
+			<s:HorizontalLayout horizontalAlign="right" verticalAlign="middle" gap="10"/>
+		</s:layout>
+		<s:Button label="@Resource(bundle = 'messages', key = 'mimetype.button.save.label')" click="addNewFeature(event)"/>
+		<s:Button label="@Resource(bundle = 'messages', key = 'mimetype.button.cancel.label')" click="{close()}"/>
+	</s:Group>
+</s:TitleWindow>

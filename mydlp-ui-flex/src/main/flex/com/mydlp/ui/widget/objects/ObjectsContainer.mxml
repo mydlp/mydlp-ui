@@ -17,6 +17,7 @@
 			
 			public function refreshObjects():void
 			{
+				editFormContainer.visible = false;
 				objectsTree.refreshTree();
 			}
 			

@@ -9,21 +9,37 @@
 		<![CDATA[
 			import com.mydlp.ui.domain.DataFormat;
 			import com.mydlp.ui.domain.MIMEType;
+			import com.mydlp.ui.util.InteractionUtil;
 			
 			import mx.collections.ArrayCollection;
 			import mx.events.DragEvent;
 			import mx.rpc.events.ResultEvent;
 			
 			[Bindable]
-			protected var otherMIMETypes:ListCollectionView;
-			
-			[Bindable]
 			protected var allMIMETypes:ListCollectionView;
 			
+			public var deleteList:ListCollectionView = null;
+			
+			public function addMimeType(mt:MIMEType): void
+			{
+				mimeTypes.addItem(mt);
+				mtList.validateNow();
+			}
+			
+			protected function removeClickHandler(event:MouseEvent):void
+			{
+				mtList.dataGroup.invalidateDisplayList();
+				for each (var o:Object in mtList.selectedIndices)
+				{
+					deleteList.addItem(mimeTypes.getItemAt(o as int));
+					mimeTypes.removeItemAt(o as int);		
+				}
+				mtList.validateNow();
+			}
 			
 			protected function refreshLists(): void
 			{
-				odfList.dataGroup.invalidateDisplayList();
+				mtList.dataGroup.invalidateDisplayList();
 				if (allMIMETypes == null)
 					re.getMIMETypes();
 				else
@@ -38,7 +54,7 @@
 			
 			protected function populateOtherDataFormats(): void
 			{
-				otherMIMETypes = new ArrayCollection();
+				mimeTypes = new ArrayCollection();
 				
 				if (mimeTypes != null)
 					for each (var ndf:Object in allMIMETypes)
@@ -51,9 +67,24 @@
 						break;
 					}
 					if (addFlag)
-						otherMIMETypes.addItem(ndf);
+						mimeTypes.addItem(ndf);
 				}
-				odfList.validateNow();
+				mtList.validateNow();
+			}
+			
+			protected function addClickHandler(event:MouseEvent):void
+			{
+				var mtp:MIMETypePopup = InteractionUtil.newPopup(MIMETypePopup) as MIMETypePopup;
+				mtp.mimeTypeInput = this;
+				mtp.populate();
+			}
+			
+			protected function editClickHandler(event:MouseEvent):void
+			{
+				var mtp:MIMETypePopup = InteractionUtil.newPopup(MIMETypePopup) as MIMETypePopup;
+				mtp.mimeTypeInput = this;
+				mtp.mimeTypeObject = mtList.selectedItem;
+				mtp.populate();
 			}
 			
 		]]>
@@ -69,16 +100,26 @@
 	<s:layout>
 		<s:HorizontalLayout verticalAlign="middle" gap="2"/>
 	</s:layout>
-	
-	<s:Group width="43%" height="100%">
+
+	<s:Group width="100%" height="100%">
 		<s:layout>
-			<s:VerticalLayout gap="2"/>
+			<s:HorizontalLayout verticalAlign="middle" gap="2"/>
 		</s:layout>
-		<s:Label text="@Resource(bundle = 'messages', key = 'generic.edit.input.dataFormats.odfList.label')" />
-		<s:List id="odfList" dataProvider="{otherMIMETypes}" 
-				width="100%" height="80%" 
-				itemRenderer="com.mydlp.ui.widget.general.input.MIMETypeRenderer" />
+		<s:List id="mtList" dataProvider="{MIMETypes}" 
+				width="87%" height="100%" 
+				itemRenderer="com.mydlp.ui.widget.general.input.MIMETypeRenderer" >
+			<s:layout>
+				<s:VerticalLayout useVirtualLayout="false" requestedMinRowCount="1"/>
+			</s:layout>
+		</s:List>
+		<s:Group width="13%" height="100%">
+			<s:layout>
+				<s:VerticalLayout verticalAlign="middle" horizontalAlign="center" gap="2"/>
+			</s:layout>
+			<s:Button skinClass="com.mydlp.ui.skin.AddBitmapButton32Skin" click="addClickHandler(event)"/>
+			<s:Button skinClass="com.mydlp.ui.skin.EditBitmapButton32Skin" click="editClickHandler(event)"/>
+			<s:Button skinClass="com.mydlp.ui.skin.RemoveBitmapButton32Skin" click="removeClickHandler(event)"/>
+		</s:Group>
 	</s:Group>
-	
 	
 </s:SkinnableContainer>
