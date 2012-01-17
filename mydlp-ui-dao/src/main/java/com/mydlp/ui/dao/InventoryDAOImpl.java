@@ -11,7 +11,7 @@ import com.mydlp.ui.domain.InventoryBase;
 
 @Repository("inventoryDAO")
 @Transactional
-public class InventoryDAOImpl extends AbstractDAO implements InventoryDAO {
+public class InventoryDAOImpl extends AbstractPolicyDAO implements InventoryDAO {
 
 	@SuppressWarnings("unchecked")
 	public List<InventoryBase> getInventory() {

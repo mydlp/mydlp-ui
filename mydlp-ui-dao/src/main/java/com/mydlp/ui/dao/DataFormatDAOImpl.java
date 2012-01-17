@@ -10,7 +10,7 @@ import com.mydlp.ui.domain.DataFormat;
 
 @Repository("dataFormatDAO")
 @Transactional
-public class DataFormatDAOImpl extends AbstractDAO implements DataFormatDAO {
+public class DataFormatDAOImpl extends AbstractPolicyDAO implements DataFormatDAO {
 
 	@SuppressWarnings("unchecked")
 	public List<DataFormat> getDataFormats() {

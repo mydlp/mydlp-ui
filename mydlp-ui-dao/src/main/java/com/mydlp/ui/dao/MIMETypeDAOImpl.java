@@ -10,7 +10,7 @@ import com.mydlp.ui.domain.MIMEType;
 
 @Repository("MIMETYpeDAO")
 @Transactional
-public class MIMETypeDAOImpl extends AbstractDAO implements MIMETypeDAO{
+public class MIMETypeDAOImpl extends AbstractPolicyDAO implements MIMETypeDAO{
 
 	@SuppressWarnings("unchecked")
 	public List<MIMEType> getMIMETypes() {

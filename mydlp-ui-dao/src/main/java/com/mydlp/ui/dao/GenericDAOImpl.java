@@ -7,7 +7,7 @@ import com.mydlp.ui.domain.AbstractEntity;
 
 @Repository("genericDAO")
 @Transactional
-public class GenericDAOImpl extends AbstractDAO implements GenericDAO {
+public class GenericDAOImpl extends AbstractPolicyDAO implements GenericDAO {
 
 	@Override
 	@Transactional(readOnly=false)

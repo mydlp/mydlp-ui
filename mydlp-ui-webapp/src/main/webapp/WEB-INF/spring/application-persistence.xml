@@ -12,9 +12,51 @@
   http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
   ">
   
-   <bean id="sessionFactory" class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
-     <property name="dataSource"><ref bean="dataSource"/></property>
-     <property name="packagesToScan" value="com.mydlp.ui.domain"/>
+   <bean id="policySessionFactory" class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
+     <property name="dataSource"><ref bean="policyDataSource"/></property>
+     <property name="annotatedClasses">
+       <list>
+         <value>com.mydlp.ui.domain.AuthSecurityRole</value>
+         <value>com.mydlp.ui.domain.AuthUser</value>
+         <value>com.mydlp.ui.domain.Config</value>
+         <value>com.mydlp.ui.domain.DataFormat</value>
+         <value>com.mydlp.ui.domain.EndpointRule</value>
+         <value>com.mydlp.ui.domain.InformationDescription</value>
+         <value>com.mydlp.ui.domain.InformationFeature</value>
+         <value>com.mydlp.ui.domain.InformationType</value>
+         <value>com.mydlp.ui.domain.InventoryBase</value>
+         <value>com.mydlp.ui.domain.InventoryCategory</value>
+         <value>com.mydlp.ui.domain.InventoryItem</value>
+         <value>com.mydlp.ui.domain.Item</value>
+         <value>com.mydlp.ui.domain.MailRule</value>
+         <value>com.mydlp.ui.domain.Matcher</value>
+         <value>com.mydlp.ui.domain.MatcherParam</value>
+         <value>com.mydlp.ui.domain.MIMEType</value>
+         <value>com.mydlp.ui.domain.Network</value>
+         <value>com.mydlp.ui.domain.RegularExpression</value>
+         <value>com.mydlp.ui.domain.Rule</value>
+         <value>com.mydlp.ui.domain.RuleItem</value>
+         <value>com.mydlp.ui.domain.WebRule</value>
+       </list>
+     </property>
+     <property name="hibernateProperties">
+       <props>
+         <prop key="hibernate.dialect">org.hibernate.dialect.HSQLDialect</prop>
+         <prop key="hibernate.hbm2ddl.auto">update</prop>
+         <prop key="hibernate.show_sql">true</prop>
+       </props>
+     </property>
+   </bean>
+
+   <bean id="logSessionFactory" class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
+     <property name="dataSource"><ref bean="logDataSource"/></property>
+     <property name="annotatedClasses">
+       <list>
+         <value>com.mydlp.ui.domain.IncidentLog</value>
+         <value>com.mydlp.ui.domain.IncidentLogFile</value>
+         <value>com.mydlp.ui.domain.IncidentLogFileContent</value>
+       </list>
+     </property>
      <property name="hibernateProperties">
        <props>
          <prop key="hibernate.dialect">org.hibernate.dialect.HSQLDialect</prop>
@@ -24,20 +66,33 @@
      </property>
   </bean>
 
-  <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+  <bean id="policyDataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
     <property name="driverClassName" value="org.hsqldb.jdbcDriver" />
     <property name="url" value="jdbc:hsqldb:file:hsqldb/MyDLP" />
     <property name="username" value="sa" />
     <property name="password" value="" />
   </bean>
+  
+  <bean id="logDataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+    <property name="driverClassName" value="org.hsqldb.jdbcDriver" />
+    <property name="url" value="jdbc:hsqldb:file:hsqldb/MyDLPLog" />
+    <property name="username" value="sa" />
+    <property name="password" value="" />
+  </bean>
 
-  <bean id="transactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
-    <property name="sessionFactory"><ref local="sessionFactory"/></property>
+  <bean id="policyTransactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+    <property name="sessionFactory"><ref local="policySessionFactory"/></property>
   </bean>
   
-  <bean id="transactionTemplate" class="org.springframework.transaction.support.TransactionTemplate">
-    <property name="transactionManager" ref="transactionManager"/>
+  <bean id="logTransactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+    <property name="sessionFactory"><ref local="logSessionFactory"/></property>
   </bean>
   
-  <tx:annotation-driven/>
+  <bean id="policyTransactionTemplate" class="org.springframework.transaction.support.TransactionTemplate">
+    <property name="transactionManager" ref="policyTransactionManager"/>
+  </bean>
+  
+  <tx:annotation-driven transaction-manager="policyTransactionManager"/>
+  
+  <tx:annotation-driven transaction-manager="logTransactionManager"/>
 </beans>
