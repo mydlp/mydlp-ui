@@ -268,20 +268,26 @@
 				cButton.enabled = false;
 			}
 			
-			protected function okHandler(event:Event): void
+			protected function saveHandler(event:Event): void
 			{
-				InteractionUtil.closeCurrentPopup();
-				Alert.show(	LangUtil.getString("messages", "generic.edit." + getSimpleName() + ".ok.message"),
-							LangUtil.getString("messages", "generic.edit." + getSimpleName() + ".title"));
+				//InteractionUtil.closeCurrentPopup();
+				//Alert.show(	LangUtil.getString("messages", "generic.edit." + getSimpleName() + ".ok.message"),
+				//			LangUtil.getString("messages", "generic.edit." + getSimpleName() + ".title"));
 				
 				if (deleteList.length == 0)
+				{
+					InteractionUtil.closeCurrentPopup();
 					FlexGlobals.topLevelApplication.refresh();
+				}
 				else
+				{
 					re.removeAll(deleteList);
+				}
 			}
 			
 			protected function removeAllHandler(event:Event): void
 			{
+				InteractionUtil.closeCurrentPopup();
 				FlexGlobals.topLevelApplication.refresh();
 			}
 			
@@ -290,7 +296,7 @@
 	
 	<fx:Declarations>
 		<my:remote id="re" destination="genericBRS" >
-			<my:method name="save" result="okHandler(event)" />
+			<my:method name="save" result="saveHandler(event)" />
 			<my:method name="removeAll" result="removeAllHandler(event)" />
 		</my:remote>
 	</fx:Declarations>

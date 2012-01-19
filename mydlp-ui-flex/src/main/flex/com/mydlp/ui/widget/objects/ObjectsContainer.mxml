@@ -9,6 +9,7 @@
 	<fx:Script>
 		<![CDATA[
 			import com.mydlp.ui.domain.AbstractEntity;
+			import com.mydlp.ui.domain.InventoryItem;
 			import com.mydlp.ui.util.InteractionUtil;
 			import com.mydlp.ui.widget.general.popup.GenericEditContainer;
 			
@@ -47,11 +48,11 @@
 	</fx:Script>
 	
 	<s:layout>
-		<s:HorizontalLayout paddingTop="10" />
+		<s:HorizontalLayout paddingTop="10"/>
 	</s:layout>
 	
 	<objects:ObjectsTree id="objectsTree" height="100%" width="400" change="onSelectedItemChange(event)"/>
 	
-	<s:VGroup id="editFormContainer" paddingLeft="20"/>
+	<s:VGroup id="editFormContainer" paddingLeft="40" paddingTop="40"/>
 	
 </s:SkinnableContainer>

@@ -4,17 +4,28 @@
 					  xmlns:mx="library://ns.adobe.com/flex/mx">
 	<fx:Script>
 		<![CDATA[
+			import avmplus.getQualifiedClassName;
+			
 			import com.mydlp.ui.domain.AbstractEntity;
 			import com.mydlp.ui.domain.DataFormat;
 			import com.mydlp.ui.util.InteractionUtil;
 			
+			import mx.events.FlexEvent;
+			
 			protected function clickAddButton(event:MouseEvent):void
 			{
-				if(treeListData.item.containerType == "DataFormat")
+				if(treeListData.item.classType == DataFormat)
 				{
 					var newDataFormat:DataFormat = new DataFormat();
 					InteractionUtil.newEditDialog(newDataFormat);
 				}
+			}
+			
+			protected function hasAddButton(item:*): Boolean
+			{
+				if (item is ObjectGroup && (item as ObjectGroup).classType != null)
+					return true;
+				return false;
 			}
 			
 		]]>
@@ -41,7 +52,7 @@
 		<s:HGroup width="45" height="20" verticalAlign="middle">
 			<s:Button includeIn="selected" styleName="addButtonStyle"
 					  click="clickAddButton(event)"
-					  visible="{treeListData.item is AbstractEntity? false:treeListData.item.containerType=='DataFormat'? true:false}"/>
+					  visible="{hasAddButton(treeListData.item)}"/>
 			<s:Button includeIn="selected" styleName="removeButtonStyle"
 					  click="{InteractionUtil.newDeleteDialog(treeListData.item)}"
 					  visible="{treeListData.item is AbstractEntity}"/>

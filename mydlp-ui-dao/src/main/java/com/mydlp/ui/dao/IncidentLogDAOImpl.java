@@ -21,7 +21,7 @@ public class IncidentLogDAOImpl extends AbstractLogDAO implements IncidentLogDAO
 	public List<IncidentLog> getIncidents() {
 		DetachedCriteria criteria = 
 				DetachedCriteria.forClass(IncidentLog.class)
-					.addOrder(Order.desc("date"));
+					.addOrder(Order.desc("id"));
 		return getHibernateTemplate().findByCriteria(criteria);
 	}
 
@@ -58,7 +58,7 @@ public class IncidentLogDAOImpl extends AbstractLogDAO implements IncidentLogDAO
 	public List<IncidentLog> getIncidents(List<List<Object>> criteriaList, Integer offset, Integer limit) {
 		DetachedCriteria criteria = 
 				DetachedCriteria.forClass(IncidentLog.class)
-					.addOrder(Order.desc("date"));
+					.addOrder(Order.desc("id"));
 		criteria = applyUserCriteria(criteria, criteriaList);
 		return criteria.getExecutableCriteria(getSession())
 			.setFirstResult(offset)

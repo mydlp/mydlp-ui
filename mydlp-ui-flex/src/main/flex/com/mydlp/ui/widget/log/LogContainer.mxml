@@ -20,8 +20,8 @@
 			import mx.rpc.events.FaultEvent;
 			import mx.rpc.events.ResultEvent;
 
-			protected const PAGE_SIZE:int = 10;
-			protected const MAX_FETCHED_PAGE:int = 50;
+			protected const PAGE_SIZE:int = 25;
+			protected const MAX_FETCHED_PAGE:int = 20;
 			protected const PENDING_OBJECT:Object = {date: LangUtil.getString("messages", "log.container.search.pending.message")};
 			
 			protected var criteriaList:ListCollectionView = new ArrayCollection();
@@ -85,10 +85,7 @@
 			private function reset():void{
 				_fetchedPages = new Dictionary();
 				_numFetchedPages = 0;
-				if (pagedList == null)
-					pagedList = new PagedList(_numDBItems);
-				else
-					pagedList.reset();
+				pagedList = new PagedList(_numDBItems);
 			}
 			
 			protected function getLogCountHandler(event:ResultEvent): void
