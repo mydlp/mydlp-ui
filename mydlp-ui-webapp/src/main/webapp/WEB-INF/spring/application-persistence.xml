@@ -41,9 +41,9 @@
      </property>
      <property name="hibernateProperties">
        <props>
-         <prop key="hibernate.dialect">org.hibernate.dialect.HSQLDialect</prop>
+         <prop key="hibernate.dialect">${dao.policy.dialect}</prop>
          <prop key="hibernate.hbm2ddl.auto">update</prop>
-         <prop key="hibernate.show_sql">true</prop>
+         <prop key="hibernate.show_sql">${dao.show_sql}</prop>
        </props>
      </property>
    </bean>
@@ -59,25 +59,25 @@
      </property>
      <property name="hibernateProperties">
        <props>
-         <prop key="hibernate.dialect">org.hibernate.dialect.HSQLDialect</prop>
+         <prop key="hibernate.dialect">${dao.log.dialect}</prop>
          <prop key="hibernate.hbm2ddl.auto">update</prop>
-         <prop key="hibernate.show_sql">true</prop>
+         <prop key="hibernate.show_sql">${dao.show_sql}</prop>
        </props>
      </property>
   </bean>
 
   <bean id="policyDataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-    <property name="driverClassName" value="org.hsqldb.jdbcDriver" />
-    <property name="url" value="jdbc:hsqldb:file:hsqldb/MyDLP" />
-    <property name="username" value="sa" />
-    <property name="password" value="" />
+    <property name="driverClassName" value="${ds.policy.driver}"/>
+    <property name="url" value="${ds.policy.url}"/>
+    <property name="username" value="${ds.policy.username}"/>
+    <property name="password" value="${ds.policy.password}"/>
   </bean>
   
   <bean id="logDataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-    <property name="driverClassName" value="org.hsqldb.jdbcDriver" />
-    <property name="url" value="jdbc:hsqldb:file:hsqldb/MyDLPLog" />
-    <property name="username" value="sa" />
-    <property name="password" value="" />
+    <property name="driverClassName" value="${ds.log.driver}"/>
+    <property name="url" value="${ds.log.url}"/>
+    <property name="username" value="${ds.log.username}"/>
+    <property name="password" value="${ds.log.password}"/>
   </bean>
 
   <bean id="policyTransactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">

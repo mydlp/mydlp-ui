@@ -47,13 +47,48 @@
     <org.hibernate.version>3.6.8.Final</org.hibernate.version>
     <jpa.version>2.0-cr-1</jpa.version>
     <aspectj.version>1.6.12</aspectj.version>
+    <mysql.driver.version>5.1.18</mysql.driver.version>
+    <jstl.version>1.2</jstl.version>
 
     <flex.debug>true</flex.debug>
     <flex.optimize>false</flex.optimize>
     <flex.quality>0.0</flex.quality>
 
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+    <dao.show_sql>true</dao.show_sql>
+
+    <dao.policy.dialect>org.hibernate.dialect.HSQLDialect</dao.policy.dialect>
+    <ds.policy.driver>org.hsqldb.jdbcDriver</ds.policy.driver>
+    <ds.policy.url>jdbc:hsqldb:file:hsqldb/MyDLP</ds.policy.url>
+    <ds.policy.username>sa</ds.policy.username>
+    <ds.policy.password></ds.policy.password>
+
+    <dao.log.dialect>org.hibernate.dialect.HSQLDialect</dao.log.dialect>
+    <ds.log.driver>org.hsqldb.jdbcDriver</ds.log.driver>
+    <ds.log.url>jdbc:hsqldb:file:hsqldb/MyDLPLog</ds.log.url>
+    <ds.log.username>sa</ds.log.username>
+    <ds.log.password></ds.log.password>    
   </properties>
+
+  <profiles>
+    <profile>
+      <id>production</id>
+      <properties>
+        <dao.show_sql>false</dao.show_sql>
+        <dao.policy.dialect>org.hibernate.dialect.MySQLMyISAMDialect</dao.policy.dialect>
+        <ds.policy.driver>com.mysql.jdbc.Driver</ds.policy.driver>
+        <ds.policy.url>jdbc:mysql://localhost/mydlp</ds.policy.url>
+        <ds.policy.username>root</ds.policy.username>
+        <ds.policy.password></ds.policy.password>
+        <dao.log.dialect>org.hibernate.dialect.MySQL5InnoDBDialect</dao.log.dialect>
+        <ds.log.driver>com.mysql.jdbc.Driver</ds.log.driver>
+        <ds.log.url>jdbc:mysql://localhost/mydlp_log</ds.log.url>
+        <ds.log.username>root</ds.log.username>
+        <ds.log.password></ds.log.password>   
+      </properties>
+    </profile>
+  </profiles>
 
   <modules>
     <module>mydlp-ui-domain</module>
