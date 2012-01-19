@@ -2,6 +2,8 @@ package com.mydlp.ui.remoting.blazeds;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.flex.remoting.RemotingDestination;
 import org.springframework.stereotype.Service;
@@ -15,6 +17,8 @@ import com.mydlp.ui.domain.Rule;
 @RemotingDestination
 public class GenericBRSImpl implements GenericService
 {
+	private static Logger logger = LoggerFactory.getLogger(GenericBRSImpl.class);
+	
 	@Autowired
 	protected GenericDAO genericDAO;
 	
@@ -49,7 +53,12 @@ public class GenericBRSImpl implements GenericService
 	@Override
 	public void removeAll(List<AbstractEntity> items) {
 		for (AbstractEntity abstractEntity : items) {
-			remove(abstractEntity);
+			if (abstractEntity.getId() != null)
+				remove(abstractEntity);
+			else
+				logger.info("Recieved transient object ( Type: " +
+						abstractEntity.getClass().getName()
+						+ " ). Ignoring.");
 		}
 	}
 	

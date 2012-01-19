@@ -252,7 +252,7 @@
 				cButton.enabled = false;
 			}
 			
-			protected function okHandler(event:Event): void
+			protected function saveHandler(event:Event): void
 			{
 				InteractionUtil.closeCurrentPopup();
 				Alert.show(	LangUtil.getString("messages", "generic.edit." + getSimpleName() + ".ok.message"),
@@ -274,7 +274,7 @@
 	
 	<fx:Declarations>
 		<my:remote id="re" destination="genericBRS" >
-			<my:method name="save" result="okHandler(event)" />
+			<my:method name="save" result="saveHandler(event)" />
 			<my:method name="removeAll" result="removeAllHandler(event)" />
 		</my:remote>
 	</fx:Declarations>

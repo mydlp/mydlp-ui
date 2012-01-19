@@ -2,8 +2,9 @@ package com.mydlp.ui.domain;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 
 @Entity
 public class DataFormat extends AbstractNamedEntity {
@@ -15,7 +16,7 @@ public class DataFormat extends AbstractNamedEntity {
 	
 	protected List<MIMEType> mimeTypes;
 
-	@ManyToMany
+	@OneToMany(cascade={CascadeType.ALL})
 	public List<MIMEType> getMimeTypes() {
 		return mimeTypes;
 	}
