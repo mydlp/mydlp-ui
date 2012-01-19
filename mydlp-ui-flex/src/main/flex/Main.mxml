@@ -47,7 +47,8 @@
 				if (ruleContainer != null)
 					ruleContainer.refreshRules();
 				if (optionContainer != null)
-					optionContainer.refreshUsers();
+					if (optionContainer.userManagerBox != null)
+						optionContainer.userManagerBox.refreshUsers();
 				if (objectsContainer != null)
 					objectsContainer.refreshObjects();
 			}

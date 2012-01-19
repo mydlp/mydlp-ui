@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:my="http://www.mydlp.com/flex/my"
+		 xmlns:mx="library://ns.adobe.com/flex/mx"
+		 creationComplete="onCreationComplete(event)">
+	<fx:Script>
+		<![CDATA[
+			import com.mydlp.ui.domain.AuthUser;
+			import com.mydlp.ui.util.InteractionUtil;
+			
+			import mx.collections.ArrayCollection;
+			import mx.collections.ListCollectionView;
+			import mx.rpc.events.ResultEvent;
+			
+			[Bindable]
+			protected var userDP:ListCollectionView = new ArrayCollection();
+			
+			public function refreshUsers():void
+			{
+				userList.invalidateDisplayList();
+				userDP.removeAll();
+				re.getUsers();
+				editUser.enabled = false;
+				deleteUser.enabled = false;
+			}
+			
+			protected function getUsersHandler(event:ResultEvent):void
+			{
+				var users:ArrayCollection = event.result as ArrayCollection;
+				for each(var user:* in users)
+				userDP.addItem(user);
+				userList.validateNow();
+			}
+			protected function onCreationComplete(event:Event):void
+			{
+				refreshUsers();
+			}
+			
+			protected function deleteClick(event:MouseEvent):void
+			{
+				InteractionUtil.newDeleteDialog(userList.selectedItem);
+				editUser.enabled = false;
+				deleteUser.enabled = false;
+			}
+			
+			protected function editClick(event:MouseEvent):void
+			{
+				InteractionUtil.newEditDialog(userList.selectedItem);
+				editUser.enabled = false;
+				deleteUser.enabled = false;
+			}
+			
+			protected function mouseMoveOnDataGrid(event:MouseEvent):void
+			{
+				if(userList.selectedItem != null){
+					editUser.enabled = true;
+					deleteUser.enabled = true;
+				}
+				else
+				{
+					editUser.enabled = false;
+					deleteUser.enabled = false;
+				}
+			}
+			
+			
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<my:remote id="re" destination="userBRS">
+			<my:method name="getUsers" result="getUsersHandler(event)" />
+		</my:remote>
+	</fx:Declarations>
+	<s:Group>
+		<s:layout>
+			<s:VerticalLayout gap="5" horizontalAlign="right"/>
+		</s:layout>
+		
+		<s:DataGrid id="userList" width="500" height="300" dataProvider="{userDP}"
+					gridClick="mouseMoveOnDataGrid(event)">
+			<s:columns>
+				<s:ArrayList>					
+					<s:GridColumn dataField="username" />
+					<s:GridColumn dataField="email" />
+					<s:GridColumn dataField="isActive" itemRenderer="com.mydlp.ui.widget.option.ActiveGridItemRenderer" />
+				</s:ArrayList>
+			</s:columns>
+		</s:DataGrid>
+		
+		<s:Group>
+			
+			<s:layout>
+				<s:HorizontalLayout gap="5"/>
+			</s:layout>
+			
+			<s:Button id="deleteUser" label = "Delete User" icon = "@Embed(source='/assets/icons/16x16/trash.png')"
+					  click="deleteClick(event)" enabled="false"
+					  height="19"/>
+			<s:Button id="editUser" label="Edit User" icon = "@Embed(source='/assets/icons/16x16/edit.png')"
+					  click="editClick(event)" enabled="false"
+					  height="19"/>
+			<s:Button id="newUser" label="New User" icon = "@Embed(source='/assets/icons/16x16/add.png')"
+					  click="{InteractionUtil.newEditDialog(new AuthUser())}"
+					  height="19"/>
+		</s:Group>
+	</s:Group>
+</s:Group>

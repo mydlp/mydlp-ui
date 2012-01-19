@@ -1,112 +1,88 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:SkinnableContainer xmlns:fx="http://ns.adobe.com/mxml/2009"
 					  xmlns:s="library://ns.adobe.com/flex/spark"
-					  xmlns:my="http://www.mydlp.com/flex/my"
 					  xmlns:mx="library://ns.adobe.com/flex/mx"
-					  width="100%" height="100%" creationComplete="onCreationComplete(event)"
-						>
+					  xmlns:option="com.mydlp.ui.widget.option.*"
+					  xmlns:my="http://www.mydlp.com/flex/my"
+					  width="100%" height="100%" 
+					  creationComplete="{re.getConfigs()}">
 	<fx:Script>
 		<![CDATA[
-			import com.mydlp.ui.domain.AuthUser;
-			import com.mydlp.ui.util.InteractionUtil;
+			import com.mydlp.ui.domain.Config;
 			
-			import mx.collections.ArrayCollection;
 			import mx.collections.ListCollectionView;
-			import mx.controls.Alert;
 			import mx.rpc.events.ResultEvent;
 			
 			[Bindable]
-			protected var userDP:ListCollectionView = new ArrayCollection();
+			protected var configs:ListCollectionView = null;
 			
-			public function refreshUsers():void
+			protected function getConfigsHandler(event:ResultEvent):void
 			{
-				userList.invalidateDisplayList();
-				userDP.removeAll();
-				re.getUsers();
-				editUser.enabled = false;
-				deleteUser.enabled = false;
+				configs = event.result as ListCollectionView;
+				populate();
 			}
 			
-			protected function getUsersHandler(event:ResultEvent):void
+			protected function populate():void
 			{
-				var users:ArrayCollection = event.result as ArrayCollection;
-				for each(var user:* in users)
-					userDP.addItem(user);
-				userList.validateNow();
-			}
-			protected function onCreationComplete(event:Event):void
-			{
-				refreshUsers();
-			}
-			
-			protected function deleteClick(event:MouseEvent):void
-			{
-				InteractionUtil.newDeleteDialog(userList.selectedItem);
-				editUser.enabled = false;
-				deleteUser.enabled = false;
-			}
-			
-			protected function editClick(event:MouseEvent):void
-			{
-				InteractionUtil.newEditDialog(userList.selectedItem);
-				editUser.enabled = false;
-				deleteUser.enabled = false;
-			}
-			
-			protected function mouseMoveOnDataGrid(event:MouseEvent):void
-			{
-				if(userList.selectedItem != null){
-					editUser.enabled = true;
-					deleteUser.enabled = true;
-				}
-				else
+				if (configs == null) return;
+				for each (var c:* in configs)
 				{
-					editUser.enabled = false;
-					deleteUser.enabled = false;
+					var config:Config = c as Config;
+					if (config.key == "error_action") advancedTab.errorAction = config;
 				}
 			}
 			
+			protected function saveButtonHandler(event:MouseEvent):void
+			{
+				re.saveAll(configs);
+				saveButton.enabled = false;
+			}
+			
+			protected function saveAllHandler(event:ResultEvent):void
+			{
+				saveButton.enabled = true;
+			}
 			
 		]]>
 	</fx:Script>
-		
+	
 	<fx:Declarations>
-		<!-- Place non-visual elements (e.g., services, value objects) here -->
-		<my:remote id="re" destination="userBRS">
-			<my:method name="getUsers" result="getUsersHandler(event)" />
+		<my:remote id="re" destination="configBRS">
+			<my:method name="getConfigs" result="getConfigsHandler(event)"/>
+			<my:method name="saveAll" result="saveAllHandler(event)"/>
 		</my:remote>
 	</fx:Declarations>
-	<s:Group>
-		<s:layout>
-			<s:VerticalLayout gap="5" horizontalAlign="right"/>
-		</s:layout>
-			
-		<s:DataGrid id="userList" height="300" dataProvider="{userDP}"
-					gridClick="mouseMoveOnDataGrid(event)">
-			<s:columns>
-				<s:ArrayList>					
-					<s:GridColumn dataField="username"/>
-					<s:GridColumn dataField="email"/>
-					<s:GridColumn dataField="isActive" itemRenderer="com.mydlp.ui.widget.option.ActiveGridItemRenderer"/>
-				</s:ArrayList>
-			</s:columns>
-		</s:DataGrid>
-		
-		<s:Group>
-			
-			<s:layout>
-				<s:HorizontalLayout gap="5"/>
-			</s:layout>
-			
-			<s:Button id="deleteUser" label = "Delete User" icon = "@Embed(source='/assets/icons/16x16/trash.png')"
-					  click="deleteClick(event)" enabled="false"
-					  height="19"/>
-			<s:Button id="editUser" label="Edit User" icon = "@Embed(source='/assets/icons/16x16/edit.png')"
-					  click="editClick(event)" enabled="false"
-					  height="19"/>
-			<s:Button id="newUser" label="New User" icon = "@Embed(source='/assets/icons/16x16/add.png')"
-					  click="{InteractionUtil.newEditDialog(new AuthUser())}"
-					  height="19"/>
-		</s:Group>
+	
+	<s:layout>
+		<s:VerticalLayout gap="0" paddingTop="4" />
+	</s:layout>
+	
+	<s:TabBar dataProvider="{vs}" fontWeight="bold" fontSize="14"/>
+	
+	<s:Group width="100%" height="100%">
+		<s:Rect left="0" right="0" top="0" bottom="0" >
+			<s:stroke>
+				<s:SolidColorStroke color="0xACADAF" weight="3"/>
+			</s:stroke>
+		</s:Rect>
+		<s:VGroup paddingTop="6" paddingBottom="6" paddingLeft="6" paddingRight="6" width="100%" height="100%">
+			<mx:ViewStack id="vs" width="100%" height="100%" creationPolicy="all">
+				<s:NavigatorContent label="@Resource(bundle = 'messages', key = 'options.tab.advanced')" width="100%" height="100%">
+					<option:AdvancedTab id="advancedTab" />
+				</s:NavigatorContent>
+				<s:NavigatorContent label="@Resource(bundle = 'messages', key = 'options.tab.user')" width="100%" height="100%">
+					<option:UserManagerBox id="userManagerBox" />
+				</s:NavigatorContent>
+			</mx:ViewStack>
+		</s:VGroup>
 	</s:Group>
+	
+	<s:Spacer height="10" />
+	
+	<s:HGroup paddingLeft="20">
+		<s:Button id="saveButton" label="@Resource(bundle = 'messages', key = 'options.button.save.label')" 
+				  click="saveButtonHandler(event)"/>
+	</s:HGroup>
+	
+		
 </s:SkinnableContainer>
