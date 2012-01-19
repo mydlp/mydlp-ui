@@ -27,12 +27,12 @@
 			
 			protected function ruleHandler(rule:Rule): void
 			{
+				close();
 				rule.priority = recommendedPriority;
 				rule.enabled = true;
 				rule.action = Rule.ACTION_PASS;
 				rule.ruleItems = new ArrayCollection();
 				InteractionUtil.newEditDialog(rule);
-				close();
 			}
 			
 			protected function webRuleHandler():void

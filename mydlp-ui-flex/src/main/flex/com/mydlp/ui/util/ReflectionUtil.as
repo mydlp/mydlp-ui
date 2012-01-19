@@ -98,7 +98,7 @@ package com.mydlp.ui.util
 					else if (classMember.name == "name" && classMember.type == String)
 					{
 						targetObject.name =
-							LangUtil.getString("messages", "clone.name.cloneof") + 
+							LangUtil.getString("messages", "clone.name.cloneof") + " " +
 							sourceObject.name;
 					}
 					else if (sourceObject is InventoryItem && classMember.name == "item")
