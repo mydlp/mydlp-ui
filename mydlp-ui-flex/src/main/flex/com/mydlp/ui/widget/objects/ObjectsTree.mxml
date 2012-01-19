@@ -9,7 +9,7 @@
 		 borderVisible="false"
 		 allowMultipleSelection="false"
 		 creationComplete="populateTree()"
-		 dataProvider="{DPForTree}"
+		 dataProvider="{objects}"
 		 itemRenderer="com.mydlp.ui.widget.objects.ObjectsTreeRenderer"
 		 folderOpenIcon="@Embed('/assets/icons/16x16/folder.png')"
 		 folderClosedIcon="@Embed('/assets/icons/16x16/folder.png')"
@@ -18,7 +18,13 @@
 		<![CDATA[
 			import com.mydlp.ui.domain.AbstractEntity;
 			import com.mydlp.ui.domain.DataFormat;
+			import com.mydlp.ui.domain.InformationType;
+			import com.mydlp.ui.domain.InventoryBase;
+			import com.mydlp.ui.domain.InventoryItem;
+			import com.mydlp.ui.domain.Item;
+			import com.mydlp.ui.domain.Network;
 			import com.mydlp.ui.util.InteractionUtil;
+			import com.mydlp.ui.util.LangUtil;
 			
 			import mx.collections.ArrayCollection;
 			import mx.collections.ListCollectionView;
@@ -27,21 +33,23 @@
 			import mx.rpc.events.ResultEvent;
 			
 			[Bindable]
-			protected var objects:Object;
+			protected var objects:ListCollectionView = null;
 			
-			[Bindable]
-			protected var DPForTree:ListCollectionView = new ArrayCollection();
-			
-			protected var childrenForDataFormats:ArrayCollection = new ArrayCollection();
-			protected var childrenForOthers:ArrayCollection = new ArrayCollection();
+			protected var dataFormats:ArrayCollection = new ArrayCollection();
+			protected var networks:ArrayCollection = new ArrayCollection();
+			protected var informationTypes:ArrayCollection = new ArrayCollection();
+			protected var keywordGroups:ArrayCollection = new ArrayCollection();
+			protected var others:ArrayCollection = new ArrayCollection();
 			
 			protected var tempOpenItems:Object;
 			
 			public function refreshTree(): void
 			{
+				/*
 				if(FlexGlobals.topLevelApplication.objectsContainer.objectsTree.selectedItem == null ||
 				    !FlexGlobals.topLevelApplication.objectsContainer.objectsTree.selectedItem is AbstractEntity)
 					FlexGlobals.topLevelApplication.objectsContainer.editFormContainer.visible = false;
+				*/
 				tempOpenItems = openItems;
 				invalidateList();
 				re.getObjects();
@@ -54,16 +62,24 @@
 			
 			protected function getObjectsHandler(event:ResultEvent): void
 			{
-				objects = event.result as ListCollectionView;
-				childrenForDataFormats.removeAll();
-				childrenForOthers.removeAll();
-				//DPForTree.removeAll();
-				for each(var item:* in objects)
+				var _objects:ListCollectionView = event.result as ListCollectionView;
+				
+				dataFormats.removeAll();
+				networks.removeAll();
+				informationTypes.removeAll();
+				keywordGroups.removeAll();
+				others.removeAll();
+				
+				for each(var item:* in _objects)
 				{
-					if(item is DataFormat )
-						childrenForDataFormats.addItem(item);
+					if (item is DataFormat )
+						dataFormats.addItem(item);
+					else if (item is InventoryItem && (item as InventoryItem).item is Network)
+						networks.addItem(item);
+					else if (item is InventoryItem && (item as InventoryItem).item is InformationType)
+						informationTypes.addItem(item);
 					else
-						childrenForOthers.addItem(item);
+						others.addItem(item);
 				}
 				openItems = tempOpenItems;
 				validateNow();
@@ -71,22 +87,42 @@
 			
 			protected function populateTree():void
 			{
-				var parentDataFormats:Object = new Object();
-				parentDataFormats["label"] = "Data Formats";
-				parentDataFormats["containerType"] = "DataFormat";
-				parentDataFormats["children"] = childrenForDataFormats;
-				DPForTree.addItem(parentDataFormats);
-				
-				var parentOthers:Object = new Object();
-				parentOthers["label"] = "Others";
-				parentOthers["containerType"] = "none";
-				parentOthers["children"] = childrenForOthers;
-				DPForTree.addItem(parentOthers);
-				
+				if (objects == null)
+				{
+					objects = new ArrayCollection();
+					
+					var parentDataFormats:ObjectGroup = new ObjectGroup();
+					parentDataFormats.label = LangUtil.getString("messages", "objects.dataFormats.label");
+					parentDataFormats.classType = DataFormat;
+					parentDataFormats.children = dataFormats;
+					objects.addItem(parentDataFormats);
+					
+					var parentNetworks:ObjectGroup = new ObjectGroup();
+					parentNetworks.label = LangUtil.getString("messages", "objects.networks.label");;
+					parentNetworks.classType = null;
+					parentNetworks.children = networks;
+					objects.addItem(parentNetworks);
+					
+					var parentInformationTypes:ObjectGroup = new ObjectGroup();
+					parentInformationTypes.label = LangUtil.getString("messages", "objects.informationTypes.label");;
+					parentInformationTypes.classType = null;
+					parentInformationTypes.children  = informationTypes;
+					objects.addItem(parentInformationTypes);
+					
+					var parentKeywordGroup:ObjectGroup = new ObjectGroup();
+					parentKeywordGroup.label = LangUtil.getString("messages", "objects.keywordGroups.label");;
+					parentKeywordGroup.classType = null;
+					parentKeywordGroup.children = keywordGroups;
+					objects.addItem(parentKeywordGroup);
+					
+					var parentOthers:ObjectGroup = new ObjectGroup();
+					parentOthers.label = LangUtil.getString("messages", "objects.others.label");;
+					parentOthers.classType = null;
+					parentOthers.children  = others;
+					objects.addItem(parentOthers);
+				}
 				refreshTree();
 			}
-			
-			
 			
 		]]>
 	</fx:Script>
