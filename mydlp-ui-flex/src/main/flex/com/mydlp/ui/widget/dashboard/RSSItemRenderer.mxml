@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:ItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009" 
+				xmlns:s="library://ns.adobe.com/flex/spark" 
+				xmlns:mx="library://ns.adobe.com/flex/mx" 
+				autoDrawBackground="false" creationComplete="onCreationComplete(event)">
+	<fx:Script>
+		<![CDATA[
+			import mx.events.FlexEvent;
+			
+			protected function onCreationComplete(event:FlexEvent):void
+			{
+				lbl.text = data.title;
+				lbl.addEventListener(MouseEvent.CLICK, 
+					function (event:MouseEvent):void {
+						navigateToURL(new URLRequest (data.link), '_blank');
+					});
+			}
+		]]>
+	</fx:Script>
+	
+	<s:layout>
+		<s:HorizontalLayout verticalAlign="middle" horizontalAlign="center"
+							paddingTop="5" paddingBottom="5" 
+							paddingRight="10" />
+	</s:layout>
+	
+	<s:Label id="lbl" width="250" textAlign="center" />
+	
+</s:ItemRenderer>

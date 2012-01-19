@@ -85,10 +85,7 @@
 			private function reset():void{
 				_fetchedPages = new Dictionary();
 				_numFetchedPages = 0;
-				if (pagedList == null)
-					pagedList = new PagedList(_numDBItems);
-				else
-					pagedList.reset();
+				pagedList = new PagedList(_numDBItems);
 			}
 			
 			protected function getLogCountHandler(event:ResultEvent): void

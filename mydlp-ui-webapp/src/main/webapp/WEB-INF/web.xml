@@ -70,11 +70,21 @@
     <load-on-startup>1</load-on-startup>
   </servlet>
   
+  <servlet>
+    <servlet-name>MyDLP Content Proxy Servlet</servlet-name>
+    <servlet-class>com.mydlp.ui.framework.servlet.ProxyServlet</servlet-class>
+  </servlet>
+  
   <!-- Spring Flex Integration 1.0  -->
   <!-- Map all /messagbroker requests to the DispatcherServlet for handling -->
   <servlet-mapping>
     <servlet-name>Spring MVC Dispatcher Servlet</servlet-name>
     <url-pattern>/spring/*</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
+    <servlet-name>MyDLP Content Proxy Servlet</servlet-name>
+    <url-pattern>/proxy</url-pattern>
   </servlet-mapping>
 
 </web-app>

@@ -7,6 +7,8 @@ import javax.persistence.MappedSuperclass;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.hibernate.annotations.Index;
+
 @MappedSuperclass
 public abstract class AbstractLog extends AbstractEntity {
 
@@ -15,6 +17,7 @@ public abstract class AbstractLog extends AbstractEntity {
 	 */
 	private static final long serialVersionUID = 2531927084553631314L;
 
+	@Index(name = "date")
 	@Temporal(TemporalType.TIMESTAMP)
 	protected Date date;
 	protected Boolean visible;

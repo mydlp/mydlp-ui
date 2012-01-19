@@ -265,7 +265,6 @@
 				<s:Button styleName="removeButtonStyle" 
 						  click="{InteractionUtil.newDeleteDialog(ruleObject)}" />
 			</s:Group>
-			
 		</s:Group>
 		
 		<rule:RSpacer />
