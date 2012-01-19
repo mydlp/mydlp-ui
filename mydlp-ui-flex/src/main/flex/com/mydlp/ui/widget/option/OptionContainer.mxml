@@ -3,7 +3,7 @@
 					  xmlns:s="library://ns.adobe.com/flex/spark"
 					  xmlns:my="http://www.mydlp.com/flex/my"
 					  xmlns:mx="library://ns.adobe.com/flex/mx"
-					  width="890" height="362" creationComplete="onCreationComplete(event)"
+					  width="100%" height="100%" creationComplete="onCreationComplete(event)"
 						>
 	<fx:Script>
 		<![CDATA[
@@ -69,47 +69,25 @@
 			
 		]]>
 	</fx:Script>
-	
-	
-	<!--<s:states>
-		<s:State name = "default"/>
-		<s:State name = "clicked"/>
-	</s:states>-->
-	
+		
 	<fx:Declarations>
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
 		<my:remote id="re" destination="userBRS">
 			<my:method name="getUsers" result="getUsersHandler(event)" />
 		</my:remote>
 	</fx:Declarations>
-	<s:Group width="832" height="352">
+	<s:Group>
 		<s:layout>
 			<s:VerticalLayout gap="5" horizontalAlign="right"/>
 		</s:layout>
-		
-		
-	
-		<!--<s:List id="userList" x="153" y="26" dataProvider="{userDP}"
-				itemRenderer="com.mydlp.ui.widget.option.UserRenderer"/>-->
-		
-		
-		
-		<s:DataGrid id="userList" x="0" y="0" width="789" height="312" dataProvider="{userDP}"
-					gridClick="mouseMoveOnDataGrid(event)" textAlign="center" textAlignLast="center">
+			
+		<s:DataGrid id="userList" height="300" dataProvider="{userDP}"
+					gridClick="mouseMoveOnDataGrid(event)">
 			<s:columns>
-				<s:ArrayList>
-					<s:GridColumn dataField="User name" sortable="false">
-						<s:itemRenderer>
-							<fx:Component>
-								<s:GridItemRenderer>
-									<s:Label text="{data.username}"/>
-								</s:GridItemRenderer>
-							</fx:Component>
-						</s:itemRenderer>
-					</s:GridColumn>
+				<s:ArrayList>					
+					<s:GridColumn dataField="username"/>
 					<s:GridColumn dataField="email"/>
 					<s:GridColumn dataField="isActive" itemRenderer="com.mydlp.ui.widget.option.ActiveGridItemRenderer"/>
-					<!--<s:GridColumn includeIn="clicked" dataField="buttons" itemRenderer="com.mydlp.ui.widget.option.GridItemRenderer" sortable="false"/>-->
 				</s:ArrayList>
 			</s:columns>
 		</s:DataGrid>
@@ -117,7 +95,7 @@
 		<s:Group>
 			
 			<s:layout>
-				<s:HorizontalLayout gap="2"/>
+				<s:HorizontalLayout gap="5"/>
 			</s:layout>
 			
 			<s:Button id="deleteUser" label = "Delete User" icon = "@Embed(source='/assets/icons/16x16/trash.png')"

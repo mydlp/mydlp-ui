@@ -9,6 +9,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import com.mydlp.ui.dao.UserDAO;
+import com.mydlp.ui.domain.AuthSecurityRole;
 import com.mydlp.ui.domain.AuthUser;
 
 @Service("userBRS")
@@ -40,7 +41,10 @@ public class UserBRSImpl implements UserService
 		}
 		return authUser;
 	}
-	
-	
+
+	@Override
+	public List<AuthSecurityRole> getRoles() {
+		return userDAO.getRoles();
+	}	
 	
 }

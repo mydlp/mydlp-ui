@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:SkinnableContainer xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		  xmlns:s="library://ns.adobe.com/flex/spark" 
+		  xmlns:my="http://www.mydlp.com/flex/my"
+		  xmlns:mx="library://ns.adobe.com/flex/mx"
+		  width="100%"
+		  height="150" creationComplete="{re.getRoles()}"
+		  xmlns:util="com.mydlp.ui.util.*">
+	<fx:Script>
+		<![CDATA[
+			import com.mydlp.ui.domain.AuthSecurityRole;
+			
+			import mx.events.ListEvent;
+			import mx.rpc.events.ResultEvent;
+			
+			import spark.events.IndexChangeEvent;
+
+			
+			[Bindable]
+			protected var allAuthSecurity:ListCollectionView;
+			
+					
+			protected function getRolesHandler(event:ResultEvent): void
+			{				
+				trace("In getRolesHandler");
+				allAuthSecurity = event.result as ListCollectionView;
+			
+				for (var i:int=0; i < allAuthSecurity.length; i++)				
+				{
+					for each (var role:AuthSecurityRole in authSecurityRoles)
+					{
+						if (allAuthSecurity[i].roleName == role.roleName)
+							srList.selectedIndices.push(i);
+					}					
+				}				
+			}
+			
+			public function onChange(event:IndexChangeEvent): void
+			{	trace("In onChange");
+				authSecurityRoles.removeAll();
+				for each (var i:int in srList.selectedIndices )		
+				{
+					authSecurityRoles.addItem(allAuthSecurity[i]);
+				}			
+			}
+			
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<mx:ListCollectionView id="authSecurityRoles" />		
+		<my:remote id="re" destination="userBRS">
+			<my:method name="getRoles" result="getRolesHandler(event)" />
+		</my:remote>
+	</fx:Declarations>
+	
+	<s:layout>
+		<s:HorizontalLayout verticalAlign="middle" gap="2"/>
+	</s:layout>
+	
+	<s:Group width="100%" height="100%">
+		<s:layout>
+			<s:VerticalLayout gap="2"/>
+		</s:layout>
+		<s:Label text="@Resource(bundle = 'messages', key = 'generic.edit.input.authSecurity.srList.label')" />
+		<s:List id="srList" dataProvider="{allAuthSecurity}" 
+				width="100%" height="20%"
+				itemRenderer="com.mydlp.ui.widget.general.input.AuthSecurityRoleRenderer"
+				allowMultipleSelection="true"
+				change="onChange(event)" />
+	</s:Group>
+	
+</s:SkinnableContainer>
