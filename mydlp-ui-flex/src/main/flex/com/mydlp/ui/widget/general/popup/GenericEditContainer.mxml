@@ -254,18 +254,24 @@
 			
 			protected function saveHandler(event:Event): void
 			{
-				InteractionUtil.closeCurrentPopup();
-				Alert.show(	LangUtil.getString("messages", "generic.edit." + getSimpleName() + ".ok.message"),
-							LangUtil.getString("messages", "generic.edit." + getSimpleName() + ".title"));
+				//InteractionUtil.closeCurrentPopup();
+				//Alert.show(	LangUtil.getString("messages", "generic.edit." + getSimpleName() + ".ok.message"),
+				//			LangUtil.getString("messages", "generic.edit." + getSimpleName() + ".title"));
 				
 				if (deleteList.length == 0)
+				{
+					InteractionUtil.closeCurrentPopup();
 					FlexGlobals.topLevelApplication.refresh();
+				}
 				else
+				{
 					re.removeAll(deleteList);
+				}
 			}
 			
 			protected function removeAllHandler(event:Event): void
 			{
+				InteractionUtil.closeCurrentPopup();
 				FlexGlobals.topLevelApplication.refresh();
 			}
 			
