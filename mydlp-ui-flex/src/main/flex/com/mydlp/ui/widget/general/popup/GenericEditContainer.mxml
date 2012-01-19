@@ -11,6 +11,7 @@
 	<fx:Script>
 		<![CDATA[
 			import com.mydlp.ui.domain.AbstractEntity;
+			import com.mydlp.ui.domain.AuthUser;
 			import com.mydlp.ui.domain.DataFormat;
 			import com.mydlp.ui.domain.InformationDescription;
 			import com.mydlp.ui.domain.InformationType;
@@ -22,6 +23,7 @@
 			import com.mydlp.ui.util.InteractionUtil;
 			import com.mydlp.ui.util.LangUtil;
 			import com.mydlp.ui.util.ReflectionUtil;
+			import com.mydlp.ui.widget.general.input.AuthSecurityRolesInput;
 			import com.mydlp.ui.widget.general.input.DataFormatInput;
 			import com.mydlp.ui.widget.general.input.InformationFeatureInput;
 			import com.mydlp.ui.widget.general.input.IpAddressInput;
@@ -78,9 +80,10 @@
 							(classMember.name == "ruleItems" && classMember.type == ListCollectionView) ||
 							classMember.name == "enabled" ||
 							classMember.name == "priority" ||
+							//todo refine password
+							classMember.name == "password" ||
 							classMember.name == "action" ||
-							(classMember.name == "children" && classMember.type == ListCollectionView)||
-							(classMember.name == "roles" && classMember.type == ListCollectionView)||
+							(classMember.name == "children" && classMember.type == ListCollectionView)||						
 							(classMember.name == "coupledInventoryItem" && classMember.type == InventoryItem) ||
 							(classMember.name == "coupledRuleItems" && classMember.type == ListCollectionView) ||
 							(classMember.name == "informationType" && classMember.type == InformationType)
@@ -139,6 +142,19 @@
 						BindingUtils.bindProperty(targetObject, classMember.name, mtInput, "mimeTypes");
 						inputLabel = new VerticalInputLabel()
 						inputLabel.addElement(mtInput);
+						index = 8;
+					}
+					
+					else if (targetObject is AuthUser && classMember.name == "roles" && classMember.type == ListCollectionView)
+					{
+						var srInput:AuthSecurityRolesInput = new AuthSecurityRolesInput();
+						if (targetObject[classMember.name] == null)
+							srInput.authSecurityRoles = new ArrayCollection();
+						else
+							srInput.authSecurityRoles = targetObject[classMember.name];
+						BindingUtils.bindProperty(targetObject, classMember.name, srInput, "authSecurityRoles");
+						inputLabel = new VerticalInputLabel()
+						inputLabel.addElement(srInput);		
 						index = 8;
 					}
 					

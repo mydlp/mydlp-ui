@@ -7,6 +7,7 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.mydlp.ui.domain.AuthSecurityRole;
 import com.mydlp.ui.domain.AuthUser;
 
 @Repository("userDAO")
@@ -33,6 +34,13 @@ public class UserDAOImpl extends AbstractPolicyDAO implements UserDAO {
 	@Transactional(readOnly=false)
 	public void remove(AuthUser i) {
 		getHibernateTemplate().delete(i);
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<AuthSecurityRole> getRoles() {
+		DetachedCriteria criteria = 
+				DetachedCriteria.forClass(AuthSecurityRole.class);
+		return getHibernateTemplate().findByCriteria(criteria);
 	}
 	
 }
