@@ -12,4 +12,7 @@
 			}
 		]]>
 	</fx:Script>
+	<s:layout>
+		<s:VerticalLayout useVirtualLayout="false" requestedMinRowCount="1"/>
+	</s:layout>
 </s:List>

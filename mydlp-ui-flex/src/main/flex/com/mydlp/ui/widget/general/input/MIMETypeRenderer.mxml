@@ -21,6 +21,5 @@
 		<s:HorizontalLayout verticalAlign="middle" 
 							paddingLeft="2" paddingRight="2"/>
 	</s:layout>
-	<s:Label text="{data.mimeType}" maxWidth="150"/>
-	<mx:Spacer includeIn="selected" width="100%"/>
+	<s:Label text="{data.mimeType}" width="100%"/>
 </s:ItemRenderer>
