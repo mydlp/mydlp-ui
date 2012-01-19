@@ -105,7 +105,7 @@
 		<s:layout>
 			<s:HorizontalLayout verticalAlign="middle" gap="2"/>
 		</s:layout>
-		<s:List id="mtList" dataProvider="{MIMETypes}" 
+		<s:List id="mtList" dataProvider="{mimeTypes}" 
 				width="87%" height="100%" 
 				itemRenderer="com.mydlp.ui.widget.general.input.MIMETypeRenderer" >
 			<s:layout>
