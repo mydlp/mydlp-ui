@@ -19,10 +19,11 @@ public abstract class AbstractLog extends AbstractEntity {
 	protected Date date;
 	protected Boolean visible;
 	protected Long ruleId;
+	protected String action;
 	protected Long sourceIp;
 	protected String sourceUser;
 	protected String destination;
-	protected String matcherId;
+	protected Long informationTypeId;
 	protected String matcherMessage;
 	
 	@Column(nullable=false)
@@ -45,6 +46,13 @@ public abstract class AbstractLog extends AbstractEntity {
 	public void setRuleId(Long ruleId) {
 		this.ruleId = ruleId;
 	}
+	@Column(nullable=false)
+	public String getAction() {
+		return action;
+	}
+	public void setAction(String action) {
+		this.action = action;
+	}
 	public Long getSourceIp() {
 		return sourceIp;
 	}
@@ -63,11 +71,11 @@ public abstract class AbstractLog extends AbstractEntity {
 	public void setDestination(String destination) {
 		this.destination = destination;
 	}
-	public String getMatcherId() {
-		return matcherId;
+	public Long getInformationTypeId() {
+		return informationTypeId;
 	}
-	public void setMatcherId(String matcherId) {
-		this.matcherId = matcherId;
+	public void setInformationTypeId(Long informationTypeId) {
+		this.informationTypeId = informationTypeId;
 	}
 	public String getMatcherMessage() {
 		return matcherMessage;

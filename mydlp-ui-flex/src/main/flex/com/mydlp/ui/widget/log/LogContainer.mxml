@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:SkinnableContainer xmlns:fx="http://ns.adobe.com/mxml/2009" 
+					  xmlns:s="library://ns.adobe.com/flex/spark" 
+					  xmlns:mx="library://ns.adobe.com/flex/mx"
+					  xmlns:my="http://www.mydlp.com/flex/my"
+					  xmlns:util="com.mydlp.ui.util.*"
+					  width="100%" height="100%" 
+					  creationComplete="onCreationComplete(event)">
+	<fx:Script>
+		<![CDATA[
+			import com.mydlp.ui.util.LangUtil;
+			import com.mydlp.ui.util.PagedList;
+			
+			import mx.collections.ArrayCollection;
+			import mx.collections.ListCollectionView;
+			import mx.collections.errors.ItemPendingError;
+			import mx.events.FlexEvent;
+			import mx.rpc.AsyncResponder;
+			import mx.rpc.AsyncToken;
+			import mx.rpc.events.FaultEvent;
+			import mx.rpc.events.ResultEvent;
+
+			protected const PAGE_SIZE:int = 10;
+			protected const MAX_FETCHED_PAGE:int = 50;
+			protected const PENDING_OBJECT:Object = {date: LangUtil.getString("messages", "log.container.search.pending.message")};
+			
+			protected var criteriaList:ListCollectionView = new ArrayCollection();
+			
+			[Bindable]
+			protected var pagedList:PagedList = null;
+			
+			[Bindable]
+			protected var _numDBItems:Number = Number.NaN;
+			
+			protected var _fetchedPages:Dictionary = new Dictionary();
+			protected var _numFetchedPages:int = 0;
+			
+			protected function handleCreatePendingItemFunction(index:int, ipe:ItemPendingError):Object 
+			{
+				var pendingObject:Object = {date: "Loading..."};
+				
+				if (isNaN(_numDBItems)) return pendingObject;
+				if (_fetchedPages == null) return pendingObject;
+				
+				if (_numFetchedPages > MAX_FETCHED_PAGE) reset();
+				
+				var page:uint = Math.floor(index / PAGE_SIZE);
+				
+				if (_fetchedPages[page] == undefined)
+				{
+					var numItemsToFetch:uint = PAGE_SIZE;
+					var startIndex:uint = PAGE_SIZE * page;
+					var endIndex:uint = startIndex + PAGE_SIZE - 1;
+					
+					if (endIndex > pagedList.length)
+					{
+						numItemsToFetch = pagedList.length - startIndex;
+					}
+					
+					var asyncToken:AsyncToken = re.getLogs(criteriaList, startIndex, numItemsToFetch);
+					
+					asyncToken.addResponder(new AsyncResponder(
+						function result(event:ResultEvent, token:Object = null):void 
+						{
+							for (var i:uint = 0; i < event.result.length; i++)
+								pagedList.setItemAt(event.result[i], token + i);
+						}, 
+						function fault(event:FaultEvent, token:Object = null):void 
+						{
+							trace(event.fault.faultString);
+							_fetchedPages[page] = undefined;
+							_numFetchedPages--;
+						}, 
+						startIndex));
+					_fetchedPages[page] = true;
+					_numFetchedPages++;
+				}
+				return pendingObject;
+			}            
+			
+			
+			/**
+			 * Reset the PagedList and member variables
+			 */ 
+			private function reset():void{
+				_fetchedPages = new Dictionary();
+				_numFetchedPages = 0;
+				if (pagedList == null)
+					pagedList = new PagedList(_numDBItems);
+				else
+					pagedList.reset();
+			}
+			
+			protected function getLogCountHandler(event:ResultEvent): void
+			{
+				_numDBItems = event.result as Number;
+				reset();
+			}
+			
+			protected function onCreationComplete(event:FlexEvent):void
+			{
+				init();
+			}
+			
+			protected function init():void
+			{
+				re.getLogCount(criteriaList);
+			}
+			
+			protected function searchHandler(event:MouseEvent):void
+			{
+				criteriaList = new ArrayCollection();
+				if (startDate.selectedDate != null && startDate.selectedDate != null)
+				{
+					var criteria:ListCollectionView = new ArrayCollection();
+					criteria.addItem("date");
+					criteria.addItem("bw");
+					criteria.addItem(startDate.selectedDate);
+					criteria.addItem(endDate.selectedDate);
+					
+					criteriaList.addItem(criteria);
+				}
+				init();
+			}
+			
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<my:remote id="re" destination="logBRS">
+			<my:method name="getLogCount" result="getLogCountHandler(event)" />
+		</my:remote>
+		<s:AsyncListView id="asyncListView" list="{pagedList}" createPendingItemFunction="handleCreatePendingItemFunction" />
+	</fx:Declarations>
+	<s:layout>
+		<s:VerticalLayout paddingTop="10" />
+	</s:layout>
+	
+	<s:Group id="logSearchBar" width="100%">
+		<s:layout>
+			<s:HorizontalLayout verticalAlign="middle" />
+		</s:layout>
+		
+		<s:Label text="@Resource(bundle = 'messages', key = 'log.container.search.date.start.label')"/>
+		<mx:DateField id="startDate"/>
+		<s:Label text="@Resource(bundle = 'messages', key = 'log.container.search.date.end.label')"/>
+		<mx:DateField id="endDate"/>
+		<s:Spacer width="20"/>
+		<s:Button label="@Resource(bundle = 'messages', key = 'log.container.search.button.label')"
+				  click="searchHandler(event)"/>
+		<s:Button label="@Resource(bundle = 'messages', key = 'log.container.search.reset.label')"
+				  click="{criteriaList = new ArrayCollection(); init();}"/>
+		
+	</s:Group>
+	
+	<s:DataGrid id="logList" dataProvider="{asyncListView}" width="100%" height="100%" variableRowHeight="true">
+		<s:columns>
+			<s:ArrayList>
+				<s:GridColumn headerText="@Resource(bundle = 'messages', key = 'log.container.header.date')"
+							  dataField="date"/>
+				<s:GridColumn headerText="@Resource(bundle = 'messages', key = 'log.container.header.source')" 
+							  itemRenderer="com.mydlp.ui.widget.log.SourceColumnRenderer"/>
+				<s:GridColumn headerText="@Resource(bundle = 'messages', key = 'log.container.header.destination')"
+							  dataField="destination"/>
+				<s:GridColumn headerText="@Resource(bundle = 'messages', key = 'log.container.header.policy')"
+							  itemRenderer="com.mydlp.ui.widget.log.PolicyColumnRenderer"/>
+				<s:GridColumn headerText="@Resource(bundle = 'messages', key = 'log.container.header.files')"
+							  itemRenderer="com.mydlp.ui.widget.log.FilesColumnRenderer"/>
+			</s:ArrayList>
+		</s:columns>
+	</s:DataGrid>
+	
+	
+</s:SkinnableContainer>

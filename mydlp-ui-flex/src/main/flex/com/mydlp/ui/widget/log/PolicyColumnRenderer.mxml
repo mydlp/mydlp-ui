@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:GridItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009" 
+					xmlns:s="library://ns.adobe.com/flex/spark" 
+					xmlns:mx="library://ns.adobe.com/flex/mx" clipAndEnableScrolling="true">
+	
+	<fx:Script>
+		<![CDATA[
+			import com.mydlp.ui.domain.IncidentLog;
+			import com.mydlp.ui.domain.InformationType;
+			import com.mydlp.ui.domain.Matcher;
+			import com.mydlp.ui.domain.Rule;
+			import com.mydlp.ui.domain.RuleItem;
+			import com.mydlp.ui.util.LangUtil;
+			
+			import mx.core.FlexGlobals;
+			import mx.events.FlexEvent;
+			
+			protected function getPolicyText(value:*):String {
+				var log:IncidentLog = value as IncidentLog;
+				var rule:Rule = FlexGlobals.topLevelApplication.ruleContainer.getRule(log.ruleId);
+				var informationType:InformationType = findInformationType(rule, log.informationTypeId);
+				var labelText:String = "";
+				
+				labelText += LangUtil.getString("messages","log.container.column.policy.rule") + ": ";
+				if (rule != null)
+					labelText +=  rule.label;
+				else
+					labelText = "id(" + log.ruleId + ")";
+				
+				labelText += "\n" + LangUtil.getString("messages","log.container.column.policy.informationType") + ": ";
+				if (informationType != null)
+					labelText += informationType.coupledInventoryItem.label;
+				else
+					labelText += "id(" + log.informationTypeId + ")";
+				
+				labelText += "\n" + LangUtil.getString("messages","log.container.column.policy.action") + ": ";
+				
+				switch (log.action)
+				{
+					case "B": labelText += LangUtil.getString("messages","log.container.column.policy.action.block"); break;
+					case "L": labelText += LangUtil.getString("messages","log.container.column.policy.action.log"); break;
+					case "Q": labelText += LangUtil.getString("messages","log.container.column.policy.action.quarantine"); break;
+					case "A": labelText += LangUtil.getString("messages","log.container.column.policy.action.archive"); break;
+					default: break;
+				}
+				
+				return labelText;
+			}
+			
+			protected static function findInformationType(rule:Rule,informationTypeId:Number): InformationType
+			{
+				if (rule == null || isNaN(informationTypeId)) return null;
+				for each (var i:* in rule.ruleItems)
+				{
+					var ri:RuleItem = i as RuleItem;
+					if (ri.item is InformationType && (ri.item as InformationType).id == informationTypeId)
+						return ri.item as InformationType;
+				}
+				return null;
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<s:Label id="lblData" top="9" left="7" text="{getPolicyText(data)}"/>
+	
+</s:GridItemRenderer>

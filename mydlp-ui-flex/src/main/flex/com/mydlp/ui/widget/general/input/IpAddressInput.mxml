@@ -13,6 +13,27 @@
 			
 			private static const NUMBER_VALUE_CHANGE_EVENT:String = "numberValueChanged";
 			
+			public static function numberToIPStr(value:Number):String
+			{
+				var rNumber:Number = new Number(value);
+				var tString:String = "";
+				var i4:int;
+				var i3:int;
+				var i2:int;
+				var i1:int;
+				i4 = rNumber%256;
+				rNumber -= i4;
+				rNumber /= 256;
+				i3 = rNumber%256;
+				rNumber -= i3;
+				rNumber /= 256;
+				i2 = rNumber%256;
+				rNumber -= i2;
+				rNumber /= 256;
+				i1 = rNumber;
+				return i1 + "." + i2 + "." + i3 + "." + i4;
+			}
+			
 			protected function changeHandler(event:Event):void
 			{
 				var tempIp:Array=text.split(".");
@@ -35,24 +56,7 @@
 				}
 				else
 				{
-					var rNumber:Number = new Number(value);
-					var tString:String = "";
-					var i4:int;
-					var i3:int;
-					var i2:int;
-					var i1:int;
-					i4 = rNumber%256;
-					rNumber -= i4;
-					rNumber /= 256;
-					i3 = rNumber%256;
-					rNumber -= i3;
-					rNumber /= 256;
-					i2 = rNumber%256;
-					rNumber -= i2;
-					rNumber /= 256;
-					i1 = rNumber;
-					tString = i1 + "." + i2 + "." + i3 + "." + i4;
-					text = tString;
+					text = numberToIPStr(value);
 					_numberValue = value;
 				}
 				dispatchEvent(new Event(NUMBER_VALUE_CHANGE_EVENT));

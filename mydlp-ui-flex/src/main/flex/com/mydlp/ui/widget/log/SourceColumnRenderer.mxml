@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:GridItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009" 
+					xmlns:s="library://ns.adobe.com/flex/spark" 
+					xmlns:mx="library://ns.adobe.com/flex/mx" clipAndEnableScrolling="true">
+	
+	<fx:Script>
+		<![CDATA[
+			import avmplus.getQualifiedClassName;
+			
+			import com.mydlp.ui.domain.IncidentLog;
+			import com.mydlp.ui.util.LangUtil;
+			import com.mydlp.ui.widget.general.input.IpAddressInput;
+			
+			protected function getSourceText(value:*):String {
+				var log:IncidentLog = value as IncidentLog;
+				var labelText:String = "";
+				labelText += LangUtil.getString("messages","log.container.column.source.ip") 
+					+ ": " + IpAddressInput.numberToIPStr(log.sourceIp); 
+				if (log.sourceUser != null && log.sourceUser.length > 0)
+					labelText += "\n" + LangUtil.getString("messages","log.container.column.source.user") 
+						+ ": " + log.sourceUser;
+				return labelText;
+			}
+		]]>
+	</fx:Script>
+	
+	<s:Label id="lblData" top="9" left="7" text='{getSourceText(data)}'/>
+	
+</s:GridItemRenderer>

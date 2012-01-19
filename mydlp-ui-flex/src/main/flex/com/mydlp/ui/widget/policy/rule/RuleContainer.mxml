@@ -12,6 +12,7 @@
 		<![CDATA[
 			import com.mydlp.ui.domain.EndpointRule;
 			import com.mydlp.ui.domain.MailRule;
+			import com.mydlp.ui.domain.Rule;
 			import com.mydlp.ui.domain.WebRule;
 			import com.mydlp.ui.util.InteractionUtil;
 			import com.mydlp.ui.widget.general.popup.NewRuleDialog;
@@ -26,6 +27,14 @@
 			
 			[Bindable]
 			protected var ruleDP:ListCollectionView = new ArrayCollection();
+			
+			public function getRule(value:Number): Rule
+			{
+				for each (var rule:* in ruleDP) 
+					if ((rule as Rule).id == value)
+						return rule as Rule;
+				return null;
+			}
 			
 			public function refreshRules():void
 			{
