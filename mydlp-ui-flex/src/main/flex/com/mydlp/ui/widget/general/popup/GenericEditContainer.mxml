@@ -241,6 +241,7 @@
 			{	
 				cButton.label = LangUtil.getString("messages", "generic.edit." + getSimpleName() + ".createButton.label");
 				cButton.addEventListener(MouseEvent.CLICK, createButtonClickHandler);
+				cButton.addEventListener(KeyboardEvent.KEY_DOWN, keyPressed);
 				var cbil:HorizontalInputLabel = new HorizontalInputLabel();
 				cbil.addElement(cButton);
 				editForm.addElement(cbil);
@@ -260,6 +261,12 @@
 				populateCreateButton();
 				
 				super.populate();
+			}
+			
+			protected function keyPressed(event:KeyboardEvent):void
+			{
+				if(event.charCode == 13)
+					createButtonClickHandler(event);
 			}
 			
 			protected function createButtonClickHandler(event:Event): void

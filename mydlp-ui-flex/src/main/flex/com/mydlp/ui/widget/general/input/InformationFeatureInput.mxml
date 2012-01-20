@@ -48,6 +48,8 @@
 			
 			protected function editClickHandler(event:MouseEvent):void
 			{
+				if(ifList.selectedItem == null)
+					return;
 				var ifp:InformationFeaturePopup = InteractionUtil.newPopup(InformationFeaturePopup) as InformationFeaturePopup;
 				ifp.informationFeatureInput = this;
 				ifp.informationFeatureObject = ifList.selectedItem;
