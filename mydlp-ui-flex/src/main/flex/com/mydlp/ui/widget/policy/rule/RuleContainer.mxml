@@ -12,6 +12,7 @@
 		<![CDATA[
 			import com.mydlp.ui.domain.EndpointRule;
 			import com.mydlp.ui.domain.MailRule;
+			import com.mydlp.ui.domain.PrinterRule;
 			import com.mydlp.ui.domain.Rule;
 			import com.mydlp.ui.domain.WebRule;
 			import com.mydlp.ui.util.InteractionUtil;
@@ -67,6 +68,10 @@
 					else if (rule is EndpointRule)
 					{
 						rule = rule as EndpointRule;
+					}
+					else if (rule is PrinterRule)
+					{
+						rule = rule as PrinterRule;
 					}
 					else
 						throw new Error("Unknown rule type;");

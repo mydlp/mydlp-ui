@@ -22,9 +22,9 @@
   </channels>
   
   <logging>
-    <target class="flex.messaging.log.ConsoleTarget" level="error">
+    <target class="flex.messaging.log.ConsoleTarget" level="Error">
       <properties>
-        <prefix>[BlazeDS]</prefix>
+        <prefix>[BlazeDS] </prefix>
       </properties>
     </target>
   </logging>

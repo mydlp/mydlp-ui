@@ -16,22 +16,19 @@
 		<![CDATA[
 			import com.mydlp.ui.domain.EndpointRule;
 			import com.mydlp.ui.domain.InformationType;
-			import com.mydlp.ui.domain.InventoryCategory;
 			import com.mydlp.ui.domain.InventoryItem;
 			import com.mydlp.ui.domain.Item;
 			import com.mydlp.ui.domain.MailRule;
 			import com.mydlp.ui.domain.Network;
+			import com.mydlp.ui.domain.PrinterRule;
 			import com.mydlp.ui.domain.Rule;
 			import com.mydlp.ui.domain.RuleItem;
 			import com.mydlp.ui.domain.WebRule;
 			import com.mydlp.ui.util.InteractionUtil;
 			import com.mydlp.ui.util.ReflectionUtil;
 			
-			import flash.utils.getQualifiedClassName;
-			
 			import mx.collections.ArrayCollection;
 			import mx.collections.ListCollectionView;
-			import mx.core.DragSource;
 			import mx.core.FlexGlobals;
 			import mx.core.IUIComponent;
 			import mx.events.DragEvent;
@@ -39,7 +36,6 @@
 			import mx.managers.DragManager;
 			import mx.rpc.events.ResultEvent;
 			
-			import spark.components.Application;
 			import spark.components.List;
 			
 			[Bindable]
@@ -54,6 +50,8 @@
 			[Embed('/assets/icons/32x32/computer.png')]
 			public static const endpointRuleIcon:Class;
 			
+			[Embed('/assets/icons/32x32/print.png')]
+			public static const printerRuleIcon:Class;
 			
 			[Bindable]
 			protected var sourceDataProvider:ArrayCollection = new ArrayCollection();
@@ -77,6 +75,10 @@
 				else if (data is EndpointRule)
 				{
 					ruleTypeImage.source = endpointRuleIcon;
+				}
+				else if (data is PrinterRule)
+				{
+					ruleTypeImage.source = printerRuleIcon;
 				}
 				else
 					throw new Error("Unknown rule type;");
@@ -283,6 +285,7 @@
 		
 		<rule:ActionBox id="actionBox" width="150" 
 						actionBoxRuleObject="@{ruleObject}" 
-						currentState="{this.currentState}"/>
+						currentState="{this.currentState}"
+						isReadOnly="{ruleObject is PrinterRule}"/>
 	</s:Group>
 </s:ItemRenderer>

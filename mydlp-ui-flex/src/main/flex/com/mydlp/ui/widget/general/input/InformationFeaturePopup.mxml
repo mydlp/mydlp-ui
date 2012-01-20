@@ -112,6 +112,8 @@
 			<input:MatcherDefinition data="france_insee" />
 			<input:MatcherDefinition data="uk_nino" />
 			<input:MatcherDefinition data="keyword" />
+			<input:MatcherDefinition data="scode" />
+			<input:MatcherDefinition data="scode_ada" />
 		</s:ArrayCollection>
 	</fx:Declarations>
 	
@@ -125,6 +127,8 @@
 		<s:State name="france_insee" />
 		<s:State name="uk_nino" />
 		<s:State name="keyword" />
+		<s:State name="scode" />
+		<s:State name="scode_ada" />
 	</s:states>
 	
 	<s:layout>

@@ -10,6 +10,7 @@
 		<![CDATA[
 			import com.mydlp.ui.domain.EndpointRule;
 			import com.mydlp.ui.domain.MailRule;
+			import com.mydlp.ui.domain.PrinterRule;
 			import com.mydlp.ui.domain.Rule;
 			import com.mydlp.ui.domain.WebRule;
 			import com.mydlp.ui.util.InteractionUtil;
@@ -48,6 +49,11 @@
 				ruleHandler(new EndpointRule());
 			}
 			
+			protected function printerRuleHandler():void
+			{
+				ruleHandler(new PrinterRule());
+			}
+			
 			protected function onCreationComplete(event:FlexEvent):void
 			{
 				if (FlexGlobals.topLevelApplication.ruleContainer.ruleList.dataProvider.length > 0)
@@ -72,6 +78,7 @@
 		<s:Button skinClass="com.mydlp.ui.skin.WebRuleBitmapLabelButton16Skin" label="@Resource(bundle = 'messages', key = 'inventory.newdialog.webrule')" click="webRuleHandler()"/>
 		<s:Button skinClass="com.mydlp.ui.skin.MailRuleBitmapLabelButton16Skin" label="@Resource(bundle = 'messages', key = 'inventory.newdialog.mailrule')" click="mailRuleHandler()"/>
 		<s:Button skinClass="com.mydlp.ui.skin.EndpointRuleBitmapLabelButton16Skin" label="@Resource(bundle = 'messages', key = 'inventory.newdialog.endpointrule')" click="endpointRuleHandler()"/>
+		<s:Button skinClass="com.mydlp.ui.skin.PrinterRuleBitmapLabelButton16Skin" label="@Resource(bundle = 'messages', key = 'inventory.newdialog.printerrule')" click="printerRuleHandler()"/>
 	</s:Group>
 	
 </popup:ClosableTitleWindow>
