@@ -4,8 +4,8 @@
 					  xmlns:mx="library://ns.adobe.com/flex/mx"
 					  xmlns:option="com.mydlp.ui.widget.option.*"
 					  xmlns:my="http://www.mydlp.com/flex/my"
-					  width="100%" height="100%" 
-					  creationComplete="{re.getConfigs()}">
+					  creationComplete="{re.getConfigs()}"
+					  visible="false">
 	<fx:Script>
 		<![CDATA[
 			import com.mydlp.ui.domain.Config;
@@ -28,7 +28,36 @@
 				for each (var c:* in configs)
 				{
 					var config:Config = c as Config;
-					if (config.key == "error_action") advancedTab.errorAction = config;
+					if (config.key == "error_action") generalTab.errorAction = config;
+					else if (config.key == "mail_archive") generalTab.mailArchive = config;
+						
+					else if (config.key == "smtp_helo_name") smtpTab.smtpHeloName = config;
+					else if (config.key == "smtp_next_hop_host") smtpTab.smtpNextHopHost = config;
+					else if (config.key == "smtp_next_hop_port") smtpTab.smtpNextHopPort = config;
+					else if (config.key == "smtp_bypass_on_fail") smtpTab.smtpBypassOnFail = config;
+					else if (config.key == "smtp_enable_for_all") smtpTab.smtpEnableForAll = config;
+						
+					else if (config.key == "icap_reqmod_path") icapTab.icapReqModPath = config;
+					else if (config.key == "icap_respmod_path") icapTab.icapRespModPath = config;
+					else if (config.key == "icap_max_connections") icapTab.icapMaxConnections = config;
+					else if (config.key == "icap_options_ttl") icapTab.icapOptionsTTL = config;
+					else if (config.key == "icap_log_pass") icapTab.icapLogPass = config;
+					else if (config.key == "icap_log_pass_lower_limit") icapTab.icapLogPassLowerLimit = config;
+						
+					else if (config.key == "archive_inbound") advancedTab.archiveInbound = config;
+					else if (config.key == "archive_minimum_size") advancedTab.archiveMinimumSize = config;
+					else if (config.key == "maximum_object_size") advancedTab.maximumObjectSize = config;
+					else if (config.key == "maximum_memory_object") advancedTab.maximumMemoryObject = config;
+					else if (config.key == "maximum_chunk_size") advancedTab.maximumChunkSize = config;
+					else if (config.key == "supervisor_max_restart_count") advancedTab.supervisorMaxRestartCount = config;
+					else if (config.key == "supervisor_max_restart_time") advancedTab.supervisorMaxRestartTime = config;
+					else if (config.key == "supervisor_kill_timeout") advancedTab.supervisorKillTimeout = config;
+					else if (config.key == "fsm_timeout") advancedTab.fsmTimeout = config;
+					else if (config.key == "spawn_timeout") advancedTab.spawnTimeout = config;
+					else if (config.key == "query_cache_cleanup_interval") advancedTab.queryCacheCleanupInterval = config;
+					else if (config.key == "query_cache_maximum_size") advancedTab.queryCacheMaximumSize = config;					
+					
+					visible = true;
 				}
 			}
 			
@@ -57,32 +86,42 @@
 		<s:VerticalLayout gap="0" paddingTop="4" />
 	</s:layout>
 	
-	<s:TabBar dataProvider="{vs}" fontWeight="bold" fontSize="14"/>
+	<s:TabBar dataProvider="{vs}" fontSize="14" fontWeight="bold"/>
 	
-	<s:Group width="100%" height="100%">
-		<s:Rect left="0" right="0" top="0" bottom="0" >
+	<s:Group width="100%" height="100%" maxHeight="400 " maxWidth="730">
+		<s:Rect left="0" right="0" top="0" bottom="30">
 			<s:stroke>
 				<s:SolidColorStroke color="0xACADAF" weight="3"/>
-			</s:stroke>
+			</s:stroke>		
 		</s:Rect>
-		<s:VGroup paddingTop="6" paddingBottom="6" paddingLeft="6" paddingRight="6" width="100%" height="100%">
+		<s:VGroup paddingTop="6" paddingBottom="6" paddingLeft="6" paddingRight="6" width="100%" top="0" bottom="30" >
 			<mx:ViewStack id="vs" width="100%" height="100%" creationPolicy="all">
-				<s:NavigatorContent label="@Resource(bundle = 'messages', key = 'options.tab.advanced')" width="100%" height="100%">
-					<option:AdvancedTab id="advancedTab" />
+				<s:NavigatorContent label="@Resource(bundle = 'messages', key = 'options.tab.general')" width="100%" height="100%">
+					<option:GeneralTab id="generalTab" />
+				</s:NavigatorContent>
+				<s:NavigatorContent label="@Resource(bundle = 'messages', key = 'options.tab.icap')" width="100%" height="100%">
+					<option:IcapTab id="icapTab" />
+				</s:NavigatorContent>
+				<s:NavigatorContent label="@Resource(bundle = 'messages', key = 'options.tab.smtp')" width="100%" height="100%">
+					<option:SmtpTab id="smtpTab" />
 				</s:NavigatorContent>
 				<s:NavigatorContent label="@Resource(bundle = 'messages', key = 'options.tab.user')" width="100%" height="100%">
-					<option:UserManagerBox id="userManagerBox" />
+					<option:UserManagerTab id="userManagerTab" />
 				</s:NavigatorContent>
+				<s:NavigatorContent label="@Resource(bundle = 'messages', key = 'options.tab.advanced')" width="100%" height="100%">
+					<option:AdvancedTab id="advancedTab" />
+				</s:NavigatorContent>				
 			</mx:ViewStack>
-		</s:VGroup>
-	</s:Group>
-	
-	<s:Spacer height="10" />
-	
-	<s:HGroup paddingLeft="20">
-		<s:Button id="saveButton" label="@Resource(bundle = 'messages', key = 'options.button.save.label')" 
-				  click="saveButtonHandler(event)"/>
-	</s:HGroup>
-	
+		</s:VGroup>		
 		
+		<s:Spacer height="10" />
+		
+		<s:HGroup bottom="5" right="30">
+			<s:Button id="saveButton" label="@Resource(bundle = 'messages', key = 'options.button.save.label')" 
+					  click="saveButtonHandler(event)"/>
+		</s:HGroup>	
+	</s:Group>		
+	
+
+	
 </s:SkinnableContainer>
