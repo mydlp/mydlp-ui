@@ -66,7 +66,6 @@ public class SchemaManagerImpl extends AbstractPolicyDAO implements SchemaManage
 		
 		if (schemaRevision == null) {
 			schemaRevision = new Config();
-			schemaRevision.setNameKey("config." + SCHEMA_REVISION_KEY);
 			schemaRevision.setKey(SCHEMA_REVISION_KEY);
 		}
 		schemaRevision.setValue(newRevision.toString());

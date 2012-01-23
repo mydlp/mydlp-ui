@@ -7,6 +7,8 @@ import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Restrictions;
 
 import com.mydlp.ui.dao.DAOUtil;
+import com.mydlp.ui.domain.AuthSecurityRole;
+import com.mydlp.ui.domain.AuthUser;
 import com.mydlp.ui.domain.EndpointRule;
 import com.mydlp.ui.domain.InventoryItem;
 import com.mydlp.ui.domain.Item;
@@ -16,7 +18,7 @@ import com.mydlp.ui.domain.RuleItem;
 import com.mydlp.ui.domain.WebRule;
 import com.mydlp.ui.schema.AbstractGranule;
 
-public class _000_00003_Rules extends AbstractGranule {
+public class _000_00003_Users extends AbstractGranule {
 
 	@Override
 	protected void callback() {
@@ -55,6 +57,26 @@ public class _000_00003_Rules extends AbstractGranule {
 		getHibernateTemplate().saveOrUpdate(wri1);
 		getHibernateTemplate().saveOrUpdate(mr);
 		getHibernateTemplate().saveOrUpdate(er);
+		
+		
+		AuthSecurityRole roleAdmin = new AuthSecurityRole();
+		roleAdmin.setRoleName("ROLE_ADMIN");
+		AuthSecurityRole roleUser = new AuthSecurityRole();
+		roleUser.setRoleName("ROLE_USER");
+		
+		getHibernateTemplate().saveOrUpdate(roleAdmin);
+		getHibernateTemplate().saveOrUpdate(roleUser);
+		
+		AuthUser user = new AuthUser();
+		user.setUsername("user");
+		user.setEmail("user@mydlp.com");
+		user.setPassword("a94a8fe5ccb19ba61c4c0873d391e987982fbbd3"); // sha1 for 'test'
+		user.setIsActive(true);
+		List<AuthSecurityRole> roles = new ArrayList<AuthSecurityRole>();
+		roles.add(roleUser);
+		user.setRoles(roles);
+		
+		getHibernateTemplate().saveOrUpdate(user);
 	}
 
 }

@@ -12,6 +12,8 @@
 			import mx.collections.ListCollectionView;
 			import mx.events.FlexEvent;
 			
+			import org.dphibernate.persistence.state.ReadOnlyError;
+			
 			import spark.events.IndexChangeEvent;
 			
 			[Bindable]
@@ -32,39 +34,72 @@
 					)
 				);
 			
+			[Bindable]
+			protected var actionsReadOnly:ListCollectionView = 
+				new ArrayCollection(
+					new Array(
+						Rule.ACTION_PASS,
+						Rule.ACTION_LOG,
+						Rule.ACTION_ARCHIVE
+					)
+				);
+			
 			
 			protected function actionListChange(event:IndexChangeEvent):void
 			{
-				if(actionList.selectedItem == "PASS")
-					actionBoxRuleObject.action = Rule.ACTION_PASS;
-				else if(actionList.selectedItem == "BLOCK")
-					actionBoxRuleObject.action = Rule.ACTION_BLOCK;
-				else if(actionList.selectedItem == "LOG")
-					actionBoxRuleObject.action = Rule.ACTION_LOG;
-				else if(actionList.selectedItem == "QUARANTINE")
-					actionBoxRuleObject.action = Rule.ACTION_QUARANTINE;
-				else if(actionList.selectedItem == "ARCHIVE")
-					actionBoxRuleObject.action = Rule.ACTION_ARCHIVE;
+				if (isReadOnly)
+					if(actionList.selectedItem == "PASS")
+						actionBoxRuleObject.action = Rule.ACTION_PASS;
+					else if(actionList.selectedItem == "LOG")
+						actionBoxRuleObject.action = Rule.ACTION_LOG;
+					else if(actionList.selectedItem == "ARCHIVE")
+						actionBoxRuleObject.action = Rule.ACTION_ARCHIVE;
+				else
+					if(actionList.selectedItem == "PASS")
+						actionBoxRuleObject.action = Rule.ACTION_PASS;
+					else if(actionList.selectedItem == "BLOCK")
+						actionBoxRuleObject.action = Rule.ACTION_BLOCK;
+					else if(actionList.selectedItem == "LOG")
+						actionBoxRuleObject.action = Rule.ACTION_LOG;
+					else if(actionList.selectedItem == "QUARANTINE")
+						actionBoxRuleObject.action = Rule.ACTION_QUARANTINE;
+					else if(actionList.selectedItem == "ARCHIVE")
+						actionBoxRuleObject.action = Rule.ACTION_ARCHIVE;
 				
 				actionBoxRuleObject.save();
 			}
 			
 			protected function setSelectedIndex(event:FlexEvent):void
 			{
-				if(actionBoxRuleObject.action == Rule.ACTION_PASS)
-					actionList.selectedIndex = 0;
-				else if(actionBoxRuleObject.action == Rule.ACTION_BLOCK)
-					actionList.selectedIndex = 1;
-				else if(actionBoxRuleObject.action == Rule.ACTION_LOG)
-					actionList.selectedIndex = 2;
-				else if(actionBoxRuleObject.action == Rule.ACTION_QUARANTINE)
-					actionList.selectedIndex = 3;
-				else if(actionBoxRuleObject.action == Rule.ACTION_ARCHIVE)
-					actionList.selectedIndex = 4;
+				if (isReadOnly)
+				{
+					if(actionBoxRuleObject.action == Rule.ACTION_PASS)
+						actionList.selectedIndex = 0;
+					else if(actionBoxRuleObject.action == Rule.ACTION_LOG)
+						actionList.selectedIndex = 1;
+					else if(actionBoxRuleObject.action == Rule.ACTION_ARCHIVE)
+						actionList.selectedIndex = 2;
+				}
+				else
+				{
+					if(actionBoxRuleObject.action == Rule.ACTION_PASS)
+						actionList.selectedIndex = 0;
+					else if(actionBoxRuleObject.action == Rule.ACTION_BLOCK)
+						actionList.selectedIndex = 1;
+					else if(actionBoxRuleObject.action == Rule.ACTION_LOG)
+						actionList.selectedIndex = 2;
+					else if(actionBoxRuleObject.action == Rule.ACTION_QUARANTINE)
+						actionList.selectedIndex = 3;
+					else if(actionBoxRuleObject.action == Rule.ACTION_ARCHIVE)
+						actionList.selectedIndex = 4;
+				}
 			}
 			
 		]]>
 	</fx:Script>
+	<fx:Declarations>
+		<fx:Boolean id="isReadOnly" />
+	</fx:Declarations>
 	<s:states>
 		<s:State name="normal" />
 		<s:State name="hovered" />
@@ -96,7 +131,7 @@
 			<s:Spacer width="13" />
 			<s:DropDownList id="actionList" width="120"
 							contentBackgroundAlpha="1"
-							dataProvider="{actions}" 
+							dataProvider="{isReadOnly?actionsReadOnly:actions}" 
 							change="actionListChange(event)" 
 							creationComplete="setSelectedIndex(event)" />
 		</s:Group>

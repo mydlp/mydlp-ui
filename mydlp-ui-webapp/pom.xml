@@ -116,6 +116,11 @@
       <version>${org.springframework.version}</version>
     </dependency>
     <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>jstl</artifactId>
+      <version>${jstl.version}</version>
+    </dependency>
+    <dependency>
       <groupId>org.hibernate.java-persistence</groupId>
       <artifactId>jpa-api</artifactId>
       <version>${jpa.version}</version>
@@ -129,6 +134,11 @@
       <groupId>hsqldb</groupId>
       <artifactId>hsqldb</artifactId>
       <version>1.8.0.10</version>
+    </dependency>
+    <dependency>
+    <groupId>mysql</groupId>
+      <artifactId>mysql-connector-java</artifactId>
+      <version>${mysql.driver.version}</version>
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>
@@ -205,6 +215,16 @@
         <version>2.1.1</version>
         <configuration>
           <packagingExcludes>WEB-INF/web.xml</packagingExcludes>
+          <webResources>
+	        <resource>
+	          <directory>${basedir}/src/main/webapp/WEB-INF/spring</directory>
+	          <filtering>true</filtering>
+	          <targetPath>WEB-INF/spring</targetPath>
+	          <includes>
+	            <include>application-persistence.xml</include>
+	          </includes>
+	        </resource>
+	      </webResources>
         </configuration>
       </plugin>
       <plugin>
@@ -257,5 +277,4 @@
       </plugin>
     </plugins>
   </build>
-  
 </project>
