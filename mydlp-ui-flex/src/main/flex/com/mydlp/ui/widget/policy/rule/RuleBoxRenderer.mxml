@@ -84,6 +84,16 @@
 					throw new Error("Unknown rule type;");
 				
 				ruleObject = data;
+				if(ruleObject.enabled)
+				{
+					normalBorder.visible = true;
+					enableButton.visible = false;
+				}
+				else
+				{
+					disableOrder.visible = true;
+					enableButton.visible = true;
+				}
 				refresh();
 			}
 			
@@ -186,6 +196,18 @@
 				FlexGlobals.topLevelApplication.refresh();
 			}
 			
+			protected function disableButtonClick(event:MouseEvent):void
+			{
+				ruleObject.enabled = false;
+				re.save(ruleObject);
+			}
+			
+			protected function enableRuleClickHandler(event:MouseEvent):void
+			{
+				ruleObject.enabled = true;
+				re.save(ruleObject);
+			}
+			
 		]]>
 	</fx:Script>
 	
@@ -201,6 +223,7 @@
 		<s:State name="normal" />
 		<s:State name="hovered" />
 		<s:State name="selected" />
+		<s:State name="disabled"/>
 	</s:states>
 	
 	<s:Rect includeIn="hovered, selected"
@@ -212,7 +235,7 @@
 		</s:fill>
 	</s:Rect>
 	
-	<s:Rect id="normalBorder" left="0" right="0" top="0" bottom="0" >
+	<s:Rect id="normalBorder" left="0" right="0" top="0" bottom="0" visible="false">
 		<s:stroke>
 			<s:SolidColorStroke color="0xAEBBCF" alpha="0.3" weight="3"/>
 		</s:stroke>
@@ -224,6 +247,12 @@
 				<s:GradientEntry color="#fabe00"/>
 				<s:GradientEntry color="#e17b00"/>
 			</s:LinearGradientStroke>
+		</s:stroke>
+	</s:Rect>
+	
+	<s:Rect id="disableOrder" left="0" right="0" top="0" bottom="0" visible="false">
+		<s:stroke>
+			<s:SolidColorStroke color="0x000000" alpha="0.3" weight="3"/>
 		</s:stroke>
 	</s:Rect>
 	
@@ -266,8 +295,14 @@
 						  click="{InteractionUtil.newEditDialog(ruleObject)}" />
 				<s:Button styleName="removeButtonStyle" 
 						  click="{InteractionUtil.newDeleteDialog(ruleObject)}" />
+				<s:Button styleName="disableButton16Style"
+						  visible="{ruleObject.enabled}"
+						  click="disableButtonClick(event)"/>
 			</s:Group>
 		</s:Group>
+		
+		<s:Button id="enableButton" styleName="disableButton32Style" visible="false"
+				  click="enableRuleClickHandler(event)"/>
 		
 		<rule:RSpacer />
 		
@@ -287,5 +322,6 @@
 						actionBoxRuleObject="@{ruleObject}" 
 						currentState="{this.currentState}"
 						isReadOnly="{ruleObject is PrinterRule}"/>
+		
 	</s:Group>
 </s:ItemRenderer>

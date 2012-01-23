@@ -48,3 +48,11 @@ s|Application {
 .copyButtonStyle {
 	skinClass: ClassReference("com.mydlp.ui.skin.CopyBitmapButton16Skin");
 }
+
+.disableButton16Style {
+	skinClass: ClassReference("com.mydlp.ui.skin.DisableRuleButton16Skin")
+}
+
+.disableButton32Style {
+	skinClass: ClassReference("com.mydlp.ui.skin.DisableRuleButton32Skin")
+}
