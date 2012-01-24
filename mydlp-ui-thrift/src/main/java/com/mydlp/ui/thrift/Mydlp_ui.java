@@ -3,8 +3,6 @@
  */
 package com.mydlp.ui.thrift;
 
-import java.nio.ByteBuffer;
-
 public class Mydlp_ui {
 
 	public static class Client {
@@ -14,18 +12,6 @@ public class Mydlp_ui {
 
 		public void compileCustomer(int Customerid)
 				throws org.apache.thrift.TException {
-		}
-
-		public void send_compileCustomer(int Customerid)
-				throws org.apache.thrift.TException {
-		}
-
-		public void recv_compileCustomer() throws org.apache.thrift.TException {
-		}
-
-		public ByteBuffer getRuletable(String Ipaddress, String Revisionid)
-				throws org.apache.thrift.TException {
-			return null;
 		}
 
 	}
