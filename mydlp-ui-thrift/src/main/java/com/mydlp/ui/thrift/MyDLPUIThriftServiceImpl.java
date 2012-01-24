@@ -29,7 +29,7 @@ public class MyDLPUIThriftServiceImpl implements MyDLPUIThriftService {
 			destroy();
 		}
 		try {
-			transport = new TSocket("localhost", 9090);
+			transport = new TSocket("localhost", 9092);
 			transport.open();
 
 			TProtocol protocol = new TBinaryProtocol(transport);
