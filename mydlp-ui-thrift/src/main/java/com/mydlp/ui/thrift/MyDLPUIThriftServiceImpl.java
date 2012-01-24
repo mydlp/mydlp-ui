@@ -23,7 +23,7 @@ public class MyDLPUIThriftServiceImpl implements MyDLPUIThriftService {
 	protected TTransport transport;
 
 	@PostConstruct
-	protected void init() {
+	protected synchronized void init() {
 		if (transport != null)
 		{
 			destroy();
@@ -41,15 +41,22 @@ public class MyDLPUIThriftServiceImpl implements MyDLPUIThriftService {
 	}
 	
 	@PreDestroy
-	protected void destroy() {
-		transport.close();
+	protected synchronized void destroy() {
+		if (transport != null && ! transport.isOpen())
+			transport.close();
 		transport = null;
 		client = null;
+	}
+	
+	protected synchronized void ensureOpen() {
+		if (transport == null || !transport.isOpen())
+			init();
 	}
 
 	@Override
 	public void compileFilter(Integer filterId) {
 		try {
+			ensureOpen();
 			client.compileCustomer(filterId);
 		} catch (TException e) {
 			logger.error("Thrift compile filter", e);
