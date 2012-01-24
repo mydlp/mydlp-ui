@@ -97,6 +97,7 @@
     <module>mydlp-ui-flex</module>
     <module>mydlp-ui-dao</module>
     <module>mydlp-ui-remoting-blazeds</module>
+    <module>mydlp-ui-thrift</module>
     <module>mydlp-ui-webapp</module>
   </modules>  
 
