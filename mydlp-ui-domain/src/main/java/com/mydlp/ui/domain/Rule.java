@@ -27,6 +27,8 @@ public abstract class Rule extends AbstractNamedEntity {
 	
 	protected Boolean enabled;
 	
+	protected String description;
+	
 	protected String action = Rule.ACTION_PASS;
 	
 	protected List<RuleItem> ruleItems;
@@ -47,6 +49,16 @@ public abstract class Rule extends AbstractNamedEntity {
 
 	public void setEnabled(Boolean enabled) {
 		this.enabled = enabled;
+	}
+	
+	public void setDescription(String description)
+	{
+		this.description = description;
+	}
+	
+	public String getDescription()
+	{
+		return this.description;
 	}
 
 	@Column(nullable=false)
