@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<option:ConfigTabBox xmlns:fx="http://ns.adobe.com/mxml/2009" 
+					 xmlns:s="library://ns.adobe.com/flex/spark" 
+					 xmlns:mx="library://ns.adobe.com/flex/mx" 
+					 xmlns:option="com.mydlp.ui.widget.option.*"
+					 xmlns:domain="com.mydlp.ui.domain.*">
+	
+	<fx:Declarations>		
+		<domain:Config id="icapReqModPath" />
+		<domain:Config id="icapRespModPath" />
+		<domain:Config id="icapMaxConnections" />	
+		<domain:Config id="icapOptionsTTL" />
+		<domain:Config id="icapLogPass" />
+		<domain:Config id="icapLogPassLowerLimit" />
+		
+		
+	</fx:Declarations>
+	
+	<s:VGroup width="100%" height="100%">
+		
+		<s:Form>		
+			<s:FormItem label="{icapReqModPath.label}">
+				<s:TextInput text="@{icapReqModPath.value}"/>
+			</s:FormItem>
+			<s:FormItem label="{icapRespModPath.label}">
+				<s:TextInput text="@{icapRespModPath.value}"/>
+			</s:FormItem>
+			<s:FormItem label="{icapMaxConnections.label}">
+				<s:TextInput text="@{icapMaxConnections.value}"/>
+			</s:FormItem>
+			<s:FormItem label="{icapOptionsTTL.label}">
+				<s:TextInput text="@{icapOptionsTTL.value}"/>
+			</s:FormItem>			
+			<s:FormItem label="{icapLogPass.label}">
+				<s:CheckBox id="icapLogPassCheckBox" selected="{icapLogPass.value == 'true'}"
+							change="{icapLogPass.value = icapLogPassCheckBox.selected ? 'true' : 'false'}"/>
+			</s:FormItem>
+			<s:FormItem label="{icapLogPassLowerLimit.label}">
+				<s:TextInput text="@{icapLogPassLowerLimit.value}"/>
+			</s:FormItem>			
+		</s:Form>
+		
+	</s:VGroup>
+	
+</option:ConfigTabBox>

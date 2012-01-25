@@ -3,21 +3,66 @@
 					 xmlns:s="library://ns.adobe.com/flex/spark" 
 					 xmlns:mx="library://ns.adobe.com/flex/mx" 
 					 xmlns:option="com.mydlp.ui.widget.option.*"
-					 xmlns:domain="com.mydlp.ui.domain.*"
-					 >
-
+					 xmlns:domain="com.mydlp.ui.domain.*">
+	
 	<fx:Declarations>
-		<domain:Config id="errorAction" />
+		<domain:Config id="archiveMinimumSize" />	
+		<domain:Config id="archiveInbound" />	
+		<domain:Config id="maximumObjectSize" />	
+		<domain:Config id="maximumMemoryObject" />	
+		<domain:Config id="maximumChunkSize" />	
+		<domain:Config id="supervisorMaxRestartCount" />	
+		<domain:Config id="supervisorMaxRestartTime" />			
+		<domain:Config id="supervisorKillTimeout" />	
+		<domain:Config id="fsmTimeout" />			
+		<domain:Config id="spawnTimeout" />	
+		<domain:Config id="queryCacheCleanupInterval" />			
+		<domain:Config id="queryCacheMaximumSize" />	
 	</fx:Declarations>
 	
-	<s:VGroup width="100%" height="100%">
-		
-		<s:Form>
-			<s:FormItem label="{errorAction.label}">
-				<s:TextInput text="@{errorAction.value}"/>
+	<s:HGroup width="100%" height="100%">		
+		<s:Form>			
+			<s:FormItem label="{archiveMinimumSize.label}">
+				<s:TextInput text="@{archiveMinimumSize.value}"/>
+			</s:FormItem>
+			<s:FormItem label="{archiveInbound.label}">
+				<s:CheckBox id="archiveInboundCheckBox" selected="{archiveInbound.value == 'true'}"
+							change="archiveInbound.value = archiveInboundCheckBox.selected ? 'true' : 'false'"/>
+			</s:FormItem>	
+			<s:FormItem label="{maximumObjectSize.label}">
+				<s:TextInput text="@{maximumObjectSize.value}"/>
+			</s:FormItem>
+			<s:FormItem label="{maximumMemoryObject.label}">
+				<s:TextInput text="@{maximumMemoryObject.value}"/>
+			</s:FormItem>			
+			<s:FormItem label="{maximumChunkSize.label}">
+				<s:TextInput text="@{maximumChunkSize.value}"/>
+			</s:FormItem>
+			<s:FormItem label="{fsmTimeout.label}">
+				<s:TextInput text="@{fsmTimeout.value}"/>
 			</s:FormItem>
 		</s:Form>
+		<s:Form>		
+			<s:FormItem label="{supervisorMaxRestartCount.label}">
+				<s:TextInput text="@{supervisorMaxRestartCount.value}"/>
+			</s:FormItem>
+			<s:FormItem label="{supervisorMaxRestartTime.label}">
+				<s:TextInput text="@{supervisorMaxRestartTime.value}"/>
+			</s:FormItem>
+			<s:FormItem label="{supervisorKillTimeout.label}">
+				<s:TextInput text="@{supervisorKillTimeout.value}"/>
+			</s:FormItem>			
+			<s:FormItem label="{spawnTimeout.label}">
+				<s:TextInput text="@{spawnTimeout.value}"/>
+			</s:FormItem>
+			<s:FormItem label="{queryCacheCleanupInterval.label}">
+				<s:TextInput text="@{queryCacheCleanupInterval.value}"/>
+			</s:FormItem>
+			<s:FormItem label="{queryCacheMaximumSize.label}">
+				<s:TextInput text="@{queryCacheMaximumSize.value}"/>
+			</s:FormItem>	
+		</s:Form>
 		
-	</s:VGroup>
+	</s:HGroup>
 	
 </option:ConfigTabBox>

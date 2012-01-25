@@ -72,23 +72,19 @@
 			<my:method name="getUsers" result="getUsersHandler(event)" />
 		</my:remote>
 	</fx:Declarations>
-	<s:Group>
-		<s:layout>
-			<s:VerticalLayout gap="5" horizontalAlign="right"/>
-		</s:layout>
-		
+	<s:VGroup paddingTop="25" paddingLeft="25" horizontalAlign="right" gap="5">			
 		<s:DataGrid id="userList" width="500" height="300" dataProvider="{userDP}"
 					gridClick="mouseMoveOnDataGrid(event)">
 			<s:columns>
 				<s:ArrayList>					
 					<s:GridColumn dataField="username" />
 					<s:GridColumn dataField="email" />
-					<s:GridColumn dataField="isActive" itemRenderer="com.mydlp.ui.widget.option.ActiveGridItemRenderer" />
+					<s:GridColumn dataField="isActive" itemRenderer="com.mydlp.ui.widget.option.GridItemCheckBoxRenderer" />
 				</s:ArrayList>
 			</s:columns>
 		</s:DataGrid>
 		
-		<s:Group>
+		<s:Group >
 			
 			<s:layout>
 				<s:HorizontalLayout gap="5"/>
@@ -104,5 +100,5 @@
 					  click="{InteractionUtil.newEditDialog(new AuthUser())}"
 					  height="19"/>
 		</s:Group>
-	</s:Group>
+	</s:VGroup>
 </s:Group>

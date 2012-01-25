@@ -10,7 +10,7 @@
 			import com.mydlp.ui.util.InteractionUtil;
 		]]>
 	</fx:Script>
-
+	
 	<s:states>
 		<s:State name="normal" />
 		<s:State name="hovered" />

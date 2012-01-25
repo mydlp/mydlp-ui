@@ -19,6 +19,7 @@
 			import com.mydlp.ui.domain.InventoryCategory;
 			import com.mydlp.ui.domain.InventoryItem;
 			import com.mydlp.ui.domain.Item;
+			import com.mydlp.ui.domain.Rule;
 			import com.mydlp.ui.util.ClassMember;
 			import com.mydlp.ui.util.InteractionUtil;
 			import com.mydlp.ui.util.LangUtil;
@@ -193,6 +194,19 @@
 						inputLabel.addElement(checkBox);
 						index = 6;
 					}
+					
+					else if(targetObject is Rule &&
+							classMember.name == "description")
+					{
+						var textInput2:TextInput = new TextInput();
+						textInput2.text = targetObject[classMember.name];
+						BindingUtils.bindProperty(targetObject, classMember.name, textInput2, "text");
+						textInput2.percentWidth = 100;
+						inputLabel = new HorizontalInputLabel()
+						inputLabel.addElement(textInput2);
+						index = 12;
+					}
+					
 					else
 					{
 						var textInput:TextInput = new TextInput();
