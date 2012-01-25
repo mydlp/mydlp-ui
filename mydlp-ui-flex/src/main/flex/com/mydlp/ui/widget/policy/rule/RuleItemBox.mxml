@@ -21,7 +21,7 @@
 						  paddingBottom="4" paddingTop="4"/>
 	</s:layout>
 	
-	<s:Label includeIn="noitem" text="ALL" />
+	<s:Label includeIn="noitem" text="NONE" />
 	
 	<rule:RuleItemList	includeIn="normal" 
 				width="{this.width - 4}"
