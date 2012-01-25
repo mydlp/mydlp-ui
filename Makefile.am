@@ -23,6 +23,10 @@ mydlpuidir = $(datadir)/mydlp/ui/
 mydlpui_DATA = \
 	mydlp-ui-webapp/target/mydlp-ui-webapp.war
 
+apachesitesdir = $(sysconfdir)/apache2/sites-available
+
+apachesites_DATA = conf/mydlp-site
+
 mydlp-ui-webapp/target/mydlp-ui-webapp.war: pom.xml
 	$(MVN) -Pproduction install
 
