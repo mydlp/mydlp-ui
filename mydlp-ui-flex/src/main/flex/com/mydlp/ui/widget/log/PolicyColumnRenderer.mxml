@@ -44,6 +44,17 @@
 					default: break;
 				}
 				
+				labelText += "\n" + LangUtil.getString("messages","log.container.column.policy.channel") + ": ";
+				
+				switch (log.channel)
+				{
+					case "W": labelText += LangUtil.getString("messages","log.container.column.policy.channel.web"); break;
+					case "E": labelText += LangUtil.getString("messages","log.container.column.policy.channel.endpoint"); break;
+					case "M": labelText += LangUtil.getString("messages","log.container.column.policy.channel.mail"); break;
+					case "P": labelText += LangUtil.getString("messages","log.container.column.policy.channel.printer"); break;
+					default: break;
+				}
+				
 				return labelText;
 			}
 			
