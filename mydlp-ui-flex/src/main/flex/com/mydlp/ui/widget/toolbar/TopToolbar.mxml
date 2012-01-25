@@ -3,19 +3,23 @@
 		 xmlns:s="library://ns.adobe.com/flex/spark" 
 		 xmlns:mx="library://ns.adobe.com/flex/mx"
 		 xmlns:my="http://www.mydlp.com/flex/my"
-		 width="100%" height="24"
+		 width="100%" height="36"
 		 creationComplete="onCreationComplete(event)">
 
 	<fx:Script>
 		<![CDATA[
 			import com.mydlp.ui.domain.AuthUser;
+			import com.mydlp.ui.util.InteractionUtil;
 			import com.mydlp.ui.util.LangUtil;
 			
+			import mx.core.IFlexDisplayObject;
 			import mx.events.FlexEvent;
 			import mx.rpc.events.ResultEvent;
 			import mx.validators.EmailValidator;
 			
 			protected var currentUser:AuthUser = null;
+			
+			protected var installPopup:InstallPolicyPopup = null;
 			
 			protected function onCreationComplete(event:FlexEvent):void
 			{
@@ -31,6 +35,21 @@
 										currentUser.username + " <" +currentUser.email + ">";
 			}
 			
+			protected function compilePolicyHandler(event:ResultEvent): void
+			{
+				if (installPopup != null)
+				{
+					installPopup.currentState = "completed";
+					installPopup = null;
+				}
+			}
+			
+			protected function installPolicy(): void
+			{
+				installPopup = InteractionUtil.newPopup(InstallPolicyPopup) as InstallPolicyPopup;
+				re.compilePolicy(1);
+			}
+			
 		]]>
 	</fx:Script>
 
@@ -39,12 +58,19 @@
 		<my:remote id="re" destination="userBRS" >
 			<my:method name="getCurrentUser" result="getCurrentUserHandler(event)" />
 		</my:remote>
+		<my:remote id="pe" destination="policyBRS" >
+			<my:method name="compilePolicy" result="compilePolicyHandler(event)" />
+		</my:remote>
 	</fx:Declarations>
 	
 	<s:layout>
 		<s:HorizontalLayout verticalAlign="middle" horizontalAlign="right"/>
 	</s:layout>
 	
+	<s:Button skinClass="com.mydlp.ui.skin.InstallBitmapLabelButton24Skin" 
+			  label="@Resource(bundle = 'messages', key = 'toptoolbar.installPolicy')"
+			  styleName="fontSize24Style"/>
+	<s:Spacer width="6" />
 	<s:Label id="userLabel" />
 	<s:Spacer width="4" />
 	<s:Button skinClass="com.mydlp.ui.skin.SettingsBitmapButton16Skin" 

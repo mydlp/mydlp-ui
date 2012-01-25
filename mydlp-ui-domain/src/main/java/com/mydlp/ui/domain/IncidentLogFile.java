@@ -26,7 +26,6 @@ public class IncidentLogFile extends AbstractLogFile {
 	}
 
 	@ManyToOne
-	@JoinColumn(nullable=false)
 	public IncidentLogFileContent getContent() {
 		return content;
 	}

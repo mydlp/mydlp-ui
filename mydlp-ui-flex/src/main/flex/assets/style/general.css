@@ -17,8 +17,12 @@ rule|RuleBox s|SkinnableContainer#labelBox #nameLabel {
 	fontWeight: bold;
 }
 
-rule|RuleContainer s|Group s|Button {
-	fontSize: "32"
+.fontSize24Style{
+	fontSize: "24"
+}
+
+.fontSize16Style{
+	fontSize: "16"
 }
 
 s|Application {

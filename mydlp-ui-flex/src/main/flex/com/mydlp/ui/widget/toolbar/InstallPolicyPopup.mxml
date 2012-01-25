@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:TitleWindow xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			   xmlns:s="library://ns.adobe.com/flex/spark" 
+			   xmlns:mx="library://ns.adobe.com/flex/mx" 
+			   initialize="onInit(event)"
+			   title="@Resource(bundle = 'messages', key = 'toptoolbar.install.title')"
+			   width="400" >
+	<fx:Script>
+		<![CDATA[
+			import com.mydlp.ui.util.InteractionUtil;
+			
+			import mx.events.FlexEvent;
+			
+			protected function onInit(event:FlexEvent):void
+			{
+				this.mx_internal::closeButton.enabled = false;
+			}
+			
+		]]>
+	</fx:Script>
+	<s:states>
+		<s:State name="progress" />
+		<s:State name="completed" />
+	</s:states>
+	<s:layout>
+		<s:VerticalLayout verticalAlign="middle" horizontalAlign="center" 
+						  	paddingTop="20" paddingBottom="20"
+							paddingLeft="10" paddingRight="10"/>
+	</s:layout>
+	
+	<s:Label id="installationStatus" 
+			 text.progress="@Resource(bundle = 'messages', key = 'toptoolbar.install.progress.message')"
+			 text.completed="@Resource(bundle = 'messages', key = 'toptoolbar.install.completed.message')"/>
+	
+	<s:Spacer height="4" />
+	
+	<s:Button includeIn="completed" label="@Resource(bundle = 'messages', key = 'toptoolbar.install.closeButton.label')"
+			  click="{InteractionUtil.closePopup(this)}" />
+	
+	
+	
+	
+</s:TitleWindow>
