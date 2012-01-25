@@ -18,7 +18,8 @@
 		<s:Label text="{data.filename}" width="100%"/>
 		<s:HGroup width="20" height="20 " verticalAlign="middle">
 			<s:Button skinClass="com.mydlp.ui.skin.DownloadBitmapButton16Skin"
-					  click="{navigateToURL(new URLRequest ('download?id=' + data.id), '_blank')}" />	
+					  click="{navigateToURL(new URLRequest ('download?id=' + data.id), '_blank')}"
+					  visible="{data.content != null}"/>	
 		</s:HGroup>
 	</s:Group>
 	
