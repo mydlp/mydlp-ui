@@ -21,6 +21,7 @@
 mydlpuidir = $(datadir)/mydlp/ui/
 
 mydlpui_DATA = \
+	conf/jetty.defaults \
 	mydlp-ui-webapp/target/mydlp-ui-webapp.war
 
 apachesitesdir = $(sysconfdir)/apache2/sites-available
