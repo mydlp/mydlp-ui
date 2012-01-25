@@ -146,6 +146,8 @@
 				  click="searchHandler(event)"/>
 		<s:Button label="@Resource(bundle = 'messages', key = 'log.container.search.reset.label')"
 				  click="{criteriaList = new ArrayCollection(); init();}"/>
+		<s:Button label="@Resource(bundle = 'messages', key = 'log.container.refresh.button.label')"
+				  click="searchHandler(event)"/>
 		
 	</s:Group>
 	
