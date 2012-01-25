@@ -58,6 +58,8 @@ public class MyDLPUIThriftServiceImpl implements MyDLPUIThriftService {
 		try {
 			ensureOpen();
 			client.compileCustomer(filterId);
+		} catch (NullPointerException e) {
+			// ignore
 		} catch (TException e) {
 			logger.error("Thrift compile filter", e);
 		}

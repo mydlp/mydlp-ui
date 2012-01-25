@@ -214,7 +214,7 @@
 		</s:fill>
 	</s:Rect>
 	
-	<s:Rect id="normalBorder" left="0" right="0" top="0" bottom="0" visible="false">
+	<s:Rect id="normalBorder" left="0" right="0" top="0" bottom="0" visible="true">
 		<s:stroke>
 			<s:SolidColorStroke color="0xAEBBCF" alpha="0.3" weight="3"/>
 		</s:stroke>
@@ -226,12 +226,6 @@
 				<s:GradientEntry color="#fabe00"/>
 				<s:GradientEntry color="#e17b00"/>
 			</s:LinearGradientStroke>
-		</s:stroke>
-	</s:Rect>
-	
-	<s:Rect id="disableOrder" left="0" right="0" top="0" bottom="0" visible="false">
-		<s:stroke>
-			<s:SolidColorStroke color="0x000000" alpha="0.3" weight="3"/>
 		</s:stroke>
 	</s:Rect>
 	
