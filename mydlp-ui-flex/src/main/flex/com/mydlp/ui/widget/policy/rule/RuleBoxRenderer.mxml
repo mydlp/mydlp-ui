@@ -85,16 +85,6 @@
 					throw new Error("Unknown rule type;");
 				
 				ruleObject = data;
-				if(ruleObject.enabled)
-				{
-					normalBorder.visible = true;
-					enableButton.visible = false;
-				}
-				else
-				{
-					disableOrder.visible = true;
-					enableButton.visible = true;
-				}
 				refresh();
 			}
 			
@@ -197,18 +187,6 @@
 				FlexGlobals.topLevelApplication.refresh();
 			}
 			
-			protected function disableButtonClick(event:MouseEvent):void
-			{
-				ruleObject.enabled = false;
-				re.save(ruleObject);
-			}
-			
-			protected function enableRuleClickHandler(event:MouseEvent):void
-			{
-				ruleObject.enabled = true;
-				re.save(ruleObject);
-			}
-			
 		]]>
 	</fx:Script>
 	
@@ -298,12 +276,12 @@
 						  click="{InteractionUtil.newDeleteDialog(ruleObject)}" />
 				<s:Button styleName="disableButton16Style"
 						  visible="{ruleObject.enabled}"
-						  click="disableButtonClick(event)"/>
+						  click="{ruleObject.enabled = false; re.save(ruleObject);}"/>
 			</s:Group>
 		</s:Group>
 		
-		<s:Button id="enableButton" styleName="disableButton32Style" visible="false"
-				  click="enableRuleClickHandler(event)"/>
+		<s:Button styleName="disableButton32Style" visible="{! ruleObject.enabled}"
+				  click="{ruleObject.enabled = true; re.save(ruleObject);}"/>
 		
 		<rule:RSpacer />
 		
