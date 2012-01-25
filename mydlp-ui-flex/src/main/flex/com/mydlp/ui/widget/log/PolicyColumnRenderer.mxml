@@ -73,6 +73,10 @@
 		]]>
 	</fx:Script>
 	
-	<s:Label id="lblData" top="9" left="7" text="{getPolicyText(data)}"/>
+	<s:layout>
+		<s:VerticalLayout paddingBottom="4" paddingTop="4" />
+	</s:layout>
+	
+	<s:Label id="lblData" text="{getPolicyText(data)}"/>
 	
 </s:GridItemRenderer>

@@ -4,9 +4,9 @@
 					xmlns:mx="library://ns.adobe.com/flex/mx" 
 					clipAndEnableScrolling="true" xmlns:util="com.mydlp.ui.util.*">
 	<s:layout>
-		<s:VerticalLayout verticalAlign="middle" />
+		<s:VerticalLayout verticalAlign="middle" paddingBottom="4" paddingTop="4" />
 	</s:layout>
-	<util:MyList width="100%"
+	<util:MyList width="100%" contentBackgroundAlpha="0"
 		dataProvider="{data.files}" itemRenderer="com.mydlp.ui.widget.log.IncidentLogFileRenderer" 
 		borderVisible="false"/>
 	

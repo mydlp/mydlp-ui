@@ -292,7 +292,7 @@
 		<rule:RSpacer />
 		
 		<rule:ActionBox id="actionBox" width="150" 
-						actionBoxRuleObject="@{ruleObject}" 
+						ruleObject="@{ruleObject}" 
 						currentState="{this.currentState}"
 						isReadOnly="{ruleObject is PrinterRule}"/>
 		
