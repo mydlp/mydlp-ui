@@ -49,6 +49,7 @@
     <aspectj.version>1.6.12</aspectj.version>
     <mysql.driver.version>5.1.18</mysql.driver.version>
     <jstl.version>1.2</jstl.version>
+    <libthrift.version>0.7.0</libthrift.version>
 
     <flex.debug>true</flex.debug>
     <flex.optimize>false</flex.optimize>
@@ -97,6 +98,7 @@
     <module>mydlp-ui-flex</module>
     <module>mydlp-ui-dao</module>
     <module>mydlp-ui-remoting-blazeds</module>
+    <module>mydlp-ui-thrift</module>
     <module>mydlp-ui-webapp</module>
   </modules>  
 

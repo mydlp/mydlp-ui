@@ -24,4 +24,5 @@ public interface RuleService {
 	public void ruleDown(Rule r);
 	
 	public void balanceRulePriority();
+	
 }

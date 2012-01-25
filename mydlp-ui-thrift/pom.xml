@@ -9,9 +9,9 @@
   </parent>
   
   <groupId>com.mydlp.ui</groupId>
-  <artifactId>mydlp-ui-remoting-blazeds</artifactId>
+  <artifactId>mydlp-ui-thrift</artifactId>
   <packaging>jar</packaging>
-  <name>MyDLP UI Remoting Objects for BlazeDS</name>
+  <name>MyDLP UI Thrift Services</name>
   <url>http://www.mydlp.com</url>
   
   <properties>
@@ -99,21 +99,10 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>com.mydlp.ui</groupId>
-      <artifactId>mydlp-ui-domain</artifactId>
-      <version>${mydlp-ui.version}</version>
+      <groupId>org.apache.thrift</groupId>
+      <artifactId>libthrift</artifactId>
+      <version>${libthrift.version}</version> 
     </dependency>
-    <dependency>
-      <groupId>com.mydlp.ui</groupId>
-      <artifactId>mydlp-ui-dao</artifactId>
-      <version>${mydlp-ui.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>com.mydlp.ui</groupId>
-      <artifactId>mydlp-ui-thrift</artifactId>
-      <version>${mydlp-ui.version}</version>
-    </dependency>
-    
   </dependencies>
   
 </project>
