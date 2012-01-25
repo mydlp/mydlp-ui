@@ -36,6 +36,7 @@ public class MyDLPUIThriftServiceImpl implements MyDLPUIThriftService {
 			client = new Mydlp_ui.Client(protocol);
 		} catch (TException e) {
 			logger.error("Thrift init", e);
+			destroy();
 		}
 
 	}
@@ -59,9 +60,10 @@ public class MyDLPUIThriftServiceImpl implements MyDLPUIThriftService {
 			ensureOpen();
 			client.compileCustomer(filterId);
 		} catch (NullPointerException e) {
-			// ignore
+			logger.error("Can not establish thrift service connection.");
 		} catch (TException e) {
 			logger.error("Thrift compile filter", e);
+			destroy();
 		}
 	}
 

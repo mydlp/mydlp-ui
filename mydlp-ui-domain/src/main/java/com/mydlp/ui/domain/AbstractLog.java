@@ -23,6 +23,7 @@ public abstract class AbstractLog extends AbstractEntity {
 	protected Boolean visible;
 	protected Long ruleId;
 	protected String action;
+	protected String channel;
 	protected Long sourceIp;
 	protected String sourceUser;
 	protected String destination;
@@ -55,6 +56,13 @@ public abstract class AbstractLog extends AbstractEntity {
 	}
 	public void setAction(String action) {
 		this.action = action;
+	}
+	@Column(nullable=false)
+	public String getChannel() {
+		return channel;
+	}
+	public void setChannel(String channel) {
+		this.channel = channel;
 	}
 	public Long getSourceIp() {
 		return sourceIp;
