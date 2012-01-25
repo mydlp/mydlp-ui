@@ -50,6 +50,11 @@
     <url-pattern>/spring/*</url-pattern>
   </filter-mapping>
   
+  <filter-mapping>  
+    <filter-name>logSessionFilter</filter-name>  
+    <url-pattern>/download</url-pattern>
+  </filter-mapping>
+  
   <filter-mapping>
     <filter-name>springSecurityFilterChain</filter-name>
     <url-pattern>/*</url-pattern>
@@ -71,8 +76,15 @@
   </servlet>
   
   <servlet>
-    <servlet-name>MyDLP Content Proxy Servlet</servlet-name>
+    <servlet-name>proxyServlet</servlet-name>
     <servlet-class>com.mydlp.ui.framework.servlet.ProxyServlet</servlet-class>
+  </servlet>
+  
+  <servlet>
+    <servlet-name>downloadServlet</servlet-name>
+    <servlet-class>
+      org.springframework.web.context.support.HttpRequestHandlerServlet
+    </servlet-class>
   </servlet>
   
   <!-- Spring Flex Integration 1.0  -->
@@ -83,8 +95,13 @@
   </servlet-mapping>
   
   <servlet-mapping>
-    <servlet-name>MyDLP Content Proxy Servlet</servlet-name>
+    <servlet-name>proxyServlet</servlet-name>
     <url-pattern>/proxy</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
+    <servlet-name>downloadServlet</servlet-name>
+    <url-pattern>/download</url-pattern>
   </servlet-mapping>
 
 </web-app>

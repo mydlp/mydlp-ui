@@ -41,7 +41,7 @@
 					case "L": labelText += LangUtil.getString("messages","log.container.column.policy.action.log"); break;
 					case "Q": labelText += LangUtil.getString("messages","log.container.column.policy.action.quarantine"); break;
 					case "A": labelText += LangUtil.getString("messages","log.container.column.policy.action.archive"); break;
-					default: break;
+					default: labelText += log.action; break;
 				}
 				
 				labelText += "\n" + LangUtil.getString("messages","log.container.column.policy.channel") + ": ";
@@ -52,7 +52,7 @@
 					case "E": labelText += LangUtil.getString("messages","log.container.column.policy.channel.endpoint"); break;
 					case "M": labelText += LangUtil.getString("messages","log.container.column.policy.channel.mail"); break;
 					case "P": labelText += LangUtil.getString("messages","log.container.column.policy.channel.printer"); break;
-					default: break;
+					default: labelText += log.channel; break;
 				}
 				
 				return labelText;

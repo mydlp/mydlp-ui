@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.mydlp.ui.domain.IncidentLog;
+import com.mydlp.ui.domain.IncidentLogFile;
 
 @Repository("incidentLogDAO")
 @Transactional
@@ -64,6 +65,11 @@ public class IncidentLogDAOImpl extends AbstractLogDAO implements IncidentLogDAO
 			.setFirstResult(offset)
 			.setMaxResults(limit)
 			.list();
+	}
+
+	@Override
+	public IncidentLogFile geIncidentLogFile(Integer id) {
+		return getHibernateTemplate().load(IncidentLogFile.class, id);
 	}
 		
 }

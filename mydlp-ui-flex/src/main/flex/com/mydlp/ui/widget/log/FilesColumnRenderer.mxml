@@ -1,28 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:GridItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009" 
 					xmlns:s="library://ns.adobe.com/flex/spark" 
-					xmlns:mx="library://ns.adobe.com/flex/mx" clipAndEnableScrolling="true">
-	
-	<fx:Script>
-		<![CDATA[
-			import com.mydlp.ui.domain.IncidentLog;
-			import com.mydlp.ui.domain.IncidentLogFile;
-			
-			protected function getFilesText(value:*):String
-			{
-				var log:IncidentLog = value as IncidentLog;
-				var labelText:String = "";
-				for (var i:int = 0; i < log.files.length; i++)
-				{
-					labelText += (log.files.getItemAt(i) as IncidentLogFile).filename;
-					if (i != log.files.length - 1)
-						labelText += "\n";
-				}
-				return labelText;
-			}
-		]]>
-	</fx:Script>
-	
-	<s:Label id="lblData" top="9" left="7" text="{getFilesText(data)}"/>
+					xmlns:mx="library://ns.adobe.com/flex/mx" 
+					clipAndEnableScrolling="true" xmlns:util="com.mydlp.ui.util.*">
+	<s:layout>
+		<s:VerticalLayout verticalAlign="middle" />
+	</s:layout>
+	<util:MyList width="100%"
+		dataProvider="{data.files}" itemRenderer="com.mydlp.ui.widget.log.IncidentLogFileRenderer" 
+		borderVisible="false"/>
 	
 </s:GridItemRenderer>
