@@ -79,7 +79,7 @@
 				<s:ArrayList>					
 					<s:GridColumn dataField="username" />
 					<s:GridColumn dataField="email" />
-					<s:GridColumn dataField="isActive" itemRenderer="com.mydlp.ui.widget.option.ActiveGridItemRenderer" />
+					<s:GridColumn dataField="isActive" itemRenderer="com.mydlp.ui.widget.option.GridItemCheckBoxRenderer" />
 				</s:ArrayList>
 			</s:columns>
 		</s:DataGrid>

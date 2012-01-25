@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:List xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		xmlns:s="library://ns.adobe.com/flex/spark" 
+		xmlns:mx="library://ns.adobe.com/flex/mx"
+		dataProvider="{nodeListCollection}" 
+		itemRenderer="com.mydlp.ui.widget.option.NodeItemRenderer"
+		width="200" height="200">
+	
+	<fx:Script>
+		<![CDATA[
+			import mx.collections.ArrayCollection;
+			import mx.collections.ListCollectionView;
+			import mx.events.PropertyChangeEvent;
+			
+			[Bindable]
+			public var nodeListCollection:ListCollectionView = new ListCollectionView();
+			
+			public function set nodeText(text:String):void
+			{					
+				if (text == null || text.length == 0)
+				{
+					nodeListCollection = new ArrayCollection();
+				} 
+				else
+				{	
+					nodeListCollection = new ArrayCollection(
+						text.slice(1, (text.length - 1))
+						.replace(new RegExp("\'","g"),"")						
+						.split(",")
+					);
+				}
+			}
+			
+			public function get nodeText():String
+			{
+				var tempText:String;
+				
+				if(nodeListCollection == null || nodeListCollection.length == 0)
+					return "";
+				
+				tempText = "[";				
+				for (var i:int=0; i < nodeListCollection.length; i++) 
+				{					
+					if(i > 0)
+						tempText +=",";
+					tempText += "'" + nodeListCollection[i] + "'";					
+				}				
+				tempText += "]"		
+				
+				trace("get nodeText return" + tempText);
+				return tempText;
+			}				
+		]]>
+	</fx:Script>	
+	<s:layout>
+		<s:VerticalLayout/>
+	</s:layout>	
+	
+</s:List>

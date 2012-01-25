@@ -56,6 +56,9 @@
 					else if (config.key == "spawn_timeout") advancedTab.spawnTimeout = config;
 					else if (config.key == "query_cache_cleanup_interval") advancedTab.queryCacheCleanupInterval = config;
 					else if (config.key == "query_cache_maximum_size") advancedTab.queryCacheMaximumSize = config;					
+						
+					else if (config.key == "auto_distribution") haTab.autoDistribution = config;
+					else if (config.key == "auto_distribution_nodes") haTab.autoDistributionNodes = config;					
 					
 					visible = true;
 				}
@@ -108,9 +111,12 @@
 				<s:NavigatorContent label="@Resource(bundle = 'messages', key = 'options.tab.user')" width="100%" height="100%">
 					<option:UserManagerTab id="userManagerTab" />
 				</s:NavigatorContent>
+				<s:NavigatorContent label="@Resource(bundle = 'messages', key = 'options.tab.ha')" width="100%" height="100%">
+					<option:HaTab id="haTab" />
+				</s:NavigatorContent>		
 				<s:NavigatorContent label="@Resource(bundle = 'messages', key = 'options.tab.advanced')" width="100%" height="100%">
 					<option:AdvancedTab id="advancedTab" />
-				</s:NavigatorContent>				
+				</s:NavigatorContent>		
 			</mx:ViewStack>
 		</s:VGroup>		
 		
@@ -122,6 +128,6 @@
 		</s:HGroup>	
 	</s:Group>		
 	
-
+	
 	
 </s:SkinnableContainer>
