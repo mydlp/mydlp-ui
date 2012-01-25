@@ -1,0 +1,46 @@
+<IfModule mod_ssl.c>
+<VirtualHost *:443>
+	ServerAdmin mydlp@mydlp.com
+
+	DocumentRoot /usr/share/mydlp/ui/
+	<Directory />
+		Options FollowSymLinks
+		AllowOverride None
+	</Directory>
+
+	ProxyRequests Off
+	ProxyPreserveHost Off
+	<Proxy *>
+		Order allow,deny
+		Allow from all
+	</Proxy>
+	ProxyPass / http://localhost:8080/
+	ProxyPassReverse / http://localhost:8080/
+
+
+	ErrorLog /var/log/mydlp/apache2-error.log
+	LogLevel warn
+	CustomLog /var/log/mydlp/apache2-access.log combined
+
+	SSLEngine on
+	SSLCertificateFile    /etc/mydlp/ssl/public.pem
+	SSLCertificateKeyFile /etc/mydlp/ssl/private.pem
+
+	<FilesMatch "\.(cgi|shtml|phtml|php)$">
+		SSLOptions +StdEnvVars
+	</FilesMatch>
+
+	BrowserMatch "MSIE [2-6]" \
+		nokeepalive ssl-unclean-shutdown \
+		downgrade-1.0 force-response-1.0
+	BrowserMatch "MSIE [17-9]" ssl-unclean-shutdown
+
+</VirtualHost>
+</IfModule>
+<VirtualHost *:80>
+	ServerAdmin mydlp@mydlp.com
+	DocumentRoot /usr/share/mydlp/ui/
+	RewriteEngine On
+	RewriteCond %{HTTPS} off
+	RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI}
+</VirtualHost>
