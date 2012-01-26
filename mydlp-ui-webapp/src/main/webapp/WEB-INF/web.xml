@@ -82,9 +82,17 @@
   
   <servlet>
     <servlet-name>downloadServlet</servlet-name>
-    <servlet-class>
-      org.springframework.web.context.support.HttpRequestHandlerServlet
-    </servlet-class>
+    <servlet-class>org.springframework.web.context.support.HttpRequestHandlerServlet</servlet-class>
+  </servlet>
+  
+  <servlet>
+    <servlet-name>syncServlet</servlet-name>
+    <servlet-class>org.springframework.web.context.support.HttpRequestHandlerServlet</servlet-class>
+  </servlet>
+  
+  <servlet>
+    <servlet-name>receiveServlet</servlet-name>
+    <servlet-class>org.springframework.web.context.support.HttpRequestHandlerServlet</servlet-class>
   </servlet>
   
   <!-- Spring Flex Integration 1.0  -->
@@ -102,6 +110,16 @@
   <servlet-mapping>
     <servlet-name>downloadServlet</servlet-name>
     <url-pattern>/download</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
+    <servlet-name>syncServlet</servlet-name>
+    <url-pattern>/sync</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
+    <servlet-name>receiveServlet</servlet-name>
+    <url-pattern>/receive</url-pattern>
   </servlet-mapping>
 
 </web-app>
