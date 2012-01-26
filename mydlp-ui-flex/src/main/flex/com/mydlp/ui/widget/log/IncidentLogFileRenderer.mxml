@@ -7,7 +7,7 @@
 	<fx:Script>
 		<![CDATA[
 			import com.mydlp.ui.domain.IncidentLogFile;
-			import com.mydlp.ui.util.ConvertSizeAppropriateForm;
+			import com.mydlp.ui.util.FileUtil;
 			
 			import mx.controls.Alert;
 			import mx.events.ToolTipEvent;

@@ -1,8 +1,8 @@
 package com.mydlp.ui.util
 {	
-	public class ConvertSizeAppropriateForm
+	public class FileUtil
 	{
-		public static function getSize(size:Number): String
+		public static function getHumanReadableSize(size:Number): String
 		{			
 			if(size < 1024)
 				return size + " B";

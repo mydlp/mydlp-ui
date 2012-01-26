@@ -9,7 +9,7 @@
 	<fx:Script>
 		<![CDATA[
 			import com.mydlp.ui.domain.IncidentLogFile;
-			import com.mydlp.ui.util.ConvertSizeAppropriateForm;
+			import com.mydlp.ui.util.FileUtil;
 			
 			[Bindable]
 			public var logFile:IncidentLogFile;
@@ -48,7 +48,7 @@
 		
 		<s:Label fontWeight="bold" text="Download This File"/>
 		<s:Label text="Filename: {logFile.filename}"/>
-		<s:Label text="Size: {ConvertSizeAppropriateForm.getSize(logFile.content.size)}"/>
+		<s:Label text="Size: {FileUtil.getHumanReadableSize(logFile.content.size)}"/>
 		<s:Label text="Type: {logFile.content.mimeType}"/>
 	
 	</s:Group>
