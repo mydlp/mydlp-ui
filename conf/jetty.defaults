@@ -15,7 +15,7 @@ VERBOSE=yes
 JETTY_HOST=127.0.0.1
 
 # The network port used by Jetty
-#JETTY_PORT=8080
+JETTY_PORT=8010
 
 # Timeout in seconds for the shutdown of all webapps
 #JETTY_SHUTDOWN=30
