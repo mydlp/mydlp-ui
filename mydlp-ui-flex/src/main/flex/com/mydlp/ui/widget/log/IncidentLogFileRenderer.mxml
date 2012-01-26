@@ -7,6 +7,18 @@
 	<fx:Script>
 		<![CDATA[
 			import com.mydlp.ui.domain.IncidentLogFile;
+			import com.mydlp.ui.util.ConvertSizeAppropriateForm;
+			
+			import mx.controls.Alert;
+			import mx.events.ToolTipEvent;
+			
+			protected function createCustomToolTip(event:ToolTipEvent):void
+			{
+				var toolTip:DownloadButtonToolTip = new DownloadButtonToolTip();
+				toolTip.logFile = data as IncidentLogFile;
+				event.toolTip = toolTip;
+			}
+			
 		]]>
 	</fx:Script>
 	
@@ -19,7 +31,8 @@
 		<s:HGroup width="20" height="20 " verticalAlign="middle">
 			<s:Button skinClass="com.mydlp.ui.skin.DownloadBitmapButton16Skin"
 					  click="{navigateToURL(new URLRequest ('download?id=' + data.id), '_blank')}"
-					  visible="{data.content != null}"/>	
+					  visible="{data.content != null}" toolTip=" "
+					  toolTipCreate="createCustomToolTip(event)"/>	
 		</s:HGroup>
 	</s:Group>
 	
