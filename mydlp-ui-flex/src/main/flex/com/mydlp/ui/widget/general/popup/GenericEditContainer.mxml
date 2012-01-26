@@ -202,6 +202,7 @@
 						textInput2.text = targetObject[classMember.name];
 						BindingUtils.bindProperty(targetObject, classMember.name, textInput2, "text");
 						textInput2.percentWidth = 100;
+						textInput.percentHeight = 50;
 						inputLabel = new HorizontalInputLabel()
 						inputLabel.addElement(textInput2);
 						index = 12;

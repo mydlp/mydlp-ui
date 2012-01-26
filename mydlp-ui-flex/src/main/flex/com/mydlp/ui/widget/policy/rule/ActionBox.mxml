@@ -41,6 +41,7 @@
 						Rule.ACTION_ARCHIVE
 					)
 				);
+			
 		]]>
 	</fx:Script>
 	<fx:Declarations>
@@ -59,11 +60,8 @@
 		should align using padding prop.
 	-->
 	<s:Group includeIn="normal, hovered" >
-		<s:layout>
-			<s:HorizontalLayout />
-		</s:layout>
 		<s:Spacer width="20" />
-		<s:Label text="{ruleObject.action}" />
+		<rule:ActionBoxElement action="{ruleObject.action}"/>
 	</s:Group>
 	
 	<s:Group includeIn="selected" >
@@ -79,7 +77,8 @@
 							contentBackgroundAlpha="1"
 							dataProvider="{isReadOnly?actionsReadOnly:actions}" 
 							selectedItem="@{ruleObject.action}"
-							change="{ruleObject.save()}"/>
+							change="{ruleObject.save()}" 
+							itemRenderer="com.mydlp.ui.widget.policy.rule.ActionDropDownListItemRenderer"/>
 		</s:Group>
 		<s:Spacer height="19" />
 	</s:Group>

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx" width="100%" height="24"
+		 >
+	
+	 <fx:Script>
+		<![CDATA[
+			import com.mydlp.ui.domain.Rule;
+			
+			import mx.controls.Alert;
+			import mx.events.FlexEvent;
+			
+			[Bindable]
+			public var action:String;
+			
+			[Embed('/assets/icons/16x16/accept.png')]
+			public static const passIcon:Class;
+		
+			[Embed('/assets/icons/16x16/delete.png')]
+			public static const blockIcon:Class;
+			
+			[Embed('/assets/icons/16x16/new_page.png')]
+			public static const logIcon:Class;
+			
+			[Embed('/assets/icons/16x16/quarantine.png')]
+			public static const quarantineIcon:Class;
+			
+			[Embed('/assets/icons/16x16/briefcase.png')]
+			public static const archieveIcon:Class;
+			
+			protected static function getIcon(actionValue:String): Class
+			{
+				if(actionValue == Rule.ACTION_PASS)
+					return passIcon;
+				else if(actionValue == Rule.ACTION_BLOCK)
+					return blockIcon;
+				else if(actionValue == Rule.ACTION_LOG)
+					return logIcon;
+				else if(actionValue == Rule.ACTION_QUARANTINE)
+					return quarantineIcon;
+				else if(actionValue == Rule.ACTION_ARCHIVE)
+					return archieveIcon;
+				
+				return logIcon;
+			}
+			
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	
+	<s:layout>
+		<s:HorizontalLayout gap="3"/>
+	</s:layout>
+	
+	<s:BitmapImage id="actionIcon" verticalAlign="middle"
+				   source="{getIcon(action)}"/>
+	
+	<s:Label text="{action}" verticalAlign="middle"/>
+	
+	
+</s:Group>
