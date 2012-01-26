@@ -7,16 +7,30 @@
 	
 	<fx:Script>
 		<![CDATA[
-			protected function AddNodeClickHandler(event:MouseEvent):void
+			
+			import com.mydlp.ui.util.InteractionUtil;
+			
+			protected function removeNodeClickHandler(event:MouseEvent):void
 			{
-				nodeList.nodeListCollection.addItem("test");
+				if (nodeList.selectedIndex != -1)
+				{
+					nodeList.nodeListCollection.removeItemAt(nodeList.selectedIndex);
+					autoDistributionNodes.value = nodeList.nodeText;
+				}
+			}
+			
+			public function addNode(node:String):void
+			{
+				nodeList.nodeListCollection.addItem(node);				
 				autoDistributionNodes.value = nodeList.nodeText;
 			}
-			protected function RemoveNodeClickHandler(event:MouseEvent):void
+			
+			protected function newButtonHandler(event:MouseEvent):void
 			{
-				nodeList.nodeListCollection.removeItemAt(nodeList.selectedIndex);
-				autoDistributionNodes.value = nodeList.nodeText;
+				var popup:NewNodeDialog = InteractionUtil.newPopup(NewNodeDialog) as NewNodeDialog;
+				popup.parentTab = this;
 			}
+			
 		]]>
 	</fx:Script>
 	
@@ -30,14 +44,20 @@
 		
 		<s:Form>
 			<s:FormItem label="{autoDistribution.label}">
-				<s:CheckBox id="autoDistributionCheckBox" selected="{autoDistribution.value == 'true'}" 
+				<s:CheckBox id="autoDistributionCheckBox" 
+							selected="{autoDistribution.value == 'true'}" 
 							change="{autoDistribution.value = autoDistributionCheckBox.selected ? 'true' : 'false'}"/>			
 			</s:FormItem>
+			
 			<s:FormItem label="{autoDistributionNodes.label}">
-				<option:NodeList id="nodeList" nodeText="{autoDistributionNodes.value}"/>
-				<s:HGroup>
-					<s:Button label="removeNode" click="RemoveNodeClickHandler(event)"/>
-					<s:Button label="addNode" click="AddNodeClickHandler(event)"/>					
+				<option:NodeList id="nodeList" nodeText="{autoDistributionNodes.value}" width="200" height="100" />
+				<s:HGroup width="200">
+					<s:Spacer width="100%"/>
+					<s:Button label="@Resource(bundle = 'messages', key = 'options.hatab.popup.removenode')" 
+							  click="removeNodeClickHandler(event)"/>
+					
+					<s:Button label="@Resource(bundle = 'messages', key = 'options.hatab.popup.addnode')"
+							  click="newButtonHandler(event)"/>					
 				</s:HGroup>
 			</s:FormItem>
 		</s:Form>		

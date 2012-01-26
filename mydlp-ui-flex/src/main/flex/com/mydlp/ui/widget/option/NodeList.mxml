@@ -3,8 +3,7 @@
 		xmlns:s="library://ns.adobe.com/flex/spark" 
 		xmlns:mx="library://ns.adobe.com/flex/mx"
 		dataProvider="{nodeListCollection}" 
-		itemRenderer="com.mydlp.ui.widget.option.NodeItemRenderer"
-		width="200" height="200">
+		itemRenderer="com.mydlp.ui.widget.option.NodeItemRenderer">
 	
 	<fx:Script>
 		<![CDATA[
