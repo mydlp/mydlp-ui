@@ -136,9 +136,9 @@
 						  paddingLeft="8" paddingRight="8"
 						  paddingTop="5" paddingBottom="5"/>
 	</s:layout>
-	<s:Form>
+	<s:Form width="350">
 		<s:FormItem label="@Resource(bundle = 'messages', key = 'matcher.combobox.label')" >
-			<s:ComboBox id="matcherCombobox" dataProvider="{matcherDefinitions}" 
+			<s:ComboBox id="matcherCombobox" dataProvider="{matcherDefinitions}" width="100%"
 						change="{currentState = (matcherCombobox.selectedItem == null ? 'normal' : matcherCombobox.selectedItem.data)}"
 						creationComplete="{currentState = (matcherCombobox.selectedItem == null ? 'normal' : matcherCombobox.selectedItem.data)}"
 						/>

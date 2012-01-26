@@ -229,6 +229,8 @@
 							index = 5;
 						}
 						else if(classMember.name == "threshold"){
+							if(isNaN(targetObject[classMember.name]))
+								textInput.text = new String("1");
 							index = 7;
 						}
 					}

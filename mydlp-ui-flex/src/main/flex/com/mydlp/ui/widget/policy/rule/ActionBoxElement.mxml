@@ -52,13 +52,14 @@
 	</fx:Declarations>
 	
 	<s:layout>
-		<s:HorizontalLayout gap="3"/>
+		<s:HorizontalLayout gap="3"	verticalAlign="middle"
+							paddingTop="3" paddingBottom="3"
+							paddingLeft="4" paddingRight="4"/>
 	</s:layout>
 	
-	<s:BitmapImage id="actionIcon" verticalAlign="middle"
-				   source="{getIcon(action)}"/>
+	<s:BitmapImage id="actionIcon" source="{getIcon(action)}"/>
 	
-	<s:Label text="{action}" verticalAlign="middle"/>
+	<s:Label text="{action}"/>
 	
 	
 </s:Group>
