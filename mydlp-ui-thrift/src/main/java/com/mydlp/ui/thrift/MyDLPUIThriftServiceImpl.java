@@ -1,5 +1,7 @@
 package com.mydlp.ui.thrift;
 
+import java.nio.ByteBuffer;
+
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
@@ -65,6 +67,49 @@ public class MyDLPUIThriftServiceImpl implements MyDLPUIThriftService {
 			logger.error("Thrift compile filter", e);
 			destroy();
 		}
+	}
+
+	@Override
+	public ByteBuffer getRuletable(String ipAddress, String revisionId) {
+		try {
+			ensureOpen();
+			return client.getRuletable(ipAddress, revisionId);
+		} catch (NullPointerException e) {
+			logger.error("Can not establish thrift service connection.");
+		} catch (TException e) {
+			logger.error("Thrift compile filter", e);
+			destroy();
+		}
+		return null;
+	}
+
+	@Override
+	public String receiveBegin(String ipAddress) {
+		try {
+			ensureOpen();
+			return client.receiveBegin(ipAddress);
+		} catch (NullPointerException e) {
+			logger.error("Can not establish thrift service connection.");
+		} catch (TException e) {
+			logger.error("Thrift compile filter", e);
+			destroy();
+		}
+		return null;
+	}
+
+	@Override
+	public String receiveChunk(String ipAddress, long itemId,
+			ByteBuffer chunkData, int chunkNum, int chunkNumTotal) {
+		try {
+			ensureOpen();
+			return client.receiveChunk(ipAddress, itemId, chunkData, chunkNum, chunkNumTotal);
+		} catch (NullPointerException e) {
+			logger.error("Can not establish thrift service connection.");
+		} catch (TException e) {
+			logger.error("Thrift compile filter", e);
+			destroy();
+		}
+		return null;
 	}
 
 }

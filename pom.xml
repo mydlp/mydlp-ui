@@ -55,6 +55,10 @@
     <flex.optimize>false</flex.optimize>
     <flex.quality>0.0</flex.quality>
 
+    <amf.protocol>http</amf.protocol>
+    <amf.channelType>mx.messaging.channels.AMFChannel</amf.channelType>
+    <amf.endpointType>flex.messaging.endpoints.AMFEndpoint</amf.endpointType>
+
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
     <dao.show_sql>true</dao.show_sql>
@@ -87,6 +91,15 @@
         <ds.log.url>jdbc:mysql://localhost/mydlp_log</ds.log.url>
         <ds.log.username>root</ds.log.username>
         <ds.log.password></ds.log.password>   
+
+        <flex.debug>false</flex.debug>
+        <flex.optimize>true</flex.optimize>
+        <flex.quality>0.0</flex.quality>
+
+        <amf.protocol>https</amf.protocol>
+        <amf.channelType>mx.messaging.channels.SecureAMFChannel</amf.channelType>
+        <amf.endpointType>flex.messaging.endpoints.SecureAMFEndpoint</amf.endpointType>
+
       </properties>
     </profile>
   </profiles>

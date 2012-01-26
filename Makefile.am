@@ -21,7 +21,10 @@
 mydlpuidir = $(datadir)/mydlp/ui/
 
 mydlpui_DATA = \
+	conf/jetty.defaults \
 	mydlp-ui-webapp/target/mydlp-ui-webapp.war
+
+apachesitesdir = $(sysconfdir)/apache2/sites-available
 
 mydlp-ui-webapp/target/mydlp-ui-webapp.war: pom.xml
 	$(MVN) -Pproduction install
@@ -29,3 +32,6 @@ mydlp-ui-webapp/target/mydlp-ui-webapp.war: pom.xml
 clean-local:
 	$(MVN) -Pproduction clean
 
+install-data-hook:
+	mkdir -p $(DESTDIR)$(apachesitesdir) && \
+		cp -af conf/mydlp.apache-site $(DESTDIR)$(apachesitesdir)/mydlp
