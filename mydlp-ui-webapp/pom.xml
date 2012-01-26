@@ -222,11 +222,12 @@
           <packagingExcludes>WEB-INF/web.xml</packagingExcludes>
           <webResources>
 	        <resource>
-	          <directory>${basedir}/src/main/webapp/WEB-INF/spring</directory>
+	          <directory>${basedir}/src/main/webapp/WEB-INF</directory>
 	          <filtering>true</filtering>
-	          <targetPath>WEB-INF/spring</targetPath>
+	          <targetPath>WEB-INF</targetPath>
 	          <includes>
-	            <include>application-persistence.xml</include>
+	            <include>spring/application-persistence.xml</include>
+	            <include>flex/services-config.xml</include>
 	          </includes>
 	        </resource>
 	      </webResources>
