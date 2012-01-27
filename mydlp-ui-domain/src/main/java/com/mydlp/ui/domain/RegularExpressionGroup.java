@@ -13,7 +13,8 @@ public class RegularExpressionGroup extends MatcherParam {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -6757624652878483973L;
+	private static final long serialVersionUID = 6091346470897557773L;
+	
 	
 	protected List<RegularExpressionGroupEntry> entries;
 

@@ -38,6 +38,7 @@
 			import mx.collections.ArrayCollection;
 			import mx.collections.ListCollectionView;
 			import mx.controls.Alert;
+			import mx.controls.TextArea;
 			import mx.core.FlexGlobals;
 			import mx.events.FlexEvent;
 			
@@ -198,13 +199,13 @@
 					else if(targetObject is Rule &&
 							classMember.name == "description")
 					{
-						var textInput2:TextInput = new TextInput();
-						textInput2.text = targetObject[classMember.name];
-						BindingUtils.bindProperty(targetObject, classMember.name, textInput2, "text");
-						textInput2.percentWidth = 100;
-						textInput.percentHeight = 50;
+						var descriptionTextArea:TextArea = new TextArea();
+						descriptionTextArea.text = targetObject[classMember.name];
+						BindingUtils.bindProperty(targetObject, classMember.name, descriptionTextArea, "text");
+						descriptionTextArea.percentWidth = 100;
+						descriptionTextArea.height = 60;
 						inputLabel = new HorizontalInputLabel()
-						inputLabel.addElement(textInput2);
+						inputLabel.addElement(descriptionTextArea);
 						index = 12;
 					}
 					
@@ -235,7 +236,7 @@
 						}
 					}
 					
-					if (inputLabel != null)//index tuttum ama gerek yok sanirim, direk burada edip string olarak tutarim!
+					if (inputLabel != null)
 					{
 						inputLabel.label = LangUtil.getString("messages", "generic.edit." + getObjectName(targetObject) + "." + classMember.name + ".label");
 						sourceLabelList.push(new InputLabelIndexTuple(index, inputLabel));
