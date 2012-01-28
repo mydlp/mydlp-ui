@@ -130,11 +130,16 @@
 				DragManager.showFeedback(DragManager.NONE);
 			}
 			
+			protected var previousSelectedItem:Object = null;
+			
 			protected function onItemClick(event:ListEvent):void
 			{
-				if (dataDescriptor.isBranch(selectedItem)) {
+				if (dataDescriptor.isBranch(selectedItem) && 
+							(!isItemOpen(selectedItem) || selectedItem == previousSelectedItem)
+						) {
 					expandItem(selectedItem, !isItemOpen(selectedItem), true);
 				}
+				previousSelectedItem = selectedItem;
 			}
 			
 		]]>

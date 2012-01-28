@@ -34,15 +34,27 @@
 		<s:HGroup width="85" height="20" verticalAlign="middle" >
 			<s:HGroup id="actions" includeIn="selected" gap="1">
 				<s:Button styleName="addButtonStyle"
-						  click="{InteractionUtil.newPopup(NewInventoryItemDialog)}" 
+						  click="{
+						  InteractionUtil.newPopup(NewInventoryItemDialog);
+						  event.stopPropagation();
+						  }" 
 						  visible="{treeListData.item is InventoryCategory}"/>
 				<s:Button styleName="copyButtonStyle"
-						  click="{InteractionUtil.newEditDialog(ReflectionUtil.cloneDomainObject(treeListData.item))}" 
+						  click="{
+						  InteractionUtil.newEditDialog(ReflectionUtil.cloneDomainObject(treeListData.item));
+						  event.stopPropagation();
+						  }" 
 						  visible="{treeListData.item is InventoryItem}"/>
 				<s:Button styleName="editButtonStyle" 
-						  click="{InteractionUtil.newEditDialog(treeListData.item)}" />
+						  click="{
+						  InteractionUtil.newEditDialog(treeListData.item);
+						  event.stopPropagation();
+						  }" />
 				<s:Button styleName="removeButtonStyle" 
-						  click="{InteractionUtil.newDeleteDialog(treeListData.item)}" />
+						  click="{
+						  InteractionUtil.newDeleteDialog(treeListData.item);
+						  event.stopPropagation();
+						  }" />
 			</s:HGroup>
 		</s:HGroup>
 		

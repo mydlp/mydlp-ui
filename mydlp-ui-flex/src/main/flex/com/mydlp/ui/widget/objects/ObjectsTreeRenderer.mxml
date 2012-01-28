@@ -19,6 +19,7 @@
 					var newDataFormat:DataFormat = new DataFormat();
 					InteractionUtil.newEditDialog(newDataFormat);
 				}
+				event.stopPropagation();
 			}
 			
 			protected function hasAddButton(item:*): Boolean
