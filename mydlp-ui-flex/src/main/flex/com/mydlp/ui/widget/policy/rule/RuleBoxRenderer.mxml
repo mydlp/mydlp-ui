@@ -16,6 +16,8 @@
 		<![CDATA[
 			import com.mydlp.ui.domain.EndpointRule;
 			import com.mydlp.ui.domain.InformationType;
+			import com.mydlp.ui.domain.InventoryBase;
+			import com.mydlp.ui.domain.InventoryCategory;
 			import com.mydlp.ui.domain.InventoryItem;
 			import com.mydlp.ui.domain.Item;
 			import com.mydlp.ui.domain.MailRule;
@@ -143,17 +145,43 @@
 			
 			protected function onDragOver(event:DragEvent):void
 			{
-				var treeItem:* = FlexGlobals.topLevelApplication.inventoryTree.selectedItem;
-				if(treeItem is InventoryItem)
-					if (treeItem.item is InformationType)
-						acceptDrop();
-					else if ( treeItem.item is Network && 
-							(ruleObject is WebRule || ruleObject is EndpointRule) )
-						acceptDrop();
-					else
-						rejectDrop();
-				else 
+				var treeItems:* = FlexGlobals.topLevelApplication.inventoryTree.selectedItems;
+				if (isAllDroppable(treeItems))
+					acceptDrop();
+				else
 					rejectDrop();
+			}
+			
+			protected function isAllDroppable(treeItems:*): Boolean
+			{
+				for each (var o:* in treeItems)
+				{
+					if (!isDroppable(o)) return false;
+				}
+				
+				return true;
+			}
+			
+			protected function isDroppable(treeItem:*): Boolean
+			{
+				if(treeItem is InventoryItem)
+				{
+					if (treeItem.item is InformationType)
+						return true;
+					else if ( treeItem.item is Network && 
+						(	ruleObject is WebRule || 
+							ruleObject is EndpointRule ||
+							ruleObject is PrinterRule
+							) )
+						return true;
+				}
+				else if (treeItem is InventoryCategory)
+				{
+					var inventoryCategory:InventoryCategory = treeItem as InventoryCategory;
+					return isAllDroppable(inventoryCategory.children);
+				}
+				
+				return false;
 			}
 			
 			protected function onDragExit(event:DragEvent):void
@@ -163,12 +191,51 @@
 			
 			protected function onDragDrop(dragEvent:DragEvent):void
 			{
-				var sourceItem:Item = FlexGlobals.topLevelApplication.inventoryTree.selectedItem.item;
-				saveDroppedObject(sourceItem);
+				var inventoryObjects:* = FlexGlobals.topLevelApplication.inventoryTree.selectedItems;
+				for each (var o:* in inventoryObjects)
+					addDroppedObject(o as InventoryBase);
+				re.save(ruleObject);
 				highlightOff();
 			}
 			
-			protected function saveDroppedObject(sourceItem:Item):void
+			protected function addDroppedObject(inventoryObject:InventoryBase):void
+			{
+				if (!isDroppable(inventoryObject)) return;
+				
+				if (inventoryObject is InventoryItem)
+				{
+					var inventoryItem:InventoryItem = inventoryObject as InventoryItem;
+					addRuleItemObject(inventoryItem.item);
+				}
+				else if (inventoryObject is InventoryCategory)
+				{
+					var inventoryItems:ListCollectionView = resolveInvetoryItems(inventoryObject as InventoryCategory);
+					for each (var o:* in inventoryItems)
+					{
+						var inventoryItem2:InventoryItem = o as InventoryItem;
+						addRuleItemObject(inventoryItem2.item);
+					}
+				}
+				else
+					throw new Error("Unexpected inventory object");
+			}
+			
+			protected function resolveInvetoryItems(category:InventoryCategory): ListCollectionView
+			{
+				var itemList:ListCollectionView = new ArrayCollection();
+				for each (var o:* in category.children)
+				{
+					if (o is InventoryItem)
+						itemList.addItem(o as InventoryItem);
+					else if (o is InventoryCategory)
+						itemList.addAll(resolveInvetoryItems(o as InventoryCategory));
+					else
+						throw new Error("Unexpected inventory object");
+				}
+				return itemList;
+			}
+			
+			protected function addRuleItemObject(sourceItem:Item):void
 			{
 				for each (var ri:RuleItem in ruleObject.ruleItems)
 					if (ri.item.id == sourceItem.id)
@@ -178,7 +245,6 @@
 				newItem.item = sourceItem;
 				newItem.rule = ruleObject;
 				ruleObject.ruleItems.addItem(newItem);
-				re.save(ruleObject);
 			}
 			
 			protected function changeHandler(event:ResultEvent):void
