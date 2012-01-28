@@ -13,6 +13,7 @@
 		 itemRenderer="com.mydlp.ui.widget.objects.ObjectsTreeRenderer"
 		 folderOpenIcon="@Embed('/assets/icons/16x16/folder.png')"
 		 folderClosedIcon="@Embed('/assets/icons/16x16/folder.png')"
+		 itemClick="onItemClick(event)"
 		 >
 	<fx:Script>
 		<![CDATA[
@@ -122,6 +123,13 @@
 					objects.addItem(parentOthers);
 				}
 				refreshTree();
+			}
+			
+			protected function onItemClick(event:ListEvent):void
+			{
+				if (dataDescriptor.isBranch(selectedItem)) {
+					expandItem(selectedItem, !isItemOpen(selectedItem), true);
+				}
 			}
 			
 		]]>

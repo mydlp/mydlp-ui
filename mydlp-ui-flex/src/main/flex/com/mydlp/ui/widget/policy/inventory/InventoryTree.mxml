@@ -18,6 +18,7 @@
 		 itemRenderer="com.mydlp.ui.widget.policy.inventory.InventoryItemRenderer"
 		 folderOpenIcon="@Embed('/assets/icons/16x16/folder.png')"
 		 folderClosedIcon="@Embed('/assets/icons/16x16/folder.png')"
+		 itemClick="onItemClick(event)"
 		 >
 	<fx:Script>
 		<![CDATA[
@@ -35,6 +36,7 @@
 			import mx.collections.ListCollectionView;
 			import mx.controls.listClasses.IListItemRenderer;
 			import mx.events.DragEvent;
+			import mx.events.ListEvent;
 			import mx.managers.DragManager;
 			import mx.rpc.events.ResultEvent;
 			import mx.utils.ObjectUtil;
@@ -126,6 +128,13 @@
 			protected function onDragExit(event:DragEvent):void
 			{
 				DragManager.showFeedback(DragManager.NONE);
+			}
+			
+			protected function onItemClick(event:ListEvent):void
+			{
+				if (dataDescriptor.isBranch(selectedItem)) {
+					expandItem(selectedItem, !isItemOpen(selectedItem), true);
+				}
 			}
 			
 		]]>
