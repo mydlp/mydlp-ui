@@ -21,8 +21,7 @@
 			
 					
 			protected function getRolesHandler(event:ResultEvent): void
-			{				
-				trace("In getRolesHandler");
+			{
 				allAuthSecurity = event.result as ListCollectionView;
 			
 				for (var i:int=0; i < allAuthSecurity.length; i++)				
@@ -36,7 +35,7 @@
 			}
 			
 			public function onChange(event:IndexChangeEvent): void
-			{	trace("In onChange");
+			{
 				authSecurityRoles.removeAll();
 				for each (var i:int in srList.selectedIndices )		
 				{

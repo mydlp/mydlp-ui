@@ -44,9 +44,7 @@
 						tempText +=",";
 					tempText += "'" + nodeListCollection[i] + "'";					
 				}				
-				tempText += "]"		
-				
-				trace("get nodeText return" + tempText);
+				tempText += "]";
 				return tempText;
 			}				
 		]]>
