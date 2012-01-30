@@ -92,6 +92,8 @@ package com.mydlp.ui.util
 					}
 					else if (
 							(classMember.name == "children" && classMember.type == ListCollectionView) ||
+							(classMember.name == "nameKey" && classMember.type == String) ||
+							(classMember.name == "label" && classMember.type == String) ||
 							(classMember.name == "coupledInventoryItem" && classMember.type == InventoryItem)
 						)
 					{
