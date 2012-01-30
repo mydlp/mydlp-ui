@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:SkinnableContainer xmlns:fx="http://ns.adobe.com/mxml/2009" 
+					  xmlns:s="library://ns.adobe.com/flex/spark" 
+					  xmlns:my="http://www.mydlp.com/flex/my"
+					  xmlns:mx="library://ns.adobe.com/flex/mx"
+					  width="100%" height="150">
+	<fx:Script>
+		<![CDATA[
+			import com.mydlp.ui.domain.RegularExpressionGroupEntry;
+			import com.mydlp.ui.util.InteractionUtil;
+			
+			
+			public var deleteList:ListCollectionView = null;
+			
+			public function addEntry(rge:RegularExpressionGroupEntry): void
+			{
+				entries.addItem(rge);
+				entriesList.validateNow();
+			}
+			
+			protected function removeClickHandler(event:MouseEvent):void
+			{
+				entriesList.dataGroup.invalidateDisplayList();
+				for each (var o:Object in entriesList.selectedIndices)
+				{
+					deleteList.addItem(entries.getItemAt(o as int));
+					entries.removeItemAt(o as int);		
+				}
+				entriesList.validateNow();
+			}
+			
+			protected function addClickHandler(event:MouseEvent):void
+			{
+				var regp:RegularExpressionGroupPopup = InteractionUtil.newPopup(RegularExpressionGroupPopup) as RegularExpressionGroupPopup;
+				regp.regularExpressionGroupInput = this;
+				regp.populate();
+			}
+			
+			protected function editClickHandler(event:MouseEvent):void
+			{
+				var regp:RegularExpressionGroupPopup = InteractionUtil.newPopup(RegularExpressionGroupPopup) as RegularExpressionGroupPopup;
+				regp.regularExpressionGroupInput = this;
+				regp.regexEntry = entriesList.selectedItem;
+				regp.populate();
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<fx:Declarations>
+		<mx:ListCollectionView id="entries" />
+	</fx:Declarations>
+	
+	<s:layout>
+		<s:HorizontalLayout verticalAlign="middle" gap="2"/>
+	</s:layout>
+	
+	<s:Group width="100%" height="100%">
+		<s:layout>
+			<s:HorizontalLayout verticalAlign="middle" gap="2"/>
+		</s:layout>
+		<s:List id="entriesList" dataProvider="{entries}" 
+				width="87%" height="100%" 
+				itemRenderer="com.mydlp.ui.widget.general.input.RegularExpressionGroupRenderer">
+			<s:layout>
+				<s:VerticalLayout useVirtualLayout="false" requestedMinRowCount="1"/>
+			</s:layout>
+		</s:List>
+		<s:Group width="13%" height="100%">
+			<s:layout>
+				<s:VerticalLayout verticalAlign="middle" horizontalAlign="center" gap="2"/>
+			</s:layout>
+			<s:Button skinClass="com.mydlp.ui.skin.AddBitmapButton32Skin" click="addClickHandler(event)"/>
+			<s:Button skinClass="com.mydlp.ui.skin.EditBitmapButton32Skin" click="editClickHandler(event)"/>
+			<s:Button skinClass="com.mydlp.ui.skin.RemoveBitmapButton32Skin" click="removeClickHandler(event)"/>
+		</s:Group>
+	</s:Group>
+	
+</s:SkinnableContainer>

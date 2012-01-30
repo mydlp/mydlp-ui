@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:TitleWindow xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			   xmlns:s="library://ns.adobe.com/flex/spark" 
+			   xmlns:mx="library://ns.adobe.com/flex/mx"
+			   xmlns:input="com.mydlp.ui.widget.general.input.*"
+			   close="{close()}"
+			   visible="false"
+			   title="@Resource(bundle = 'messages', key = 'regularExpression.title.label')"
+			   >
+	
+	<fx:Script>
+		<![CDATA[
+			import com.mydlp.ui.domain.MIMEType;
+			import com.mydlp.ui.domain.RegularExpressionGroupEntry;
+			import com.mydlp.ui.util.InteractionUtil;
+			
+			import mx.events.FlexEvent;
+			
+			public var regularExpressionGroupInput:RegularExpressionGroupInput = null;
+			
+			[Bindable]
+			public var regexEntry:RegularExpressionGroupEntry = null;
+			
+			protected function close(): void
+			{
+				InteractionUtil.closePopup(this);
+			}
+			
+			protected function addNewFeature(event:MouseEvent):void
+			{
+				var isEdit:Boolean = false;
+				if (regexEntry == null)
+					regexEntry = new RegularExpressionGroupEntry();
+				else 
+					isEdit = true;
+				
+				regexEntry.regex = keyword.text;
+				
+				if (!isEdit)
+					regularExpressionGroupInput.addEntry(regexEntry);
+				
+				close();
+			}
+			
+			public function populate():void
+			{
+				if (regexEntry != null)
+				{
+					keyword.text = regexEntry.regex.toString();
+				}
+				
+				visible = true;
+			}
+			
+			
+		]]>
+	</fx:Script>
+	
+	
+	<fx:Declarations>
+		
+	</fx:Declarations>
+	
+	
+	<s:layout>
+		<s:VerticalLayout horizontalAlign="center" gap="5"
+						  paddingLeft="8" paddingRight="8"
+						  paddingTop="5" paddingBottom="5"/>
+	</s:layout>
+	<s:Form>
+		<s:FormItem label="@Resource(bundle = 'messages', key = 'regularExpression.name.label')" >
+			<s:TextInput id="keyword"/>
+		</s:FormItem>
+	</s:Form>			
+	
+	<s:Group>
+		<s:layout>
+			<s:HorizontalLayout horizontalAlign="right" verticalAlign="middle" gap="10"/>
+		</s:layout>
+		<s:Button label="@Resource(bundle = 'messages', key = 'regularExpression.button.save.label')" click="addNewFeature(event)"/>
+		<s:Button label="@Resource(bundle = 'messages', key = 'regularExpression.button.cancel.label')" click="{close()}"/>
+	</s:Group>
+</s:TitleWindow>

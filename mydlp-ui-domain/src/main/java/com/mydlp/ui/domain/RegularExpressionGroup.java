@@ -18,7 +18,7 @@ public class RegularExpressionGroup extends MatcherParam {
 	
 	protected List<RegularExpressionGroupEntry> entries;
 
-	@OneToMany(mappedBy="group", cascade={CascadeType.ALL})
+	@OneToMany(cascade={CascadeType.ALL})
 	public List<RegularExpressionGroupEntry> getEntries() {
 		return entries;
 	}
