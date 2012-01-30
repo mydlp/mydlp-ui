@@ -13,11 +13,13 @@
 			import com.mydlp.ui.util.ReflectionUtil;
 			import com.mydlp.ui.widget.general.popup.NewInventoryItemDialog;
 			
+			public static const USERDEFINED_NAMEKEY:String = "inventory.userDefined";
+			
 			public static function isAddEnabled(i:*): Boolean
 			{
 				if (i is InventoryCategory) {
 					var category:InventoryCategory = i as InventoryCategory;
-					if (category.nameKey != null && category.nameKey == "inventory.userDefined")
+					if (category.nameKey != null && category.nameKey == USERDEFINED_NAMEKEY)
 						return true;
 					return category.editable;
 				}
@@ -33,7 +35,7 @@
 					var c:InventoryCategory = (i as InventoryItem).category;
 					if (c == null)
 						return true;
-					if (c.nameKey != null && c.nameKey == "inventory.userDefined")
+					if (c.nameKey != null && c.nameKey == USERDEFINED_NAMEKEY)
 						return true;
 					return c.editable;
 				}

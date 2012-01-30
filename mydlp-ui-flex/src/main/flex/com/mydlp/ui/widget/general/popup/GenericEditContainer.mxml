@@ -65,7 +65,9 @@
 					if (classMember.name == "category" && classMember.type == InventoryCategory)
 					{
 						if (targetObject.id == null || isNaN(targetObject.id) ) // means that this is a new object
-							if (FlexGlobals.topLevelApplication.inventoryTree.selectedItem == null)
+							if (targetObject[classMember.name] != null)
+								continue;
+							else if (FlexGlobals.topLevelApplication.inventoryTree.selectedItem == null)
 								continue;
 							else if (FlexGlobals.topLevelApplication.inventoryTree.selectedItem is InventoryCategory)
 								targetObject[classMember.name] = FlexGlobals.topLevelApplication.inventoryTree.selectedItem;

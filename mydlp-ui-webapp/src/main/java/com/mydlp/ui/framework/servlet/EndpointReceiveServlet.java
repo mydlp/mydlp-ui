@@ -58,7 +58,6 @@ public class EndpointReceiveServlet implements HttpRequestHandler {
 			logger.error("Runtime error occured", e);
 		}
 		PrintWriter out = resp.getWriter();
-		resp.setContentType("application/octet-stream");
 		out.print(returnStr);
 		out.flush();
 		out.close();

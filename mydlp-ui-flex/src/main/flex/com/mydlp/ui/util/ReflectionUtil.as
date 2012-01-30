@@ -8,6 +8,7 @@ package com.mydlp.ui.util
 	import com.mydlp.ui.domain.Item;
 	import com.mydlp.ui.domain.Rule;
 	import com.mydlp.ui.domain.RuleItem;
+	import com.mydlp.ui.widget.policy.inventory.InventoryItemRenderer;
 	
 	import flash.utils.describeType;
 	import flash.utils.getDefinitionByName;
@@ -16,6 +17,7 @@ package com.mydlp.ui.util
 	import mx.collections.ArrayList;
 	import mx.collections.ListCollectionView;
 	import mx.controls.Alert;
+	import mx.core.FlexGlobals;
 
 	public class ReflectionUtil
 	{
@@ -95,11 +97,17 @@ package com.mydlp.ui.util
 					{
 						continue;
 					}
+					else if (classMember.name == "category" && classMember.type == InventoryCategory)
+					{
+						var c:InventoryCategory = sourceObject[classMember.name];
+						if (InventoryItemRenderer.isAddEnabled(c))
+							targetObject[classMember.name] = sourceObject[classMember.name];
+						else
+							targetObject[classMember.name] = FlexGlobals.topLevelApplication.inventoryTree.getUserDefinedCategory();
+					}
 					else if (classMember.name == "name" && classMember.type == String)
 					{
-						targetObject.name =
-							LangUtil.getString("messages", "clone.name.cloneof") + " " +
-							sourceObject.name;
+						targetObject.name =	LangUtil.getString("messages", "clone.name.cloneof") + " " + sourceObject.label;
 					}
 					else if (sourceObject is InventoryItem && classMember.name == "item")
 					{

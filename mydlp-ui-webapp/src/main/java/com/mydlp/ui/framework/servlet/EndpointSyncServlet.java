@@ -1,10 +1,11 @@
 package com.mydlp.ui.framework.servlet;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
 import java.nio.channels.Channels;
 import java.nio.channels.WritableByteChannel;
+import java.nio.charset.Charset;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -24,6 +25,8 @@ public class EndpointSyncServlet implements HttpRequestHandler {
 	private static Logger logger = LoggerFactory.getLogger(EndpointSyncServlet.class);
 	
 	private static final String UP_TO_DATE = "up-to-date";
+	
+	private static final ByteBuffer errorResponse = Charset.forName("ISO-8859-1").encode(CharBuffer.wrap(UP_TO_DATE));
 
 	@Autowired
 	protected MyDLPUIThriftService thriftService;
@@ -31,25 +34,21 @@ public class EndpointSyncServlet implements HttpRequestHandler {
 	@Override
 	public void handleRequest(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
+		ByteBuffer responseBuffer = null;
 		try {
 			String urlKey = req.getParameter("rid");
 			String ipAddress = req.getRemoteAddr();
-			ByteBuffer serializedRuleTable = thriftService.getRuletable(ipAddress, urlKey);
-			WritableByteChannel channel = Channels.newChannel(resp.getOutputStream());
-			resp.setContentType("application/octet-stream");
-	        channel.write(serializedRuleTable);
-	        channel.close();
-	        return;
-		} catch (IOException e) {
-			logger.error("IOError occurred", e);
+			responseBuffer = thriftService.getRuletable(ipAddress, urlKey);
 		} catch (RuntimeException e) {
 			logger.error("Runtime error occured", e);
 		}
-		PrintWriter out = resp.getWriter();
-		resp.setContentType("application/octet-stream");
-		out.print(UP_TO_DATE);
-		out.flush();
-		out.close();
+		
+		if (responseBuffer == null)
+			responseBuffer = errorResponse;
+		
+		WritableByteChannel channel = Channels.newChannel(resp.getOutputStream());
+        channel.write(responseBuffer);
+        channel.close();
 	}
 
 }
