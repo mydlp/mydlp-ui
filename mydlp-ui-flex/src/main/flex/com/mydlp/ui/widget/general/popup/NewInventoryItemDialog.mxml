@@ -31,7 +31,9 @@
 			protected function categoryHandler():void
 			{
 				close();
-				InteractionUtil.newEditDialog(new InventoryCategory());
+				var c:InventoryCategory = new InventoryCategory();
+				c.editable = true;
+				InteractionUtil.newEditDialog(c);
 			}
 			protected function networkHandler():void
 			{

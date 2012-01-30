@@ -4,11 +4,43 @@
 					  xmlns:mx="library://ns.adobe.com/flex/mx">
 	<fx:Script>
 		<![CDATA[
+			import avmplus.getQualifiedClassName;
+			
+			import com.mydlp.ui.domain.InventoryBase;
 			import com.mydlp.ui.domain.InventoryCategory;
 			import com.mydlp.ui.domain.InventoryItem;
 			import com.mydlp.ui.util.InteractionUtil;
 			import com.mydlp.ui.util.ReflectionUtil;
 			import com.mydlp.ui.widget.general.popup.NewInventoryItemDialog;
+			
+			public static function isAddEnabled(i:*): Boolean
+			{
+				if (i is InventoryCategory) {
+					var category:InventoryCategory = i as InventoryCategory;
+					if (category.nameKey != null && category.nameKey == "inventory.userDefined")
+						return true;
+					return category.editable;
+				}
+				return false;
+			}
+			
+			public static function isEditEnabled(i:*): Boolean
+			{
+				if (i is InventoryCategory)
+					return (i as InventoryCategory).editable;
+				else if (i is InventoryItem)
+				{
+					var c:InventoryCategory = (i as InventoryItem).category;
+					if (c == null)
+						return true;
+					if (c.nameKey != null && c.nameKey == "inventory.userDefined")
+						return true;
+					return c.editable;
+				}
+				else
+					throw new Error("Unexpected inventory object");
+			}
+			
 		]]>
 	</fx:Script>
 	
@@ -38,7 +70,7 @@
 						  InteractionUtil.newPopup(NewInventoryItemDialog);
 						  event.stopPropagation();
 						  }" 
-						  visible="{treeListData.item is InventoryCategory}"/>
+						  visible="{isAddEnabled(treeListData.item)}"/>
 				<s:Button styleName="copyButtonStyle"
 						  click="{
 						  InteractionUtil.newEditDialog(ReflectionUtil.cloneDomainObject(treeListData.item));
@@ -49,12 +81,14 @@
 						  click="{
 						  InteractionUtil.newEditDialog(treeListData.item);
 						  event.stopPropagation();
-						  }" />
+						  }" 
+						  visible="{isEditEnabled(treeListData.item)}"/>
 				<s:Button styleName="removeButtonStyle" 
 						  click="{
 						  InteractionUtil.newDeleteDialog(treeListData.item);
 						  event.stopPropagation();
-						  }" />
+						  }"
+						  visible="{isEditEnabled(treeListData.item)}"/>
 			</s:HGroup>
 		</s:HGroup>
 		
