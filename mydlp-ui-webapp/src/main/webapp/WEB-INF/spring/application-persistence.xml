@@ -45,6 +45,7 @@
          <prop key="hibernate.dialect">${dao.policy.dialect}</prop>
          <prop key="hibernate.hbm2ddl.auto">update</prop>
          <prop key="hibernate.show_sql">${dao.show_sql}</prop>
+         <prop key="hibernate.connection.zeroDateTimeBehavior">convertToNull</prop>
        </props>
      </property>
    </bean>
@@ -63,6 +64,7 @@
          <prop key="hibernate.dialect">${dao.log.dialect}</prop>
          <prop key="hibernate.hbm2ddl.auto">update</prop>
          <prop key="hibernate.show_sql">${dao.show_sql}</prop>
+         <prop key="hibernate.connection.zeroDateTimeBehavior">convertToNull</prop>
        </props>
      </property>
   </bean>
