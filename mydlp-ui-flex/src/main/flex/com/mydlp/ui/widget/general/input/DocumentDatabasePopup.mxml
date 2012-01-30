@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:TitleWindow xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			   xmlns:s="library://ns.adobe.com/flex/spark" 
+			   xmlns:mx="library://ns.adobe.com/flex/mx"
+			   xmlns:input="com.mydlp.ui.widget.general.input.*"
+			   close="{close()}"
+			   visible="false"
+			   title="@Resource(bundle = 'messages', key = 'documentDatabase.title.label')"
+			   >
+	
+	<fx:Script>
+		<![CDATA[
+			import com.mydlp.ui.domain.DocumentDatabaseFileEntry;
+			import com.mydlp.ui.domain.MIMEType;
+			import com.mydlp.ui.domain.RegularExpressionGroupEntry;
+			import com.mydlp.ui.util.InteractionUtil;
+			
+			import mx.events.FlexEvent;
+			
+			public var documentDatabaseInput:DocumentDatabaseInput = null;
+			
+			[Bindable]
+			public var fileEntry:DocumentDatabaseFileEntry = null;
+			
+			protected function close(): void
+			{
+				InteractionUtil.closePopup(this);
+			}
+			
+			protected function addNewFileEntry(event:MouseEvent):void
+			{
+				var isEdit:Boolean = false;
+				if (fileEntry == null)
+					fileEntry = new DocumentDatabaseFileEntry();
+				else 
+					isEdit = true;
+				
+				fileEntry.md5Hash = md5HashInput.text;
+				
+				if (!isEdit)
+					documentDatabaseInput.addEntry(fileEntry);
+				
+				close();
+			}
+			
+			public function populate():void
+			{
+				if (fileEntry != null)
+				{
+					md5HashInput.text = fileEntry.md5Hash.toString();
+				}
+				
+				visible = true;
+			}
+			
+			
+		]]>
+	</fx:Script>
+	
+	
+	<fx:Declarations>
+		
+	</fx:Declarations>
+	
+	
+	<s:layout>
+		<s:VerticalLayout horizontalAlign="center" gap="5"
+						  paddingLeft="8" paddingRight="8"
+						  paddingTop="5" paddingBottom="5"/>
+	</s:layout>
+	<s:Form>
+		<s:FormItem label="@Resource(bundle = 'messages', key = 'documentDatabase.name.label')" >
+			<s:TextInput id="md5HashInput"/>
+		</s:FormItem>
+	</s:Form>			
+	
+	<s:Group>
+		<s:layout>
+			<s:HorizontalLayout horizontalAlign="right" verticalAlign="middle" gap="10"/>
+		</s:layout>
+		<s:Button label="@Resource(bundle = 'messages', key = 'documentDatabase.button.save.label')" click="addNewFileEntry(event)"/>
+		<s:Button label="@Resource(bundle = 'messages', key = 'documentDatabase.button.cancel.label')" click="{close()}"/>
+	</s:Group>
+</s:TitleWindow>

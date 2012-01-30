@@ -19,6 +19,7 @@
 		<![CDATA[
 			import com.mydlp.ui.domain.AbstractEntity;
 			import com.mydlp.ui.domain.DataFormat;
+			import com.mydlp.ui.domain.DocumentDatabase;
 			import com.mydlp.ui.domain.InformationType;
 			import com.mydlp.ui.domain.InventoryBase;
 			import com.mydlp.ui.domain.InventoryItem;
@@ -44,6 +45,7 @@
 			protected var keywordGroups:ArrayCollection = new ArrayCollection();
 			protected var others:ArrayCollection = new ArrayCollection();
 			protected var regularExpressionGroups:ArrayCollection = new ArrayCollection();
+			protected var documentDatabases:ArrayCollection = new ArrayCollection();
 			
 			protected var tempOpenItems:Object;
 			
@@ -73,6 +75,7 @@
 				informationTypes.removeAll();
 				keywordGroups.removeAll();
 				regularExpressionGroups.removeAll();
+				documentDatabases.removeAll();
 				others.removeAll();
 				
 				for each(var item:* in _objects)
@@ -81,6 +84,8 @@
 						dataFormats.addItem(item);
 					else if(item is RegularExpressionGroup)
 						regularExpressionGroups.addItem(item);
+					else if(item is DocumentDatabase)
+						documentDatabases.addItem(item);
 					else if (item is InventoryItem && (item as InventoryItem).item is Network)
 						networks.addItem(item);
 					else if (item is InventoryItem && (item as InventoryItem).item is InformationType)
@@ -121,6 +126,12 @@
 					parentRegularExpressionGroups.classType = RegularExpressionGroup;
 					parentRegularExpressionGroups.children = regularExpressionGroups;
 					objects.addItem(parentRegularExpressionGroups);
+					
+					var parentDocumentDatabases:ObjectGroup = new ObjectGroup();
+					parentDocumentDatabases.label = LangUtil.getString("messages", "objects.documentDatabases.label");
+					parentDocumentDatabases.classType = DocumentDatabase;
+					parentDocumentDatabases.children = documentDatabases;
+					objects.addItem(parentDocumentDatabases);
 					
 					
 					var parentOthers:ObjectGroup = new ObjectGroup();

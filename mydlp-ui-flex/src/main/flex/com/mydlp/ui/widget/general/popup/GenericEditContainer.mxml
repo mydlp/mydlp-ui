@@ -13,6 +13,7 @@
 			import com.mydlp.ui.domain.AbstractEntity;
 			import com.mydlp.ui.domain.AuthUser;
 			import com.mydlp.ui.domain.DataFormat;
+			import com.mydlp.ui.domain.DocumentDatabase;
 			import com.mydlp.ui.domain.InformationDescription;
 			import com.mydlp.ui.domain.InformationType;
 			import com.mydlp.ui.domain.InventoryBase;
@@ -28,6 +29,7 @@
 			import com.mydlp.ui.util.ReflectionUtil;
 			import com.mydlp.ui.widget.general.input.AuthSecurityRolesInput;
 			import com.mydlp.ui.widget.general.input.DataFormatInput;
+			import com.mydlp.ui.widget.general.input.DocumentDatabaseInput;
 			import com.mydlp.ui.widget.general.input.InformationFeatureInput;
 			import com.mydlp.ui.widget.general.input.IpAddressInput;
 			import com.mydlp.ui.widget.general.input.MimeTypeInput;
@@ -135,6 +137,22 @@
 						BindingUtils.bindProperty(targetObject, classMember.name, dfInput, "dataFormats");
 						inputLabel = new VerticalInputLabel()
 						inputLabel.addElement(dfInput);
+						index = 8;
+					}
+					
+					else if(targetObject is DocumentDatabase &&
+							classMember.name == "fileEntries" &&
+							classMember.type == ListCollectionView)
+					{
+						var ddInput:DocumentDatabaseInput = new DocumentDatabaseInput();
+						ddInput.deleteList = this.deleteList;
+						if(targetObject[classMember.name] == null)
+							ddInput.fileEntries = new ArrayCollection();
+						else
+							ddInput.fileEntries = targetObject[classMember.name];
+						BindingUtils.bindProperty(targetObject, classMember.name, ddInput, "fileEntries");
+						inputLabel = new VerticalInputLabel();
+						inputLabel.addElement(ddInput);
 						index = 8;
 					}
 					

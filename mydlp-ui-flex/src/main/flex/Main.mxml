@@ -12,7 +12,7 @@
 			   xmlns:dashboard="com.mydlp.ui.widget.dashboard.*"
 			   minHeight="800" minWidth="1280" 
 			   usePreloader="true"
-			   applicationComplete="onCreationComplete(event)"
+			   applicationComplete="onCreationComplete(event)" xmlns:revision="com.mydlp.ui.widget.revision.*"
 			   >
 	<fx:Style source="/assets/style/general.css" />
 	
@@ -113,6 +113,7 @@
 					<log:LogContainer id="logContainer" />
 				</s:NavigatorContent>
 				<s:NavigatorContent label="@Resource(bundle = 'messages', key = 'maintab.revisions')" width="100%" height="100%">
+					<revision:RevisionContainer/>
 				</s:NavigatorContent>
 			</mx:ViewStack>
 		</s:VGroup>

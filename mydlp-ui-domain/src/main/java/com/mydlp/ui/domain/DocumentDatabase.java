@@ -16,7 +16,7 @@ public class DocumentDatabase extends MatcherParam {
 	
 	protected List<DocumentDatabaseFileEntry> fileEntries;
 
-	@OneToMany(mappedBy="documentDatabase", cascade={CascadeType.ALL})
+	@OneToMany(cascade={CascadeType.ALL})
 	public List<DocumentDatabaseFileEntry> getFileEntries() {
 		return fileEntries;
 	}

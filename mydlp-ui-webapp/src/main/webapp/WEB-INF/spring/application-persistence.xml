@@ -34,6 +34,8 @@
          <value>com.mydlp.ui.domain.MIMEType</value>
          <value>com.mydlp.ui.domain.RegularExpressionGroup</value>
          <value>com.mydlp.ui.domain.RegularExpressionGroupEntry</value>
+         <value>com.mydlp.ui.domain.DocumentDatabase</value>
+         <value>com.mydlp.ui.domain.DocumentDatabaseFileEntry</value>
          <value>com.mydlp.ui.domain.Network</value>
          <value>com.mydlp.ui.domain.PrinterRule</value>
          <value>com.mydlp.ui.domain.RegularExpression</value>

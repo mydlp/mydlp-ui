@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx" width="400" height="300"
+		 initialize="init(event)">
+	
+	<fx:Script>
+		<![CDATA[
+			import mx.controls.Alert;
+			import mx.events.FlexEvent;
+			private var fileRef:FileReference;
+			
+			private const FILE_UPLOAD_URL:String = "http://localhost:8080/";
+			
+			private function init(event:FlexEvent):void {
+				try{
+					fileRef = new FileReference();
+					fileRef.addEventListener(Event.SELECT, fileRef_select);
+					fileRef.addEventListener(ProgressEvent.PROGRESS, fileRef_progress);
+					fileRef.addEventListener(Event.COMPLETE, fileRef_complete);
+					//fileRef.addEventListener(IOErrorEvent.IO_ERROR, ioErrorHandler);
+				
+				}
+				catch(err:Error){
+					message.text = "ERROR";
+				}
+			}
+			
+			private function ioErrorHandler(event:IOErrorEvent):void
+			{
+				Alert.show("ioerror: " + event );
+			}
+			
+			private function browseAndUpload():void {
+				fileRef.browse();
+				message.text = "";
+			}
+			
+			private function fileRef_select(evt:Event):void {
+				try {
+					message.text = "size (bytes): " + numberFormatter.format(fileRef.size);
+					var request:URLRequest = new URLRequest();
+					request.url = FILE_UPLOAD_URL;
+					fileRef.upload(request);
+				} catch (err:Error) {
+					message.text = "ERROR: zero-byte file";
+				}
+			}
+			
+			private function fileRef_progress(evt:ProgressEvent):void {
+				progressBar.visible = true;
+			}
+			
+			private function fileRef_complete(evt:Event):void {
+				message.text += " (complete)";
+				progressBar.visible = false;
+			}
+
+			
+		]]>
+	</fx:Script>
+	
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+		<s:NumberFormatter id="numberFormatter" />
+	</fx:Declarations>
+	
+	
+	<s:layout>
+		<s:HorizontalLayout gap="2"/>
+	</s:layout>
+	
+	<s:Button label="Upload file"
+			   click="browseAndUpload();" />
+	<s:Label id="message" />
+	<mx:ProgressBar id="progressBar"
+					indeterminate="true"
+					visible="false" />
+
+</s:Group>

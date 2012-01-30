@@ -6,7 +6,6 @@ import org.hibernate.criterion.DetachedCriteria;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.mydlp.ui.domain.DataFormat;
 import com.mydlp.ui.domain.DocumentDatabase;
 
 
@@ -17,7 +16,7 @@ public class DocumentDatabaseDAOImpl extends AbstractPolicyDAO implements Docume
 	@SuppressWarnings("unchecked")
 	public List<DocumentDatabase> getDocumentDatabases() {
 		DetachedCriteria criteria = 
-				DetachedCriteria.forClass(DataFormat.class);
+				DetachedCriteria.forClass(DocumentDatabase.class);
 		return getHibernateTemplate().findByCriteria(criteria);
 	}
 
