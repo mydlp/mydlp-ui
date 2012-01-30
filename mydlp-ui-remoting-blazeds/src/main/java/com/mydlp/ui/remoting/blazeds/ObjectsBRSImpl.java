@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.mydlp.ui.dao.DataFormatDAO;
 import com.mydlp.ui.dao.InventoryDAO;
+import com.mydlp.ui.dao.RegularExpressionGroupDAO;
 import com.mydlp.ui.domain.AbstractEntity;
 
 @Service("objectsBRS")
@@ -20,6 +21,9 @@ public class ObjectsBRSImpl implements ObjectsService
 	
 	@Autowired
 	protected DataFormatDAO dataFormatDAO;
+	
+	@Autowired
+	protected RegularExpressionGroupDAO regexDAO;
 
 	public List<AbstractEntity> getObjects() {
 		
@@ -27,6 +31,7 @@ public class ObjectsBRSImpl implements ObjectsService
 		
 		objects.addAll(dataFormatDAO.getDataFormats());
 		objects.addAll(inventoryDAO.getInventoryItems());
+		objects.addAll(regexDAO.getRegularExpressionGroups());
 		
 		return objects;
 	}

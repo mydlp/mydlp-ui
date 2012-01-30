@@ -8,17 +8,17 @@ import javax.persistence.ManyToOne;
 
 @Entity
 @Inheritance(strategy=InheritanceType.JOINED)
-public abstract class MatcherParam extends AbstractEntity {
-
+public abstract class MatcherParam extends AbstractNamedEntity {
+	
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 7769507344355346426L;
+	private static final long serialVersionUID = 547366977394426668L;
 	
 	protected Matcher matcher;
 
 	@ManyToOne
-	@JoinColumn(nullable=false)
+	@JoinColumn
 	public Matcher getMatcher() {
 		return matcher;
 	}

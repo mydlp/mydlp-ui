@@ -6,7 +6,6 @@ import org.hibernate.criterion.DetachedCriteria;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.mydlp.ui.domain.DataFormat;
 import com.mydlp.ui.domain.RegularExpressionGroup;
 
 
@@ -17,7 +16,7 @@ public class RegularExpressionGroupDAOImpl extends AbstractPolicyDAO implements 
 	@SuppressWarnings("unchecked")
 	public List<RegularExpressionGroup> getRegularExpressionGroups() {
 		DetachedCriteria criteria = 
-				DetachedCriteria.forClass(DataFormat.class);
+				DetachedCriteria.forClass(RegularExpressionGroup.class);
 		return getHibernateTemplate().findByCriteria(criteria);
 	}
 

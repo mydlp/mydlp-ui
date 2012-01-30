@@ -87,7 +87,10 @@ public class AuditTrail {
 		className = prettifyClassName(className);
 		
 		if (o instanceof AbstractEntity) {
-			String objectId = ((AbstractEntity) o).getId().toString();
+			Integer oId = ((AbstractEntity) o).getId();
+			String objectId = "null";
+			if (oId != null)
+				objectId = oId.toString();
 			
 			auditStr += className + "[id:" + objectId + "]";
 			if (o instanceof AbstractNamedEntity) {

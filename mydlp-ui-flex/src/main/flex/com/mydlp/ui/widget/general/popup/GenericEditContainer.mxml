@@ -19,6 +19,8 @@
 			import com.mydlp.ui.domain.InventoryCategory;
 			import com.mydlp.ui.domain.InventoryItem;
 			import com.mydlp.ui.domain.Item;
+			import com.mydlp.ui.domain.Matcher;
+			import com.mydlp.ui.domain.RegularExpressionGroup;
 			import com.mydlp.ui.domain.Rule;
 			import com.mydlp.ui.util.ClassMember;
 			import com.mydlp.ui.util.InteractionUtil;
@@ -29,6 +31,7 @@
 			import com.mydlp.ui.widget.general.input.InformationFeatureInput;
 			import com.mydlp.ui.widget.general.input.IpAddressInput;
 			import com.mydlp.ui.widget.general.input.MimeTypeInput;
+			import com.mydlp.ui.widget.general.input.RegularExpressionGroupInput;
 			
 			import flash.utils.getQualifiedClassName;
 			
@@ -91,7 +94,8 @@
 							(classMember.name == "coupledInventoryItem" && classMember.type == InventoryItem) ||
 							(classMember.name == "coupledRuleItems" && classMember.type == ListCollectionView) ||
 							(classMember.name == "informationType" && classMember.type == InformationType) ||
-							(classMember.name == "editable" && classMember.type == Boolean)
+							(classMember.name == "editable" && classMember.type == Boolean) ||
+							(classMember.name == "matcher" && classMember.type == Matcher)
 						)
 					{
 						continue;
@@ -131,6 +135,22 @@
 						BindingUtils.bindProperty(targetObject, classMember.name, dfInput, "dataFormats");
 						inputLabel = new VerticalInputLabel()
 						inputLabel.addElement(dfInput);
+						index = 8;
+					}
+					
+					else if (targetObject is RegularExpressionGroup &&
+							classMember.name == "entries" &&
+							classMember.type == ListCollectionView)
+					{
+						var regInput:RegularExpressionGroupInput = new RegularExpressionGroupInput();
+						regInput.deleteList = this.deleteList;
+						if(targetObject[classMember.name] == null)
+							regInput.entries = new ArrayCollection();
+						else
+							regInput.entries = targetObject[classMember.name];
+						BindingUtils.bindProperty(targetObject, classMember.name, regInput, "entries");
+						inputLabel = new VerticalInputLabel();
+						inputLabel.addElement(regInput);
 						index = 8;
 					}
 					

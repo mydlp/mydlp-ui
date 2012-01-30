@@ -8,6 +8,7 @@
 			
 			import com.mydlp.ui.domain.AbstractEntity;
 			import com.mydlp.ui.domain.DataFormat;
+			import com.mydlp.ui.domain.RegularExpressionGroup;
 			import com.mydlp.ui.util.InteractionUtil;
 			
 			import mx.events.FlexEvent;
@@ -18,6 +19,11 @@
 				{
 					var newDataFormat:DataFormat = new DataFormat();
 					InteractionUtil.newEditDialog(newDataFormat);
+				}
+				if(treeListData.item.classType == RegularExpressionGroup)
+				{
+					var newRegularExpressionGroup:RegularExpressionGroup = new RegularExpressionGroup();
+					InteractionUtil.newEditDialog(newRegularExpressionGroup);
 				}
 				event.stopPropagation();
 			}
