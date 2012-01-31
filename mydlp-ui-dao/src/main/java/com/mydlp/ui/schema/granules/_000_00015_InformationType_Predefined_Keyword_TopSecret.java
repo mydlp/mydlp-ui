@@ -15,7 +15,7 @@ import com.mydlp.ui.domain.InventoryBase;
 import com.mydlp.ui.domain.InventoryCategory;
 import com.mydlp.ui.domain.InventoryItem;
 import com.mydlp.ui.domain.Matcher;
-import com.mydlp.ui.domain.MatcherParam;
+import com.mydlp.ui.domain.MatcherArgument;
 import com.mydlp.ui.domain.RegularExpression;
 import com.mydlp.ui.schema.AbstractGranule;
 
@@ -42,10 +42,12 @@ public class _000_00015_InformationType_Predefined_Keyword_TopSecret extends Abs
 		
 		Matcher m = new Matcher();
 		m.setFunctionName("keyword");
-		r.setMatcher(m);
-		List<MatcherParam> mpl = new ArrayList<MatcherParam>();
-		mpl.add(r);
-		m.setMatcherParams(mpl);
+		MatcherArgument ma = new MatcherArgument();
+		ma.setCoupledMatcher(m);
+		ma.setCoupledArgument(r);
+		List<MatcherArgument> mpl = new ArrayList<MatcherArgument>();
+		mpl.add(ma);
+		m.setMatcherArguments(mpl);
 		
 		InformationFeature ift = new InformationFeature();
 		ift.setWeight(new Long(1));

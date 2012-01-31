@@ -16,6 +16,7 @@
      <property name="dataSource"><ref bean="policyDataSource"/></property>
      <property name="annotatedClasses">
        <list>
+         <value>com.mydlp.ui.domain.Argument</value>
          <value>com.mydlp.ui.domain.AuthSecurityRole</value>
          <value>com.mydlp.ui.domain.AuthUser</value>
          <value>com.mydlp.ui.domain.Config</value>
@@ -30,7 +31,7 @@
          <value>com.mydlp.ui.domain.Item</value>
          <value>com.mydlp.ui.domain.MailRule</value>
          <value>com.mydlp.ui.domain.Matcher</value>
-         <value>com.mydlp.ui.domain.MatcherParam</value>
+         <value>com.mydlp.ui.domain.MatcherArgument</value>
          <value>com.mydlp.ui.domain.MIMEType</value>
          <value>com.mydlp.ui.domain.RegularExpressionGroup</value>
          <value>com.mydlp.ui.domain.RegularExpressionGroupEntry</value>

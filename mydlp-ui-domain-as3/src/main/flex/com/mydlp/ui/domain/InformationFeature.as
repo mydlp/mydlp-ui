@@ -28,7 +28,7 @@ package com.mydlp.ui.domain {
 			else if(this.matcher.functionName == "uk_nino")
 				return "UK National Insurance Number" + " - " + this.weight.toString();
 			else if(this.matcher.functionName == "keyword")
-				return "Keyword" + " - " + this.matcher.matcherParams.getItemAt(0).regex + " - " + this.weight.toString();
+				return "Keyword" + " - " + this.matcher.matcherArguments.getItemAt(0).coupledArgument.regex + " - " + this.weight.toString();
 			else if(this.matcher.functionName == "scode")
 				return "Source Code(C/C++/C#)" + " - " + this.weight.toString();
 			else if(this.matcher.functionName == "scode_ada")

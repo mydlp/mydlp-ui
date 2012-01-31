@@ -17,7 +17,7 @@ public class Matcher extends AbstractEntity {
 
 	protected String functionName;
 	
-	protected List<MatcherParam> matcherParams;
+	protected List<MatcherArgument> matcherArguments;
 	
 	protected InformationFeature coupledInformationFeature;
 
@@ -29,15 +29,15 @@ public class Matcher extends AbstractEntity {
 		this.functionName = functionName;
 	}
 
-	@OneToMany(mappedBy="matcher", cascade={CascadeType.ALL})
-	public List<MatcherParam> getMatcherParams() {
-		return matcherParams;
+	@OneToMany(mappedBy="coupledMatcher", cascade={CascadeType.ALL})
+	public List<MatcherArgument> getMatcherArguments() {
+		return matcherArguments;
 	}
 
-	public void setMatcherParams(List<MatcherParam> matcherParams) {
-		this.matcherParams = matcherParams;
+	public void setMatcherArguments(List<MatcherArgument> matcherArguments) {
+		this.matcherArguments = matcherArguments;
 	}
-	
+
 	@OneToOne(mappedBy="matcher")
 	public InformationFeature getCoupledInformationFeature() {
 		return coupledInformationFeature;

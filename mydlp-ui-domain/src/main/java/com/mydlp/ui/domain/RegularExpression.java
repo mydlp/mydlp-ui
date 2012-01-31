@@ -4,7 +4,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 
 @Entity
-public class RegularExpression extends MatcherParam {
+public class RegularExpression extends Argument {
 	
 	/**
 	 * 

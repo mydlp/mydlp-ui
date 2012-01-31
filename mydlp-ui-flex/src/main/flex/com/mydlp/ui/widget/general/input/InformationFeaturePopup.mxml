@@ -12,10 +12,9 @@
 		<![CDATA[
 			import com.mydlp.ui.domain.InformationFeature;
 			import com.mydlp.ui.domain.Matcher;
+			import com.mydlp.ui.domain.MatcherArgument;
 			import com.mydlp.ui.domain.RegularExpression;
 			import com.mydlp.ui.util.InteractionUtil;
-			
-			import mx.events.FlexEvent;
 			
 			public var informationFeatureInput:InformationFeatureInput = null;
 			
@@ -51,16 +50,18 @@
 				{
 					m.functionName = "keyword";
 					var r:RegularExpression = null;
-					if (m.matcherParams == null)
+					if (m.matcherArguments == null || m.matcherArguments.length == 0)
 					{
 						r = new RegularExpression();
-						m.matcherParams = new ArrayCollection();
-						m.matcherParams.addItem(r);
-						r.matcher = m;
+						var ma:MatcherArgument = new MatcherArgument;
+						m.matcherArguments = new ArrayCollection();
+						ma.coupledMatcher = m;
+						ma.coupledArgument = r;
+						m.matcherArguments.addItem(ma);
 					}
 					else
 					{
-						r = m.matcherParams.getItemAt(0) as RegularExpression;
+						r = m.matcherArguments.getItemAt(0).coupledArgument as RegularExpression;
 					}
 					
 					// TODO: there should be regex validation. escaping special characters.
@@ -149,7 +150,7 @@
 		<s:FormItem includeIn="keyword" label="@Resource(bundle = 'messages', key = 'matcher.keyword.keywordValue.label')" >
 			<s:TextInput id="keywordValue" creationComplete="{
 						 if (informationFeatureObject != null)
-						 	keywordValue.text = informationFeatureObject.matcher.matcherParams.getItemAt(0).regex;
+						 	keywordValue.text = informationFeatureObject.matcher.matcherArguments.getItemAt(0).coupledArgument.regex;
 						 }"/>
 		</s:FormItem>
 	</s:Form>			
