@@ -426,7 +426,7 @@
        when adding a document.
    -->
 
-   <field name="id" type="string" indexed="true" stored="true" required="true" /> 
+   <field name="id" type="long" indexed="true" stored="true" required="true" /> 
    <field name="category" type="text_ws" indexed="true" stored="true" multiValued="true" omitNorms="true" required="true" />
    <field name="content" type="text" indexed="true" stored="false" multiValued="true" required="true" />
 
