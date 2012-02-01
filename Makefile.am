@@ -18,22 +18,37 @@
 ###    along with MyDLP.  If not, see <http://www.gnu.org/licenses/>.
 ###--------------------------------------------------------------------------
 
-mydlpuidir = $(datadir)/mydlp/ui/
+mydlpuidir = $(datadir)/mydlp/ui
 
 mydlpui_DATA = \
 	conf/jetty-ajp.xml \
 	conf/jetty.conf \
 	conf/jetty.defaults \
+	conf/solr.schema.xml \
 	mydlp-ui-webapp/target/mydlp-ui-webapp.war
 
 apachesitesdir = $(sysconfdir)/apache2/sites-available
 
+solrlibdir = $(datadir)/solr/WEB-INF/lib
+
+solrlib_DATA = \
+	target/apache-solr-cell.jar
+
 mydlp-ui-webapp/target/mydlp-ui-webapp.war: pom.xml
-	$(MVN) -Pproduction install
+	@$(MVN) -Pproduction install
+
+target/apache-solr-cell.jar: pom.xml
+	@mkdir -p target
+	@$(MVN) dependency:get -DrepoUrl=http://repo1.maven.apache.org/maven2 -Dartifact=org.apache.solr:solr-cell:1.4.0
+	@cp -af $(HOME)/.m2/repository/org/apache/solr/solr-cell/1.4.0/solr-cell-1.4.0.jar target/apache-solr-cell.jar
+	@$(MVN) dependency:get -DrepoUrl=http://repo1.maven.apache.org/maven2 -Dartifact=org.apache.tika:tika-bundle:0.8
+	@cp -af $(HOME)/.m2/repository/org/apache/tika/tika-bundle/0.8/tika-bundle-0.8.jar target/tika-bundle.jar
 
 clean-local:
-	$(MVN) -Pproduction clean
+	@$(MVN) -Pproduction clean
 
 install-data-hook:
 	mkdir -p $(DESTDIR)$(apachesitesdir) && \
 		cp -af conf/mydlp.apache-site $(DESTDIR)$(apachesitesdir)/mydlp
+	mkdir -p $(DESTDIR)$(solrlibdir) && \
+		unzip target/tika-bundle.jar -x 'META-INF/*' -d $(DESTDIR)$(solrlibdir)
