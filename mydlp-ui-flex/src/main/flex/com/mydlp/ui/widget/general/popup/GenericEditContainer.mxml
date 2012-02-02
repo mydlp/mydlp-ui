@@ -121,9 +121,9 @@
 						inputLabel.addElement(ipInput);
 						
 						if(classMember.name == "ipBase")
-							index = 2;
-						else
 							index = 1;
+						else
+							index = 2;
 					}
 					else if (targetObject is InformationType && 
 							classMember.name == "dataFormats" && 

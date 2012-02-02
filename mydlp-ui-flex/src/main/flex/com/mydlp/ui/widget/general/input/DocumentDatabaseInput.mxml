@@ -31,7 +31,7 @@
 			
 			protected function addClickHandler(event:MouseEvent):void
 			{
-				var ddPopup:DocumentDatabasePopup = InteractionUtil.newPopup(DocumentDatabasePopup) as DocumentDatabasePopup;
+				var ddPopup:DocumentDatabaseAddPopup = InteractionUtil.newPopup(DocumentDatabaseAddPopup) as DocumentDatabaseAddPopup;
 				ddPopup.documentDatabaseInput = this;
 				ddPopup.populate();
 			}

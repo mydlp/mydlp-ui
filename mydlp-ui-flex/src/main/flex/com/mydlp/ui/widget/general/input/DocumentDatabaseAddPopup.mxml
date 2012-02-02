@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:TitleWindow xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			   xmlns:s="library://ns.adobe.com/flex/spark" 
+			   xmlns:mx="library://ns.adobe.com/flex/mx"
+			   xmlns:input="com.mydlp.ui.widget.general.input.*"
+			   close="{close()}"
+			   visible="false"
+			   title="@Resource(bundle = 'messages', key = 'documentDatabase.add.title.label')"
+			   >
+	
+	
+	<fx:Script>
+		<![CDATA[
+			import com.mydlp.ui.domain.DocumentDatabaseFileEntry;
+			import com.mydlp.ui.util.InteractionUtil;
+			import com.mydlp.ui.util.Md5Util;
+			
+			import mx.collections.ArrayCollection;
+			import mx.controls.Alert;
+			import mx.events.DragEvent;
+			import mx.events.FlexEvent;
+			import mx.managers.DragManager;
+			import mx.rpc.events.ResultEvent;
+			
+			
+			private var refUploadFile:FileReference;
+			private var refUploadFileList:FileReferenceList;
+			private var fileListArray:Array;
+			private var md5List:ArrayCollection = new ArrayCollection();
+			
+			public var documentDatabaseInput:DocumentDatabaseInput = null;
+			
+			
+			protected function close(): void
+			{
+				InteractionUtil.closePopup(this);
+			}
+			
+			protected function uploadButton(event:MouseEvent):void
+			{
+				refUploadFileList = new FileReferenceList();
+				refUploadFile = new FileReference();
+				refUploadFileList.browse(); 
+				refUploadFileList.addEventListener(Event.SELECT,onFileSelect); 
+			}
+			
+			protected function loadEachFile(file:FileReference):void
+			{
+				file.addEventListener(Event.COMPLETE, onFileComplete);
+				file.load();
+			}
+			
+			protected function onFileSelect(event:Event):void
+			{
+				md5List.removeAll();
+				refUploadFileList = event.currentTarget as FileReferenceList;
+				fileListArray = refUploadFileList.fileList;
+				var file:FileReference;
+				for(var i:int = 0; i < fileListArray.length; i++)
+				{
+					file = (FileReference)(fileListArray[i]);
+					loadEachFile(file);
+				}
+			}
+			
+			protected function onFileComplete(event:Event):void
+			{
+				var tempRefUploadFile:FileReference = event.currentTarget as FileReference;
+				
+				var data:ByteArray = new ByteArray();
+				tempRefUploadFile.data.readBytes(data, 0, tempRefUploadFile.data.length);
+				var tempMd5:String = Md5Util.hashBinary(data); 
+				md5List.addItem(tempMd5);
+				
+				filePath.text += tempRefUploadFile.name;
+				filePath.text += "\n";
+				this.currentState = "uploadFile";
+			}
+			
+			protected function doUploadHandler(event:ResultEvent):void
+			{
+				var result:String = event.result as String;
+				this.currentState = "selectFile";
+				filePath.text = "";
+				Alert.show(result);
+			}
+			
+			
+			protected function uploadFile(event:MouseEvent):void
+			{
+				filePath.text = "";
+				for each(var s:String in md5List)
+				{
+					var fileEntry:DocumentDatabaseFileEntry = new DocumentDatabaseFileEntry();
+					fileEntry.md5Hash = s;
+					documentDatabaseInput.addEntry(fileEntry);
+				}
+				this.currentState = "selectFile";
+			}
+			
+			public function populate():void
+			{				
+				visible = true;
+			}
+			
+		]]>
+	</fx:Script>
+	
+	
+	<s:states>
+		<s:State name="selectFile"/>
+		<s:State name="uploadFile"/>
+	</s:states>
+	
+	<s:Group>
+		
+	
+		<s:layout>
+			<s:VerticalLayout horizontalAlign="center" gap="5"
+							  paddingLeft="8" paddingRight="8"
+							  paddingTop="15" paddingBottom="15"/>
+		</s:layout>
+		
+		<s:TextArea includeIn="selectFile, uploadFile" width="100%" height="60" id="filePath" text=""/>
+		
+		<s:Group>
+			
+			<s:layout>
+				<s:HorizontalLayout horizontalAlign="right" verticalAlign="middle" gap="10"/>
+			</s:layout>
+			
+			<s:Button includeIn="selectFile, uploadFile" label="@Resource(key='documentDatabase.fileUpload.browse', bundle='messages')"
+					  click="uploadButton(event)" />
+			
+			<s:Button includeIn="uploadFile" label="@Resource(key='documentDatabase.fileUpload.upload', bundle='messages')"
+					  click="uploadFile(event)"/>
+			
+			<s:Button label="@Resource(bundle = 'messages', key = 'documentDatabase.button.cancel.label')" click="{close()}"/>
+		</s:Group>
+		
+	</s:Group>
+	
+</s:TitleWindow>
