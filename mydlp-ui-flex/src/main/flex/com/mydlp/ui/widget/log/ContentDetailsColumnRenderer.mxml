@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:GridItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009" 
+					xmlns:s="library://ns.adobe.com/flex/spark" 
+					xmlns:mx="library://ns.adobe.com/flex/mx" 
+					clipAndEnableScrolling="true" >
+	
+	<fx:Script>
+		<![CDATA[
+			import com.mydlp.ui.domain.IncidentLogFileContent;
+			import com.mydlp.ui.util.FileUtil;
+			import com.mydlp.ui.util.LangUtil;
+			
+			protected function getDetailsText(value:*):String {
+				if (!value is IncidentLogFileContent)
+					return value.message;
+				
+				var logContent:IncidentLogFileContent = value as IncidentLogFileContent;
+				var labelText:String = "";
+				
+				labelText += LangUtil.getString("messages","log.container.content.type.label") + ": ";
+				labelText += logContent.mimeType;
+				labelText += "\n";
+				labelText += LangUtil.getString("messages","log.container.content.size.label") + ": ";
+				labelText += FileUtil.getHumanReadableSize(data.size);
+				
+				return labelText;
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<s:states>
+		<s:State name="normal" />
+		<s:State name="hovered" />
+		<s:State name="selected" />
+	</s:states>
+	
+	<s:layout>
+		<s:HorizontalLayout paddingBottom="4" paddingTop="4" gap="4"/>
+	</s:layout>
+
+	<s:Button skinClass="com.mydlp.ui.skin.DownloadBitmapButton16Skin"
+			  click="{navigateToURL(new URLRequest ('download?id=' + data.id), '_blank')}"
+			  toolTip="@Resource(bundle = 'messages', key = 'log.container.content.download.label')"
+			  visible="{data.id != null}"
+			  />	
+	
+	<s:Label id="lblData" text="{getDetailsText(data)}"/>
+	
+</s:GridItemRenderer>

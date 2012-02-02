@@ -10,4 +10,7 @@ public interface ConfigDAO {
 	
 	public void saveAll(List<Config> configs);
 	
+	public String getValue(String key);
+	
+	public void setValue(String key, String value);
 }

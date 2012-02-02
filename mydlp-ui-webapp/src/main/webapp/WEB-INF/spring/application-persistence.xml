@@ -100,7 +100,12 @@
     <property name="transactionManager" ref="policyTransactionManager"/>
   </bean>
   
+  <bean id="logTransactionTemplate" class="org.springframework.transaction.support.TransactionTemplate">
+    <property name="transactionManager" ref="logTransactionManager"/>
+  </bean>
+  
   <tx:annotation-driven transaction-manager="policyTransactionManager"/>
   
   <tx:annotation-driven transaction-manager="logTransactionManager"/>
+  
 </beans>

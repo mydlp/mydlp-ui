@@ -12,5 +12,5 @@ public interface MyDLPUIThriftService {
 
     public String receiveChunk(String ipAddress, long itemId, 
     			ByteBuffer chunkData, int chunkNum, int chunkNumTotal);
-
+    
 }

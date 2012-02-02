@@ -8,103 +8,69 @@
 					  creationComplete="onCreationComplete(event)">
 	<fx:Script>
 		<![CDATA[
+			import com.mydlp.ui.domain.IncidentLogFileContent;
+			import com.mydlp.ui.util.AsyncListDataProvider;
 			import com.mydlp.ui.util.LangUtil;
-			import com.mydlp.ui.util.PagedList;
 			
 			import mx.collections.ArrayCollection;
 			import mx.collections.ListCollectionView;
-			import mx.collections.errors.ItemPendingError;
 			import mx.events.FlexEvent;
-			import mx.rpc.AsyncResponder;
 			import mx.rpc.AsyncToken;
-			import mx.rpc.events.FaultEvent;
-			import mx.rpc.events.ResultEvent;
+			
+			import spark.events.GridEvent;
+			
+			protected const LOG_PENDING_OBJECT:Object = 
+				{date: LangUtil.getString("messages", "log.container.search.pending.message")};
+			
+			protected const CONTENT_PENDING_OBJECT:Object = 
+				{message: LangUtil.getString("messages", "log.container.search.pending.message")};
 
-			protected const PAGE_SIZE:int = 25;
-			protected const MAX_FETCHED_PAGE:int = 20;
-			protected const PENDING_OBJECT:Object = {date: LangUtil.getString("messages", "log.container.search.pending.message")};
-			
 			protected var criteriaList:ListCollectionView = new ArrayCollection();
+			protected var searchString:String = "";
+			protected var contentId:Number = Number.NaN;
 			
 			[Bindable]
-			protected var pagedList:PagedList = null;
+			protected var logSearchDP:AsyncListDataProvider = null;
 			
 			[Bindable]
-			protected var _numDBItems:Number = Number.NaN;
-			
-			protected var _fetchedPages:Dictionary = new Dictionary();
-			protected var _numFetchedPages:int = 0;
-			
-			protected function handleCreatePendingItemFunction(index:int, ipe:ItemPendingError):Object 
-			{
-				var pendingObject:Object = {date: "Loading..."};
-				
-				if (isNaN(_numDBItems)) return pendingObject;
-				if (_fetchedPages == null) return pendingObject;
-				
-				if (_numFetchedPages > MAX_FETCHED_PAGE) reset();
-				
-				var page:uint = Math.floor(index / PAGE_SIZE);
-				
-				if (_fetchedPages[page] == undefined)
-				{
-					var numItemsToFetch:uint = PAGE_SIZE;
-					var startIndex:uint = PAGE_SIZE * page;
-					var endIndex:uint = startIndex + PAGE_SIZE - 1;
-					
-					if (endIndex > pagedList.length)
-					{
-						numItemsToFetch = pagedList.length - startIndex;
-					}
-					
-					var asyncToken:AsyncToken = re.getLogs(criteriaList, startIndex, numItemsToFetch);
-					
-					asyncToken.addResponder(new AsyncResponder(
-						function result(event:ResultEvent, token:Object = null):void 
-						{
-							for (var i:uint = 0; i < event.result.length; i++)
-								pagedList.setItemAt(event.result[i], token + i);
-						}, 
-						function fault(event:FaultEvent, token:Object = null):void 
-						{
-							trace(event.fault.faultString);
-							_fetchedPages[page] = undefined;
-							_numFetchedPages--;
-						}, 
-						startIndex));
-					_fetchedPages[page] = true;
-					_numFetchedPages++;
-				}
-				return pendingObject;
-			}            
-			
-			
-			/**
-			 * Reset the PagedList and member variables
-			 */ 
-			private function reset():void{
-				_fetchedPages = new Dictionary();
-				_numFetchedPages = 0;
-				pagedList = new PagedList(_numDBItems);
-			}
-			
-			protected function getLogCountHandler(event:ResultEvent): void
-			{
-				_numDBItems = event.result as Number;
-				reset();
-			}
+			protected var contentSearchDP:AsyncListDataProvider = null;
 			
 			protected function onCreationComplete(event:FlexEvent):void
 			{
-				init();
+				logSearchDP = new AsyncListDataProvider();
+				logSearchDP.countFunction = countLogSearch;
+				logSearchDP.fetchFunction = fetchLogSearch;
+				logSearchDP.pendingObject = LOG_PENDING_OBJECT;
+				
+				contentSearchDP = new AsyncListDataProvider();
+				contentSearchDP.countFunction = countContentSearch;
+				contentSearchDP.fetchFunction = fetchContentSearch;
+				contentSearchDP.pendingObject = CONTENT_PENDING_OBJECT;
+				
+				logSearchDP.init();
 			}
 			
-			protected function init():void
+			protected function countLogSearch(): AsyncToken
 			{
-				re.getLogCount(criteriaList);
+				return re.getLogCount(criteriaList);
 			}
 			
-			protected function searchHandler(event:MouseEvent):void
+			protected function fetchLogSearch(offset:Number, count:Number): AsyncToken
+			{
+				return re.getLogs(criteriaList, offset, count);
+			}
+			
+			protected function countContentSearch(): AsyncToken
+			{
+				return re.getLogContentCount(searchString);
+			}
+			
+			protected function fetchContentSearch(offset:Number, count:Number): AsyncToken
+			{
+				return re.getLogContents(searchString, offset, count);
+			}
+			
+			protected function generateCriteriaList():void
 			{
 				criteriaList = new ArrayCollection();
 				if (startDate.selectedDate != null && startDate.selectedDate != null)
@@ -117,56 +83,132 @@
 					
 					criteriaList.addItem(criteria);
 				}
-				init();
+				if (!isNaN(contentId))
+				{
+					var criteria2:ListCollectionView = new ArrayCollection();
+					criteria2.addItem("contentId");
+					criteria2.addItem("eq");
+					criteria2.addItem(contentId);
+					
+					criteriaList.addItem(criteria2);
+				}
+			}
+			
+			protected function searchLogHandler(event:MouseEvent):void
+			{
+				generateCriteriaList();
+				logSearchDP.init();
+			}
+			
+			protected function resetHandler(event:MouseEvent):void
+			{
+				// reset search keys
+				criteriaList = new ArrayCollection();
+				searchString = "";
+				contentId = Number.NaN;
+				
+				// requery
+				logSearchDP.init();
+				
+				// reset view
+				currentState = "normal";
+				startDate.selectedDate = null;
+				endDate.selectedDate = null;
+				fulltextInput.text = "";
+			}
+			
+			protected function searchContentHandler(event:MouseEvent):void
+			{
+				searchString = fulltextInput.text;
+				contentSearchDP.init();
+				currentState = "fulltext";
+			}
+			
+			protected function onContentClick(event:GridEvent):void
+			{
+				if (event.item == null) return;
+				var content:IncidentLogFileContent = 
+						event.item as IncidentLogFileContent;
+				contentId = content.id;
+				generateCriteriaList();
+				logSearchDP.init();
 			}
 			
 		]]>
 	</fx:Script>
 	<fx:Declarations>
-		<my:remote id="re" destination="logBRS">
-			<my:method name="getLogCount" result="getLogCountHandler(event)" />
-		</my:remote>
-		<s:AsyncListView id="asyncListView" list="{pagedList}" createPendingItemFunction="handleCreatePendingItemFunction" />
+		<my:remote id="re" destination="logBRS" />
 	</fx:Declarations>
+	
+	<s:states>
+		<s:State name="normal" />
+		<s:State name="fulltext" />
+	</s:states>
+	
 	<s:layout>
 		<s:VerticalLayout paddingTop="10" />
 	</s:layout>
 	
-	<s:Group id="logSearchBar" width="100%">
+	<s:Group id="searchBar" width="100%" height="32">
 		<s:layout>
 			<s:HorizontalLayout verticalAlign="middle" />
 		</s:layout>
 		
-		<s:Label text="@Resource(bundle = 'messages', key = 'log.container.search.date.start.label')"/>
-		<mx:DateField id="startDate"/>
-		<s:Label text="@Resource(bundle = 'messages', key = 'log.container.search.date.end.label')"/>
-		<mx:DateField id="endDate"/>
-		<s:Spacer width="20"/>
-		<s:Button label="@Resource(bundle = 'messages', key = 'log.container.search.button.label')"
-				  click="searchHandler(event)"/>
-		<s:Button label="@Resource(bundle = 'messages', key = 'log.container.search.reset.label')"
-				  click="{criteriaList = new ArrayCollection(); init();}"/>
-		<s:Button label="@Resource(bundle = 'messages', key = 'log.container.refresh.button.label')"
-				  click="searchHandler(event)"/>
-		
+		<s:HGroup verticalAlign="middle" width="100%">
+			<s:Label text="@Resource(bundle = 'messages', key = 'log.container.search.date.start.label')"/>
+			<mx:DateField id="startDate"/>
+			<s:Label text="@Resource(bundle = 'messages', key = 'log.container.search.date.end.label')"/>
+			<mx:DateField id="endDate"/>
+			<s:Spacer width="20"/>
+			<s:Button label="@Resource(bundle = 'messages', key = 'log.container.search.button.label')"
+					  click="searchLogHandler(event)"/>
+			<s:Button label="@Resource(bundle = 'messages', key = 'log.container.search.reset.label')"
+					  click="resetHandler(event)"/>
+			<s:Button label="@Resource(bundle = 'messages', key = 'log.container.refresh.button.label')"
+					  click="searchLogHandler(event)"/>
+		</s:HGroup>
+		<s:HGroup width="400" verticalAlign="middle" >
+			<s:Button label="@Resource(bundle = 'messages', key = 'log.container.search.fulltext.label')"
+					  click="searchContentHandler(event)" enabled="{fulltextInput.text.length > 3}"/>
+			<s:TextInput id="fulltextInput" width="100%"/>
+		</s:HGroup>
 	</s:Group>
 	
-	<s:DataGrid id="logList" dataProvider="{asyncListView}" width="100%" height="100%" variableRowHeight="true">
-		<s:columns>
-			<s:ArrayList>
-				<s:GridColumn headerText="@Resource(bundle = 'messages', key = 'log.container.header.date')"
-							  dataField="date"/>
-				<s:GridColumn headerText="@Resource(bundle = 'messages', key = 'log.container.header.source')" 
-							  itemRenderer="com.mydlp.ui.widget.log.SourceColumnRenderer"/>
-				<s:GridColumn headerText="@Resource(bundle = 'messages', key = 'log.container.header.destination')"
-							  dataField="destination"/>
-				<s:GridColumn headerText="@Resource(bundle = 'messages', key = 'log.container.header.policy')"
-							  itemRenderer="com.mydlp.ui.widget.log.PolicyColumnRenderer"/>
-				<s:GridColumn headerText="@Resource(bundle = 'messages', key = 'log.container.header.files')"
-							  itemRenderer="com.mydlp.ui.widget.log.FilesColumnRenderer"/>
-			</s:ArrayList>
-		</s:columns>
-	</s:DataGrid>
-	
+	<s:Group width="100%" height="100%">
+		<s:layout>
+			<s:HorizontalLayout gap="10"/>
+		</s:layout>
+		<s:DataGrid id="logList" dataProvider="{logSearchDP.asyncListView}" width="100%" height="100%" variableRowHeight="true">
+			<s:columns>
+				<s:ArrayList>
+					<s:GridColumn headerText="@Resource(bundle = 'messages', key = 'log.container.header.date')"
+								  dataField="date"/>
+					<s:GridColumn headerText="@Resource(bundle = 'messages', key = 'log.container.header.source')" 
+								  itemRenderer="com.mydlp.ui.widget.log.IncidentSourceColumnRenderer"/>
+					<s:GridColumn headerText="@Resource(bundle = 'messages', key = 'log.container.header.destination')"
+								  dataField="destination"/>
+					<s:GridColumn headerText="@Resource(bundle = 'messages', key = 'log.container.header.policy')"
+								  itemRenderer="com.mydlp.ui.widget.log.IncidentPolicyColumnRenderer"/>
+					<s:GridColumn headerText="@Resource(bundle = 'messages', key = 'log.container.header.files')"
+								  itemRenderer="com.mydlp.ui.widget.log.IncidentFilesColumnRenderer"/>
+				</s:ArrayList>
+			</s:columns>
+		</s:DataGrid>
+		
+		<s:DataGrid id="logContentList" includeIn="fulltext" gridClick="onContentClick(event)"
+					dataProvider="{contentSearchDP.asyncListView}" width="400" height="100%" variableRowHeight="true">
+			<s:columns>
+				<s:ArrayList>
+					<s:GridColumn headerText=""
+								  itemRenderer="com.mydlp.ui.widget.log.ContentSelectColumnRenderer"
+								  width="36"/>
+					<s:GridColumn headerText="@Resource(bundle = 'messages', key = 'log.container.header.content.details')" 
+								  itemRenderer="com.mydlp.ui.widget.log.ContentDetailsColumnRenderer"/>
+					<s:GridColumn headerText="@Resource(bundle = 'messages', key = 'log.container.header.content.filenames')"
+								  itemRenderer="com.mydlp.ui.widget.log.ContentFilenamesColumnRenderer"/>
+				</s:ArrayList>
+			</s:columns>
+		</s:DataGrid>
+	</s:Group>
 	
 </s:SkinnableContainer>
