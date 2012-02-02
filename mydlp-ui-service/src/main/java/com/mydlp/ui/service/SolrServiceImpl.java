@@ -138,7 +138,7 @@ public class SolrServiceImpl implements SolrService {
 			SolrDocumentList result = response.getResults();
 			
 			for (SolrDocument solrDocument : result) 
-				returnList.add(Integer.parseInt((String) solrDocument.get("id")));
+				returnList.add(((Long) solrDocument.get("id")).intValue());
 			
 		} catch (NumberFormatException e) {
 			logger.error("Error occurred when formatting number", e);

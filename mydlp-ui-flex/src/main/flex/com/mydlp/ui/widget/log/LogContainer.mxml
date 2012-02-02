@@ -126,7 +126,7 @@
 			
 			protected function onContentClick(event:GridEvent):void
 			{
-				if (event.item == null) return;
+				if (event.item == null || ! event.item is IncidentLogFileContent) return;
 				var content:IncidentLogFileContent = 
 						event.item as IncidentLogFileContent;
 				contentId = content.id;
