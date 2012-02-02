@@ -1,4 +1,4 @@
-package com.mydlp.ui.framework.aspectj;
+package com.mydlp.ui.service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,8 +19,8 @@ import com.mydlp.ui.domain.AbstractEntity;
 import com.mydlp.ui.domain.AbstractNamedEntity;
 
 @Aspect
-@Service("auditTrailAspect")
-public class AuditTrail {
+@Service("auditTrailService")
+public class AuditTrailServiceImpl implements AuditTrailService {
 
 	private static Logger logger = LoggerFactory.getLogger("AUDIT");
 	
@@ -82,6 +82,7 @@ public class AuditTrail {
 	}
 	
 	protected static String objectToAuditString(Object o) {
+		if ( o == null) return "null";
 		String auditStr = "";
 		String className = o.getClass().getName();
 		className = prettifyClassName(className);

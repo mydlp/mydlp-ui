@@ -9,9 +9,9 @@
   </parent>
   
   <groupId>com.mydlp.ui</groupId>
-  <artifactId>mydlp-ui-remoting-blazeds</artifactId>
+  <artifactId>mydlp-ui-service</artifactId>
   <packaging>jar</packaging>
-  <name>MyDLP UI Remoting Objects for BlazeDS</name>
+  <name>MyDLP UI Services</name>
   <url>http://www.mydlp.com</url>
   
   <properties>
@@ -93,15 +93,9 @@
       <version>${org.springframework.version}</version>
     </dependency>
     <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>3.8.1</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.mydlp.ui</groupId>
-      <artifactId>mydlp-ui-domain</artifactId>
-      <version>${mydlp-ui.version}</version>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-lang3</artifactId>
+      <version>3.1</version>
     </dependency>
     <dependency>
       <groupId>com.mydlp.ui</groupId>
@@ -114,11 +108,21 @@
       <version>${mydlp-ui.version}</version>
     </dependency>
     <dependency>
-      <groupId>com.mydlp.ui</groupId>
-      <artifactId>mydlp-ui-service</artifactId>
-      <version>${mydlp-ui.version}</version>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-simple</artifactId>
+      <version>1.6.4</version>
     </dependency>
-    
+    <dependency>
+      <groupId>org.apache.solr.solr</groupId>
+      <artifactId>solr-solrj</artifactId>
+      <version>${solrj.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>3.8.1</version>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
   
 </project>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:GridItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009" 
+					xmlns:s="library://ns.adobe.com/flex/spark" 
+					xmlns:mx="library://ns.adobe.com/flex/mx" 
+					xmlns:my="http://www.mydlp.com/flex/my"
+					clipAndEnableScrolling="true" xmlns:util="com.mydlp.ui.util.*">
+	<fx:Script>
+		<![CDATA[
+			import com.mydlp.ui.domain.IncidentLogFileContent;
+			
+			import mx.collections.ListCollectionView;
+			import mx.rpc.events.ResultEvent;
+			[Bindable]
+			protected var filenamesDP:ListCollectionView = null;
+			
+			protected function isValid(value:*): Boolean
+			{
+				if (value == null) return false;
+				var content:IncidentLogFileContent = value as IncidentLogFileContent;
+				re.getFilenamesForContent(content.id);
+				return true;
+			}
+			
+			protected function getFilenamesForContentHandler(event:ResultEvent): void
+			{
+				filenamesDP = event.result as ListCollectionView;
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<fx:Declarations>
+		<my:remote id="re" destination="logBRS" result="getFilenamesForContentHandler(event)" />
+	</fx:Declarations>
+		
+	<s:layout>
+		<s:VerticalLayout verticalAlign="middle" paddingBottom="4" paddingTop="4" />
+	</s:layout>
+	
+	<util:MyList width="100%" contentBackgroundAlpha="0"
+				 dataProvider="{filenamesDP}" 
+				 itemRenderer="com.mydlp.ui.widget.log.ContentFilenameRenderer" 
+				 borderVisible="false" visible="{isValid(data)}"/>
+	
+</s:GridItemRenderer>

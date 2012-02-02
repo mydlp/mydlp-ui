@@ -20,7 +20,7 @@ public class Mydlp_ui {
 	    		throws org.apache.thrift.TException {
 	    	return null;
 	    }
-
+	    
 	    public String receiveBegin(String Ipaddress) 
 	    		throws org.apache.thrift.TException {
 	    	return null;
@@ -31,6 +31,7 @@ public class Mydlp_ui {
 	    				throws org.apache.thrift.TException {
 	    	return null;
 	    }
+	    
 
 	}
 }

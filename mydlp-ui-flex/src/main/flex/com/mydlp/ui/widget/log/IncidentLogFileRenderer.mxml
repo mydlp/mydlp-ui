@@ -14,7 +14,7 @@
 			
 			protected function createCustomToolTip(event:ToolTipEvent):void
 			{
-				var toolTip:DownloadButtonToolTip = new DownloadButtonToolTip();
+				var toolTip:IncidentFileDownloadButtonToolTip = new IncidentFileDownloadButtonToolTip();
 				toolTip.logFile = data as IncidentLogFile;
 				event.toolTip = toolTip;
 			}
@@ -27,13 +27,13 @@
 			<s:HorizontalLayout verticalAlign="middle"
 								paddingLeft="4" paddingRight="4" gap="2"/>
 		</s:layout>
-		<s:Label text="{data.filename}" width="100%"/>
 		<s:HGroup width="20" height="20 " verticalAlign="middle">
 			<s:Button skinClass="com.mydlp.ui.skin.DownloadBitmapButton16Skin"
 					  click="{navigateToURL(new URLRequest ('download?id=' + data.id), '_blank')}"
 					  visible="{data.content != null}" toolTip=" "
 					  toolTipCreate="createCustomToolTip(event)"/>	
 		</s:HGroup>
+		<s:Label text="{data.filename}" width="100%"/>
 	</s:Group>
 	
 </s:ItemRenderer>

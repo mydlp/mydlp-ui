@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:GridItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009" 
+					xmlns:s="library://ns.adobe.com/flex/spark" 
+					xmlns:mx="library://ns.adobe.com/flex/mx" 
+					clipAndEnableScrolling="true" >
+
+	<s:states>
+		<s:State name="normal" />
+		<s:State name="hovered" />
+		<s:State name="selected" />
+	</s:states>
+	
+	<s:VGroup width="100%" height="100%" horizontalAlign="center" verticalAlign="middle">
+		<s:VGroup height="30" width="30" horizontalAlign="center" verticalAlign="middle">
+			<s:BitmapImage includeIn="hovered,selected"
+				source="@Embed('/assets/icons/24x24/left.png')" 
+				visible="{data != null}"/>
+		</s:VGroup>
+	</s:VGroup>
+	
+	
+</s:GridItemRenderer>

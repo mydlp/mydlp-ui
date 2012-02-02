@@ -46,10 +46,10 @@
 							  paddingLeft="4" paddingRight="4"/>
 		</s:layout>
 		
-		<s:Label fontWeight="bold" text="Download This File"/>
-		<s:Label text="Filename: {logFile.filename}"/>
-		<s:Label text="Size: {FileUtil.getHumanReadableSize(logFile.content.size)}"/>
-		<s:Label text="Type: {logFile.content.mimeType}"/>
+		<s:Label fontWeight="bold" text="@Resource(bundle = 'messages', key = 'log.container.content.download.label')"/>
+		<s:Label text="@Resource(bundle = 'messages', key = 'log.container.content.filename.label'): {logFile.filename}"/>
+		<s:Label text="@Resource(bundle = 'messages', key = 'log.container.content.size.label'): {FileUtil.getHumanReadableSize(logFile.content.size)}"/>
+		<s:Label text="@Resource(bundle = 'messages', key = 'log.container.content.type.label'): {logFile.content.mimeType}"/>
 	
 	</s:Group>
 
