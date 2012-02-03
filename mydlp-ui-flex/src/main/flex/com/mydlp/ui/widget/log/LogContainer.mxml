@@ -186,9 +186,11 @@
 					<s:GridColumn headerText="@Resource(bundle = 'messages', key = 'log.container.header.source')" 
 								  itemRenderer="com.mydlp.ui.widget.log.IncidentSourceColumnRenderer"/>
 					<s:GridColumn headerText="@Resource(bundle = 'messages', key = 'log.container.header.destination')"
-								  dataField="destination"/>
+								  itemRenderer="com.mydlp.ui.widget.log.IncidentDestinationColumnRenderer"/>
 					<s:GridColumn headerText="@Resource(bundle = 'messages', key = 'log.container.header.policy')"
 								  itemRenderer="com.mydlp.ui.widget.log.IncidentPolicyColumnRenderer"/>
+					<s:GridColumn headerText="@Resource(bundle = 'messages', key = 'log.container.header.details')"
+								  itemRenderer="com.mydlp.ui.widget.log.IncidentDetailsColumnRenderer"/>
 					<s:GridColumn headerText="@Resource(bundle = 'messages', key = 'log.container.header.files')"
 								  itemRenderer="com.mydlp.ui.widget.log.IncidentFilesColumnRenderer"/>
 				</s:ArrayList>

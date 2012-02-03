@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 implements="mx.core.IToolTip"
+		 xmlns:mx="library://ns.adobe.com/flex/mx" 
+		 width="100%" height="100%" 
+		 xmlns:popup="com.mydlp.ui.widget.general.popup.*"
+		 visible="false"
+		 creationComplete="{detailsContainer.populate(); visible=true}"
+		 >
+	
+	<fx:Script>
+		<![CDATA[
+			private var _text:String;
+			
+			public function get text():String {
+				return _text;
+			}
+			public function set text(value:String):void {
+			} 
+		]]>
+	</fx:Script>
+	
+	<s:Rect left="0" right="0" top="0" bottom="0">
+		<s:fill>
+			<s:SolidColor color="0xFFFFFF" />
+		</s:fill>
+	</s:Rect>
+	
+	<s:Rect left="0" right="0" top="0" bottom="0">
+		<s:stroke>
+			<s:LinearGradientStroke rotation="90" weight="3">
+				<s:GradientEntry color="#fabe00"/>
+				<s:GradientEntry color="#e17b00"/>
+			</s:LinearGradientStroke>
+		</s:stroke>
+	</s:Rect>
+	
+	<s:VGroup top="3" bottom="3" left="3" right="3">
+		<popup:GenericDetailsContainer id="detailsContainer" />
+	</s:VGroup>
+
+</s:Group>

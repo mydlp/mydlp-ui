@@ -18,20 +18,15 @@
 			protected function getPolicyText(value:*):String {
 				var log:IncidentLog = value as IncidentLog;
 				var rule:Rule = FlexGlobals.topLevelApplication.ruleContainer.getRule(log.ruleId);
-				var informationType:InformationType = findInformationType(rule, log.informationTypeId);
 				var labelText:String = "";
 				
 				labelText += LangUtil.getString("messages","log.container.column.policy.rule") + ": ";
 				if (rule != null)
+					labelText +=  LangUtil.getString("messages","log.container.column.policy.rule.default");
+				else if (log.ruleId == -1)
 					labelText +=  rule.label;
 				else
-					labelText = "id(" + log.ruleId + ")";
-				
-				labelText += "\n" + LangUtil.getString("messages","log.container.column.policy.informationType") + ": ";
-				if (informationType != null)
-					labelText += informationType.coupledInventoryItem.label;
-				else
-					labelText += "id(" + log.informationTypeId + ")";
+					labelText += "id(" + log.ruleId + ")";
 				
 				labelText += "\n" + LangUtil.getString("messages","log.container.column.policy.action") + ": ";
 				
@@ -58,23 +53,11 @@
 				return labelText;
 			}
 			
-			protected static function findInformationType(rule:Rule,informationTypeId:Number): InformationType
-			{
-				if (rule == null || isNaN(informationTypeId)) return null;
-				for each (var i:* in rule.ruleItems)
-				{
-					var ri:RuleItem = i as RuleItem;
-					if (ri.item is InformationType && (ri.item as InformationType).id == informationTypeId)
-						return ri.item as InformationType;
-				}
-				return null;
-			}
-			
 		]]>
 	</fx:Script>
 	
 	<s:layout>
-		<s:VerticalLayout paddingBottom="4" paddingTop="4" />
+		<s:VerticalLayout paddingBottom="4" paddingTop="4" paddingLeft="4"/>
 	</s:layout>
 	
 	<s:Label id="lblData" text="{getPolicyText(data)}"/>

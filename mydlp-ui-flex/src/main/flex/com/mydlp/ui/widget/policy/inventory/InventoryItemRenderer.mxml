@@ -13,6 +13,9 @@
 			import com.mydlp.ui.util.ReflectionUtil;
 			import com.mydlp.ui.widget.general.popup.NewInventoryItemDialog;
 			
+			import mx.events.ToolTipEvent;
+			import mx.managers.ToolTipManager;
+			
 			public static const USERDEFINED_NAMEKEY:String = "inventory.userDefined";
 			
 			public static function isAddEnabled(i:*): Boolean
@@ -43,6 +46,13 @@
 					throw new Error("Unexpected inventory object");
 			}
 			
+			protected function onToolTipCreate(event:ToolTipEvent):void
+			{
+				var toolTip:InventoryItemToolTip = new InventoryItemToolTip();
+				toolTip.detailsContainer.formObject = treeListData.item;
+				event.toolTip = toolTip;
+			}
+			
 		]]>
 	</fx:Script>
 	
@@ -62,9 +72,12 @@
 		<s:Group id="disclosureGroup">
 			<s:BitmapImage source="{treeListData.disclosureIcon}" visible="{treeListData.hasChildren}" />
 		</s:Group>
-		<s:BitmapImage source="{treeListData.icon}" />
-		<s:Label id="labelField" text="{treeListData.label}" paddingTop="2" width="100%"/>
-		<s:Spacer width="10" />
+		<s:HGroup toolTip="{treeListData.item is InventoryItem ? ' ': null}" 
+				  toolTipCreate="onToolTipCreate(event)" width="100%">
+			<s:BitmapImage source="{treeListData.icon}" />
+			<s:Label id="labelField" text="{treeListData.label}" paddingTop="2" width="100%"/>
+			<s:Spacer width="10" />
+		</s:HGroup>
 		<s:HGroup width="85" height="20" verticalAlign="middle" >
 			<s:HGroup id="actions" includeIn="selected" gap="1">
 				<s:Button styleName="addButtonStyle"

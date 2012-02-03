@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<popup:GenericCRUDContainer xmlns:fx="http://ns.adobe.com/mxml/2009" 
+				xmlns:s="library://ns.adobe.com/flex/spark" 
+				xmlns:mx="library://ns.adobe.com/flex/mx"
+				xmlns:general="com.mydlp.ui.widget.general.*"
+				xmlns:my="http://www.mydlp.com/flex/my" 
+				xmlns:popup="com.mydlp.ui.widget.general.popup.*"
+				width="300"
+				>
+	
+	<fx:Script>
+		<![CDATA[
+			import com.mydlp.ui.domain.DataFormat;
+			import com.mydlp.ui.domain.InformationDescription;
+			import com.mydlp.ui.domain.InformationFeature;
+			import com.mydlp.ui.domain.InformationType;
+			import com.mydlp.ui.domain.InventoryCategory;
+			import com.mydlp.ui.domain.InventoryItem;
+			import com.mydlp.ui.domain.Item;
+			import com.mydlp.ui.domain.Matcher;
+			import com.mydlp.ui.util.ClassMember;
+			import com.mydlp.ui.util.LangUtil;
+			import com.mydlp.ui.util.ReflectionUtil;
+			import com.mydlp.ui.widget.general.input.IpAddressInput;
+			
+			import mx.collections.ArrayCollection;
+			import mx.collections.ListCollectionView;
+			import mx.controls.Label;
+			import mx.core.FlexGlobals;
+
+			protected var formItemOrder:ListCollectionView = new ArrayCollection();
+			
+			protected var sourceLabelList:Array = new Array();
+			
+			public function populateClassMembers(targetObject:Object): void
+			{
+				var classMembers:Array = ReflectionUtil.getClassMembers(targetObject as Object);
+				var index:Number = -1;
+				
+				for each (var classMember:ClassMember in classMembers)
+				{
+					var valueString:String = "";
+					
+					if (classMember.name == "category" && classMember.type == InventoryCategory)
+					{
+						if (targetObject.category != null) 
+							valueString = targetObject.category.label;
+						else
+							valueString = LangUtil.getString("messages", "generic.category.uncategorized");
+						index = -1;
+					}
+					else if 
+						(
+							classMember.name == "id" ||
+							classMember.name == "optimisticLockVersion" ||
+							classMember.name == "nameKey" ||
+							classMember.name == "icon" ||
+							(classMember.name == "ruleItems" && classMember.type == ListCollectionView) ||
+							classMember.name == "enabled" ||
+							classMember.name == "priority" ||
+							//todo refine password
+							classMember.name == "password" ||
+							classMember.name == "action" ||
+							(classMember.name == "children" && classMember.type == ListCollectionView)||						
+							(classMember.name == "coupledInventoryItem" && classMember.type == InventoryItem) ||
+							(classMember.name == "coupledRuleItems" && classMember.type == ListCollectionView) ||
+							(classMember.name == "informationType" && classMember.type == InformationType) ||
+							(classMember.name == "editable" && classMember.type == Boolean) ||
+							(classMember.name == "matcher" && classMember.type == Matcher)
+						)
+					{
+						continue;
+					}
+					else if (targetObject is InventoryItem && classMember.name == "item")
+					{
+						if (targetObject.item != null && targetObject.item is Item)
+							(targetObject.item as Item).coupledInventoryItem = targetObject as InventoryItem;
+						populateClassMembers(targetObject.item);
+						continue;
+					}
+					else if (
+							( classMember.name == "ipBase" || classMember.name == "ipMask" )
+							&& classMember.type == Number)
+					{
+						valueString = IpAddressInput.numberToIPStr(targetObject[classMember.name]);
+						
+						if(classMember.name == "ipBase")
+							index = 1;
+						else
+							index = 2;
+					}
+					else if (targetObject is InformationType && 
+							classMember.name == "dataFormats" && 
+							classMember.type == ListCollectionView)
+					{
+						if (targetObject[classMember.name] != null)
+							for each (var i:* in targetObject[classMember.name])
+							{
+								var df:DataFormat = i as DataFormat;
+								valueString += df.label + "\n";
+							}
+						
+						index = 8;
+					}
+					
+					else if (targetObject is InformationDescription &&
+							classMember.name == "features" && 
+							classMember.type == ListCollectionView)
+					{
+						if (targetObject[classMember.name] != null)
+							for each (var i2:* in targetObject[classMember.name])
+							{
+								var ift:InformationFeature = i2 as InformationFeature;
+								valueString += ift.label + "\n";
+							}
+						
+						index = 9;
+					}
+					else if (targetObject is InformationType &&
+							classMember.name == "informationDescription" && 
+							classMember.type == InformationDescription)
+					{
+						if (targetObject[classMember.name] != null)
+							populateClassMembers(targetObject[classMember.name]);
+						
+						continue;
+					}
+					
+					else if(classMember.type == Boolean)
+					{
+						if (targetObject[classMember.name])
+							valueString = "yes";
+						else
+							valueString = "no";
+						index = 6;
+					}
+					else
+					{
+						if(classMember.name == "name")
+							valueString = targetObject.label;
+						else
+							valueString = targetObject[classMember.name];
+						
+						
+						if(classMember.name == "name"){
+							index = -2;
+						}
+						else if(classMember.name == "username"){
+							index = 3;
+						}
+						else if(classMember.name == "email"){
+							index = 4;
+						}
+						else if(classMember.name == "password"){
+							index = 5;
+						}
+						else if(classMember.name == "threshold"){
+							index = 7;
+						}
+					}
+					
+					var inputLabel:InputLabel = new HorizontalInputLabel(); 
+					
+					var valueLabel:Label = new Label();
+					valueLabel.maxWidth = 150;
+					valueLabel.text = valueString;
+					inputLabel.addElement(valueLabel);
+					inputLabel.label = LangUtil.getString("messages", "generic.edit." + getObjectName(targetObject) + "." + classMember.name + ".label");
+					sourceLabelList.push(new InputLabelIndexTuple(index, inputLabel));
+					
+				}
+			}
+			
+			public function populateEachFormItem():void
+			{
+				sourceLabelList.sortOn("order", Array.DESCENDING, Array.NUMERIC);
+				for(var i:int = sourceLabelList.length-1; i >= 0; i--){
+					var tempElement:InputLabelIndexTuple = sourceLabelList[i] as InputLabelIndexTuple;
+					if(tempElement != null && tempElement.vs != null){
+						var tempInputLabel:InputLabel = tempElement.vs;
+						editForm.addElement(tempInputLabel);
+					}
+				}
+			}
+			
+			override public function populate(): void
+			{
+				windowTitle = LangUtil.getString("messages", "generic.edit." + getSimpleName() + ".title");
+				populateClassMembers(formObject);
+				populateEachFormItem();
+				super.populate();
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<s:Group width="100%" height="100%">
+		<s:layout>
+			<s:VerticalLayout horizontalAlign="center" verticalAlign="middle" />
+		</s:layout>
+		<s:Group id="editForm" width="100%" height="100%">
+			<s:layout>
+				<s:VerticalLayout horizontalAlign="left" verticalAlign="middle"/>
+			</s:layout>
+		</s:Group>
+	</s:Group>
+	
+</popup:GenericCRUDContainer>
