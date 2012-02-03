@@ -9,7 +9,8 @@
 		<domain:Config id="usbSerialAccessControl" />
 		<domain:Config id="printMonitor" />
 		<domain:Config id="logLevel" />
-		<domain:Config id="logLimit" />		
+		<domain:Config id="logLimit" />
+		<domain:Config id="syncInterval" /> 
 	</fx:Declarations>
 	
 	<fx:Script>
@@ -49,9 +50,12 @@
 					</s:dataProvider>						
 				</s:DropDownList>				
 			</s:FormItem>
+			<s:FormItem label="{syncInterval.label}">
+				<s:TextInput text="@{syncInterval.value}"/>
+			</s:FormItem>
 			<s:FormItem label="{logLimit.label}">
 				<s:TextInput text="@{logLimit.value}"/>
-			</s:FormItem>
+			</s:FormItem>			
 		</s:Form>	
 		
 	</s:VGroup>

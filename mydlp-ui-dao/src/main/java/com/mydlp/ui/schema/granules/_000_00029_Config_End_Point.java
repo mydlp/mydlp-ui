@@ -15,19 +15,24 @@ public class _000_00029_Config_End_Point extends AbstractGranule {
 		Config printMonitor = new Config();
 		printMonitor.setKey("print_monitor");
 		printMonitor.setValue("false");
-		
+
 		Config logLevel = new Config();
 		logLevel.setKey("log_level");
 		logLevel.setValue("0");
-		
+
 		Config logLimit = new Config();
 		logLimit.setKey("log_limit");
 		logLimit.setValue("10485760");
-		
+
+		Config syncInterval = new Config();
+		syncInterval.setKey("sync_interval");
+		syncInterval.setValue("300000");
+
 		getHibernateTemplate().saveOrUpdate(usbSerialAccessControl);
 		getHibernateTemplate().saveOrUpdate(printMonitor);	
 		getHibernateTemplate().saveOrUpdate(logLevel);
 		getHibernateTemplate().saveOrUpdate(logLimit);	
+		getHibernateTemplate().saveOrUpdate(syncInterval);
 
 	}
 
