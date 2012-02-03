@@ -17,7 +17,7 @@
 			
 			import mx.events.FlexEvent;
 			
-			public var documentDatabaseInput:DocumentDatabaseInput = null;
+			public var documentDatabaseInput:DocumentDatabaseFileEntryInput = null;
 			
 			[Bindable]
 			public var fileEntry:DocumentDatabaseFileEntry = null;

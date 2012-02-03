@@ -29,7 +29,7 @@
 			import com.mydlp.ui.util.ReflectionUtil;
 			import com.mydlp.ui.widget.general.input.AuthSecurityRolesInput;
 			import com.mydlp.ui.widget.general.input.DataFormatInput;
-			import com.mydlp.ui.widget.general.input.DocumentDatabaseInput;
+			import com.mydlp.ui.widget.general.input.DocumentDatabaseFileEntryInput;
 			import com.mydlp.ui.widget.general.input.InformationFeatureInput;
 			import com.mydlp.ui.widget.general.input.IpAddressInput;
 			import com.mydlp.ui.widget.general.input.MimeTypeInput;
@@ -144,7 +144,7 @@
 							classMember.name == "fileEntries" &&
 							classMember.type == ListCollectionView)
 					{
-						var ddInput:DocumentDatabaseInput = new DocumentDatabaseInput();
+						var ddInput:DocumentDatabaseFileEntryInput = new DocumentDatabaseFileEntryInput();
 						ddInput.deleteList = this.deleteList;
 						if(targetObject[classMember.name] == null)
 							ddInput.fileEntries = new ArrayCollection();

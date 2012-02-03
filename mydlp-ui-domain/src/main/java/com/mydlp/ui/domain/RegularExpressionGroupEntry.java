@@ -12,8 +12,7 @@ public class RegularExpressionGroupEntry extends AbstractEntity{
 	private static final long serialVersionUID = -449541461894641839L;
 	
 	protected String regex;
-	protected RegularExpressionGroup group;
-
+	
 	@Column(nullable=false)
 	public String getRegex() {
 		return regex;

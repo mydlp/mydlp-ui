@@ -12,9 +12,9 @@
 			
 			public var deleteList:ListCollectionView = null;
 			
-			public function addEntry(rge:DocumentDatabaseFileEntry): void
+			public function addEntry(ddfe:DocumentDatabaseFileEntry): void
 			{
-				fileEntries.addItem(rge);
+				fileEntries.addItem(ddfe);
 				fileEntriesList.validateNow();
 			}
 			
@@ -31,14 +31,14 @@
 			
 			protected function addClickHandler(event:MouseEvent):void
 			{
-				var ddPopup:DocumentDatabaseAddPopup = InteractionUtil.newPopup(DocumentDatabaseAddPopup) as DocumentDatabaseAddPopup;
-				ddPopup.documentDatabaseInput = this;
+				var ddPopup:DocumentDatabaseFileEntryAddPopup = InteractionUtil.newPopup(DocumentDatabaseFileEntryAddPopup) as DocumentDatabaseFileEntryAddPopup;
+				ddPopup.ddfeInput = this;
 				ddPopup.populate();
 			}
 			
 			protected function editClickHandler(event:MouseEvent):void
 			{
-				var regp:DocumentDatabasePopup = InteractionUtil.newPopup(DocumentDatabasePopup) as DocumentDatabasePopup;
+				var regp:DocumentDatabaseFileEntryPopup = InteractionUtil.newPopup(DocumentDatabaseFileEntryPopup) as DocumentDatabaseFileEntryPopup;
 				regp.documentDatabaseInput = this;
 				regp.fileEntry = fileEntriesList.selectedItem;
 				regp.populate();
@@ -61,7 +61,7 @@
 		</s:layout>
 		<s:List id="fileEntriesList" dataProvider="{fileEntries}" 
 				width="87%" height="100%" 
-				itemRenderer="com.mydlp.ui.widget.general.input.DocumentDatabaseRenderer">
+				itemRenderer="com.mydlp.ui.widget.general.input.DocumentDatabaseFileEntryRenderer">
 			<s:layout>
 				<s:VerticalLayout useVirtualLayout="false" requestedMinRowCount="1"/>
 			</s:layout>

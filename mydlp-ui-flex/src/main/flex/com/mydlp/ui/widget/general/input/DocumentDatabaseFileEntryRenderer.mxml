@@ -21,5 +21,5 @@
 		<s:HorizontalLayout verticalAlign="middle" 
 							paddingLeft="2" paddingRight="2"/>
 	</s:layout>
-	<s:Label text="{data.md5Hash}" width="100%"/>
+	<s:Label text="{data.filename}" width="100%"/>
 </s:ItemRenderer>
