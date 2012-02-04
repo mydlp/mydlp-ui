@@ -59,11 +59,12 @@
 						
 					else if (config.key == "auto_distribution") haTab.autoDistribution = config;
 					else if (config.key == "auto_distribution_nodes") haTab.autoDistributionNodes = config;
-					
+						
 					else if (config.key == "usb_serial_access_control") epTab.usbSerialAccessControl = config;
 					else if (config.key == "print_monitor") epTab.printMonitor = config;
 					else if (config.key == "log_level") epTab.logLevel = config;
 					else if (config.key == "log_limit") epTab.logLimit = config;
+					else if (config.key == "sync_interval") epTab.syncInterval = config;
 					
 					visible = true;
 				}
