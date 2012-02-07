@@ -43,6 +43,19 @@ public class RuleDAOImpl extends AbstractPolicyDAO implements RuleDAO {
 	public void removeRuleItem(RuleItem ri) {
 		getHibernateTemplate().delete(ri);
 	}
+	
+	@Override
+	@Transactional(readOnly=false)
+	public void removeRuleItems(List<RuleItem> ris) {
+		for (RuleItem ri : ris) {
+			if (ri.getId() != null)
+				removeRuleItem(ri);
+			else
+				logger.info("Recieved transient object ( Type: " +
+						ri.getClass().getName()
+						+ " ). Ignoring.");
+		}
+	}
 
 	@Override
 	@Transactional(readOnly=false)

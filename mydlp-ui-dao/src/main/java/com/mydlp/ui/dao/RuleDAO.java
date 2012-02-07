@@ -15,6 +15,8 @@ public interface RuleDAO {
 	
 	public void removeRuleItem(RuleItem ri);
 	
+	public void removeRuleItems(List<RuleItem> ris);
+	
 	public void ruleUp(Rule r);
 	
 	public void ruleDown(Rule r);

@@ -31,6 +31,7 @@
 			
 			import mx.collections.ArrayCollection;
 			import mx.collections.ListCollectionView;
+			import mx.controls.Alert;
 			import mx.core.FlexGlobals;
 			import mx.core.IUIComponent;
 			import mx.events.DragEvent;
@@ -63,6 +64,8 @@
 			
 			[Bindable]
 			protected var ruleList:List = FlexGlobals.topLevelApplication.ruleContainer.ruleList;
+			
+			protected var deleteList:ListCollectionView;
 			
 			protected function onCreationComplete(event:FlexEvent):void
 			{
@@ -114,6 +117,79 @@
 				validateNow();
 			}
 			
+			protected function isSourceRuleItem(item:Item):Boolean
+			{
+				if(item is Network)
+					return true;
+				else
+					return false;
+			}
+			
+			protected function hasAllNetwork():Boolean
+			{
+				for each(var o:RuleItem in ruleObject.ruleItems)
+				{
+					if(o.item.coupledInventoryItem.nameKey == "inventory.networks.all")
+						return true;
+				}
+				return false;
+			}
+			
+			protected function isITypeRuleItem(item:Item):Boolean
+			{
+				if(item is InformationType)
+					return true;
+				else
+					return false;
+			}
+			
+			protected function removeAllNetwotkItem():void
+			{
+				for each(var o:RuleItem in ruleObject.ruleItems)
+				{
+					if(o.item.coupledInventoryItem.nameKey == "inventory.networks.all")
+						deleteList.addItem(o);
+				}
+			}
+			
+			protected function removeOtherNetworks():void
+			{
+				for each(var o:RuleItem in ruleObject.ruleItems)
+				{
+					if(o.item is Network)
+						deleteList.addItem(o);
+				}
+			}
+			
+			protected function hasAllIType():Boolean
+			{
+				for each(var o:RuleItem in ruleObject.ruleItems)
+				{
+					if(o.item.coupledInventoryItem.nameKey == "informationType.predefined.all")
+						return true;
+				}
+				return false
+			}
+			
+			protected function removeAllITypeItem():void
+			{
+				for each(var o:RuleItem in ruleObject.ruleItems)
+				{
+					if(o.item.coupledInventoryItem.nameKey == "informationType.predefined.all")
+						deleteList.addItem(o);
+				}
+			}
+			
+			protected function removeOtherITypes():void
+			{
+				for each(var o:RuleItem in ruleObject.ruleItems)
+				{
+					if(o.item is InformationType)
+						deleteList.addItem(o);
+				}
+			}
+			
+			
 			protected function acceptDrop(): void
 			{
 				DragManager.showFeedback(DragManager.COPY);
@@ -129,7 +205,7 @@
 			protected function highlightOn(): void
 			{
 				normalBorder.visible=false;
-				highlightBorder.visible=true;	
+				highlightBorder.visible=true;
 			}
 			
 			protected function highlightOff(): void
@@ -191,11 +267,11 @@
 			
 			protected function onDragDrop(dragEvent:DragEvent):void
 			{
+				deleteList = new ArrayCollection();
 				var inventoryObjects:* = FlexGlobals.topLevelApplication.inventoryTree.selectedItems;
 				for each (var o:* in inventoryObjects)
 					addDroppedObject(o as InventoryBase);
 				re.save(ruleObject);
-				highlightOff();
 			}
 			
 			protected function addDroppedObject(inventoryObject:InventoryBase):void
@@ -237,6 +313,39 @@
 			
 			protected function addRuleItemObject(sourceItem:Item):void
 			{
+				
+				if(isSourceRuleItem(sourceItem))
+				{
+					if(hasAllNetwork())//if ruleObject has all networks
+					{
+						if(sourceItem.coupledInventoryItem.nameKey == "inventory.networks.all")
+							return;
+						else
+							removeAllNetwotkItem();
+					}
+					else
+					{
+						if(sourceItem.coupledInventoryItem.nameKey == "inventory.networks.all")
+							removeOtherNetworks();
+					}
+				}
+				else if(isITypeRuleItem(sourceItem))
+				{
+					if(hasAllIType())//if ruleObject has all Information Types
+					{
+						if(sourceItem.coupledInventoryItem.nameKey == "informationType.predefined.all")
+							return;
+						else
+							removeAllITypeItem();
+					}
+					else
+					{
+						if(sourceItem.coupledInventoryItem.nameKey == "informationType.predefined.all")
+							removeOtherITypes();
+					}
+				}
+				
+				
 				for each (var ri:RuleItem in ruleObject.ruleItems)
 					if (ri.item.id == sourceItem.id)
 						return;
@@ -252,12 +361,30 @@
 				FlexGlobals.topLevelApplication.refresh();
 			}
 			
+			protected function saveHandler(event:ResultEvent):void
+			{
+				if(deleteList.length == 0)
+				{
+					highlightOff();
+					FlexGlobals.topLevelApplication.refresh();
+				}
+				else
+					re.removeRuleItems(deleteList);
+			}
+			
+			protected function deleteRuleItemsHandler(event:ResultEvent):void
+			{
+				highlightOff();
+				FlexGlobals.topLevelApplication.refresh();
+			}
+			
 		]]>
 	</fx:Script>
 	
 	<fx:Declarations>
 		<my:remote id="re" destination="ruleBRS">
-			<my:method name="save" result="changeHandler(event)"/>
+			<my:method name="save" result="saveHandler(event)"/>
+			<my:method name="removeRuleItems" result="deleteRuleItemsHandler(event)"/>
 			<my:method name="ruleUp" result="changeHandler(event)"/>
 			<my:method name="ruleDown" result="changeHandler(event)"/>
 		</my:remote>
