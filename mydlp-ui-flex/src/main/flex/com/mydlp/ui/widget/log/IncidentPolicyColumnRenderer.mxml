@@ -111,10 +111,16 @@
 			<s:Label id="lblData" text="{getPolicyText(data)}"/>
 		</s:Group>
 		
-		<s:Button includeIn="selected" id="gotoRuleButton" skinClass="com.mydlp.ui.skin.GoToRuleButton16Skin"
-				  toolTip="@Resource(bundle = 'messages', key = 'log.gotoRule.tooltip')"
-				  visible="{isGotoVisible(data)}"
-				  click="goToRuleButtonClickHandler(event)" />
+		<s:Group height="100%">
+			<s:layout>
+				<s:VerticalLayout verticalAlign="middle" horizontalAlign="left"/>
+			</s:layout>
+			<s:Button includeIn="selected" id="gotoRuleButton" skinClass="com.mydlp.ui.skin.GoToRuleButton16Skin"
+					  toolTip="@Resource(bundle = 'messages', key = 'log.gotoRule.tooltip')"
+					  visible="{isGotoVisible(data)}"
+					  click="goToRuleButtonClickHandler(event)" />
+		</s:Group>
+		
 	</s:Group>
 	
 </s:GridItemRenderer>
