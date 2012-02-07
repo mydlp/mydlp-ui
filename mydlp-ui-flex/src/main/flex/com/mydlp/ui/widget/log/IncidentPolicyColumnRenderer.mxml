@@ -15,18 +15,46 @@
 			import mx.core.FlexGlobals;
 			import mx.events.FlexEvent;
 			
-			protected function getPolicyText(value:*):String {
+			protected var selectedRule:Rule = null;
+			
+			protected function isGotoVisible(value:*): Boolean
+			{
+				if (value == null) return false;
 				var log:IncidentLog = value as IncidentLog;
-				var rule:Rule = FlexGlobals.topLevelApplication.ruleContainer.getRule(log.ruleId);
+				if (! (log.ruleId == -1))
+				{
+					var rule:Rule = FlexGlobals.topLevelApplication.ruleContainer.getRule(log.ruleId);
+					if (rule != null)
+					{
+						selectedRule = rule;
+						return true;
+					}
+				}
+				return false;
+			}
+			
+			
+			protected function getPolicyText(value:*):String {
+				if (value == null) return "";
+				
+				var log:IncidentLog = value as IncidentLog;
 				var labelText:String = "";
 				
 				labelText += LangUtil.getString("messages","log.container.column.policy.rule") + ": ";
-				if (rule != null)
+				
+				if (log.ruleId == -1)
+				{
 					labelText +=  LangUtil.getString("messages","log.container.column.policy.rule.default");
-				else if (log.ruleId == -1)
-					labelText +=  rule.label;
+				}
 				else
-					labelText += "id(" + log.ruleId + ")";
+				{
+					var rule:Rule = FlexGlobals.topLevelApplication.ruleContainer.getRule(log.ruleId);
+					if (rule != null){
+						labelText +=  rule.label;
+					}
+					else
+						labelText += "id(" + log.ruleId + ")";
+				}
 				
 				labelText += "\n" + LangUtil.getString("messages","log.container.column.policy.action") + ": ";
 				
@@ -53,13 +81,40 @@
 				return labelText;
 			}
 			
+			protected function goToRuleButtonClickHandler(event:MouseEvent):void
+			{
+				FlexGlobals.topLevelApplication.ruleContainer.ruleList.selectedItem = selectedRule;
+				FlexGlobals.topLevelApplication.tapBar.selectedIndex = 1; // index of policy tab
+			}
+			
 		]]>
 	</fx:Script>
 	
-	<s:layout>
-		<s:VerticalLayout paddingBottom="4" paddingTop="4" paddingLeft="4"/>
-	</s:layout>
+	<s:states>
+		<s:State name="normal" />
+		<s:State name="hovered" />
+		<s:State name="selected" />
+	</s:states>
 	
-	<s:Label id="lblData" text="{getPolicyText(data)}"/>
+	<s:Group>
+		
+		<s:layout>
+			<s:HorizontalLayout gap="5"/>
+		</s:layout>
+		
+		<s:Group>
+			
+			<s:layout>
+				<s:VerticalLayout paddingBottom="4" paddingTop="4" paddingLeft="4"/>
+			</s:layout>
+			
+			<s:Label id="lblData" text="{getPolicyText(data)}"/>
+		</s:Group>
+		
+		<s:Button includeIn="selected" id="gotoRuleButton" skinClass="com.mydlp.ui.skin.GoToRuleButton16Skin"
+				  toolTip="@Resource(bundle = 'messages', key = 'log.gotoRule.tooltip')"
+				  visible="{isGotoVisible(data)}"
+				  click="goToRuleButtonClickHandler(event)" />
+	</s:Group>
 	
 </s:GridItemRenderer>
