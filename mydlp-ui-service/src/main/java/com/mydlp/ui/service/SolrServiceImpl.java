@@ -26,7 +26,7 @@ import org.springframework.stereotype.Service;
 public class SolrServiceImpl implements SolrService {
 
 	private static Logger logger = LoggerFactory.getLogger(SolrServiceImpl.class);
-	protected static final String SOLR_URL = "http://192.168.179.237:8010/solr";
+	protected static final String SOLR_URL = "http://127.0.0.1:8010/solr";
 	protected static final String CATEGORY_ARCHIVE = "archive";
 	protected SolrServer solrServer = null;
 
