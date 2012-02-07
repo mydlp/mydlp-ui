@@ -16,6 +16,8 @@
 			import mx.events.FlexEvent;
 			
 			protected function getPolicyText(value:*):String {
+				if (value == null) return "";
+				
 				var log:IncidentLog = value as IncidentLog;
 				var labelText:String = "";
 				
