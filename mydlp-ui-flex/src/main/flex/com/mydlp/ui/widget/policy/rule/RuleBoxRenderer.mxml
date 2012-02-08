@@ -67,8 +67,8 @@
 			
 			protected var deleteList:ListCollectionView;
 			
-			protected var droppedSources:ListCollectionView;
-			protected var droppedMatchers:ListCollectionView;
+			protected var droppedSources:ListCollectionView;//Array for dropped Sources items from inventory tree to rule container.
+			protected var droppedMatchers:ListCollectionView;//Array for dropped Matchers items from inventory tree to rule container.
 			
 			protected function onCreationComplete(event:FlexEvent):void
 			{
@@ -128,7 +128,7 @@
 					return false;
 			}
 			
-			protected function hasAllNetwork():Boolean
+			protected function hasAllNetwork():Boolean // Checks whether rule has "All Network" or not. 
 			{
 				for each(var o:RuleItem in ruleObject.ruleItems)
 				{
@@ -146,7 +146,7 @@
 					return false;
 			}
 			
-			protected function removeAllNetwotkItem():void
+			protected function removeAllNetwotkItem():void //called when "All Network" is in rule and dropped network is a specific network.
 			{
 				var ruleItems:ListCollectionView = ruleObject.ruleItems;
 				for(var i:int = 0; i < ruleItems.length; i++)
@@ -159,7 +159,7 @@
 				}
 			}
 			
-			protected function removeOtherNetworks():void
+			protected function removeOtherNetworks():void // called when specific networks are in rule and dropped network is "All Network"
 			{
 				var ruleItems:ListCollectionView = ruleObject.ruleItems;
 				for(var i:int = 0; i < ruleItems.length; i++)
@@ -169,7 +169,7 @@
 				}
 			}
 			
-			protected function hasAllIType():Boolean
+			protected function hasAllIType():Boolean // Checks whether rule has "All Information Types" or not.
 			{
 				for each(var o:RuleItem in ruleObject.ruleItems)
 				{
@@ -179,7 +179,7 @@
 				return false
 			}
 			
-			protected function removeAllITypeItem():void
+			protected function removeAllITypeItem():void //called when "All Information Type" is in rule and dropped network is a specific network.
 			{
 				var ruleItems:ListCollectionView = ruleObject.ruleItems;
 				for(var i:int = 0; i < ruleItems.length; i++)
@@ -192,7 +192,7 @@
 				}
 			}
 			
-			protected function removeOtherITypes():void
+			protected function removeOtherITypes():void // called when specific networks are in rule and dropped network is "All Information Types"
 			{
 				var ruleItems:ListCollectionView = ruleObject.ruleItems;
 				for(var i:int = 0; i < ruleItems.length; i++)
@@ -243,8 +243,8 @@
 					rejectDrop();
 			}
 			
-			protected function checkConsistency(treeItems:*):Boolean
-			{
+			protected function checkConsistency(treeItems:*):Boolean //Controls whether dropped items consist both "All Network" and specific network
+			{														// or both "All Information Types" and specific information types.
 				groupDroppedItems(treeItems);
 				if(isConsistentForSources() && isConsistentForMatchers())
 					return true;
@@ -252,7 +252,7 @@
 				
 			}
 			
-			protected function isConsistentForSources():Boolean
+			protected function isConsistentForSources():Boolean // Controls whether dropped items consist both "All Network" and specific network
 			{
 				for each(var ri:InventoryItem in droppedSources)
 				{
@@ -262,7 +262,7 @@
 				return true;
 			}
 			
-			protected function isConsistentForMatchers():Boolean
+			protected function isConsistentForMatchers():Boolean //Controls whether dropped items consist both "All Information Types" and specific information types
 			{
 				for each(var ri:InventoryItem in droppedMatchers)
 				{
@@ -272,8 +272,8 @@
 				return true;
 			}
 			
-			protected function groupDroppedItems(droppedItems:*):void
-			{
+			protected function groupDroppedItems(droppedItems:*):void // Group dropped items as Sources and matchers with the help of
+			{															// "groupDroppedItem" function.
 				for each(var item:* in droppedItems)
 					groupDroppedItem(item);
 			}
@@ -383,9 +383,9 @@
 				
 				if(isSourceRuleItem(sourceItem))
 				{
-					if(hasAllNetwork())//if ruleObject has all networks
+					if(hasAllNetwork())//if ruleObject has "All Networks"
 					{
-						if(sourceItem.coupledInventoryItem.nameKey == "inventory.networks.all")
+						if(sourceItem.coupledInventoryItem.nameKey == "inventory.networks.all")//if dropped item is "All Networks"
 							return;
 						else
 							removeAllNetwotkItem();
@@ -398,9 +398,9 @@
 				}
 				else if(isITypeRuleItem(sourceItem))
 				{
-					if(hasAllIType())//if ruleObject has all Information Types
+					if(hasAllIType())//if ruleObject has "All Information Types"
 					{
-						if(sourceItem.coupledInventoryItem.nameKey == "informationType.predefined.all")
+						if(sourceItem.coupledInventoryItem.nameKey == "informationType.predefined.all") //if dropped item is "All Information Types"
 							return;
 						else
 							removeAllITypeItem();
@@ -430,7 +430,6 @@
 			
 			protected function saveHandler(event:ResultEvent):void
 			{
-				trace("deleteList Length: " + deleteList.length);
 				if(deleteList.length == 0)
 				{
 					highlightOff();
