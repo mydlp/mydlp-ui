@@ -19,6 +19,8 @@ public interface RuleService {
 	
 	public void removeRuleItem(RuleItem ruleItem);
 	
+	public void removeRuleItems(List<RuleItem> ruleItems);
+	
 	public void ruleUp(Rule r);
 	
 	public void ruleDown(Rule r);
