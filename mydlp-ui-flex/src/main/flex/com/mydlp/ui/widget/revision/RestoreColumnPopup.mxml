@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:TitleWindow xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			   xmlns:s="library://ns.adobe.com/flex/spark" 
+			   xmlns:mx="library://ns.adobe.com/flex/mx" 
+			   title="@Resource(bundle = 'messages', key = 'revision.restoreCompleted.title')"
+			   width="400" xmlns:popup="com.mydlp.ui.widget.general.popup.*" >
+	<fx:Script>
+		<![CDATA[
+			import com.mydlp.ui.util.InteractionUtil;
+			
+			import mx.core.FlexGlobals;
+
+			protected function disableButtons(): void
+			{
+				installButton.enabled = false;
+				reloadButton.enabled = false;
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<s:states>
+		<s:State name="progress" />
+		<s:State name="completed" />
+	</s:states>
+	
+	<s:layout>
+		<s:VerticalLayout verticalAlign="middle" horizontalAlign="center" 
+						  	paddingTop="20" paddingBottom="20"
+							paddingLeft="10" paddingRight="10"/>
+	</s:layout>
+	
+	
+	<s:Label text.progress="@Resource(bundle = 'messages', key = 'revision.restore.progress.message')" 
+			 text.completed="@Resource(bundle = 'messages', key = 'revision.restore.completed.message')" />
+	
+	<s:Label includeIn="completed" text="@Resource(bundle = 'messages', key = 'revision.restore.completed.message2')" />
+	
+	<s:Spacer height="4" />
+	
+	<s:HGroup gap="20" width="100%" horizontalAlign="center">
+		<s:Button id="reloadButton" label="@Resource(bundle = 'messages', key = 'revision.restorePopup.button.reload.label')"
+				  click="{disableButtons(); FlexGlobals.topLevelApplication.topToolbar.reloadApp()}" />
+		<s:Button id="installButton" label="@Resource(bundle = 'messages', key = 'revision.restorePopup.button.install.label')"
+				  click="{disableButtons(); FlexGlobals.topLevelApplication.topToolbar.installPolicyAndReload()}" />
+	</s:HGroup>
+	
+	
+</s:TitleWindow>

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:TitleWindow xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			   xmlns:s="library://ns.adobe.com/flex/spark" 
+			   xmlns:mx="library://ns.adobe.com/flex/mx" 
+			   xmlns:my="http://www.mydlp.com/flex/my"
+			   close="{InteractionUtil.closePopup(this)}"
+			   title="@Resource(bundle = 'messages', key = 'revision.nameEdit.title')"
+			   width="400" >
+	<fx:Script>
+		<![CDATA[
+			import com.mydlp.ui.domain.Revision;
+			import com.mydlp.ui.util.InteractionUtil;
+			
+			import mx.core.FlexGlobals;
+			import mx.rpc.events.ResultEvent;
+
+			[Bindable]
+			public var revisionObject:Revision = null;
+			
+			protected function saveClickHandler(event:MouseEvent):void
+			{
+				re.saveEntity(revisionObject);
+				saveButton.enabled = false;
+			}
+			
+			protected function saveEntityHandler(event:ResultEvent): void
+			{
+				FlexGlobals.topLevelApplication.revisionContainer.refreshNamed();
+				FlexGlobals.topLevelApplication.revisionContainer.gotoRevision(revisionObject);
+				InteractionUtil.closePopup(this);
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<fx:Declarations>
+		<my:remote id="re" destination="revisionBRS" >
+			<my:method name="saveEntity" result="saveEntityHandler(event)" />
+		</my:remote>
+	</fx:Declarations>
+	
+	<s:layout>
+		<s:VerticalLayout verticalAlign="middle" horizontalAlign="center" 
+						  	paddingTop="20" paddingBottom="20"
+							paddingLeft="10" paddingRight="10"/>
+	</s:layout>
+	
+	<s:HGroup gap="15">
+		<s:Label text="@Resource(bundle = 'messages', key = 'revision.name.label')" width="150"/>
+		<s:TextInput id="nameInput" text="@{revisionObject.name}"/>
+	</s:HGroup>
+	
+	<s:Spacer height="4" />
+	
+	<s:HGroup gap="15">
+		<s:Spacer width="150" />
+		<s:Button id="saveButton" label="@Resource(bundle = 'messages', key = 'revision.namePopup.button.ok.label')"
+					  click="saveClickHandler(event)" />
+		<s:Button label="@Resource(bundle = 'messages', key = 'revision.namePopup.button.cancel.label')"
+					  click="{InteractionUtil.closePopup(this)}" />
+	</s:HGroup>
+		
+</s:TitleWindow>

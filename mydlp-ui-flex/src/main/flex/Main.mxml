@@ -113,7 +113,7 @@
 					<log:LogContainer id="logContainer" />
 				</s:NavigatorContent>
 				<s:NavigatorContent label="@Resource(bundle = 'messages', key = 'maintab.revisions')" width="100%" height="100%">
-					<revision:RevisionContainer/>
+					<revision:RevisionContainer id="revisionContainer"/>
 				</s:NavigatorContent>
 			</mx:ViewStack>
 		</s:VGroup>

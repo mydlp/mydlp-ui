@@ -17,10 +17,13 @@ package com.mydlp.ui.util
 	public class InteractionUtil
 	{
 		
-		public static function newPopup(className:Class): IFlexDisplayObject
+		public static function newPopup(className:Class,center:Boolean = false): IFlexDisplayObject
 		{
 			var popup:IFlexDisplayObject = PopUpManager.createPopUp(FlexGlobals.topLevelApplication as DisplayObject , className, true);
-			popup.move(FlexGlobals.topLevelApplication.mouseX + 10, FlexGlobals.topLevelApplication.mouseY + 10);
+			if (center)
+				PopUpManager.centerPopUp(popup);
+			else
+				popup.move(FlexGlobals.topLevelApplication.mouseX + 10, FlexGlobals.topLevelApplication.mouseY + 10);
 			return popup;
 		}
 		

@@ -115,7 +115,7 @@
 			<s:layout>
 				<s:VerticalLayout verticalAlign="middle" horizontalAlign="left"/>
 			</s:layout>
-			<s:Button includeIn="selected" id="gotoRuleButton" skinClass="com.mydlp.ui.skin.GoToRuleButton16Skin"
+			<s:Button includeIn="selected" id="gotoRuleButton" skinClass="com.mydlp.ui.skin.GotoButton16Skin"
 					  toolTip="@Resource(bundle = 'messages', key = 'log.gotoRule.tooltip')"
 					  visible="{isGotoVisible(data)}"
 					  click="goToRuleButtonClickHandler(event)" />

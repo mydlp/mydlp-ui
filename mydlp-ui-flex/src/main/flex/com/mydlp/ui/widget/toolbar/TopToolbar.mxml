@@ -12,6 +12,8 @@
 			import com.mydlp.ui.util.InteractionUtil;
 			import com.mydlp.ui.util.LangUtil;
 			
+			import flash.net.navigateToURL;
+			
 			import mx.core.IFlexDisplayObject;
 			import mx.events.FlexEvent;
 			import mx.rpc.events.ResultEvent;
@@ -20,6 +22,8 @@
 			protected var currentUser:AuthUser = null;
 			
 			protected var installPopup:InstallPolicyPopup = null;
+			
+			protected var reloadFlag:Boolean = false;
 			
 			protected function onCreationComplete(event:FlexEvent):void
 			{
@@ -39,16 +43,56 @@
 			{
 				if (installPopup != null)
 				{
-					installPopup.currentState = "completed";
-					installPopup = null;
+					installPopup.currentState = "revision";
 				}
+				rev.save();
 			}
 			
-			protected function installPolicy(): void
+			protected function saveRevisionHandler(event:ResultEvent): void
 			{
-				installPopup = InteractionUtil.newPopup(InstallPolicyPopup) as InstallPolicyPopup;
+				if (reloadFlag)
+				{
+					if (installPopup != null)
+					{
+						installPopup.currentState = "reload";
+					}
+					reloadApp();
+				}
+				else
+				{
+					if (installPopup != null)
+					{
+						installPopup.currentState = "completed";
+						installPopup = null;
+					}
+				}			
+			}
+			
+			public function reloadApp(): void
+			{
+				navigateToURL(new URLRequest ("/"), "_self");
+			}
+			
+			public function installPolicy(): void
+			{
+				reloadFlag = false;
+				installPolicyFunc();
+			}
+			
+			protected function installPolicyFunc(): void
+			{
+				installPopup = InteractionUtil.newPopup(InstallPolicyPopup, true) as InstallPolicyPopup;
 				pe.compilePolicy(1);
 			}
+			
+			public function installPolicyAndReload(): void
+			{
+				reloadFlag = true;
+				installPolicyFunc();
+			}
+			
+			
+			
 			
 		]]>
 	</fx:Script>
@@ -60,6 +104,9 @@
 		</my:remote>
 		<my:remote id="pe" destination="policyBRS" >
 			<my:method name="compilePolicy" result="compilePolicyHandler(event)" />
+		</my:remote>
+		<my:remote id="rev" destination="revisionBRS" >
+			<my:method name="save" result="saveRevisionHandler(event)" />
 		</my:remote>
 	</fx:Declarations>
 	

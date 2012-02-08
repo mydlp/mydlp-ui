@@ -1,11 +1,161 @@
 <?xml version="1.0" encoding="utf-8"?>
-<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
-		 xmlns:s="library://ns.adobe.com/flex/spark" 
-		 xmlns:mx="library://ns.adobe.com/flex/mx"
-		 xmlns:my="http://www.mydlp.com/flex/my"
-		 width="400" height="300"
-		 >
+<s:SkinnableContainer xmlns:fx="http://ns.adobe.com/mxml/2009" 
+					  xmlns:s="library://ns.adobe.com/flex/spark" 
+					  xmlns:mx="library://ns.adobe.com/flex/mx"
+					  xmlns:my="http://www.mydlp.com/flex/my"
+					  xmlns:util="com.mydlp.ui.util.*"
+					  width="100%" height="100%" 
+					  creationComplete="onCreationComplete(event)">
+	<fx:Script>
+		<![CDATA[
+			import com.mydlp.ui.domain.IncidentLogFileContent;
+			import com.mydlp.ui.domain.Revision;
+			import com.mydlp.ui.util.AsyncListDataProvider;
+			import com.mydlp.ui.util.LangUtil;
+			
+			import mx.collections.ArrayCollection;
+			import mx.collections.ListCollectionView;
+			import mx.events.FlexEvent;
+			import mx.rpc.AsyncToken;
+			import mx.rpc.events.ResultEvent;
+			
+			import spark.events.GridEvent;
+			
+			protected const PENDING_OBJECT:Object = 
+				{date: LangUtil.getString("messages", "revision.container.pending.message")};
+			
+			[Bindable]
+			protected var revisionDP:AsyncListDataProvider = null;
+			
+			[Bindable]
+			protected var namedRevisionDP:AsyncListDataProvider = null;
+			
+			protected function onCreationComplete(event:FlexEvent):void
+			{
+				revisionDP = new AsyncListDataProvider();
+				revisionDP.countFunction = countRevisions;
+				revisionDP.fetchFunction = fetchRevisions;
+				revisionDP.pendingObject = PENDING_OBJECT;
+				
+				namedRevisionDP = new AsyncListDataProvider();
+				namedRevisionDP.countFunction = countNamedRevisions;
+				namedRevisionDP.fetchFunction = fetchNamedRevisions;
+				namedRevisionDP.pendingObject = PENDING_OBJECT;
+				
+				refresh();
+			}
+			
+			public function refresh(): void
+			{
+				refreshAll();	
+				refreshNamed();
+			}
+			
+			public function refreshAll(): void
+			{
+				revisionDP.init();
+			}
+			
+			public function refreshNamed(): void
+			{
+				namedRevisionDP.init();
+			}
+			
+			protected function countRevisions(): AsyncToken
+			{
+				return re.getRevisionCount();
+			}
+			
+			protected function fetchRevisions(offset:Number, count:Number): AsyncToken
+			{
+				return re.getRevisions(offset, count);
+			}
+			
+			protected function countNamedRevisions(): AsyncToken
+			{
+				return re.getNamedRevisionCount();
+			}
+			
+			protected function fetchNamedRevisions(offset:Number, count:Number): AsyncToken
+			{
+				return re.getNamedRevisions(offset, count);
+			}
+			
+			protected function namedClickHandler(event:GridEvent):void
+			{
+				if (event.item == null || ! event.item is Revision) return;
+				var revision:Revision = event.item as Revision;
+				gotoRevision(revision);
+			}
+			
+			public function gotoRevision(revision:Revision): void
+			{
+				refreshAll();
+				re.getRevisionIndex(revision);
+			}
+			
+			protected function getRevisionIndexHandler(event:ResultEvent): void
+			{
+				var revisionIndex:Number = event.result as Number;
+				allRevisions.selectedIndex = revisionIndex;
+				allRevisions.ensureCellIsVisible(revisionIndex);
+			}
+			
+			protected function saveHandler(event:ResultEvent): void
+			{
+				refreshAll();
+			}
+			
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<my:remote id="re" destination="revisionBRS" >
+			<my:method name="getRevisionIndex" result="getRevisionIndexHandler(event)" />
+			<my:method name="save" result="saveHandler(event)" />
+		</my:remote>
+	</fx:Declarations>
 	
+	<s:layout>
+		<s:VerticalLayout paddingTop="10" />
+	</s:layout>
 	
-
-</s:Group>
+	<s:Group width="100%" height="100%">
+		<s:layout>
+			<s:HorizontalLayout gap="10"/>
+		</s:layout>
+		<s:DataGrid id="namedRevisions" dataProvider="{namedRevisionDP.asyncListView}" width="500" height="100%"
+					gridClick="namedClickHandler(event)"
+					variableRowHeight="true">
+			<s:columns>
+				<s:ArrayList>
+					<s:GridColumn headerText="@Resource(bundle = 'messages', key = 'revision.container.header.date')"
+								  dataField="date"/>
+					<s:GridColumn headerText="@Resource(bundle = 'messages', key = 'revision.container.header.label')" 
+								  dataField="label"/>
+				</s:ArrayList>
+			</s:columns>
+		</s:DataGrid>
+		
+		<s:VGroup width="100%" height="100%" gap="10">
+			<s:Button label="@Resource(bundle = 'messages', key = 'revision.button.save.label')" 
+					  styleName="fontSize24Style" skinClass="com.mydlp.ui.skin.SaveBitmapLabelButton24Skin"
+					  click="{re.save()}"/>
+			<s:DataGrid id="allRevisions" 
+						dataProvider="{revisionDP.asyncListView}" width="100%" height="100%" variableRowHeight="true">
+				<s:columns>
+					<s:ArrayList>
+						<s:GridColumn headerText="@Resource(bundle = 'messages', key = 'revision.container.header.date')"
+									  dataField="date"/>
+						<s:GridColumn headerText="@Resource(bundle = 'messages', key = 'revision.container.header.label')" 
+									  itemRenderer="com.mydlp.ui.widget.revision.NameColumnRenderer"/>
+						<s:GridColumn headerText="@Resource(bundle = 'messages', key = 'revision.container.header.parent')" 
+									  itemRenderer="com.mydlp.ui.widget.revision.ParentColumnRenderer"/>
+						<s:GridColumn itemRenderer="com.mydlp.ui.widget.revision.RestoreColumnRenderer" width="120"/>
+					</s:ArrayList>
+				</s:columns>
+			</s:DataGrid>
+		</s:VGroup>
+		
+	</s:Group>
+	
+</s:SkinnableContainer>

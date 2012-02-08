@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:GridItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009" 
+					xmlns:s="library://ns.adobe.com/flex/spark" 
+					xmlns:mx="library://ns.adobe.com/flex/mx"
+					xmlns:my="http://www.mydlp.com/flex/my"
+					clipAndEnableScrolling="true">
+	
+	<fx:Script>
+		<![CDATA[
+			import com.mydlp.ui.domain.Revision;
+			import com.mydlp.ui.util.InteractionUtil;
+			import com.mydlp.ui.util.LangUtil;
+			
+			import mx.core.FlexGlobals;
+			import mx.rpc.events.ResultEvent;
+			protected function getNameText(value:*):String {
+				if (value == null) return "";
+				
+				var revision:Revision = value as Revision;
+				var labelText:String = "";
+				
+				if (revision.restoreRevision == null)
+				{
+					labelText += revision.label;
+				}
+				else 
+				{
+					labelText += LangUtil.getString("messages","revision.container.column.name.name") + ": ";
+					
+					if (revision.label != null && revision.label.length > 0 )
+						labelText += revision.label;
+					else
+						labelText += "id(" + revision.id + ")";
+				}
+				
+				return labelText;
+			}
+			
+			protected function isEditVisible(value:*): Boolean {
+				if (value == null) return false;
+				var revision:Revision = value as Revision;
+				return revision.name != null;
+			}
+			
+			protected function isAddVisible(value:*): Boolean {
+				if (value == null) return false;
+				var revision:Revision = value as Revision;
+				return revision.name == null;
+			}
+			
+			
+			protected function editClickHandler(event:MouseEvent):void
+			{
+				var popup:NameColumnPopup = InteractionUtil.newPopup(NameColumnPopup, true) as NameColumnPopup;
+				popup.revisionObject = data as Revision;
+			}
+			
+			protected function saveEntityHandler(event:ResultEvent): void
+			{
+				FlexGlobals.topLevelApplication.revisionContainer.refreshNamed();
+				FlexGlobals.topLevelApplication.revisionContainer.gotoRevision(data as Revision);
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<fx:Declarations>
+		<my:remote id="re" destination="revisionBRS" >
+			<my:method name="saveEntity" result="saveEntityHandler(event)" />
+		</my:remote>
+	</fx:Declarations>
+	
+	<s:states>
+		<s:State name="normal" />
+		<s:State name="hovered" />
+		<s:State name="selected" />
+	</s:states>
+	
+	<s:layout>
+		<s:VerticalLayout paddingBottom="4" paddingTop="4" paddingLeft="4"/>
+	</s:layout>
+	
+	<s:Group width="100%" height="100%" minHeight="30">
+		<s:HGroup width="100%" height="100%"
+				  visible="{!isAddVisible(data)}"
+				  verticalAlign="middle" >
+			<s:Label text="{getNameText(data)}"/>
+			<s:Button includeIn="selected" skinClass="com.mydlp.ui.skin.EditBitmapButton16Skin" visible="{isEditVisible(data)}"
+					  click="editClickHandler(event)"/>
+			<s:Button includeIn="selected" skinClass="com.mydlp.ui.skin.RemoveBitmapButton16Skin" visible="{isEditVisible(data)}"
+					  click="{data.name = null; re.saveEntity(data)}"/>
+		</s:HGroup>
+		<s:HGroup width="100%" height="100%"
+				  visible="{isAddVisible(data)}"
+				  verticalAlign="middle" horizontalAlign="center">
+			<s:Button includeIn="selected" skinClass="com.mydlp.ui.skin.AddBitmapButton16Skin"
+					  click="editClickHandler(event)"/>
+		</s:HGroup>
+	</s:Group>
+	
+</s:GridItemRenderer>

@@ -90,7 +90,6 @@ public class ProxyServlet extends HttpServlet {
 			throws ServletException, IOException {
 		
 		String urlKey = req.getParameter("q");
-		System.out.println("is here!!!!!");
 		if (urlKey != null && urlMap.containsKey(urlKey))
 		{
 			Map<String, StringBuffer> cache = getCacheMap(req);

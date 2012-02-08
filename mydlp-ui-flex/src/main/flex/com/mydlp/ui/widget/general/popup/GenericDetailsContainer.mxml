@@ -40,7 +40,7 @@
 				for each (var classMember:ClassMember in classMembers)
 				{
 					var valueString:String = "";
-					
+					/*
 					if (classMember.name == "category" && classMember.type == InventoryCategory)
 					{
 						if (targetObject.category != null) 
@@ -49,16 +49,17 @@
 							valueString = LangUtil.getString("messages", "generic.category.uncategorized");
 						index = -1;
 					}
-					else if 
+					else */ 
+					if 
 						(
 							classMember.name == "id" ||
+							(classMember.name == "category" && classMember.type == InventoryCategory) ||
 							classMember.name == "optimisticLockVersion" ||
 							classMember.name == "nameKey" ||
 							classMember.name == "icon" ||
 							(classMember.name == "ruleItems" && classMember.type == ListCollectionView) ||
 							classMember.name == "enabled" ||
 							classMember.name == "priority" ||
-							//todo refine password
 							classMember.name == "password" ||
 							classMember.name == "action" ||
 							(classMember.name == "children" && classMember.type == ListCollectionView)||						
