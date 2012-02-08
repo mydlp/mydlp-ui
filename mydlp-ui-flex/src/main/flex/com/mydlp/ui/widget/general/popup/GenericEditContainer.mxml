@@ -120,6 +120,8 @@
 						inputLabel = new HorizontalInputLabel()
 						inputLabel.addElement(ipInput);
 						
+						//trace("gelenin adi: " + classMember.name + " value: " + targetObject[classMember.name])
+						
 						if(classMember.name == "ipBase")
 							index = 1;
 						else

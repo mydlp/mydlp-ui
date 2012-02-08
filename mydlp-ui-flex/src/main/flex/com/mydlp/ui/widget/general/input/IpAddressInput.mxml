@@ -15,6 +15,7 @@
 			
 			public static function numberToIPStr(value:Number):String
 			{
+				//trace("stringe cevrilirken: " + value)
 				var rNumber:Number = new Number(value);
 				var tString:String = "";
 				var i4:int;
@@ -38,12 +39,14 @@
 			{
 				var tempIp:Array=text.split(".");
 				_numberValue = ((int)(tempIp[0])*16777216) + ((int)(tempIp[1])*65536) + ((int)(tempIp[2])*256) + (int)(tempIp[3]);
+				//trace("changeHandler: " + _numberValue);
 				dispatchEvent(new Event(NUMBER_VALUE_CHANGE_EVENT));
 			}
 			
 			[Bindable(event=NUMBER_VALUE_CHANGE_EVENT)]
 			public function get numberValue():Number
 			{
+				//trace("get icinde number value: " + _numberValue);
 				return _numberValue;
 			}
 			
@@ -51,6 +54,7 @@
 			{
 				if (isNaN(value))
 				{
+				//	trace("isNaN");
 					text = "0.0.0.0";
 					_numberValue = 0;
 				}
@@ -59,6 +63,7 @@
 					text = numberToIPStr(value);
 					_numberValue = value;
 				}
+				//trace("set sonunda deger: " + _numberValue);
 				dispatchEvent(new Event(NUMBER_VALUE_CHANGE_EVENT));
 			}
 			
