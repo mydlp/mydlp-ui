@@ -67,6 +67,9 @@
 			
 			protected var deleteList:ListCollectionView;
 			
+			protected var droppedSources:ListCollectionView;
+			protected var droppedMatchers:ListCollectionView;
+			
 			protected function onCreationComplete(event:FlexEvent):void
 			{
 				if (data is WebRule)
@@ -145,19 +148,24 @@
 			
 			protected function removeAllNetwotkItem():void
 			{
-				for each(var o:RuleItem in ruleObject.ruleItems)
+				var ruleItems:ListCollectionView = ruleObject.ruleItems;
+				for(var i:int = 0; i < ruleItems.length; i++)
 				{
-					if(o.item.coupledInventoryItem.nameKey == "inventory.networks.all")
-						deleteList.addItem(o);
+					if(ruleItems[i].item.coupledInventoryItem.nameKey == "inventory.networks.all")
+					{
+						deleteList.addItem(ruleObject.ruleItems[i]);
+						ruleObject.ruleItems.removeItemAt(i);
+					}
 				}
 			}
 			
 			protected function removeOtherNetworks():void
 			{
-				for each(var o:RuleItem in ruleObject.ruleItems)
+				var ruleItems:ListCollectionView = ruleObject.ruleItems;
+				for(var i:int = 0; i < ruleItems.length; i++)
 				{
-					if(o.item is Network)
-						deleteList.addItem(o);
+					if(ruleItems[i].item is Network)
+						deleteList.addItem(ruleObject.ruleItems[i]);
 				}
 			}
 			
@@ -173,19 +181,24 @@
 			
 			protected function removeAllITypeItem():void
 			{
-				for each(var o:RuleItem in ruleObject.ruleItems)
+				var ruleItems:ListCollectionView = ruleObject.ruleItems;
+				for(var i:int = 0; i < ruleItems.length; i++)
 				{
-					if(o.item.coupledInventoryItem.nameKey == "informationType.predefined.all")
-						deleteList.addItem(o);
+					if(ruleItems[i].item.coupledInventoryItem.nameKey == "informationType.predefined.all")
+					{
+						deleteList.addItem(ruleObject.ruleItems[i]);
+						ruleObject.ruleItems.removeItemAt(i);
+					}
 				}
 			}
 			
 			protected function removeOtherITypes():void
 			{
-				for each(var o:RuleItem in ruleObject.ruleItems)
+				var ruleItems:ListCollectionView = ruleObject.ruleItems;
+				for(var i:int = 0; i < ruleItems.length; i++)
 				{
-					if(o.item is InformationType)
-						deleteList.addItem(o);
+					if(ruleItems[i].item is InformationType)
+						deleteList.addItem(ruleObject.ruleItems[i]);
 				}
 			}
 			
@@ -221,15 +234,69 @@
 			
 			protected function onDragOver(event:DragEvent):void
 			{
+				droppedMatchers = new ArrayCollection();
+				droppedSources = new ArrayCollection();
 				var treeItems:* = FlexGlobals.topLevelApplication.inventoryTree.selectedItems;
-				if (isAllDroppable(treeItems))
+				if (isAllDroppable(treeItems) && checkConsistency(treeItems))
 					acceptDrop();
 				else
 					rejectDrop();
 			}
 			
+			protected function checkConsistency(treeItems:*):Boolean
+			{
+				groupDroppedItems(treeItems);
+				if(isConsistentForSources() && isConsistentForMatchers())
+					return true;
+				return false;
+				
+			}
+			
+			protected function isConsistentForSources():Boolean
+			{
+				for each(var ri:InventoryItem in droppedSources)
+				{
+					if(ri.item.coupledInventoryItem.nameKey == "inventory.networks.all" && droppedSources.length > 1)
+						return false;
+				}
+				return true;
+			}
+			
+			protected function isConsistentForMatchers():Boolean
+			{
+				for each(var ri:InventoryItem in droppedMatchers)
+				{
+					if(ri.item.coupledInventoryItem.nameKey == "informationType.predefined.all" && droppedMatchers.length > 1)
+						return false;
+				}
+				return true;
+			}
+			
+			protected function groupDroppedItems(droppedItems:*):void
+			{
+				for each(var item:* in droppedItems)
+					groupDroppedItem(item);
+			}
+			
+			protected function groupDroppedItem(droppedItem:*):void
+			{
+				if(droppedItem is InventoryItem)
+				{
+					if(droppedItem.item is Network)
+						droppedSources.addItem(droppedItem);
+					else if(droppedItem.item is InformationType)
+						droppedMatchers.addItem(droppedItem);
+				}
+				else if(droppedItem is InventoryCategory)
+				{
+					var inventoryCategory:InventoryCategory = droppedItem as InventoryCategory;
+					groupDroppedItems(inventoryCategory.children);
+				}
+			}
+			
 			protected function isAllDroppable(treeItems:*): Boolean
 			{
+				
 				for each (var o:* in treeItems)
 				{
 					if (!isDroppable(o)) return false;
@@ -363,6 +430,7 @@
 			
 			protected function saveHandler(event:ResultEvent):void
 			{
+				trace("deleteList Length: " + deleteList.length);
 				if(deleteList.length == 0)
 				{
 					highlightOff();
