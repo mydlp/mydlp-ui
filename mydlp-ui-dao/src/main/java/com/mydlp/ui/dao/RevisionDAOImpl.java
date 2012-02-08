@@ -73,7 +73,7 @@ public class RevisionDAOImpl extends AbstractPolicyDAO implements RevisionDAO {
 				DetachedCriteria.forClass(Revision.class)
 					.addOrder(Order.desc("id"));
 		@SuppressWarnings("unchecked")
-		Revision firstRevision = DAOUtil.getSingleResult(criteria.getExecutableCriteria(getSession())
+		Revision firstRevision = (Revision) DAOUtil.getSingleResult(criteria.getExecutableCriteria(getSession())
 								.setMaxResults(1)
 								.list());
 		return new Long(firstRevision.getId() - revision.getId());
