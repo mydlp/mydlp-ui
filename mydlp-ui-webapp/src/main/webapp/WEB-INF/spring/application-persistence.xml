@@ -40,6 +40,7 @@
          <value>com.mydlp.ui.domain.Network</value>
          <value>com.mydlp.ui.domain.PrinterRule</value>
          <value>com.mydlp.ui.domain.RegularExpression</value>
+         <value>com.mydlp.ui.domain.Revision</value>
          <value>com.mydlp.ui.domain.Rule</value>
          <value>com.mydlp.ui.domain.RuleItem</value>
          <value>com.mydlp.ui.domain.WebRule</value>
