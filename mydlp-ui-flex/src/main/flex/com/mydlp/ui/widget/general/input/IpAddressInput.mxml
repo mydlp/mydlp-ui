@@ -2,16 +2,10 @@
 <s:TextInput xmlns:fx="http://ns.adobe.com/mxml/2009" 
 				xmlns:s="library://ns.adobe.com/flex/spark" 
 				xmlns:mx="library://ns.adobe.com/flex/mx"
-				change="changeHandler(event)"
-				text=""
+				text="" creationComplete="{text = numberToIPStr(numberValue)}"
 				>
 	<fx:Script>
 		<![CDATA[
-			import mx.events.FlexEvent;
-			
-			private var _numberValue:uint;
-			
-			private static const NUMBER_VALUE_CHANGE_EVENT:String = "numberValueChanged";
 			
 			public static function numberToIPStr(value:Number):String
 			{
@@ -34,34 +28,18 @@
 				return i1 + "." + i2 + "." + i3 + "." + i4;
 			}
 			
-			protected function changeHandler(event:Event):void
+			public static function ipStrToNumber(value:String):uint
 			{
-				var tempIp:Array=text.split(".");
-				_numberValue = ((int)(tempIp[0])*16777216) + ((int)(tempIp[1])*65536) + ((int)(tempIp[2])*256) + (int)(tempIp[3]);
-				dispatchEvent(new Event(NUMBER_VALUE_CHANGE_EVENT));
+				var tempIp:Array=value.split(".");
+				return ((int)(tempIp[0])*16777216) + ((int)(tempIp[1])*65536) + ((int)(tempIp[2])*256) + (int)(tempIp[3]);
 			}
 			
-			[Bindable(event=NUMBER_VALUE_CHANGE_EVENT)]
-			public function get numberValue():Number
-			{
-				return _numberValue;
-			}
-			
-			public function set numberValue(value:Number):void
-			{
-				if (isNaN(value))
-				{
-					text = "0.0.0.0";
-					_numberValue = 0;
-				}
-				else
-				{
-					text = numberToIPStr(value);
-					_numberValue = value;
-				}
-				dispatchEvent(new Event(NUMBER_VALUE_CHANGE_EVENT));
-			}
 			
 		]]>
 	</fx:Script>
+	<fx:Declarations>
+		<fx:uint id="numberValue">
+			{ipStrToNumber(text)}
+		</fx:uint>
+	</fx:Declarations>
 </s:TextInput>

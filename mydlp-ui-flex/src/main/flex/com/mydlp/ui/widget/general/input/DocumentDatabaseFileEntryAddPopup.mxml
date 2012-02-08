@@ -6,7 +6,7 @@
 			   close="{close()}"
 			   visible="false"
 			   title="@Resource(bundle = 'messages', key = 'documentDatabase.add.title.label')"
-			   width="300" height="200"
+			   width="200" height="100"
 			   >
 	
 	
@@ -91,7 +91,7 @@
 	<s:Group>
 		
 		<s:layout>
-			<s:HorizontalLayout horizontalAlign="center" gap="5" verticalAlign="middle" 
+			<s:HorizontalLayout horizontalAlign="center" gap="10" verticalAlign="middle" 
 							  paddingLeft="8" paddingRight="8"
 							  paddingTop="15" paddingBottom="15"/>
 		</s:layout>
