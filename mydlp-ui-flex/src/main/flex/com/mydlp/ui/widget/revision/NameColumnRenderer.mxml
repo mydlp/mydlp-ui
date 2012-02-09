@@ -58,7 +58,7 @@
 			protected function saveEntityHandler(event:ResultEvent): void
 			{
 				FlexGlobals.topLevelApplication.revisionContainer.refreshNamed();
-				FlexGlobals.topLevelApplication.revisionContainer.gotoRevision(data as Revision);
+				FlexGlobals.topLevelApplication.revisionContainer.refreshAndGotoRevision(data as Revision);
 			}
 			
 		]]>

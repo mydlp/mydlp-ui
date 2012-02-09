@@ -20,6 +20,7 @@
 			import mx.rpc.events.ResultEvent;
 			
 			import spark.events.GridEvent;
+			import spark.events.GridSelectionEvent;
 			
 			protected const PENDING_OBJECT:Object = 
 				{date: LangUtil.getString("messages", "revision.container.pending.message")};
@@ -81,29 +82,50 @@
 				return re.getNamedRevisions(offset, count);
 			}
 			
-			protected function namedClickHandler(event:GridEvent):void
+			public function refreshAndGotoRevision(revision:Revision): void
 			{
-				if (event.item == null || ! event.item is Revision) return;
-				var revision:Revision = event.item as Revision;
+				refreshAll();
 				gotoRevision(revision);
 			}
 			
 			public function gotoRevision(revision:Revision): void
 			{
-				refreshAll();
+				if (revision == null || isNaN(revision.id) ) return;
+				
+				if (revisionDP.asyncListView.length > 0) {
+					var r:* = revisionDP.asyncListView.getItemAt(0);
+					if (r != null && r is Revision) // to detect pending objects
+					{
+						gotoIndex((r as Revision).id - revision.id);
+						return;
+					}
+				}
 				re.getRevisionIndex(revision);
+			}
+			
+			protected function gotoIndex(index:Number): void
+			{
+				allRevisions.selectedIndex = index;
+				allRevisions.ensureCellIsVisible(index);
 			}
 			
 			protected function getRevisionIndexHandler(event:ResultEvent): void
 			{
 				var revisionIndex:Number = event.result as Number;
-				allRevisions.selectedIndex = revisionIndex;
-				allRevisions.ensureCellIsVisible(revisionIndex);
+				gotoIndex(revisionIndex);
 			}
 			
 			protected function saveHandler(event:ResultEvent): void
 			{
 				refreshAll();
+			}
+			
+			protected function namedSelectionHandler(event:GridSelectionEvent):void
+			{
+				if (event.currentTarget.grid.selectedItem == null || 
+					! event.currentTarget.grid.selectedItem is Revision) return;
+				var revision:Revision = event.currentTarget.grid.selectedItem as Revision;
+				gotoRevision(revision);
 			}
 			
 		]]>
@@ -124,7 +146,7 @@
 			<s:HorizontalLayout gap="10"/>
 		</s:layout>
 		<s:DataGrid id="namedRevisions" dataProvider="{namedRevisionDP.asyncListView}" width="500" height="100%"
-					gridClick="namedClickHandler(event)"
+					selectionChange="namedSelectionHandler(event)"
 					variableRowHeight="true">
 			<s:columns>
 				<s:ArrayList>

@@ -26,7 +26,7 @@
 			protected function saveEntityHandler(event:ResultEvent): void
 			{
 				FlexGlobals.topLevelApplication.revisionContainer.refreshNamed();
-				FlexGlobals.topLevelApplication.revisionContainer.gotoRevision(revisionObject);
+				FlexGlobals.topLevelApplication.revisionContainer.refreshAndGotoRevision(revisionObject);
 				InteractionUtil.closePopup(this);
 			}
 			
