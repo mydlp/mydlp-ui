@@ -7,6 +7,8 @@ import javax.persistence.MappedSuperclass;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.hibernate.annotations.Index;
+
 @MappedSuperclass
 public abstract class AbstractLog extends AbstractEntity {
 
@@ -27,6 +29,7 @@ public abstract class AbstractLog extends AbstractEntity {
 	protected Long informationTypeId;
 	protected String matcherMessage;
 	
+	@Index(name="dateIndex")
 	@Column(nullable=false)
 	public Date getDate() {
 		return date;
