@@ -4,8 +4,6 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-import org.hibernate.annotations.Index;
-
 @Entity
 public class IncidentLogFile extends AbstractLogFile {
 
@@ -17,7 +15,6 @@ public class IncidentLogFile extends AbstractLogFile {
 	protected IncidentLog incidentLog;
 	protected IncidentLogFileContent content;
 
-	@Index(name="logIndex")
 	@ManyToOne
 	@JoinColumn(nullable=false)
 	public IncidentLog getIncidentLog() {
@@ -28,7 +25,6 @@ public class IncidentLogFile extends AbstractLogFile {
 		this.incidentLog = incidentLog;
 	}
 
-	@Index(name="contentIndex")
 	@ManyToOne
 	public IncidentLogFileContent getContent() {
 		return content;
