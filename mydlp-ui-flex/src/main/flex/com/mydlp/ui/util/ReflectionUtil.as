@@ -3,15 +3,22 @@ package com.mydlp.ui.util
 	import avmplus.getQualifiedClassName;
 	
 	import com.mydlp.ui.domain.AbstractEntity;
+	import com.mydlp.ui.domain.DocumentDatabase;
+	import com.mydlp.ui.domain.InformationFeature;
+	import com.mydlp.ui.domain.InformationType;
 	import com.mydlp.ui.domain.InventoryCategory;
 	import com.mydlp.ui.domain.InventoryItem;
 	import com.mydlp.ui.domain.Item;
+	import com.mydlp.ui.domain.Matcher;
+	import com.mydlp.ui.domain.MatcherArgument;
+	import com.mydlp.ui.domain.RegularExpressionGroup;
 	import com.mydlp.ui.domain.Rule;
 	import com.mydlp.ui.domain.RuleItem;
 	import com.mydlp.ui.widget.policy.inventory.InventoryItemRenderer;
 	
 	import flash.utils.describeType;
 	import flash.utils.getDefinitionByName;
+	import flash.utils.getQualifiedClassName;
 	
 	import mx.collections.ArrayCollection;
 	import mx.collections.ArrayList;
@@ -94,7 +101,8 @@ package com.mydlp.ui.util
 							(classMember.name == "children" && classMember.type == ListCollectionView) ||
 							(classMember.name == "nameKey" && classMember.type == String) ||
 							(classMember.name == "label" && classMember.type == String) ||
-							(classMember.name == "coupledInventoryItem" && classMember.type == InventoryItem)
+							(classMember.name == "coupledInventoryItem" && classMember.type == InventoryItem) ||
+							(sourceObject is Matcher && classMember.name == "coupledInformationFeature" && classMember.type == InformationFeature)
 						)
 					{
 						continue;
@@ -129,6 +137,48 @@ package com.mydlp.ui.util
 							ris.addItem(ri);
 						}
 						targetObject[classMember.name] = ris;
+					}
+					else if (sourceObject is InformationFeature && classMember.name == "matcher" && classMember.type == Matcher)
+					{
+						targetObject.matcher = cloneDomainObject(sourceObject.matcher);
+						(targetObject.matcher as Matcher).coupledInformationFeature = targetObject as InformationFeature;
+					}
+					else if (	sourceObject is Matcher && 
+						classMember.name == "matcherArguments" && 
+						classMember.type == ListCollectionView)
+					{
+						var mas:ListCollectionView = new ArrayCollection();
+						for each (var mao:Object in sourceObject[classMember.name] as ListCollectionView)
+						{
+							var ma:MatcherArgument = new MatcherArgument();
+							var sourceMa:MatcherArgument = mao as MatcherArgument;
+							ma.coupledMatcher = targetObject as Matcher;
+							if (sourceMa.coupledArgument is DocumentDatabase ||
+								sourceMa.coupledArgument is RegularExpressionGroup) // because related matchersr references these objects
+								ma.coupledArgument = sourceMa.coupledArgument;
+							else
+								ma.coupledArgument = cloneDomainObject(sourceMa.coupledArgument);
+							mas.addItem(ma);
+						}
+						targetObject[classMember.name] = mas;
+					}
+					else if (	sourceObject is InformationType && 
+						classMember.name == "dataFormats" && 
+						classMember.type == ListCollectionView)
+					{
+						targetObject[classMember.name] = sourceObject[classMember.name];
+					}
+					else if (classMember.type == ListCollectionView)
+					{
+						var list:ListCollectionView = new ArrayCollection();
+						for each (var listObject:* in sourceObject[classMember.name] as ListCollectionView)
+							list.addItem(cloneDomainObject(listObject));
+						
+						targetObject[classMember.name] = list;
+					}
+					else if (sourceObject[classMember.name] is AbstractEntity)
+					{
+						targetObject[classMember.name] = cloneDomainObject(sourceObject[classMember.name]);
 					}
 					else
 					{
