@@ -11,10 +11,13 @@
 			import com.mydlp.ui.domain.Config;
 			
 			import mx.collections.ListCollectionView;
+			import mx.events.ValidationResultEvent;
 			import mx.rpc.events.ResultEvent;
 			
 			[Bindable]
 			protected var configs:ListCollectionView = null;
+			
+			protected var inputValidationObject:Object = new Object();
 			
 			protected function getConfigsHandler(event:ResultEvent):void
 			{
@@ -81,6 +84,20 @@
 				saveButton.enabled = true;
 			}
 			
+			public function invalidInput(event:ValidationResultEvent):void
+			{
+				inputValidationObject[event.target.source.uid] = false;
+				saveButton.enabled = false;
+			}
+			
+			public function validInput(event:ValidationResultEvent):void
+			{
+				inputValidationObject[event.target.source.uid] = true;
+				for (var i:* in inputValidationObject)
+					if(inputValidationObject[i] as Boolean == false) return;
+				saveButton.enabled = true;				
+			}
+			
 		]]>
 	</fx:Script>
 	
@@ -97,7 +114,7 @@
 	
 	<s:TabBar dataProvider="{vs}" fontSize="14" fontWeight="bold"/>
 	
-	<s:Group width="100%" height="100%" maxHeight="400 " maxWidth="730">
+	<s:Group id="optionContainerGroup" width="100%" height="100%" maxHeight="400 " maxWidth="730">
 		<s:Rect left="0" right="0" top="0" bottom="30">
 			<s:stroke>
 				<s:SolidColorStroke color="0xACADAF" weight="3"/>
@@ -112,7 +129,7 @@
 					<option:IcapTab id="icapTab" />
 				</s:NavigatorContent>
 				<s:NavigatorContent label="@Resource(bundle = 'messages', key = 'options.tab.smtp')" width="100%" height="100%">
-					<option:SmtpTab id="smtpTab" />
+					<option:SmtpTab id="smtpTab"/>
 				</s:NavigatorContent>
 				<s:NavigatorContent label="@Resource(bundle = 'messages', key = 'options.tab.user')" width="100%" height="100%">
 					<option:UserManagerTab id="userManagerTab" />

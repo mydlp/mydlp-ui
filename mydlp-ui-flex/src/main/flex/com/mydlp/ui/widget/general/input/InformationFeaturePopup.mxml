@@ -16,6 +16,8 @@
 			import com.mydlp.ui.domain.RegularExpression;
 			import com.mydlp.ui.util.InteractionUtil;
 			
+			import mx.events.ValidationResultEvent;
+			
 			public var informationFeatureInput:InformationFeatureInput = null;
 			
 			[Bindable]
@@ -116,6 +118,12 @@
 			<input:MatcherDefinition data="scode" />
 			<input:MatcherDefinition data="scode_ada" />
 		</s:ArrayCollection>
+		
+		<s:NumberValidator source="{featureWeight}"
+						   property="text"
+						   minValue="1"
+						   valid="{saveButton.enabled = true}"
+						   invalid="{saveButton.enabled = false}"/>
 	</fx:Declarations>
 	
 	<s:states>
@@ -159,7 +167,7 @@
 		<s:layout>
 			<s:HorizontalLayout horizontalAlign="right" verticalAlign="middle" gap="10"/>
 		</s:layout>
-		<s:Button label="@Resource(bundle = 'messages', key = 'matcher.button.save.label')" click="addNewFeature(event)"/>
+		<s:Button id="saveButton" label="@Resource(bundle = 'messages', key = 'matcher.button.save.label')" click="addNewFeature(event)"/>
 		<s:Button label="@Resource(bundle = 'messages', key = 'matcher.button.cancel.label')" click="{close()}"/>
 	</s:Group>
 </s:TitleWindow>

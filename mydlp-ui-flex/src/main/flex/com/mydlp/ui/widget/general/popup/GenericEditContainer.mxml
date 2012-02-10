@@ -46,6 +46,10 @@
 			import mx.controls.TextArea;
 			import mx.core.FlexGlobals;
 			import mx.events.FlexEvent;
+			import mx.events.ValidationResultEvent;
+			import mx.validators.EmailValidator;
+			import mx.validators.NumberValidator;
+			import mx.validators.RegExpValidator;
 			
 			import spark.components.Button;
 			import spark.components.CheckBox;
@@ -57,6 +61,9 @@
 			public var deleteList:ListCollectionView;
 			
 			protected var sourceLabelList:Array = new Array();
+			protected var inputValidationObject:Object = new Object();
+			
+			protected var falseInputCount:int = 0;
 			
 			public function populateClassMembers(targetObject:Object): void
 			{
@@ -120,12 +127,18 @@
 						inputLabel = new HorizontalInputLabel()
 						inputLabel.addElement(ipInput);
 						
-						//trace("gelenin adi: " + classMember.name + " value: " + targetObject[classMember.name])
-						
 						if(classMember.name == "ipBase")
 							index = 1;
 						else
 							index = 2;
+						
+						var regExpValidator:RegExpValidator = new RegExpValidator();
+						regExpValidator.source = ipInput;
+						regExpValidator.property = "text";
+						regExpValidator.expression = "^([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])$";
+						
+						regExpValidator.addEventListener(ValidationResultEvent.INVALID, invalidInput);
+						regExpValidator.addEventListener(ValidationResultEvent.VALID, validInput);
 					}
 					else if (targetObject is InformationType && 
 							classMember.name == "dataFormats" && 
@@ -262,12 +275,22 @@
 						inputLabel.addElement(textInput);
 						if(classMember.name == "name"){
 							index = 0;
+							var regExpValidator2:RegExpValidator = new RegExpValidator();
+							regExpValidator2.source = textInput;
+							regExpValidator2.property = "text";
+							regExpValidator2.expression = "^[a-zA-Z0-9_/\.\ ]+$"
+							regExpValidator2.addEventListener(ValidationResultEvent.INVALID, invalidInput);
+							regExpValidator2.addEventListener(ValidationResultEvent.VALID, validInput);
 						}
 						else if(classMember.name == "username"){
 							index = 3;
 						}
 						else if(classMember.name == "email"){
-							index = 4;
+							var emailValidator:EmailValidator = new EmailValidator();
+							emailValidator.source = textInput;
+							emailValidator.property = "text";
+							emailValidator.addEventListener(ValidationResultEvent.INVALID, invalidInput);
+							emailValidator.addEventListener(ValidationResultEvent.VALID, validInput);
 						}
 						else if(classMember.name == "password"){
 							index = 5;
@@ -276,6 +299,13 @@
 							if(isNaN(targetObject[classMember.name]))
 								textInput.text = new String("1");
 							index = 7;
+							var numberValidator:NumberValidator = new NumberValidator();
+							numberValidator.source = textInput;
+							numberValidator.property = "text";
+							numberValidator.domain = "int";
+							numberValidator.minValue = "1";
+							numberValidator.addEventListener(ValidationResultEvent.INVALID, invalidInput);
+							numberValidator.addEventListener(ValidationResultEvent.VALID, validInput);
 						}
 					}
 					
@@ -285,6 +315,20 @@
 						sourceLabelList.push(new InputLabelIndexTuple(index, inputLabel));
 					}
 				}
+			}
+			
+			protected function validInput(event:ValidationResultEvent):void
+			{
+				inputValidationObject[event.target.source.uid] = true;
+				for (var i:* in inputValidationObject)
+					if(inputValidationObject[i] as Boolean == false) return;
+				cButton.enabled = true;
+			}
+			
+			protected function invalidInput(event:ValidationResultEvent):void
+			{
+				inputValidationObject[event.target.source.uid] = false;
+				cButton.enabled = false;
 			}
 			
 			public function populateEachFormItem():void

@@ -10,7 +10,7 @@ public class _000_00026_Config_Icap extends AbstractGranule {
 
 		Config icapReqModPath = new Config();
 		icapReqModPath.setKey("icap_reqmod_path");
-		icapReqModPath.setValue("/dlp");
+		icapReqModPath.setValue("\\dlp");
 
 		Config icapRespModPath = new Config();
 		icapRespModPath.setKey("icap_respmod_path");
