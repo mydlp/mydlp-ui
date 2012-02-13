@@ -14,6 +14,7 @@
 			
 			import flash.net.navigateToURL;
 			
+			import mx.core.FlexGlobals;
 			import mx.core.IFlexDisplayObject;
 			import mx.events.FlexEvent;
 			import mx.rpc.events.ResultEvent;
@@ -63,6 +64,7 @@
 					if (installPopup != null)
 					{
 						installPopup.currentState = "completed";
+						FlexGlobals.topLevelApplication.revisionContainer.refreshAll();
 						installPopup = null;
 					}
 				}			

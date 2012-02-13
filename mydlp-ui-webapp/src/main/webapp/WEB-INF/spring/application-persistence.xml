@@ -29,6 +29,7 @@
          <value>com.mydlp.ui.domain.InventoryCategory</value>
          <value>com.mydlp.ui.domain.InventoryItem</value>
          <value>com.mydlp.ui.domain.Item</value>
+         <value>com.mydlp.ui.domain.NonCascadingArgument</value>
          <value>com.mydlp.ui.domain.MailRule</value>
          <value>com.mydlp.ui.domain.Matcher</value>
          <value>com.mydlp.ui.domain.MatcherArgument</value>

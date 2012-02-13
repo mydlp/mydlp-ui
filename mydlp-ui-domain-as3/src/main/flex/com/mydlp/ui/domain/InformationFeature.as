@@ -6,35 +6,27 @@
  */
 
 package com.mydlp.ui.domain {
+	import mx.resources.ResourceManager;
 
     [Managed]
     [RemoteClass(alias="com.mydlp.ui.domain.InformationFeature")]
+	[ResourceBundle("messages")]
     public class InformationFeature extends InformationFeatureBase {
 		
 		public function get label():String
-		{
-			if(this.matcher.functionName == "cc")
-				return "Credit Card Number" + " - " + this.weight.toString();
-			else if(this.matcher.functionName == "ssn")
-				return "Social Security Number" + " - " + this.weight.toString();
-			else if(this.matcher.functionName == "iban")
-				return "IBAN Account Number" + " - " + this.weight.toString();
-			else if(this.matcher.functionName == "trid")
-				return "Turkey National ID Number" + " - " + this.weight.toString();
-			else if(this.matcher.functionName == "canada_sin")
-				return "Canada Social Insurance Number" + " - " + this.weight.toString();
-			else if(this.matcher.functionName == "france_insee")
-				return "France INSEE Number" + " - " +this.weight.toString();
-			else if(this.matcher.functionName == "uk_nino")
-				return "UK National Insurance Number" + " - " + this.weight.toString();
+		{	
+			var generatedNameKey:String = new String("matchers.");
+			
+			generatedNameKey += this.matcher.functionName + ".label";
+			
+			var resourceVal:String = ResourceManager.getInstance().getString("messages", generatedNameKey);
+			if (resourceVal == null || resourceVal.length == 0)
+				return "Custom" + " - " + this.weight.toString();
 			else if(this.matcher.functionName == "keyword")
-				return "Keyword" + " - " + this.matcher.matcherArguments.getItemAt(0).coupledArgument.regex + " - " + this.weight.toString();
-			else if(this.matcher.functionName == "scode")
-				return "Source Code(C/C++/C#)" + " - " + this.weight.toString();
-			else if(this.matcher.functionName == "scode_ada")
-				return "Source Code(Ada)" + " - " + this.weight.toString();
-			else
-				return "Custom " + this.weight.toString();
+				return resourceVal + " - " + this.matcher.matcherArguments.getItemAt(0).coupledArgument.regex + " - " + this.weight.toString();
+			else 
+				return resourceVal + " - " + this.weight.toString();
+			
 		}
     }
 }

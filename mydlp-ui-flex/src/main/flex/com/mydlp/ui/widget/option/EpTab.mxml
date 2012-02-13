@@ -11,6 +11,14 @@
 		<domain:Config id="logLevel" />
 		<domain:Config id="logLimit" />
 		<domain:Config id="syncInterval" /> 
+		
+		<s:NumberValidator source="{sync}"
+						   property="text"
+						   minValue="149999"/>
+		
+		<s:NumberValidator source="{log}"
+						   property="text"
+						   minValue="1048575"/>
 	</fx:Declarations>
 	
 	<fx:Script>
@@ -51,10 +59,10 @@
 				</s:DropDownList>				
 			</s:FormItem>
 			<s:FormItem label="{syncInterval.label}">
-				<s:TextInput text="@{syncInterval.value}"/>
+				<s:TextInput id="sync" text="@{syncInterval.value}"/>
 			</s:FormItem>
 			<s:FormItem label="{logLimit.label}">
-				<s:TextInput text="@{logLimit.value}"/>
+				<s:TextInput id="log" text="@{logLimit.value}"/>
 			</s:FormItem>			
 		</s:Form>	
 		

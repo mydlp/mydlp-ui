@@ -2,6 +2,7 @@
 <s:TitleWindow xmlns:fx="http://ns.adobe.com/mxml/2009" 
 			   xmlns:s="library://ns.adobe.com/flex/spark" 
 			   xmlns:mx="library://ns.adobe.com/flex/mx"
+			   xmlns:my="http://www.mydlp.com/flex/my"
 			   xmlns:input="com.mydlp.ui.widget.general.input.*"
 			   close="{close()}"
 			   visible="false"
@@ -10,11 +11,18 @@
 	
 	<fx:Script>
 		<![CDATA[
+			import com.mydlp.ui.domain.DocumentDatabase;
 			import com.mydlp.ui.domain.InformationFeature;
 			import com.mydlp.ui.domain.Matcher;
 			import com.mydlp.ui.domain.MatcherArgument;
+			import com.mydlp.ui.domain.NonCascadingArgument;
 			import com.mydlp.ui.domain.RegularExpression;
+			import com.mydlp.ui.domain.RegularExpressionGroup;
 			import com.mydlp.ui.util.InteractionUtil;
+			
+			import mx.collections.ListCollectionView;
+			import mx.events.ValidationResultEvent;
+			import mx.rpc.events.ResultEvent;
 			
 			public var informationFeatureInput:InformationFeatureInput = null;
 			
@@ -67,6 +75,44 @@
 					// TODO: there should be regex validation. escaping special characters.
 					r.regex = keywordValue.text;
 				}
+				else if(matcherCombobox.selectedItem.data == "document_database")
+				{
+					m.functionName = "document_database";
+					var nca:NonCascadingArgument = null;
+					if(m.matcherArguments == null || m.matcherArguments.length == 0)
+					{
+						nca = new NonCascadingArgument;
+						var mar:MatcherArgument = new MatcherArgument;
+						m.matcherArguments = new ArrayCollection();
+						mar.coupledMatcher = m;
+						mar.coupledArgument = nca;
+						m.matcherArguments.addItem(mar);
+					}
+					else
+					{
+						nca = m.matcherArguments.getItemAt(0).coupledArgument as NonCascadingArgument;
+					}
+					nca.argument = documentDatabaseComboBox.selectedItem;
+				}
+				else if(matcherCombobox.selectedItem.data == "keyword_group")
+				{
+					m.functionName = "keyword_group";
+					var ncar:NonCascadingArgument = null;
+					if(m.matcherArguments == null || m.matcherArguments.length == 0)
+					{
+						ncar = new NonCascadingArgument;
+						var marg:MatcherArgument = new MatcherArgument;
+						m.matcherArguments = new ArrayCollection();
+						marg.coupledMatcher = m;
+						marg.coupledArgument = ncar;
+						m.matcherArguments.addItem(marg);
+					}
+					else
+					{
+						ncar = m.matcherArguments.getItemAt(0).coupledArgument as NonCascadingArgument;
+					}
+					ncar.argument = keywordGroupComboBox.selectedItem;
+				}
 				else
 				{
 					m.functionName = matcherCombobox.selectedItem.data ;
@@ -115,7 +161,24 @@
 			<input:MatcherDefinition data="keyword" />
 			<input:MatcherDefinition data="scode" />
 			<input:MatcherDefinition data="scode_ada" />
+			<input:MatcherDefinition data="all" />
+			<input:MatcherDefinition data="keyword_group" />
+			<input:MatcherDefinition data="document_database" />
 		</s:ArrayCollection>
+		
+		<s:NumberValidator source="{featureWeight}"
+						   property="text"
+						   minValue="1"
+						   valid="{saveButton.enabled = true}"
+						   invalid="{saveButton.enabled = false}"/>
+		<my:remote id="re" destination="documentDatabaseBRS">
+			<my:method name="getDocumentDatabases" result="{documentDatabaseComboBox.dataProvider = event.result as ListCollectionView}"/>
+		</my:remote>
+		
+		<my:remote id="rek" destination="regularExpressionGroupBRS">
+			<my:method name="getRegularExpressions" result="{keywordGroupComboBox.dataProvider = event.result as ListCollectionView}"/>
+		</my:remote>
+		
 	</fx:Declarations>
 	
 	<s:states>
@@ -130,14 +193,17 @@
 		<s:State name="keyword" />
 		<s:State name="scode" />
 		<s:State name="scode_ada" />
+		<s:State name="keyword_group"/>
+		<s:State name="document_database"/>
+		<s:State name="all" />
 	</s:states>
 	
 	<s:layout>
 		<s:VerticalLayout horizontalAlign="center" gap="5"
-						  paddingLeft="8" paddingRight="8"
+						  paddingLeft="8" paddingRight="2"
 						  paddingTop="5" paddingBottom="5"/>
 	</s:layout>
-	<s:Form width="350">
+	<s:Form width="400">
 		<s:FormItem label="@Resource(bundle = 'messages', key = 'matcher.combobox.label')" >
 			<s:ComboBox id="matcherCombobox" dataProvider="{matcherDefinitions}" width="100%"
 						change="{currentState = (matcherCombobox.selectedItem == null ? 'normal' : matcherCombobox.selectedItem.data)}"
@@ -153,13 +219,23 @@
 						 	keywordValue.text = informationFeatureObject.matcher.matcherArguments.getItemAt(0).coupledArgument.regex;
 						 }"/>
 		</s:FormItem>
+		<s:FormItem includeIn="document_database" label="@Resource(bundle = 'messages', key = 'matcher.documentDatabase.label')">
+			<s:ComboBox id="documentDatabaseComboBox" labelField="label" width="100%"
+						selectedItem="{informationFeatureObject.matcher.matcherArguments.getItemAt(0).coupledArgument.argument}"
+						creationComplete="{re.getDocumentDatabases()}"/>
+		</s:FormItem>
+		<s:FormItem includeIn="keyword_group" label="@Resource(bundle = 'messages', key = 'matcher.keywordGroup.label')">
+			<s:ComboBox id="keywordGroupComboBox" labelField="label" width="100%"
+						selectedItem="{informationFeatureObject.matcher.matcherArguments.getItemAt(0).coupledArgument.argument}"
+						creationComplete="{rek.getRegularExpressions()}"/>
+		</s:FormItem>
 	</s:Form>			
 	
 	<s:Group>
 		<s:layout>
 			<s:HorizontalLayout horizontalAlign="right" verticalAlign="middle" gap="10"/>
 		</s:layout>
-		<s:Button label="@Resource(bundle = 'messages', key = 'matcher.button.save.label')" click="addNewFeature(event)"/>
+		<s:Button id="saveButton" label="@Resource(bundle = 'messages', key = 'matcher.button.save.label')" click="addNewFeature(event)"/>
 		<s:Button label="@Resource(bundle = 'messages', key = 'matcher.button.cancel.label')" click="{close()}"/>
 	</s:Group>
 </s:TitleWindow>
