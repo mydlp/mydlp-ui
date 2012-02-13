@@ -117,6 +117,7 @@
 			<input:MatcherDefinition data="keyword" />
 			<input:MatcherDefinition data="scode" />
 			<input:MatcherDefinition data="scode_ada" />
+			<input:MatcherDefinition data="all" />
 		</s:ArrayCollection>
 		
 		<s:NumberValidator source="{featureWeight}"
@@ -138,6 +139,7 @@
 		<s:State name="keyword" />
 		<s:State name="scode" />
 		<s:State name="scode_ada" />
+		<s:State name="all" />
 	</s:states>
 	
 	<s:layout>

@@ -33,6 +33,8 @@ package com.mydlp.ui.domain {
 				return "Source Code(C/C++/C#)" + " - " + this.weight.toString();
 			else if(this.matcher.functionName == "scode_ada")
 				return "Source Code(Ada)" + " - " + this.weight.toString();
+			else if(this.matcher.functionName == "all")
+				return "All Matcher" + " - " + this.weight.toString();
 			else
 				return "Custom " + this.weight.toString();
 		}
