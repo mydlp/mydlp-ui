@@ -32,7 +32,7 @@ public class Mydlp_ui {
 
     public String receiveChunk(String Ipaddress, long Itemid, ByteBuffer Chunkdata, int Chunknum, int Chunknumtotal) throws org.apache.thrift.TException;
 
-    public List<Long> getFingerprints(ByteBuffer Data) throws org.apache.thrift.TException;
+    public List<Long> getFingerprints(String Filename, ByteBuffer Data) throws org.apache.thrift.TException;
 
   }
 
@@ -46,7 +46,7 @@ public class Mydlp_ui {
 
     public void receiveChunk(String Ipaddress, long Itemid, ByteBuffer Chunkdata, int Chunknum, int Chunknumtotal, org.apache.thrift.async.AsyncMethodCallback<AsyncClient.receiveChunk_call> resultHandler) throws org.apache.thrift.TException;
 
-    public void getFingerprints(ByteBuffer Data, org.apache.thrift.async.AsyncMethodCallback<AsyncClient.getFingerprints_call> resultHandler) throws org.apache.thrift.TException;
+    public void getFingerprints(String Filename, ByteBuffer Data, org.apache.thrift.async.AsyncMethodCallback<AsyncClient.getFingerprints_call> resultHandler) throws org.apache.thrift.TException;
 
   }
 
@@ -164,15 +164,16 @@ public class Mydlp_ui {
       throw new org.apache.thrift.TApplicationException(org.apache.thrift.TApplicationException.MISSING_RESULT, "receiveChunk failed: unknown result");
     }
 
-    public List<Long> getFingerprints(ByteBuffer Data) throws org.apache.thrift.TException
+    public List<Long> getFingerprints(String Filename, ByteBuffer Data) throws org.apache.thrift.TException
     {
-      send_getFingerprints(Data);
+      send_getFingerprints(Filename, Data);
       return recv_getFingerprints();
     }
 
-    public void send_getFingerprints(ByteBuffer Data) throws org.apache.thrift.TException
+    public void send_getFingerprints(String Filename, ByteBuffer Data) throws org.apache.thrift.TException
     {
       getFingerprints_args args = new getFingerprints_args();
+      args.setFilename(Filename);
       args.setData(Data);
       sendBase("getFingerprints", args);
     }
@@ -348,23 +349,26 @@ public class Mydlp_ui {
       }
     }
 
-    public void getFingerprints(ByteBuffer Data, org.apache.thrift.async.AsyncMethodCallback<getFingerprints_call> resultHandler) throws org.apache.thrift.TException {
+    public void getFingerprints(String Filename, ByteBuffer Data, org.apache.thrift.async.AsyncMethodCallback<getFingerprints_call> resultHandler) throws org.apache.thrift.TException {
       checkReady();
-      getFingerprints_call method_call = new getFingerprints_call(Data, resultHandler, this, ___protocolFactory, ___transport);
+      getFingerprints_call method_call = new getFingerprints_call(Filename, Data, resultHandler, this, ___protocolFactory, ___transport);
       this.___currentMethod = method_call;
       ___manager.call(method_call);
     }
 
     public static class getFingerprints_call extends org.apache.thrift.async.TAsyncMethodCall {
+      private String Filename;
       private ByteBuffer Data;
-      public getFingerprints_call(ByteBuffer Data, org.apache.thrift.async.AsyncMethodCallback<getFingerprints_call> resultHandler, org.apache.thrift.async.TAsyncClient client, org.apache.thrift.protocol.TProtocolFactory protocolFactory, org.apache.thrift.transport.TNonblockingTransport transport) throws org.apache.thrift.TException {
+      public getFingerprints_call(String Filename, ByteBuffer Data, org.apache.thrift.async.AsyncMethodCallback<getFingerprints_call> resultHandler, org.apache.thrift.async.TAsyncClient client, org.apache.thrift.protocol.TProtocolFactory protocolFactory, org.apache.thrift.transport.TNonblockingTransport transport) throws org.apache.thrift.TException {
         super(client, protocolFactory, transport, resultHandler, false);
+        this.Filename = Filename;
         this.Data = Data;
       }
 
       public void write_args(org.apache.thrift.protocol.TProtocol prot) throws org.apache.thrift.TException {
         prot.writeMessageBegin(new org.apache.thrift.protocol.TMessage("getFingerprints", org.apache.thrift.protocol.TMessageType.CALL, 0));
         getFingerprints_args args = new getFingerprints_args();
+        args.setFilename(Filename);
         args.setData(Data);
         args.write(prot);
         prot.writeMessageEnd();
@@ -476,7 +480,7 @@ public class Mydlp_ui {
 
       protected getFingerprints_result getResult(I iface, getFingerprints_args args) throws org.apache.thrift.TException {
         getFingerprints_result result = new getFingerprints_result();
-        result.success = iface.getFingerprints(args.Data);
+        result.success = iface.getFingerprints(args.Filename, args.Data);
         return result;
       }
     }
@@ -3218,13 +3222,16 @@ public class Mydlp_ui {
   public static class getFingerprints_args implements org.apache.thrift.TBase<getFingerprints_args, getFingerprints_args._Fields>, java.io.Serializable, Cloneable   {
     private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("getFingerprints_args");
 
-    private static final org.apache.thrift.protocol.TField DATA_FIELD_DESC = new org.apache.thrift.protocol.TField("Data", org.apache.thrift.protocol.TType.STRING, (short)1);
+    private static final org.apache.thrift.protocol.TField FILENAME_FIELD_DESC = new org.apache.thrift.protocol.TField("Filename", org.apache.thrift.protocol.TType.STRING, (short)1);
+    private static final org.apache.thrift.protocol.TField DATA_FIELD_DESC = new org.apache.thrift.protocol.TField("Data", org.apache.thrift.protocol.TType.STRING, (short)2);
 
+    public String Filename; // required
     public ByteBuffer Data; // required
 
     /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
     public enum _Fields implements org.apache.thrift.TFieldIdEnum {
-      DATA((short)1, "Data");
+      FILENAME((short)1, "Filename"),
+      DATA((short)2, "Data");
 
       private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
 
@@ -3239,7 +3246,9 @@ public class Mydlp_ui {
        */
       public static _Fields findByThriftId(int fieldId) {
         switch(fieldId) {
-          case 1: // DATA
+          case 1: // FILENAME
+            return FILENAME;
+          case 2: // DATA
             return DATA;
           default:
             return null;
@@ -3285,6 +3294,8 @@ public class Mydlp_ui {
     public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
     static {
       Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
+      tmpMap.put(_Fields.FILENAME, new org.apache.thrift.meta_data.FieldMetaData("Filename", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+          new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
       tmpMap.put(_Fields.DATA, new org.apache.thrift.meta_data.FieldMetaData("Data", org.apache.thrift.TFieldRequirementType.DEFAULT, 
           new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING          , true)));
       metaDataMap = Collections.unmodifiableMap(tmpMap);
@@ -3295,9 +3306,11 @@ public class Mydlp_ui {
     }
 
     public getFingerprints_args(
+      String Filename,
       ByteBuffer Data)
     {
       this();
+      this.Filename = Filename;
       this.Data = Data;
     }
 
@@ -3305,6 +3318,9 @@ public class Mydlp_ui {
      * Performs a deep copy on <i>other</i>.
      */
     public getFingerprints_args(getFingerprints_args other) {
+      if (other.isSetFilename()) {
+        this.Filename = other.Filename;
+      }
       if (other.isSetData()) {
         this.Data = org.apache.thrift.TBaseHelper.copyBinary(other.Data);
 ;
@@ -3317,7 +3333,32 @@ public class Mydlp_ui {
 
     @Override
     public void clear() {
+      this.Filename = null;
       this.Data = null;
+    }
+
+    public String getFilename() {
+      return this.Filename;
+    }
+
+    public getFingerprints_args setFilename(String Filename) {
+      this.Filename = Filename;
+      return this;
+    }
+
+    public void unsetFilename() {
+      this.Filename = null;
+    }
+
+    /** Returns true if field Filename is set (has been assigned a value) and false otherwise */
+    public boolean isSetFilename() {
+      return this.Filename != null;
+    }
+
+    public void setFilenameIsSet(boolean value) {
+      if (!value) {
+        this.Filename = null;
+      }
     }
 
     public byte[] getData() {
@@ -3356,6 +3397,14 @@ public class Mydlp_ui {
 
     public void setFieldValue(_Fields field, Object value) {
       switch (field) {
+      case FILENAME:
+        if (value == null) {
+          unsetFilename();
+        } else {
+          setFilename((String)value);
+        }
+        break;
+
       case DATA:
         if (value == null) {
           unsetData();
@@ -3369,6 +3418,9 @@ public class Mydlp_ui {
 
     public Object getFieldValue(_Fields field) {
       switch (field) {
+      case FILENAME:
+        return getFilename();
+
       case DATA:
         return getData();
 
@@ -3383,6 +3435,8 @@ public class Mydlp_ui {
       }
 
       switch (field) {
+      case FILENAME:
+        return isSetFilename();
       case DATA:
         return isSetData();
       }
@@ -3401,6 +3455,15 @@ public class Mydlp_ui {
     public boolean equals(getFingerprints_args that) {
       if (that == null)
         return false;
+
+      boolean this_present_Filename = true && this.isSetFilename();
+      boolean that_present_Filename = true && that.isSetFilename();
+      if (this_present_Filename || that_present_Filename) {
+        if (!(this_present_Filename && that_present_Filename))
+          return false;
+        if (!this.Filename.equals(that.Filename))
+          return false;
+      }
 
       boolean this_present_Data = true && this.isSetData();
       boolean that_present_Data = true && that.isSetData();
@@ -3427,6 +3490,16 @@ public class Mydlp_ui {
       int lastComparison = 0;
       getFingerprints_args typedOther = (getFingerprints_args)other;
 
+      lastComparison = Boolean.valueOf(isSetFilename()).compareTo(typedOther.isSetFilename());
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+      if (isSetFilename()) {
+        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.Filename, typedOther.Filename);
+        if (lastComparison != 0) {
+          return lastComparison;
+        }
+      }
       lastComparison = Boolean.valueOf(isSetData()).compareTo(typedOther.isSetData());
       if (lastComparison != 0) {
         return lastComparison;
@@ -3454,7 +3527,14 @@ public class Mydlp_ui {
           break;
         }
         switch (field.id) {
-          case 1: // DATA
+          case 1: // FILENAME
+            if (field.type == org.apache.thrift.protocol.TType.STRING) {
+              this.Filename = iprot.readString();
+            } else { 
+              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, field.type);
+            }
+            break;
+          case 2: // DATA
             if (field.type == org.apache.thrift.protocol.TType.STRING) {
               this.Data = iprot.readBinary();
             } else { 
@@ -3476,6 +3556,11 @@ public class Mydlp_ui {
       validate();
 
       oprot.writeStructBegin(STRUCT_DESC);
+      if (this.Filename != null) {
+        oprot.writeFieldBegin(FILENAME_FIELD_DESC);
+        oprot.writeString(this.Filename);
+        oprot.writeFieldEnd();
+      }
       if (this.Data != null) {
         oprot.writeFieldBegin(DATA_FIELD_DESC);
         oprot.writeBinary(this.Data);
@@ -3490,6 +3575,14 @@ public class Mydlp_ui {
       StringBuilder sb = new StringBuilder("getFingerprints_args(");
       boolean first = true;
 
+      sb.append("Filename:");
+      if (this.Filename == null) {
+        sb.append("null");
+      } else {
+        sb.append(this.Filename);
+      }
+      first = false;
+      if (!first) sb.append(", ");
       sb.append("Data:");
       if (this.Data == null) {
         sb.append("null");
