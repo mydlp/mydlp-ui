@@ -32,6 +32,8 @@ public class Mydlp_ui {
 
     public String receiveChunk(String Ipaddress, long Itemid, ByteBuffer Chunkdata, int Chunknum, int Chunknumtotal) throws org.apache.thrift.TException;
 
+    public List<Long> getFingerprints(ByteBuffer Data) throws org.apache.thrift.TException;
+
   }
 
   public interface AsyncIface {
@@ -43,6 +45,8 @@ public class Mydlp_ui {
     public void receiveBegin(String Ipaddress, org.apache.thrift.async.AsyncMethodCallback<AsyncClient.receiveBegin_call> resultHandler) throws org.apache.thrift.TException;
 
     public void receiveChunk(String Ipaddress, long Itemid, ByteBuffer Chunkdata, int Chunknum, int Chunknumtotal, org.apache.thrift.async.AsyncMethodCallback<AsyncClient.receiveChunk_call> resultHandler) throws org.apache.thrift.TException;
+
+    public void getFingerprints(ByteBuffer Data, org.apache.thrift.async.AsyncMethodCallback<AsyncClient.getFingerprints_call> resultHandler) throws org.apache.thrift.TException;
 
   }
 
@@ -158,6 +162,29 @@ public class Mydlp_ui {
         return result.success;
       }
       throw new org.apache.thrift.TApplicationException(org.apache.thrift.TApplicationException.MISSING_RESULT, "receiveChunk failed: unknown result");
+    }
+
+    public List<Long> getFingerprints(ByteBuffer Data) throws org.apache.thrift.TException
+    {
+      send_getFingerprints(Data);
+      return recv_getFingerprints();
+    }
+
+    public void send_getFingerprints(ByteBuffer Data) throws org.apache.thrift.TException
+    {
+      getFingerprints_args args = new getFingerprints_args();
+      args.setData(Data);
+      sendBase("getFingerprints", args);
+    }
+
+    public List<Long> recv_getFingerprints() throws org.apache.thrift.TException
+    {
+      getFingerprints_result result = new getFingerprints_result();
+      receiveBase(result, "getFingerprints");
+      if (result.isSetSuccess()) {
+        return result.success;
+      }
+      throw new org.apache.thrift.TApplicationException(org.apache.thrift.TApplicationException.MISSING_RESULT, "getFingerprints failed: unknown result");
     }
 
   }
@@ -321,6 +348,38 @@ public class Mydlp_ui {
       }
     }
 
+    public void getFingerprints(ByteBuffer Data, org.apache.thrift.async.AsyncMethodCallback<getFingerprints_call> resultHandler) throws org.apache.thrift.TException {
+      checkReady();
+      getFingerprints_call method_call = new getFingerprints_call(Data, resultHandler, this, ___protocolFactory, ___transport);
+      this.___currentMethod = method_call;
+      ___manager.call(method_call);
+    }
+
+    public static class getFingerprints_call extends org.apache.thrift.async.TAsyncMethodCall {
+      private ByteBuffer Data;
+      public getFingerprints_call(ByteBuffer Data, org.apache.thrift.async.AsyncMethodCallback<getFingerprints_call> resultHandler, org.apache.thrift.async.TAsyncClient client, org.apache.thrift.protocol.TProtocolFactory protocolFactory, org.apache.thrift.transport.TNonblockingTransport transport) throws org.apache.thrift.TException {
+        super(client, protocolFactory, transport, resultHandler, false);
+        this.Data = Data;
+      }
+
+      public void write_args(org.apache.thrift.protocol.TProtocol prot) throws org.apache.thrift.TException {
+        prot.writeMessageBegin(new org.apache.thrift.protocol.TMessage("getFingerprints", org.apache.thrift.protocol.TMessageType.CALL, 0));
+        getFingerprints_args args = new getFingerprints_args();
+        args.setData(Data);
+        args.write(prot);
+        prot.writeMessageEnd();
+      }
+
+      public List<Long> getResult() throws org.apache.thrift.TException {
+        if (getState() != org.apache.thrift.async.TAsyncMethodCall.State.RESPONSE_READ) {
+          throw new IllegalStateException("Method call not finished!");
+        }
+        org.apache.thrift.transport.TMemoryInputTransport memoryTransport = new org.apache.thrift.transport.TMemoryInputTransport(getFrameBuffer().array());
+        org.apache.thrift.protocol.TProtocol prot = client.getProtocolFactory().getProtocol(memoryTransport);
+        return (new Client(prot)).recv_getFingerprints();
+      }
+    }
+
   }
 
   public static class Processor<I extends Iface> extends org.apache.thrift.TBaseProcessor implements org.apache.thrift.TProcessor {
@@ -338,6 +397,7 @@ public class Mydlp_ui {
       processMap.put("getRuletable", new getRuletable());
       processMap.put("receiveBegin", new receiveBegin());
       processMap.put("receiveChunk", new receiveChunk());
+      processMap.put("getFingerprints", new getFingerprints());
       return processMap;
     }
 
@@ -401,6 +461,22 @@ public class Mydlp_ui {
       protected receiveChunk_result getResult(I iface, receiveChunk_args args) throws org.apache.thrift.TException {
         receiveChunk_result result = new receiveChunk_result();
         result.success = iface.receiveChunk(args.Ipaddress, args.Itemid, args.Chunkdata, args.Chunknum, args.Chunknumtotal);
+        return result;
+      }
+    }
+
+    private static class getFingerprints<I extends Iface> extends org.apache.thrift.ProcessFunction<I, getFingerprints_args> {
+      public getFingerprints() {
+        super("getFingerprints");
+      }
+
+      protected getFingerprints_args getEmptyArgsInstance() {
+        return new getFingerprints_args();
+      }
+
+      protected getFingerprints_result getResult(I iface, getFingerprints_args args) throws org.apache.thrift.TException {
+        getFingerprints_result result = new getFingerprints_result();
+        result.success = iface.getFingerprints(args.Data);
         return result;
       }
     }
@@ -3104,6 +3180,647 @@ public class Mydlp_ui {
     @Override
     public String toString() {
       StringBuilder sb = new StringBuilder("receiveChunk_result(");
+      boolean first = true;
+
+      sb.append("success:");
+      if (this.success == null) {
+        sb.append("null");
+      } else {
+        sb.append(this.success);
+      }
+      first = false;
+      sb.append(")");
+      return sb.toString();
+    }
+
+    public void validate() throws org.apache.thrift.TException {
+      // check for required fields
+    }
+
+    private void writeObject(java.io.ObjectOutputStream out) throws java.io.IOException {
+      try {
+        write(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(out)));
+      } catch (org.apache.thrift.TException te) {
+        throw new java.io.IOException(te);
+      }
+    }
+
+    private void readObject(java.io.ObjectInputStream in) throws java.io.IOException, ClassNotFoundException {
+      try {
+        read(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(in)));
+      } catch (org.apache.thrift.TException te) {
+        throw new java.io.IOException(te);
+      }
+    }
+
+  }
+
+  public static class getFingerprints_args implements org.apache.thrift.TBase<getFingerprints_args, getFingerprints_args._Fields>, java.io.Serializable, Cloneable   {
+    private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("getFingerprints_args");
+
+    private static final org.apache.thrift.protocol.TField DATA_FIELD_DESC = new org.apache.thrift.protocol.TField("Data", org.apache.thrift.protocol.TType.STRING, (short)1);
+
+    public ByteBuffer Data; // required
+
+    /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
+    public enum _Fields implements org.apache.thrift.TFieldIdEnum {
+      DATA((short)1, "Data");
+
+      private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+
+      static {
+        for (_Fields field : EnumSet.allOf(_Fields.class)) {
+          byName.put(field.getFieldName(), field);
+        }
+      }
+
+      /**
+       * Find the _Fields constant that matches fieldId, or null if its not found.
+       */
+      public static _Fields findByThriftId(int fieldId) {
+        switch(fieldId) {
+          case 1: // DATA
+            return DATA;
+          default:
+            return null;
+        }
+      }
+
+      /**
+       * Find the _Fields constant that matches fieldId, throwing an exception
+       * if it is not found.
+       */
+      public static _Fields findByThriftIdOrThrow(int fieldId) {
+        _Fields fields = findByThriftId(fieldId);
+        if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+        return fields;
+      }
+
+      /**
+       * Find the _Fields constant that matches name, or null if its not found.
+       */
+      public static _Fields findByName(String name) {
+        return byName.get(name);
+      }
+
+      private final short _thriftId;
+      private final String _fieldName;
+
+      _Fields(short thriftId, String fieldName) {
+        _thriftId = thriftId;
+        _fieldName = fieldName;
+      }
+
+      public short getThriftFieldId() {
+        return _thriftId;
+      }
+
+      public String getFieldName() {
+        return _fieldName;
+      }
+    }
+
+    // isset id assignments
+
+    public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
+    static {
+      Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
+      tmpMap.put(_Fields.DATA, new org.apache.thrift.meta_data.FieldMetaData("Data", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+          new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING          , true)));
+      metaDataMap = Collections.unmodifiableMap(tmpMap);
+      org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(getFingerprints_args.class, metaDataMap);
+    }
+
+    public getFingerprints_args() {
+    }
+
+    public getFingerprints_args(
+      ByteBuffer Data)
+    {
+      this();
+      this.Data = Data;
+    }
+
+    /**
+     * Performs a deep copy on <i>other</i>.
+     */
+    public getFingerprints_args(getFingerprints_args other) {
+      if (other.isSetData()) {
+        this.Data = org.apache.thrift.TBaseHelper.copyBinary(other.Data);
+;
+      }
+    }
+
+    public getFingerprints_args deepCopy() {
+      return new getFingerprints_args(this);
+    }
+
+    @Override
+    public void clear() {
+      this.Data = null;
+    }
+
+    public byte[] getData() {
+      setData(org.apache.thrift.TBaseHelper.rightSize(Data));
+      return Data == null ? null : Data.array();
+    }
+
+    public ByteBuffer bufferForData() {
+      return Data;
+    }
+
+    public getFingerprints_args setData(byte[] Data) {
+      setData(Data == null ? (ByteBuffer)null : ByteBuffer.wrap(Data));
+      return this;
+    }
+
+    public getFingerprints_args setData(ByteBuffer Data) {
+      this.Data = Data;
+      return this;
+    }
+
+    public void unsetData() {
+      this.Data = null;
+    }
+
+    /** Returns true if field Data is set (has been assigned a value) and false otherwise */
+    public boolean isSetData() {
+      return this.Data != null;
+    }
+
+    public void setDataIsSet(boolean value) {
+      if (!value) {
+        this.Data = null;
+      }
+    }
+
+    public void setFieldValue(_Fields field, Object value) {
+      switch (field) {
+      case DATA:
+        if (value == null) {
+          unsetData();
+        } else {
+          setData((ByteBuffer)value);
+        }
+        break;
+
+      }
+    }
+
+    public Object getFieldValue(_Fields field) {
+      switch (field) {
+      case DATA:
+        return getData();
+
+      }
+      throw new IllegalStateException();
+    }
+
+    /** Returns true if field corresponding to fieldID is set (has been assigned a value) and false otherwise */
+    public boolean isSet(_Fields field) {
+      if (field == null) {
+        throw new IllegalArgumentException();
+      }
+
+      switch (field) {
+      case DATA:
+        return isSetData();
+      }
+      throw new IllegalStateException();
+    }
+
+    @Override
+    public boolean equals(Object that) {
+      if (that == null)
+        return false;
+      if (that instanceof getFingerprints_args)
+        return this.equals((getFingerprints_args)that);
+      return false;
+    }
+
+    public boolean equals(getFingerprints_args that) {
+      if (that == null)
+        return false;
+
+      boolean this_present_Data = true && this.isSetData();
+      boolean that_present_Data = true && that.isSetData();
+      if (this_present_Data || that_present_Data) {
+        if (!(this_present_Data && that_present_Data))
+          return false;
+        if (!this.Data.equals(that.Data))
+          return false;
+      }
+
+      return true;
+    }
+
+    @Override
+    public int hashCode() {
+      return 0;
+    }
+
+    public int compareTo(getFingerprints_args other) {
+      if (!getClass().equals(other.getClass())) {
+        return getClass().getName().compareTo(other.getClass().getName());
+      }
+
+      int lastComparison = 0;
+      getFingerprints_args typedOther = (getFingerprints_args)other;
+
+      lastComparison = Boolean.valueOf(isSetData()).compareTo(typedOther.isSetData());
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+      if (isSetData()) {
+        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.Data, typedOther.Data);
+        if (lastComparison != 0) {
+          return lastComparison;
+        }
+      }
+      return 0;
+    }
+
+    public _Fields fieldForId(int fieldId) {
+      return _Fields.findByThriftId(fieldId);
+    }
+
+    public void read(org.apache.thrift.protocol.TProtocol iprot) throws org.apache.thrift.TException {
+      org.apache.thrift.protocol.TField field;
+      iprot.readStructBegin();
+      while (true)
+      {
+        field = iprot.readFieldBegin();
+        if (field.type == org.apache.thrift.protocol.TType.STOP) { 
+          break;
+        }
+        switch (field.id) {
+          case 1: // DATA
+            if (field.type == org.apache.thrift.protocol.TType.STRING) {
+              this.Data = iprot.readBinary();
+            } else { 
+              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, field.type);
+            }
+            break;
+          default:
+            org.apache.thrift.protocol.TProtocolUtil.skip(iprot, field.type);
+        }
+        iprot.readFieldEnd();
+      }
+      iprot.readStructEnd();
+
+      // check for required fields of primitive type, which can't be checked in the validate method
+      validate();
+    }
+
+    public void write(org.apache.thrift.protocol.TProtocol oprot) throws org.apache.thrift.TException {
+      validate();
+
+      oprot.writeStructBegin(STRUCT_DESC);
+      if (this.Data != null) {
+        oprot.writeFieldBegin(DATA_FIELD_DESC);
+        oprot.writeBinary(this.Data);
+        oprot.writeFieldEnd();
+      }
+      oprot.writeFieldStop();
+      oprot.writeStructEnd();
+    }
+
+    @Override
+    public String toString() {
+      StringBuilder sb = new StringBuilder("getFingerprints_args(");
+      boolean first = true;
+
+      sb.append("Data:");
+      if (this.Data == null) {
+        sb.append("null");
+      } else {
+        org.apache.thrift.TBaseHelper.toString(this.Data, sb);
+      }
+      first = false;
+      sb.append(")");
+      return sb.toString();
+    }
+
+    public void validate() throws org.apache.thrift.TException {
+      // check for required fields
+    }
+
+    private void writeObject(java.io.ObjectOutputStream out) throws java.io.IOException {
+      try {
+        write(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(out)));
+      } catch (org.apache.thrift.TException te) {
+        throw new java.io.IOException(te);
+      }
+    }
+
+    private void readObject(java.io.ObjectInputStream in) throws java.io.IOException, ClassNotFoundException {
+      try {
+        read(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(in)));
+      } catch (org.apache.thrift.TException te) {
+        throw new java.io.IOException(te);
+      }
+    }
+
+  }
+
+  public static class getFingerprints_result implements org.apache.thrift.TBase<getFingerprints_result, getFingerprints_result._Fields>, java.io.Serializable, Cloneable   {
+    private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("getFingerprints_result");
+
+    private static final org.apache.thrift.protocol.TField SUCCESS_FIELD_DESC = new org.apache.thrift.protocol.TField("success", org.apache.thrift.protocol.TType.LIST, (short)0);
+
+    public List<Long> success; // required
+
+    /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
+    public enum _Fields implements org.apache.thrift.TFieldIdEnum {
+      SUCCESS((short)0, "success");
+
+      private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+
+      static {
+        for (_Fields field : EnumSet.allOf(_Fields.class)) {
+          byName.put(field.getFieldName(), field);
+        }
+      }
+
+      /**
+       * Find the _Fields constant that matches fieldId, or null if its not found.
+       */
+      public static _Fields findByThriftId(int fieldId) {
+        switch(fieldId) {
+          case 0: // SUCCESS
+            return SUCCESS;
+          default:
+            return null;
+        }
+      }
+
+      /**
+       * Find the _Fields constant that matches fieldId, throwing an exception
+       * if it is not found.
+       */
+      public static _Fields findByThriftIdOrThrow(int fieldId) {
+        _Fields fields = findByThriftId(fieldId);
+        if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+        return fields;
+      }
+
+      /**
+       * Find the _Fields constant that matches name, or null if its not found.
+       */
+      public static _Fields findByName(String name) {
+        return byName.get(name);
+      }
+
+      private final short _thriftId;
+      private final String _fieldName;
+
+      _Fields(short thriftId, String fieldName) {
+        _thriftId = thriftId;
+        _fieldName = fieldName;
+      }
+
+      public short getThriftFieldId() {
+        return _thriftId;
+      }
+
+      public String getFieldName() {
+        return _fieldName;
+      }
+    }
+
+    // isset id assignments
+
+    public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
+    static {
+      Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
+      tmpMap.put(_Fields.SUCCESS, new org.apache.thrift.meta_data.FieldMetaData("success", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+          new org.apache.thrift.meta_data.ListMetaData(org.apache.thrift.protocol.TType.LIST, 
+              new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.I64))));
+      metaDataMap = Collections.unmodifiableMap(tmpMap);
+      org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(getFingerprints_result.class, metaDataMap);
+    }
+
+    public getFingerprints_result() {
+    }
+
+    public getFingerprints_result(
+      List<Long> success)
+    {
+      this();
+      this.success = success;
+    }
+
+    /**
+     * Performs a deep copy on <i>other</i>.
+     */
+    public getFingerprints_result(getFingerprints_result other) {
+      if (other.isSetSuccess()) {
+        List<Long> __this__success = new ArrayList<Long>();
+        for (Long other_element : other.success) {
+          __this__success.add(other_element);
+        }
+        this.success = __this__success;
+      }
+    }
+
+    public getFingerprints_result deepCopy() {
+      return new getFingerprints_result(this);
+    }
+
+    @Override
+    public void clear() {
+      this.success = null;
+    }
+
+    public int getSuccessSize() {
+      return (this.success == null) ? 0 : this.success.size();
+    }
+
+    public java.util.Iterator<Long> getSuccessIterator() {
+      return (this.success == null) ? null : this.success.iterator();
+    }
+
+    public void addToSuccess(long elem) {
+      if (this.success == null) {
+        this.success = new ArrayList<Long>();
+      }
+      this.success.add(elem);
+    }
+
+    public List<Long> getSuccess() {
+      return this.success;
+    }
+
+    public getFingerprints_result setSuccess(List<Long> success) {
+      this.success = success;
+      return this;
+    }
+
+    public void unsetSuccess() {
+      this.success = null;
+    }
+
+    /** Returns true if field success is set (has been assigned a value) and false otherwise */
+    public boolean isSetSuccess() {
+      return this.success != null;
+    }
+
+    public void setSuccessIsSet(boolean value) {
+      if (!value) {
+        this.success = null;
+      }
+    }
+
+    public void setFieldValue(_Fields field, Object value) {
+      switch (field) {
+      case SUCCESS:
+        if (value == null) {
+          unsetSuccess();
+        } else {
+          setSuccess((List<Long>)value);
+        }
+        break;
+
+      }
+    }
+
+    public Object getFieldValue(_Fields field) {
+      switch (field) {
+      case SUCCESS:
+        return getSuccess();
+
+      }
+      throw new IllegalStateException();
+    }
+
+    /** Returns true if field corresponding to fieldID is set (has been assigned a value) and false otherwise */
+    public boolean isSet(_Fields field) {
+      if (field == null) {
+        throw new IllegalArgumentException();
+      }
+
+      switch (field) {
+      case SUCCESS:
+        return isSetSuccess();
+      }
+      throw new IllegalStateException();
+    }
+
+    @Override
+    public boolean equals(Object that) {
+      if (that == null)
+        return false;
+      if (that instanceof getFingerprints_result)
+        return this.equals((getFingerprints_result)that);
+      return false;
+    }
+
+    public boolean equals(getFingerprints_result that) {
+      if (that == null)
+        return false;
+
+      boolean this_present_success = true && this.isSetSuccess();
+      boolean that_present_success = true && that.isSetSuccess();
+      if (this_present_success || that_present_success) {
+        if (!(this_present_success && that_present_success))
+          return false;
+        if (!this.success.equals(that.success))
+          return false;
+      }
+
+      return true;
+    }
+
+    @Override
+    public int hashCode() {
+      return 0;
+    }
+
+    public int compareTo(getFingerprints_result other) {
+      if (!getClass().equals(other.getClass())) {
+        return getClass().getName().compareTo(other.getClass().getName());
+      }
+
+      int lastComparison = 0;
+      getFingerprints_result typedOther = (getFingerprints_result)other;
+
+      lastComparison = Boolean.valueOf(isSetSuccess()).compareTo(typedOther.isSetSuccess());
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+      if (isSetSuccess()) {
+        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.success, typedOther.success);
+        if (lastComparison != 0) {
+          return lastComparison;
+        }
+      }
+      return 0;
+    }
+
+    public _Fields fieldForId(int fieldId) {
+      return _Fields.findByThriftId(fieldId);
+    }
+
+    public void read(org.apache.thrift.protocol.TProtocol iprot) throws org.apache.thrift.TException {
+      org.apache.thrift.protocol.TField field;
+      iprot.readStructBegin();
+      while (true)
+      {
+        field = iprot.readFieldBegin();
+        if (field.type == org.apache.thrift.protocol.TType.STOP) { 
+          break;
+        }
+        switch (field.id) {
+          case 0: // SUCCESS
+            if (field.type == org.apache.thrift.protocol.TType.LIST) {
+              {
+                org.apache.thrift.protocol.TList _list0 = iprot.readListBegin();
+                this.success = new ArrayList<Long>(_list0.size);
+                for (int _i1 = 0; _i1 < _list0.size; ++_i1)
+                {
+                  long _elem2; // required
+                  _elem2 = iprot.readI64();
+                  this.success.add(_elem2);
+                }
+                iprot.readListEnd();
+              }
+            } else { 
+              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, field.type);
+            }
+            break;
+          default:
+            org.apache.thrift.protocol.TProtocolUtil.skip(iprot, field.type);
+        }
+        iprot.readFieldEnd();
+      }
+      iprot.readStructEnd();
+
+      // check for required fields of primitive type, which can't be checked in the validate method
+      validate();
+    }
+
+    public void write(org.apache.thrift.protocol.TProtocol oprot) throws org.apache.thrift.TException {
+      oprot.writeStructBegin(STRUCT_DESC);
+
+      if (this.isSetSuccess()) {
+        oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
+        {
+          oprot.writeListBegin(new org.apache.thrift.protocol.TList(org.apache.thrift.protocol.TType.I64, this.success.size()));
+          for (long _iter3 : this.success)
+          {
+            oprot.writeI64(_iter3);
+          }
+          oprot.writeListEnd();
+        }
+        oprot.writeFieldEnd();
+      }
+      oprot.writeFieldStop();
+      oprot.writeStructEnd();
+    }
+
+    @Override
+    public String toString() {
+      StringBuilder sb = new StringBuilder("getFingerprints_result(");
       boolean first = true;
 
       sb.append("success:");
