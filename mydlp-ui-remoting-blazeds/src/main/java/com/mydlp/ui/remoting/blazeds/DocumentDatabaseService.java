@@ -13,5 +13,7 @@ public interface DocumentDatabaseService {
 	public List<DocumentDatabase> getDocumentDatabases();
 	
 	public DocumentDatabase save(DocumentDatabase d);
+	
+	public List<Long> populateFingerprints(String filename, byte[] data);
 
 }

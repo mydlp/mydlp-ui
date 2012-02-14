@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx"
+		 xmlns:my="http://www.mydlp.com/flex/my"
+		 width="575">
+	
+	<fx:Script>
+		<![CDATA[
+			import com.mydlp.ui.domain.DocumentDatabaseFileEntry;
+			import com.mydlp.ui.domain.DocumentFingerprint;
+			import com.mydlp.ui.util.Md5Util;
+			
+			import mx.collections.ArrayCollection;
+			import mx.collections.ListCollectionView;
+			import mx.rpc.events.ResultEvent;
+			
+			[Bindable]
+			protected var ddfe:DocumentDatabaseFileEntry = null;
+			
+			[Bindable]
+			protected var filename:String = "";
+			
+			protected var timer:Timer = null;
+			protected var completedFunction:Function = null;
+			
+			public function loadFile(fileReference:FileReference, valueFunction:Function): void
+			{
+				currentState = "loading";
+				filename = fileReference.name;
+				completedFunction = valueFunction;
+				fileReference.addEventListener(Event.COMPLETE, onFileComplete);
+				fileReference.load();
+			}
+			
+			protected function onFileComplete(event:Event):void
+			{
+				var fileReference:FileReference = event.currentTarget as FileReference;
+				currentState = "hash";
+				var data:ByteArray = new ByteArray();
+				fileReference.data.readBytes(data, 0, fileReference.data.length);
+				var md5sum:String = Md5Util.hashBinary(data); 
+				
+				ddfe = new DocumentDatabaseFileEntry();
+				ddfe.filename = fileReference.name;
+				ddfe.md5Hash = md5sum;
+				
+				currentState = "fingerprint";
+				re.populateFingerprints(ddfe.filename, data);
+			}
+			
+			
+			protected function populateFingerprintsHandler(event:ResultEvent): void
+			{
+				if (ddfe.fingerprints == null)
+				{
+					ddfe.fingerprints = new ArrayCollection();
+				}
+				
+				if (event.result != null)
+				{
+					for each (var i:* in event.result as ListCollectionView)
+					{
+						var f:DocumentFingerprint = new DocumentFingerprint();
+						f.fingerprint = i as Number;
+						ddfe.fingerprints.addItem(f);
+					}
+				}
+				
+				currentState = "done";
+				completedFunction(ddfe);
+			}
+			
+		]]>
+	</fx:Script>
+	
+	
+	<fx:Declarations>
+		<my:remote id="re" destination="documentDatabaseBRS" >
+			<my:method name="populateFingerprints" result="populateFingerprintsHandler(event)" />
+		</my:remote>
+	</fx:Declarations>
+	
+	<s:layout>
+		<s:HorizontalLayout paddingRight="10" paddingLeft="10" gap="10" />
+	</s:layout>
+	
+	<s:states>
+		<s:State name="loading" stateGroups="normal"/>
+		<s:State name="hash" stateGroups="normal"/>
+		<s:State name="fingerprint" stateGroups="normal"/>
+		<s:State name="done" stateGroups="normal"/>
+		<s:State name="invisible" />
+	</s:states>
+	
+	<s:Label text="{filename}" includeIn="normal" width="200" maxWidth="200"/>
+	
+	<mx:ProgressBar includeIn="loading,hash,fingerprint" indeterminate="true" width="100" height="10"
+					labelPlacement="center" label="" labelWidth="0"/>
+	<s:Label includeIn="normal" width="250"
+			 text.loading="@Resource(bundle = 'messages', key = 'fileLoad.status.loading')"
+			 text.hash="@Resource(bundle = 'messages', key = 'fileLoad.status.hash')"
+			 text.fingerprint="@Resource(bundle = 'messages', key = 'fileLoad.status.fingerprint')"
+			 text.done="@Resource(bundle = 'messages', key = 'fileLoad.status.done')"
+			 />
+	
+</s:Group>

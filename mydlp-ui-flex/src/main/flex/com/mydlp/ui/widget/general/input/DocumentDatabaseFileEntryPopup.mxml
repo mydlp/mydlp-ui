@@ -5,80 +5,106 @@
 			   xmlns:input="com.mydlp.ui.widget.general.input.*"
 			   close="{close()}"
 			   visible="false"
-			   title="@Resource(bundle = 'messages', key = 'documentDatabase.title.label')"
+			   title="@Resource(bundle = 'messages', key = 'documentDatabase.add.title.label')"
 			   >
+	
 	
 	<fx:Script>
 		<![CDATA[
 			import com.mydlp.ui.domain.DocumentDatabaseFileEntry;
-			import com.mydlp.ui.domain.MIMEType;
-			import com.mydlp.ui.domain.RegularExpressionGroupEntry;
 			import com.mydlp.ui.util.InteractionUtil;
+			import com.mydlp.ui.util.Md5Util;
 			
+			import mx.collections.ArrayCollection;
+			import mx.controls.Alert;
+			import mx.events.DragEvent;
 			import mx.events.FlexEvent;
+			import mx.managers.DragManager;
+			import mx.rpc.events.ResultEvent;
 			
-			public var documentDatabaseInput:DocumentDatabaseFileEntryInput = null;
+			protected var refUploadFileList:FileReferenceList;
 			
-			[Bindable]
-			public var fileEntry:DocumentDatabaseFileEntry = null;
+			public var ddfeInput:DocumentDatabaseFileEntryInput = null;
+			
+			protected var remaining:int = 0;
 			
 			protected function close(): void
 			{
-				InteractionUtil.closePopup(this);
+				if (okButton.visible)
+					InteractionUtil.closePopup(this);
 			}
 			
-			protected function addNewFileEntry(event:MouseEvent):void
+			protected function uploadButton(event:MouseEvent):void
 			{
-				var isEdit:Boolean = false;
-				if (fileEntry == null)
-					fileEntry = new DocumentDatabaseFileEntry();
-				else 
-					isEdit = true;
+				refUploadFileList = new FileReferenceList();
+				refUploadFileList.browse(); 
+				refUploadFileList.addEventListener(Event.SELECT,onFileSelect); 
+			}
+			
+			protected function loadEachFile(file:FileReference):void
+			{
+				var fileLoad:FileLoadStatus = new FileLoadStatus();
+				loadStatusList.addElement(fileLoad);
+				fileLoad.loadFile(file, onFileLoadComplete);
+			}
+			
+			protected function onFileSelect(event:Event):void
+			{
+				refUploadFileList = event.currentTarget as FileReferenceList;
+				var fileListArray:Array = refUploadFileList.fileList;
 				
-				fileEntry.md5Hash = md5HashInput.text;
+				if (loadStatusList.numElements > 25)
+					loadStatusList.removeAllElements();
 				
-				if (!isEdit)
-					documentDatabaseInput.addEntry(fileEntry);
+				remaining += fileListArray.length;
+				if (remaining > 0)
+				{
+					okButton.enabled = false;
+					browseButton.enabled = false;
+				}
 				
-				close();
+				for(var i:int = 0; i < fileListArray.length; i++)
+				{
+					var file:FileReference = fileListArray[i] as FileReference;
+					loadEachFile(file);
+				}
+			}
+			
+			protected function onFileLoadComplete(ddfe:DocumentDatabaseFileEntry):void
+			{
+				ddfeInput.addEntry(ddfe);
+				remaining --;
+				if (remaining == 0)
+				{
+					okButton.enabled = true;
+					browseButton.enabled = true;
+				}
 			}
 			
 			public function populate():void
-			{
-				if (fileEntry != null)
-				{
-					md5HashInput.text = fileEntry.md5Hash.toString();
-				}
-				
+			{				
 				visible = true;
 			}
 			
 			
 		]]>
 	</fx:Script>
-	
-	
-	<fx:Declarations>
-		
-	</fx:Declarations>
-	
-	
 	<s:layout>
-		<s:VerticalLayout horizontalAlign="center" gap="5"
-						  paddingLeft="8" paddingRight="8"
-						  paddingTop="5" paddingBottom="5"/>
+		<s:VerticalLayout paddingTop="15" paddingBottom="15"
+						  paddingLeft="10" paddingRight="10" 
+						  />
 	</s:layout>
-	<s:Form>
-		<s:FormItem label="@Resource(bundle = 'messages', key = 'documentDatabase.name.label')" >
-			<s:TextInput id="md5HashInput"/>
-		</s:FormItem>
-	</s:Form>			
+	<s:VGroup id="loadStatusList" gap="5" paddingBottom="10" horizontalAlign="center" width="100%"/>
 	
-	<s:Group>
-		<s:layout>
-			<s:HorizontalLayout horizontalAlign="right" verticalAlign="middle" gap="10"/>
-		</s:layout>
-		<s:Button label="@Resource(bundle = 'messages', key = 'documentDatabase.button.save.label')" click="addNewFileEntry(event)"/>
-		<s:Button label="@Resource(bundle = 'messages', key = 'documentDatabase.button.cancel.label')" click="{close()}"/>
-	</s:Group>
+	<s:HGroup width="300" 
+			  horizontalAlign="center" gap="20" verticalAlign="middle" >
+		
+		<s:Button id="browseButton" label="@Resource(key='documentDatabase.fileUpload.browse', bundle='messages')"
+				  click="uploadButton(event)" />
+					
+		<s:Button id="okButton" label="@Resource(bundle = 'messages', key = 'documentDatabase.button.ok.label')" 
+				  click="{close()}"/>
+		
+	</s:HGroup>
+	
 </s:TitleWindow>

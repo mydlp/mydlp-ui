@@ -26,7 +26,5 @@ public class DocumentDatabaseDAOImpl extends AbstractPolicyDAO implements Docume
 		getHibernateTemplate().saveOrUpdate(r);
 		return r;
 	}
-	
-	
 
 }

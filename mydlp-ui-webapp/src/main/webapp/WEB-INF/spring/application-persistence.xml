@@ -21,6 +21,9 @@
          <value>com.mydlp.ui.domain.AuthUser</value>
          <value>com.mydlp.ui.domain.Config</value>
          <value>com.mydlp.ui.domain.DataFormat</value>
+         <value>com.mydlp.ui.domain.DocumentDatabase</value>
+         <value>com.mydlp.ui.domain.DocumentDatabaseFileEntry</value>
+         <value>com.mydlp.ui.domain.DocumentFingerprint</value>
          <value>com.mydlp.ui.domain.EndpointRule</value>
          <value>com.mydlp.ui.domain.InformationDescription</value>
          <value>com.mydlp.ui.domain.InformationFeature</value>
@@ -34,13 +37,11 @@
          <value>com.mydlp.ui.domain.Matcher</value>
          <value>com.mydlp.ui.domain.MatcherArgument</value>
          <value>com.mydlp.ui.domain.MIMEType</value>
-         <value>com.mydlp.ui.domain.RegularExpressionGroup</value>
-         <value>com.mydlp.ui.domain.RegularExpressionGroupEntry</value>
-         <value>com.mydlp.ui.domain.DocumentDatabase</value>
-         <value>com.mydlp.ui.domain.DocumentDatabaseFileEntry</value>
          <value>com.mydlp.ui.domain.Network</value>
          <value>com.mydlp.ui.domain.PrinterRule</value>
          <value>com.mydlp.ui.domain.RegularExpression</value>
+         <value>com.mydlp.ui.domain.RegularExpressionGroup</value>
+         <value>com.mydlp.ui.domain.RegularExpressionGroupEntry</value>
          <value>com.mydlp.ui.domain.Revision</value>
          <value>com.mydlp.ui.domain.Rule</value>
          <value>com.mydlp.ui.domain.RuleItem</value>

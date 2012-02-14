@@ -14,34 +14,29 @@
 			
 			public function addEntry(ddfe:DocumentDatabaseFileEntry): void
 			{
+				ddfe.createdDate = new Date();
 				fileEntries.addItem(ddfe);
-				fileEntriesList.validateNow();
+				fileEntriesGrid.validateNow();
 			}
 			
 			protected function removeClickHandler(event:MouseEvent):void
 			{
-				fileEntriesList.dataGroup.invalidateDisplayList();
-				for each (var o:Object in fileEntriesList.selectedIndices)
+				fileEntriesGrid.invalidateDisplayList();
+				for each (var o:Object in fileEntriesGrid.selectedIndices)
 				{
 					deleteList.addItem(fileEntries.getItemAt(o as int));
 					fileEntries.removeItemAt(o as int);		
 				}
-				fileEntriesList.validateNow();
+				fileEntriesGrid.validateNow();
 			}
 			
 			protected function addClickHandler(event:MouseEvent):void
 			{
-				var ddPopup:DocumentDatabaseFileEntryAddPopup = InteractionUtil.newPopup(DocumentDatabaseFileEntryAddPopup) as DocumentDatabaseFileEntryAddPopup;
+				var ddPopup:DocumentDatabaseFileEntryPopup = 
+					InteractionUtil.newPopup(DocumentDatabaseFileEntryPopup, true) 
+					as DocumentDatabaseFileEntryPopup;
 				ddPopup.ddfeInput = this;
 				ddPopup.populate();
-			}
-			
-			protected function editClickHandler(event:MouseEvent):void
-			{
-				var regp:DocumentDatabaseFileEntryPopup = InteractionUtil.newPopup(DocumentDatabaseFileEntryPopup) as DocumentDatabaseFileEntryPopup;
-				regp.documentDatabaseInput = this;
-				regp.fileEntry = fileEntriesList.selectedItem;
-				regp.populate();
 			}
 			
 		]]>
@@ -59,19 +54,24 @@
 		<s:layout>
 			<s:HorizontalLayout verticalAlign="middle" gap="2"/>
 		</s:layout>
-		<s:List id="fileEntriesList" dataProvider="{fileEntries}" 
-				width="87%" height="100%" 
-				itemRenderer="com.mydlp.ui.widget.general.input.DocumentDatabaseFileEntryRenderer">
-			<s:layout>
-				<s:VerticalLayout useVirtualLayout="false" requestedMinRowCount="1"/>
-			</s:layout>
-		</s:List>
+		<s:DataGrid id="fileEntriesGrid" dataProvider="{fileEntries}" 
+					width="700" height="100%" >
+			<s:columns>
+				<s:ArrayList>
+					<s:GridColumn headerText="@Resource(bundle = 'messages', key = 'fileEntries.header.date')"
+								  dataField="createdDate"/>
+					<s:GridColumn headerText="@Resource(bundle = 'messages', key = 'fileEntries.header.filename')"
+								  dataField="filename"/>
+					<s:GridColumn headerText="@Resource(bundle = 'messages', key = 'fileEntries.header.md5sum')"
+								  dataField="md5Hash"/>
+				</s:ArrayList>
+			</s:columns>
+		</s:DataGrid>
 		<s:Group width="13%" height="100%">
 			<s:layout>
 				<s:VerticalLayout verticalAlign="middle" horizontalAlign="center" gap="2"/>
 			</s:layout>
 			<s:Button skinClass="com.mydlp.ui.skin.AddBitmapButton32Skin" click="addClickHandler(event)"/>
-			<s:Button skinClass="com.mydlp.ui.skin.EditBitmapButton32Skin" click="editClickHandler(event)"/>
 			<s:Button skinClass="com.mydlp.ui.skin.RemoveBitmapButton32Skin" click="removeClickHandler(event)"/>
 		</s:Group>
 	</s:Group>
