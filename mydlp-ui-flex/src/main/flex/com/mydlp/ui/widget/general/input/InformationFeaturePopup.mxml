@@ -11,6 +11,7 @@
 	
 	<fx:Script>
 		<![CDATA[
+			import com.mydlp.ui.domain.Argument;
 			import com.mydlp.ui.domain.DocumentDatabase;
 			import com.mydlp.ui.domain.InformationFeature;
 			import com.mydlp.ui.domain.Matcher;
@@ -61,7 +62,7 @@
 					if (m.matcherArguments == null || m.matcherArguments.length == 0)
 					{
 						r = new RegularExpression();
-						var ma:MatcherArgument = new MatcherArgument;
+						var ma:MatcherArgument = new MatcherArgument();
 						m.matcherArguments = new ArrayCollection();
 						ma.coupledMatcher = m;
 						ma.coupledArgument = r;
@@ -82,8 +83,8 @@
 					var nca:NonCascadingArgument = null;
 					if(m.matcherArguments == null || m.matcherArguments.length == 0)
 					{
-						nca = new NonCascadingArgument;
-						var mar:MatcherArgument = new MatcherArgument;
+						nca = new NonCascadingArgument();
+						var mar:MatcherArgument = new MatcherArgument();
 						m.matcherArguments = new ArrayCollection();
 						mar.coupledMatcher = m;
 						mar.coupledArgument = nca;
@@ -101,17 +102,15 @@
 					var ncar:NonCascadingArgument = null;
 					if(m.matcherArguments == null || m.matcherArguments.length == 0)
 					{
-						ncar = new NonCascadingArgument;
-						var marg:MatcherArgument = new MatcherArgument;
+						var marg:MatcherArgument = new MatcherArgument();
 						m.matcherArguments = new ArrayCollection();
 						marg.coupledMatcher = m;
-						marg.coupledArgument = ncar;
+						marg.coupledArgument = new NonCascadingArgument();
 						m.matcherArguments.addItem(marg);
 					}
-					else
-					{
-						ncar = m.matcherArguments.getItemAt(0).coupledArgument as NonCascadingArgument;
-					}
+					
+					ncar = m.matcherArguments.getItemAt(0).coupledArgument as NonCascadingArgument;
+					
 					ncar.argument = keywordGroupComboBox.selectedItem;
 				}
 				else
@@ -146,6 +145,20 @@
 				visible = true;
 			}
 			
+			protected function getNCArgument(): Argument
+			{
+				if (informationFeatureObject != null)
+						return informationFeatureObject.matcher.matcherArguments.getItemAt(0).coupledArgument.argument;
+				return null;
+			}
+			
+			protected function getArgument(): Argument
+			{
+				if (informationFeatureObject != null)
+					return informationFeatureObject.matcher.matcherArguments.getItemAt(0).coupledArgument;
+				return null;
+			}
+			
 		]]>
 	</fx:Script>
 	
@@ -174,11 +187,17 @@
 						   valid="{saveButton.enabled = true}"
 						   invalid="{saveButton.enabled = false}"/>
 		<my:remote id="re" destination="documentDatabaseBRS">
-			<my:method name="getDocumentDatabases" result="{documentDatabaseComboBox.dataProvider = event.result as ListCollectionView}"/>
+			<my:method name="getDocumentDatabases" result="{
+					   documentDatabaseComboBox.dataProvider = event.result as ListCollectionView;
+					   documentDatabaseComboBox.selectedItem = getNCArgument();
+					   }"/>
 		</my:remote>
 		
 		<my:remote id="rek" destination="regularExpressionGroupBRS">
-			<my:method name="getRegularExpressions" result="{keywordGroupComboBox.dataProvider = event.result as ListCollectionView}"/>
+			<my:method name="getRegularExpressions" result="{
+					   keywordGroupComboBox.dataProvider = event.result as ListCollectionView;
+					   keywordGroupComboBox.selectedItem = getNCArgument();
+					   }"/>
 		</my:remote>
 		
 	</fx:Declarations>
@@ -218,18 +237,15 @@
 		</s:FormItem>
 		<s:FormItem includeIn="keyword" label="@Resource(bundle = 'messages', key = 'matcher.keyword.keywordValue.label')" >
 			<s:TextInput id="keywordValue" creationComplete="{
-						 if (informationFeatureObject != null)
-						 	keywordValue.text = informationFeatureObject.matcher.matcherArguments.getItemAt(0).coupledArgument.regex;
+						 	keywordValue.text = (getArgument() as RegularExpression).regex;
 						 }"/>
 		</s:FormItem>
 		<s:FormItem includeIn="document_hash,document_pdm" label="@Resource(bundle = 'messages', key = 'matcher.documentDatabase.label')">
 			<s:ComboBox id="documentDatabaseComboBox" labelField="label" width="100%"
-						selectedItem="{informationFeatureObject.matcher.matcherArguments.getItemAt(0).coupledArgument.argument}"
 						creationComplete="{re.getDocumentDatabases()}"/>
 		</s:FormItem>
 		<s:FormItem includeIn="keyword_group" label="@Resource(bundle = 'messages', key = 'matcher.keywordGroup.label')">
 			<s:ComboBox id="keywordGroupComboBox" labelField="label" width="100%"
-						selectedItem="{informationFeatureObject.matcher.matcherArguments.getItemAt(0).coupledArgument.argument}"
 						creationComplete="{rek.getRegularExpressions()}"/>
 		</s:FormItem>
 	</s:Form>			
