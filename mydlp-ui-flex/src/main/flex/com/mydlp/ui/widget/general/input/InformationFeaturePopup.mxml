@@ -75,9 +75,10 @@
 					// TODO: there should be regex validation. escaping special characters.
 					r.regex = keywordValue.text;
 				}
-				else if(matcherCombobox.selectedItem.data == "document_database")
+				else if(matcherCombobox.selectedItem.data == "document_hash" ||
+						matcherCombobox.selectedItem.data == "document_pdm")
 				{
-					m.functionName = "document_database";
+					m.functionName = matcherCombobox.selectedItem.data;
 					var nca:NonCascadingArgument = null;
 					if(m.matcherArguments == null || m.matcherArguments.length == 0)
 					{
@@ -151,6 +152,7 @@
 	
 	<fx:Declarations>
 		<s:ArrayCollection id="matcherDefinitions">
+			<input:MatcherDefinition data="all" />
 			<input:MatcherDefinition data="cc" />
 			<input:MatcherDefinition data="ssn" />
 			<input:MatcherDefinition data="iban" />
@@ -161,9 +163,9 @@
 			<input:MatcherDefinition data="keyword" />
 			<input:MatcherDefinition data="scode" />
 			<input:MatcherDefinition data="scode_ada" />
-			<input:MatcherDefinition data="all" />
 			<input:MatcherDefinition data="keyword_group" />
-			<input:MatcherDefinition data="document_database" />
+			<input:MatcherDefinition data="document_hash" />
+			<input:MatcherDefinition data="document_pdm" />
 		</s:ArrayCollection>
 		
 		<s:NumberValidator source="{featureWeight}"
@@ -183,6 +185,7 @@
 	
 	<s:states>
 		<s:State name="normal"/>
+		<s:State name="all" />
 		<s:State name="cc" />
 		<s:State name="ssn" />
 		<s:State name="iban" />
@@ -194,8 +197,8 @@
 		<s:State name="scode" />
 		<s:State name="scode_ada" />
 		<s:State name="keyword_group"/>
-		<s:State name="document_database"/>
-		<s:State name="all" />
+		<s:State name="document_hash"/>
+		<s:State name="document_pdm"/>
 	</s:states>
 	
 	<s:layout>
@@ -219,7 +222,7 @@
 						 	keywordValue.text = informationFeatureObject.matcher.matcherArguments.getItemAt(0).coupledArgument.regex;
 						 }"/>
 		</s:FormItem>
-		<s:FormItem includeIn="document_database" label="@Resource(bundle = 'messages', key = 'matcher.documentDatabase.label')">
+		<s:FormItem includeIn="document_hash,document_pdm" label="@Resource(bundle = 'messages', key = 'matcher.documentDatabase.label')">
 			<s:ComboBox id="documentDatabaseComboBox" labelField="label" width="100%"
 						selectedItem="{informationFeatureObject.matcher.matcherArguments.getItemAt(0).coupledArgument.argument}"
 						creationComplete="{re.getDocumentDatabases()}"/>
