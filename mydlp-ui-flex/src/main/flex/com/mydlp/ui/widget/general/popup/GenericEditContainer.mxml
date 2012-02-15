@@ -50,12 +50,14 @@
 			import mx.validators.EmailValidator;
 			import mx.validators.NumberValidator;
 			import mx.validators.RegExpValidator;
+			import mx.validators.Validator;
 			
 			import spark.components.Button;
 			import spark.components.CheckBox;
 			import spark.components.TextInput;
 			
 			protected var cButton:Button = new Button();
+			protected var cancelButton:Button = new Button();
 			protected var formItemOrder:ListCollectionView = new ArrayCollection();
 			
 			public var deleteList:ListCollectionView;
@@ -63,7 +65,20 @@
 			protected var sourceLabelList:Array = new Array();
 			protected var inputValidationObject:Object = new Object();
 			
-			protected var falseInputCount:int = 0;
+			protected var validators:Array = new Array();
+			
+			
+			protected function cancelButtonClickHandler(event:Event):void
+			{
+				if(event is KeyboardEvent)
+				{
+					if((event as KeyboardEvent).charCode == 32 || (event as KeyboardEvent).charCode == 13)
+						InteractionUtil.closeCurrentPopup();
+				}
+				else
+					InteractionUtil.closeCurrentPopup();
+			}
+			
 			
 			public function populateClassMembers(targetObject:Object): void
 			{
@@ -136,9 +151,9 @@
 						regExpValidator.source = ipInput;
 						regExpValidator.property = "text";
 						regExpValidator.expression = "^([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])$";
-						
 						regExpValidator.addEventListener(ValidationResultEvent.INVALID, invalidInput);
 						regExpValidator.addEventListener(ValidationResultEvent.VALID, validInput);
+						validators.push(regExpValidator);
 					}
 					else if (targetObject is InformationType && 
 							classMember.name == "dataFormats" && 
@@ -281,6 +296,7 @@
 							regExpValidator2.expression = "^[a-zA-Z0-9_/\.\ ]+$"
 							regExpValidator2.addEventListener(ValidationResultEvent.INVALID, invalidInput);
 							regExpValidator2.addEventListener(ValidationResultEvent.VALID, validInput);
+							validators.push(regExpValidator2);
 						}
 						else if(classMember.name == "username"){
 							index = 3;
@@ -291,6 +307,7 @@
 							emailValidator.property = "text";
 							emailValidator.addEventListener(ValidationResultEvent.INVALID, invalidInput);
 							emailValidator.addEventListener(ValidationResultEvent.VALID, validInput);
+							validators.push(emailValidator);
 						}
 						else if(classMember.name == "password"){
 							index = 5;
@@ -306,6 +323,7 @@
 							numberValidator.minValue = "1";
 							numberValidator.addEventListener(ValidationResultEvent.INVALID, invalidInput);
 							numberValidator.addEventListener(ValidationResultEvent.VALID, validInput);
+							validators.push(numberValidator);
 						}
 					}
 					
@@ -345,11 +363,13 @@
 			public function populateCreateButton(): void
 			{	
 				cButton.label = LangUtil.getString("messages", "generic.edit." + getSimpleName() + ".createButton.label");
+				cancelButton.label = LangUtil.getString("messages", "generic.edit.cancelButton.label");
 				cButton.addEventListener(MouseEvent.CLICK, createButtonClickHandler);
 				cButton.addEventListener(KeyboardEvent.KEY_DOWN, keyPressed);
-				var cbil:HorizontalInputLabel = new HorizontalInputLabel();
-				cbil.addElement(cButton);
-				editForm.addElement(cbil);
+				cancelButton.addEventListener(MouseEvent.CLICK, cancelButtonClickHandler);
+				cancelButton.addEventListener(KeyboardEvent.KEY_DOWN, cancelButtonClickHandler);
+				buttonGroup.addElement(cButton);
+				buttonGroup.addElement(cancelButton);
 			}
 				
 			
@@ -376,8 +396,12 @@
 			
 			protected function createButtonClickHandler(event:Event): void
 			{
-				re.save(formObject);
-				cButton.enabled = false;
+				var validationErrorArray:Array = Validator.validateAll(validators);
+				if(validationErrorArray.length == 0)
+				{	
+					re.save(formObject);
+					cButton.enabled = false;
+				}
 			}
 			
 			protected function saveHandler(event:Event): void
@@ -420,6 +444,11 @@
 		<s:Group id="editForm" width="100%" height="100%">
 			<s:layout>
 				<s:VerticalLayout horizontalAlign="left" verticalAlign="middle"/>
+			</s:layout>
+		</s:Group>
+		<s:Group id="buttonGroup" width="100%" height="100%">
+			<s:layout>
+				<s:HorizontalLayout gap="5" verticalAlign="middle" paddingBottom="5" paddingTop="5" paddingLeft="135"/>
 			</s:layout>
 		</s:Group>
 	</s:Group>

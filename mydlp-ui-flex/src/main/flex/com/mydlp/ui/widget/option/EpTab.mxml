@@ -5,6 +5,12 @@
 					 xmlns:option="com.mydlp.ui.widget.option.*"
 					 xmlns:domain="com.mydlp.ui.domain.*">
 	
+	<fx:Script>
+		<![CDATA[
+			public var optionContainer:OptionContainer = null;
+		]]>
+	</fx:Script>
+	
 	<fx:Declarations>
 		<domain:Config id="usbSerialAccessControl" />
 		<domain:Config id="printMonitor" />
@@ -12,13 +18,19 @@
 		<domain:Config id="logLimit" />
 		<domain:Config id="syncInterval" /> 
 		
-		<s:NumberValidator source="{sync}"
+		<s:NumberValidator id="epSyncValidator"
+						   source="{sync}"
 						   property="text"
-						   minValue="149999"/>
+						   minValue="149999"
+						   valid="{optionContainer.validInput(event)}"
+						   invalid="{optionContainer.invalidInput(event)}"/>
 		
-		<s:NumberValidator source="{log}"
+		<s:NumberValidator id="epLogValidator"
+						   source="{log}"
 						   property="text"
-						   minValue="1048575"/>
+						   minValue="1048575"
+						   valid="{optionContainer.validInput(event)}"
+						   invalid="{optionContainer.invalidInput(event)}"/>
 	</fx:Declarations>
 	
 	<fx:Script>

@@ -24,6 +24,7 @@
 			import mx.collections.ListCollectionView;
 			import mx.events.ValidationResultEvent;
 			import mx.rpc.events.ResultEvent;
+			import mx.validators.ValidationResult;
 			
 			public var informationFeatureInput:InformationFeatureInput = null;
 			
@@ -37,6 +38,8 @@
 			
 			protected function addNewFeature(event:MouseEvent):void
 			{
+				var validationResult:ValidationResultEvent = weightValidator.validate();
+				if(validationResult.results != null) return;
 				var isEdit:Boolean = false;
 				if (informationFeatureObject == null)
 					informationFeatureObject = new InformationFeature();
@@ -181,7 +184,8 @@
 			<input:MatcherDefinition data="document_pdm" />
 		</s:ArrayCollection>
 		
-		<s:NumberValidator source="{featureWeight}"
+		<s:NumberValidator id="weightValidator"
+						   source="{featureWeight}"
 						   property="text"
 						   minValue="1"
 						   valid="{saveButton.enabled = true}"

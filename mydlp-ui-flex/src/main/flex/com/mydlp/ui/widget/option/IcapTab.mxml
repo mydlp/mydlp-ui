@@ -4,7 +4,11 @@
 					 xmlns:mx="library://ns.adobe.com/flex/mx" 
 					 xmlns:option="com.mydlp.ui.widget.option.*"
 					 xmlns:domain="com.mydlp.ui.domain.*">
-	
+	<fx:Script>
+		<![CDATA[
+			public var optionContainer:OptionContainer = null;
+		]]>
+	</fx:Script>
 	
 	
 	<fx:Declarations>		
@@ -15,21 +19,33 @@
 		<domain:Config id="icapLogPass" />
 		<domain:Config id="icapLogPassLowerLimit" />
 		
-		<mx:RegExpValidator source="{icapRMP}"
+		<mx:RegExpValidator id="icapRegExValidator"
+							source="{icapRMP}"
 							property="text"
-							expression="^[a-zA-Z\-\\\ ]+$"/>
+							expression="^[a-zA-Z\-\/\ ]+$"
+							valid="{optionContainer.validInput(event)}"
+							invalid="{optionContainer.invalidInput(event)}"/>
 		
-		<s:NumberValidator source="{maxConnections}"
+		<s:NumberValidator id="icapConValidator"
+						   source="{maxConnections}"
 						   property="text"
-						   minValue="0"/>
+						   minValue="0"
+						   valid="{optionContainer.validInput(event)}"
+						   invalid="{optionContainer.invalidInput(event)}"/>
 		
-		<s:NumberValidator source="{optionsTTL}"
+		<s:NumberValidator id="icapTTLValidator"
+						   source="{optionsTTL}"
 						   property="text"
-						   minValue="0"/>
+						   minValue="0"
+						   valid="{optionContainer.validInput(event)}"
+						   invalid="{optionContainer.invalidInput(event)}"/>
 		
-		<s:NumberValidator source="{logPass}"
+		<s:NumberValidator id="icapLogPassValidator"
+						   source="{logPass}"
 						   property="text"
-						   minValue="0"/>
+						   minValue="0"
+						   valid="{optionContainer.validInput(event)}"
+						   invalid="{optionContainer.invalidInput(event)}"/>
 		
 	</fx:Declarations>
 	
