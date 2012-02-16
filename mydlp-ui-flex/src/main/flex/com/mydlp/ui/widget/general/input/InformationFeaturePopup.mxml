@@ -38,8 +38,10 @@
 			
 			protected function addNewFeature(event:MouseEvent):void
 			{
-				var validationResult:ValidationResultEvent = weightValidator.validate();
+				var validationResult:ValidationResultEvent = weightValidator.validate();//Validation Before Saving
 				if(validationResult.results != null) return;
+				
+				
 				var isEdit:Boolean = false;
 				if (informationFeatureObject == null)
 					informationFeatureObject = new InformationFeature();
