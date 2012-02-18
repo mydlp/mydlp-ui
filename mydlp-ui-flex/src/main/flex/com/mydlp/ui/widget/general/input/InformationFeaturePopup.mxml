@@ -79,7 +79,7 @@
 					}
 					
 					// TODO: there should be regex validation. escaping special characters.
-					r.regex = keywordValue.text;
+					r.regex = regexValue.text;
 				}
 				else if(matcherCombobox.selectedItem.data == "document_hash" ||
 						matcherCombobox.selectedItem.data == "document_pdm")
@@ -243,9 +243,11 @@
 		<s:FormItem label="@Resource(bundle = 'messages', key = 'matcher.weight.label')" >
 			<s:TextInput id="featureWeight"/>
 		</s:FormItem>
-		<s:FormItem includeIn="keyword,regex" label="@Resource(bundle = 'messages', key = 'matcher.keyword.keywordValue.label')" >
-			<s:TextInput id="keywordValue" creationComplete="{
-						 	keywordValue.text = (getArgument() as RegularExpression).regex;
+		<s:FormItem includeIn="keyword,regex" 
+					label.keyword="@Resource(bundle = 'messages', key = 'matcher.keyword.keywordValue.label')"
+					label.regex="@Resource(bundle = 'messages', key = 'matcher.regex.regexValue.label')">
+			<s:TextInput id="regexValue" creationComplete="{
+						 	regexValue.text = (getArgument() as RegularExpression).regex;
 						 }"/>
 		</s:FormItem>
 		<s:FormItem includeIn="document_hash,document_pdm" label="@Resource(bundle = 'messages', key = 'matcher.documentDatabase.label')">
