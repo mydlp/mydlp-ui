@@ -27,7 +27,7 @@
 			import mx.rpc.events.ResultEvent;
 			
 			[Bindable]
-			protected var ruleDP:ListCollectionView = new ArrayCollection();
+			public var ruleDP:ListCollectionView = new ArrayCollection();
 			
 			public function getRule(value:Number): Rule
 			{
