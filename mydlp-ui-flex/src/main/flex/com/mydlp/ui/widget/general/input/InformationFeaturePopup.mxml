@@ -60,9 +60,9 @@
 				}
 				
 				
-				if (matcherCombobox.selectedItem.data == "keyword")
+				if (matcherCombobox.selectedItem.data == "keyword" || matcherCombobox.selectedItem.data == "regex")
 				{
-					m.functionName = "keyword";
+					m.functionName = matcherCombobox.selectedItem.data;
 					var r:RegularExpression = null;
 					if (m.matcherArguments == null || m.matcherArguments.length == 0)
 					{
@@ -179,6 +179,7 @@
 			<input:MatcherDefinition data="france_insee" />
 			<input:MatcherDefinition data="uk_nino" />
 			<input:MatcherDefinition data="keyword" />
+			<input:MatcherDefinition data="regex" />
 			<input:MatcherDefinition data="scode" />
 			<input:MatcherDefinition data="scode_ada" />
 			<input:MatcherDefinition data="keyword_group" />
@@ -219,6 +220,7 @@
 		<s:State name="france_insee" />
 		<s:State name="uk_nino" />
 		<s:State name="keyword" />
+		<s:State name="regex" />
 		<s:State name="scode" />
 		<s:State name="scode_ada" />
 		<s:State name="keyword_group"/>
@@ -241,7 +243,7 @@
 		<s:FormItem label="@Resource(bundle = 'messages', key = 'matcher.weight.label')" >
 			<s:TextInput id="featureWeight"/>
 		</s:FormItem>
-		<s:FormItem includeIn="keyword" label="@Resource(bundle = 'messages', key = 'matcher.keyword.keywordValue.label')" >
+		<s:FormItem includeIn="keyword,regex" label="@Resource(bundle = 'messages', key = 'matcher.keyword.keywordValue.label')" >
 			<s:TextInput id="keywordValue" creationComplete="{
 						 	keywordValue.text = (getArgument() as RegularExpression).regex;
 						 }"/>
