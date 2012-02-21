@@ -185,6 +185,8 @@
 			<input:MatcherDefinition data="keyword_group" />
 			<input:MatcherDefinition data="document_hash" />
 			<input:MatcherDefinition data="document_pdm" />
+			<input:MatcherDefinition data="encrypted_file" />
+			<input:MatcherDefinition data="encrypted_archive" />
 		</s:ArrayCollection>
 		
 		<s:NumberValidator id="weightValidator"
@@ -226,6 +228,8 @@
 		<s:State name="keyword_group"/>
 		<s:State name="document_hash"/>
 		<s:State name="document_pdm"/>
+		<s:State name="encrypted_file"/>
+		<s:State name="encrypted_archive"/>
 	</s:states>
 	
 	<s:layout>
