@@ -37,8 +37,6 @@
 			
 			protected function faultHandler(event:FaultEvent):void
 			{
-				trace("hata geldi");
-				Alert.show("is Here!");
 				Alert.show(event.fault.toString());
 			}
 			

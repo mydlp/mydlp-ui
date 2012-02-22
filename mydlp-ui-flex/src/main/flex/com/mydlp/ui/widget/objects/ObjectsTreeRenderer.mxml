@@ -50,34 +50,6 @@
 				return false;
 			}
 			
-			protected function isRemovable(selectedItem:*):Boolean
-			{
-				var ruleList:ArrayCollection = FlexGlobals.topLevelApplication.ruleContainer.ruleDP;
-				for(var i:int = 0; i < ruleList.length; i++)
-				{
-					var ruleItems:ListCollectionView = ruleList[i].ruleItems;
-					for(var j:int = 0; j < ruleItems.length; j++)
-					{
-						if(ruleItems[j].item.uid == selectedItem.item.uid)
-							return false;
-					}
-				}
-				return true;
-			}
-			
-			protected function removeButtonClickHandler(event:Event):void
-			{
-				if(treeListData.item is InventoryItem)
-				{
-					var selectedItem:InventoryItem = treeListData.item as InventoryItem;
-					if(selectedItem.item is InformationType || selectedItem.item is Network)
-						if(isRemovable(treeListData.item))
-							InteractionUtil.newDeleteDialog(treeListData.item);
-						else
-							Alert.show(LangUtil.getString("messages", "inventory.delete.error.message"), LangUtil.getString("messages", "inventory.delete.error.title"));
-				}
-			}
-			
 		]]>
 	</fx:Script>
 	
