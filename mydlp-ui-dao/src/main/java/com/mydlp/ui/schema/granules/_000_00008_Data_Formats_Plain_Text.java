@@ -38,6 +38,7 @@ public class _000_00008_Data_Formats_Plain_Text extends AbstractGranule {
 		mts.add(createMTObj("application/vnd.wap.wbxml"));
 		mts.add(createMTObj("image/svg+xml"));
 		mts.add(createMTObj("model/x3d+xml"));
+		mts.add(createMTObj("text/plain"));
 
 		df.setMimeTypes(mts);
 		getHibernateTemplate().saveOrUpdate(df);

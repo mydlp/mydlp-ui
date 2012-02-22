@@ -37,6 +37,8 @@
 			
 			protected function faultHandler(event:FaultEvent):void
 			{
+				trace("hata geldi");
+				Alert.show("is Here!");
 				Alert.show(event.fault.toString());
 			}
 			
@@ -63,7 +65,7 @@
 	
 	<fx:Declarations>
 		<my:remote id="dataAccessService" destination="dataAccessService" fault="faultHandler(event)"/>
-		<my:remote id="genericRE" destination="genericBRS" >
+		<my:remote id="genericRE" destination="genericBRS" fault="faultHandler(event)" >
 			<my:method name="save" result="genericResultHandler(event)" fault="faultHandler(event)"/>
 			<my:method name="remove" result="genericResultHandler(event)" fault="faultHandler(event)"/>
 		</my:remote>

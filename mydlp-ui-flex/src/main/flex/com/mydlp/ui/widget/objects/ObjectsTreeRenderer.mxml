@@ -9,9 +9,18 @@
 			import com.mydlp.ui.domain.AbstractEntity;
 			import com.mydlp.ui.domain.DataFormat;
 			import com.mydlp.ui.domain.DocumentDatabase;
+			import com.mydlp.ui.domain.InformationType;
+			import com.mydlp.ui.domain.InventoryItem;
+			import com.mydlp.ui.domain.Network;
 			import com.mydlp.ui.domain.RegularExpressionGroup;
+			import com.mydlp.ui.domain.Rule;
 			import com.mydlp.ui.util.InteractionUtil;
+			import com.mydlp.ui.util.LangUtil;
 			
+			import mx.collections.ArrayCollection;
+			import mx.collections.ListCollectionView;
+			import mx.controls.Alert;
+			import mx.core.FlexGlobals;
 			import mx.events.FlexEvent;
 			
 			protected function clickAddButton(event:MouseEvent):void
@@ -39,6 +48,34 @@
 				if (item is ObjectGroup && (item as ObjectGroup).classType != null)
 					return true;
 				return false;
+			}
+			
+			protected function isRemovable(selectedItem:*):Boolean
+			{
+				var ruleList:ArrayCollection = FlexGlobals.topLevelApplication.ruleContainer.ruleDP;
+				for(var i:int = 0; i < ruleList.length; i++)
+				{
+					var ruleItems:ListCollectionView = ruleList[i].ruleItems;
+					for(var j:int = 0; j < ruleItems.length; j++)
+					{
+						if(ruleItems[j].item.uid == selectedItem.item.uid)
+							return false;
+					}
+				}
+				return true;
+			}
+			
+			protected function removeButtonClickHandler(event:Event):void
+			{
+				if(treeListData.item is InventoryItem)
+				{
+					var selectedItem:InventoryItem = treeListData.item as InventoryItem;
+					if(selectedItem.item is InformationType || selectedItem.item is Network)
+						if(isRemovable(treeListData.item))
+							InteractionUtil.newDeleteDialog(treeListData.item);
+						else
+							Alert.show(LangUtil.getString("messages", "inventory.delete.error.message"), LangUtil.getString("messages", "inventory.delete.error.title"));
+				}
 			}
 			
 		]]>
