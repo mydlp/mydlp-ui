@@ -60,64 +60,6 @@
 				event.toolTip = toolTip;
 			}
 			
-			protected function hasItems(rule:Rule, selectedItems:ListCollectionView):Boolean
-			{
-				var ruleItems:ListCollectionView = rule.ruleItems;
-				for(var i:int = 0; i < ruleItems.length; i++)
-				{
-					for(var j:int = 0; j < selectedItems.length; j++)
-					{
-						if(ruleItems[i].item.uid == selectedItems[j].item.uid)
-							return false;
-					}
-				}
-				return true;
-			}
-			
-			protected function isRemovable(selectedItems:ListCollectionView):Boolean
-			{
-				var ruleList:ArrayCollection = FlexGlobals.topLevelApplication.ruleContainer.ruleDP;
-				for(var i:int = 0; i < ruleList.length; i++)
-				{
-					if(! (hasItems(ruleList[i] as Rule, selectedItems)))
-						return false;
-				}
-				return true;
-			}
-			
-			protected function resolveInventoryCategory(selectedCategory:InventoryCategory):ListCollectionView
-			{
-				var itemList:ListCollectionView = new ArrayCollection();
-				for each (var o:* in selectedCategory.children)
-				{
-					if (o is InventoryItem)
-						itemList.addItem(o as InventoryItem);
-					else if (o is InventoryCategory)
-						itemList.addAll(resolveInventoryCategory(o as InventoryCategory));
-					else
-						throw new Error("Unexpected inventory object");
-				}
-				return itemList;
-			}
-			
-			protected function deleteButtonClickHandler(event:Event):void
-			{
-				var selectedItems:ListCollectionView = new ArrayCollection();
-				if(this.treeListData.item is InventoryItem)
-					selectedItems.addItem(this.treeListData.item);
-				else if(this.treeListData.item is InventoryCategory)
-				{
-					selectedItems = resolveInventoryCategory(this.treeListData.item as InventoryCategory);
-				}
-				if(isRemovable(selectedItems))
-				{
-					InteractionUtil.newDeleteDialog(treeListData.item);
-					event.stopPropagation();
-				}
-				else
-					Alert.show(LangUtil.getString("messages", "inventory.delete.error.message"), LangUtil.getString("messages", "inventory.delete.error.title"));
-			}
-			
 		]]>
 	</fx:Script>
 	
@@ -164,7 +106,8 @@
 						  }" 
 						  visible="{isEditEnabled(treeListData.item)}"/>
 				<s:Button styleName="removeButtonStyle" 
-						  click="deleteButtonClickHandler(event)"
+						  click="{InteractionUtil.newDeleteDialog(treeListData.item);
+						  		event.stopPropagation();}"
 						  visible="{isEditEnabled(treeListData.item)}"/>
 			</s:HGroup>
 		</s:HGroup>
