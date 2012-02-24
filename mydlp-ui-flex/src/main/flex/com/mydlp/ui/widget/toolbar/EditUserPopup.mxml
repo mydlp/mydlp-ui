@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:TitleWindow xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			   xmlns:s="library://ns.adobe.com/flex/spark" 
+			   xmlns:mx="library://ns.adobe.com/flex/mx"
+			   xmlns:my="http://www.mydlp.com/flex/my"
+			   xmlns:input="com.mydlp.ui.widget.general.input.*"
+			   close="{close()}"
+			   visible="false"
+			   title="@Resource(bundle = 'messages', key = 'editCurrentUser.popup.title')"
+			   >
+	<fx:Script>
+		<![CDATA[
+			import com.mydlp.ui.domain.AuthUser;
+			import com.mydlp.ui.util.InteractionUtil;
+			import com.mydlp.ui.util.LangUtil;
+			
+			import mx.controls.Alert;
+			import mx.rpc.events.ResultEvent;
+			
+			[Bindable]
+			public var currentUser:AuthUser = null;
+			
+			public var initialUserName:String = null;
+			
+			protected function close(): void
+			{
+				InteractionUtil.closePopup(this);
+			}
+			
+			protected function controlPasswordHandler(event:ResultEvent):void
+			{
+				var result:Boolean = event.result as Boolean;
+				if(result == false)
+					Alert.show(LangUtil.getString("messages", "editCurrentUser.password.error.message"),
+						LangUtil.getString("messages", "editCurrentUser.password.error.title"));
+				else
+				{
+					if(newPasswd.text == "")
+						Alert.show(LangUtil.getString("messages", "editCurrentUser.nullpassword.error.message"),
+							LangUtil.getString("messages", "editCurrentUser.nullpassword.error.title"));
+					else if(newPasswd.text == reenterPasswd.text)
+						re.save(currentUser, newPasswd.text);
+					else
+						Alert.show(LangUtil.getString("messages", "editCurrentUser.newpassword.error.message"),
+							LangUtil.getString("messages", "editCurrentUser.newpassword.error.title"));
+				}
+				
+			}
+			
+			protected function closeHandlerFunction(event:Event):void
+			{
+				InteractionUtil.closePopup(this);
+				if(initialUserName != currentUser.username)
+					navigateToURL(new URLRequest ('j_spring_security_logout'), '_self');
+			}
+		
+			
+			protected function saveHandler(event:ResultEvent):void
+			{
+				currentUser = event.result as AuthUser;
+				Alert.show(LangUtil.getString("messages", "editCurrentUser.ok.message"),
+					LangUtil.getString("messages", "editCurrentUser.ok.title"), 4, null, closeHandlerFunction);
+			}
+			
+			protected function saveButtonClickHandler(event:MouseEvent):void
+			{
+				re.isPasswordTrue(nameInput.text, password.text);
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<fx:Declarations>
+		<my:remote id="re" destination="EditUserBRS" >
+			<my:method name="isPasswordTrue" result="controlPasswordHandler(event)" />
+			<my:method name="save" result="saveHandler(event)" />
+		</my:remote>
+	</fx:Declarations>
+	
+	<s:Form>
+		<s:FormItem label="@Resource(bundle = 'messages', key = 'editCurrentUser.popup.name.label')">
+			<s:TextInput id="nameInput" text="@{currentUser.username}"/>
+		</s:FormItem>
+		<s:FormItem label="@Resource(bundle = 'messages', key = 'editCurrentUser.popup.email.label')">
+			<s:TextInput id="emailInput" text="{currentUser.email}" editable="false"/>
+		</s:FormItem>
+		<s:FormItem label="@Resource(bundle = 'messages', key = 'editCurrentUser.popup.currentPassword.label')">
+			<s:TextInput id="password" displayAsPassword="true"/>
+		</s:FormItem>
+		<s:FormItem label="@Resource(bundle = 'messages', key = 'editCurrentUser.popup.newPassword.label')">
+			<s:TextInput id="newPasswd" displayAsPassword="true"/>
+		</s:FormItem>
+		<s:FormItem label="@Resource(bundle = 'messages', key = 'editCurrentUser.popup.reenterNewPassword.label')">
+			<s:TextInput id="reenterPasswd" displayAsPassword="true"/>
+		</s:FormItem>
+		<s:FormItem >
+			<s:Button label="@Resource(bundle = 'messages', key = 'editCurrentUser.popup.button.label')"
+					  click="saveButtonClickHandler(event)"/>
+		</s:FormItem>
+	</s:Form>
+	
+</s:TitleWindow>

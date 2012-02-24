@@ -14,4 +14,6 @@ public interface UserDAO {
 	public void remove(AuthUser i);
 	
 	public List<AuthSecurityRole> getRoles();
+	
+	public AuthUser save(AuthUser r);
 }
