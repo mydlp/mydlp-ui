@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<dashboard:DashboardQueryItemBox xmlns:fx="http://ns.adobe.com/mxml/2009" 
+							xmlns:s="library://ns.adobe.com/flex/spark" 
+							xmlns:mx="library://ns.adobe.com/flex/mx" 
+							xmlns:dashboard="com.mydlp.ui.widget.dashboard.*">
+	<fx:Script>
+		<![CDATA[
+			import com.mydlp.ui.domain.DashboardItem;
+			import com.mydlp.ui.domain.Rule;
+			import com.mydlp.ui.util.LangUtil;
+			
+			import mx.collections.ArrayCollection;
+			import mx.core.FlexGlobals;
+			
+			import spark.formatters.NumberFormatter;
+			
+			public function round(num:Number, precision:Number):Number {
+				var result:String;
+				var f:NumberFormatter = new NumberFormatter();
+				f.fractionalDigits = precision;
+				result = f.format(num);
+				return Number(result);
+			}
+			
+			protected function itemLabelFunc(value:Object, previousCategoryValue:Object, axis:CategoryAxis, categoryItem:Object):String {
+				if (itemKey == DashboardItem.TOP_5_ADDRESS_1H || itemKey == DashboardItem.TOP_5_ADDRESS_24H ||
+					itemKey == DashboardItem.TOP_5_USERS_1H || itemKey == DashboardItem.TOP_5_USERS_24H) 
+					return value.toString();
+				if (itemKey == DashboardItem.TOP_5_RULES_1H || itemKey == DashboardItem.TOP_5_RULES_24H)
+					return FlexGlobals.topLevelApplication.ruleContainer.getRuleLabel(value as Number);
+				return 	LangUtil.getString("messages", "dashboardItem." + itemKey + "." + value.toString());
+			}
+		]]>
+	</fx:Script>
+
+	<mx:BarChart id="barChart" width="100%" height="100%" 
+				 dataProvider="{itemDP}">
+		<mx:verticalAxis>
+			<mx:CategoryAxis
+				categoryField="labelKey"
+				labelFunction="itemLabelFunc"
+				/>
+		</mx:verticalAxis >
+		<mx:series>
+			<mx:BarSeries 
+				xField="value"
+				maxBarWidth="10"
+				/>
+		</mx:series>
+	</mx:BarChart>
+	
+</dashboard:DashboardQueryItemBox>

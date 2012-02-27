@@ -16,6 +16,7 @@
 			import com.mydlp.ui.domain.Rule;
 			import com.mydlp.ui.domain.WebRule;
 			import com.mydlp.ui.util.InteractionUtil;
+			import com.mydlp.ui.util.LangUtil;
 			import com.mydlp.ui.widget.general.popup.NewRuleDialog;
 			
 			import mx.collections.ArrayCollection;
@@ -36,6 +37,26 @@
 						return rule as Rule;
 				return null;
 			}
+			
+			public function getRuleLabel(value:Number) : String
+			{
+				var labelText:String = "";
+				if (value == -1)
+				{
+					labelText +=  LangUtil.getString("messages","policy.rule.default");
+				}
+				else
+				{
+					var rule:Rule = getRule(value);
+					if (rule != null){
+						labelText +=  rule.label;
+					}
+					else
+						labelText += "id(" + value + ")";
+				}
+				return labelText;
+			}
+			
 			
 			public function refreshRules():void
 			{

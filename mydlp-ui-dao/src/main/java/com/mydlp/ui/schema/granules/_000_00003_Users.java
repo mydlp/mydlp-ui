@@ -15,6 +15,7 @@ import com.mydlp.ui.domain.Item;
 import com.mydlp.ui.domain.MailRule;
 import com.mydlp.ui.domain.Rule;
 import com.mydlp.ui.domain.RuleItem;
+import com.mydlp.ui.domain.UserSettings;
 import com.mydlp.ui.domain.WebRule;
 import com.mydlp.ui.schema.AbstractGranule;
 
@@ -77,6 +78,10 @@ public class _000_00003_Users extends AbstractGranule {
 		user.setRoles(roles);
 		
 		getHibernateTemplate().saveOrUpdate(user);
+		
+		UserSettings settings = new UserSettings();
+		settings.setUser(user);
+		getHibernateTemplate().saveOrUpdate(settings);
 	}
 
 }

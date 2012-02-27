@@ -2,23 +2,125 @@
 <s:SkinnableContainer xmlns:fx="http://ns.adobe.com/mxml/2009" 
 					  xmlns:s="library://ns.adobe.com/flex/spark" 
 					  xmlns:mx="library://ns.adobe.com/flex/mx"
+					  xmlns:my="http://www.mydlp.com/flex/my"
 					  xmlns:util="com.mydlp.ui.util.*" 
 					  xmlns:dashboard="com.mydlp.ui.widget.dashboard.*"
-					  width="100%" height="100%">
+					  width="100%" height="100%"
+					  creationComplete="{refreshDashboard()}">
+	
+	<fx:Script>
+		<![CDATA[
+			import com.mydlp.ui.domain.DashboardItem;
+			import com.mydlp.ui.domain.UserSettings;
+			import com.mydlp.ui.util.InteractionUtil;
+			import com.mydlp.ui.util.LangUtil;
+			
+			import mx.core.FlexGlobals;
+			import mx.rpc.events.ResultEvent;
+			
+			[Bindable]
+			protected var userSettings:UserSettings = null;
+			
+			public function refreshDashboard(): void
+			{
+				re.getUserSettings();
+			}
+			
+			protected function getUserSettingsHandler(event:ResultEvent): void
+			{
+				userSettings = event.result as UserSettings;
+				populateDashboardItems();
+			}
+			
+			protected function populateDashboardItems(): void
+			{
+				if (userSettings == null) return;
+				dashboardItems.removeAllElements();
+				for each (var i:* in userSettings.dashboardItems)
+				{
+					var dashboardItem:DashboardItem = i as DashboardItem;
+					var dashboardItemBox:DashboardItemBox = null;
+					if (dashboardItem.dasboardItemKey == DashboardItem.INCIDENTS_BY_PROTOCOLS_1H ||
+						dashboardItem.dasboardItemKey == DashboardItem.INCIDENTS_BY_PROTOCOLS_24H )
+					{
+						dashboardItemBox = new PieChartBox();
+					} else if (dashboardItem.dasboardItemKey == DashboardItem.INCIDENT_BY_ACTIONS_1H ||
+						dashboardItem.dasboardItemKey == DashboardItem.INCIDENT_BY_ACTIONS_24H )
+					{
+						dashboardItemBox = new PieChartBox();
+					} else if (dashboardItem.dasboardItemKey == DashboardItem.TOP_5_ADDRESS_1H ||
+						dashboardItem.dasboardItemKey == DashboardItem.TOP_5_ADDRESS_24H )
+					{
+						dashboardItemBox = new HBarChartBox();
+					} else if (dashboardItem.dasboardItemKey == DashboardItem.TOP_5_USERS_1H ||
+						dashboardItem.dasboardItemKey == DashboardItem.TOP_5_USERS_24H )
+					{
+						dashboardItemBox = new HBarChartBox();
+					} else if (dashboardItem.dasboardItemKey == DashboardItem.TOP_5_RULES_1H ||
+						dashboardItem.dasboardItemKey == DashboardItem.TOP_5_RULES_24H )
+					{
+						dashboardItemBox = new HBarChartBox();
+					} else if (dashboardItem.dasboardItemKey == DashboardItem.TOP_5_ITYPES_1H ||
+						dashboardItem.dasboardItemKey == DashboardItem.TOP_5_ITYPES_24H )
+					{
+						dashboardItemBox = new HBarChartBox();
+					} else if (dashboardItem.dasboardItemKey == DashboardItem.RSS_MYDLP_BLOG ||
+						dashboardItem.dasboardItemKey == DashboardItem.RSS_DATALOSSDB ) {
+						dashboardItemBox = new RSSFeedBox();
+					}
+					
+					if (dashboardItemBox != null)
+					{
+						var dashboardItemContainer:DashboardItemContainer = new DashboardItemContainer();
+						dashboardItemBox.itemKey = dashboardItem.dasboardItemKey;
+						dashboardItemContainer.container.addElement(dashboardItemBox);
+						dashboardItemContainer.itemKey = dashboardItem.dasboardItemKey; 
+						dashboardItems.addElement(dashboardItemContainer);
+					}
+				}
+			}
+			
+			public function addDashboardItem(value:String): void {
+				for each (var i:* in userSettings.dashboardItems)
+					if ((i as DashboardItem).dasboardItemKey == value)
+						return;
+				var d:DashboardItem = new DashboardItem();
+				d.dasboardItemKey = value;
+				d.userSettings = userSettings;
+				re.register(value);
+				d.save();
+			}
+			
+			public function removeDashboardItem(value:String): void {
+				for each (var i:* in userSettings.dashboardItems)
+					if ((i as DashboardItem).dasboardItemKey == value)
+					{
+						i.deleteRecord();
+						return;
+					}
+			}
+			
+			protected function newDashboardItem(event:MouseEvent):void
+			{
+				var dip:DasboardItemPopup = InteractionUtil.newPopup(DasboardItemPopup) as DasboardItemPopup;
+				FlexGlobals.topLevelApplication.currentPopup = dip;
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<fx:Declarations>
+		<my:remote id="re" destination="dashboardBRS" >
+			<my:method name="getUserSettings" result="getUserSettingsHandler(event)" />
+		</my:remote>
+	</fx:Declarations>
+	
 	
 	<s:layout>
 		<s:HorizontalLayout horizontalAlign="center" />
 	</s:layout>
 	
-	<s:Group width="30%" height="100%">
-		<s:layout>
-			<s:VerticalLayout verticalAlign="middle" horizontalAlign="center" gap="20"/>
-		</s:layout>
-		<dashboard:PercentageDisplayBox currentPercent="12" label="@Resource(bundle = 'messages', key = 'dashboard.cpuusage.label')" />
-		<dashboard:PercentageDisplayBox currentPercent="66" label="@Resource(bundle = 'messages', key = 'dashboard.memoryusage.label')" />
-		<dashboard:PercentageDisplayBox currentPercent="25" label="@Resource(bundle = 'messages', key = 'dashboard.diskusage.label')" />
-	</s:Group>
-	<s:Group width="40%" height="100%">
+	<s:Group width="400" height="100%">
 		<s:layout>
 			<s:VerticalLayout verticalAlign="middle" horizontalAlign="center" gap="20"/>
 		</s:layout>
@@ -27,11 +129,15 @@
 		<s:BitmapImage source="@Embed('/assets/images/logo_314x124.png')" />
 		<dashboard:AlertBox />
 	</s:Group>
-	<s:Group width="30%" height="100%">
-		<s:layout>
-			<s:VerticalLayout verticalAlign="middle" horizontalAlign="center" gap="20"/>
-		</s:layout>
-		<dashboard:RSSFeedBox rssKey="blogrss" title="MyDLP Blog"/>
-		<dashboard:RSSFeedBox rssKey="datalossdbrss" title="DataLossDB"/>
-	</s:Group>
+	<s:VGroup width="100%" height="100%" paddingTop="20" gap="20">
+		<s:Button skinClass="com.mydlp.ui.skin.AddBitmapLabelButton24Skin" 
+				  label="@Resource(key='dashboard.additem', bundle='messages')"
+				  click="{newDashboardItem(event)}" styleName="fontSize24Style"/>
+
+		<s:Group id="dashboardItems" width="100%" height="100%">
+			<s:layout>
+				<s:TileLayout horizontalGap="40" verticalGap="25"/>
+			</s:layout>
+		</s:Group>
+	</s:VGroup>
 </s:SkinnableContainer>

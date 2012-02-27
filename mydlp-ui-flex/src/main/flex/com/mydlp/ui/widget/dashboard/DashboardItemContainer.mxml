@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx" 
+		 mouseOver="onMouseOver(event)"
+		 mouseOut="onMouseOut(event)"
+		 width="350" height="250">
+	<fx:Script>
+		<![CDATA[
+			import com.mydlp.ui.util.LangUtil;
+			
+			import mx.core.FlexGlobals;
+			
+			
+			protected function onMouseOver(event:MouseEvent):void
+			{
+				closeButton.visible = true;
+			}
+			
+			protected function onMouseOut(event:MouseEvent):void
+			{
+				closeButton.visible = false;
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<fx:Declarations>
+		<fx:String id="itemKey"/>
+	</fx:Declarations>
+	
+	<s:Rect left="0" right="0" top="0" bottom="0" >
+		<s:stroke>
+			<s:SolidColorStroke color="0xAEBBCF" alpha="0.3" weight="3"/>
+		</s:stroke>
+	</s:Rect>
+	
+	<s:VGroup width="100%" height="100%" gap="8"
+			  paddingTop="8" paddingBottom="6"
+			  paddingLeft="6" paddingRight="6">
+		<s:HGroup width="100%" height="30" 
+				  paddingLeft="8" paddingRight="6"
+				  horizontalAlign="left" verticalAlign="middle">
+			<s:Label text="{LangUtil.getString('messages', 'dashboardItem.' + itemKey + '.title')}" fontWeight="bold"/>
+			<s:Spacer width="100%"/>
+			<s:Button id="closeButton" skinClass="com.mydlp.ui.skin.CloseBitmapButton16Skin"
+					  click="{FlexGlobals.topLevelApplication.dashboardContainer.removeDashboardItem(itemKey)}"
+					  visible="false" />
+		</s:HGroup>
+		<s:VGroup width="100%" height="100%"
+				  horizontalAlign="center" verticalAlign="middle">
+			<s:Group id="container" width="100%" height="100%" />
+		</s:VGroup>
+	</s:VGroup>
+</s:Group>

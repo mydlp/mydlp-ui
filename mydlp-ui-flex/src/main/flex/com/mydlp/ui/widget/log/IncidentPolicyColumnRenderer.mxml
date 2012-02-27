@@ -42,19 +42,7 @@
 				
 				labelText += LangUtil.getString("messages","log.container.column.policy.rule") + ": ";
 				
-				if (log.ruleId == -1)
-				{
-					labelText +=  LangUtil.getString("messages","log.container.column.policy.rule.default");
-				}
-				else
-				{
-					var rule:Rule = FlexGlobals.topLevelApplication.ruleContainer.getRule(log.ruleId);
-					if (rule != null){
-						labelText +=  rule.label;
-					}
-					else
-						labelText += "id(" + log.ruleId + ")";
-				}
+				labelText += FlexGlobals.topLevelApplication.ruleContainer.getRuleLabel(log.ruleId);
 				
 				labelText += "\n" + LangUtil.getString("messages","log.container.column.policy.action") + ": ";
 				

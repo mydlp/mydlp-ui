@@ -20,6 +20,7 @@
          <value>com.mydlp.ui.domain.AuthSecurityRole</value>
          <value>com.mydlp.ui.domain.AuthUser</value>
          <value>com.mydlp.ui.domain.Config</value>
+         <value>com.mydlp.ui.domain.DashboardItem</value>
          <value>com.mydlp.ui.domain.DataFormat</value>
          <value>com.mydlp.ui.domain.DocumentDatabase</value>
          <value>com.mydlp.ui.domain.DocumentDatabaseFileEntry</value>
@@ -45,6 +46,7 @@
          <value>com.mydlp.ui.domain.Revision</value>
          <value>com.mydlp.ui.domain.Rule</value>
          <value>com.mydlp.ui.domain.RuleItem</value>
+         <value>com.mydlp.ui.domain.UserSettings</value>
          <value>com.mydlp.ui.domain.WebRule</value>
        </list>
      </property>

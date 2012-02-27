@@ -43,6 +43,12 @@
       <version>${flex.version}</version>
       <type>pom</type>
     </dependency>
+    <dependency>
+      <groupId>com.adobe.flex.framework</groupId>
+      <artifactId>datavisualization</artifactId>
+      <version>${flex.dv.version}</version>
+      <type>swc</type>
+    </dependency>
     <dependency> 
       <groupId>dpHibernate</groupId> 
       <artifactId>dpHibernate</artifactId> 

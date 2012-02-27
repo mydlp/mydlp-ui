@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<dashboard:DashboardItemBox xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx" 
+		 xmlns:my="http://www.mydlp.com/flex/my"
+		 xmlns:dashboard="com.mydlp.ui.widget.dashboard.*"
+		 creationComplete="{reget()}" >
+	
+	<fx:Script>
+		<![CDATA[
+			import mx.collections.ArrayCollection;
+			import mx.rpc.events.ResultEvent;
+			[Bindable]
+			protected var itemDP:Object = null;
+			
+			protected var timer:Timer = null;
+			
+			protected function reget(): void
+			{
+				re.get(itemKey);
+			}
+			
+			protected function getHandler(event:ResultEvent): void
+			{
+				itemDP = event.result;
+				if (this is HBarChartBox && itemDP is ArrayCollection){
+					(itemDP as ArrayCollection).source.reverse();
+				}
+				if (itemDP == null) {
+					timer = new Timer(10000, 1);
+					timer.addEventListener(TimerEvent.TIMER_COMPLETE, onTimerComplete);
+				} else {
+					invalidateDisplayList();
+				}
+			}
+			
+			public function onTimerComplete(event:TimerEvent):void
+			{
+				if (timer.running) timer.stop();
+				reget();
+			}
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<my:remote id="re" destination="dashboardBRS" >
+			<my:method name="get" result="getHandler(event)" />
+		</my:remote>
+	</fx:Declarations>
+</dashboard:DashboardItemBox>

@@ -57,5 +57,4 @@ public class AuthUser extends AbstractEntity {
 		this.roles = roles;
 	}
 	
-	
 }

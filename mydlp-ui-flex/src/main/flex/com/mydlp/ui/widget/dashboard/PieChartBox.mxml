@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<dashboard:DashboardQueryItemBox xmlns:fx="http://ns.adobe.com/mxml/2009" 
+							xmlns:s="library://ns.adobe.com/flex/spark" 
+							xmlns:mx="library://ns.adobe.com/flex/mx" 
+							xmlns:dashboard="com.mydlp.ui.widget.dashboard.*">
+	<fx:Script>
+		<![CDATA[
+			import com.mydlp.ui.util.LangUtil;
+			
+			import mx.collections.ArrayCollection;
+			
+			import spark.formatters.NumberFormatter;
+			
+			public function round(num:Number, precision:Number):Number {
+				var result:String;
+				var f:NumberFormatter = new NumberFormatter();
+				f.fractionalDigits = precision;
+				result = f.format(num);
+				return Number(result);
+			}
+			
+			protected function itemLabelFunc(data:Object, field:String, index:Number, percentValue:Number):String {
+				return 	LangUtil.getString("messages", "dashboardItem." + itemKey + "." + data.labelKey) +
+						"\n " + data.value + " (" + round(percentValue,2) + "%)";
+			}
+		]]>
+	</fx:Script>
+	
+	<mx:PieChart id="pieChart" width="100%" height="100%"
+				 dataProvider="{itemDP}"
+				 innerRadius=".3">
+		
+		<mx:series>
+			<mx:PieSeries id="ps"
+						  field="value"
+						  labelPosition="callout"
+						  labelFunction="itemLabelFunc"/>
+			
+		</mx:series>
+		
+	</mx:PieChart>
+	
+</dashboard:DashboardQueryItemBox>

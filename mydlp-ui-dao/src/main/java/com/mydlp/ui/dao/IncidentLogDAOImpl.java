@@ -1,8 +1,13 @@
 package com.mydlp.ui.dao;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
+import org.hibernate.Query;
 import org.hibernate.criterion.CriteriaSpecification;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
@@ -18,6 +23,9 @@ import com.mydlp.ui.domain.IncidentLogFileContent;
 @Repository("incidentLogDAO")
 @Transactional
 public class IncidentLogDAOImpl extends AbstractLogDAO implements IncidentLogDAO {
+	
+	protected static final String MAPKEY_LABEL = "labelKey";
+	protected static final String MAPKEY_VALUE = "value";
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -95,6 +103,162 @@ public class IncidentLogDAOImpl extends AbstractLogDAO implements IncidentLogDAO
 		return getHibernateTemplate().findByNamedParam(
 				"select distinct f.filename from IncidentLogFile f " +
 				"where f.content.id=:contentId", "contentId", id);
+	}
+	
+
+	@Override
+	public List<Map<String, Object>> getProtocolIncidentCount(Integer hours) {
+		Date now = new Date();
+		Date startDate = new Date(now.getTime() - hours * 60L * 60L * 1000L);
+		List<Map<String, Object>> returnList = new ArrayList<Map<String, Object>>();
+		
+		Query query = getSession().createQuery(
+				"select count(l), l.channel from IncidentLog l " +
+				"where l.date between :startDate and :endDate " +
+				"group by l.channel order by 1 desc");
+		query.setTimestamp("startDate", startDate);
+		query.setTimestamp("endDate", now);
+		
+		for (@SuppressWarnings("unchecked")
+		Iterator<Object[]> iterator = query.list().iterator(); iterator.hasNext();) {
+			Object[] row = (Object[]) iterator.next();
+			Map<String, Object> returnMap = new HashMap<String, Object>();
+			returnMap.put(MAPKEY_LABEL, row[1]);
+			returnMap.put(MAPKEY_VALUE, row[0]);
+			returnList.add(returnMap);
+		}
+		return returnList;
+	}
+	
+	public static String intToIpStr(long i) {
+        return ((i >> 24 ) & 0xFF) + "." +
+               ((i >> 16 ) & 0xFF) + "." +
+               ((i >>  8 ) & 0xFF) + "." +
+               ( i        & 0xFF);
+    }
+
+	@Override
+	public List<Map<String, Object>> topSourceAddress(Integer hours, Integer count) {
+		Date now = new Date();
+		Date startDate = new Date(now.getTime() - hours * 60L * 60L * 1000L);
+		List<Map<String, Object>> returnList = new ArrayList<Map<String, Object>>();
+		
+		Query query = getSession().createQuery(
+				"select count(l), l.sourceIp from IncidentLog l " +
+				"where l.date between :startDate and :endDate " +
+				"group by l.sourceIp order by 1 desc");
+		query.setTimestamp("startDate", startDate);
+		query.setTimestamp("endDate", now);
+		query.setMaxResults(count);
+		
+		for (@SuppressWarnings("unchecked")
+		Iterator<Object[]> iterator = query.list().iterator(); iterator.hasNext();) {
+			Object[] row = (Object[]) iterator.next();
+			Map<String, Object> returnMap = new HashMap<String, Object>();
+			returnMap.put(MAPKEY_LABEL, intToIpStr(((Long) row[1]).longValue()));
+			returnMap.put(MAPKEY_VALUE, row[0]);
+			returnList.add(returnMap);
+		}	
+		return returnList;
+	}
+
+	@Override
+	public List<Map<String, Object>> topSourceUser(Integer hours, Integer count) {
+		Date now = new Date();
+		Date startDate = new Date(now.getTime() - hours * 60L * 60L * 1000L);
+		List<Map<String, Object>> returnList = new ArrayList<Map<String, Object>>();
+		
+		Query query = getSession().createQuery(
+				"select count(l), l.sourceUser from IncidentLog l " +
+				"where l.date between :startDate and :endDate " +
+				"group by l.sourceUser order by 1 desc");
+		query.setTimestamp("startDate", startDate);
+		query.setTimestamp("endDate", now);
+		query.setMaxResults(count);
+		
+		for (@SuppressWarnings("unchecked")
+		Iterator<Object[]> iterator = query.list().iterator(); iterator.hasNext();) {
+			Object[] row = (Object[]) iterator.next();
+			Map<String, Object> returnMap = new HashMap<String, Object>();
+			returnMap.put(MAPKEY_LABEL, row[1]);
+			returnMap.put(MAPKEY_VALUE, row[0]);
+			returnList.add(returnMap);
+		}	
+		return returnList;
+	}
+
+	@Override
+	public List<Map<String, Object>> getActionIncidentCount(Integer hours) {
+		Date now = new Date();
+		Date startDate = new Date(now.getTime() - hours * 60L * 60L * 1000L);
+		List<Map<String, Object>> returnList = new ArrayList<Map<String, Object>>();
+		
+		Query query = getSession().createQuery(
+				"select count(l), l.action from IncidentLog l " +
+				"where l.date between :startDate and :endDate " +
+				"group by l.action order by 1 desc");
+		query.setTimestamp("startDate", startDate);
+		query.setTimestamp("endDate", now);
+		
+		for (@SuppressWarnings("unchecked")
+		Iterator<Object[]> iterator = query.list().iterator(); iterator.hasNext();) {
+			Object[] row = (Object[]) iterator.next();
+			Map<String, Object> returnMap = new HashMap<String, Object>();
+			returnMap.put(MAPKEY_LABEL, row[1]);
+			returnMap.put(MAPKEY_VALUE, row[0]);
+			returnList.add(returnMap);
+		}
+		return returnList;
+	}
+
+	@Override
+	public List<Map<String, Object>> topRuleId(Integer hours, Integer count) {
+		Date now = new Date();
+		Date startDate = new Date(now.getTime() - hours * 60L * 60L * 1000L);
+		List<Map<String, Object>> returnList = new ArrayList<Map<String, Object>>();
+		
+		Query query = getSession().createQuery(
+				"select count(l), l.ruleId from IncidentLog l " +
+				"where l.date between :startDate and :endDate " +
+				"group by l.ruleId order by 1 desc");
+		query.setTimestamp("startDate", startDate);
+		query.setTimestamp("endDate", now);
+		query.setMaxResults(count);
+		
+		for (@SuppressWarnings("unchecked")
+		Iterator<Object[]> iterator = query.list().iterator(); iterator.hasNext();) {
+			Object[] row = (Object[]) iterator.next();
+			Map<String, Object> returnMap = new HashMap<String, Object>();
+			returnMap.put(MAPKEY_LABEL, row[1]);
+			returnMap.put(MAPKEY_VALUE, row[0]);
+			returnList.add(returnMap);
+		}	
+		return returnList;
+	}
+
+	@Override
+	public List<Map<String, Object>> topInformationTypeId(Integer hours, Integer count) {
+		Date now = new Date();
+		Date startDate = new Date(now.getTime() - hours * 60L * 60L * 1000L);
+		List<Map<String, Object>> returnList = new ArrayList<Map<String, Object>>();
+		
+		Query query = getSession().createQuery(
+				"select count(l), l.informationTypeId from IncidentLog l " +
+				"where l.date between :startDate and :endDate " +
+				"group by l.informationTypeId order by 1 desc");
+		query.setTimestamp("startDate", startDate);
+		query.setTimestamp("endDate", now);
+		query.setMaxResults(count);
+		
+		for (@SuppressWarnings("unchecked")
+		Iterator<Object[]> iterator = query.list().iterator(); iterator.hasNext();) {
+			Object[] row = (Object[]) iterator.next();
+			Map<String, Object> returnMap = new HashMap<String, Object>();
+			returnMap.put(MAPKEY_LABEL, row[1]);
+			returnMap.put(MAPKEY_VALUE, row[0]);
+			returnList.add(returnMap);
+		}	
+		return returnList;
 	}
 		
 }
