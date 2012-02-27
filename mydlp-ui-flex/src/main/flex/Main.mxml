@@ -18,25 +18,39 @@
 	
 	<fx:Script>
 		<![CDATA[
+			import com.mydlp.ui.util.LangUtil;
+			import com.mydlp.ui.widget.general.popup.ClosableTitleWindow;
+			
 			import mx.controls.Alert;
 			import mx.events.FlexEvent;
+			import mx.messaging.messages.ErrorMessage;
 			import mx.rpc.events.FaultEvent;
 			import mx.rpc.events.ResultEvent;
 			
 			import org.dphibernate.rpc.HibernateManaged;
-			
 			import spark.components.TitleWindow;
 			
 			public var currentPopup:TitleWindow = null;
+
+			public static const removeError:String = "org.springframework.jdbc.UncategorizedSQLException";
 			
 			protected function onCreationComplete(event:FlexEvent):void
 			{
 				HibernateManaged.defaultHibernateService = this.dataAccessService;
 			}
 			
-			protected function faultHandler(event:FaultEvent):void
+			public function faultHandler(event:FaultEvent):void
 			{
-				Alert.show(event.fault.toString());
+				var errorMessage:String = event.fault.faultString as String;
+				var splittedArray:Array = errorMessage.split(":");
+				var len:int = splittedArray[0].length;
+				var errorString:String = (splittedArray[0] as String).substring(0, len-1);
+				if(errorString == removeError)
+					Alert.show(LangUtil.getString("messages", "inventory.delete.error." + errorString + ".message"),
+						LangUtil.getString("messages", "inventory.delete.error." + errorString + ".title"));
+				else
+					Alert.show(LangUtil.getString("messages", "inventory.delete.error.unexpected.message"),
+						LangUtil.getString("messages", "inventory.delete.error.unexpected.title"));
 			}
 			
 			public function refresh(): void
@@ -64,7 +78,7 @@
 	
 	<fx:Declarations>
 		<my:remote id="dataAccessService" destination="dataAccessService" fault="faultHandler(event)"/>
-		<my:remote id="genericRE" destination="genericBRS" >
+		<my:remote id="genericRE" destination="genericBRS" fault="faultHandler(event)" >
 			<my:method name="save" result="genericResultHandler(event)" fault="faultHandler(event)"/>
 			<my:method name="remove" result="genericResultHandler(event)" fault="faultHandler(event)"/>
 		</my:remote>

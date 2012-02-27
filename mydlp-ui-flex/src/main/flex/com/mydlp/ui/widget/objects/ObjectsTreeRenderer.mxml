@@ -9,9 +9,18 @@
 			import com.mydlp.ui.domain.AbstractEntity;
 			import com.mydlp.ui.domain.DataFormat;
 			import com.mydlp.ui.domain.DocumentDatabase;
+			import com.mydlp.ui.domain.InformationType;
+			import com.mydlp.ui.domain.InventoryItem;
+			import com.mydlp.ui.domain.Network;
 			import com.mydlp.ui.domain.RegularExpressionGroup;
+			import com.mydlp.ui.domain.Rule;
 			import com.mydlp.ui.util.InteractionUtil;
+			import com.mydlp.ui.util.LangUtil;
 			
+			import mx.collections.ArrayCollection;
+			import mx.collections.ListCollectionView;
+			import mx.controls.Alert;
+			import mx.core.FlexGlobals;
 			import mx.events.FlexEvent;
 			
 			protected function clickAddButton(event:MouseEvent):void

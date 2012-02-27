@@ -23,6 +23,7 @@ public class _000_00009_Data_Formats_HTML_XML extends AbstractGranule {
 		List<MIMEType> mts = new ArrayList<MIMEType>();
 		mts.add(createMTObj("application/xml"));
 		mts.add(createMTObj("application/x-fictionbook+xml"));
+		mts.add(createMTObj("text/html"));
 		df.setMimeTypes(mts);
 		getHibernateTemplate().saveOrUpdate(df);
 	}

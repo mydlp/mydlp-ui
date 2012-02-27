@@ -21,6 +21,9 @@
 			import mx.controls.Alert;
 			import mx.controls.Spacer;
 			import mx.core.FlexGlobals;
+			import mx.managers.PopUpManager;
+			import mx.messaging.messages.ErrorMessage;
+			import mx.rpc.events.FaultEvent;
 			
 			import spark.components.Button;
 			import spark.components.HGroup;
@@ -129,12 +132,18 @@
 				FlexGlobals.topLevelApplication.refresh();
 			}
 			
+			protected function faultHandler(event:FaultEvent):void
+			{
+				FlexGlobals.topLevelApplication.faultHandler(event);
+				InteractionUtil.closeCurrentPopup();
+			}
+			
 		]]>
 	</fx:Script>
 	
 	<fx:Declarations>
 		<my:remote id="re" destination="genericBRS" >
-			<my:method name="remove" result="okHandler(event)" />
+			<my:method name="remove" result="okHandler(event)" fault="faultHandler(event)"/>
 		</my:remote>
 	</fx:Declarations>
 	

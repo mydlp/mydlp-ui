@@ -96,6 +96,14 @@
 			
 			
 			
+			protected function settingButtonClickHandler(event:MouseEvent):void
+			{
+				var eup:EditUserPopup = InteractionUtil.newPopup(EditUserPopup, true) as EditUserPopup;
+				eup.currentUser = currentUser;
+				eup.initialUserName = currentUser.username;
+				eup.visible = true;
+			}
+			
 		]]>
 	</fx:Script>
 
@@ -123,7 +131,8 @@
 	<s:Label id="userLabel" />
 	<s:Spacer width="4" />
 	<s:Button skinClass="com.mydlp.ui.skin.SettingsBitmapButton16Skin" 
-			  toolTip="@Resource(bundle = 'messages', key = 'toptoolbar.settings')"/>
+			  toolTip="@Resource(bundle = 'messages', key = 'toptoolbar.settings')"
+			  click="settingButtonClickHandler(event)"/>
 	<s:Button skinClass="com.mydlp.ui.skin.CloseBitmapButton16Skin" 
 			  click="{navigateToURL(new URLRequest ('j_spring_security_logout'), '_self')}"
 			  toolTip="@Resource(bundle = 'messages', key = 'toptoolbar.logout')"/>

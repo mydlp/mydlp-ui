@@ -32,6 +32,13 @@ public class UserDAOImpl extends AbstractPolicyDAO implements UserDAO {
 	
 	@Override
 	@Transactional(readOnly=false)
+	public AuthUser save(AuthUser r) {
+		getHibernateTemplate().saveOrUpdate(r);
+		return r;
+	}
+	
+	@Override
+	@Transactional(readOnly=false)
 	public void remove(AuthUser i) {
 		getHibernateTemplate().delete(i);
 	}
