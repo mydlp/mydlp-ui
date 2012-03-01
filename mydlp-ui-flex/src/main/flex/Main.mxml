@@ -21,6 +21,8 @@
 			import com.mydlp.ui.util.LangUtil;
 			import com.mydlp.ui.widget.general.popup.ClosableTitleWindow;
 			
+			import flash.utils.setTimeout;
+			
 			import mx.controls.Alert;
 			import mx.events.FlexEvent;
 			import mx.messaging.messages.ErrorMessage;
@@ -28,15 +30,43 @@
 			import mx.rpc.events.ResultEvent;
 			
 			import org.dphibernate.rpc.HibernateManaged;
+			
 			import spark.components.TitleWindow;
 			
 			public var currentPopup:TitleWindow = null;
 
 			public static const removeError:String = "org.springframework.jdbc.UncategorizedSQLException";
 			
+			private var activityTimeout:uint;
+			
+			protected function resetAutoLogout():void
+			{
+				clearTimeout(activityTimeout);
+				var delay:Number = 60*15*1000;
+				activityTimeout = setTimeout(doLogout, delay);
+			}
+			
+			protected function doLogout():void
+			{
+				navigateToURL(new URLRequest ('j_spring_security_logout'), '_self');		
+			}
+			
+			protected function handleUserActivity(event:Event):void
+			{
+				resetAutoLogout();
+			}
+			
 			protected function onCreationComplete(event:FlexEvent):void
 			{
 				HibernateManaged.defaultHibernateService = this.dataAccessService;
+				
+				if(stage != null)
+				{
+					stage.addEventListener(MouseEvent.MOUSE_MOVE, handleUserActivity);
+					stage.addEventListener(MouseEvent.CLICK, handleUserActivity);
+					stage.addEventListener(KeyboardEvent.KEY_DOWN, handleUserActivity);
+				}
+				resetAutoLogout();
 			}
 			
 			public function faultHandler(event:FaultEvent):void

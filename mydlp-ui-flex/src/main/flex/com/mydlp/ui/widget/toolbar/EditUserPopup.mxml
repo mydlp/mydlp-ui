@@ -64,6 +64,7 @@
 			
 			protected function saveButtonClickHandler(event:MouseEvent):void
 			{
+				saveButton.enabled = false;
 				re.isPasswordTrue(nameInput.text, password.text);
 			}
 			
@@ -94,7 +95,7 @@
 			<s:TextInput id="reenterPasswd" displayAsPassword="true"/>
 		</s:FormItem>
 		<s:FormItem >
-			<s:Button label="@Resource(bundle = 'messages', key = 'editCurrentUser.popup.button.label')"
+			<s:Button id="saveButton" label="@Resource(bundle = 'messages', key = 'editCurrentUser.popup.button.label')"
 					  click="saveButtonClickHandler(event)"/>
 		</s:FormItem>
 	</s:Form>
