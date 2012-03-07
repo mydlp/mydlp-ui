@@ -122,4 +122,8 @@
     <url-pattern>/receive</url-pattern>
   </servlet-mapping>
 
+  <session-config>
+    <session-timeout>15</session-timeout> <!-- in minutes -->
+  </session-config>
+
 </web-app>
