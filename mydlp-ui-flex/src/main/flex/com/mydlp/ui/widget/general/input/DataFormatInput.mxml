@@ -3,11 +3,12 @@
 		  xmlns:s="library://ns.adobe.com/flex/spark" 
 		  xmlns:my="http://www.mydlp.com/flex/my"
 		  xmlns:mx="library://ns.adobe.com/flex/mx"
-		  width="100%"
+		  width="{InputLabel.VERTICAL_INPUT_WIDTH}"
 		  height="150" creationComplete="{refreshLists()}">
 	<fx:Script>
 		<![CDATA[
 			import com.mydlp.ui.domain.DataFormat;
+			import com.mydlp.ui.widget.general.popup.InputLabel;
 			
 			import mx.collections.ArrayCollection;
 			import mx.events.DragEvent;

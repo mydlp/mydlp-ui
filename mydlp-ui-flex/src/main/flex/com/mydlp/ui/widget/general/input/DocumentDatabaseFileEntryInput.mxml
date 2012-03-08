@@ -3,7 +3,7 @@
 					  xmlns:s="library://ns.adobe.com/flex/spark" 
 					  xmlns:my="http://www.mydlp.com/flex/my"
 					  xmlns:mx="library://ns.adobe.com/flex/mx"
-					  width="100%" height="150">
+					  width="700" height="150">
 	<fx:Script>
 		<![CDATA[
 			import com.mydlp.ui.domain.DocumentDatabaseFileEntry;
@@ -55,7 +55,7 @@
 			<s:HorizontalLayout verticalAlign="middle" gap="2"/>
 		</s:layout>
 		<s:DataGrid id="fileEntriesGrid" dataProvider="{fileEntries}" 
-					width="700" height="100%" >
+					width="100%" height="100%" >
 			<s:columns>
 				<s:ArrayList>
 					<s:GridColumn headerText="@Resource(bundle = 'messages', key = 'fileEntries.header.date')"

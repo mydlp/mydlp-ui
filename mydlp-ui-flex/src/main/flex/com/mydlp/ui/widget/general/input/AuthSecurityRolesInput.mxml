@@ -3,12 +3,13 @@
 		  xmlns:s="library://ns.adobe.com/flex/spark" 
 		  xmlns:my="http://www.mydlp.com/flex/my"
 		  xmlns:mx="library://ns.adobe.com/flex/mx"
-		  width="100%"
+		  width="{InputLabel.VERTICAL_INPUT_WIDTH}"
 		  height="150" creationComplete="{re.getRoles()}"
 		  xmlns:util="com.mydlp.ui.util.*">
 	<fx:Script>
 		<![CDATA[
 			import com.mydlp.ui.domain.AuthSecurityRole;
+			import com.mydlp.ui.widget.general.popup.InputLabel;
 			
 			import mx.events.ListEvent;
 			import mx.rpc.events.ResultEvent;

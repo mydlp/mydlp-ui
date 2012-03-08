@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx"
+		 xmlns:my="http://www.mydlp.com/flex/my"
+		 width="670" height="200"
+		 creationComplete="onCreationComplete(event)">
+	<fx:Script>
+		<![CDATA[
+			import com.mydlp.ui.domain.USBDevice;
+			import com.mydlp.ui.util.AsyncListDataProvider;
+			import com.mydlp.ui.util.InteractionUtil;
+			import com.mydlp.ui.util.LangUtil;
+			
+			import mx.events.FlexEvent;
+			import mx.rpc.AsyncToken;
+			public var optionContainer:OptionContainer = null;
+			
+			protected const PENDING_OBJECT:Object = 
+				{id: LangUtil.getString("messages", "options.usbsac.pending.message")};
+			
+			[Bindable]
+			protected var usbsacDP:AsyncListDataProvider = null;
+			
+			protected function onCreationComplete(event:FlexEvent):void
+			{
+				usbsacDP = new AsyncListDataProvider();
+				usbsacDP.countFunction = countRevisions;
+				usbsacDP.fetchFunction = fetchRevisions;
+				usbsacDP.pendingObject = PENDING_OBJECT;
+				
+				refresh();
+			}
+			
+			public function refresh(): void
+			{
+				usbsacDP.init();
+			}
+			
+			protected function countRevisions(): AsyncToken
+			{
+				return re.getUSBDeviceCount();
+			}
+			
+			protected function fetchRevisions(offset:Number, count:Number): AsyncToken
+			{
+				return re.getUSBDevices(offset, count);
+			}
+			
+			
+		]]>
+	</fx:Script>
+	
+	<fx:Declarations>
+		<my:remote id="re" destination="usbDeviceBRS" />
+	</fx:Declarations>
+	
+	<s:Rect left="0" right="0" top="0" bottom="0" >
+		<s:stroke>
+			<s:SolidColorStroke color="0xAEBBCF" alpha="0.3" weight="3"/>
+		</s:stroke>
+	</s:Rect>
+	
+	<s:VGroup gap="8" width="100%" height="100%"
+			  paddingTop="8" paddingBottom="6"
+			  paddingLeft="6" paddingRight="6">
+		<s:Button skinClass="com.mydlp.ui.skin.AddBitmapLabelButton16Skin"
+				  label="@Resource(key='options.usbsac.add.label', bundle='messages')"
+				  click="{InteractionUtil.newEditDialog(new USBDevice())}" />
+		<s:DataGrid id="usbDevices" dataProvider="{usbsacDP.asyncListView}" width="100%" height="100%"
+					variableRowHeight="true">
+			<s:columns>
+				<s:ArrayList>
+					<s:GridColumn headerText="@Resource(bundle = 'messages', key = 'options.usbsac.header.id')"
+								  dataField="id" width="60"/>
+					<s:GridColumn headerText="@Resource(bundle = 'messages', key = 'options.usbsac.header.deviceId')"
+								  dataField="deviceId"/>
+					<s:GridColumn headerText="@Resource(bundle = 'messages', key = 'options.usbsac.header.uniqId')"
+								  dataField="uniqId"/>
+					<s:GridColumn headerText="@Resource(bundle = 'messages', key = 'options.usbsac.header.comment')"
+								  dataField="comment"/>
+					<s:GridColumn width="60">
+						<s:itemRenderer>
+							<fx:Component>
+								<s:GridItemRenderer>
+									<fx:Script>
+										<![CDATA[
+											import com.mydlp.ui.util.InteractionUtil;
+										]]>
+									</fx:Script>
+									<s:states>
+										<s:State name="normal" />
+										<s:State name="hovered" />
+										<s:State name="selected" />
+									</s:states>
+									<s:HGroup includeIn="selected" width="100%" height="100%"
+											  horizontalAlign="center" verticalAlign="middle" gap="8">
+										<s:Button styleName="editButtonStyle" 
+												  click="{InteractionUtil.newEditDialog(data)}" />
+										<s:Button styleName="removeButtonStyle" 
+												  click="{InteractionUtil.newDeleteDialog(data)}"/>
+									</s:HGroup>
+								</s:GridItemRenderer>
+							</fx:Component>
+						</s:itemRenderer>
+					</s:GridColumn>
+				</s:ArrayList>
+			</s:columns>
+		</s:DataGrid>
+	</s:VGroup>
+</s:Group>

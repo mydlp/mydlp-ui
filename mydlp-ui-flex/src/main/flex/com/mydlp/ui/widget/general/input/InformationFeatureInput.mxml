@@ -5,7 +5,7 @@
 		  xmlns:mx="library://ns.adobe.com/flex/mx" 
 		  xmlns:domain="com.mydlp.ui.domain.*" 
 		  xmlns:input="com.mydlp.ui.widget.general.input.*" 
-		  width="100%" height="150">
+		  width="{InputLabel.VERTICAL_INPUT_WIDTH}" height="150">
 	
 	<fx:Script>
 		<![CDATA[
@@ -14,6 +14,7 @@
 			import com.mydlp.ui.domain.RegularExpression;
 			import com.mydlp.ui.util.InteractionUtil;
 			import com.mydlp.ui.widget.general.popup.GenericEditContainer;
+			import com.mydlp.ui.widget.general.popup.InputLabel;
 			
 			import flash.utils.getQualifiedClassName;
 			

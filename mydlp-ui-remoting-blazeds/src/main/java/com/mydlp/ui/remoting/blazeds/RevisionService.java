@@ -10,7 +10,7 @@ import com.mydlp.ui.domain.Revision;
 @Secured(AuthSecurityRole.ROLE_USER)
 public interface RevisionService {
 
-public List<Revision> getRevisions(Integer offset, Integer limit);
+	public List<Revision> getRevisions(Integer offset, Integer limit);
 	
 	public Long getRevisionCount();
 	

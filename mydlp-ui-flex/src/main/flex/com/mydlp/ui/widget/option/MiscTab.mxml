@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<option:ConfigTabBox xmlns:fx="http://ns.adobe.com/mxml/2009" 
+					 xmlns:s="library://ns.adobe.com/flex/spark" 
+					 xmlns:mx="library://ns.adobe.com/flex/mx" 
+					 xmlns:my="http://www.mydlp.com/flex/my"
+					 xmlns:option="com.mydlp.ui.widget.option.*"
+					 xmlns:domain="com.mydlp.ui.domain.*">
+	
+	<fx:Declarations>
+		<domain:Config id="usbSerialAccessControl" />
+	</fx:Declarations>
+	
+	<s:VGroup width="100%" height="100%" gap="8">	
+		
+		<s:Form>
+			<s:FormItem label="{usbSerialAccessControl.label}">
+				<s:CheckBox id="usbSerialAccessControlCheckBox" selected="{usbSerialAccessControl.value == 'true'}" 
+							change="{usbSerialAccessControl.value = usbSerialAccessControlCheckBox.selected ? 'true' : 'false'}"/>			
+			</s:FormItem>
+		</s:Form>
+		
+		<s:HGroup width="100%">
+			<s:Spacer width="20" />
+			<option:USBDeviceCRUDGrid id="usbDeviceCrudGrid" />
+		</s:HGroup>
+		
+	</s:VGroup>
+	
+</option:ConfigTabBox>

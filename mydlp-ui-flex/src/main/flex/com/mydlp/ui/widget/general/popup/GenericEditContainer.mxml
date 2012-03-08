@@ -5,12 +5,12 @@
 				xmlns:general="com.mydlp.ui.widget.general.*"
 				xmlns:my="http://www.mydlp.com/flex/my" 
 				xmlns:popup="com.mydlp.ui.widget.general.popup.*"
-				width="400"
 				>
 	
 	<fx:Script>
 		<![CDATA[
 			import com.mydlp.ui.domain.AbstractEntity;
+			import com.mydlp.ui.domain.AbstractNamedEntity;
 			import com.mydlp.ui.domain.AuthUser;
 			import com.mydlp.ui.domain.DataFormat;
 			import com.mydlp.ui.domain.DocumentDatabase;
@@ -23,6 +23,7 @@
 			import com.mydlp.ui.domain.Matcher;
 			import com.mydlp.ui.domain.RegularExpressionGroup;
 			import com.mydlp.ui.domain.Rule;
+			import com.mydlp.ui.domain.USBDevice;
 			import com.mydlp.ui.util.ClassMember;
 			import com.mydlp.ui.util.InteractionUtil;
 			import com.mydlp.ui.util.LangUtil;
@@ -102,6 +103,10 @@
 								targetObject[classMember.name] = FlexGlobals.topLevelApplication.inventoryTree.selectedItem.category;
 						continue;
 					}
+					else if ( targetObject is USBDevice && classMember.name == "action")
+					{
+						targetObject[classMember.name] = "P"; // TODO: will be deleted after implementing edit dialog.
+					}
 					else if 
 						(
 							classMember.name == "id" ||
@@ -138,8 +143,8 @@
 						var ipInput:IpAddressInput = new IpAddressInput();
 						ipInput.numberValue = targetObject[classMember.name];
 						BindingUtils.bindProperty(targetObject, classMember.name, ipInput, "numberValue");
-						ipInput.percentWidth = 100;
-						inputLabel = new HorizontalInputLabel()
+						ipInput.width = InputLabel.HORIZONTAL_INPUT_WIDTH;
+						inputLabel = new HorizontalInputLabel();
 						inputLabel.addElement(ipInput);
 						
 						if(classMember.name == "ipBase")
@@ -165,7 +170,7 @@
 						else
 							dfInput.dataFormats = targetObject[classMember.name];
 						BindingUtils.bindProperty(targetObject, classMember.name, dfInput, "dataFormats");
-						inputLabel = new VerticalInputLabel()
+						inputLabel = new VerticalInputLabel();
 						inputLabel.addElement(dfInput);
 						index = 8;
 					}
@@ -213,7 +218,7 @@
 						else
 							mtInput.mimeTypes = targetObject[classMember.name];
 						BindingUtils.bindProperty(targetObject, classMember.name, mtInput, "mimeTypes");
-						inputLabel = new VerticalInputLabel()
+						inputLabel = new VerticalInputLabel();
 						inputLabel.addElement(mtInput);
 						index = 8;
 					}
@@ -226,7 +231,7 @@
 						else
 							srInput.authSecurityRoles = targetObject[classMember.name];
 						BindingUtils.bindProperty(targetObject, classMember.name, srInput, "authSecurityRoles");
-						inputLabel = new VerticalInputLabel()
+						inputLabel = new VerticalInputLabel();
 						inputLabel.addElement(srInput);		
 						index = 8;
 					}
@@ -242,7 +247,7 @@
 						else
 							ifInput.informationFeatures = targetObject[classMember.name];
 						BindingUtils.bindProperty(targetObject, classMember.name, ifInput, "informationFeatures");
-						inputLabel = new VerticalInputLabel()
+						inputLabel = new VerticalInputLabel();
 						inputLabel.addElement(ifInput);
 						index = 9;
 					}
@@ -262,31 +267,35 @@
 						var checkBox:CheckBox = new CheckBox();
 						checkBox.selected = targetObject[classMember.name];
 						BindingUtils.bindProperty(targetObject, classMember.name, checkBox, "selected");
-						inputLabel = new HorizontalInputLabel()
+						inputLabel = new HorizontalInputLabel();
 						inputLabel.addElement(checkBox);
 						index = 6;
 					}
 					
-					else if(targetObject is Rule &&
-							classMember.name == "description")
+					else if ( 
+							(targetObject is Rule && classMember.name == "description") ||
+							(targetObject is USBDevice && classMember.name == "comment") 
+						)
 					{
-						var descriptionTextArea:TextArea = new TextArea();
-						descriptionTextArea.text = targetObject[classMember.name];
-						BindingUtils.bindProperty(targetObject, classMember.name, descriptionTextArea, "text");
-						descriptionTextArea.percentWidth = 100;
-						descriptionTextArea.height = 60;
-						inputLabel = new HorizontalInputLabel()
-						inputLabel.addElement(descriptionTextArea);
+						var textArea:TextArea = new TextArea();
+						textArea.text = targetObject[classMember.name];
+						BindingUtils.bindProperty(targetObject, classMember.name, textArea, "text");
+						textArea.width = InputLabel.VERTICAL_INPUT_WIDTH;
+						textArea.height = 60;
+						inputLabel = new VerticalInputLabel();
+						inputLabel.addElement(textArea);
 						index = 12;
 					}
-					
 					else
 					{
 						var textInput:TextInput = new TextInput();
-						textInput.text = targetObject[classMember.name];
+						if(targetObject is AbstractNamedEntity && classMember.name == "name")
+							textInput.text = targetObject["label"];
+						else
+							textInput.text = targetObject[classMember.name];
 						BindingUtils.bindProperty(targetObject, classMember.name, textInput, "text");
-						textInput.percentWidth = 100;
-						inputLabel = new HorizontalInputLabel()
+						textInput.width = InputLabel.HORIZONTAL_INPUT_WIDTH;
+						inputLabel = new HorizontalInputLabel();
 						inputLabel.addElement(textInput);
 						if(classMember.name == "name"){
 							index = 0;
@@ -300,6 +309,12 @@
 						}
 						else if(classMember.name == "username"){
 							index = 3;
+						}
+						else if(classMember.name == "deviceId"){
+							index = 3;
+						}
+						else if(classMember.name == "uniqId"){
+							index = 6;
 						}
 						else if(classMember.name == "email"){
 							var emailValidator:EmailValidator = new EmailValidator();

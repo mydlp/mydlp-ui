@@ -46,6 +46,7 @@
          <value>com.mydlp.ui.domain.Revision</value>
          <value>com.mydlp.ui.domain.Rule</value>
          <value>com.mydlp.ui.domain.RuleItem</value>
+         <value>com.mydlp.ui.domain.USBDevice</value>
          <value>com.mydlp.ui.domain.UserSettings</value>
          <value>com.mydlp.ui.domain.WebRule</value>
        </list>

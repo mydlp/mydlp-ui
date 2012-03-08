@@ -10,9 +10,10 @@
 			   xmlns:toolbar="com.mydlp.ui.widget.toolbar.*"
 			   xmlns:log="com.mydlp.ui.widget.log.*" 
 			   xmlns:dashboard="com.mydlp.ui.widget.dashboard.*"
+			   xmlns:revision="com.mydlp.ui.widget.revision.*"
 			   minHeight="800" minWidth="1280" 
 			   usePreloader="true"
-			   applicationComplete="onCreationComplete(event)" xmlns:revision="com.mydlp.ui.widget.revision.*"
+			   applicationComplete="onCreationComplete(event)" 
 			   >
 	<fx:Style source="/assets/style/general.css" />
 	
@@ -20,6 +21,7 @@
 		<![CDATA[
 			import com.mydlp.ui.util.LangUtil;
 			import com.mydlp.ui.widget.general.popup.ClosableTitleWindow;
+			import com.mydlp.ui.widget.option.USBDeviceCRUDGrid;
 			
 			import flash.utils.setTimeout;
 			
@@ -90,8 +92,12 @@
 				if (ruleContainer != null)
 					ruleContainer.refreshRules();
 				if (optionContainer != null)
+				{
 					if (optionContainer.userManagerTab != null)
 						optionContainer.userManagerTab.refreshUsers();
+					
+					optionContainer.miscTab.usbDeviceCrudGrid.refresh();
+				}
 				if (objectsContainer != null)
 					objectsContainer.refreshObjects();
 				if (dashboardContainer != null)

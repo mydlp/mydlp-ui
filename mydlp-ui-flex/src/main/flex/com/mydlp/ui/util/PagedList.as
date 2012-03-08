@@ -85,6 +85,7 @@ package com.mydlp.ui.util
 		
 		public function getItemIndex(item:Object):int 
 		{
+			if (_list == null) return -1;
 			return _list.getItemIndex(item);
 		}
 		
