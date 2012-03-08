@@ -105,7 +105,7 @@
 					}
 					else if ( targetObject is USBDevice && classMember.name == "action")
 					{
-						targetObject[classMember.name] = "P"; // TODO: will be deleted after implementing edit dialog.
+						targetObject[classMember.name] = "PASS"; // TODO: will be deleted after implementing edit dialog.
 					}
 					else if 
 						(
