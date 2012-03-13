@@ -21,6 +21,7 @@
 			
 			import mx.collections.ArrayCollection;
 			import mx.collections.ListCollectionView;
+			import mx.core.FlexGlobals;
 			import mx.core.IUIComponent;
 			import mx.events.DragEvent;
 			import mx.events.FlexEvent;
@@ -30,7 +31,14 @@
 			[Bindable]
 			public var ruleDP:ListCollectionView = new ArrayCollection();
 			
-			public function getRule(value:Number): Rule
+			public static function getRule(value:Number): Rule
+			{
+				if (FlexGlobals.topLevelApplication.ruleContainer == null)
+					return null;
+				return FlexGlobals.topLevelApplication.ruleContainer.getRuleI(value);
+			}
+			
+			public function getRuleI(value:Number): Rule
 			{
 				for each (var rule:* in ruleDP) 
 					if ((rule as Rule).id == value)
@@ -38,7 +46,7 @@
 				return null;
 			}
 			
-			public function getRuleLabel(value:Number) : String
+			public static function getRuleLabel(value:Number) : String
 			{
 				var labelText:String = "";
 				if (value == -1)
@@ -48,11 +56,15 @@
 				else
 				{
 					var rule:Rule = getRule(value);
-					if (rule != null){
+					
+					if (rule != null)
+					{
 						labelText +=  rule.label;
 					}
 					else
+					{
 						labelText += "id(" + value + ")";
+					}
 				}
 				return labelText;
 			}

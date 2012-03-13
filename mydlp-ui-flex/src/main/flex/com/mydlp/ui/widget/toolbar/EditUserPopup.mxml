@@ -72,7 +72,7 @@
 	</fx:Script>
 	
 	<fx:Declarations>
-		<my:remote id="re" destination="EditUserBRS" >
+		<my:remote id="re" destination="userBRS" >
 			<my:method name="isPasswordTrue" result="controlPasswordHandler(event)" />
 			<my:method name="save" result="saveHandler(event)" />
 		</my:remote>

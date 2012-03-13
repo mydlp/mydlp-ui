@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.mydlp.ui.dao.UserSettingsDAO;
 import com.mydlp.ui.domain.AuthUser;
+import com.mydlp.ui.domain.DashboardItem;
 import com.mydlp.ui.domain.UserSettings;
 import com.mydlp.ui.service.DashboardItemService;
 
@@ -36,6 +37,11 @@ public class DashboardBRSImpl implements DashboardService
 	@Override
 	public void register(String itemKey) {
 		dashboardItemService.registerForGeneration(itemKey);
+	}
+
+	@Override
+	public void remove(DashboardItem dashboardItem) {
+		userSettingsDAO.removeDashboardItem(dashboardItem);
 	}
 	
 }

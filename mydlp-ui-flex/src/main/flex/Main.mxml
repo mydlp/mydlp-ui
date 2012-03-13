@@ -19,6 +19,8 @@
 	
 	<fx:Script>
 		<![CDATA[
+			import com.mydlp.ui.domain.AuthSecurityRole;
+			import com.mydlp.ui.domain.AuthUser;
 			import com.mydlp.ui.util.LangUtil;
 			import com.mydlp.ui.widget.general.popup.ClosableTitleWindow;
 			import com.mydlp.ui.widget.option.USBDeviceCRUDGrid;
@@ -69,6 +71,18 @@
 					stage.addEventListener(KeyboardEvent.KEY_DOWN, handleUserActivity);
 				}
 				resetAutoLogout();
+				
+				re.getCurrentUser();
+			}
+			
+			protected function getCurrentUserHandler(event:ResultEvent): void
+			{
+				var currentUser:AuthUser = event.result as AuthUser;
+				
+				if (currentUser.hasRole(AuthSecurityRole.ROLE_ADMIN))
+					currentState="admin";
+				else if (currentUser.hasRole(AuthSecurityRole.ROLE_AUDITOR))
+					currentState="auditor";
 			}
 			
 			public function faultHandler(event:FaultEvent):void
@@ -118,7 +132,16 @@
 			<my:method name="save" result="genericResultHandler(event)" fault="faultHandler(event)"/>
 			<my:method name="remove" result="genericResultHandler(event)" fault="faultHandler(event)"/>
 		</my:remote>
+		<my:remote id="re" destination="userBRS" >
+			<my:method name="getCurrentUser" result="getCurrentUserHandler(event)" />
+		</my:remote>
 	</fx:Declarations>
+	
+	<s:states>
+		<s:State name="none" />
+		<s:State name="auditor" />
+		<s:State name="admin" />
+	</s:states>
 	
 	<s:layout>
 		<s:VerticalLayout gap="0" paddingTop="4" paddingBottom="24"
@@ -129,7 +152,7 @@
 	
 	<s:Spacer height="5" width="100%" />
 	
-	<s:TabBar id="tapBar" dataProvider="{vs}" fontWeight="bold" fontSize="14"/>
+	<s:TabBar id="tapBar" dataProvider="{vs}" fontWeight="bold" fontSize="14" />
 	
 	<s:Group width="100%" height="100%">
 		<s:Rect left="0" right="0" top="0" bottom="0" >
@@ -142,7 +165,8 @@
 				<s:NavigatorContent label="@Resource(bundle = 'messages', key = 'maintab.dashboard')" width="100%" height="100%">
 					<dashboard:DashboardContainer id="dashboardContainer" />
 				</s:NavigatorContent>
-				<s:NavigatorContent label="@Resource(bundle = 'messages', key = 'maintab.policy')" width="100%" height="100%">
+				<s:NavigatorContent includeIn="admin" 
+									label="@Resource(bundle = 'messages', key = 'maintab.policy')" width="100%" height="100%">
 					<s:layout>
 						<s:HorizontalLayout gap="10" />
 					</s:layout>
@@ -150,20 +174,24 @@
 					<rule:RSpacer />
 					<rule:RuleContainer id="ruleContainer" />
 				</s:NavigatorContent>
-				<s:NavigatorContent label="@Resource(bundle = 'messages', key = 'maintab.objects')" width="100%" height="100%">
+				<s:NavigatorContent includeIn="admin" 
+									label="@Resource(bundle = 'messages', key = 'maintab.objects')" width="100%" height="100%">
 					<mx:HDividedBox width="100%" height="100%">
 						<objects:ObjectsContainer id="objectsContainer"/>
 					</mx:HDividedBox>
 				</s:NavigatorContent>
-				<s:NavigatorContent label="@Resource(bundle = 'messages', key = 'maintab.options')" width="100%" height="100%">
+				<s:NavigatorContent includeIn="admin" 
+									label="@Resource(bundle = 'messages', key = 'maintab.options')" width="100%" height="100%">
 					<mx:HDividedBox width="100%" height="100%">
 						<option:OptionContainer id="optionContainer" width="100%" height="100%"/>
 					</mx:HDividedBox>
 				</s:NavigatorContent>
-				<s:NavigatorContent label="@Resource(bundle = 'messages', key = 'maintab.logs')" width="100%" height="100%">
+				<s:NavigatorContent includeIn="admin,auditor" 
+									label="@Resource(bundle = 'messages', key = 'maintab.logs')" width="100%" height="100%">
 					<log:LogContainer id="logContainer" />
 				</s:NavigatorContent>
-				<s:NavigatorContent label="@Resource(bundle = 'messages', key = 'maintab.revisions')" width="100%" height="100%">
+				<s:NavigatorContent includeIn="admin" 
+									label="@Resource(bundle = 'messages', key = 'maintab.revisions')" width="100%" height="100%">
 					<revision:RevisionContainer id="revisionContainer"/>
 				</s:NavigatorContent>
 			</mx:ViewStack>

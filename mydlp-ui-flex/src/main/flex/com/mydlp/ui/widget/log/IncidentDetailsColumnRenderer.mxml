@@ -11,6 +11,7 @@
 			import com.mydlp.ui.domain.Rule;
 			import com.mydlp.ui.domain.RuleItem;
 			import com.mydlp.ui.util.LangUtil;
+			import com.mydlp.ui.widget.policy.rule.RuleContainer;
 			
 			import mx.core.FlexGlobals;
 			import mx.events.FlexEvent;
@@ -23,7 +24,7 @@
 				
 				if (log.informationTypeId != -1)
 				{
-					var rule:Rule = FlexGlobals.topLevelApplication.ruleContainer.getRule(log.ruleId);
+					var rule:Rule = RuleContainer.getRule(log.ruleId);
 					var informationType:InformationType = findInformationType(rule, log.informationTypeId);
 					
 					labelText += LangUtil.getString("messages","log.container.column.policy.informationType") + ": ";

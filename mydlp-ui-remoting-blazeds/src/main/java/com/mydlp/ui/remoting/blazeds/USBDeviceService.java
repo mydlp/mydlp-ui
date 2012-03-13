@@ -7,7 +7,7 @@ import org.springframework.security.access.annotation.Secured;
 import com.mydlp.ui.domain.AuthSecurityRole;
 import com.mydlp.ui.domain.USBDevice;
 
-@Secured(AuthSecurityRole.ROLE_USER)
+@Secured(AuthSecurityRole.ROLE_ADMIN)
 public interface USBDeviceService {
 
 	public List<USBDevice> getUSBDevices(Integer offset, Integer limit);

@@ -40,5 +40,10 @@ public class UserSettingsDAOImpl extends AbstractPolicyDAO implements UserSettin
 		}
 		return settings;
 	}
+
+	@Override
+	public void removeDashboardItem(DashboardItem dashboardItem) {
+		getHibernateTemplate().delete(dashboardItem);
+	}
 	
 }
