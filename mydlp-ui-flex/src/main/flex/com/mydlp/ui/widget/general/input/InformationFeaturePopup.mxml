@@ -251,7 +251,8 @@
 					label.keyword="@Resource(bundle = 'messages', key = 'matcher.keyword.keywordValue.label')"
 					label.regex="@Resource(bundle = 'messages', key = 'matcher.regex.regexValue.label')">
 			<s:TextInput id="regexValue" creationComplete="{
-						 	regexValue.text = (getArgument() as RegularExpression).regex;
+						    var __r:RegularExpression = (getArgument() as RegularExpression);
+						 	regexValue.text = __r == null ? '' : __r.regex;
 						 }"/>
 		</s:FormItem>
 		<s:FormItem includeIn="document_hash,document_pdm" label="@Resource(bundle = 'messages', key = 'matcher.documentDatabase.label')">
