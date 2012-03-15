@@ -9,6 +9,9 @@
 	
 	<fx:Script>
 		<![CDATA[
+			import com.mydlp.ui.domain.ADDomainItem;
+			import com.mydlp.ui.domain.ADDomainItemGroup;
+			import com.mydlp.ui.domain.ADDomainRoot;
 			import com.mydlp.ui.domain.AbstractEntity;
 			import com.mydlp.ui.domain.AbstractNamedEntity;
 			import com.mydlp.ui.domain.AuthUser;
@@ -28,6 +31,7 @@
 			import com.mydlp.ui.util.InteractionUtil;
 			import com.mydlp.ui.util.LangUtil;
 			import com.mydlp.ui.util.ReflectionUtil;
+			import com.mydlp.ui.widget.general.input.ADDomainEnumeratingProcessInput;
 			import com.mydlp.ui.widget.general.input.AuthSecurityRolesInput;
 			import com.mydlp.ui.widget.general.input.DataFormatInput;
 			import com.mydlp.ui.widget.general.input.DocumentDatabaseFileEntryInput;
@@ -80,6 +84,12 @@
 					InteractionUtil.closeCurrentPopup();
 			}
 			
+			protected function isEditable(obj:*): Boolean
+			{
+				if (obj is ADDomainItem)
+					return false;
+				return true;
+			}
 			
 			public function populateClassMembers(targetObject:Object): void
 			{
@@ -124,7 +134,9 @@
 							(classMember.name == "coupledRuleItems" && classMember.type == ListCollectionView) ||
 							(classMember.name == "informationType" && classMember.type == InformationType) ||
 							(classMember.name == "editable" && classMember.type == Boolean) ||
-							(classMember.name == "matcher" && classMember.type == Matcher)
+							(classMember.name == "matcher" && classMember.type == Matcher) ||
+							(classMember.name == "root" && classMember.type == ADDomainRoot) ||
+							(classMember.name == "parent" && classMember.type == ADDomainItemGroup)
 						)
 					{
 						continue;
@@ -261,6 +273,14 @@
 						populateClassMembers(targetObject[classMember.name]);
 						continue;
 					}
+					else if (classMember.name == "currentlyEnumerating" && classMember.type == Boolean)
+					{
+						var addps:ADDomainEnumeratingProcessInput = new ADDomainEnumeratingProcessInput();
+						addps.currentlyEnumerating = targetObject[classMember.name];
+						inputLabel = new NoLabelInputLabel();
+						inputLabel.addElement(addps);
+						index = 9;
+					}
 					
 					else if(classMember.type == Boolean)
 					{
@@ -295,6 +315,7 @@
 							textInput.text = targetObject[classMember.name];
 						BindingUtils.bindProperty(targetObject, classMember.name, textInput, "text");
 						textInput.width = InputLabel.HORIZONTAL_INPUT_WIDTH;
+						textInput.editable = isEditable(targetObject);
 						inputLabel = new HorizontalInputLabel();
 						inputLabel.addElement(textInput);
 						if(classMember.name == "name"){
@@ -306,6 +327,52 @@
 							regExpValidator2.addEventListener(ValidationResultEvent.INVALID, invalidInput);
 							regExpValidator2.addEventListener(ValidationResultEvent.VALID, validInput);
 							validators.push(regExpValidator2);
+						}
+						else if(classMember.name == "displayName"){
+							index = 0;
+						}
+						else if(classMember.name == "domainName"){
+							index = 0;
+							var regExpValidator4:RegExpValidator = new RegExpValidator();
+							regExpValidator4.source = textInput;
+							regExpValidator4.property = "text";
+							regExpValidator4.expression = "^([\\w\\.-]{1,255})$";
+							regExpValidator4.addEventListener(ValidationResultEvent.INVALID, invalidInput);
+							regExpValidator4.addEventListener(ValidationResultEvent.VALID, validInput);
+							validators.push(regExpValidator4);
+						}
+						else if(classMember.name == "serverIp"){
+							index = 1;
+							var regExpValidator3:RegExpValidator = new RegExpValidator();
+							regExpValidator3.source = textInput;
+							regExpValidator3.property = "text";
+							regExpValidator3.expression = "^([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])$";
+							regExpValidator3.addEventListener(ValidationResultEvent.INVALID, invalidInput);
+							regExpValidator3.addEventListener(ValidationResultEvent.VALID, validInput);
+							validators.push(regExpValidator3);
+						}
+						else if(classMember.name == "loginPassword"){
+							index = 3;
+							textInput.displayAsPassword = true;
+						}
+						else if(classMember.name == "loginUsername") {
+							index = 2;
+							var regExpValidator5:RegExpValidator = new RegExpValidator();
+							regExpValidator5.source = textInput;
+							regExpValidator5.property = "text";
+							regExpValidator5.expression = "^([\\w\\.-@]{1,255})$";
+							regExpValidator5.addEventListener(ValidationResultEvent.INVALID, invalidInput);
+							regExpValidator5.addEventListener(ValidationResultEvent.VALID, validInput);
+							validators.push(regExpValidator5);
+						}
+						else if(classMember.name == "distinguishedName"){
+							index = 1;
+						}
+						else if(classMember.name == "sAMAccountName"){
+							index = 2;
+						}
+						else if(classMember.name == "userPrincipalName"){
+							index = 3;
 						}
 						else if(classMember.name == "username"){
 							index = 3;
@@ -375,7 +442,7 @@
 					}
 				}
 			}
-			public function populateCreateButton(): void
+			public function populateButtons(): void
 			{	
 				cButton.label = LangUtil.getString("messages", "generic.edit." + getSimpleName() + ".createButton.label");
 				cancelButton.label = LangUtil.getString("messages", "generic.edit.cancelButton.label");
@@ -398,7 +465,8 @@
 				
 				populateEachFormItem();
 				
-				populateCreateButton();
+				if (isEditable(formObject))
+					populateButtons();
 				
 				super.populate();
 			}

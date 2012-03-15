@@ -43,5 +43,10 @@ public class DashboardBRSImpl implements DashboardService
 	public void remove(DashboardItem dashboardItem) {
 		userSettingsDAO.removeDashboardItem(dashboardItem);
 	}
+
+	@Override
+	public DashboardItem saveDashboardItem(DashboardItem dashboardItem) {
+		return (DashboardItem) userSettingsDAO.save(dashboardItem);
+	}
 	
 }

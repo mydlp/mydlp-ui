@@ -63,10 +63,9 @@
 				message += LangUtil.getString("messages", "generic.delete." + getSimpleName() + ".dialogMessage");
 				message += ": ";
 				
-				if (formObject is AbstractNamedEntity) 
+				if (formObject["label"] != null) 
 				{
-					var namedEntity:AbstractNamedEntity = formObject as AbstractNamedEntity;
-					message += namedEntity.label;
+					message += formObject.label;
 				}
 				else if (formObject is AbstractEntity)
 				{

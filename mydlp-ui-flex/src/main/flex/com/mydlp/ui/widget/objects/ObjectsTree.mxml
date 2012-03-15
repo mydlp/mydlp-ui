@@ -17,6 +17,7 @@
 		 >
 	<fx:Script>
 		<![CDATA[
+			import com.mydlp.ui.domain.ADDomain;
 			import com.mydlp.ui.domain.AbstractEntity;
 			import com.mydlp.ui.domain.DataFormat;
 			import com.mydlp.ui.domain.DocumentDatabase;
@@ -46,6 +47,7 @@
 			protected var others:ArrayCollection = new ArrayCollection();
 			protected var regularExpressionGroups:ArrayCollection = new ArrayCollection();
 			protected var documentDatabases:ArrayCollection = new ArrayCollection();
+			protected var adDomains:ArrayCollection = new ArrayCollection();
 			
 			protected var tempOpenItems:Object;
 			
@@ -76,6 +78,7 @@
 				keywordGroups.removeAll();
 				regularExpressionGroups.removeAll();
 				documentDatabases.removeAll();
+				adDomains.removeAll();
 				others.removeAll();
 				
 				for each(var item:* in _objects)
@@ -86,6 +89,8 @@
 						regularExpressionGroups.addItem(item);
 					else if(item is DocumentDatabase)
 						documentDatabases.addItem(item);
+					else if(item is ADDomain)
+						adDomains.addItem(item);
 					else if (item is InventoryItem && (item as InventoryItem).item is Network)
 						networks.addItem(item);
 					else if (item is InventoryItem && (item as InventoryItem).item is InformationType)
@@ -133,6 +138,11 @@
 					parentDocumentDatabases.children = documentDatabases;
 					objects.addItem(parentDocumentDatabases);
 					
+					var parentADDomains:ObjectGroup = new ObjectGroup();
+					parentADDomains.label = LangUtil.getString("messages", "objects.adDomains.label");
+					parentADDomains.classType = ADDomain;
+					parentADDomains.children = adDomains;
+					objects.addItem(parentADDomains);
 					
 					var parentOthers:ObjectGroup = new ObjectGroup();
 					parentOthers.label = LangUtil.getString("messages", "objects.others.label");;

@@ -6,6 +6,8 @@
 		<![CDATA[
 			import avmplus.getQualifiedClassName;
 			
+			import com.mydlp.ui.domain.ADDomain;
+			import com.mydlp.ui.domain.ADDomainItem;
 			import com.mydlp.ui.domain.AbstractEntity;
 			import com.mydlp.ui.domain.DataFormat;
 			import com.mydlp.ui.domain.DocumentDatabase;
@@ -17,9 +19,9 @@
 			import com.mydlp.ui.util.InteractionUtil;
 			import com.mydlp.ui.util.LangUtil;
 			
-			import mx.collections.ArrayCollection;
 			import mx.collections.ListCollectionView;
 			import mx.controls.Alert;
+			import mx.controls.treeClasses.TreeListData;
 			import mx.core.FlexGlobals;
 			import mx.events.FlexEvent;
 			
@@ -30,15 +32,20 @@
 					var newDataFormat:DataFormat = new DataFormat();
 					InteractionUtil.newEditDialog(newDataFormat);
 				}
-				if(treeListData.item.classType == RegularExpressionGroup)
+				else if(treeListData.item.classType == RegularExpressionGroup)
 				{
 					var newRegularExpressionGroup:RegularExpressionGroup = new RegularExpressionGroup();
 					InteractionUtil.newEditDialog(newRegularExpressionGroup);
 				}
-				if(treeListData.item.classType == DocumentDatabase)
+				else if(treeListData.item.classType == DocumentDatabase)
 				{
 					var newDocumnetDatabase:DocumentDatabase = new DocumentDatabase();
 					InteractionUtil.newEditDialog(newDocumnetDatabase);
+				}
+				else if(treeListData.item.classType == ADDomain)
+				{
+					var newADDomain:ADDomain = new ADDomain();
+					InteractionUtil.newEditDialog(newADDomain);
 				}
 				event.stopPropagation();
 			}
@@ -50,6 +57,15 @@
 				return false;
 			}
 			
+			protected function hasRemoveButton(item:*): Boolean
+			{
+				if (item is ADDomainItem)
+					return false;
+				if (item is AbstractEntity)
+					return true;
+				return false;
+			}
+		
 		]]>
 	</fx:Script>
 	
@@ -68,7 +84,7 @@
 		<s:Group id="disclosureGroup">
 			<s:BitmapImage source="{treeListData.disclosureIcon}" visible="{treeListData.hasChildren}" />
 		</s:Group>
-		<s:BitmapImage source="{treeListData.icon}" />
+		<s:BitmapImage source="{treeListData.item.hasOwnProperty('icon') ? treeListData.item.icon : treeListData.icon}" />
 		<s:Label id="labelField" text="{treeListData.label}" paddingTop="2" width="100%"/>
 		<s:Spacer width="10"/>
 		<s:HGroup width="45" height="20" verticalAlign="middle">
@@ -77,7 +93,7 @@
 					  visible="{hasAddButton(treeListData.item)}"/>
 			<s:Button includeIn="selected" styleName="removeButtonStyle"
 					  click="{InteractionUtil.newDeleteDialog(treeListData.item)}"
-					  visible="{treeListData.item is AbstractEntity}"/>
+					  visible="{hasRemoveButton(treeListData.item)}"/>
 		</s:HGroup>
 	</s:HGroup>
 </s:MXTreeItemRenderer>

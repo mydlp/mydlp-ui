@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<popup:InputLabel xmlns:fx="http://ns.adobe.com/mxml/2009" 
+				  xmlns:s="library://ns.adobe.com/flex/spark" 
+				  xmlns:mx="library://ns.adobe.com/flex/mx" 
+				  xmlns:popup="com.mydlp.ui.widget.general.popup.*">
+	
+	<fx:Script>
+		<![CDATA[
+			import mx.core.IVisualElement;
+			
+			override public function addElement(element:IVisualElement): IVisualElement
+			{
+				return container.addElement(element);
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<s:Group width="100%" height="100%">
+		<s:layout>
+			<s:VerticalLayout verticalAlign="middle" gap="5" paddingTop="2"/>
+		</s:layout>
+		
+		<s:Group id="container" width="100%" height="100%">
+			
+		</s:Group>
+	</s:Group>
+	
+</popup:InputLabel>

@@ -9,7 +9,9 @@ import org.springframework.flex.remoting.RemotingDestination;
 import org.springframework.stereotype.Service;
 
 import com.mydlp.ui.dao.GenericDAO;
+import com.mydlp.ui.domain.ADDomain;
 import com.mydlp.ui.domain.AbstractEntity;
+import com.mydlp.ui.domain.DashboardItem;
 import com.mydlp.ui.domain.InventoryBase;
 import com.mydlp.ui.domain.Rule;
 
@@ -27,6 +29,12 @@ public class GenericBRSImpl implements GenericService
 	
 	@Autowired
 	protected RuleService ruleService;
+	
+	@Autowired
+	protected ADDomainService adDomainService;
+	
+	@Autowired
+	protected DashboardService dashboardService;
 
 	@Override
 	public AbstractEntity save(AbstractEntity item) {
@@ -35,6 +43,10 @@ public class GenericBRSImpl implements GenericService
 			return inventoryService.save((InventoryBase) item);
 		else if (item instanceof Rule)
 			return ruleService.save((Rule) item);
+		else if (item instanceof ADDomain)
+			return adDomainService.save((ADDomain) item);
+		else if (item instanceof DashboardItem)
+			return dashboardService.saveDashboardItem((DashboardItem) item);
 		else
 			return genericDAO.save(item);
 	}
@@ -46,6 +58,8 @@ public class GenericBRSImpl implements GenericService
 			inventoryService.remove((InventoryBase) item);
 		else if (item instanceof Rule)
 			ruleService.remove((Rule) item);
+		else if (item instanceof DashboardItem)
+			dashboardService.remove((DashboardItem) item);
 		else
 			genericDAO.remove(item);
 	}

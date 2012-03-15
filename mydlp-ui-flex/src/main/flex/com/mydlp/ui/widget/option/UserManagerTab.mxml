@@ -42,6 +42,7 @@
 				InteractionUtil.newDeleteDialog(userList.selectedItem);
 				editUser.enabled = false;
 				deleteUser.enabled = false;
+				setPassword.enabled = false;
 			}
 			
 			protected function editClick(event:MouseEvent):void
@@ -49,6 +50,17 @@
 				InteractionUtil.newEditDialog(userList.selectedItem);
 				editUser.enabled = false;
 				deleteUser.enabled = false;
+				setPassword.enabled = false;
+			}
+			
+			protected function setPasswordClick(event:MouseEvent):void
+			{
+				var popup:UserSetPasswordPopup = InteractionUtil.newPopup(UserSetPasswordPopup) as UserSetPasswordPopup;
+				popup.authUser = userList.selectedItem as AuthUser;
+				popup.visible = true;
+				editUser.enabled = false;
+				deleteUser.enabled = false;
+				setPassword.enabled = false;
 			}
 			
 			protected function mouseMoveOnDataGrid(event:MouseEvent):void
@@ -56,11 +68,13 @@
 				if(userList.selectedItem != null){
 					editUser.enabled = true;
 					deleteUser.enabled = true;
+					setPassword.enabled = true;
 				}
 				else
 				{
 					editUser.enabled = false;
 					deleteUser.enabled = false;
+					setPassword.enabled = false;
 				}
 			}
 			
@@ -90,14 +104,17 @@
 				<s:HorizontalLayout gap="5"/>
 			</s:layout>
 			
-			<s:Button id="deleteUser" label = "Delete User" icon = "@Embed(source='/assets/icons/16x16/trash.png')"
+			<s:Button id="deleteUser" label = "Delete User" skinClass="com.mydlp.ui.skin.RemoveBitmapLabelButton16Skin"
 					  click="deleteClick(event)" enabled="false"
 					  height="19"/>
-			<s:Button id="editUser" label="Edit User" icon = "@Embed(source='/assets/icons/16x16/edit.png')"
+			<s:Button id="editUser" label="Edit User" skinClass="com.mydlp.ui.skin.EditBitmapLabelButton16Skin"
 					  click="editClick(event)" enabled="false"
 					  height="19"/>
-			<s:Button id="newUser" label="New User" icon = "@Embed(source='/assets/icons/16x16/add.png')"
+			<s:Button id="newUser" label="New User" skinClass="com.mydlp.ui.skin.AddBitmapLabelButton16Skin"
 					  click="{InteractionUtil.newEditDialog(new AuthUser())}"
+					  height="19"/>
+			<s:Button id="setPassword" label="Set Password" skinClass="com.mydlp.ui.skin.PasswordBitmapLabelButton16Skin"
+					  click="setPasswordClick(event)" enabled="false"
 					  height="19"/>
 		</s:Group>
 	</s:VGroup>

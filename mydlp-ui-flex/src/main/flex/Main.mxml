@@ -136,7 +136,7 @@
 			<my:method name="getCurrentUser" result="getCurrentUserHandler(event)" />
 		</my:remote>
 	</fx:Declarations>
-	
+
 	<s:states>
 		<s:State name="none" />
 		<s:State name="auditor" />

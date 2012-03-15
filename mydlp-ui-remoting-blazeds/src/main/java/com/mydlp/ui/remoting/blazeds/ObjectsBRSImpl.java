@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.flex.remoting.RemotingDestination;
 import org.springframework.stereotype.Service;
 
+import com.mydlp.ui.dao.ADDomainDAO;
 import com.mydlp.ui.dao.DataFormatDAO;
 import com.mydlp.ui.dao.DocumentDatabaseDAO;
 import com.mydlp.ui.dao.InventoryDAO;
@@ -28,6 +29,9 @@ public class ObjectsBRSImpl implements ObjectsService
 	
 	@Autowired
 	protected DocumentDatabaseDAO documentDatabaseDAO;
+	
+	@Autowired
+	protected ADDomainDAO adDomainDAO;
 
 	public List<AbstractEntity> getObjects() {
 		
@@ -37,6 +41,7 @@ public class ObjectsBRSImpl implements ObjectsService
 		objects.addAll(inventoryDAO.getInventoryItems());
 		objects.addAll(regexDAO.getRegularExpressionGroups());
 		objects.addAll(documentDatabaseDAO.getDocumentDatabases());
+		objects.addAll(adDomainDAO.getADDomains());
 		
 		return objects;
 	}

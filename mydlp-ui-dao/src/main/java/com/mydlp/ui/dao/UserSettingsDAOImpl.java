@@ -8,6 +8,7 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.mydlp.ui.domain.AbstractEntity;
 import com.mydlp.ui.domain.AuthUser;
 import com.mydlp.ui.domain.DashboardItem;
 import com.mydlp.ui.domain.UserSettings;
@@ -44,6 +45,12 @@ public class UserSettingsDAOImpl extends AbstractPolicyDAO implements UserSettin
 	@Override
 	public void removeDashboardItem(DashboardItem dashboardItem) {
 		getHibernateTemplate().delete(dashboardItem);
+	}
+
+	@Override
+	public AbstractEntity save(AbstractEntity entity) {
+		getHibernateTemplate().saveOrUpdate(entity);
+		return entity;
 	}
 	
 }

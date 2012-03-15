@@ -17,4 +17,6 @@ public interface DashboardService {
 	
 	public void remove(DashboardItem dashboardItem);
 	
+	public DashboardItem saveDashboardItem(DashboardItem dashboardItem);
+	
 }

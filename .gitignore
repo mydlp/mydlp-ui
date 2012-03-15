@@ -14,6 +14,9 @@ Makefile.in
 mydlp-ui-domain-as3/src/main/flex/com/mydlp/ui/domain/*.as
 !mydlp-ui-domain-as3/src/main/flex/com/mydlp/ui/domain/AbstractNamedEntity.as
 !mydlp-ui-domain-as3/src/main/flex/com/mydlp/ui/domain/AbstractEntity.as
+!mydlp-ui-domain-as3/src/main/flex/com/mydlp/ui/domain/ADDomain.as
+!mydlp-ui-domain-as3/src/main/flex/com/mydlp/ui/domain/ADDomainUser.as
+!mydlp-ui-domain-as3/src/main/flex/com/mydlp/ui/domain/ADDomainOU.as
 !mydlp-ui-domain-as3/src/main/flex/com/mydlp/ui/domain/AuthSecurityRole.as
 !mydlp-ui-domain-as3/src/main/flex/com/mydlp/ui/domain/AuthUser.as
 !mydlp-ui-domain-as3/src/main/flex/com/mydlp/ui/domain/Config.as
