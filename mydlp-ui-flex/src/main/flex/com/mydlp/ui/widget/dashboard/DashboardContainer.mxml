@@ -120,7 +120,7 @@
 		<s:HorizontalLayout horizontalAlign="center" />
 	</s:layout>
 	
-	<s:Group width="400" height="100%">
+	<s:Group width="400" height="100%" id="printedGroup">
 		<s:layout>
 			<s:VerticalLayout verticalAlign="middle" horizontalAlign="center" gap="20"/>
 		</s:layout>

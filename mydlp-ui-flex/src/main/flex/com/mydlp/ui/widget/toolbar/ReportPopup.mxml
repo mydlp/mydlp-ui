@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:TitleWindow xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx" 
+		 xmlns:my="http://www.mydlp.com/flex/my"
+		 width="100%" height="100%"
+		 title="@Resource(bundle = 'messages', key = 'getReport.organize.title')"
+		 close="{InteractionUtil.closePopup(this)}"
+		 creationComplete="onCreationComplete(event)">
+	<fx:Script>
+		<![CDATA[
+			import com.mydlp.ui.domain.DashboardItem;
+			import com.mydlp.ui.domain.UserSettings;
+			import com.mydlp.ui.util.InteractionUtil;
+			import com.mydlp.ui.widget.dashboard.DashboardItemBox;
+			import com.mydlp.ui.widget.dashboard.DashboardItemContainer;
+			import com.mydlp.ui.widget.dashboard.HBarChartBox;
+			import com.mydlp.ui.widget.dashboard.PieChartBox;
+			import com.mydlp.ui.widget.dashboard.RSSFeedBox;
+			
+			import mx.controls.Alert;
+			import mx.core.FlexGlobals;
+			import mx.events.FlexEvent;
+			import mx.rpc.events.ResultEvent;
+			
+			import org.alivepdf.display.Display;
+			import org.alivepdf.fonts.CoreFont;
+			import org.alivepdf.fonts.FontFamily;
+			import org.alivepdf.fonts.IFont;
+			import org.alivepdf.layout.Orientation;
+			import org.alivepdf.layout.Size;
+			import org.alivepdf.layout.Unit;
+			import org.alivepdf.pdf.PDF;
+			import org.alivepdf.saving.Method;
+			
+			[Bindable]
+			protected var userSettings:UserSettings = null;
+			
+			protected var xPosition:int = 10;
+			protected var yPosition:int=160;
+			
+			protected function addChartButtonClickHandler(event:MouseEvent):void
+			{
+				var bytes:ByteArray = new ByteArray;
+				var myPDF:PDF = new PDF(Orientation.PORTRAIT, Unit.MM, Size.A4);
+				myPDF.setDisplayMode(Display.REAL);
+				myPDF.addPage();
+				myPDF.addImage(printedCanvas, null, 0, 0);
+				bytes = myPDF.save(Method.LOCAL);
+				var f:FileReference = new FileReference();
+				f.save(bytes, "testPDF.pdf");
+			}
+			
+			protected function onCreationComplete(event:FlexEvent):void
+			{
+				re.getUserSettings();
+			}
+			
+			protected function getUserSettingsHandler(event:ResultEvent):void
+			{
+				userSettings = event.result as UserSettings;
+				populateDashboardItems();	
+			}
+			
+			protected function populateDashboardItems(): void
+			{
+				if (userSettings == null) return;
+				
+				printedCanvas.removeAllElements();
+				printedCanvas.addChild(new ReportHeadComponent);
+				
+				for each (var i:* in userSettings.dashboardItems)
+				{
+					var dashboardItem:DashboardItem = i as DashboardItem;
+					var dashboardItemBox:DashboardItemBox = null;
+					if (dashboardItem.dasboardItemKey == DashboardItem.INCIDENTS_BY_PROTOCOLS_1H ||
+						dashboardItem.dasboardItemKey == DashboardItem.INCIDENTS_BY_PROTOCOLS_24H )
+					{
+						dashboardItemBox = new PieChartBox();
+					} else if (dashboardItem.dasboardItemKey == DashboardItem.INCIDENT_BY_ACTIONS_1H ||
+						dashboardItem.dasboardItemKey == DashboardItem.INCIDENT_BY_ACTIONS_24H )
+					{
+						dashboardItemBox = new PieChartBox();
+					} else if (dashboardItem.dasboardItemKey == DashboardItem.TOP_5_ADDRESS_1H ||
+						dashboardItem.dasboardItemKey == DashboardItem.TOP_5_ADDRESS_24H )
+					{
+						dashboardItemBox = new HBarChartBox();
+					} else if (dashboardItem.dasboardItemKey == DashboardItem.TOP_5_USERS_1H ||
+						dashboardItem.dasboardItemKey == DashboardItem.TOP_5_USERS_24H )
+					{
+						dashboardItemBox = new HBarChartBox();
+					} else if (dashboardItem.dasboardItemKey == DashboardItem.TOP_5_RULES_1H ||
+						dashboardItem.dasboardItemKey == DashboardItem.TOP_5_RULES_24H )
+					{
+						dashboardItemBox = new HBarChartBox();
+					} else if (dashboardItem.dasboardItemKey == DashboardItem.TOP_5_ITYPES_1H ||
+						dashboardItem.dasboardItemKey == DashboardItem.TOP_5_ITYPES_24H )
+					{
+						dashboardItemBox = new HBarChartBox();
+					} else if (dashboardItem.dasboardItemKey == DashboardItem.RSS_MYDLP_BLOG ||
+						dashboardItem.dasboardItemKey == DashboardItem.RSS_DATALOSSDB ) {
+						dashboardItemBox = new RSSFeedBox();
+					}
+					
+					if (dashboardItemBox != null)
+					{
+						var dashboardItemContainer:DashboardItemContainer = new DashboardItemContainer();
+						dashboardItemBox.itemKey = dashboardItem.dasboardItemKey;
+						dashboardItemContainer.container.addElement(dashboardItemBox);
+						dashboardItemContainer.itemKey = dashboardItem.dasboardItemKey; 
+						printedCanvas.addElement(dashboardItemContainer);
+					}
+				}
+				//printedCanvas.addChild(new ReportHeadComponent);
+				for(var j:int = 0; j < printedCanvas.numChildren; j++)
+				{
+					if(j == 0)
+					{
+						printedCanvas.getChildAt(j).x = 10;
+						printedCanvas.getChildAt(j).y = 20;
+					}
+					else{
+						printedCanvas.getChildAt(j).scaleX = 0.75;
+						printedCanvas.getChildAt(j).scaleY = 0.75;
+						printedCanvas.getChildAt(j).x = xPosition;
+						printedCanvas.getChildAt(j).y = yPosition;
+						if(j%2 == 1)
+							xPosition += 280;
+						else
+						{
+							xPosition = 10;
+							yPosition += 200
+						}
+					}
+				}
+			}
+			
+		]]>
+	</fx:Script>
+
+	<fx:Declarations>
+		<my:remote id="re" destination="dashboardBRS" >
+			<my:method name="getUserSettings" result="getUserSettingsHandler(event)" />
+		</my:remote>
+	</fx:Declarations>
+	
+	<s:Rect left="0" right="0" top="0" bottom="0" >
+		<s:stroke>
+			<s:SolidColorStroke color="0xACADAF" weight="3"/>
+		</s:stroke>
+	</s:Rect>
+	<mx:Canvas width="560" height="792" id="printedCanvas" >
+		
+	</mx:Canvas>
+	<s:Button label="@Resource(bundle = 'messages', key = 'getReport.addChart.button.label')"
+			  click="addChartButtonClickHandler(event)"/>
+</s:TitleWindow>

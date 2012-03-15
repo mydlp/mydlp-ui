@@ -55,6 +55,12 @@
       <version>${dpHibernate.version}</version> 
       <type>swc</type>
     </dependency>
+    <dependency> 
+     <groupId>AlivePDF</groupId> 
+     <artifactId>AlivePDF</artifactId> 
+     <version>${AlivePDF.version}</version> 
+     <type>swc</type>
+   </dependency>
   </dependencies>
 
   <!-- Build Settings -->
