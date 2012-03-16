@@ -18,16 +18,17 @@
 			import com.mydlp.ui.widget.dashboard.PieChartBox;
 			import com.mydlp.ui.widget.dashboard.RSSFeedBox;
 			
-			import mx.controls.Alert;
-			import mx.core.FlexGlobals;
 			import mx.events.FlexEvent;
+			import mx.graphics.ImageSnapshot;
+			import mx.graphics.codec.JPEGEncoder;
 			import mx.rpc.events.ResultEvent;
 			
 			import org.alivepdf.display.Display;
-			import org.alivepdf.fonts.CoreFont;
-			import org.alivepdf.fonts.FontFamily;
-			import org.alivepdf.fonts.IFont;
+			import org.alivepdf.images.ColorSpace;
+			import org.alivepdf.layout.Mode;
 			import org.alivepdf.layout.Orientation;
+			import org.alivepdf.layout.Position;
+			import org.alivepdf.layout.Resize;
 			import org.alivepdf.layout.Size;
 			import org.alivepdf.layout.Unit;
 			import org.alivepdf.pdf.PDF;
@@ -42,11 +43,13 @@
 			protected function addChartButtonClickHandler(event:MouseEvent):void
 			{
 				var bytes:ByteArray = new ByteArray;
-				var myPDF:PDF = new PDF(Orientation.PORTRAIT, Unit.MM, Size.A4);
-				myPDF.setDisplayMode(Display.REAL);
-				myPDF.addPage();
-				myPDF.addImage(printedCanvas, null, 0, 0);
-				bytes = myPDF.save(Method.LOCAL);
+				var reportPDF:PDF = new PDF(Orientation.PORTRAIT, Unit.MM, Size.A4);
+				reportPDF.setDisplayMode(Display.REAL);
+				reportPDF.addPage();
+				var image:ImageSnapshot = ImageSnapshot.captureImage(printedCanvas,300 , new JPEGEncoder(100), false);//for high resolution image
+				var resize:Resize = new Resize(Mode.FIT_TO_PAGE, Position.CENTERED);//for fitting into page
+				reportPDF.addImageStream(image.data, ColorSpace.DEVICE_RGB, resize);
+				bytes = reportPDF.save(Method.LOCAL);
 				var f:FileReference = new FileReference();
 				f.save(bytes, "testPDF.pdf");
 			}
@@ -111,7 +114,6 @@
 						printedCanvas.addElement(dashboardItemContainer);
 					}
 				}
-				//printedCanvas.addChild(new ReportHeadComponent);
 				for(var j:int = 0; j < printedCanvas.numChildren; j++)
 				{
 					if(j == 0)
@@ -149,7 +151,7 @@
 			<s:SolidColorStroke color="0xACADAF" weight="3"/>
 		</s:stroke>
 	</s:Rect>
-	<mx:Canvas width="560" height="792" id="printedCanvas" >
+	<mx:Canvas width="560" height="792" id="printedCanvas" backgroundColor="white">
 		
 	</mx:Canvas>
 	<s:Button label="@Resource(bundle = 'messages', key = 'getReport.addChart.button.label')"

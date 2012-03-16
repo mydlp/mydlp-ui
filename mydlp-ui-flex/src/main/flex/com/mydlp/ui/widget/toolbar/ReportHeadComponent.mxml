@@ -12,7 +12,8 @@
 				var month:Number = date.getMonth() + 1;
 				var reportDate:String = new String();
 				reportDate = LangUtil.getString('messages', 'report.headComponent.reportDate.label');
-				reportDate += date.getDate() + "-" + month + "-" + date.getFullYear();
+				reportDate += date.getDate() + "-" + month + "-" + date.getFullYear() + " / " +
+								date.getHours() + ":" + date.getMinutes();
 				return reportDate;
 			}
 		]]>
