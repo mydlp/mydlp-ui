@@ -338,6 +338,10 @@
 				var inventoryObjects:* = FlexGlobals.topLevelApplication.inventoryTree.selectedItems;
 				for each (var o:* in inventoryObjects)
 					addDroppedObject(o as InventoryBase);
+				
+				invalidateProperties();
+				refresh();
+				
 				re.save(ruleObject);
 			}
 			
