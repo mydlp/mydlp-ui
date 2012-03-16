@@ -34,6 +34,8 @@ public class Mydlp_ui {
 
     public List<Long> getFingerprints(String Filename, ByteBuffer Data) throws org.apache.thrift.TException;
 
+    public void requeueIncident(long Incidentid) throws org.apache.thrift.TException;
+
   }
 
   public interface AsyncIface {
@@ -47,6 +49,8 @@ public class Mydlp_ui {
     public void receiveChunk(String Ipaddress, long Itemid, ByteBuffer Chunkdata, int Chunknum, int Chunknumtotal, org.apache.thrift.async.AsyncMethodCallback<AsyncClient.receiveChunk_call> resultHandler) throws org.apache.thrift.TException;
 
     public void getFingerprints(String Filename, ByteBuffer Data, org.apache.thrift.async.AsyncMethodCallback<AsyncClient.getFingerprints_call> resultHandler) throws org.apache.thrift.TException;
+
+    public void requeueIncident(long Incidentid, org.apache.thrift.async.AsyncMethodCallback<AsyncClient.requeueIncident_call> resultHandler) throws org.apache.thrift.TException;
 
   }
 
@@ -186,6 +190,18 @@ public class Mydlp_ui {
         return result.success;
       }
       throw new org.apache.thrift.TApplicationException(org.apache.thrift.TApplicationException.MISSING_RESULT, "getFingerprints failed: unknown result");
+    }
+
+    public void requeueIncident(long Incidentid) throws org.apache.thrift.TException
+    {
+      send_requeueIncident(Incidentid);
+    }
+
+    public void send_requeueIncident(long Incidentid) throws org.apache.thrift.TException
+    {
+      requeueIncident_args args = new requeueIncident_args();
+      args.setIncidentid(Incidentid);
+      sendBase("requeueIncident", args);
     }
 
   }
@@ -384,6 +400,37 @@ public class Mydlp_ui {
       }
     }
 
+    public void requeueIncident(long Incidentid, org.apache.thrift.async.AsyncMethodCallback<requeueIncident_call> resultHandler) throws org.apache.thrift.TException {
+      checkReady();
+      requeueIncident_call method_call = new requeueIncident_call(Incidentid, resultHandler, this, ___protocolFactory, ___transport);
+      this.___currentMethod = method_call;
+      ___manager.call(method_call);
+    }
+
+    public static class requeueIncident_call extends org.apache.thrift.async.TAsyncMethodCall {
+      private long Incidentid;
+      public requeueIncident_call(long Incidentid, org.apache.thrift.async.AsyncMethodCallback<requeueIncident_call> resultHandler, org.apache.thrift.async.TAsyncClient client, org.apache.thrift.protocol.TProtocolFactory protocolFactory, org.apache.thrift.transport.TNonblockingTransport transport) throws org.apache.thrift.TException {
+        super(client, protocolFactory, transport, resultHandler, true);
+        this.Incidentid = Incidentid;
+      }
+
+      public void write_args(org.apache.thrift.protocol.TProtocol prot) throws org.apache.thrift.TException {
+        prot.writeMessageBegin(new org.apache.thrift.protocol.TMessage("requeueIncident", org.apache.thrift.protocol.TMessageType.CALL, 0));
+        requeueIncident_args args = new requeueIncident_args();
+        args.setIncidentid(Incidentid);
+        args.write(prot);
+        prot.writeMessageEnd();
+      }
+
+      public void getResult() throws org.apache.thrift.TException {
+        if (getState() != org.apache.thrift.async.TAsyncMethodCall.State.RESPONSE_READ) {
+          throw new IllegalStateException("Method call not finished!");
+        }
+        org.apache.thrift.transport.TMemoryInputTransport memoryTransport = new org.apache.thrift.transport.TMemoryInputTransport(getFrameBuffer().array());
+        org.apache.thrift.protocol.TProtocol prot = client.getProtocolFactory().getProtocol(memoryTransport);
+      }
+    }
+
   }
 
   public static class Processor<I extends Iface> extends org.apache.thrift.TBaseProcessor implements org.apache.thrift.TProcessor {
@@ -402,6 +449,7 @@ public class Mydlp_ui {
       processMap.put("receiveBegin", new receiveBegin());
       processMap.put("receiveChunk", new receiveChunk());
       processMap.put("getFingerprints", new getFingerprints());
+      processMap.put("requeueIncident", new requeueIncident());
       return processMap;
     }
 
@@ -482,6 +530,21 @@ public class Mydlp_ui {
         getFingerprints_result result = new getFingerprints_result();
         result.success = iface.getFingerprints(args.Filename, args.Data);
         return result;
+      }
+    }
+
+    private static class requeueIncident<I extends Iface> extends org.apache.thrift.ProcessFunction<I, requeueIncident_args> {
+      public requeueIncident() {
+        super("requeueIncident");
+      }
+
+      protected requeueIncident_args getEmptyArgsInstance() {
+        return new requeueIncident_args();
+      }
+
+      protected org.apache.thrift.TBase getResult(I iface, requeueIncident_args args) throws org.apache.thrift.TException {
+        iface.requeueIncident(args.Incidentid);
+        return null;
       }
     }
 
@@ -3941,6 +4004,303 @@ public class Mydlp_ui {
 
     private void readObject(java.io.ObjectInputStream in) throws java.io.IOException, ClassNotFoundException {
       try {
+        read(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(in)));
+      } catch (org.apache.thrift.TException te) {
+        throw new java.io.IOException(te);
+      }
+    }
+
+  }
+
+  public static class requeueIncident_args implements org.apache.thrift.TBase<requeueIncident_args, requeueIncident_args._Fields>, java.io.Serializable, Cloneable   {
+    private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("requeueIncident_args");
+
+    private static final org.apache.thrift.protocol.TField INCIDENTID_FIELD_DESC = new org.apache.thrift.protocol.TField("Incidentid", org.apache.thrift.protocol.TType.I64, (short)1);
+
+    public long Incidentid; // required
+
+    /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
+    public enum _Fields implements org.apache.thrift.TFieldIdEnum {
+      INCIDENTID((short)1, "Incidentid");
+
+      private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+
+      static {
+        for (_Fields field : EnumSet.allOf(_Fields.class)) {
+          byName.put(field.getFieldName(), field);
+        }
+      }
+
+      /**
+       * Find the _Fields constant that matches fieldId, or null if its not found.
+       */
+      public static _Fields findByThriftId(int fieldId) {
+        switch(fieldId) {
+          case 1: // INCIDENTID
+            return INCIDENTID;
+          default:
+            return null;
+        }
+      }
+
+      /**
+       * Find the _Fields constant that matches fieldId, throwing an exception
+       * if it is not found.
+       */
+      public static _Fields findByThriftIdOrThrow(int fieldId) {
+        _Fields fields = findByThriftId(fieldId);
+        if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+        return fields;
+      }
+
+      /**
+       * Find the _Fields constant that matches name, or null if its not found.
+       */
+      public static _Fields findByName(String name) {
+        return byName.get(name);
+      }
+
+      private final short _thriftId;
+      private final String _fieldName;
+
+      _Fields(short thriftId, String fieldName) {
+        _thriftId = thriftId;
+        _fieldName = fieldName;
+      }
+
+      public short getThriftFieldId() {
+        return _thriftId;
+      }
+
+      public String getFieldName() {
+        return _fieldName;
+      }
+    }
+
+    // isset id assignments
+    private static final int __INCIDENTID_ISSET_ID = 0;
+    private BitSet __isset_bit_vector = new BitSet(1);
+
+    public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
+    static {
+      Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
+      tmpMap.put(_Fields.INCIDENTID, new org.apache.thrift.meta_data.FieldMetaData("Incidentid", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+          new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.I64)));
+      metaDataMap = Collections.unmodifiableMap(tmpMap);
+      org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(requeueIncident_args.class, metaDataMap);
+    }
+
+    public requeueIncident_args() {
+    }
+
+    public requeueIncident_args(
+      long Incidentid)
+    {
+      this();
+      this.Incidentid = Incidentid;
+      setIncidentidIsSet(true);
+    }
+
+    /**
+     * Performs a deep copy on <i>other</i>.
+     */
+    public requeueIncident_args(requeueIncident_args other) {
+      __isset_bit_vector.clear();
+      __isset_bit_vector.or(other.__isset_bit_vector);
+      this.Incidentid = other.Incidentid;
+    }
+
+    public requeueIncident_args deepCopy() {
+      return new requeueIncident_args(this);
+    }
+
+    @Override
+    public void clear() {
+      setIncidentidIsSet(false);
+      this.Incidentid = 0;
+    }
+
+    public long getIncidentid() {
+      return this.Incidentid;
+    }
+
+    public requeueIncident_args setIncidentid(long Incidentid) {
+      this.Incidentid = Incidentid;
+      setIncidentidIsSet(true);
+      return this;
+    }
+
+    public void unsetIncidentid() {
+      __isset_bit_vector.clear(__INCIDENTID_ISSET_ID);
+    }
+
+    /** Returns true if field Incidentid is set (has been assigned a value) and false otherwise */
+    public boolean isSetIncidentid() {
+      return __isset_bit_vector.get(__INCIDENTID_ISSET_ID);
+    }
+
+    public void setIncidentidIsSet(boolean value) {
+      __isset_bit_vector.set(__INCIDENTID_ISSET_ID, value);
+    }
+
+    public void setFieldValue(_Fields field, Object value) {
+      switch (field) {
+      case INCIDENTID:
+        if (value == null) {
+          unsetIncidentid();
+        } else {
+          setIncidentid((Long)value);
+        }
+        break;
+
+      }
+    }
+
+    public Object getFieldValue(_Fields field) {
+      switch (field) {
+      case INCIDENTID:
+        return Long.valueOf(getIncidentid());
+
+      }
+      throw new IllegalStateException();
+    }
+
+    /** Returns true if field corresponding to fieldID is set (has been assigned a value) and false otherwise */
+    public boolean isSet(_Fields field) {
+      if (field == null) {
+        throw new IllegalArgumentException();
+      }
+
+      switch (field) {
+      case INCIDENTID:
+        return isSetIncidentid();
+      }
+      throw new IllegalStateException();
+    }
+
+    @Override
+    public boolean equals(Object that) {
+      if (that == null)
+        return false;
+      if (that instanceof requeueIncident_args)
+        return this.equals((requeueIncident_args)that);
+      return false;
+    }
+
+    public boolean equals(requeueIncident_args that) {
+      if (that == null)
+        return false;
+
+      boolean this_present_Incidentid = true;
+      boolean that_present_Incidentid = true;
+      if (this_present_Incidentid || that_present_Incidentid) {
+        if (!(this_present_Incidentid && that_present_Incidentid))
+          return false;
+        if (this.Incidentid != that.Incidentid)
+          return false;
+      }
+
+      return true;
+    }
+
+    @Override
+    public int hashCode() {
+      return 0;
+    }
+
+    public int compareTo(requeueIncident_args other) {
+      if (!getClass().equals(other.getClass())) {
+        return getClass().getName().compareTo(other.getClass().getName());
+      }
+
+      int lastComparison = 0;
+      requeueIncident_args typedOther = (requeueIncident_args)other;
+
+      lastComparison = Boolean.valueOf(isSetIncidentid()).compareTo(typedOther.isSetIncidentid());
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+      if (isSetIncidentid()) {
+        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.Incidentid, typedOther.Incidentid);
+        if (lastComparison != 0) {
+          return lastComparison;
+        }
+      }
+      return 0;
+    }
+
+    public _Fields fieldForId(int fieldId) {
+      return _Fields.findByThriftId(fieldId);
+    }
+
+    public void read(org.apache.thrift.protocol.TProtocol iprot) throws org.apache.thrift.TException {
+      org.apache.thrift.protocol.TField field;
+      iprot.readStructBegin();
+      while (true)
+      {
+        field = iprot.readFieldBegin();
+        if (field.type == org.apache.thrift.protocol.TType.STOP) { 
+          break;
+        }
+        switch (field.id) {
+          case 1: // INCIDENTID
+            if (field.type == org.apache.thrift.protocol.TType.I64) {
+              this.Incidentid = iprot.readI64();
+              setIncidentidIsSet(true);
+            } else { 
+              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, field.type);
+            }
+            break;
+          default:
+            org.apache.thrift.protocol.TProtocolUtil.skip(iprot, field.type);
+        }
+        iprot.readFieldEnd();
+      }
+      iprot.readStructEnd();
+
+      // check for required fields of primitive type, which can't be checked in the validate method
+      validate();
+    }
+
+    public void write(org.apache.thrift.protocol.TProtocol oprot) throws org.apache.thrift.TException {
+      validate();
+
+      oprot.writeStructBegin(STRUCT_DESC);
+      oprot.writeFieldBegin(INCIDENTID_FIELD_DESC);
+      oprot.writeI64(this.Incidentid);
+      oprot.writeFieldEnd();
+      oprot.writeFieldStop();
+      oprot.writeStructEnd();
+    }
+
+    @Override
+    public String toString() {
+      StringBuilder sb = new StringBuilder("requeueIncident_args(");
+      boolean first = true;
+
+      sb.append("Incidentid:");
+      sb.append(this.Incidentid);
+      first = false;
+      sb.append(")");
+      return sb.toString();
+    }
+
+    public void validate() throws org.apache.thrift.TException {
+      // check for required fields
+    }
+
+    private void writeObject(java.io.ObjectOutputStream out) throws java.io.IOException {
+      try {
+        write(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(out)));
+      } catch (org.apache.thrift.TException te) {
+        throw new java.io.IOException(te);
+      }
+    }
+
+    private void readObject(java.io.ObjectInputStream in) throws java.io.IOException, ClassNotFoundException {
+      try {
+        // it doesn't seem like you should have to do this, but java serialization is wacky, and doesn't call the default constructor.
+        __isset_bit_vector = new BitSet(1);
         read(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(in)));
       } catch (org.apache.thrift.TException te) {
         throw new java.io.IOException(te);
