@@ -77,7 +77,7 @@
 				 labelField="label"
 				 width="100%" height="80%"
 				 showRoot="true"
-				 allowMultipleSelection="false"
+				 allowMultipleSelection="true"
 				 dataProvider="{adDomains}"
 				 itemRenderer="com.mydlp.ui.widget.general.input.ADDomainItemGroupTreeRenderer"
 				 folderOpenIcon="@Embed('/assets/icons/16x16/folder.png')"
