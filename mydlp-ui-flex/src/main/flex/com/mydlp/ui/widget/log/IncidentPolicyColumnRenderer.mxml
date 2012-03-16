@@ -83,7 +83,7 @@
 						labelText += "\n" + LangUtil.getString("messages","log.container.column.policy.requeuedOn") 
 										  + ": " + log.requeueStatus.date.toString();
 					else
-						labelText += "\n" + LangUtil.getString("messages","log.container.column.policy.requeued");
+						labelText += "\n" + LangUtil.getString("messages","log.container.column.policy.requeueOnProgress");
 				}
 				
 				return labelText;
@@ -93,6 +93,16 @@
 			{
 				FlexGlobals.topLevelApplication.ruleContainer.ruleList.selectedItem = selectedRule;
 				FlexGlobals.topLevelApplication.tapBar.selectedIndex = 1; // index of policy tab
+			}
+			
+			protected function requeueButtonClickHandler(event:MouseEvent):void
+			{
+				var log:IncidentLog = data as IncidentLog;
+				FlexGlobals.topLevelApplication.logContainer.requeueIncident(log);
+				log.requeueStatus.isRequeued = true;
+				data = log;
+				lblData.text = getPolicyText(data);
+				requeueButton.visible = false;
 			}
 			
 		]]>
@@ -132,7 +142,7 @@
 				<s:Button id="requeueButton" skinClass="com.mydlp.ui.skin.RequeueBitmapButton16Skin"
 						  toolTip="@Resource(bundle = 'messages', key = 'log.requeue.tooltip')"
 						  includeInLayout="{isRequeueVisible(data)}"
-						  />
+						  click="requeueButtonClickHandler(event)" />
 			</s:HGroup>
 		</s:Group>
 		

@@ -21,4 +21,6 @@ public interface LogService {
 	
 	public List<String> getFilenamesForContent(Integer id);
 	
+	public void requeueIncident(IncidentLog log);
+	
 }

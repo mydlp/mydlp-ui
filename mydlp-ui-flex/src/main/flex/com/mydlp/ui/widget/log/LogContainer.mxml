@@ -8,6 +8,7 @@
 					  creationComplete="onCreationComplete(event)">
 	<fx:Script>
 		<![CDATA[
+			import com.mydlp.ui.domain.IncidentLog;
 			import com.mydlp.ui.domain.IncidentLogFileContent;
 			import com.mydlp.ui.util.AsyncListDataProvider;
 			import com.mydlp.ui.util.LangUtil;
@@ -133,6 +134,12 @@
 				generateCriteriaList();
 				logSearchDP.init();
 			}
+			
+			public function requeueIncident(value:IncidentLog): void
+			{
+				re.requeueIncident(value);
+			}
+				
 			
 		]]>
 	</fx:Script>

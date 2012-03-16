@@ -12,6 +12,7 @@ import com.mydlp.ui.domain.AuthUser;
 import com.mydlp.ui.domain.IncidentLog;
 import com.mydlp.ui.domain.IncidentLogFileContent;
 import com.mydlp.ui.service.SolrService;
+import com.mydlp.ui.thrift.MyDLPUIThriftService;
 
 @Service("logBRS")
 @RemotingDestination
@@ -25,6 +26,9 @@ public class LogBRSImpl implements LogService
 	
 	@Autowired
 	protected UserService userService;
+	
+	@Autowired
+	protected MyDLPUIThriftService myDLPUIThriftService;
 
 	@Override
 	public List<IncidentLog> getLogs(List<List<Object>> criteriaList, Integer offset, Integer count) {
@@ -61,6 +65,11 @@ public class LogBRSImpl implements LogService
 	@Override
 	public List<String> getFilenamesForContent(Integer id) {
 		return incidentLogDAO.getFilenamesForContent(id);
+	}
+
+	@Override
+	public void requeueIncident(IncidentLog log) {
+		myDLPUIThriftService.requeueIncident(log.getId());
 	}
 
 }

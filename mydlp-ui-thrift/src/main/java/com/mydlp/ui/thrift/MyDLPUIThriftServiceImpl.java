@@ -127,4 +127,17 @@ public class MyDLPUIThriftServiceImpl implements MyDLPUIThriftService {
 		return null;
 	}
 
+	@Override
+	public void requeueIncident(Integer incidentId) {
+		try {
+			ensureOpen();
+			client.requeueIncident(incidentId);
+		} catch (NullPointerException e) {
+			logger.error("Can not establish thrift service connection.");
+		} catch (TException e) {
+			logger.error("Thrift compile filter", e);
+			destroy();
+		}
+	}
+
 }

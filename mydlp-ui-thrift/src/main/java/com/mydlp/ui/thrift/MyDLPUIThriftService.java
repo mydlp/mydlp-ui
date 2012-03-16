@@ -16,4 +16,5 @@ public interface MyDLPUIThriftService {
     
     public List<Long> getFingerprints(String filename, ByteBuffer data);
     
+    public void requeueIncident(Integer incidentId);
 }
