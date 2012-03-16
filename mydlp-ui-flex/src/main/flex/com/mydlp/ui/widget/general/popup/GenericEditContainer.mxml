@@ -33,6 +33,7 @@
 			import com.mydlp.ui.util.ReflectionUtil;
 			import com.mydlp.ui.widget.general.input.ADDomainEnumeratingProcessInput;
 			import com.mydlp.ui.widget.general.input.AuthSecurityRolesInput;
+			import com.mydlp.ui.widget.general.input.AuthorityScopeADItemInput;
 			import com.mydlp.ui.widget.general.input.DataFormatInput;
 			import com.mydlp.ui.widget.general.input.DocumentDatabaseFileEntryInput;
 			import com.mydlp.ui.widget.general.input.InformationFeatureInput;
@@ -245,7 +246,7 @@
 						BindingUtils.bindProperty(targetObject, classMember.name, srInput, "authSecurityRoles");
 						inputLabel = new VerticalInputLabel();
 						inputLabel.addElement(srInput);		
-						index = 8;
+						index = 5;
 					}
 					
 					else if (targetObject is InformationDescription &&
@@ -273,6 +274,20 @@
 						populateClassMembers(targetObject[classMember.name]);
 						continue;
 					}
+					else if (targetObject is AuthUser &&
+						classMember.name == "authorityScopeADItems" && 
+						classMember.type == ListCollectionView)
+					{
+						var asaiInput:AuthorityScopeADItemInput = new AuthorityScopeADItemInput();
+						if (targetObject[classMember.name] == null)
+							asaiInput.authorityScopeADItems = new ArrayCollection();
+						else
+							asaiInput.authorityScopeADItems = targetObject[classMember.name];
+						BindingUtils.bindProperty(targetObject, classMember.name, asaiInput, "authorityScopeADItems");
+						inputLabel = new VerticalInputLabel();
+						inputLabel.addElement(asaiInput);
+						index = 7;
+					}
 					else if (classMember.name == "currentlyEnumerating" && classMember.type == Boolean)
 					{
 						var addps:ADDomainEnumeratingProcessInput = new ADDomainEnumeratingProcessInput();
@@ -280,16 +295,6 @@
 						inputLabel = new NoLabelInputLabel();
 						inputLabel.addElement(addps);
 						index = 9;
-					}
-					
-					else if(classMember.type == Boolean)
-					{
-						var checkBox:CheckBox = new CheckBox();
-						checkBox.selected = targetObject[classMember.name];
-						BindingUtils.bindProperty(targetObject, classMember.name, checkBox, "selected");
-						inputLabel = new HorizontalInputLabel();
-						inputLabel.addElement(checkBox);
-						index = 6;
 					}
 					
 					else if ( 
@@ -306,6 +311,20 @@
 						inputLabel.addElement(textArea);
 						index = 12;
 					}
+					else if(classMember.type == Boolean)
+					{
+						var checkBox:CheckBox = new CheckBox();
+						checkBox.selected = targetObject[classMember.name];
+						BindingUtils.bindProperty(targetObject, classMember.name, checkBox, "selected");
+						inputLabel = new HorizontalInputLabel();
+						inputLabel.addElement(checkBox);
+
+						if (classMember.name == "isActive")
+							index = 4;
+						else 
+							index = 6;
+					}
+					
 					else
 					{
 						var textInput:TextInput = new TextInput();
@@ -390,6 +409,7 @@
 							emailValidator.addEventListener(ValidationResultEvent.INVALID, invalidInput);
 							emailValidator.addEventListener(ValidationResultEvent.VALID, validInput);
 							validators.push(emailValidator);
+							index = 2;
 						}
 						else if(classMember.name == "password"){
 							index = 5;
@@ -433,8 +453,9 @@
 			
 			public function populateEachFormItem():void
 			{
-				sourceLabelList.sortOn("order", Array.DESCENDING, Array.NUMERIC);
-				for(var i:int = sourceLabelList.length-1; i >= 0; i--){
+				sourceLabelList.sortOn("order", [Array.DESCENDING, Array.NUMERIC]);
+				//for(var i:int = sourceLabelList.length-1; i >= 0; i--){
+				for(var i:int = 0; i < sourceLabelList.length; i++){
 					var tempElement:InputLabelIndexTuple = sourceLabelList[i] as InputLabelIndexTuple;
 					if(tempElement != null){
 						var tempInputLabel:InputLabel = tempElement.vs;

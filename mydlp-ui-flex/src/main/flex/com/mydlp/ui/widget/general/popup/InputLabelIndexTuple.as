@@ -5,9 +5,9 @@ package com.mydlp.ui.widget.general.popup
 		public var order:Number;
 		public var vs:InputLabel;
 		
-		public function InputLabelIndexTuple(order:Number, v:InputLabel):void
+		public function InputLabelIndexTuple(orderv:Number, v:InputLabel):void
 		{
-			this.order = order;
+			this.order = orderv;
 			this.vs = v;
 		}
 	}

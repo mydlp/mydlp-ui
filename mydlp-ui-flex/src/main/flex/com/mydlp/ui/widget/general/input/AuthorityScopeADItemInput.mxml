@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:SkinnableContainer xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		  xmlns:s="library://ns.adobe.com/flex/spark" 
+		  xmlns:my="http://www.mydlp.com/flex/my"
+		  xmlns:mx="library://ns.adobe.com/flex/mx"
+		  width="{InputLabel.VERTICAL_INPUT_WIDTH}"
+		  height="150" creationComplete="{refresh()}">
+	<fx:Script>
+		<![CDATA[
+			import com.mydlp.ui.domain.ADDomain;
+			import com.mydlp.ui.domain.ADDomainItem;
+			import com.mydlp.ui.widget.general.popup.InputLabel;
+			
+			import mx.collections.ArrayCollection;
+			import mx.rpc.events.ResultEvent;
+			
+			[Bindable]
+			protected var adDomains:ListCollectionView;
+			
+			protected function removeClickHandler(event:MouseEvent):void
+			{
+				asaiList.dataGroup.invalidateDisplayList();
+				for each (var o:Object in asaiList.selectedIndices)
+					authorityScopeADItems.removeItemAt(o as int);
+					asaiList.validateNow();
+			}
+			
+			protected function addClickHandler(event:MouseEvent):void
+			{
+				asaiList.dataGroup.invalidateDisplayList();
+				
+				for each (var o:Object in adTree.selectedItems)
+				{
+					if (o is ADDomain)
+						continue;
+					if (!authorityScopeADItems.contains(o))
+						authorityScopeADItems.addItem(o);
+				}
+				
+				asaiList.validateNow();
+			}
+			
+			protected function getADDomainsHandler(event:ResultEvent): void
+			{
+				adDomains = event.result as ListCollectionView;
+				adTree.validateNow();
+			}
+			
+			public function refresh(): void
+			{
+				adTree.invalidateList();
+				re.getADDomains();
+			}
+			
+			
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<mx:ListCollectionView id="authorityScopeADItems" />
+		
+		<my:remote id="re" destination="adDomainBRS">
+			<my:method name="getADDomains" result="getADDomainsHandler(event)" />
+		</my:remote>
+	</fx:Declarations>
+	
+	<s:layout>
+		<s:HorizontalLayout verticalAlign="middle" gap="2"/>
+	</s:layout>
+	
+	<s:Group width="53%" height="100%">
+		<s:layout>
+			<s:VerticalLayout gap="2"/>
+		</s:layout>
+		<s:Label text="@Resource(bundle = 'messages', key = 'generic.edit.input.dataFormats.odfList.label')" />
+		
+		<mx:Tree id="adTree"
+				 labelField="label"
+				 width="100%" height="80%"
+				 showRoot="true"
+				 allowMultipleSelection="false"
+				 dataProvider="{adDomains}"
+				 itemRenderer="com.mydlp.ui.widget.general.input.ADDomainItemGroupTreeRenderer"
+				 folderOpenIcon="@Embed('/assets/icons/16x16/folder.png')"
+				 folderClosedIcon="@Embed('/assets/icons/16x16/folder.png')"
+				 />
+		
+	</s:Group>
+	
+	<s:Group width="14%" height="100%">
+		<s:layout>
+			<s:VerticalLayout gap="2" verticalAlign="middle" horizontalAlign="center"/>
+		</s:layout>
+		<s:Button skinClass="com.mydlp.ui.skin.RightBitmapButton32Skin" click="addClickHandler(event)"/>
+		<s:Button skinClass="com.mydlp.ui.skin.LeftBitmapButton32Skin" click="removeClickHandler(event)" 
+				  				enabled="{asaiList.selectedIndex != -1}"/>
+	</s:Group>
+	
+	<s:Group width="33%" height="100%">
+		<s:layout>
+			<s:VerticalLayout gap="2"/>
+		</s:layout>
+		<s:Label text="@Resource(bundle = 'messages', key = 'generic.edit.input.authorityScopeADItems.asaiList.label')" />
+		<s:List id="asaiList" dataProvider="{authorityScopeADItems}" 
+				width="100%" height="80%"
+				itemRenderer="com.mydlp.ui.widget.general.input.ADDomainItemGroupRenderer" />
+	</s:Group>
+	
+</s:SkinnableContainer>

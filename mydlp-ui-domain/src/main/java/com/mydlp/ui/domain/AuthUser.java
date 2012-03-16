@@ -21,6 +21,8 @@ public class AuthUser extends AbstractEntity {
 	protected String email;
 	protected Boolean isActive;
 	protected List<AuthSecurityRole> roles;
+	protected Boolean hasAuthorityScope;
+	protected List<ADDomainItem> authorityScopeADItems;
 
 	@Column(unique=true)
 	public String getUsername() {
@@ -55,6 +57,23 @@ public class AuthUser extends AbstractEntity {
 	}
 	public void setRoles(List<AuthSecurityRole> roles) {
 		this.roles = roles;
+	}
+	
+	@Column(nullable=false)
+	public Boolean getHasAuthorityScope() {
+		return hasAuthorityScope;
+	}
+	public void setHasAuthorityScope(Boolean hasAuthorityScope) {
+		this.hasAuthorityScope = hasAuthorityScope;
+	}
+	
+	@ManyToMany
+	public List<ADDomainItem> getAuthorityScopeADItems() {
+		return authorityScopeADItems;
+	}
+	public void setAuthorityScopeADItems(
+			List<ADDomainItem> authorityScopeADItems) {
+		this.authorityScopeADItems = authorityScopeADItems;
 	}
 	
 }

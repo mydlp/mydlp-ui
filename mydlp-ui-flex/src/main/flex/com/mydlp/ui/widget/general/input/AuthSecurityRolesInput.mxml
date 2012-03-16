@@ -4,7 +4,7 @@
 		  xmlns:my="http://www.mydlp.com/flex/my"
 		  xmlns:mx="library://ns.adobe.com/flex/mx"
 		  width="{InputLabel.VERTICAL_INPUT_WIDTH}"
-		  height="150" creationComplete="{re.getRoles()}"
+		  creationComplete="{re.getRoles()}"
 		  xmlns:util="com.mydlp.ui.util.*">
 	<fx:Script>
 		<![CDATA[
@@ -63,9 +63,9 @@
 		</s:layout>
 		<s:Label text="@Resource(bundle = 'messages', key = 'generic.edit.input.authSecurity.srList.label')" />
 		<s:List id="srList" dataProvider="{allAuthSecurity}" 
-				width="100%" height="20%"
+				width="100%" height="64"
 				itemRenderer="com.mydlp.ui.widget.general.input.AuthSecurityRoleRenderer"
-				allowMultipleSelection="true"
+				allowMultipleSelection="false"
 				change="onChange(event)" />
 	</s:Group>
 	

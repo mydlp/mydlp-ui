@@ -8,6 +8,7 @@ import org.springframework.flex.remoting.RemotingDestination;
 import org.springframework.stereotype.Service;
 
 import com.mydlp.ui.dao.IncidentLogDAO;
+import com.mydlp.ui.domain.AuthUser;
 import com.mydlp.ui.domain.IncidentLog;
 import com.mydlp.ui.domain.IncidentLogFileContent;
 import com.mydlp.ui.service.SolrService;
@@ -21,20 +22,20 @@ public class LogBRSImpl implements LogService
 	
 	@Autowired 
 	protected SolrService solrService;
-
-	@Override
-	public List<IncidentLog> getLogs() {
-		return incidentLogDAO.getIncidents();
-	}
+	
+	@Autowired
+	protected UserService userService;
 
 	@Override
 	public List<IncidentLog> getLogs(List<List<Object>> criteriaList, Integer offset, Integer count) {
-		return incidentLogDAO.getIncidents(criteriaList, offset, count);
+		AuthUser currentUser = userService.getCurrentUser();
+		return incidentLogDAO.getIncidents(currentUser, criteriaList, offset, count);
 	}
 
 	@Override
 	public Long getLogCount(List<List<Object>> criteriaList) {
-		return incidentLogDAO.getIncidentCount(criteriaList);
+		AuthUser currentUser = userService.getCurrentUser();
+		return incidentLogDAO.getIncidentCount(currentUser, criteriaList);
 	}
 
 	protected List<IncidentLogFileContent> loadLogs(List<Integer> ids) {

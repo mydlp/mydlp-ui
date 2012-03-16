@@ -3,12 +3,15 @@ package com.mydlp.ui.dao;
 import java.util.List;
 
 import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.criterion.Property;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.mydlp.ui.domain.ADDomain;
 import com.mydlp.ui.domain.ADDomainItem;
+import com.mydlp.ui.domain.ADDomainOU;
+import com.mydlp.ui.domain.ADDomainUser;
 import com.mydlp.ui.domain.AbstractEntity;
 
 
@@ -51,6 +54,17 @@ public class ADDomainDAOImpl extends AbstractPolicyDAO implements ADDomainDAO {
 		DetachedCriteria criteria = DetachedCriteria.forClass(ADDomain.class);
 		return getHibernateTemplate().findByCriteria(criteria);
 	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<String> getUserPrincipalNames(ADDomainOU adOU) {
+		DetachedCriteria criteria = 
+				DetachedCriteria.forClass(ADDomainUser.class)
+				.add(Restrictions.eq("parent", adOU))
+				.setProjection(Property.forName("userPrincipalName"));
+		return getHibernateTemplate().findByCriteria(criteria);
+	}
+
 
 
 }

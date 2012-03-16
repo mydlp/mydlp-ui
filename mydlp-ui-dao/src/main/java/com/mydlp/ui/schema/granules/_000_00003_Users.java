@@ -74,6 +74,7 @@ public class _000_00003_Users extends AbstractGranule {
 		user.setEmail("user@mydlp.com");
 		user.setPassword("a94a8fe5ccb19ba61c4c0873d391e987982fbbd3"); // sha1 for 'test'
 		user.setIsActive(true);
+		user.setHasAuthorityScope(false);
 		List<AuthSecurityRole> roles = new ArrayList<AuthSecurityRole>();
 		roles.add(roleAdmin);
 		user.setRoles(roles);
@@ -83,6 +84,7 @@ public class _000_00003_Users extends AbstractGranule {
 		user2.setEmail("user@mydlp.com");
 		user2.setPassword("a94a8fe5ccb19ba61c4c0873d391e987982fbbd3"); // sha1 for 'test'
 		user2.setIsActive(true);
+		user2.setHasAuthorityScope(false);
 		List<AuthSecurityRole> roles2 = new ArrayList<AuthSecurityRole>();
 		roles2.add(roleAuditor);
 		user2.setRoles(roles2);

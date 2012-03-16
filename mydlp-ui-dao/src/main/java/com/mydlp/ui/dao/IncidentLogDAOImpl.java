@@ -10,12 +10,19 @@ import java.util.Map;
 import org.hibernate.Query;
 import org.hibernate.criterion.CriteriaSpecification;
 import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Property;
 import org.hibernate.criterion.Restrictions;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.mydlp.ui.domain.ADDomainItem;
+import com.mydlp.ui.domain.ADDomainOU;
+import com.mydlp.ui.domain.ADDomainUser;
+import com.mydlp.ui.domain.AuthUser;
 import com.mydlp.ui.domain.IncidentLog;
 import com.mydlp.ui.domain.IncidentLogFile;
 import com.mydlp.ui.domain.IncidentLogFileContent;
@@ -26,28 +33,49 @@ public class IncidentLogDAOImpl extends AbstractLogDAO implements IncidentLogDAO
 	
 	protected static final String MAPKEY_LABEL = "labelKey";
 	protected static final String MAPKEY_VALUE = "value";
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<IncidentLog> getIncidents() {
-		DetachedCriteria criteria = 
-				DetachedCriteria.forClass(IncidentLog.class)
-					.addOrder(Order.desc("id"));
-		return getHibernateTemplate().findByCriteria(criteria);
-	}
+	
+	@Autowired
+	protected ADDomainDAO adDomainDAO;
 
 	@Override
-	public Long getIncidentCount(List<List<Object>> criteriaList) {
+	public Long getIncidentCount(AuthUser user, List<List<Object>> criteriaList) {
 		DetachedCriteria criteria = 
 				DetachedCriteria.forClass(IncidentLog.class)
 					.setProjection(Projections.rowCount());
-		criteria = applyUserCriteria(criteria, criteriaList);
+		criteria = applyUserCriteria(criteria, user);
+		criteria = applyCriteriaList(criteria, criteriaList);
 		@SuppressWarnings("unchecked")
 		List<Long> returnList = getHibernateTemplate().findByCriteria(criteria);
 		return DAOUtil.getSingleResult(returnList);
 	}
 	
-	protected DetachedCriteria applyUserCriteria(DetachedCriteria detachedCriteria, List<List<Object>> criteriaList)
+	protected DetachedCriteria applyUserCriteria(DetachedCriteria detachedCriteria, AuthUser user)
+	{
+		DetachedCriteria criteria = detachedCriteria;
+		
+		if (!user.getHasAuthorityScope())
+			return criteria;
+		
+		Disjunction disjunction = Restrictions.disjunction();
+		disjunction.add(Restrictions.sqlRestriction("(1=0)")); //  defaults to false
+		
+		for (ADDomainItem item : user.getAuthorityScopeADItems()) {
+			if (item instanceof ADDomainUser) {
+				ADDomainUser adUser = (ADDomainUser) item;
+				disjunction.add(Property.forName("sourceUser").eq(adUser.getUserPrincipalName()));
+			} else if (item instanceof ADDomainOU) {
+				ADDomainOU adOU = (ADDomainOU) item;
+				List<String> names = adDomainDAO.getUserPrincipalNames(adOU);
+				disjunction.add(Property.forName("sourceUser").in(names));
+			}
+		}
+		
+		criteria = criteria.add(disjunction);
+		
+		return criteria;
+	}
+	
+	protected DetachedCriteria applyCriteriaList(DetachedCriteria detachedCriteria, List<List<Object>> criteriaList)
 	{
 		DetachedCriteria criteria = detachedCriteria;
 		for (List<Object> list : criteriaList) {
@@ -71,11 +99,12 @@ public class IncidentLogDAOImpl extends AbstractLogDAO implements IncidentLogDAO
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<IncidentLog> getIncidents(List<List<Object>> criteriaList, Integer offset, Integer limit) {
+	public List<IncidentLog> getIncidents(AuthUser user, List<List<Object>> criteriaList, Integer offset, Integer limit) {
 		DetachedCriteria criteria = 
 				DetachedCriteria.forClass(IncidentLog.class)
 					.addOrder(Order.desc("id"));
-		criteria = applyUserCriteria(criteria, criteriaList);
+		criteria = applyUserCriteria(criteria, user);
+		criteria = applyCriteriaList(criteria, criteriaList);
 		return criteria.getExecutableCriteria(getSession())
 			.setFirstResult(offset)
 			.setMaxResults(limit)

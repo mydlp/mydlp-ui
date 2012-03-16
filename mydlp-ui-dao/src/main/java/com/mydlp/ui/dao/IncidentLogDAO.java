@@ -3,6 +3,7 @@ package com.mydlp.ui.dao;
 import java.util.List;
 import java.util.Map;
 
+import com.mydlp.ui.domain.AuthUser;
 import com.mydlp.ui.domain.IncidentLog;
 import com.mydlp.ui.domain.IncidentLogFile;
 import com.mydlp.ui.domain.IncidentLogFileContent;
@@ -10,13 +11,11 @@ import com.mydlp.ui.domain.IncidentLogFileContent;
 
 public interface IncidentLogDAO {
 
-	public List<IncidentLog> getIncidents();
-	
 	public IncidentLogFileContent getIncidentContent(Integer id);
 	
-	public List<IncidentLog> getIncidents(List<List<Object>> criteriaList, Integer offset, Integer limit);
+	public List<IncidentLog> getIncidents(AuthUser user, List<List<Object>> criteriaList, Integer offset, Integer limit);
 	
-	public Long getIncidentCount(List<List<Object>> criteriaList);
+	public Long getIncidentCount(AuthUser user, List<List<Object>> criteriaList);
 	
 	public IncidentLogFile geIncidentLogFile(Integer id);
 	

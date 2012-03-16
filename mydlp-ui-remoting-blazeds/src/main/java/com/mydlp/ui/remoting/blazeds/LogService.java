@@ -11,8 +11,6 @@ import com.mydlp.ui.domain.IncidentLogFileContent;
 @Secured({AuthSecurityRole.ROLE_ADMIN, AuthSecurityRole.ROLE_AUDITOR})
 public interface LogService {
 
-	public List<IncidentLog> getLogs();
-	
 	public List<IncidentLog> getLogs(List<List<Object>> criteriaList, Integer offset, Integer count);
 	
 	public Long getLogCount(List<List<Object>> criteriaList);

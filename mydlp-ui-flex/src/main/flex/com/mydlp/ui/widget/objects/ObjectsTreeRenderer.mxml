@@ -4,8 +4,6 @@
 					  xmlns:mx="library://ns.adobe.com/flex/mx">
 	<fx:Script>
 		<![CDATA[
-			import avmplus.getQualifiedClassName;
-			
 			import com.mydlp.ui.domain.ADDomain;
 			import com.mydlp.ui.domain.ADDomainItem;
 			import com.mydlp.ui.domain.AbstractEntity;
