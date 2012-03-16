@@ -34,6 +34,16 @@
 				return false;
 			}
 			
+			protected function isRequeueVisible(value:*): Boolean
+			{
+				if (value == null) return false;
+				var log:IncidentLog = value as IncidentLog;
+				if (log.channel == "M" && log.action == "Q" && 
+					log.requeueStatus != null && !log.requeueStatus.isRequeued)
+					return true;
+				return false;
+			}
+			
 			
 			protected function getPolicyText(value:*):String {
 				if (value == null) return "";
@@ -65,6 +75,15 @@
 					case "M": labelText += LangUtil.getString("messages","log.container.column.policy.channel.mail"); break;
 					case "P": labelText += LangUtil.getString("messages","log.container.column.policy.channel.printer"); break;
 					default: labelText += log.channel; break;
+				}
+				
+				if (log.requeueStatus != null && log.requeueStatus.isRequeued)
+				{
+					if (log.requeueStatus.date != null)
+						labelText += "\n" + LangUtil.getString("messages","log.container.column.policy.requeuedOn") 
+										  + ": " + log.requeueStatus.date.toString();
+					else
+						labelText += "\n" + LangUtil.getString("messages","log.container.column.policy.requeued");
 				}
 				
 				return labelText;
@@ -104,10 +123,17 @@
 			<s:layout>
 				<s:VerticalLayout verticalAlign="middle" horizontalAlign="left"/>
 			</s:layout>
-			<s:Button includeIn="selected" id="gotoRuleButton" skinClass="com.mydlp.ui.skin.GotoButton16Skin"
-					  toolTip="@Resource(bundle = 'messages', key = 'log.gotoRule.tooltip')"
-					  visible="{isGotoVisible(data)}"
-					  click="goToRuleButtonClickHandler(event)" />
+			<s:HGroup includeIn="selected">
+				<s:Button  id="gotoRuleButton" skinClass="com.mydlp.ui.skin.GotoButton16Skin"
+						  toolTip="@Resource(bundle = 'messages', key = 'log.gotoRule.tooltip')"
+						  includeInLayout="{isGotoVisible(data)}"
+						  click="goToRuleButtonClickHandler(event)" />
+				
+				<s:Button id="requeueButton" skinClass="com.mydlp.ui.skin.RequeueBitmapButton16Skin"
+						  toolTip="@Resource(bundle = 'messages', key = 'log.requeue.tooltip')"
+						  includeInLayout="{isRequeueVisible(data)}"
+						  />
+			</s:HGroup>
 		</s:Group>
 		
 	</s:Group>

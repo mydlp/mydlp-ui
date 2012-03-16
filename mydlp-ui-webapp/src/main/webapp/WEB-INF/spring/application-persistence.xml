@@ -74,6 +74,7 @@
          <value>com.mydlp.ui.domain.IncidentLog</value>
          <value>com.mydlp.ui.domain.IncidentLogFile</value>
          <value>com.mydlp.ui.domain.IncidentLogFileContent</value>
+         <value>com.mydlp.ui.domain.IncidentLogRequeueStatus</value>
        </list>
      </property>
      <property name="hibernateProperties">
