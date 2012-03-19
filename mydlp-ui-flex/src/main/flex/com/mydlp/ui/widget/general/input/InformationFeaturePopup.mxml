@@ -178,6 +178,7 @@
 			<input:MatcherDefinition data="canada_sin" />
 			<input:MatcherDefinition data="france_insee" />
 			<input:MatcherDefinition data="uk_nino" />
+			<input:MatcherDefinition data="said" />
 			<input:MatcherDefinition data="keyword" />
 			<input:MatcherDefinition data="regex" />
 			<input:MatcherDefinition data="scode" />
@@ -223,6 +224,7 @@
 		<s:State name="canada_sin" />
 		<s:State name="france_insee" />
 		<s:State name="uk_nino" />
+		<s:State name="said" />
 		<s:State name="keyword" />
 		<s:State name="regex" />
 		<s:State name="scode" />
