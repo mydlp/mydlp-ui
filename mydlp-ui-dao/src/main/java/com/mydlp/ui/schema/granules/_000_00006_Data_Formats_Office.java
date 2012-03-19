@@ -49,8 +49,6 @@ public class _000_00006_Data_Formats_Office extends AbstractGranule {
 		mts.add(createMTObj("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"));
 		mts.add(createMTObj("application/vnd.ms-powerpoint.presentation.macroenabled.12"));
 		mts.add(createMTObj("application/vnd.openxmlformats-officedocument.wordprocessingml.template"));
-		mts.add(createMTObj("application/pdf"));
-		mts.add(createMTObj("text/plain"));
 		mts.add(createMTObj("application/vnd.oasis.opendocument.spreadsheet-template"));
 		mts.add(createMTObj("application/vnd.oasis.opendocument.text-template"));
 		mts.add(createMTObj("application/vnd.oasis.opendocument.chart-template"));
