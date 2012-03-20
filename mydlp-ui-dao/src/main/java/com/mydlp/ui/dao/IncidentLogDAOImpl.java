@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 
 import org.hibernate.Query;
 import org.hibernate.criterion.CriteriaSpecification;
@@ -19,9 +21,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.mydlp.ui.domain.ADDomain;
+import com.mydlp.ui.domain.ADDomainAlias;
 import com.mydlp.ui.domain.ADDomainItem;
 import com.mydlp.ui.domain.ADDomainOU;
+import com.mydlp.ui.domain.ADDomainRoot;
 import com.mydlp.ui.domain.ADDomainUser;
+import com.mydlp.ui.domain.ADDomainUserAlias;
 import com.mydlp.ui.domain.AuthUser;
 import com.mydlp.ui.domain.IncidentLog;
 import com.mydlp.ui.domain.IncidentLogFile;
@@ -49,6 +55,47 @@ public class IncidentLogDAOImpl extends AbstractLogDAO implements IncidentLogDAO
 		return DAOUtil.getSingleResult(returnList);
 	}
 	
+	protected ADDomain getDomain(ADDomainItem item) {
+		if (item instanceof ADDomainRoot)
+			return ((ADDomainRoot)item).getDomain();
+		else
+			return getDomain(item.getParent());
+	}
+	
+	protected Set<String> getDomainNames(ADDomainItem item) {
+		ADDomain domain = getDomain(item);
+		Set<String> domainnames = new TreeSet<String>();
+		domainnames.add(domain.getDomainName().toLowerCase());
+		domainnames.add(domain.getNetbiosName().toLowerCase());
+		
+		for (ADDomainAlias alias : domain.getAliases())
+			domainnames.add(alias.getDomainAlias());
+		
+		return domainnames;
+	}
+	
+	protected Set<String> getUserNames(ADDomainUser user) {
+		Set<String> usernames = new TreeSet<String>();
+		usernames.add(user.getsAMAccountName());
+		
+		for (ADDomainUserAlias alias : user.getAliases())
+			usernames.add(alias.getUserAlias());
+		
+		return usernames;
+	}
+	
+	protected Set<String> getUPNs(ADDomainUser user) {
+		Set<String> usernames = getUserNames(user);
+		Set<String> domainnames = getDomainNames(user);
+		
+		Set<String> upns = new TreeSet<String>();
+		for (String username : usernames)
+			for (String domainname : domainnames)
+				upns.add(username + "@" + domainname);
+		
+		return upns;
+	}
+	
 	protected DetachedCriteria applyUserCriteria(DetachedCriteria detachedCriteria, AuthUser user)
 	{
 		DetachedCriteria criteria = detachedCriteria;
@@ -62,11 +109,16 @@ public class IncidentLogDAOImpl extends AbstractLogDAO implements IncidentLogDAO
 		for (ADDomainItem item : user.getAuthorityScopeADItems()) {
 			if (item instanceof ADDomainUser) {
 				ADDomainUser adUser = (ADDomainUser) item;
-				disjunction.add(Property.forName("sourceUser").eq(adUser.getUserPrincipalName()));
+				disjunction.add(Property.forName("sourceUser").in(
+						getUPNs(adUser)
+					));
 			} else if (item instanceof ADDomainOU) {
 				ADDomainOU adOU = (ADDomainOU) item;
-				List<String> names = adDomainDAO.getUserPrincipalNames(adOU);
-				disjunction.add(Property.forName("sourceUser").in(names));
+				for (ADDomainItem child: adOU.getChildren())
+					if (child instanceof ADDomainUser)
+						disjunction.add(Property.forName("sourceUser").in(
+								getUPNs((ADDomainUser)child)
+							));
 			}
 		}
 		

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:TitleWindow xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			   xmlns:s="library://ns.adobe.com/flex/spark" 
+			   xmlns:mx="library://ns.adobe.com/flex/mx"
+			   xmlns:my="http://www.mydlp.com/flex/my"
+			   xmlns:input="com.mydlp.ui.widget.general.input.*"
+			   close="{close()}"
+			   visible="false"
+			   title="@Resource(bundle = 'messages', key = 'feature.matcher.title.label')"
+			   creationComplete="onCreationComplete(event)"
+			   >
+	
+	<fx:Script>
+		<![CDATA[
+			import com.mydlp.ui.domain.ADDomainAlias;
+			import com.mydlp.ui.util.InteractionUtil;
+			
+			import mx.events.FlexEvent;
+			
+			public var adDomainAliasInput:ADDomainAliasInput = null;
+			
+			public var adDomainAliasObject:ADDomainAlias = null;
+			
+			protected function close(): void
+			{
+				InteractionUtil.closePopup(this);
+			}
+			
+			protected function addNewAlias(event:MouseEvent):void
+			{
+				if (adDomainAliasObject == null)
+					adDomainAliasObject = new ADDomainAlias();
+				adDomainAliasObject.domainAlias = domainAlias.text;
+				adDomainAliasInput.addADDomainAlias(adDomainAliasObject);
+				close();
+			}
+			
+			public function populate(): void
+			{
+				visible = true;
+			}
+			
+			protected function onCreationComplete(event:FlexEvent):void
+			{
+				domainValidator.expression="^([\\w\\.-]{1,255})$";
+			}
+			
+		]]>
+	</fx:Script>
+	
+	
+	<fx:Declarations>
+		<mx:RegExpValidator id="domainValidator"
+						   source="{domainAlias}"
+						   property="text"
+						   valid="{saveButton.enabled = true}"
+						   invalid="{saveButton.enabled = false}"/>
+	</fx:Declarations>
+	
+	<s:layout>
+		<s:VerticalLayout horizontalAlign="center" gap="5"
+						  paddingLeft="8" paddingRight="2"
+						  paddingTop="5" paddingBottom="5"/>
+	</s:layout>
+	<s:Form width="400">
+		<s:FormItem label="@Resource(bundle = 'messages', key = 'addomainalias.input.domainAlias.label')">
+			<s:TextInput id="domainAlias" />
+		</s:FormItem>
+	</s:Form>			
+	
+	<s:Group>
+		<s:layout>
+			<s:HorizontalLayout horizontalAlign="right" verticalAlign="middle" gap="10"/>
+		</s:layout>
+		<s:Button id="saveButton" label="@Resource(bundle = 'messages', key = 'addomainalias.button.save.label')" click="addNewAlias(event)"/>
+		<s:Button label="@Resource(bundle = 'messages', key = 'addomainalias.button.cancel.label')" click="{close()}"/>
+	</s:Group>
+</s:TitleWindow>

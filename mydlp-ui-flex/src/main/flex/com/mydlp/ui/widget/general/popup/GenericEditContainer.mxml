@@ -9,9 +9,12 @@
 	
 	<fx:Script>
 		<![CDATA[
+			import com.mydlp.ui.domain.ADDomain;
+			import com.mydlp.ui.domain.ADDomainAlias;
 			import com.mydlp.ui.domain.ADDomainItem;
 			import com.mydlp.ui.domain.ADDomainItemGroup;
 			import com.mydlp.ui.domain.ADDomainRoot;
+			import com.mydlp.ui.domain.ADDomainUser;
 			import com.mydlp.ui.domain.AbstractEntity;
 			import com.mydlp.ui.domain.AbstractNamedEntity;
 			import com.mydlp.ui.domain.AuthUser;
@@ -31,7 +34,9 @@
 			import com.mydlp.ui.util.InteractionUtil;
 			import com.mydlp.ui.util.LangUtil;
 			import com.mydlp.ui.util.ReflectionUtil;
+			import com.mydlp.ui.widget.general.input.ADDomainAliasInput;
 			import com.mydlp.ui.widget.general.input.ADDomainEnumeratingProcessInput;
+			import com.mydlp.ui.widget.general.input.ADDomainUserAliasInput;
 			import com.mydlp.ui.widget.general.input.AuthSecurityRolesInput;
 			import com.mydlp.ui.widget.general.input.AuthorityScopeADItemInput;
 			import com.mydlp.ui.widget.general.input.DataFormatInput;
@@ -288,6 +293,34 @@
 						inputLabel.addElement(asaiInput);
 						index = 7;
 					}
+					else if (targetObject is ADDomain &&
+						classMember.name == "aliases" && 
+						classMember.type == ListCollectionView)
+					{
+						var adaiInput:ADDomainAliasInput = new ADDomainAliasInput();
+						adaiInput.deleteList = this.deleteList;
+						if (targetObject[classMember.name] == null)
+							adaiInput.adDomainAliases = new ArrayCollection();
+						else
+							adaiInput.adDomainAliases = targetObject[classMember.name];
+						BindingUtils.bindProperty(targetObject, classMember.name, adaiInput, "adDomainAliases");
+						inputLabel = new VerticalInputLabel();
+						inputLabel.addElement(adaiInput);
+						index = 7;
+					}
+					else if (targetObject is ADDomainUser &&
+						classMember.name == "aliases" && 
+						classMember.type == ListCollectionView)
+					{
+						var aduaiInput:ADDomainUserAliasInput = new ADDomainUserAliasInput();
+						if (targetObject[classMember.name] == null)
+							aduaiInput.adDomainUserAliases = new ArrayCollection();
+						else
+							aduaiInput.adDomainUserAliases = targetObject[classMember.name];
+						inputLabel = new VerticalInputLabel();
+						inputLabel.addElement(aduaiInput);
+						index = 7;
+					}
 					else if (classMember.name == "currentlyEnumerating" && classMember.type == Boolean)
 					{
 						var addps:ADDomainEnumeratingProcessInput = new ADDomainEnumeratingProcessInput();
@@ -370,12 +403,22 @@
 							regExpValidator3.addEventListener(ValidationResultEvent.VALID, validInput);
 							validators.push(regExpValidator3);
 						}
+						else if(classMember.name == "netbiosName"){
+							index = 2;
+							var regExpValidator6:RegExpValidator = new RegExpValidator();
+							regExpValidator6.source = textInput;
+							regExpValidator6.property = "text";
+							regExpValidator6.expression = "^([\\w-]{1,15})$";
+							regExpValidator6.addEventListener(ValidationResultEvent.INVALID, invalidInput);
+							regExpValidator6.addEventListener(ValidationResultEvent.VALID, validInput);
+							validators.push(regExpValidator6);
+						}
 						else if(classMember.name == "loginPassword"){
-							index = 3;
+							index = 4;
 							textInput.displayAsPassword = true;
 						}
 						else if(classMember.name == "loginUsername") {
-							index = 2;
+							index = 3;
 							var regExpValidator5:RegExpValidator = new RegExpValidator();
 							regExpValidator5.source = textInput;
 							regExpValidator5.property = "text";

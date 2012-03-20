@@ -1,8 +1,11 @@
 package com.mydlp.ui.domain;
 
+import java.util.List;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 @Entity
@@ -21,9 +24,13 @@ public class ADDomain extends AbstractEntity {
 	
 	protected String loginPassword;
 	
+	protected String netbiosName;
+	
 	protected Boolean currentlyEnumerating;
 	
 	protected ADDomainRoot root;
+	
+	protected List<ADDomainAlias> aliases;
 
 	@Column(nullable=false, unique=true)
 	public String getDomainName() {
@@ -32,6 +39,14 @@ public class ADDomain extends AbstractEntity {
 
 	public void setDomainName(String domainName) {
 		this.domainName = domainName;
+	}
+
+	public String getNetbiosName() {
+		return netbiosName;
+	}
+
+	public void setNetbiosName(String netbiosName) {
+		this.netbiosName = netbiosName;
 	}
 
 	@Column(nullable=false)
@@ -76,6 +91,15 @@ public class ADDomain extends AbstractEntity {
 
 	public void setCurrentlyEnumerating(Boolean currentlyEnumerating) {
 		this.currentlyEnumerating = currentlyEnumerating;
+	}
+
+	@OneToMany(cascade={CascadeType.ALL})
+	public List<ADDomainAlias> getAliases() {
+		return aliases;
+	}
+
+	public void setAliases(List<ADDomainAlias> aliases) {
+		this.aliases = aliases;
 	}
 	
 }

@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.mydlp.ui.domain.ADDomain;
 import com.mydlp.ui.domain.ADDomainItem;
-import com.mydlp.ui.domain.ADDomainOU;
 import com.mydlp.ui.domain.AbstractEntity;
 
 public interface ADDomainDAO {
@@ -19,5 +18,4 @@ public interface ADDomainDAO {
 	
 	public List<ADDomain> getADDomains();
 	
-	public List<String> getUserPrincipalNames(ADDomainOU adOU);
 }

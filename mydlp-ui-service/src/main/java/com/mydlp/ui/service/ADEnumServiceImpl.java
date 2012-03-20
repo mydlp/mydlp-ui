@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 import javax.naming.Context;
 import javax.naming.NamingEnumeration;
@@ -28,6 +30,7 @@ import com.mydlp.ui.domain.ADDomainItemGroup;
 import com.mydlp.ui.domain.ADDomainOU;
 import com.mydlp.ui.domain.ADDomainRoot;
 import com.mydlp.ui.domain.ADDomainUser;
+import com.mydlp.ui.domain.ADDomainUserAlias;
 
 @Service("adEnumService")
 public class ADEnumServiceImpl implements ADEnumService {
@@ -94,7 +97,7 @@ public class ADEnumServiceImpl implements ADEnumService {
 	protected void searchDNforUsers(ADDomain domain, ADDomainItemGroup parent, String distinguishedName) throws NamingException {
 		DirContext ctx = context(domain);
 		SearchControls ctls = new SearchControls();
-		String[] attrIDs =  { "displayName", "sAMAccountName", "userPrincipalName", "distinguishedName"};
+		String[] attrIDs =  { "displayName", "sAMAccountName", "distinguishedName", "proxyAddresses", "mailNickname"};
 		ctls.setReturningAttributes(attrIDs);
 		
 		ctls.setSearchScope(SearchControls.ONELEVEL_SCOPE);
@@ -115,7 +118,7 @@ public class ADEnumServiceImpl implements ADEnumService {
 		ctls.setSearchScope(SearchControls.ONELEVEL_SCOPE);
 
 		NamingEnumeration<SearchResult> queryResults = ctx.search(distinguishedName,
-				"(&(objectClass=organizationalUnit)(!(isCriticalSystemObject=TRUE)))"
+				"(&(objectClass=organizationalUnit)(!(isCriticalSystemObject=TRUE))(!(msExchVersion=*)))"
 				, ctls);
 		
 		saveOUs(domain, parent, queryResults);
@@ -139,27 +142,48 @@ public class ADEnumServiceImpl implements ADEnumService {
 
 			if (null != attribs)
 			{
-				// "displayName", "sAMAccountName", "userPrincipalName", "distinguishedName"
+				// "displayName", "sAMAccountName", "distinguishedName", "proxyAddresses","mailNickname"
 				String displayName = null;
 				String sAMAccountName = null;
-				String userPrincipalName = null;
 				String distinguishedName = null;
+				
+				Set<String> userAliases = new TreeSet<String>();
+				
 				
 				for (NamingEnumeration<? extends Attribute> ae = attribs.getAll(); ae.hasMoreElements();)
 				{
 					Attribute atr = (Attribute) ae.next();
 					String attributeID = atr.getID();
 					
+					//for (int i = 0; i < atr.size(); i++) 
+					//	System.out.println(attributeID + ": " + atr.get(i));
+					
+					
 					if (atr.size() > 0)
 					{
 						if (attributeID.equals("displayName"))
 							displayName = (String) atr.get(0);
 						else if (attributeID.equals("sAMAccountName"))
-							sAMAccountName = (String) atr.get(0);
-						else if (attributeID.equals("userPrincipalName"))
-							userPrincipalName = (String) atr.get(0);
+							sAMAccountName = ((String) atr.get(0)).toLowerCase();
 						else if (attributeID.equals("distinguishedName"))
 							distinguishedName = (String) atr.get(0);
+						else if (attributeID.equals("proxyAddresses"))
+							for (int i = 0; i < atr.size(); i++) {
+								String val = (String) atr.get(i);
+								val = val.toLowerCase();
+								if (!val.startsWith("smtp:"))
+									continue;
+								val = val.substring(5); // Drop smtp:
+								int atSignIndex = val.indexOf('@');
+								val = val.substring(0, atSignIndex); // drop @domain.com
+								userAliases.add(val);
+							}
+						else if (attributeID.equals("mailNickname"))
+							for (int i = 0; i < atr.size(); i++) {
+								String val = (String) atr.get(i);
+								val = val.toLowerCase();
+								userAliases.add(val);
+							}
 					}
 				}
 				
@@ -183,13 +207,39 @@ public class ADEnumServiceImpl implements ADEnumService {
 					saveFlag = true;
 				}
 				
-				if (!userPrincipalName.equals(domainUser.getUserPrincipalName())) {
-					domainUser.setUserPrincipalName(userPrincipalName);
+				userAliases.remove(sAMAccountName);
+				
+				List<ADDomainUserAlias> aliasesToSave = null;
+				List<ADDomainUserAlias> aliasesToDelete = new ArrayList<ADDomainUserAlias>();
+				
+				if (domainUser.getAliases() == null )
+					aliasesToSave = new ArrayList<ADDomainUserAlias>();
+				else
+					aliasesToSave = domainUser.getAliases();
+				
+				for (ADDomainUserAlias adDomainUserAlias : aliasesToSave)
+					if (!userAliases.remove(adDomainUserAlias.getUserAlias()))
+					{
+						aliasesToSave.remove(adDomainUserAlias);
+						aliasesToDelete.add(adDomainUserAlias);
+						saveFlag = true;
+					}
+				
+				for (String aliasStr : userAliases) {
+					ADDomainUserAlias uaObj = new ADDomainUserAlias();
+					uaObj.setUserAlias(aliasStr);
+					aliasesToSave.add(uaObj);
 					saveFlag = true;
 				}
 				
+				domainUser.setAliases(aliasesToSave);
+				
 				if (saveFlag)
 					adDomainDAO.saveDomainItem(domainUser);
+				
+				for (ADDomainUserAlias adDomainUserAlias : aliasesToDelete) {
+					adDomainDAO.remove(adDomainUserAlias);
+				}
 			}
 		}
 		
@@ -212,6 +262,10 @@ public class ADEnumServiceImpl implements ADEnumService {
 				{
 					Attribute atr = (Attribute) ae.next();
 					String attributeID = atr.getID();
+					
+					for (int i = 0; i < atr.size(); i++) 
+						System.out.println(attributeID + ": " + atr.get(i));
+					
 					
 					if (atr.size() > 0)
 					{

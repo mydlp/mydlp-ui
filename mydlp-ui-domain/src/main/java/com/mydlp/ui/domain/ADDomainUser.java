@@ -1,7 +1,11 @@
 package com.mydlp.ui.domain;
 
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.OneToMany;
 
 @Entity
 public class ADDomainUser extends ADDomainItem {
@@ -13,7 +17,8 @@ public class ADDomainUser extends ADDomainItem {
 	
 	protected String displayName;
 	protected String sAMAccountName;
-	protected String userPrincipalName;
+	
+	protected List<ADDomainUserAlias> aliases;
 	
 	@Column(nullable=false)
 	public String getDisplayName() {
@@ -30,13 +35,13 @@ public class ADDomainUser extends ADDomainItem {
 	public void setsAMAccountName(String sAMAccountName) {
 		this.sAMAccountName = sAMAccountName;
 	}
+
+	@OneToMany(cascade={CascadeType.ALL})
+	public List<ADDomainUserAlias> getAliases() {
+		return aliases;
+	}
+	public void setAliases(List<ADDomainUserAlias> aliases) {
+		this.aliases = aliases;
+	}
 	
-	@Column(nullable=false)
-	public String getUserPrincipalName() {
-		return userPrincipalName;
-	}
-	public void setUserPrincipalName(String userPrincipalName) {
-		this.userPrincipalName = userPrincipalName;
-	}
-		
 }

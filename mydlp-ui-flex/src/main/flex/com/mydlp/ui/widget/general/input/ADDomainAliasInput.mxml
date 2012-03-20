@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:SkinnableContainer xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		  xmlns:s="library://ns.adobe.com/flex/spark" 
+		  xmlns:my="http://www.mydlp.com/flex/my"
+		  xmlns:mx="library://ns.adobe.com/flex/mx" 
+		  xmlns:domain="com.mydlp.ui.domain.*" 
+		  xmlns:input="com.mydlp.ui.widget.general.input.*" 
+		  width="{InputLabel.VERTICAL_INPUT_WIDTH}" height="150">
+	
+	<fx:Script>
+		<![CDATA[
+			import com.mydlp.ui.domain.ADDomainAlias;
+			import com.mydlp.ui.util.InteractionUtil;
+			import com.mydlp.ui.widget.general.popup.InputLabel;
+			
+			public var deleteList:ListCollectionView;
+			
+			protected function removeClickHandler(event:MouseEvent):void
+			{
+				daList.dataGroup.invalidateDisplayList();
+				for each (var o:Object in daList.selectedIndices)
+				{
+					deleteList.addItem(adDomainAliases.getItemAt(o as int));
+					adDomainAliases.removeItemAt(o as int);		
+				}
+				daList.validateNow();
+			}
+			
+			public function addADDomainAlias(add:ADDomainAlias): void
+			{
+				adDomainAliases.addItem(add);
+				daList.validateNow();
+			}
+			
+			protected function addClickHandler(event:MouseEvent):void
+			{
+				var adap:ADDomainAliasPopup = InteractionUtil.newPopup(ADDomainAliasPopup) as ADDomainAliasPopup;
+				adap.adDomainAliasInput = this;
+				adap.populate();
+			}
+			
+			protected function editClickHandler(event:MouseEvent):void
+			{
+				if(daList.selectedItem == null)
+					return;
+				var adap:ADDomainAliasPopup = InteractionUtil.newPopup(ADDomainAliasPopup) as ADDomainAliasPopup;
+				adap.adDomainAliasInput = this;
+				adap.adDomainAliasObject = daList.selectedItem;
+				adap.populate();
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<fx:Declarations>
+		<mx:ListCollectionView id="adDomainAliases"/>
+	</fx:Declarations>
+
+	<s:layout>
+		<s:HorizontalLayout  verticalAlign="middle"/>
+	</s:layout>
+	
+	<s:Group width="100%" height="100%">
+		<s:layout>
+			<s:HorizontalLayout verticalAlign="middle" gap="2"/>
+		</s:layout>
+		<s:List id="daList" dataProvider="{adDomainAliases}"  width="87%" height="100%" >
+			<s:itemRenderer>
+				<fx:Component>
+					<s:ItemRenderer	height="20"
+						creationComplete="{data = data as ADDomainAlias}">
+						<fx:Script>
+							<![CDATA[
+								import com.mydlp.ui.domain.ADDomainAlias;
+							]]>
+						</fx:Script>
+						<s:layout>
+							<s:HorizontalLayout paddingLeft="4" verticalAlign="middle" />
+						</s:layout>
+						<s:Label text="{data.domainAlias}" />
+					</s:ItemRenderer>
+				</fx:Component>
+			</s:itemRenderer>
+		</s:List>
+		
+		<s:Group width="13%" height="100%">
+			<s:layout>
+				<s:VerticalLayout verticalAlign="middle" horizontalAlign="center" gap="2"/>
+			</s:layout>
+			<s:Button skinClass="com.mydlp.ui.skin.AddBitmapButton32Skin" click="addClickHandler(event)"/>
+			<s:Button skinClass="com.mydlp.ui.skin.EditBitmapButton32Skin" click="editClickHandler(event)"/>
+			<s:Button skinClass="com.mydlp.ui.skin.RemoveBitmapButton32Skin" click="removeClickHandler(event)"/>
+		</s:Group>
+	</s:Group>
+	
+</s:SkinnableContainer>
