@@ -5,17 +5,76 @@
 	
 	<fx:Script>
 		<![CDATA[
-			import avmplus.getQualifiedClassName;
-			
 			import com.mydlp.ui.domain.IncidentLog;
 			import com.mydlp.ui.util.LangUtil;
 			import com.mydlp.ui.widget.general.input.IpAddressInput;
+			
+			import mx.collections.ArrayCollection;
+			
+			public static function startsWith( string:String, pattern:String):Boolean
+			{
+				string  = string.toLowerCase();
+				pattern = pattern.toLowerCase();
+				
+				return pattern == string.substr( 0, pattern.length );
+			}
 			
 			protected function getDestText(value:*):String {
 				var log:IncidentLog = value as IncidentLog;
 				var labelText:String = "";
 				if (log.destination == null || log.channel == "E")
-					labelText = LangUtil.getString("messages","log.container.column.destination.removableStorage")
+					labelText = LangUtil.getString("messages","log.container.column.destination.removableStorage");
+				else if (log.channel == "M")
+				{
+					var rcpttoList:ArrayCollection = new ArrayCollection();
+					var toList:ArrayCollection = new ArrayCollection();
+					var fromList:ArrayCollection = new ArrayCollection();
+					var ccList:ArrayCollection = new ArrayCollection();
+					var bccList:ArrayCollection = new ArrayCollection();
+					for each (var o:* in log.destination.split(", "))
+					{
+						var line:String = o as String;
+						if (startsWith(line,"rcpt to: "))
+							rcpttoList.addItem(line.substr(9));
+						else if (startsWith(line,"to: "))
+							toList.addItem(line.substr(4));
+						else if (startsWith(line,"from: "))
+							fromList.addItem(line.substr(6));
+						else if (startsWith(line,"cc: "))
+							ccList.addItem(line.substr(4));
+						else if (startsWith(line,"bcc: "))
+							bccList.addItem(line.substr(5));
+					}
+					var rcpttoVisible:Boolean = false;
+					if (rcpttoList.length == toList.length)
+					{
+						for (var i:int = 0; i < rcpttoList.length; i++)
+							if (rcpttoList.getItemAt(i) != toList.getItemAt(i))
+							{
+								rcpttoVisible = true;
+								break;
+							}
+					}
+					else
+						rcpttoVisible = true;
+					
+					if (rcpttoVisible && rcpttoList.length > 0)
+						labelText += LangUtil.getString("messages","log.container.column.destination.smtp.rpctto") + ": \t" +
+							rcpttoList.toArray().join("\n\t") + "\n";
+					if (toList.length > 0)
+						labelText += LangUtil.getString("messages","log.container.column.destination.smtp.to") + ": \t" +
+							toList.toArray().join("\n\t") + "\n";
+					if (fromList.length > 0)
+						labelText += LangUtil.getString("messages","log.container.column.destination.smtp.from") + ": \t" +
+							fromList.toArray().join("\n\t") + "\n";
+					if (ccList.length > 0)
+						labelText += LangUtil.getString("messages","log.container.column.destination.smtp.cc") + ": \t" +
+							ccList.toArray().join("\n\t") + "\n";
+					if (bccList.length > 0)
+						labelText += LangUtil.getString("messages","log.container.column.destination.smtp.bcc") + ": \t" +
+							bccList.toArray().join("\n\t") + "\n";
+					
+				}
 				else
 					labelText = log.destination;
 				return labelText;
