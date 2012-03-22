@@ -23,10 +23,10 @@
 	</fx:Declarations>
 	
 	<s:layout>
-		<s:HorizontalLayout gap="15"/>
+		<s:HorizontalLayout gap="25"/>
 	</s:layout>
 	
 	<s:BitmapImage source="@Embed('/assets/images/logo_314x124.png')" />
 	
-	<s:Label text="{getReportDate()}" paddingTop="30"/>
+	<s:Label text="{getReportDate()}" paddingTop="40"/>
 </s:Group>

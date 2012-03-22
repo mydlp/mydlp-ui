@@ -6,22 +6,20 @@
 		 width="100%" height="100%"
 		 title="@Resource(bundle = 'messages', key = 'getReport.organize.title')"
 		 close="{InteractionUtil.closePopup(this)}"
-		 creationComplete="onCreationComplete(event)">
+		 initialize="populateDashboardItems()">
 	<fx:Script>
 		<![CDATA[
 			import com.mydlp.ui.domain.DashboardItem;
-			import com.mydlp.ui.domain.UserSettings;
 			import com.mydlp.ui.util.InteractionUtil;
 			import com.mydlp.ui.widget.dashboard.DashboardItemBox;
 			import com.mydlp.ui.widget.dashboard.DashboardItemContainer;
 			import com.mydlp.ui.widget.dashboard.HBarChartBox;
 			import com.mydlp.ui.widget.dashboard.PieChartBox;
-			import com.mydlp.ui.widget.dashboard.RSSFeedBox;
 			
-			import mx.events.FlexEvent;
+			import mx.collections.ArrayCollection;
+			import mx.collections.ListCollectionView;
 			import mx.graphics.ImageSnapshot;
 			import mx.graphics.codec.JPEGEncoder;
-			import mx.rpc.events.ResultEvent;
 			
 			import org.alivepdf.display.Display;
 			import org.alivepdf.images.ColorSpace;
@@ -34,11 +32,18 @@
 			import org.alivepdf.pdf.PDF;
 			import org.alivepdf.saving.Method;
 			
-			[Bindable]
-			protected var userSettings:UserSettings = null;
+			
+			protected static const reportItems:ListCollectionView = new ArrayCollection([
+				DashboardItem.INCIDENT_BY_ACTIONS_24H,
+				DashboardItem.INCIDENTS_BY_PROTOCOLS_24H, 
+				DashboardItem.TOP_5_USERS_24H, 
+				DashboardItem.TOP_5_RULES_24H,
+				DashboardItem.TOP_5_ITYPES_24H, 
+				DashboardItem.TOP_5_ADDRESS_24H, 
+			]);
 			
 			protected var xPosition:int = 10;
-			protected var yPosition:int=160;
+			protected var yPosition:int=210;
 			
 			protected function addChartButtonClickHandler(event:MouseEvent):void
 			{
@@ -46,71 +51,55 @@
 				var reportPDF:PDF = new PDF(Orientation.PORTRAIT, Unit.MM, Size.A4);
 				reportPDF.setDisplayMode(Display.REAL);
 				reportPDF.addPage();
-				var image:ImageSnapshot = ImageSnapshot.captureImage(printedCanvas,300 , new JPEGEncoder(100), false);//for high resolution image
+				var image:ImageSnapshot = ImageSnapshot.captureImage(printedCanvas, 300 , new JPEGEncoder(100), false);//for high resolution image
 				var resize:Resize = new Resize(Mode.FIT_TO_PAGE, Position.CENTERED);//for fitting into page
 				reportPDF.addImageStream(image.data, ColorSpace.DEVICE_RGB, resize);
 				bytes = reportPDF.save(Method.LOCAL);
 				var f:FileReference = new FileReference();
-				f.save(bytes, "testPDF.pdf");
-			}
-			
-			protected function onCreationComplete(event:FlexEvent):void
-			{
-				re.getUserSettings();
-			}
-			
-			protected function getUserSettingsHandler(event:ResultEvent):void
-			{
-				userSettings = event.result as UserSettings;
-				populateDashboardItems();	
+				f.save(bytes, "Weekly_Report.pdf");
 			}
 			
 			protected function populateDashboardItems(): void
-			{
-				if (userSettings == null) return;
-				
+			{				
 				printedCanvas.removeAllElements();
 				printedCanvas.addChild(new ReportHeadComponent);
 				
-				for each (var i:* in userSettings.dashboardItems)
+				for each (var i:* in reportItems)
 				{
-					var dashboardItem:DashboardItem = i as DashboardItem;
+					var reportItemKey:String = i as String;
 					var dashboardItemBox:DashboardItemBox = null;
-					if (dashboardItem.dasboardItemKey == DashboardItem.INCIDENTS_BY_PROTOCOLS_1H ||
-						dashboardItem.dasboardItemKey == DashboardItem.INCIDENTS_BY_PROTOCOLS_24H )
+					if (reportItemKey == DashboardItem.INCIDENTS_BY_PROTOCOLS_1H ||
+						reportItemKey == DashboardItem.INCIDENTS_BY_PROTOCOLS_24H )
 					{
 						dashboardItemBox = new PieChartBox();
-					} else if (dashboardItem.dasboardItemKey == DashboardItem.INCIDENT_BY_ACTIONS_1H ||
-						dashboardItem.dasboardItemKey == DashboardItem.INCIDENT_BY_ACTIONS_24H )
+					} else if (reportItemKey == DashboardItem.INCIDENT_BY_ACTIONS_1H ||
+						reportItemKey == DashboardItem.INCIDENT_BY_ACTIONS_24H )
 					{
 						dashboardItemBox = new PieChartBox();
-					} else if (dashboardItem.dasboardItemKey == DashboardItem.TOP_5_ADDRESS_1H ||
-						dashboardItem.dasboardItemKey == DashboardItem.TOP_5_ADDRESS_24H )
+					} else if (reportItemKey == DashboardItem.TOP_5_ADDRESS_1H ||
+						reportItemKey == DashboardItem.TOP_5_ADDRESS_24H )
 					{
 						dashboardItemBox = new HBarChartBox();
-					} else if (dashboardItem.dasboardItemKey == DashboardItem.TOP_5_USERS_1H ||
-						dashboardItem.dasboardItemKey == DashboardItem.TOP_5_USERS_24H )
+					} else if (reportItemKey == DashboardItem.TOP_5_USERS_1H ||
+						reportItemKey == DashboardItem.TOP_5_USERS_24H )
 					{
 						dashboardItemBox = new HBarChartBox();
-					} else if (dashboardItem.dasboardItemKey == DashboardItem.TOP_5_RULES_1H ||
-						dashboardItem.dasboardItemKey == DashboardItem.TOP_5_RULES_24H )
+					} else if (reportItemKey == DashboardItem.TOP_5_RULES_1H ||
+						reportItemKey == DashboardItem.TOP_5_RULES_24H )
 					{
 						dashboardItemBox = new HBarChartBox();
-					} else if (dashboardItem.dasboardItemKey == DashboardItem.TOP_5_ITYPES_1H ||
-						dashboardItem.dasboardItemKey == DashboardItem.TOP_5_ITYPES_24H )
+					} else if (reportItemKey == DashboardItem.TOP_5_ITYPES_1H ||
+						reportItemKey == DashboardItem.TOP_5_ITYPES_24H )
 					{
 						dashboardItemBox = new HBarChartBox();
-					} else if (dashboardItem.dasboardItemKey == DashboardItem.RSS_MYDLP_BLOG ||
-						dashboardItem.dasboardItemKey == DashboardItem.RSS_DATALOSSDB ) {
-						dashboardItemBox = new RSSFeedBox();
 					}
 					
 					if (dashboardItemBox != null)
 					{
 						var dashboardItemContainer:DashboardItemContainer = new DashboardItemContainer();
-						dashboardItemBox.itemKey = dashboardItem.dasboardItemKey;
+						dashboardItemBox.itemKey = reportItemKey;
 						dashboardItemContainer.container.addElement(dashboardItemBox);
-						dashboardItemContainer.itemKey = dashboardItem.dasboardItemKey; 
+						dashboardItemContainer.itemKey = reportItemKey; 
 						printedCanvas.addElement(dashboardItemContainer);
 					}
 				}
@@ -124,6 +113,7 @@
 					else{
 						printedCanvas.getChildAt(j).scaleX = 0.75;
 						printedCanvas.getChildAt(j).scaleY = 0.75;
+						var h:int = printedCanvas.getChildAt(j).height;
 						printedCanvas.getChildAt(j).x = xPosition;
 						printedCanvas.getChildAt(j).y = yPosition;
 						if(j%2 == 1)
@@ -139,21 +129,16 @@
 			
 		]]>
 	</fx:Script>
-
-	<fx:Declarations>
-		<my:remote id="re" destination="dashboardBRS" >
-			<my:method name="getUserSettings" result="getUserSettingsHandler(event)" />
-		</my:remote>
-	</fx:Declarations>
 	
 	<s:Rect left="0" right="0" top="0" bottom="0" >
 		<s:stroke>
 			<s:SolidColorStroke color="0xACADAF" weight="3"/>
 		</s:stroke>
 	</s:Rect>
-	<mx:Canvas width="560" height="792" id="printedCanvas" backgroundColor="white">
+	<mx:Canvas width="589" height="832" id="printedCanvas" backgroundColor="white">
 		
 	</mx:Canvas>
-	<s:Button label="@Resource(bundle = 'messages', key = 'getReport.addChart.button.label')"
-			  click="addChartButtonClickHandler(event)"/>
+	<s:Button skinClass="com.mydlp.ui.skin.PDFBitmapLabelButton24Skin" styleName="fontSize24Style"
+			  label="@Resource(bundle = 'messages', key = 'getReport.exportAsPDF.button.label')"
+			  click="addChartButtonClickHandler(event)" x="350" y="800"/>
 </s:TitleWindow>

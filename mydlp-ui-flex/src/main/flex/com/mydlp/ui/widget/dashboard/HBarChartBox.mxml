@@ -28,6 +28,8 @@
 					return value.toString();
 				if (itemKey == DashboardItem.TOP_5_RULES_1H || itemKey == DashboardItem.TOP_5_RULES_24H)
 					return FlexGlobals.topLevelApplication.ruleContainer.getRuleLabel(value as Number);
+				if (itemKey == DashboardItem.TOP_5_ITYPES_1H || itemKey == DashboardItem.TOP_5_ITYPES_24H)
+					return "Itype: " + (value as Number).toString();
 				return 	LangUtil.getString("messages", "dashboardItem." + itemKey + "." + value.toString());
 			}
 		]]>
