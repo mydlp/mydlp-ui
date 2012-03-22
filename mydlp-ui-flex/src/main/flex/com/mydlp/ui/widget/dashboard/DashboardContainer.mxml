@@ -67,6 +67,8 @@
 					} else if (dashboardItem.dasboardItemKey == DashboardItem.RSS_MYDLP_BLOG ||
 						dashboardItem.dasboardItemKey == DashboardItem.RSS_DATALOSSDB ) {
 						dashboardItemBox = new RSSFeedBox();
+					} else if (dashboardItem.dasboardItemKey == DashboardItem.ENDPOINT_STATUS) {
+						dashboardItemBox = new EndpointStatusBox();
 					}
 					
 					if (dashboardItemBox != null)

@@ -23,13 +23,13 @@
 			protected function getHandler(event:ResultEvent): void
 			{
 				itemDP = event.result;
-				if (this is HBarChartBox && itemDP is ArrayCollection){
-					(itemDP as ArrayCollection).source.reverse();
-				}
 				if (itemDP == null) {
 					timer = new Timer(10000, 1);
 					timer.addEventListener(TimerEvent.TIMER_COMPLETE, onTimerComplete);
 				} else {
+					if (this is HBarChartBox && itemDP is ArrayCollection){
+						(itemDP as ArrayCollection).source.reverse();
+					}
 					invalidateDisplayList();
 				}
 			}

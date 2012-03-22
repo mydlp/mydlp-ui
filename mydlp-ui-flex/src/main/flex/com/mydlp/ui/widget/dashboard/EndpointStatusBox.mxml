@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<dashboard:DashboardItemBox xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx"
+		 xmlns:my="http://www.mydlp.com/flex/my"
+		 xmlns:util="com.mydlp.ui.util.*"
+		 xmlns:dashboard="com.mydlp.ui.widget.dashboard.*" 
+		 creationComplete="onCreationComplete(event)" >
+	<fx:Script>
+		<![CDATA[
+			import com.mydlp.ui.util.AsyncListDataProvider;
+			import com.mydlp.ui.util.LangUtil;
+			
+			import mx.events.FlexEvent;
+			import mx.rpc.AsyncToken;
+			
+			[Bindable]
+			protected var epStatusDP:AsyncListDataProvider = null;
+			
+			protected function onCreationComplete(event:FlexEvent):void
+			{
+				epStatusDP = new AsyncListDataProvider();
+				epStatusDP.countFunction = countObjects;
+				epStatusDP.fetchFunction = fetchObjects;
+				epStatusDP.pendingObject = "pending";
+				
+				refresh();
+			}
+			
+			protected function countObjects(): AsyncToken
+			{
+				return re.getEndpointStatusCount();
+			}
+			
+			protected function fetchObjects(offset:Number, count:Number): AsyncToken
+			{
+				return re.getEndpointStatuses(offset, count);
+			}
+			
+			public function refresh(): void
+			{
+				epStatusDP.init();
+			}
+			
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<my:remote id="re" destination="endpointStatusBRS" />
+	</fx:Declarations>
+	
+	<s:Group width="100%" height="100%">
+		<s:layout>
+			<s:VerticalLayout verticalAlign="middle" horizontalAlign="center" 
+							  paddingBottom="5" paddingTop="5" 
+							  paddingLeft="5" paddingRight="5"/>
+		</s:layout>
+		<util:MyList width="100%" height="100%"
+					 borderVisible="false"
+					 dataProvider="{epStatusDP.asyncListView}"
+					 itemRenderer="com.mydlp.ui.widget.dashboard.EndpointStatusItemRenderer"/>
+	</s:Group>
+</dashboard:DashboardItemBox>

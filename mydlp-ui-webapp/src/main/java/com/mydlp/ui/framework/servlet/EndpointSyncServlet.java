@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.HttpRequestHandler;
 
+import com.mydlp.ui.dao.EndpointStatusDAO;
 import com.mydlp.ui.thrift.MyDLPUIThriftService;
 
 @Service("syncServlet")
@@ -31,6 +32,9 @@ public class EndpointSyncServlet implements HttpRequestHandler {
 	@Autowired
 	protected MyDLPUIThriftService thriftService;
 	
+	@Autowired
+	protected EndpointStatusDAO endpointStatusDAO;
+	
 	@Override
 	public void handleRequest(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
@@ -39,6 +43,7 @@ public class EndpointSyncServlet implements HttpRequestHandler {
 			String urlKey = req.getParameter("rid");
 			String ipAddress = req.getRemoteAddr();
 			responseBuffer = thriftService.getRuletable(ipAddress, urlKey);
+			endpointStatusDAO.upToDateEndpoint(ipAddress);
 		} catch (RuntimeException e) {
 			logger.error("Runtime error occured", e);
 		}

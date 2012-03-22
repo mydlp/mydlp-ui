@@ -73,6 +73,7 @@
      <property name="dataSource"><ref bean="logDataSource"/></property>
      <property name="annotatedClasses">
        <list>
+         <value>com.mydlp.ui.domain.EndpointStatus</value>
          <value>com.mydlp.ui.domain.IncidentLog</value>
          <value>com.mydlp.ui.domain.IncidentLogFile</value>
          <value>com.mydlp.ui.domain.IncidentLogFileContent</value>

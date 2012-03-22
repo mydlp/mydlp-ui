@@ -31,11 +31,6 @@
 		<s:HTTPService id="httpService" url="/proxy?q={itemKey}" 
 					   resultFormat="e4x" result="parseRSS(event)" />
 	</fx:Declarations>
-	<s:Rect left="0" right="0" top="0" bottom="0" >
-		<s:stroke>
-			<s:SolidColorStroke color="0xAEBBCF" alpha="0.3" weight="3"/>
-		</s:stroke>
-	</s:Rect>
 	<s:Group width="100%" height="100%">
 		<s:layout>
 			<s:VerticalLayout verticalAlign="middle" horizontalAlign="center" 

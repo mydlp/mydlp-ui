@@ -53,6 +53,8 @@
 	
 	<objects:ObjectsTree id="objectsTree" height="100%" width="400" change="onSelectedItemChange(event)"/>
 	
+	<rule:RSpacer />
+	
 	<s:VGroup id="editFormContainer" paddingLeft="40" paddingTop="40"/>
 	
 </s:SkinnableContainer>
