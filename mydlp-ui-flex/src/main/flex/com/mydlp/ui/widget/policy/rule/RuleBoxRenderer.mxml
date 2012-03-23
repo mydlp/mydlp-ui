@@ -14,6 +14,7 @@
 				>
 	<fx:Script>
 		<![CDATA[
+			import com.mydlp.ui.domain.DiscoveryRule;
 			import com.mydlp.ui.domain.EndpointRule;
 			import com.mydlp.ui.domain.InformationType;
 			import com.mydlp.ui.domain.InventoryBase;
@@ -56,6 +57,9 @@
 			[Embed('/assets/icons/32x32/print.png')]
 			public static const printerRuleIcon:Class;
 			
+			[Embed('/assets/icons/32x32/search.png')]
+			public static const discoveryRuleIcon:Class;
+			
 			[Bindable]
 			protected var sourceDataProvider:ArrayCollection = new ArrayCollection();
 			
@@ -87,6 +91,10 @@
 				else if (data is PrinterRule)
 				{
 					ruleTypeImage.source = printerRuleIcon;
+				}
+				else if (data is DiscoveryRule)
+				{
+					ruleTypeImage.source = discoveryRuleIcon;
 				}
 				else
 					throw new Error("Unknown rule type;");
@@ -434,7 +442,7 @@
 			
 			protected function saveHandler(event:ResultEvent):void
 			{
-				if(deleteList.length == 0)
+				if(deleteList == null || deleteList.length == 0)
 				{
 					highlightOff();
 					FlexGlobals.topLevelApplication.refresh();

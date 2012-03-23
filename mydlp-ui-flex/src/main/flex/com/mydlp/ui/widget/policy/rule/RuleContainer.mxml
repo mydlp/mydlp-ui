@@ -10,6 +10,7 @@
 		 >
 	<fx:Script>
 		<![CDATA[
+			import com.mydlp.ui.domain.DiscoveryRule;
 			import com.mydlp.ui.domain.EndpointRule;
 			import com.mydlp.ui.domain.MailRule;
 			import com.mydlp.ui.domain.PrinterRule;
@@ -105,6 +106,10 @@
 					else if (rule is PrinterRule)
 					{
 						rule = rule as PrinterRule;
+					}
+					else if (rule is DiscoveryRule)
+					{
+						rule = rule as DiscoveryRule;
 					}
 					else
 						throw new Error("Unknown rule type;");

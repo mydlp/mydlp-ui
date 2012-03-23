@@ -8,6 +8,7 @@
 				>
 	<fx:Script>
 		<![CDATA[
+			import com.mydlp.ui.domain.DiscoveryRule;
 			import com.mydlp.ui.domain.EndpointRule;
 			import com.mydlp.ui.domain.MailRule;
 			import com.mydlp.ui.domain.PrinterRule;
@@ -54,6 +55,11 @@
 				ruleHandler(new PrinterRule());
 			}
 			
+			protected function discoveryRuleHandler():void
+			{
+				ruleHandler(new DiscoveryRule());
+			}
+			
 			protected function onCreationComplete(event:FlexEvent):void
 			{
 				if (FlexGlobals.topLevelApplication.ruleContainer.ruleList.dataProvider.length > 0)
@@ -62,6 +68,7 @@
 					recommendedPriority = rule.priority + 100;
 				}
 			}
+			
 			
 		]]>
 	</fx:Script>
@@ -79,6 +86,7 @@
 		<s:Button skinClass="com.mydlp.ui.skin.MailRuleBitmapLabelButton16Skin" label="@Resource(bundle = 'messages', key = 'inventory.newdialog.mailrule')" click="mailRuleHandler()"/>
 		<s:Button skinClass="com.mydlp.ui.skin.EndpointRuleBitmapLabelButton16Skin" label="@Resource(bundle = 'messages', key = 'inventory.newdialog.endpointrule')" click="endpointRuleHandler()"/>
 		<s:Button skinClass="com.mydlp.ui.skin.PrinterRuleBitmapLabelButton16Skin" label="@Resource(bundle = 'messages', key = 'inventory.newdialog.printerrule')" click="printerRuleHandler()"/>
+		<s:Button skinClass="com.mydlp.ui.skin.DiscoveryRuleBitmapLabelButton16Skin" label="@Resource(bundle = 'messages', key = 'inventory.newdialog.discoveryrule')" click="discoveryRuleHandler()"/>
 	</s:Group>
 	
 </popup:ClosableTitleWindow>
