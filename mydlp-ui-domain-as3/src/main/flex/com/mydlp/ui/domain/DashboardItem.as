@@ -30,6 +30,11 @@ package com.mydlp.ui.domain {
 		public static const INCIDENT_BY_ACTIONS_24H:String = "incident_by_actions__24h";
 		public static const TOP_5_FILES_1H:String = "top_5_files__1h";
 		public static const TOP_5_FILES_24H:String = "top_5_files__24h";
-		
-    }
+		public static const INCIDENTS_BY_PROTOCOLS_1W:String = "incident_by_protocols__1w";
+		public static const INCIDENTS_BY_ACTIONS_1W:String = "incident_by_actions__1w";
+		public static const TOP_5_ADDRESS_1W:String = "top_5_address__1w";
+		public static const TOP_5_USERS_1W:String = "top_5_users__1w";
+		public static const TOP_5_RULES_1W:String = "top_5_rules__1w";
+		public static const TOP_5_ITYPES_1W:String = "top_5_itypes__1w";
+	}
 }

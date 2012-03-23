@@ -4,9 +4,9 @@
 		 xmlns:mx="library://ns.adobe.com/flex/mx" 
 		 xmlns:my="http://www.mydlp.com/flex/my"
 		 width="100%" height="100%"
-		 title="@Resource(bundle = 'messages', key = 'getReport.organize.title')"
+		 title="@Resource(bundle = 'messages', key = 'dashboard.weeklyReport.title')"
 		 close="{InteractionUtil.closePopup(this)}"
-		 initialize="populateDashboardItems()">
+		 creationComplete="populateDashboardItems()">
 	<fx:Script>
 		<![CDATA[
 			import com.mydlp.ui.domain.DashboardItem;
@@ -18,6 +18,7 @@
 			
 			import mx.collections.ArrayCollection;
 			import mx.collections.ListCollectionView;
+			import mx.controls.Alert;
 			import mx.graphics.ImageSnapshot;
 			import mx.graphics.codec.JPEGEncoder;
 			
@@ -34,18 +35,18 @@
 			
 			
 			protected static const reportItems:ListCollectionView = new ArrayCollection([
-				DashboardItem.INCIDENT_BY_ACTIONS_24H,
-				DashboardItem.INCIDENTS_BY_PROTOCOLS_24H, 
-				DashboardItem.TOP_5_USERS_24H, 
-				DashboardItem.TOP_5_RULES_24H,
-				DashboardItem.TOP_5_ITYPES_24H, 
-				DashboardItem.TOP_5_ADDRESS_24H, 
+				DashboardItem.INCIDENTS_BY_ACTIONS_1W,
+				DashboardItem.INCIDENTS_BY_PROTOCOLS_1W, 
+				DashboardItem.TOP_5_USERS_1W, 
+				DashboardItem.TOP_5_RULES_1W,
+				DashboardItem.TOP_5_ITYPES_1W, 
+				DashboardItem.TOP_5_ADDRESS_1W, 
 			]);
 			
 			protected var xPosition:int = 10;
 			protected var yPosition:int=210;
 			
-			protected function addChartButtonClickHandler(event:MouseEvent):void
+			protected function exportAsPDF(event:Event):void
 			{
 				var bytes:ByteArray = new ByteArray;
 				var reportPDF:PDF = new PDF(Orientation.PORTRAIT, Unit.MM, Size.A4);
@@ -68,32 +69,20 @@
 				{
 					var reportItemKey:String = i as String;
 					var dashboardItemBox:DashboardItemBox = null;
-					if (reportItemKey == DashboardItem.INCIDENTS_BY_PROTOCOLS_1H ||
-						reportItemKey == DashboardItem.INCIDENTS_BY_PROTOCOLS_24H )
+					if (reportItemKey == DashboardItem.INCIDENTS_BY_PROTOCOLS_1W ||
+						reportItemKey == DashboardItem.INCIDENTS_BY_ACTIONS_1W)
 					{
 						dashboardItemBox = new PieChartBox();
-					} else if (reportItemKey == DashboardItem.INCIDENT_BY_ACTIONS_1H ||
-						reportItemKey == DashboardItem.INCIDENT_BY_ACTIONS_24H )
-					{
-						dashboardItemBox = new PieChartBox();
-					} else if (reportItemKey == DashboardItem.TOP_5_ADDRESS_1H ||
-						reportItemKey == DashboardItem.TOP_5_ADDRESS_24H )
-					{
-						dashboardItemBox = new HBarChartBox();
-					} else if (reportItemKey == DashboardItem.TOP_5_USERS_1H ||
-						reportItemKey == DashboardItem.TOP_5_USERS_24H )
-					{
-						dashboardItemBox = new HBarChartBox();
-					} else if (reportItemKey == DashboardItem.TOP_5_RULES_1H ||
-						reportItemKey == DashboardItem.TOP_5_RULES_24H )
-					{
-						dashboardItemBox = new HBarChartBox();
-					} else if (reportItemKey == DashboardItem.TOP_5_ITYPES_1H ||
-						reportItemKey == DashboardItem.TOP_5_ITYPES_24H )
+					}
+					
+					else if (reportItemKey == DashboardItem.TOP_5_ADDRESS_1W ||
+						reportItemKey == DashboardItem.TOP_5_USERS_1W ||
+						reportItemKey == DashboardItem.TOP_5_RULES_1W ||
+						reportItemKey == DashboardItem.TOP_5_ITYPES_1W )
 					{
 						dashboardItemBox = new HBarChartBox();
 					}
-					
+				
 					if (dashboardItemBox != null)
 					{
 						var dashboardItemContainer:DashboardItemContainer = new DashboardItemContainer();
@@ -138,7 +127,7 @@
 	<mx:Canvas width="589" height="832" id="printedCanvas" backgroundColor="white">
 		
 	</mx:Canvas>
-	<s:Button skinClass="com.mydlp.ui.skin.PDFBitmapLabelButton24Skin" styleName="fontSize24Style"
-			  label="@Resource(bundle = 'messages', key = 'getReport.exportAsPDF.button.label')"
-			  click="addChartButtonClickHandler(event)" x="350" y="800"/>
+	<s:Button id="exportPDFButton" skinClass="com.mydlp.ui.skin.PDFBitmapLabelButton24Skin" styleName="fontSize24Style"
+			  label="@Resource(bundle = 'messages', key = 'dashboard.weeklyReport.exportAsPDF.button.label')"
+			  click="exportAsPDF(event)" x="350" y="800"/>
 </s:TitleWindow>

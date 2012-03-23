@@ -130,9 +130,15 @@
 		<dashboard:AlertBox />
 	</s:Group>
 	<s:VGroup width="100%" height="100%" paddingTop="20" gap="20">
-		<s:Button skinClass="com.mydlp.ui.skin.AddBitmapLabelButton24Skin" 
-				  label="@Resource(key='dashboard.additem', bundle='messages')"
-				  click="{newDashboardItem(event)}" styleName="fontSize24Style"/>
+		<s:HGroup gap="30">
+			<s:Button skinClass="com.mydlp.ui.skin.AddBitmapLabelButton24Skin" 
+					  label="@Resource(key='dashboard.additem', bundle='messages')"
+					  click="{newDashboardItem(event)}" styleName="fontSize24Style"/>
+			
+			<s:Button skinClass="com.mydlp.ui.skin.GetReportBitmapLabelButton24Skin"
+					  label="@Resource(bundle = 'messages', key = 'dashboard.displayWeeklyReport.label')"
+					  styleName="fontSize24Style" click="{InteractionUtil.newPopup(ReportPopup, true) as ReportPopup}"/>
+		</s:HGroup>
 
 		<s:Group id="dashboardItems" width="100%" height="100%">
 			<s:layout>

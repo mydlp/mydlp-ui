@@ -28,6 +28,12 @@ public class DashboardItem extends AbstractEntity {
 	public static final String TOP_5_ITYPES_24H = "top_5_itypes__24h";
 	public static final String TOP_5_FILES_1H = "top_5_files__1h";
 	public static final String TOP_5_FILES_24H = "top_5_files__24h";
+	public static final String INCIDENTS_BY_PROTOCOL_1W = "incident_by_protocols__1w";
+	public static final String INCIDENTS_BY_ACTIONS_1W = "incident_by_actions__1w";
+	public static final String TOP_5_ADDRESS_1W = "top_5_address__1w";
+	public static final String TOP_5_RULES_1W = "top_5_rules__1w";
+	public static final String TOP_5_USERS_1W = "top_5_users__1w";
+	public static final String TOP_5_ITYPES_1W = "top_5_itypes__1w";
 	
 	
 	protected UserSettings userSettings;

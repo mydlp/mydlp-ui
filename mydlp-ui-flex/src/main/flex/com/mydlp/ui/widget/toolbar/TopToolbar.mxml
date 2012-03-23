@@ -38,7 +38,6 @@
 			
 			protected var reloadFlag:Boolean = false;
 			
-			public var getReportPopup:ReportPopup = null;
 			
 			protected function onCreationComplete(event:FlexEvent):void
 			{
@@ -118,29 +117,7 @@
 				eup.visible = true;
 			}
 			
-			protected function getReportClickHandler(event:MouseEvent):void
-			{
-				getReportPopup = InteractionUtil.newPopup(ReportPopup, true) as ReportPopup;
-				/*var myString:String = "test String";
-				var bytes:ByteArray = new ByteArray;
-				//var decoder:Base64Decoder = new Base64Decoder();
-				//decoder.decode(myString);
-				//bytes = decoder.toByteArray();
-				//bytes = myString.
-				var myPDF:PDF = new PDF(Orientation.PORTRAIT, Unit.MM, Size.A4);
-				myPDF.setDisplayMode(Display.FULL_WIDTH);
-				myPDF.addPage();
-				var myCoreFont:IFont = new CoreFont(FontFamily.HELVETICA_BOLD);
-				myPDF.setFont(myCoreFont, 20);
-				myPDF.addText("again a test", 20, 20);
-				myPDF.newLine(15);
-				myPDF.addText("another test", 20, 30);
-				//myPDF.addImage(FlexGlobals.topLevelApplication.dashboardContainer.dashboardItems);
-				myPDF.addImage(FlexGlobals.topLevelApplication.dashboardContainer.printedGroup, null, 20, 50);
-				bytes = myPDF.save(Method.LOCAL);
-				var f:FileReference = new FileReference();
-				f.save(bytes, "testPDF.pdf");*/
-			}
+			
 			
 		]]>
 	</fx:Script>
@@ -161,10 +138,6 @@
 	<s:layout>
 		<s:HorizontalLayout verticalAlign="middle" horizontalAlign="right"/>
 	</s:layout>
-	
-	<s:Button skinClass="com.mydlp.ui.skin.GetReportBitmapLabelButton24Skin"
-			  label="@Resource(bundle = 'messages', key = 'toptoolbar.getReport')"
-			  styleName="fontSize24Style" click="getReportClickHandler(event)"/>
 	
 	<s:Button id="installButton" skinClass="com.mydlp.ui.skin.InstallBitmapLabelButton24Skin" 
 			  label="@Resource(bundle = 'messages', key = 'toptoolbar.installPolicy')"

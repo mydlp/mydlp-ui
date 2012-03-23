@@ -23,12 +23,12 @@
 			}
 			
 			protected function itemLabelFunc(value:Object, previousCategoryValue:Object, axis:CategoryAxis, categoryItem:Object):String {
-				if (itemKey == DashboardItem.TOP_5_ADDRESS_1H || itemKey == DashboardItem.TOP_5_ADDRESS_24H ||
-					itemKey == DashboardItem.TOP_5_USERS_1H || itemKey == DashboardItem.TOP_5_USERS_24H) 
+				if (itemKey == DashboardItem.TOP_5_ADDRESS_1H || itemKey == DashboardItem.TOP_5_ADDRESS_24H || itemKey == DashboardItem.TOP_5_ADDRESS_1W ||
+					itemKey == DashboardItem.TOP_5_USERS_1H || itemKey == DashboardItem.TOP_5_USERS_24H || itemKey == DashboardItem.TOP_5_USERS_1W) 
 					return value.toString();
-				if (itemKey == DashboardItem.TOP_5_RULES_1H || itemKey == DashboardItem.TOP_5_RULES_24H)
+				if (itemKey == DashboardItem.TOP_5_RULES_1H || itemKey == DashboardItem.TOP_5_RULES_24H || itemKey == DashboardItem.TOP_5_RULES_1W)
 					return FlexGlobals.topLevelApplication.ruleContainer.getRuleLabel(value as Number);
-				if (itemKey == DashboardItem.TOP_5_ITYPES_1H || itemKey == DashboardItem.TOP_5_ITYPES_24H)
+				if (itemKey == DashboardItem.TOP_5_ITYPES_1H || itemKey == DashboardItem.TOP_5_ITYPES_24H || itemKey == DashboardItem.TOP_5_ITYPES_1W)
 					return "Itype: " + (value as Number).toString();
 				return 	LangUtil.getString("messages", "dashboardItem." + itemKey + "." + value.toString());
 			}

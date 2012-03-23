@@ -135,6 +135,18 @@ public class DashboardItemServiceImpl implements DashboardItemService {
 			return incidentLogDAO.topInformationTypeId(1,5);
 		} else if (itemKey.equals(DashboardItem.TOP_5_ITYPES_24H)) {
 			return incidentLogDAO.topInformationTypeId(24,5);
+		} else if (itemKey.equals(DashboardItem.INCIDENTS_BY_PROTOCOL_1W)) {
+			return incidentLogDAO.getProtocolIncidentCount(24*7);
+		} else if (itemKey.equals(DashboardItem.INCIDENTS_BY_ACTIONS_1W)) {
+			return incidentLogDAO.getActionIncidentCount(24*7);
+		} else if (itemKey.equals(DashboardItem.TOP_5_ADDRESS_1W)) {
+			return incidentLogDAO.topSourceAddress(24*7, 5);
+		} else if (itemKey.equals(DashboardItem.TOP_5_RULES_1W)) {
+			return incidentLogDAO.topRuleId(24*7, 5);
+		} else if (itemKey.equals(DashboardItem.TOP_5_USERS_1W)) {
+			return incidentLogDAO.topSourceUser(24*7, 5);
+		} else if (itemKey.equals(DashboardItem.TOP_5_ITYPES_1W)) {
+			return incidentLogDAO.topInformationTypeId(24*7, 5);
 		}
 		
 		return null;
