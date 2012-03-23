@@ -35,6 +35,7 @@ solrlib_DATA = \
 	target/apache-solr-cell.jar
 
 mydlp-ui-webapp/target/mydlp-ui-webapp.war: pom.xml
+	@bash bootstrap.sh
 	@$(MVN) -Pproduction install
 
 target/apache-solr-cell.jar: pom.xml
