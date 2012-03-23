@@ -4,3 +4,4 @@ cmd /c "mvn install:install-file -DgroupId=dpHibernate -DartifactId=dpHibernate-
 
 cmd /c "mvn install:install-file -DgroupId=dpHibernate -DartifactId=dpHibernate -Dpackaging=swc -Dversion=2.0-RC6 -Dfile=external-lib\dpHibernate-2.0-RC6.swc -DgeneratePom=true"
 
+cmd /c "mvn install:install-file -DgroupId=AlivePDF -DartifactId=AlivePDF -Dpackaging=swc -Dversion=0.1.5-RC -Dfile=external-lib\AlivePDF-0.1.5-RC.swc -DgeneratePom=true"

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<s:TitleWindow xmlns:fx="http://ns.adobe.com/mxml/2009" 
-			   xmlns:s="library://ns.adobe.com/flex/spark" 
+<s:TitleWindow xmlns:fx="http://ns.adobe.com/mxml/2009"
+			   xmlns:s="library://ns.adobe.com/flex/spark"
 			   xmlns:mx="library://ns.adobe.com/flex/mx"
 			   xmlns:my="http://www.mydlp.com/flex/my"
 			   xmlns:input="com.mydlp.ui.widget.general.input.*"
@@ -13,20 +13,15 @@
 			import com.mydlp.ui.domain.AuthUser;
 			import com.mydlp.ui.util.InteractionUtil;
 			import com.mydlp.ui.util.LangUtil;
-			
 			import mx.controls.Alert;
 			import mx.rpc.events.ResultEvent;
-			
 			[Bindable]
 			public var currentUser:AuthUser = null;
-			
 			public var initialUserName:String = null;
-			
 			protected function close(): void
 			{
 				InteractionUtil.closePopup(this);
 			}
-			
 			protected function controlPasswordHandler(event:ResultEvent):void
 			{
 				var result:Boolean = event.result as Boolean;
@@ -44,30 +39,24 @@
 						Alert.show(LangUtil.getString("messages", "editCurrentUser.newpassword.error.message"),
 							LangUtil.getString("messages", "editCurrentUser.newpassword.error.title"));
 				}
-				
 			}
-			
 			protected function closeHandlerFunction(event:Event):void
 			{
 				InteractionUtil.closePopup(this);
 				if(initialUserName != currentUser.username)
 					navigateToURL(new URLRequest ('j_spring_security_logout'), '_self');
 			}
-		
-			
 			protected function saveHandler(event:ResultEvent):void
 			{
 				currentUser = event.result as AuthUser;
 				Alert.show(LangUtil.getString("messages", "editCurrentUser.ok.message"),
 					LangUtil.getString("messages", "editCurrentUser.ok.title"), 4, null, closeHandlerFunction);
 			}
-			
 			protected function saveButtonClickHandler(event:MouseEvent):void
 			{
 				saveButton.enabled = false;
 				re.isPasswordTrue(nameInput.text, password.text);
 			}
-			
 		]]>
 	</fx:Script>
 	

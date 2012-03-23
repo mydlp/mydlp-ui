@@ -18,13 +18,26 @@
 			import mx.core.IFlexDisplayObject;
 			import mx.events.FlexEvent;
 			import mx.rpc.events.ResultEvent;
+			import mx.utils.Base64Decoder;
 			import mx.validators.EmailValidator;
+			
+			import org.alivepdf.display.Display;
+			import org.alivepdf.fonts.CoreFont;
+			import org.alivepdf.fonts.EmbeddedFont;
+			import org.alivepdf.fonts.FontFamily;
+			import org.alivepdf.fonts.IFont;
+			import org.alivepdf.layout.Orientation;
+			import org.alivepdf.layout.Size;
+			import org.alivepdf.layout.Unit;
+			import org.alivepdf.pdf.PDF;
+			import org.alivepdf.saving.Method;
 			
 			protected var currentUser:AuthUser = null;
 			
 			protected var installPopup:InstallPolicyPopup = null;
 			
 			protected var reloadFlag:Boolean = false;
+			
 			
 			protected function onCreationComplete(event:FlexEvent):void
 			{
@@ -104,6 +117,8 @@
 				eup.visible = true;
 			}
 			
+			
+			
 		]]>
 	</fx:Script>
 
@@ -124,7 +139,7 @@
 		<s:HorizontalLayout verticalAlign="middle" horizontalAlign="right"/>
 	</s:layout>
 	
-	<s:Button skinClass="com.mydlp.ui.skin.InstallBitmapLabelButton24Skin" 
+	<s:Button id="installButton" skinClass="com.mydlp.ui.skin.InstallBitmapLabelButton24Skin" 
 			  label="@Resource(bundle = 'messages', key = 'toptoolbar.installPolicy')"
 			  styleName="fontSize24Style" click="{installPolicy()}"/>
 	<s:Spacer width="6" />
