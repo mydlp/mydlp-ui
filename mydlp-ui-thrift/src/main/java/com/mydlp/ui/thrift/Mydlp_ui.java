@@ -26,7 +26,7 @@ public class Mydlp_ui {
 
     public void compileCustomer(int Customerid) throws org.apache.thrift.TException;
 
-    public ByteBuffer getRuletable(String Ipaddress, String Revisionid) throws org.apache.thrift.TException;
+    public ByteBuffer getRuletable(String Ipaddress, String Userh, String Revisionid) throws org.apache.thrift.TException;
 
     public String receiveBegin(String Ipaddress) throws org.apache.thrift.TException;
 
@@ -42,7 +42,7 @@ public class Mydlp_ui {
 
     public void compileCustomer(int Customerid, org.apache.thrift.async.AsyncMethodCallback<AsyncClient.compileCustomer_call> resultHandler) throws org.apache.thrift.TException;
 
-    public void getRuletable(String Ipaddress, String Revisionid, org.apache.thrift.async.AsyncMethodCallback<AsyncClient.getRuletable_call> resultHandler) throws org.apache.thrift.TException;
+    public void getRuletable(String Ipaddress, String Userh, String Revisionid, org.apache.thrift.async.AsyncMethodCallback<AsyncClient.getRuletable_call> resultHandler) throws org.apache.thrift.TException;
 
     public void receiveBegin(String Ipaddress, org.apache.thrift.async.AsyncMethodCallback<AsyncClient.receiveBegin_call> resultHandler) throws org.apache.thrift.TException;
 
@@ -94,16 +94,17 @@ public class Mydlp_ui {
       return;
     }
 
-    public ByteBuffer getRuletable(String Ipaddress, String Revisionid) throws org.apache.thrift.TException
+    public ByteBuffer getRuletable(String Ipaddress, String Userh, String Revisionid) throws org.apache.thrift.TException
     {
-      send_getRuletable(Ipaddress, Revisionid);
+      send_getRuletable(Ipaddress, Userh, Revisionid);
       return recv_getRuletable();
     }
 
-    public void send_getRuletable(String Ipaddress, String Revisionid) throws org.apache.thrift.TException
+    public void send_getRuletable(String Ipaddress, String Userh, String Revisionid) throws org.apache.thrift.TException
     {
       getRuletable_args args = new getRuletable_args();
       args.setIpaddress(Ipaddress);
+      args.setUserh(Userh);
       args.setRevisionid(Revisionid);
       sendBase("getRuletable", args);
     }
@@ -254,19 +255,21 @@ public class Mydlp_ui {
       }
     }
 
-    public void getRuletable(String Ipaddress, String Revisionid, org.apache.thrift.async.AsyncMethodCallback<getRuletable_call> resultHandler) throws org.apache.thrift.TException {
+    public void getRuletable(String Ipaddress, String Userh, String Revisionid, org.apache.thrift.async.AsyncMethodCallback<getRuletable_call> resultHandler) throws org.apache.thrift.TException {
       checkReady();
-      getRuletable_call method_call = new getRuletable_call(Ipaddress, Revisionid, resultHandler, this, ___protocolFactory, ___transport);
+      getRuletable_call method_call = new getRuletable_call(Ipaddress, Userh, Revisionid, resultHandler, this, ___protocolFactory, ___transport);
       this.___currentMethod = method_call;
       ___manager.call(method_call);
     }
 
     public static class getRuletable_call extends org.apache.thrift.async.TAsyncMethodCall {
       private String Ipaddress;
+      private String Userh;
       private String Revisionid;
-      public getRuletable_call(String Ipaddress, String Revisionid, org.apache.thrift.async.AsyncMethodCallback<getRuletable_call> resultHandler, org.apache.thrift.async.TAsyncClient client, org.apache.thrift.protocol.TProtocolFactory protocolFactory, org.apache.thrift.transport.TNonblockingTransport transport) throws org.apache.thrift.TException {
+      public getRuletable_call(String Ipaddress, String Userh, String Revisionid, org.apache.thrift.async.AsyncMethodCallback<getRuletable_call> resultHandler, org.apache.thrift.async.TAsyncClient client, org.apache.thrift.protocol.TProtocolFactory protocolFactory, org.apache.thrift.transport.TNonblockingTransport transport) throws org.apache.thrift.TException {
         super(client, protocolFactory, transport, resultHandler, false);
         this.Ipaddress = Ipaddress;
+        this.Userh = Userh;
         this.Revisionid = Revisionid;
       }
 
@@ -274,6 +277,7 @@ public class Mydlp_ui {
         prot.writeMessageBegin(new org.apache.thrift.protocol.TMessage("getRuletable", org.apache.thrift.protocol.TMessageType.CALL, 0));
         getRuletable_args args = new getRuletable_args();
         args.setIpaddress(Ipaddress);
+        args.setUserh(Userh);
         args.setRevisionid(Revisionid);
         args.write(prot);
         prot.writeMessageEnd();
@@ -480,7 +484,7 @@ public class Mydlp_ui {
 
       protected getRuletable_result getResult(I iface, getRuletable_args args) throws org.apache.thrift.TException {
         getRuletable_result result = new getRuletable_result();
-        result.success = iface.getRuletable(args.Ipaddress, args.Revisionid);
+        result.success = iface.getRuletable(args.Ipaddress, args.Userh, args.Revisionid);
         return result;
       }
     }
@@ -1050,15 +1054,18 @@ public class Mydlp_ui {
     private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("getRuletable_args");
 
     private static final org.apache.thrift.protocol.TField IPADDRESS_FIELD_DESC = new org.apache.thrift.protocol.TField("Ipaddress", org.apache.thrift.protocol.TType.STRING, (short)1);
-    private static final org.apache.thrift.protocol.TField REVISIONID_FIELD_DESC = new org.apache.thrift.protocol.TField("Revisionid", org.apache.thrift.protocol.TType.STRING, (short)2);
+    private static final org.apache.thrift.protocol.TField USERH_FIELD_DESC = new org.apache.thrift.protocol.TField("Userh", org.apache.thrift.protocol.TType.STRING, (short)2);
+    private static final org.apache.thrift.protocol.TField REVISIONID_FIELD_DESC = new org.apache.thrift.protocol.TField("Revisionid", org.apache.thrift.protocol.TType.STRING, (short)3);
 
     public String Ipaddress; // required
+    public String Userh; // required
     public String Revisionid; // required
 
     /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
     public enum _Fields implements org.apache.thrift.TFieldIdEnum {
       IPADDRESS((short)1, "Ipaddress"),
-      REVISIONID((short)2, "Revisionid");
+      USERH((short)2, "Userh"),
+      REVISIONID((short)3, "Revisionid");
 
       private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
 
@@ -1075,7 +1082,9 @@ public class Mydlp_ui {
         switch(fieldId) {
           case 1: // IPADDRESS
             return IPADDRESS;
-          case 2: // REVISIONID
+          case 2: // USERH
+            return USERH;
+          case 3: // REVISIONID
             return REVISIONID;
           default:
             return null;
@@ -1123,6 +1132,8 @@ public class Mydlp_ui {
       Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
       tmpMap.put(_Fields.IPADDRESS, new org.apache.thrift.meta_data.FieldMetaData("Ipaddress", org.apache.thrift.TFieldRequirementType.DEFAULT, 
           new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
+      tmpMap.put(_Fields.USERH, new org.apache.thrift.meta_data.FieldMetaData("Userh", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+          new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
       tmpMap.put(_Fields.REVISIONID, new org.apache.thrift.meta_data.FieldMetaData("Revisionid", org.apache.thrift.TFieldRequirementType.DEFAULT, 
           new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
       metaDataMap = Collections.unmodifiableMap(tmpMap);
@@ -1134,10 +1145,12 @@ public class Mydlp_ui {
 
     public getRuletable_args(
       String Ipaddress,
+      String Userh,
       String Revisionid)
     {
       this();
       this.Ipaddress = Ipaddress;
+      this.Userh = Userh;
       this.Revisionid = Revisionid;
     }
 
@@ -1147,6 +1160,9 @@ public class Mydlp_ui {
     public getRuletable_args(getRuletable_args other) {
       if (other.isSetIpaddress()) {
         this.Ipaddress = other.Ipaddress;
+      }
+      if (other.isSetUserh()) {
+        this.Userh = other.Userh;
       }
       if (other.isSetRevisionid()) {
         this.Revisionid = other.Revisionid;
@@ -1160,6 +1176,7 @@ public class Mydlp_ui {
     @Override
     public void clear() {
       this.Ipaddress = null;
+      this.Userh = null;
       this.Revisionid = null;
     }
 
@@ -1184,6 +1201,30 @@ public class Mydlp_ui {
     public void setIpaddressIsSet(boolean value) {
       if (!value) {
         this.Ipaddress = null;
+      }
+    }
+
+    public String getUserh() {
+      return this.Userh;
+    }
+
+    public getRuletable_args setUserh(String Userh) {
+      this.Userh = Userh;
+      return this;
+    }
+
+    public void unsetUserh() {
+      this.Userh = null;
+    }
+
+    /** Returns true if field Userh is set (has been assigned a value) and false otherwise */
+    public boolean isSetUserh() {
+      return this.Userh != null;
+    }
+
+    public void setUserhIsSet(boolean value) {
+      if (!value) {
+        this.Userh = null;
       }
     }
 
@@ -1221,6 +1262,14 @@ public class Mydlp_ui {
         }
         break;
 
+      case USERH:
+        if (value == null) {
+          unsetUserh();
+        } else {
+          setUserh((String)value);
+        }
+        break;
+
       case REVISIONID:
         if (value == null) {
           unsetRevisionid();
@@ -1236,6 +1285,9 @@ public class Mydlp_ui {
       switch (field) {
       case IPADDRESS:
         return getIpaddress();
+
+      case USERH:
+        return getUserh();
 
       case REVISIONID:
         return getRevisionid();
@@ -1253,6 +1305,8 @@ public class Mydlp_ui {
       switch (field) {
       case IPADDRESS:
         return isSetIpaddress();
+      case USERH:
+        return isSetUserh();
       case REVISIONID:
         return isSetRevisionid();
       }
@@ -1278,6 +1332,15 @@ public class Mydlp_ui {
         if (!(this_present_Ipaddress && that_present_Ipaddress))
           return false;
         if (!this.Ipaddress.equals(that.Ipaddress))
+          return false;
+      }
+
+      boolean this_present_Userh = true && this.isSetUserh();
+      boolean that_present_Userh = true && that.isSetUserh();
+      if (this_present_Userh || that_present_Userh) {
+        if (!(this_present_Userh && that_present_Userh))
+          return false;
+        if (!this.Userh.equals(that.Userh))
           return false;
       }
 
@@ -1316,6 +1379,16 @@ public class Mydlp_ui {
           return lastComparison;
         }
       }
+      lastComparison = Boolean.valueOf(isSetUserh()).compareTo(typedOther.isSetUserh());
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+      if (isSetUserh()) {
+        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.Userh, typedOther.Userh);
+        if (lastComparison != 0) {
+          return lastComparison;
+        }
+      }
       lastComparison = Boolean.valueOf(isSetRevisionid()).compareTo(typedOther.isSetRevisionid());
       if (lastComparison != 0) {
         return lastComparison;
@@ -1350,7 +1423,14 @@ public class Mydlp_ui {
               org.apache.thrift.protocol.TProtocolUtil.skip(iprot, field.type);
             }
             break;
-          case 2: // REVISIONID
+          case 2: // USERH
+            if (field.type == org.apache.thrift.protocol.TType.STRING) {
+              this.Userh = iprot.readString();
+            } else { 
+              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, field.type);
+            }
+            break;
+          case 3: // REVISIONID
             if (field.type == org.apache.thrift.protocol.TType.STRING) {
               this.Revisionid = iprot.readString();
             } else { 
@@ -1377,6 +1457,11 @@ public class Mydlp_ui {
         oprot.writeString(this.Ipaddress);
         oprot.writeFieldEnd();
       }
+      if (this.Userh != null) {
+        oprot.writeFieldBegin(USERH_FIELD_DESC);
+        oprot.writeString(this.Userh);
+        oprot.writeFieldEnd();
+      }
       if (this.Revisionid != null) {
         oprot.writeFieldBegin(REVISIONID_FIELD_DESC);
         oprot.writeString(this.Revisionid);
@@ -1396,6 +1481,14 @@ public class Mydlp_ui {
         sb.append("null");
       } else {
         sb.append(this.Ipaddress);
+      }
+      first = false;
+      if (!first) sb.append(", ");
+      sb.append("Userh:");
+      if (this.Userh == null) {
+        sb.append("null");
+      } else {
+        sb.append(this.Userh);
       }
       first = false;
       if (!first) sb.append(", ");
