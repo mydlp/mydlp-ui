@@ -5,15 +5,19 @@
 			   xmlns:my="http://www.mydlp.com/flex/my"
 			   xmlns:input="com.mydlp.ui.widget.general.input.*"
 			   close="{close()}"
+			   initialize="onInitialize(event)"
 			   visible="false"
-			   title="@Resource(bundle = 'messages', key = 'editCurrentUser.popup.title')"
+			   title="@Resource(bundle = 'messages', key = 'editCurrentUser.popup.title')" xmlns:util="com.mydlp.ui.util.*"
 			   >
 	<fx:Script>
 		<![CDATA[
 			import com.mydlp.ui.domain.AuthUser;
 			import com.mydlp.ui.util.InteractionUtil;
 			import com.mydlp.ui.util.LangUtil;
+			
 			import mx.controls.Alert;
+			import mx.events.FlexEvent;
+			import mx.events.ValidationResultEvent;
 			import mx.rpc.events.ResultEvent;
 			[Bindable]
 			public var currentUser:AuthUser = null;
@@ -30,14 +34,7 @@
 						LangUtil.getString("messages", "editCurrentUser.password.error.title"));
 				else
 				{
-					if(newPasswd.text == "")
-						Alert.show(LangUtil.getString("messages", "editCurrentUser.nullpassword.error.message"),
-							LangUtil.getString("messages", "editCurrentUser.nullpassword.error.title"));
-					else if(newPasswd.text == reenterPasswd.text)
-						re.save(currentUser, newPasswd.text);
-					else
-						Alert.show(LangUtil.getString("messages", "editCurrentUser.newpassword.error.message"),
-							LangUtil.getString("messages", "editCurrentUser.newpassword.error.title"));
+					re.save(currentUser, newPasswd.text);		
 				}
 			}
 			protected function closeHandlerFunction(event:Event):void
@@ -57,6 +54,22 @@
 				saveButton.enabled = false;
 				re.isPasswordTrue(nameInput.text, password.text);
 			}
+			
+			protected function valid(event:ValidationResultEvent):void
+			{
+				saveButton.enabled = true;
+			}
+			
+			protected function invalid(event:ValidationResultEvent):void
+			{
+				saveButton.enabled = false;
+			}
+			
+			protected function onInitialize(event:FlexEvent):void
+			{
+				regExpValidator.expression = "^.*(?=.{6,30})(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).*$";
+			}
+			
 		]]>
 	</fx:Script>
 	
@@ -65,6 +78,13 @@
 			<my:method name="isPasswordTrue" result="controlPasswordHandler(event)" />
 			<my:method name="save" result="saveHandler(event)" />
 		</my:remote>
+		<mx:RegExpValidator id="regExpValidator" 
+							noMatchError="@Resource(bundle = 'messages', key = 'setPassword.popup.password.regexpValidator.message')"
+							source="{newPasswd}" property="text"/>
+		<util:PasswordValidationUtil id="passwdValidation" required="true" source="{reenterPasswd}" property="text" 
+									 confirmationSource="{newPasswd}" confirmationProperty="text"
+									 valid="valid(event)"
+									 invalid="invalid(event)"/>
 	</fx:Declarations>
 	
 	<s:Form>
@@ -84,8 +104,15 @@
 			<s:TextInput id="reenterPasswd" displayAsPassword="true"/>
 		</s:FormItem>
 		<s:FormItem >
-			<s:Button id="saveButton" label="@Resource(bundle = 'messages', key = 'editCurrentUser.popup.button.label')"
-					  click="saveButtonClickHandler(event)"/>
+			<s:Group>
+				<s:layout>
+					<s:HorizontalLayout gap="5" horizontalAlign="center"/>
+				</s:layout>
+				<s:Button id="saveButton" label="@Resource(bundle = 'messages', key = 'editCurrentUser.popup.saveButton.label')"
+						  click="saveButtonClickHandler(event)"/>
+				<s:Button id="cancelButton" label="@Resource(bundle = 'messages', key = 'editCurrentUser.popup.cancelButton.label')"
+						  click="close()"/>
+			</s:Group>
 		</s:FormItem>
 	</s:Form>
 	
