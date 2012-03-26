@@ -36,7 +36,7 @@
 				validators.push(icapTab.icapTTLValidator);
 				validators.push(epTab.epLogValidator);
 				validators.push(epTab.epSyncValidator);
-				
+				validators.push(epTab.discSyncValidator);
 				refresh();
 			}
 			
@@ -89,6 +89,11 @@
 					else if (config.key == "log_limit") epTab.logLimit = config;
 					else if (config.key == "sync_interval") epTab.syncInterval = config;
 					
+					else if (config.key == "discover_fs_interval") epTab.discoverFSInterval = config;
+					else if (config.key == "discover_fs_paths") epTab.discoverFSPaths = config;
+					else if (config.key == "discover_fs_on_startup") epTab.discoverFSOnStartup = config;
+					else if (config.key == "ignore_discover_max_size_exceeded") epTab.ignoreDiscoverFSMaxSizeExceeded = config;
+					
 					else if (config.key == "usb_serial_access_control") miscTab.usbSerialAccessControl = config;
 					
 					visible = true;
@@ -140,7 +145,7 @@
 	
 	<s:TabBar dataProvider="{vs}" fontSize="14" fontWeight="bold"/>
 	
-	<s:Group id="optionContainerGroup" width="100%" height="100%" maxHeight="400 " maxWidth="730">
+	<s:Group id="optionContainerGroup" width="730" height="430">
 		<s:Rect left="0" right="0" top="0" bottom="30">
 			<s:stroke>
 				<s:SolidColorStroke color="0xACADAF" weight="3"/>

@@ -21,17 +21,6 @@
 			import mx.utils.Base64Decoder;
 			import mx.validators.EmailValidator;
 			
-			import org.alivepdf.display.Display;
-			import org.alivepdf.fonts.CoreFont;
-			import org.alivepdf.fonts.EmbeddedFont;
-			import org.alivepdf.fonts.FontFamily;
-			import org.alivepdf.fonts.IFont;
-			import org.alivepdf.layout.Orientation;
-			import org.alivepdf.layout.Size;
-			import org.alivepdf.layout.Unit;
-			import org.alivepdf.pdf.PDF;
-			import org.alivepdf.saving.Method;
-			
 			protected var currentUser:AuthUser = null;
 			
 			protected var installPopup:InstallPolicyPopup = null;
