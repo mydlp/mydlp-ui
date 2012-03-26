@@ -319,8 +319,12 @@
 				{
 					if (treeItem.item is InformationType )
 						return true;
-					else if ( treeItem.item is Network && 
-							  ! ruleObject is MailRule )
+					else if ( treeItem.item is Network && (
+								ruleObject is WebRule ||
+								ruleObject is EndpointRule ||
+								ruleObject is PrinterRule ||
+								ruleObject is DiscoveryRule
+							  ))
 						return true;
 				}
 				else if (treeItem is InventoryCategory)
