@@ -317,13 +317,10 @@
 			{
 				if(treeItem is InventoryItem)
 				{
-					if (treeItem.item is InformationType)
+					if (treeItem.item is InformationType )
 						return true;
 					else if ( treeItem.item is Network && 
-						(	ruleObject is WebRule || 
-							ruleObject is EndpointRule ||
-							ruleObject is PrinterRule
-							) )
+							  ! ruleObject is MailRule )
 						return true;
 				}
 				else if (treeItem is InventoryCategory)
