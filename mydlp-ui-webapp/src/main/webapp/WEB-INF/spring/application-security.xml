@@ -18,7 +18,8 @@
     <security:intercept-url pattern="/receive" filters="none"/>
     <security:intercept-url pattern="/sync" filters="none"/>
     <security:intercept-url pattern="/**" access="ROLE_ADMIN,ROLE_AUDITOR"/>
-    <security:form-login login-page="/login.jsp" authentication-failure-url="/login.jsp?authfailed=true"/>
+    <security:form-login 	login-page="/login.jsp" authentication-failure-url="/login.jsp?authfailed=true" 
+    						always-use-default-target="true" default-target-url="/" />
     <security:logout logout-success-url="/login.jsp"/>
   </security:http>
   

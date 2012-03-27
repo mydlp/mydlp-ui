@@ -1,5 +1,7 @@
 package com.mydlp.ui.mxml
 {
+	import flash.net.URLRequest;
+	import flash.net.navigateToURL;
 	import flash.utils.flash_proxy;
 	
 	import mx.rpc.AbstractOperation;
@@ -18,6 +20,12 @@ package com.mydlp.ui.mxml
 		public function RemoteObject(destination:String=null, operationBufferFactory:IOperationBufferFactory=null)
 		{
 			super(destination, operationBufferFactory);
+			addEventListener(FaultEvent.FAULT, defaultFaultHandler);
+		}
+		
+		protected function defaultFaultHandler(event:FaultEvent):void {
+			if (event.fault.faultCode == "Client.Error.DeliveryInDoubt")
+				navigateToURL(new URLRequest('j_spring_security_logout'), '_self');
 		}
 
 		/*
