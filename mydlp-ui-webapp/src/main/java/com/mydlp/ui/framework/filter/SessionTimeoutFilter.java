@@ -14,6 +14,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import flex.messaging.FlexContext;
+import flex.messaging.FlexSession;
 
 @Service("sessionTimeoutFilter")
 public class SessionTimeoutFilter implements javax.servlet.Filter {
@@ -30,7 +31,9 @@ public class SessionTimeoutFilter implements javax.servlet.Filter {
 			HttpSession session = ((HttpServletRequest) req).getSession(false);
 			if (session == null)
 			{
-				FlexContext.getFlexSession().invalidate();
+				FlexSession flexSession = FlexContext.getFlexSession();
+				if (flexSession != null)
+					flexSession.invalidate();
 				SecurityContextHolder.clearContext();
 			}
 			else
