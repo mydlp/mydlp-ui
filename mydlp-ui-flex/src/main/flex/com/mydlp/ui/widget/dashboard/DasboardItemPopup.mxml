@@ -4,7 +4,7 @@
 			   xmlns:mx="library://ns.adobe.com/flex/mx" 
 			   close="{InteractionUtil.closePopup(this)}"
 			   title="@Resource(bundle = 'messages', key = 'toptoolbar.install.title')"
-			   width="400" >
+			   width="300" >
 	<fx:Script>
 		<![CDATA[
 			import com.mydlp.ui.domain.DashboardItem;
@@ -29,7 +29,6 @@
 				DashboardItem.RSS_DATALOSSDB,
 				DashboardItem.ENDPOINT_STATUS
 			]);
-
 		]]>
 	</fx:Script>
 	
@@ -41,22 +40,47 @@
 	
 	<s:List dataProvider="{components}" width="100%" borderVisible="false">
 		<s:layout>
-			<s:VerticalLayout horizontalAlign="center" gap="4"/>
+			<s:VerticalLayout horizontalAlign="left" gap="4" paddingLeft="10"/>
 		</s:layout>
 		<s:itemRenderer>
 			<fx:Component>
 				<s:ItemRenderer>
 					<fx:Script>
 						<![CDATA[
+							import com.mydlp.ui.domain.DashboardItem;
+							import com.mydlp.ui.domain.UserSettings;
 							import com.mydlp.ui.util.InteractionUtil;
 							import com.mydlp.ui.util.LangUtil;
 							
+							import mx.controls.Alert;
+							import mx.controls.CheckBox;
 							import mx.core.FlexGlobals;
+							
+							protected function isDashboardItemSelected(data:*):Boolean
+							{
+								var userSettings:UserSettings = FlexGlobals.topLevelApplication.dashboardContainer.userSettings;
+								for each (var i:* in userSettings.dashboardItems)
+								{
+									var dashboardItem:DashboardItem = i as DashboardItem;
+									if(dashboardItem.dasboardItemKey == data)
+										return true;
+								}
+								return false;
+							}
+							
+							protected function selectionChangeHandler(event:Event):void
+							{
+								if(event.currentTarget.selected == true)
+									FlexGlobals.topLevelApplication.dashboardContainer.addDashboardItem(data);
+								else
+									FlexGlobals.topLevelApplication.dashboardContainer.removeDashboardItem(data);
+							}
+							
 						]]>
 					</fx:Script>
-					<s:Button label="{LangUtil.getString('messages', 'dashboardItem.add.' + data)}"
-							  click="{FlexGlobals.topLevelApplication.dashboardContainer.addDashboardItem(data);
-							  		  InteractionUtil.closeCurrentPopup()}" />
+					<s:CheckBox label="{LangUtil.getString('messages', 'dashboardItem.add.' + data)}"
+								selected="{isDashboardItemSelected(data)}" 
+								change="selectionChangeHandler(event)"/>
 				</s:ItemRenderer>
 			</fx:Component>
 		</s:itemRenderer>
