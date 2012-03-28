@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<popup:ClosableTitleWindow xmlns:fx="http://ns.adobe.com/mxml/2009" 
+				xmlns:s="library://ns.adobe.com/flex/spark" 
+				xmlns:mx="library://ns.adobe.com/flex/mx" 
+				xmlns:general="com.mydlp.ui.widget.general.*"
+				title="@Resource(bundle = 'messages', key = 'inventory.newuserdialog.title')" 
+				xmlns:popup="com.mydlp.ui.widget.general.popup.*" 
+				>
+	<fx:Script>
+		<![CDATA[
+			import com.mydlp.ui.domain.InventoryItem;
+			import com.mydlp.ui.domain.RuleUserAD;
+			import com.mydlp.ui.domain.RuleUserStatic;
+			import com.mydlp.ui.util.InteractionUtil;
+			
+			protected function close():void
+			{
+				InteractionUtil.closeCurrentPopup();
+			}
+			
+			protected function userStaticHandler():void
+			{
+				close();
+				var i:InventoryItem = new InventoryItem();
+				i.item = new RuleUserStatic();
+				InteractionUtil.newEditDialog(i);
+			}
+			protected function userADHandler():void
+			{
+				close();
+				var i:InventoryItem = new InventoryItem();
+				i.item = new RuleUserAD();
+				InteractionUtil.newEditDialog(i);	
+			}
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	
+	<s:Group>
+		<s:layout>
+			<s:VerticalLayout horizontalAlign="center" 
+							  paddingBottom="10" paddingLeft="10" paddingRight="10" paddingTop="10"/>
+		</s:layout>
+		<s:Label text="@Resource(bundle = 'messages', key = 'inventory.newuserdialog.message')"/>
+		<s:Button skinClass="com.mydlp.ui.skin.UserBitmapLabelButton16Skin" 
+				  label="@Resource(bundle = 'messages', key = 'inventory.newuserdialog.static')" 
+				  click="userStaticHandler()"/>
+		<s:Button skinClass="com.mydlp.ui.skin.UsersBitmapLabelButton16Skin" 
+				  label="@Resource(bundle = 'messages', key = 'inventory.newuserdialog.ad')" 
+				  click="userADHandler()"/>
+	</s:Group>
+	
+</popup:ClosableTitleWindow>

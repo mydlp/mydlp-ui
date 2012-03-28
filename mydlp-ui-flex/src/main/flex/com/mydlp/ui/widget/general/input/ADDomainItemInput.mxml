@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:SkinnableContainer xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		  xmlns:s="library://ns.adobe.com/flex/spark" 
+		  xmlns:my="http://www.mydlp.com/flex/my"
+		  xmlns:mx="library://ns.adobe.com/flex/mx"
+		  width="{InputLabel.VERTICAL_INPUT_WIDTH}"
+		  height="150" creationComplete="{refresh()}" xmlns:domain="com.mydlp.ui.domain.*">
+	<fx:Script>
+		<![CDATA[
+			import com.mydlp.ui.domain.ADDomainOU;
+			import com.mydlp.ui.domain.ADDomainRoot;
+			import com.mydlp.ui.domain.ADDomainUser;
+			import com.mydlp.ui.widget.general.popup.InputLabel;
+			
+			import mx.collections.ArrayCollection;
+			import mx.collections.ListCollectionView;
+			import mx.events.ListEvent;
+			import mx.rpc.events.ResultEvent;
+			
+			[Bindable]
+			protected var adDomains:ListCollectionView;
+			
+			[Bindable]
+			protected var domainItemIdx:int = -1;
+			
+			protected function getADDomainsHandler(event:ResultEvent): void
+			{
+				adDomains = event.result as ListCollectionView;
+				
+				if (domainItem != null)
+				{
+					var parentItem:ADDomainItem = domainItem.parent;
+					var parentList:ArrayCollection = new ArrayCollection();
+					while (parentItem != null)
+					{
+						if (parentItem is ADDomainRoot)
+						{
+							parentList.addItem((parentItem as ADDomainRoot).domain);
+							break;
+						}
+						else
+						{
+							parentList.addItem(parentItem);
+							parentItem = parentItem.parent;
+						}
+					}
+					
+					adTree.openItems = parentList.toArray().reverse();
+					
+					adTree.validateNow();
+					
+					var idx:int = adTree.getItemIndex(domainItem);
+					adTree.scrollToIndex(idx);
+					domainItemIdx = idx;					
+				}
+			}
+			
+			public function refresh(): void
+			{
+				re.getADDomains();
+			}
+			
+			protected function onSelectedItemChange(event:ListEvent):void
+			{
+				if(adTree.selectedIndex == -1)
+				{
+					domainItem = null;
+					return;
+				}
+				
+				if(adTree.selectedItem is ADDomainUser)
+				{
+					domainItem = adTree.selectedItem as ADDomainUser;
+				} 
+				else if(adTree.selectedItem is ADDomainOU)
+				{
+					domainItem = adTree.selectedItem as ADDomainOU;
+				}
+				else
+					domainItem = null;
+				
+			}
+			
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<domain:ADDomainItem id="domainItem"/>
+		
+		<my:remote id="re" destination="adDomainBRS">
+			<my:method name="getADDomains" result="getADDomainsHandler(event)" />
+		</my:remote>
+	</fx:Declarations>
+	
+	<s:layout>
+		<s:HorizontalLayout verticalAlign="middle" gap="2"/>
+	</s:layout>
+	
+	<s:Group width="53%" height="100%">
+		<s:layout>
+			<s:VerticalLayout gap="2"/>
+		</s:layout>
+		
+		<mx:Tree id="adTree"
+				 labelField="label"
+				 width="100%" height="100%"
+				 showRoot="true"
+				 allowMultipleSelection="false"
+				 dataProvider="{adDomains}"
+				 itemRenderer="com.mydlp.ui.widget.general.input.ADDomainItemGroupTreeRenderer"
+				 folderOpenIcon="@Embed('/assets/icons/16x16/folder.png')"
+				 folderClosedIcon="@Embed('/assets/icons/16x16/folder.png')"
+				 change="onSelectedItemChange(event)"
+				 selectedIndex="{domainItemIdx}"
+				 />
+		
+	</s:Group>
+	
+</s:SkinnableContainer>

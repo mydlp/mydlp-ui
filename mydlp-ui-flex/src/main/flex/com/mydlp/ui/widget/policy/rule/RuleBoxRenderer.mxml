@@ -26,6 +26,7 @@
 			import com.mydlp.ui.domain.PrinterRule;
 			import com.mydlp.ui.domain.Rule;
 			import com.mydlp.ui.domain.RuleItem;
+			import com.mydlp.ui.domain.RuleUser;
 			import com.mydlp.ui.domain.WebRule;
 			import com.mydlp.ui.util.InteractionUtil;
 			import com.mydlp.ui.util.ReflectionUtil;
@@ -325,6 +326,13 @@
 								ruleObject is PrinterRule ||
 								ruleObject is DiscoveryRule
 							  ))
+						return true;
+					else if ( treeItem.item is RuleUser && (
+						ruleObject is MailRule ||
+						ruleObject is EndpointRule ||
+						ruleObject is PrinterRule ||
+						ruleObject is DiscoveryRule
+					))
 						return true;
 				}
 				else if (treeItem is InventoryCategory)

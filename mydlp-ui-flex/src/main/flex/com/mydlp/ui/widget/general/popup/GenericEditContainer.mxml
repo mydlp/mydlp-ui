@@ -29,6 +29,7 @@
 			import com.mydlp.ui.domain.Matcher;
 			import com.mydlp.ui.domain.RegularExpressionGroup;
 			import com.mydlp.ui.domain.Rule;
+			import com.mydlp.ui.domain.RuleUserAD;
 			import com.mydlp.ui.domain.USBDevice;
 			import com.mydlp.ui.util.ClassMember;
 			import com.mydlp.ui.util.InteractionUtil;
@@ -36,6 +37,7 @@
 			import com.mydlp.ui.util.ReflectionUtil;
 			import com.mydlp.ui.widget.general.input.ADDomainAliasInput;
 			import com.mydlp.ui.widget.general.input.ADDomainEnumeratingProcessInput;
+			import com.mydlp.ui.widget.general.input.ADDomainItemInput;
 			import com.mydlp.ui.widget.general.input.ADDomainUserAliasInput;
 			import com.mydlp.ui.widget.general.input.AuthSecurityRolesInput;
 			import com.mydlp.ui.widget.general.input.AuthorityScopeADItemInput;
@@ -45,6 +47,7 @@
 			import com.mydlp.ui.widget.general.input.IpAddressInput;
 			import com.mydlp.ui.widget.general.input.MimeTypeInput;
 			import com.mydlp.ui.widget.general.input.RegularExpressionGroupInput;
+			import com.mydlp.ui.widget.general.validator.NullValidator;
 			
 			import flash.utils.getQualifiedClassName;
 			
@@ -320,6 +323,23 @@
 						inputLabel = new VerticalInputLabel();
 						inputLabel.addElement(aduaiInput);
 						index = 7;
+					}
+					else if (targetObject is RuleUserAD &&
+						classMember.name == "domainItem" && 
+						classMember.type == ADDomainItem)
+					{
+						var rudiInput:ADDomainItemInput = new ADDomainItemInput();
+						rudiInput.domainItem = targetObject[classMember.name];
+						BindingUtils.bindProperty(targetObject, classMember.name, rudiInput, "domainItem");
+						inputLabel = new VerticalInputLabel();
+						inputLabel.addElement(rudiInput);
+						index = 7;
+						var nullValidator:NullValidator = new NullValidator();
+						nullValidator.source = rudiInput;
+						nullValidator.property = "domainItem";
+						nullValidator.addEventListener(ValidationResultEvent.INVALID, invalidInput);
+						nullValidator.addEventListener(ValidationResultEvent.VALID, validInput);
+						validators.push(nullValidator);
 					}
 					else if (classMember.name == "currentlyEnumerating" && classMember.type == Boolean)
 					{

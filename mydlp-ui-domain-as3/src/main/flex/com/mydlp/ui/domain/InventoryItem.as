@@ -26,10 +26,15 @@ package com.mydlp.ui.domain {
 				if (this is InventoryItem)
 				{
 					var iitem:Item = (this as InventoryItem).item;
-					if (iitem is Network)
-						_icon = ICON_NETWORK;
-					else if (iitem is InformationType)
+					
+					if (iitem is InformationType)
 						_icon = ICON_INFORMATION_TYPE;
+					else if (iitem is Network)
+						_icon = ICON_NETWORK; 
+					else if (iitem is RuleUserStatic)
+						_icon = ADDomainUser.ICON_CLASS;
+					else if (iitem is RuleUserAD)
+						_icon = ADDomainOU.ICON_CLASS;
 				}
 			}
 			return _icon;

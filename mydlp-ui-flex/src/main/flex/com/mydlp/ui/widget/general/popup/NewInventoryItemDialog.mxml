@@ -61,9 +61,18 @@
 							  paddingBottom="10" paddingLeft="10" paddingRight="10" paddingTop="10"/>
 		</s:layout>
 		<s:Label text="@Resource(bundle = 'messages', key = 'inventory.newdialog.message')"/>
-		<s:Button skinClass="com.mydlp.ui.skin.FolderBitmapLabelButton16Skin" label="@Resource(bundle = 'messages', key = 'inventory.newdialog.category')" click="categoryHandler()"/>
-		<s:Button skinClass="com.mydlp.ui.skin.NetworkBitmapLabelButton16Skin" label="@Resource(bundle = 'messages', key = 'inventory.newdialog.network')" click="networkHandler()"/>
-		<s:Button skinClass="com.mydlp.ui.skin.InformationTypeBitmapLabelButton16Skin" label="@Resource(bundle = 'messages', key = 'inventory.newdialog.informationType')" click="informationTypeHandler()"/>
+		<s:Button skinClass="com.mydlp.ui.skin.FolderBitmapLabelButton16Skin" 
+				  label="@Resource(bundle = 'messages', key = 'inventory.newdialog.category')" 
+				  click="categoryHandler()"/>
+		<s:Button skinClass="com.mydlp.ui.skin.NetworkBitmapLabelButton16Skin" 
+				  label="@Resource(bundle = 'messages', key = 'inventory.newdialog.network')" 
+				  click="networkHandler()"/>
+		<s:Button skinClass="com.mydlp.ui.skin.InformationTypeBitmapLabelButton16Skin" 
+				  label="@Resource(bundle = 'messages', key = 'inventory.newdialog.informationType')" 
+				  click="informationTypeHandler()"/>
+		<s:Button skinClass="com.mydlp.ui.skin.UserBitmapLabelButton16Skin" 
+				  label="@Resource(bundle = 'messages', key = 'inventory.newdialog.userObject')" 
+				  click="{close(); InteractionUtil.newPopup(NewInventoryUserDialog);}"/>
 	</s:Group>
 	
 </popup:ClosableTitleWindow>
