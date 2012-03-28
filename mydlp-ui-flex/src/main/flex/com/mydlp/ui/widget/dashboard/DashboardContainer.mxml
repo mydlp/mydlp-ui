@@ -19,7 +19,7 @@
 			import mx.rpc.events.ResultEvent;
 			
 			[Bindable]
-			protected var userSettings:UserSettings = null;
+			public var userSettings:UserSettings = null;
 			
 			public function refreshDashboard(): void
 			{
