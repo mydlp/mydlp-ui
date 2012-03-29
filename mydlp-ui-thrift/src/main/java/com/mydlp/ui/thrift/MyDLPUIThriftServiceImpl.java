@@ -71,10 +71,10 @@ public class MyDLPUIThriftServiceImpl implements MyDLPUIThriftService {
 	}
 
 	@Override
-	public ByteBuffer getRuletable(String ipAddress, String revisionId) {
+	public ByteBuffer getRuletable(String ipAddress, String userH, String revisionId) {
 		try {
 			ensureOpen();
-			return client.getRuletable(ipAddress, revisionId);
+			return client.getRuletable(ipAddress, userH, revisionId);
 		} catch (NullPointerException e) {
 			logger.error("Can not establish thrift service connection.");
 		} catch (TException e) {

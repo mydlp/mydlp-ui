@@ -7,7 +7,7 @@ public interface MyDLPUIThriftService {
 	
 	public void compileFilter(Integer filterId);
 	
-	public ByteBuffer getRuletable(String ipAddress, String revisionId);
+	public ByteBuffer getRuletable(String ipAddress, String userH, String revisionId);
 	
     public String receiveBegin(String ipAddress);
 

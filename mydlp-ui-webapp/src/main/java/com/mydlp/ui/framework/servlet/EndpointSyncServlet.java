@@ -41,8 +41,9 @@ public class EndpointSyncServlet implements HttpRequestHandler {
 		ByteBuffer responseBuffer = null;
 		try {
 			String urlKey = req.getParameter("rid");
+			String userH = req.getParameter("uh");
 			String ipAddress = req.getRemoteAddr();
-			responseBuffer = thriftService.getRuletable(ipAddress, urlKey);
+			responseBuffer = thriftService.getRuletable(ipAddress, userH, urlKey);
 			endpointStatusDAO.upToDateEndpoint(ipAddress);
 		} catch (RuntimeException e) {
 			logger.error("Runtime error occured", e);
