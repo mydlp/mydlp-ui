@@ -112,7 +112,8 @@
 				var ruleItems:ListCollectionView = ruleObject.ruleItems;
 				for each (var ruleItem:* in ruleItems)
 				{
-					if (ruleItem.item is Network)
+					if (ruleItem.item is Network ||
+						ruleItem.item is RuleUser )
 						sourceDataProvider1.addItem(ruleItem);
 					else if (ruleItem.item is InformationType)
 						matcherDataProvider1.addItem(ruleItem);
