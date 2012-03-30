@@ -2,19 +2,72 @@
 <s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
 		 xmlns:s="library://ns.adobe.com/flex/spark" 
 		 xmlns:mx="library://ns.adobe.com/flex/mx"
+		 xmlns:my="http://www.mydlp.com/flex/my"
 		 xmlns:util="com.mydlp.ui.util.*"
 		 width="300" creationComplete="onCreationComplete(event)">
 	<fx:Script>
 		<![CDATA[
+			import com.mydlp.ui.domain.LicenseInformation;
+			import com.mydlp.ui.util.LangUtil;
+			
+			import mx.controls.Alert;
+			import mx.core.FlexGlobals;
 			import mx.events.FlexEvent;
+			import mx.rpc.events.ResultEvent;
+			
+			[Bindable]
+			public var licenseInformation:LicenseInformation = null;
 			
 			protected function onCreationComplete(event:FlexEvent):void
 			{
-				lbl.setStyle("color","red");
+				re.getLicense();
+				//lbl.setStyle("color","red");
 			}
+			protected function getLicenseHandler(event:ResultEvent):void
+			{
+				licenseInformation = event.result as LicenseInformation;
+				Alert.show(FlexGlobals.topLevelApplication.currentState);
+				if(currentState == "nolicense")
+				{
+					Alert.show("expired");
+					expirationDate.setStyle("color", "red");
+					textBlicker.play();
+				}
+				else
+					re.isSoftLimit();
+			}
+			
+			protected function isSoftLimitHandler(event:ResultEvent):void
+			{
+				var result:Boolean = event.result as Boolean;
+				if(result)
+				{
+					Alert.show("expired1");
+					expirationDate.setStyle("color", "#ff9955");
+					textBlicker.play();
+				}
+			}
+			
 			
 		]]>
 	</fx:Script>
+	<fx:Declarations>
+		<my:remote id="re" destination="licenseInformationBRS">
+			<my:method name="getLicense" result="getLicenseHandler(event)"/>
+			<my:method name="isSoftLimit" result="isSoftLimitHandler(event)"/>
+		</my:remote>
+		<s:Animate id="textBlicker" duration="500" repeatBehavior="reverse" repeatCount="0"
+				   target="{expirationDate}" >
+			<s:SimpleMotionPath property="alpha" valueFrom="1.0" valueTo="0.0"/>
+		</s:Animate>
+		<mx:DateFormatter id="dateFormatter" formatString="DD/MM/YYYY"/> 
+	</fx:Declarations>
+	
+	<s:states>
+		<s:State name="default" />
+		<s:State name="nolicense" />
+	</s:states>
+	
 	<s:Rect left="0" right="0" top="0" bottom="0" >
 		<s:stroke>
 			<s:SolidColorStroke color="0xAEBBCF" alpha="0.3" weight="3"/>
@@ -22,10 +75,17 @@
 	</s:Rect>
 	<s:Group width="100%" height="100%">
 		<s:layout>
-			<s:HorizontalLayout verticalAlign="middle" horizontalAlign="center" 
+			<s:VerticalLayout horizontalAlign="center" 
 							  paddingBottom="15" paddingTop="15" 
 							  paddingLeft="5" paddingRight="5"/>
 		</s:layout>
-		<s:Label id="lbl" text="License type: UNLIMITED" width="100%" fontSize="18" fontWeight="bold" textAlign="center"/>
+		<s:Label id="lbl" text="{LangUtil.getString('messages','dashboard.license.licenseType.' + licenseInformation.licenseType)}"  
+				 width="100%" fontSize="18" fontWeight="bold" textAlign="center"/>
+		<s:Label id="issueDate" text="{LangUtil.getString('messages','dashboard.license.issueDate') + dateFormatter.format(licenseInformation.issueDate)}" 
+				 fontSize="18" fontWeight="bold" textAlign="center" width="100%"/>
+		<s:Label id="expirationDate" text="{LangUtil.getString('messages','dashboard.license.expirationDate') + dateFormatter.format(licenseInformation.expirationDate)}" 
+				 fontSize="18" fontWeight="bold" textAlign="center" width="100%"/>
+		<s:Label id="userCount"  text="{LangUtil.getString('messages','dashboard.license.userCount') + licenseInformation.userCount}" 
+				 fontSize="18" fontWeight="bold" textAlign="center" width="100%"/>
 	</s:Group>
 </s:Group>

@@ -117,6 +117,11 @@
 		</my:remote>
 	</fx:Declarations>
 	
+	<s:states>
+		<s:State name="default" />
+		<s:State name="nolicense" />
+	</s:states>
+	
 	
 	<s:layout>
 		<s:HorizontalLayout horizontalAlign="center" />
@@ -126,12 +131,12 @@
 		<s:layout>
 			<s:VerticalLayout verticalAlign="middle" horizontalAlign="center" gap="20"/>
 		</s:layout>
-		<dashboard:LicenseBox />
+		<dashboard:LicenseBox currentState.nolicense="nolicense" currentState="default"/>
 		<s:Spacer height="10" />
 		<s:BitmapImage source="@Embed('/assets/images/logo_314x124.png')" />
-		<dashboard:AlertBox />
+		<dashboard:AlertBox includeIn="default"/>
 	</s:Group>
-	<s:VGroup width="100%" height="100%" paddingTop="20" gap="20">
+	<s:VGroup width="100%" height="100%" paddingTop="20" gap="20" includeIn="default">
 		<s:HGroup gap="30">
 			<s:Button skinClass="com.mydlp.ui.skin.AddBitmapLabelButton24Skin" 
 					  label="@Resource(key='dashboard.additem', bundle='messages')"
@@ -147,5 +152,10 @@
 				<s:TileLayout horizontalGap="40" verticalGap="25"/>
 			</s:layout>
 		</s:Group>
+	</s:VGroup>
+	<s:VGroup width="100%" height="100%" paddingTop="250" paddingLeft="400" includeIn="nolicense">
+		<s:HGroup gap="30">
+			<dashboard:LicenseKeyEntrance includeIn="nolicense"/>
+		</s:HGroup>
 	</s:VGroup>
 </s:SkinnableContainer>

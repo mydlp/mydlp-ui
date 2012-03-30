@@ -1,0 +1,63 @@
+package com.mydlp.ui.domain;
+
+import java.util.Date;
+
+import javax.persistence.Entity;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+@Entity
+public class LicenseInformation extends AbstractEntity {
+	
+	
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7386589999887222954L;
+	
+	public static final String COMMUNITY_LICENSE = "community_license";
+	public static final String ENTERPRISE_LICENSE = "enterprise_license";
+	
+	@Temporal(TemporalType.TIMESTAMP)
+	protected Date issueDate;
+	
+	@Temporal(TemporalType.TIMESTAMP)	
+	protected Date expirationDate;
+	
+	protected int userCount;
+	protected String licenseType;
+	protected String licenseKey;
+	
+	public Date getIssueDate() {
+		return issueDate;
+	}
+	public void setIssueDate(Date issueDate) {
+		this.issueDate = issueDate;
+	}
+	public Date getExpirationDate() {
+		return expirationDate;
+	}
+	public void setExpirationDate(Date expirationDate) {
+		this.expirationDate = expirationDate;
+	}
+	public int getUserCount() {
+		return userCount;
+	}
+	public void setUserCount(int userCount) {
+		this.userCount = userCount;
+	}
+	public String getLicenseType() {
+		return licenseType;
+	}
+	public void setLicenseType(String licenseType) {
+		this.licenseType = licenseType;
+	}
+	public String getLicenseKey() {
+		return licenseKey;
+	}
+	public void setLicenseKey(String licenseKey) {
+		this.licenseKey = licenseKey;
+	}
+
+}
