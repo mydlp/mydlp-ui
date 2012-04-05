@@ -120,6 +120,8 @@
 	<s:states>
 		<s:State name="default" />
 		<s:State name="nolicense" />
+		<s:State name="softLimit"/>
+		<s:State name="near"/>
 	</s:states>
 	
 	
@@ -127,16 +129,21 @@
 		<s:HorizontalLayout horizontalAlign="center" />
 	</s:layout>
 	
-	<s:Group width="400" height="100%" id="printedGroup">
+	<s:Group width="400" height="100%" id="printedGroup" includeIn="default, softLimit, near">
 		<s:layout>
 			<s:VerticalLayout verticalAlign="middle" horizontalAlign="center" gap="20"/>
 		</s:layout>
-		<dashboard:LicenseBox currentState.nolicense="nolicense" currentState="default"/>
-		<s:Spacer height="10" />
 		<s:BitmapImage source="@Embed('/assets/images/logo_314x124.png')" />
-		<dashboard:AlertBox includeIn="default"/>
+		<s:Spacer height="2%" />
+		<dashboard:LicenseBox id="licenseBox" currentState.nolicense="nolicense" currentState="default"/>
+		<s:Spacer height="2%" />
+		<dashboard:LicenseDayInformation includeIn="softLimit, near"/>
+		<s:Spacer height="2%" />
+		<dashboard:LicenseKeyEntrance includeIn="softLimit"/>
+		<s:Spacer height="2%" />
+		<dashboard:AlertBox includeIn="default,softLimit, near"/>
 	</s:Group>
-	<s:VGroup width="100%" height="100%" paddingTop="20" gap="20" includeIn="default">
+	<s:VGroup width="100%" height="100%" paddingTop="20" gap="20" includeIn="default, softLimit, near">
 		<s:HGroup gap="30">
 			<s:Button skinClass="com.mydlp.ui.skin.AddBitmapLabelButton24Skin" 
 					  label="@Resource(key='dashboard.additem', bundle='messages')"
@@ -153,9 +160,17 @@
 			</s:layout>
 		</s:Group>
 	</s:VGroup>
-	<s:VGroup width="100%" height="100%" paddingTop="250" paddingLeft="400" includeIn="nolicense">
-		<s:HGroup gap="30">
-			<dashboard:LicenseKeyEntrance includeIn="nolicense"/>
-		</s:HGroup>
-	</s:VGroup>
+	<s:Group width="100%" height="100%" includeIn="nolicense">
+		<s:layout>
+			<s:VerticalLayout horizontalAlign="center" verticalAlign="middle"/>
+		</s:layout>
+				
+		<s:BitmapImage source="@Embed('/assets/images/logo_314x124.png')" />
+		<s:Spacer height="5%" />
+		<dashboard:LicenseBox currentState.nolicense="nolicense" currentState="default"/>
+		<s:Spacer height="5%" />
+		<dashboard:LicenseDayInformation />
+		<s:Spacer height="5%" />
+		<dashboard:LicenseKeyEntrance/>
+	</s:Group>
 </s:SkinnableContainer>

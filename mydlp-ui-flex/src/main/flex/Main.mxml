@@ -162,7 +162,7 @@
 						  paddingLeft="24" paddingRight="24"/>
 	</s:layout>
 	
-	<toolbar:TopToolbar id="topToolbar" />
+	<toolbar:TopToolbar id="topToolbar" currentState.nolicense="nolicense" currentState="default"/>
 	
 	<s:Spacer height="5" width="100%" />
 	

@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
 		 xmlns:s="library://ns.adobe.com/flex/spark" 
-		 xmlns:mx="library://ns.adobe.com/flex/mx" width="100%" height="100%">
+		 xmlns:mx="library://ns.adobe.com/flex/mx" width="100%" height="100">
 	
 	<fx:Script>
 		<![CDATA[
+			import mx.core.FlexGlobals;
+			
+			
 			protected function saveLicenceKeyHandler(event:MouseEvent):void
 			{
-				
+				FlexGlobals.topLevelApplication.dashboardContainer.licenseBox.saveLicenseKey(licenseKey.text);
 			}
 		]]>
 	</fx:Script>
@@ -26,6 +29,6 @@
 	<s:Label id="enterLicenceKey" styleName="fontSize24Style" color="red" 
 			 text="@Resource(bundle = 'messages', key = 'dashboard.license.titleLabel.label')" creationComplete="textBlink.play()"/>
 	<s:TextInput id="licenseKey" width="200"/>
-	<s:Button id="saveLicenceButton" label="@Resource(bundle = 'messages', key = 'dashboard.license.saveButton.label')" 
+	<s:Button id="saveLicenceButton" label="@Resource(bundle = 'messages', key = 'dashboard.license.enterButton.label')" 
 			  click="saveLicenceKeyHandler(event)"/>
 </s:Group>

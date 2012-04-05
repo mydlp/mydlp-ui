@@ -8,44 +8,83 @@
 	<fx:Script>
 		<![CDATA[
 			import com.mydlp.ui.domain.LicenseInformation;
+			import com.mydlp.ui.util.InteractionUtil;
 			import com.mydlp.ui.util.LangUtil;
 			
 			import mx.controls.Alert;
 			import mx.core.FlexGlobals;
 			import mx.events.FlexEvent;
+			import mx.managers.PopUpManager;
 			import mx.rpc.events.ResultEvent;
 			
 			[Bindable]
 			public var licenseInformation:LicenseInformation = null;
 			
+			public var licenseKeyEntrancePopup:LicenseKeyEntrancePopup;
+			
 			protected function onCreationComplete(event:FlexEvent):void
 			{
 				re.getLicense();
-				//lbl.setStyle("color","red");
 			}
 			protected function getLicenseHandler(event:ResultEvent):void
 			{
 				licenseInformation = event.result as LicenseInformation;
-				Alert.show(FlexGlobals.topLevelApplication.currentState);
-				if(currentState == "nolicense")
-				{
-					Alert.show("expired");
-					expirationDate.setStyle("color", "red");
-					textBlicker.play();
-				}
-				else
-					re.isSoftLimit();
+				re.isHardLimit();
+				
 			}
 			
-			protected function isSoftLimitHandler(event:ResultEvent):void
+			protected function isHardLimitHandler(event:ResultEvent):void
 			{
 				var result:Boolean = event.result as Boolean;
 				if(result)
 				{
-					Alert.show("expired1");
-					expirationDate.setStyle("color", "#ff9955");
+					expirationDate.setStyle("color", "red");
 					textBlicker.play();
 				}
+				else
+					re.isSoftLimitOrNear();
+			}
+			
+			protected function isSoftLimitOrNearHandler(event:ResultEvent):void
+			{
+				var result:String = event.result as String;
+				if(result == "soft")
+				{
+					expirationDate.setStyle("color", "#ff9955");
+					textBlicker.play();
+					FlexGlobals.topLevelApplication.dashboardContainer.currentState="softLimit";
+				}
+				else if(result == "near")
+				{
+					expirationDate.setStyle("color", "#ffcc00");
+					textBlicker.play();
+					FlexGlobals.topLevelApplication.dashboardContainer.currentState="near";
+				}
+			}
+			
+			public function saveLicenseKey(s:String):void
+			{
+				re.saveLicenseKey(s);
+			}
+			
+			protected function saveLicenseKeyHandler(event:ResultEvent):void
+			{
+				var result:Boolean = event.result as Boolean;
+				if(result)
+				{
+					licenseKeyEntrancePopup = InteractionUtil.newPopup(LicenseKeyEntrancePopup, true) as LicenseKeyEntrancePopup;
+					var timer:Timer = new Timer(3000);
+					timer.addEventListener(TimerEvent.TIMER, timerFinishHandler);
+					timer.start();
+				}
+				else
+					Alert.show("License Key is Invalid");
+			}
+			
+			protected function timerFinishHandler(event:TimerEvent):void
+			{
+				InteractionUtil.closePopup(licenseKeyEntrancePopup);
+				navigateToURL(new URLRequest ('j_spring_security_logout'), '_self');
 			}
 			
 			
@@ -54,7 +93,9 @@
 	<fx:Declarations>
 		<my:remote id="re" destination="licenseInformationBRS">
 			<my:method name="getLicense" result="getLicenseHandler(event)"/>
-			<my:method name="isSoftLimit" result="isSoftLimitHandler(event)"/>
+			<my:method name="isSoftLimitOrNear" result="isSoftLimitOrNearHandler(event)"/>
+			<my:method name="isHardLimit" result="isHardLimitHandler(event)"/>
+			<my:method name="saveLicenseKey" result="saveLicenseKeyHandler(event)"/>
 		</my:remote>
 		<s:Animate id="textBlicker" duration="500" repeatBehavior="reverse" repeatCount="0"
 				   target="{expirationDate}" >

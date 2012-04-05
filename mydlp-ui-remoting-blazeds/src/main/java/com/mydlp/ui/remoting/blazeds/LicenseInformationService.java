@@ -12,10 +12,18 @@ public interface LicenseInformationService {
 	
 	public LicenseInformation save(LicenseInformation l);
 	
+	public Boolean saveLicenseKey(String s);
+	
 	public void remove(LicenseInformation l);
 	
 	public Boolean isSoftLimit();
 	
 	public Boolean isHardLimit();
+	
+	public Boolean isExpirationDateNear();
+	
+	public String isSoftLimitOrNear();
+	
+	public long getDayInformation();
 	
 }

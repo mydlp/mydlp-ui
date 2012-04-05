@@ -9,4 +9,6 @@ public interface LicenseInformationDAO {
 	public void remove(LicenseInformation l);
 	public Boolean isSoftLimit();
 	public Boolean isHardLimit();
+	public Boolean isExpirationDateNear();
+	public long getDayInformation();
 }

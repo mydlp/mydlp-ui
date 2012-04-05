@@ -1,7 +1,6 @@
 package com.mydlp.ui.dao;
 
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 import org.hibernate.criterion.DetachedCriteria;
@@ -39,21 +38,36 @@ public class LicenseInformationDAOImpl extends AbstractPolicyDAO implements Lice
 	@Override
 	public Boolean isSoftLimit() {
 		Calendar now = Calendar.getInstance();
-		Date nowDate = now.getTime();
-		if(getLicense().getExpirationDate().before(nowDate))
+		if(getLicense().getExpirationDate().before(now.getTime()))
 			return true;
 		else return false;			
 	}
 
 	@Override
-	@Transactional(readOnly=false)
 	public Boolean isHardLimit() {
 		Calendar now = Calendar.getInstance();
 		now.add(Calendar.DATE, -30);
-		Date nowDate = now.getTime();
-		if(getLicense().getExpirationDate().before(nowDate))
+		if(getLicense().getExpirationDate().before(now.getTime()))
 			return true;
 		else return false;
+	}
+
+	@Override
+	public Boolean isExpirationDateNear() {
+		Calendar now = Calendar.getInstance();
+		now.add(Calendar.DATE, 30);
+		if(getLicense().getExpirationDate().before(now.getTime()))
+			return true;
+		else return false; 
+	}
+
+	@Override
+	public long getDayInformation() {
+		Calendar now = Calendar.getInstance();
+		long msec = now.getTimeInMillis();
+		long expirationDateInMsec = getLicense().getExpirationDate().getTime();
+		long diff = msec - expirationDateInMsec;
+		return (diff/(1000*60*60*24));
 	}
 
 }
