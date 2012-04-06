@@ -28,17 +28,20 @@
 				}
 				else if(result < 30)
 				{
-					dayInformation.text = result.toString() + " " + LangUtil.getString('messages', 'dashboard.license.dayInformation.passedDay.label');
+					dayInformation.text = LangUtil.getString('messages', 'dashboard.license.dayInformation.passedDay.label') + " " + 
+											result.toString() + " " + LangUtil.getString('messages', 'dashboard.license.dayInformation.ago');
 					dayInformation..setStyle("color", "#ff9955");
-					remainingDay.text = (30 - result).toString() + " " + LangUtil.getString('messages', 'dashboard.license.dayInformation.remainingDayToHardLimit.label');
+					remainingDay.text = LangUtil.getString('messages', 'dashboard.license.dayInformation.after')+" "+(30 - result).toString() 
+										+ " " + LangUtil.getString('messages', 'dashboard.license.dayInformation.remainingDayToHardLimit.label');
 					remainingDay.setStyle("color", "#ff9955");
 				}
 				else
 				{
-					dayInformation.text = result.toString() + " " + LangUtil.getString('messages', 'dashboard.license.dayInformation.passedDay.label');
+					dayInformation.text = LangUtil.getString('messages', 'dashboard.license.dayInformation.passedDay.label') + " " + result.toString()
+											+ " " + LangUtil.getString('messages', 'dashboard.license.dayInformation.ago');
 					dayInformation.setStyle("color", "red");
 				}
-				textBlicker.play();
+				//textBlicker.play();
 			}
 			
 		]]>
@@ -49,10 +52,10 @@
 			<my:method name="getDayInformation" result="getDayInformationHandler(event)"/>
 		</my:remote>
 		
-		<s:Animate id="textBlicker" duration="500" repeatBehavior="reverse" repeatCount="0"
+		<!--<s:Animate id="textBlicker" duration="500" repeatBehavior="reverse" repeatCount="0"
 				   target="{dayInformation, remainingDay}" >
 			<s:SimpleMotionPath property="alpha" valueFrom="1.0" valueTo="0.0"/>
-		</s:Animate>
+		</s:Animate>-->
 	</fx:Declarations>
 	
 	<s:layout>
@@ -60,6 +63,6 @@
 	</s:layout>
 	
 	<s:Label id="dayInformation" fontSize="18"/>
-	<s:Label id="remainingDay" fontSize="18"/>
+	<s:Label id="remainingDay" fontSize="15"/>
 	
 </s:Group>

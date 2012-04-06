@@ -139,9 +139,7 @@
 		<s:Spacer height="2%" />
 		<dashboard:LicenseDayInformation includeIn="softLimit, near"/>
 		<s:Spacer height="2%" />
-		<dashboard:LicenseKeyEntrance includeIn="softLimit"/>
-		<s:Spacer height="2%" />
-		<dashboard:AlertBox includeIn="default,softLimit, near"/>
+		<dashboard:LicenseKeyEntrance includeIn="softLimit, near"/>
 	</s:Group>
 	<s:VGroup width="100%" height="100%" paddingTop="20" gap="20" includeIn="default, softLimit, near">
 		<s:HGroup gap="30">

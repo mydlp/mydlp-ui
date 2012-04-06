@@ -16,10 +16,10 @@
 	</fx:Script>
 	
 	<fx:Declarations>
-		<s:Animate id="textBlink" duration="500" repeatBehavior="reverse" repeatCount="0"
+		<!--<s:Animate id="textBlink" duration="500" repeatBehavior="reverse" repeatCount="0"
 				   target="{enterLicenceKey}" >
 			<s:SimpleMotionPath property="alpha" valueFrom="1.0" valueTo="0.0"/>			
-		</s:Animate>
+		</s:Animate>-->
 	</fx:Declarations>
 	
 	<s:layout>
@@ -27,8 +27,8 @@
 	</s:layout>
 	
 	<s:Label id="enterLicenceKey" styleName="fontSize24Style" color="red" 
-			 text="@Resource(bundle = 'messages', key = 'dashboard.license.titleLabel.label')" creationComplete="textBlink.play()"/>
-	<s:TextInput id="licenseKey" width="200"/>
+			 text="@Resource(bundle = 'messages', key = 'dashboard.license.titleLabel.label')" />
+	<s:TextInput id="licenseKey" width="400"/>
 	<s:Button id="saveLicenceButton" label="@Resource(bundle = 'messages', key = 'dashboard.license.enterButton.label')" 
 			  click="saveLicenceKeyHandler(event)"/>
 </s:Group>

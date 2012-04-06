@@ -22,6 +22,8 @@
 			
 			public var licenseKeyEntrancePopup:LicenseKeyEntrancePopup;
 			
+			public var timerBlicker:Timer = new Timer(1000*60);
+			
 			protected function onCreationComplete(event:FlexEvent):void
 			{
 				re.getLicense();
@@ -40,6 +42,8 @@
 				{
 					expirationDate.setStyle("color", "red");
 					textBlicker.play();
+					timerBlicker.addEventListener(TimerEvent.TIMER, blickingFinishHandler);
+					timerBlicker.start();
 				}
 				else
 					re.isSoftLimitOrNear();
@@ -60,6 +64,13 @@
 					textBlicker.play();
 					FlexGlobals.topLevelApplication.dashboardContainer.currentState="near";
 				}
+				timerBlicker.addEventListener(TimerEvent.TIMER, blickingFinishHandler);
+				timerBlicker.start();
+			}
+			
+			protected function blickingFinishHandler(event:TimerEvent):void
+			{
+				textBlicker.stop();
 			}
 			
 			public function saveLicenseKey(s:String):void
