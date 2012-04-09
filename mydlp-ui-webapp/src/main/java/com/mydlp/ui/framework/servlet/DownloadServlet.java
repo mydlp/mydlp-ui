@@ -19,6 +19,7 @@ import org.springframework.web.HttpRequestHandler;
 
 import com.mydlp.ui.dao.IncidentLogDAO;
 import com.mydlp.ui.domain.IncidentLogFile;
+import com.mydlp.ui.domain.IncidentLogFileContent;
 
 @Service("downloadServlet")
 public class DownloadServlet implements HttpRequestHandler {
@@ -33,15 +34,31 @@ public class DownloadServlet implements HttpRequestHandler {
 	@Override
 	public void handleRequest(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-		String urlKey = req.getParameter("id");
+		String urlKey = req.getParameter("key"); 
+		String urlId = req.getParameter("id");
 		try {
-			Integer logFileId = Integer.parseInt(urlKey);
-			IncidentLogFile logFile = incidentLogDAO.geIncidentLogFile(logFileId);
-			
-			if (logFile == null)
-			{
-				logger.error("Null object returned from DAO.");
-				return;
+			IncidentLogFile logFile = null;
+			if (urlKey != null) {
+				if (urlKey.equals("user.der")) {
+					logFile = new IncidentLogFile();
+					logFile.setFilename("mydlp-user-certificate.der");
+					IncidentLogFileContent content = new IncidentLogFileContent();
+					content.setMimeType("application/x-x509-ca-cert");
+					content.setLocalPath("/etc/mydlp/ssl/user.der");
+					logFile.setContent(content);
+				} else {
+					logger.error("Unkown key: " + req.getParameter("key"));
+					return;
+				}
+			} else {
+				Integer logFileId = Integer.parseInt(urlId);
+				logFile = incidentLogDAO.geIncidentLogFile(logFileId);
+				
+				if (logFile == null)
+				{
+					logger.error("Null object returned from DAO. urlId: ", urlId);
+					return;
+				}
 			}
 			
 			File localFile = new File(logFile.getContent().getLocalPath());
@@ -68,7 +85,7 @@ public class DownloadServlet implements HttpRequestHandler {
 	        op.close();
 			
 		} catch (NumberFormatException e) {
-			logger.error("Cannot format ", urlKey , e);
+			logger.error("Cannot format ", urlId , e);
 		} catch (FileNotFoundException e) {
 			logger.error("Cannot find file", e);
 		} catch (IOException e) {
