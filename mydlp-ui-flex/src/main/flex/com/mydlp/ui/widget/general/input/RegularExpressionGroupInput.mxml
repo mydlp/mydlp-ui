@@ -39,10 +39,14 @@
 			
 			protected function editClickHandler(event:MouseEvent):void
 			{
-				var regp:RegularExpressionGroupPopup = InteractionUtil.newPopup(RegularExpressionGroupPopup) as RegularExpressionGroupPopup;
-				regp.regularExpressionGroupInput = this;
-				regp.regexEntry = entriesList.selectedItem;
-				regp.populate();
+				if(entriesList.selectedItem != null)
+				{
+					var regp:RegularExpressionGroupPopup = InteractionUtil.newPopup(RegularExpressionGroupPopup) as RegularExpressionGroupPopup;
+					regp.regularExpressionGroupInput = this;
+					regp.currentState = "edit";
+					regp.regexEntry = entriesList.selectedItem;
+					regp.populate();
+				}
 			}
 			
 		]]>

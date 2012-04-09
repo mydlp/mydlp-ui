@@ -4,22 +4,31 @@
 			   xmlns:mx="library://ns.adobe.com/flex/mx"
 			   xmlns:input="com.mydlp.ui.widget.general.input.*"
 			   close="{close()}"
-			   visible="false"
+			   visible="false" width="300" height="100%"
 			   title="@Resource(bundle = 'messages', key = 'regularExpression.title.label')"
 			   >
 	
 	<fx:Script>
 		<![CDATA[
-			import com.mydlp.ui.domain.MIMEType;
 			import com.mydlp.ui.domain.RegularExpressionGroupEntry;
+			import com.mydlp.ui.util.FileUtil;
 			import com.mydlp.ui.util.InteractionUtil;
 			
-			import mx.events.FlexEvent;
+			import mx.collections.ArrayCollection;
+			import mx.events.ItemClickEvent;
 			
 			public var regularExpressionGroupInput:RegularExpressionGroupInput = null;
 			
 			[Bindable]
 			public var regexEntry:RegularExpressionGroupEntry = null;
+			
+			public var fileReference:FileReference = null;
+			
+			[Bindable]
+			public var keywordsFromFileDP:ArrayCollection = new ArrayCollection;
+			
+			public static var selectedKeyworsFromFile:ArrayCollection = new ArrayCollection;
+			
 			
 			protected function close(): void
 			{
@@ -34,11 +43,25 @@
 				else 
 					isEdit = true;
 				
-				regexEntry.regex = keyword.text;
+				var temp:ArrayCollection = selectedKeyworsFromFile;
+				if(temp.length != 0)
+				{
+					for (var i:int = 0; i < temp.length; i++)
+					{
+						var newregex:RegularExpressionGroupEntry = new RegularExpressionGroupEntry;
+						newregex.regex = temp[i];
+						regularExpressionGroupInput.addEntry(newregex);
+					}
+				}
+				else
+				{
+					regexEntry.regex = keyword.text;
 				
-				if (!isEdit)
-					regularExpressionGroupInput.addEntry(regexEntry);
+					if (!isEdit)
+						regularExpressionGroupInput.addEntry(regexEntry);
+				}
 				
+				selectedKeyworsFromFile.removeAll();
 				close();
 			}
 			
@@ -52,32 +75,133 @@
 				visible = true;
 			}
 			
+			protected function onUploadCompleteHandler(event:Event):void
+			{
+				var data:ByteArray = new ByteArray();
+				fileReference.data.readBytes(data, 0, fileReference.data.length);
+				var fileData:String = data.readUTFBytes(data.length);
+				keywordsFromFileDP = FileUtil.splitString(fileData);
+				selectedKeyworsFromFile = FileUtil.splitString(fileData);
+				saveButton.enabled = true;
+			}
+			
+			protected function onFileSelectHandler(event:Event):void
+			{
+				fileReference.addEventListener(Event.COMPLETE, onUploadCompleteHandler);
+				fileReference.load();
+			}
+			
+			protected function selectButtonHandler(event:Event):void
+			{
+				fileReference = new FileReference;
+				fileReference.addEventListener(Event.SELECT, onFileSelectHandler);
+				fileReference.browse();	
+			}
+			
+			protected function onSelectionHandler(event:ItemClickEvent):void
+			{
+				selectedKeyworsFromFile.removeAll();
+				if(event.currentTarget.selectedValue == "file")
+				{
+					this.currentState = "file";
+					saveButton.enabled = false;
+					keywordsFromFileDP.removeAll();
+				}
+				else
+				{
+					saveButton.enabled = true;
+					this.currentState = "text";
+				}
+			}
 			
 		]]>
 	</fx:Script>
 	
 	
 	<fx:Declarations>
-		
+		<s:RadioButtonGroup id="selection" itemClick="onSelectionHandler(event)"/>
 	</fx:Declarations>
 	
+	<s:states>
+		<s:State name="default"/>
+		<s:State name="file"/>
+		<s:State name="text"/>
+		<s:State name="edit"/>
+	</s:states>
 	
 	<s:layout>
-		<s:VerticalLayout horizontalAlign="center" gap="5"
+		<s:VerticalLayout horizontalAlign="center" gap="10"
 						  paddingLeft="8" paddingRight="8"
 						  paddingTop="5" paddingBottom="5"/>
 	</s:layout>
-	<s:Form>
+	
+	<s:Group>
+		<s:layout >
+			<s:VerticalLayout horizontalAlign="left"/>
+		</s:layout>
+		
+	<s:RadioButton id="fromFile" groupName="selection" value="file" excludeFrom="edit"
+				   label="@Resource(bundle = 'messages', key = 'regularExpression.add.importFromFile.label')" />
+	<s:RadioButton id="asText" groupName="selection" value="text" excludeFrom="edit"
+				   label="@Resource(bundle = 'messages', key = 'regularExpression.add.asText.label')" />
+	</s:Group>
+	
+	<s:Form id="form" includeIn="text, edit"  >
 		<s:FormItem label="@Resource(bundle = 'messages', key = 'regularExpression.name.label')" >
-			<s:TextInput id="keyword"/>
+			<s:TextInput id="keyword" includeIn="text, edit" itemCreationPolicy="immediate"/>
 		</s:FormItem>
-	</s:Form>			
+	</s:Form>
+	
+	<s:Button id="selectFromFileButton" label="@Resource(bundle = 'messages', key = 'regularExpression.selectFile.button.label')"
+			  includeIn="file" click="selectButtonHandler(event)"/>
+	<s:Group>
+		<s:List dataProvider="{keywordsFromFileDP}" id="fileKeywordList" includeIn="file" borderVisible="false" width="200">
+			<s:layout>
+				<s:VerticalLayout horizontalAlign="left" gap="4" paddingLeft="10"/>
+			</s:layout>
+			<s:itemRenderer>
+				<fx:Component>
+					
+					<s:ItemRenderer >
+						<fx:Script>
+							<![CDATA[
+								import mx.collections.ArrayCollection;
+								import mx.controls.Alert;
+								import mx.core.FlexGlobals;
+								import mx.events.FlexEvent;
+								protected function selectionChangeHandler(event:Event):void
+								{
+									if(event.currentTarget.selected == true)
+									{
+										RegularExpressionGroupPopup.selectedKeyworsFromFile.addItem(data as String);	
+									}
+									else
+									{
+										var temp:ArrayCollection = RegularExpressionGroupPopup.selectedKeyworsFromFile;
+										for(var i:int = 0; i < temp.length; i++)
+										{
+											if(temp[i] == data)
+											{
+												RegularExpressionGroupPopup.selectedKeyworsFromFile.removeItemAt(i);
+												break;
+											}
+										}
+									}
+								}							
+							]]>
+						</fx:Script>
+						<s:CheckBox label="{data as String}" selected="true" change="selectionChangeHandler(event)"/>
+					</s:ItemRenderer>
+				</fx:Component>
+			</s:itemRenderer>
+		</s:List>
+	</s:Group>
 	
 	<s:Group>
 		<s:layout>
 			<s:HorizontalLayout horizontalAlign="right" verticalAlign="middle" gap="10"/>
 		</s:layout>
-		<s:Button label="@Resource(bundle = 'messages', key = 'regularExpression.button.save.label')" click="addNewFeature(event)"/>
+		<s:Button id="saveButton" label="@Resource(bundle = 'messages', key = 'regularExpression.button.save.label')" click="addNewFeature(event)"/>
 		<s:Button label="@Resource(bundle = 'messages', key = 'regularExpression.button.cancel.label')" click="{close()}"/>
 	</s:Group>
 </s:TitleWindow>

@@ -1,5 +1,7 @@
 package com.mydlp.ui.util
 {	
+	import mx.collections.ArrayCollection;
+
 	public class FileUtil
 	{
 		public static function getHumanReadableSize(size:Number): String
@@ -22,6 +24,21 @@ package com.mydlp.ui.util
 			else
 				return size.toFixed(2) + " GB";
 
+		}
+		
+		public static function splitString(str:String):ArrayCollection
+		{
+			var result:ArrayCollection = new ArrayCollection;
+			var temp:Array;
+			temp = str.split("\n");
+			for each(var mem:String in temp)
+			{
+				var keywords:Array;
+				keywords = mem.split(" ");
+				for each(var keyword:String in keywords)
+					result.addItem(keyword);
+			}
+			return result;
 		}
 	}
 }
