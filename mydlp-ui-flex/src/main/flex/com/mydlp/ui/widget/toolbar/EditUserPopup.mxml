@@ -89,7 +89,7 @@
 	
 	<s:Form>
 		<s:FormItem label="@Resource(bundle = 'messages', key = 'editCurrentUser.popup.name.label')">
-			<s:TextInput id="nameInput" text="@{currentUser.username}"/>
+			<s:TextInput id="nameInput" text="@{currentUser.username}" editable="false"/>
 		</s:FormItem>
 		<s:FormItem label="@Resource(bundle = 'messages', key = 'editCurrentUser.popup.email.label')">
 			<s:TextInput id="emailInput" text="{currentUser.email}" editable="false"/>
