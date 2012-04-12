@@ -16,7 +16,7 @@
 			import mx.validators.Validator;
 			
 			[Bindable]
-			protected var configs:ListCollectionView = null;
+			public var configs:ListCollectionView = null;
 			
 			protected var inputValidationObject:Object = new Object();
 			
@@ -100,7 +100,7 @@
 				}
 			}
 			
-			protected function saveButtonHandler(event:MouseEvent):void
+			public function saveButtonHandler(event:MouseEvent):void
 			{
 				var validationErrorArray:Array = Validator.validateAll(validators);
 				if(validationErrorArray.length == 0)

@@ -5,6 +5,18 @@
 					 xmlns:option="com.mydlp.ui.widget.option.*"
 					 xmlns:domain="com.mydlp.ui.domain.*">
 	
+	<fx:Script>
+		<![CDATA[
+			import com.mydlp.ui.util.InteractionUtil;
+			
+			protected function openHTML(event:MouseEvent):void
+			{
+				var deniedPagePopup:EditDeniedPagePopup = InteractionUtil.newPopup(EditDeniedPagePopup ,true) as EditDeniedPagePopup;
+			}
+			
+		]]>
+	</fx:Script>
+	
 	<fx:Declarations>
 		<domain:Config id="errorAction" />
 		<domain:Config id="mailArchive" />		
@@ -28,8 +40,14 @@
 				<s:CheckBox id="mailArchiveCheckBox" selected="{mailArchive.value == 'true'}" 
 							change="{mailArchive.value = mailArchiveCheckBox.selected ? 'true' : 'false'}"/>			
 			</s:FormItem>			
-		</s:Form>	
-		
+		</s:Form>
+		<s:Group>
+			<s:layout>
+				<s:HorizontalLayout paddingLeft="25" gap="5" verticalAlign="middle"/>
+			</s:layout>
+			<s:Label text="@Resource(bundle = 'messages', key = 'options.tab.general.editDeniedPage.label')"/>
+			<s:Button label="@Resource(bundle = 'messages', key = 'options.tab.general.editDeniedPageButton.label')" click="openHTML(event)" />
+		</s:Group>
 	</s:VGroup>
 	
 </option:ConfigTabBox>

@@ -97,6 +97,11 @@
   </servlet>
   
   <servlet>
+    <servlet-name>htmlPreviewServlet</servlet-name>
+    <servlet-class>org.springframework.web.context.support.HttpRequestHandlerServlet</servlet-class>
+  </servlet>
+  
+  <servlet>
     <servlet-name>syncServlet</servlet-name>
     <servlet-class>org.springframework.web.context.support.HttpRequestHandlerServlet</servlet-class>
   </servlet>
@@ -131,6 +136,11 @@
   <servlet-mapping>
     <servlet-name>receiveServlet</servlet-name>
     <url-pattern>/receive</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
+    <servlet-name>htmlPreviewServlet</servlet-name>
+    <url-pattern>/htmlPreview</url-pattern>
   </servlet-mapping>
 
 </web-app>

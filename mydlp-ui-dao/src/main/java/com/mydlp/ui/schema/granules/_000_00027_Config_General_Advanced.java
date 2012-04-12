@@ -59,7 +59,11 @@ public class _000_00027_Config_General_Advanced extends AbstractGranule {
 
 		Config queryCacheMaximumSize = new Config();	
 		queryCacheMaximumSize.setKey("query_cache_maximum_size");
-		queryCacheMaximumSize.setValue("2000000");			
+		queryCacheMaximumSize.setValue("2000000");
+		
+		Config deniedPage = new Config();	
+		deniedPage.setKey("denied_page_html");
+		deniedPage.setValue("<!DOCTYPE html PUBLIC \"-//IETF//DTD HTML 2.0//EN\">");
 
 		getHibernateTemplate().saveOrUpdate(mailArchive);
 		getHibernateTemplate().saveOrUpdate(archiveMinimumSize);
@@ -73,7 +77,8 @@ public class _000_00027_Config_General_Advanced extends AbstractGranule {
 		getHibernateTemplate().saveOrUpdate(fsmTimeout);
 		getHibernateTemplate().saveOrUpdate(spawnTimeout);
 		getHibernateTemplate().saveOrUpdate(queryCacheCleaunpInterval);
-		getHibernateTemplate().saveOrUpdate(queryCacheMaximumSize);		
+		getHibernateTemplate().saveOrUpdate(queryCacheMaximumSize);	
+		getHibernateTemplate().saveOrUpdate(deniedPage);	
 
 	}
 

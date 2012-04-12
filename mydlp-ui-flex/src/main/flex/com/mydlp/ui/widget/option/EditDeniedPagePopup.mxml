@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:TitleWindow xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			   xmlns:s="library://ns.adobe.com/flex/spark" 
+			   xmlns:mx="library://ns.adobe.com/flex/mx" width="100%" height="100%"
+			   close="{InteractionUtil.closePopup(this)}"
+			   creationComplete="onCreationComplete(event)"
+			   title="@Resource(bundle = 'messages', key = 'options.tab.general.editDeniedPage.title')">
+	<fx:Script>
+		<![CDATA[
+			import com.mydlp.ui.domain.Config;
+			import com.mydlp.ui.util.InteractionUtil;
+			
+			import flash.net.navigateToURL;
+			
+			import mx.collections.ListCollectionView;
+			import mx.core.FlexGlobals;
+			import mx.events.FlexEvent;
+			
+			protected var deniedPageConfig:Config = null
+			
+			protected function previewClickHandler(event:MouseEvent):void
+			{
+				var url:String = "htmlPreview"
+				var request:URLRequest = new URLRequest(url);
+				var requestVariable:URLVariables = new URLVariables();
+				requestVariable.htmlText = htmlTextArea.text;
+				request.data = requestVariable;
+				request.method = URLRequestMethod.POST;
+				navigateToURL(request, "_blank");
+			}
+			
+			protected function saveClickHandler(event:MouseEvent):void
+			{
+				deniedPageConfig.value = htmlTextArea.text;
+				//saveButton.enabled = false;
+				FlexGlobals.topLevelApplication.optionContainer.saveButtonHandler(event);
+				InteractionUtil.closePopup(this);
+			}
+			
+			protected function onCreationComplete(event:FlexEvent):void
+			{
+				var configs:ListCollectionView = FlexGlobals.topLevelApplication.optionContainer.configs;
+				if(configs == null) return;
+				for each(var c:* in configs)
+				{
+					var config:Config = c as Config;
+					if(config.key == "denied_page_html")
+						deniedPageConfig = config;
+				}
+				if(deniedPageConfig != null)
+					htmlTextArea.text = deniedPageConfig.value;
+			}
+			
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	<s:Group>
+		
+		<s:layout>
+			<s:VerticalLayout gap="5" paddingBottom="10" paddingLeft="10" paddingRight="10" paddingTop="10" horizontalAlign="center"/>
+		</s:layout>
+		
+		<s:TextArea id="htmlTextArea" heightInLines="25" width="700"/>
+		
+		<s:Group>
+			<s:layout>
+				<s:HorizontalLayout gap="5" />
+			</s:layout>
+			
+			<s:Button label="@Resource(bundle = 'messages', key = 'options.tab.general.editDeniedPage.closeButton.label')" click="{InteractionUtil.closePopup(this)}"/>
+			<s:Button label="@Resource(bundle = 'messages', key = 'options.tab.general.editDeniedPage.saveButton.label')" click="saveClickHandler(event)"/>
+			<s:Button label="@Resource(bundle = 'messages', key = 'options.tab.general.editDeniedPage.previewButton.label')" click="previewClickHandler(event)"/>
+			
+		</s:Group>
+	</s:Group>
+	
+</s:TitleWindow>
