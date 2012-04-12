@@ -183,9 +183,7 @@
 			<input:MatcherDefinition data="regex" />
 			<input:MatcherDefinition data="scode" />
 			<input:MatcherDefinition data="scode_ada" />
-			<!--
 			<input:MatcherDefinition data="keyword_group" />
-			-->
 			<input:MatcherDefinition data="document_hash" />
 			<input:MatcherDefinition data="document_pdm" />
 			<input:MatcherDefinition data="encrypted_file" />

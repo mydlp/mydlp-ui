@@ -72,7 +72,11 @@
 			</s:FormItem>
 			<s:FormItem label="{icapLogPassLowerLimit.label}">
 				<s:TextInput id="logPass" text="@{icapLogPassLowerLimit.value}"/>
-			</s:FormItem>			
+			</s:FormItem>
+			<s:FormItem label="@Resource(bundle = 'messages', key = 'config.icap.download_user_der_title')">
+				<s:Label text="@Resource(bundle = 'messages', key = 'config.icap.download_user_der')"
+						 click="{navigateToURL(new URLRequest ('download?key=user.der'), '_blank')}"/>
+			</s:FormItem>
 		</s:Form>
 		
 	</s:VGroup>
