@@ -24,7 +24,7 @@
 		<s:NumberValidator id="epSyncValidator"
 						   source="{sync}"
 						   property="text"
-						   minValue="149999"
+						   minValue="29999"
 						   valid="{optionContainer.validInput(event)}"
 						   invalid="{optionContainer.invalidInput(event)}"/>
 		
