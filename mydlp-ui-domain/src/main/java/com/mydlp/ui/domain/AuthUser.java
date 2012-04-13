@@ -2,20 +2,24 @@ package com.mydlp.ui.domain;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToOne;
 
 import org.dphibernate.serialization.annotations.NeverSerialize;
 
 @Entity
 public class AuthUser extends AbstractEntity {
 
+
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 2085839593764490259L;
-
+	private static final long serialVersionUID = 5054573190269821453L;
+	
+	
 	protected String username;
 	protected String password;
 	protected String email;
@@ -23,6 +27,7 @@ public class AuthUser extends AbstractEntity {
 	protected List<AuthSecurityRole> roles;
 	protected Boolean hasAuthorityScope;
 	protected List<ADDomainItem> authorityScopeADItems;
+	protected UserSettings settings;
 
 	@Column(unique=true)
 	public String getUsername() {
@@ -74,6 +79,14 @@ public class AuthUser extends AbstractEntity {
 	public void setAuthorityScopeADItems(
 			List<ADDomainItem> authorityScopeADItems) {
 		this.authorityScopeADItems = authorityScopeADItems;
+	}
+	
+	@OneToOne(mappedBy="user", cascade={CascadeType.ALL})
+	public UserSettings getSettings() {
+		return settings;
+	}
+	public void setSettings(UserSettings settings) {
+		this.settings = settings;
 	}
 	
 }

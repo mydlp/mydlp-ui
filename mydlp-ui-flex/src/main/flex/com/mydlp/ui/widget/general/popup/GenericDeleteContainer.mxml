@@ -12,6 +12,7 @@
 		<![CDATA[
 			import com.mydlp.ui.domain.AbstractEntity;
 			import com.mydlp.ui.domain.AbstractNamedEntity;
+			import com.mydlp.ui.domain.AuthUser;
 			import com.mydlp.ui.domain.InventoryCategory;
 			import com.mydlp.ui.util.ClassMember;
 			import com.mydlp.ui.util.InteractionUtil;
@@ -63,7 +64,12 @@
 				message += LangUtil.getString("messages", "generic.delete." + getSimpleName() + ".dialogMessage");
 				message += ": ";
 				
-				if (formObject["label"] != null) 
+				if(formObject is AuthUser)
+				{
+					message += formObject.username;
+				}
+				
+				else if (formObject["label"] != null) 
 				{
 					message += formObject.label;
 				}
