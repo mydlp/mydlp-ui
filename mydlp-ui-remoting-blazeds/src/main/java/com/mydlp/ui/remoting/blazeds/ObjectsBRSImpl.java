@@ -38,7 +38,6 @@ public class ObjectsBRSImpl implements ObjectsService
 		List<AbstractEntity> objects = new ArrayList<AbstractEntity>(); 
 		
 		objects.addAll(dataFormatDAO.getDataFormats());
-		objects.addAll(inventoryDAO.getInventoryItems());
 		objects.addAll(regexDAO.getRegularExpressionGroups());
 		objects.addAll(documentDatabaseDAO.getDocumentDatabases());
 		objects.addAll(adDomainDAO.getADDomains());

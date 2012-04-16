@@ -91,12 +91,6 @@
 						documentDatabases.addItem(item);
 					else if(item is ADDomain)
 						adDomains.addItem(item);
-					else if (item is InventoryItem && (item as InventoryItem).item is Network)
-						networks.addItem(item);
-					else if (item is InventoryItem && (item as InventoryItem).item is InformationType)
-						informationTypes.addItem(item);
-					else
-						others.addItem(item);
 				}
 				openItems = tempOpenItems;
 				validateNow();
@@ -113,18 +107,6 @@
 					parentDataFormats.classType = DataFormat;
 					parentDataFormats.children = dataFormats;
 					objects.addItem(parentDataFormats);
-					
-					var parentNetworks:ObjectGroup = new ObjectGroup();
-					parentNetworks.label = LangUtil.getString("messages", "objects.networks.label");;
-					parentNetworks.classType = null;
-					parentNetworks.children = networks;
-					objects.addItem(parentNetworks);
-					
-					var parentInformationTypes:ObjectGroup = new ObjectGroup();
-					parentInformationTypes.label = LangUtil.getString("messages", "objects.informationTypes.label");;
-					parentInformationTypes.classType = null;
-					parentInformationTypes.children  = informationTypes;
-					objects.addItem(parentInformationTypes);
 					
 					var parentRegularExpressionGroups:ObjectGroup = new ObjectGroup();
 					parentRegularExpressionGroups.label = LangUtil.getString("messages", "objects.regularExpressionGroups.label");
@@ -143,12 +125,6 @@
 					parentADDomains.classType = ADDomain;
 					parentADDomains.children = adDomains;
 					objects.addItem(parentADDomains);
-					
-					var parentOthers:ObjectGroup = new ObjectGroup();
-					parentOthers.label = LangUtil.getString("messages", "objects.others.label");;
-					parentOthers.classType = null;
-					parentOthers.children  = others;
-					objects.addItem(parentOthers);
 				}
 				refreshTree();
 			}
