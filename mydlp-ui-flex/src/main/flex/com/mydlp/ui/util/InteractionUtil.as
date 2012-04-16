@@ -12,6 +12,7 @@ package com.mydlp.ui.util
 	import mx.core.Application;
 	import mx.core.FlexGlobals;
 	import mx.core.IFlexDisplayObject;
+	import mx.events.CloseEvent;
 	import mx.managers.PopUpManager;
 	
 	public class InteractionUtil
@@ -24,7 +25,13 @@ package com.mydlp.ui.util
 				PopUpManager.centerPopUp(popup);
 			else
 				popup.move(FlexGlobals.topLevelApplication.mouseX + 10, FlexGlobals.topLevelApplication.mouseY + 10);
+			popup.addEventListener(CloseEvent.CLOSE, closeHandlerFunction);
 			return popup;
+		}
+		
+		public static function closeHandlerFunction(event:CloseEvent):void
+		{
+			ErrorTipManager.hideAllErrorTips();
 		}
 		
 		public static function closePopup(popup:Object): void

@@ -32,6 +32,7 @@
 			import com.mydlp.ui.domain.RuleUserAD;
 			import com.mydlp.ui.domain.USBDevice;
 			import com.mydlp.ui.util.ClassMember;
+			import com.mydlp.ui.util.ErrorTipManager;
 			import com.mydlp.ui.util.InteractionUtil;
 			import com.mydlp.ui.util.LangUtil;
 			import com.mydlp.ui.util.ReflectionUtil;
@@ -64,6 +65,7 @@
 			import mx.validators.EmailValidator;
 			import mx.validators.NumberValidator;
 			import mx.validators.RegExpValidator;
+			import mx.validators.ValidationResult;
 			import mx.validators.Validator;
 			
 			import spark.components.Button;
@@ -81,9 +83,12 @@
 			
 			protected var validators:Array = new Array();
 			
+			protected var regExpValidator2:RegExpValidator = new RegExpValidator();
+			
 			
 			protected function cancelButtonClickHandler(event:Event):void
 			{
+				ErrorTipManager.hideAllErrorTips();
 				if(event is KeyboardEvent)
 				{
 					if((event as KeyboardEvent).charCode == 32 || (event as KeyboardEvent).charCode == 13)
@@ -177,8 +182,9 @@
 						regExpValidator.source = ipInput;
 						regExpValidator.property = "text";
 						regExpValidator.expression = "^([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])$";
-						regExpValidator.addEventListener(ValidationResultEvent.INVALID, invalidInput);
-						regExpValidator.addEventListener(ValidationResultEvent.VALID, validInput);
+						ErrorTipManager.registerValidator(regExpValidator);
+						//regExpValidator.addEventListener(ValidationResultEvent.INVALID, invalidInput);
+						//regExpValidator.addEventListener(ValidationResultEvent.VALID, validInput);
 						validators.push(regExpValidator);
 					}
 					else if (targetObject is InformationType && 
@@ -337,8 +343,9 @@
 						var nullValidator:NullValidator = new NullValidator();
 						nullValidator.source = rudiInput;
 						nullValidator.property = "domainItem";
-						nullValidator.addEventListener(ValidationResultEvent.INVALID, invalidInput);
-						nullValidator.addEventListener(ValidationResultEvent.VALID, validInput);
+						ErrorTipManager.registerValidator(nullValidator);
+						//nullValidator.addEventListener(ValidationResultEvent.INVALID, invalidInput);
+						//nullValidator.addEventListener(ValidationResultEvent.VALID, validInput);
 						validators.push(nullValidator);
 					}
 					else if (classMember.name == "currentlyEnumerating" && classMember.type == Boolean)
@@ -392,12 +399,14 @@
 						inputLabel.addElement(textInput);
 						if(classMember.name == "name"){
 							index = 0;
-							var regExpValidator2:RegExpValidator = new RegExpValidator();
+							//var regExpValidator2:RegExpValidator = new RegExpValidator();
 							regExpValidator2.source = textInput;
 							regExpValidator2.property = "text";
-							regExpValidator2.expression = "^[a-zA-Z0-9_/\.\ ]+$"
-							regExpValidator2.addEventListener(ValidationResultEvent.INVALID, invalidInput);
-							regExpValidator2.addEventListener(ValidationResultEvent.VALID, validInput);
+							regExpValidator2.expression = "^[a-zA-Z0-9_/\.\ ]+$";
+							ErrorTipManager.registerValidator(regExpValidator2);
+							//var ev:ValidationResultEvent = new ValidationResultEvent();
+							//regExpValidator2.addEventListener(ValidationResultEvent.INVALID, ErrorTipManager.invalidHandler);
+							//regExpValidator2.addEventListener(ValidationResultEvent.VALID, ErrorTipManager.validHandler);
 							validators.push(regExpValidator2);
 						}
 						else if(classMember.name == "displayName"){
@@ -409,8 +418,9 @@
 							regExpValidator4.source = textInput;
 							regExpValidator4.property = "text";
 							regExpValidator4.expression = "^([\\w\\.-]{1,255})$";
-							regExpValidator4.addEventListener(ValidationResultEvent.INVALID, invalidInput);
-							regExpValidator4.addEventListener(ValidationResultEvent.VALID, validInput);
+							ErrorTipManager.registerValidator(regExpValidator4);
+							//regExpValidator4.addEventListener(ValidationResultEvent.INVALID, invalidInput);
+							//regExpValidator4.addEventListener(ValidationResultEvent.VALID, validInput);
 							validators.push(regExpValidator4);
 						}
 						else if(classMember.name == "serverIp"){
@@ -419,8 +429,9 @@
 							regExpValidator3.source = textInput;
 							regExpValidator3.property = "text";
 							regExpValidator3.expression = "^([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])$";
-							regExpValidator3.addEventListener(ValidationResultEvent.INVALID, invalidInput);
-							regExpValidator3.addEventListener(ValidationResultEvent.VALID, validInput);
+							ErrorTipManager.registerValidator(regExpValidator3);
+							//regExpValidator3.addEventListener(ValidationResultEvent.INVALID, invalidInput);
+							//regExpValidator3.addEventListener(ValidationResultEvent.VALID, validInput);
 							validators.push(regExpValidator3);
 						}
 						else if(classMember.name == "netbiosName"){
@@ -429,8 +440,9 @@
 							regExpValidator6.source = textInput;
 							regExpValidator6.property = "text";
 							regExpValidator6.expression = "^([\\w-]{1,15})$";
-							regExpValidator6.addEventListener(ValidationResultEvent.INVALID, invalidInput);
-							regExpValidator6.addEventListener(ValidationResultEvent.VALID, validInput);
+							ErrorTipManager.registerValidator(regExpValidator6);
+							//regExpValidator6.addEventListener(ValidationResultEvent.INVALID, invalidInput);
+							//regExpValidator6.addEventListener(ValidationResultEvent.VALID, validInput);
 							validators.push(regExpValidator6);
 						}
 						else if(classMember.name == "loginPassword"){
@@ -443,8 +455,9 @@
 							regExpValidator5.source = textInput;
 							regExpValidator5.property = "text";
 							regExpValidator5.expression = "^([\\w\\.-@]{1,255})$";
-							regExpValidator5.addEventListener(ValidationResultEvent.INVALID, invalidInput);
-							regExpValidator5.addEventListener(ValidationResultEvent.VALID, validInput);
+							ErrorTipManager.registerValidator(regExpValidator5);
+							//regExpValidator5.addEventListener(ValidationResultEvent.INVALID, invalidInput);
+							//regExpValidator5.addEventListener(ValidationResultEvent.VALID, validInput);
 							validators.push(regExpValidator5);
 						}
 						else if(classMember.name == "distinguishedName"){
@@ -469,8 +482,9 @@
 							var emailValidator:EmailValidator = new EmailValidator();
 							emailValidator.source = textInput;
 							emailValidator.property = "text";
-							emailValidator.addEventListener(ValidationResultEvent.INVALID, invalidInput);
-							emailValidator.addEventListener(ValidationResultEvent.VALID, validInput);
+							ErrorTipManager.registerValidator(emailValidator);
+							//emailValidator.addEventListener(ValidationResultEvent.INVALID, invalidInput);
+							//emailValidator.addEventListener(ValidationResultEvent.VALID, validInput);
 							validators.push(emailValidator);
 							index = 2;
 						}
@@ -486,8 +500,9 @@
 							numberValidator.property = "text";
 							numberValidator.domain = "int";
 							numberValidator.minValue = "1";
-							numberValidator.addEventListener(ValidationResultEvent.INVALID, invalidInput);
-							numberValidator.addEventListener(ValidationResultEvent.VALID, validInput);
+							ErrorTipManager.registerValidator(numberValidator);
+							//numberValidator.addEventListener(ValidationResultEvent.INVALID, invalidInput);
+							//numberValidator.addEventListener(ValidationResultEvent.VALID, validInput);
 							validators.push(numberValidator);
 						}
 					}
@@ -513,6 +528,7 @@
 				inputValidationObject[event.target.source.uid] = false;
 				cButton.enabled = false;
 			}
+			
 			
 			public function populateEachFormItem():void
 			{
