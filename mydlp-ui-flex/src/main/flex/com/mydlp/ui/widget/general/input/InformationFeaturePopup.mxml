@@ -20,8 +20,10 @@
 			import com.mydlp.ui.domain.RegularExpression;
 			import com.mydlp.ui.domain.RegularExpressionGroup;
 			import com.mydlp.ui.util.InteractionUtil;
+			import com.mydlp.ui.util.LangUtil;
 			
 			import mx.collections.ListCollectionView;
+			import mx.controls.Alert;
 			import mx.events.ValidationResultEvent;
 			import mx.rpc.events.ResultEvent;
 			import mx.validators.ValidationResult;
@@ -30,6 +32,8 @@
 			
 			[Bindable]
 			public var informationFeatureObject:InformationFeature = null;
+			
+			protected var closePopup:Boolean;
 			
 			protected function close(): void
 			{
@@ -41,6 +45,8 @@
 				var validationResult:ValidationResultEvent = weightValidator.validate();//Validation Before Saving
 				if(validationResult.results != null) return;
 				
+				
+				closePopup = true;
 				
 				var isEdit:Boolean = false;
 				if (informationFeatureObject == null)
@@ -79,7 +85,10 @@
 					}
 					
 					// TODO: there should be regex validation. escaping special characters.
-					r.regex = regexValue.text;
+					if(regexValue.text == "")
+						closePopup = false;
+					else
+						r.regex = regexValue.text;
 				}
 				else if(matcherCombobox.selectedItem.data == "document_hash" ||
 						matcherCombobox.selectedItem.data == "document_pdm")
@@ -99,7 +108,10 @@
 					{
 						nca = m.matcherArguments.getItemAt(0).coupledArgument as NonCascadingArgument;
 					}
-					nca.argument = documentDatabaseComboBox.selectedItem;
+					if(documentDatabaseComboBox.selectedItem == null)
+						closePopup = false;
+					else
+						nca.argument = documentDatabaseComboBox.selectedItem;
 				}
 				else if(matcherCombobox.selectedItem.data == "keyword_group")
 				{
@@ -116,7 +128,10 @@
 					
 					ncar = m.matcherArguments.getItemAt(0).coupledArgument as NonCascadingArgument;
 					
-					ncar.argument = keywordGroupComboBox.selectedItem;
+					if(keywordGroupComboBox.selectedItem == null)
+						closePopup = false;
+					else
+						ncar.argument = keywordGroupComboBox.selectedItem;
 				}
 				else
 				{
@@ -125,8 +140,18 @@
 				
 				informationFeatureObject.weight = int(featureWeight.text);
 				
+				if(!closePopup)
+				{
+					if(!isEdit)
+						informationFeatureObject = null;
+					Alert.show(LangUtil.getString('messages', 'informationFeature.selectedItem.' + matcherCombobox.selectedItem.data + '.label'));
+					return;
+				}
+				
 				if (!isEdit)
+				{
 					informationFeatureInput.addInformationFeature(informationFeatureObject);
+				}
 				
 				close();
 			}

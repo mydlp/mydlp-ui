@@ -49,12 +49,14 @@
 			
 			protected function editClickHandler(event:MouseEvent):void
 			{
+				ifList.invalidateDisplayList();
 				if(ifList.selectedItem == null)
 					return;
 				var ifp:InformationFeaturePopup = InteractionUtil.newPopup(InformationFeaturePopup) as InformationFeaturePopup;
 				ifp.informationFeatureInput = this;
 				ifp.informationFeatureObject = ifList.selectedItem;
 				ifp.populate();
+				ifList.validateDisplayList();
 			}
 			
 		]]>
