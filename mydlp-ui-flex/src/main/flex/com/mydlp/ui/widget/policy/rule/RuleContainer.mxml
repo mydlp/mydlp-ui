@@ -119,7 +119,6 @@
 				ruleDP = ruleDP2;
 				ruleList.validateNow();
 			}
-			
 			protected function onCreationComplete(event:FlexEvent):void
 			{
 				this.addEventListener(DragEvent.DRAG_ENTER, acceptDrop);
@@ -146,6 +145,14 @@
 				  click="{InteractionUtil.newPopup(NewRuleDialog)}" styleName="fontSize24Style"/>
 	</s:Group>
 	
+	<s:Group>
+		<s:layout>
+			<s:HorizontalLayout gap="150" paddingLeft="300"/>
+		</s:layout>
+		
+		<s:Label text="@Resource(key='rules.sources.label', bundle='messages')" styleName="fontSize24Style" visible="{ruleDP.length != 0}"/>
+		<s:Label text="@Resource(key='rules.informationTypes.label', bundle='messages')" styleName="fontSize24Style" visible="{ruleDP.length != 0}"/>
+	</s:Group>
 	
 	<rule:RuleList id="ruleList" dataProvider="{ruleDP}" 
 				width="100%" height="100%"
