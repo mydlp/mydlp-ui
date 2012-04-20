@@ -18,6 +18,7 @@ public class LicenseInformation extends AbstractEntity {
 	
 	public static final String COMMUNITY_LICENSE = "community_license";
 	public static final String ENTERPRISE_LICENSE = "enterprise_license";
+	public static final String TRIAL_LICENSE = "trial_license";
 	
 	@Temporal(TemporalType.TIMESTAMP)
 	protected Date issueDate;

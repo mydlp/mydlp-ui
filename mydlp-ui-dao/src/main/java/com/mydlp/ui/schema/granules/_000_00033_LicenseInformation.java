@@ -10,7 +10,7 @@ public class _000_00033_LicenseInformation extends AbstractGranule{
 	@Override
 	protected void callback() {
 		int issueYear = 2012; int issueMonth = 2; int issueDay = 28;
-		int expireYear = 2012; int expireMonth = 3; int expireDay = 15;
+		int expireYear = 2012; int expireMonth = 2; int expireDay = 15;
 		LicenseInformation licenseInformation = new LicenseInformation();
 		Calendar issueCalendar = Calendar.getInstance();
 		issueCalendar.set(Calendar.YEAR, issueYear);
@@ -18,7 +18,7 @@ public class _000_00033_LicenseInformation extends AbstractGranule{
 		issueCalendar.set(Calendar.DATE, issueDay);
 		licenseInformation.setIssueDate(issueCalendar.getTime());
 		licenseInformation.setUserCount(100);
-		licenseInformation.setLicenseType(LicenseInformation.COMMUNITY_LICENSE);
+		licenseInformation.setLicenseType(LicenseInformation.TRIAL_LICENSE);
 		licenseInformation.setLicenseKey("testLicenseKey");
 		Calendar expireCalendar = Calendar.getInstance();
 		expireCalendar.set(Calendar.YEAR, expireYear);
