@@ -21,9 +21,11 @@
 			import com.mydlp.ui.domain.RegularExpressionGroup;
 			import com.mydlp.ui.util.InteractionUtil;
 			import com.mydlp.ui.util.LangUtil;
+			import com.mydlp.ui.util.SpecialCharacterUtil;
 			
 			import mx.collections.ListCollectionView;
 			import mx.controls.Alert;
+			import mx.events.FlexEvent;
 			import mx.events.ValidationResultEvent;
 			import mx.rpc.events.ResultEvent;
 			import mx.validators.ValidationResult;
@@ -88,7 +90,12 @@
 					if(regexValue.text == "")
 						closePopup = false;
 					else
-						r.regex = regexValue.text;
+					{
+						if(matcherCombobox.selectedItem.data == "keyword")
+							r.regex = SpecialCharacterUtil.escapeSpecialCharacters(regexValue.text, SpecialCharacterUtil.regex);
+						else
+							r.regex = regexValue.text;
+					}
 				}
 				else if(matcherCombobox.selectedItem.data == "document_hash" ||
 						matcherCombobox.selectedItem.data == "document_pdm")
@@ -189,6 +196,20 @@
 				return null;
 			}
 			
+			protected function regexValueCreationCompleteHandler(event:FlexEvent):void
+			{
+				var r:RegularExpression = getArgument() as RegularExpression;
+				if(r == null)
+					regexValue.text = "";
+				else
+				{
+					if(this.currentState == "keyword")
+						regexValue.text = InformationFeature.removeEscapeCharacter(r.regex);
+					else
+						regexValue.text = r.regex;
+				}
+			}
+			
 		]]>
 	</fx:Script>
 	
@@ -277,10 +298,7 @@
 		<s:FormItem includeIn="keyword,regex" 
 					label.keyword="@Resource(bundle = 'messages', key = 'matcher.keyword.keywordValue.label')"
 					label.regex="@Resource(bundle = 'messages', key = 'matcher.regex.regexValue.label')">
-			<s:TextInput id="regexValue" creationComplete="{
-						    var __r:RegularExpression = (getArgument() as RegularExpression);
-						 	regexValue.text = __r == null ? '' : __r.regex;
-						 }"/>
+			<s:TextInput id="regexValue" creationComplete="regexValueCreationCompleteHandler(event)"/>
 		</s:FormItem>
 		<s:FormItem includeIn="document_hash,document_pdm" label="@Resource(bundle = 'messages', key = 'matcher.documentDatabase.label')">
 			<s:ComboBox id="documentDatabaseComboBox" labelField="label" width="100%"

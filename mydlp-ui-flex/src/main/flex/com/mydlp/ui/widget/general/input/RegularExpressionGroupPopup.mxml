@@ -10,11 +10,14 @@
 	
 	<fx:Script>
 		<![CDATA[
+			import com.mydlp.ui.domain.InformationFeature;
 			import com.mydlp.ui.domain.RegularExpressionGroupEntry;
 			import com.mydlp.ui.util.FileUtil;
 			import com.mydlp.ui.util.InteractionUtil;
+			import com.mydlp.ui.util.SpecialCharacterUtil;
 			
 			import mx.collections.ArrayCollection;
+			import mx.controls.Alert;
 			import mx.events.ItemClickEvent;
 			
 			public var regularExpressionGroupInput:RegularExpressionGroupInput = null;
@@ -49,13 +52,13 @@
 					for (var i:int = 0; i < temp.length; i++)
 					{
 						var newregex:RegularExpressionGroupEntry = new RegularExpressionGroupEntry;
-						newregex.regex = temp[i];
+						newregex.regex = SpecialCharacterUtil.escapeSpecialCharacters(temp[i], SpecialCharacterUtil.regex);
 						regularExpressionGroupInput.addEntry(newregex);
 					}
 				}
 				else
 				{
-					regexEntry.regex = keyword.text;
+					regexEntry.regex = SpecialCharacterUtil.escapeSpecialCharacters(keyword.text, SpecialCharacterUtil.regex);
 				
 					if (!isEdit)
 						regularExpressionGroupInput.addEntry(regexEntry);
@@ -69,7 +72,7 @@
 			{
 				if (regexEntry != null)
 				{
-					keyword.text = regexEntry.regex.toString();
+					keyword.text = InformationFeature.removeEscapeCharacter(regexEntry.regex.toString());
 				}
 				
 				visible = true;

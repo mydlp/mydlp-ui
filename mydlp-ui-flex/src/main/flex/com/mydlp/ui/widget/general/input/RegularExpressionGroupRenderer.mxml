@@ -6,8 +6,10 @@
 				creationComplete="{data = data as RegularExpressionGroupEntry;}"
 				height="20">
 	<fx:Script>
-		<![CDATA[
+		<![CDATA[			
+			import com.mydlp.ui.domain.InformationFeature;
 			import com.mydlp.ui.domain.RegularExpressionGroupEntry;
+			
 		]]>
 	</fx:Script>
 	
@@ -21,5 +23,5 @@
 		<s:HorizontalLayout verticalAlign="middle" 
 							paddingLeft="2" paddingRight="2"/>
 	</s:layout>
-	<s:Label text="{data.regex}" width="100%"/>
+	<s:Label text="{InformationFeature.removeEscapeCharacter(data.regex)}" width="100%"/>
 </s:ItemRenderer>

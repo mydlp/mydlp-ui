@@ -6,6 +6,8 @@
  */
 
 package com.mydlp.ui.domain {
+	import flashx.textLayout.elements.SpecialCharacterElement;
+	
 	import mx.resources.ResourceManager;
 
     [Managed]
@@ -23,10 +25,24 @@ package com.mydlp.ui.domain {
 			if (resourceVal == null || resourceVal.length == 0)
 				return "Custom" + " - " + this.weight.toString();
 			else if(this.matcher.functionName == "keyword")
-				return resourceVal + " - " + this.matcher.matcherArguments.getItemAt(0).coupledArgument.regex + " - " + this.weight.toString();
+				return resourceVal + " - " + removeEscapeCharacter(this.matcher.matcherArguments.getItemAt(0).coupledArgument.regex) + " - " + this.weight.toString();
 			else 
 				return resourceVal + " - " + this.weight.toString();
-			
+		}
+		public static function removeEscapeCharacter(string:String):String
+		{
+			var resultString:String = new String;
+			for(var i:int = 0; i < string.length; i++)
+			{
+				if(string.charAt(i) == '\\' && string.charAt(i+1) == '\\')
+				{
+					resultString = resultString.concat(string.charAt(i));
+					i++;
+				}
+				else if(string.charAt(i) != '\\')
+					resultString = resultString.concat(string.charAt(i));
+			}
+			return resultString;
 		}
     }
 }
