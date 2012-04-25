@@ -535,28 +535,28 @@
 					<s:HorizontalLayout gap="2"/>
 				</s:layout>
 				
-				<s:Button styleName="upButtonStyle" 
+				<s:Button styleName="upButtonStyle" toolTip="@Resource(bundle = 'messages', key = 'rulebox.upButton.tooltip.label')"
 						  enabled="{itemIndex != 0}"
 						  click="{re.ruleUp(ruleObject)}"/>
-				<s:Button styleName="downButtonStyle" 
+				<s:Button styleName="downButtonStyle" toolTip="@Resource(bundle = 'messages', key = 'rulebox.downButton.tooltip.label')"
 						  enabled="{itemIndex != ruleList.dataProvider.length - 1}"
 						  click="{re.ruleDown(ruleObject)}"/>
-				<s:Button styleName="copyButtonStyle"
+				<s:Button styleName="copyButtonStyle" toolTip="@Resource(bundle = 'messages', key = 'rulebox.copyButton.tooltip.label')"
 						  click="{	var clone:Rule = ReflectionUtil.cloneDomainObject(ruleObject);
 						  clone.priority -= 50;
 						  InteractionUtil.newEditDialog(clone)}" />
-				<s:Button styleName="editButtonStyle" 
+				<s:Button styleName="editButtonStyle" toolTip="@Resource(bundle = 'messages', key = 'rulebox.editButton.tooltip.label')"
 						  click="{InteractionUtil.newEditDialog(ruleObject)}" />
-				<s:Button styleName="removeButtonStyle" 
+				<s:Button styleName="removeButtonStyle" toolTip="@Resource(bundle = 'messages', key = 'rulebox.removeButton.tooltip.label')"
 						  click="{InteractionUtil.newDeleteDialog(ruleObject)}" />
-				<s:Button styleName="disableButton16Style"
+				<s:Button styleName="disableButton16Style" toolTip="@Resource(bundle = 'messages', key = 'rulebox.disableButton.tooltip.label')"
 						  visible="{ruleObject.enabled}"
 						  click="{ruleObject.enabled = false; re.save(ruleObject);}"/>
 			</s:Group>
 		</s:Group>
 		
 		<s:Button styleName="disableButton32Style" visible="{! ruleObject.enabled}"
-				  click="{ruleObject.enabled = true; re.save(ruleObject);}"/>
+				  click="{ruleObject.enabled = true; re.save(ruleObject);}" toolTip="@Resource(bundle = 'messages', key = 'rulebox.enableButton.tooltip.label')"/>
 		
 		<rule:RSpacer />
 		

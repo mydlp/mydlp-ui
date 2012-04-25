@@ -142,7 +142,7 @@
 			<s:HorizontalLayout paddingTop="10" paddingBottom="5"/>
 		</s:layout>
 		<s:Button skinClass="com.mydlp.ui.skin.AddBitmapLabelButton24Skin" label="@Resource(key='rules.addrule', bundle='messages')"
-				  click="{InteractionUtil.newPopup(NewRuleDialog)}" styleName="fontSize24Style"/>
+				  click="{InteractionUtil.newPopup(NewRuleDialog)}" styleName="fontSize24Style" toolTip="@Resource(key='rules.addrule.tooltip.label', bundle='messages')"/>
 	</s:Group>
 	
 	<s:Group>

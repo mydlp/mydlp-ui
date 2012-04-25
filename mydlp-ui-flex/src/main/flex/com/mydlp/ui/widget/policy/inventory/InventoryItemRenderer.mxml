@@ -98,17 +98,17 @@
 						  InteractionUtil.newEditDialog(ReflectionUtil.cloneDomainObject(treeListData.item));
 						  event.stopPropagation();
 						  }" 
-						  visible="{treeListData.item is InventoryItem}"/>
+						  visible="{treeListData.item is InventoryItem}" toolTip="@Resource(key='inventoryItem.copyButton.tooltip.label', bundle='messages')"/>
 				<s:Button styleName="editButtonStyle" 
 						  click="{
 						  InteractionUtil.newEditDialog(treeListData.item);
 						  event.stopPropagation();
 						  }" 
-						  visible="{isEditEnabled(treeListData.item)}"/>
+						  visible="{isEditEnabled(treeListData.item)}" toolTip="@Resource(key='inventoryItem.editButton.tooltip.label', bundle='messages')"/>
 				<s:Button styleName="removeButtonStyle" 
 						  click="{InteractionUtil.newDeleteDialog(treeListData.item);
 						  		event.stopPropagation();}"
-						  visible="{isEditEnabled(treeListData.item)}"/>
+						  visible="{isEditEnabled(treeListData.item)}" toolTip="@Resource(key='inventoryItem.removeButton.tooltip.label', bundle='messages')"/>
 			</s:HGroup>
 		</s:HGroup>
 		

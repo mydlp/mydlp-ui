@@ -36,7 +36,7 @@
 		<s:Spacer width="10" />
 		<s:HGroup width="20" height="20 " verticalAlign="middle">
 			<s:Button includeIn="selected" styleName="removeButtonStyle" 
-					  click="{data.deleteRecord()}" />	
+					  click="{data.deleteRecord()}" toolTip="@Resource(key='ruleItems.removeButton.tooltip.label', bundle='messages')"/>	
 		</s:HGroup>
 	</s:Group>
 	

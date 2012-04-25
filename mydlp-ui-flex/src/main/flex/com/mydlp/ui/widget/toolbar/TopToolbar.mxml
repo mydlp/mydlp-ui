@@ -130,7 +130,7 @@
 	
 	<s:Button id="installButton" skinClass="com.mydlp.ui.skin.InstallBitmapLabelButton24Skin" 
 			  label="@Resource(bundle = 'messages', key = 'toptoolbar.installPolicy')"
-			  styleName="fontSize24Style" click="{installPolicy()}"/>
+			  styleName="fontSize24Style" click="{installPolicy()}" toolTip="@Resource(bundle = 'messages', key = 'toptoolbar.installPolicy.tooltip.label')"/>
 	<s:Spacer width="6" />
 	<s:Label id="userLabel" />
 	<s:Spacer width="4" />
