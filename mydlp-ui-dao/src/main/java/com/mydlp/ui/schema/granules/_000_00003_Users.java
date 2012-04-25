@@ -21,9 +21,9 @@ public class _000_00003_Users extends AbstractGranule {
 		getHibernateTemplate().saveOrUpdate(roleAuditor);
 		
 		AuthUser user = new AuthUser();
-		user.setUsername("user");
+		user.setUsername("mydlp");
 		user.setEmail("user@mydlp.com");
-		user.setPassword("a94a8fe5ccb19ba61c4c0873d391e987982fbbd3"); // sha1 for 'test'
+		user.setPassword("8947320cee61087e89fa734c2a3baf64cf46083d"); // sha1 for 'test'
 		user.setIsActive(true);
 		user.setHasAuthorityScope(false);
 		List<AuthSecurityRole> roles = new ArrayList<AuthSecurityRole>();
