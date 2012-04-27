@@ -11,13 +11,16 @@
 		>
 	<fx:Script>
 		<![CDATA[
+			import mx.controls.Alert;
 			import mx.controls.listClasses.IListItemRenderer;
+			import mx.core.FlexGlobals;
 			import mx.events.FlexEvent;
 			import mx.events.ItemClickEvent;
 			
 			import spark.events.IndexChangeEvent;
 			
-			//protected var isItemClicked:Boolean = false;
+			protected var isSelected:Boolean = false;
+			protected var itemClick:Boolean = false;
 			
 			public function invalidateList():void
 			{
@@ -32,6 +35,7 @@
 				this.addEventListener(ItemClickEvent.ITEM_CLICK, onItemClick);
 				this.addEventListener(IndexChangeEvent.CHANGE, onChange);
 				this.addEventListener(MouseEvent.CLICK, onMouseClick);
+				
 			}
 			
 			protected function onMouseClick(event:MouseEvent):void
@@ -44,17 +48,24 @@
 				}
 				isItemClicked = false;
 				*/
+				if(!itemClick && !isSelected)
+					FlexGlobals.topLevelApplication.ruleContainer.isSelection = false;
+				else
+					FlexGlobals.topLevelApplication.ruleContainer.isSelection = true;
+				isSelected = false;
+				itemClick = false;
 			}
 			
 			protected function onItemClick(event:ItemClickEvent):void
 			{
-				//isItemClicked = true;
+				itemClick = true;
 				RuleItemList.regulateSelection();
 			}
 			
 			protected function onChange(event:IndexChangeEvent):void
 			{
 				//isItemClicked = true;
+				isSelected = true;
 				RuleItemList.regulateSelection();
 			}
 			

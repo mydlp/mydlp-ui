@@ -22,15 +22,19 @@
 			
 			import mx.collections.ArrayCollection;
 			import mx.collections.ListCollectionView;
+			import mx.controls.Alert;
 			import mx.core.FlexGlobals;
 			import mx.core.IUIComponent;
 			import mx.events.DragEvent;
 			import mx.events.FlexEvent;
+			import mx.events.ItemClickEvent;
 			import mx.managers.DragManager;
 			import mx.rpc.events.ResultEvent;
 			
 			[Bindable]
 			public var ruleDP:ListCollectionView = new ArrayCollection();
+			
+			public var isSelection:Boolean = false;
 			
 			public static function getRule(value:Number): Rule
 			{
@@ -119,9 +123,18 @@
 				ruleDP = ruleDP2;
 				ruleList.validateNow();
 			}
+			
+			protected function clickHandler(event:MouseEvent):void
+			{
+				if(!isSelection)
+					ruleList.selectedIndex = -1;
+				isSelection = false;
+			}
+			
 			protected function onCreationComplete(event:FlexEvent):void
 			{
 				this.addEventListener(DragEvent.DRAG_ENTER, acceptDrop);
+				this.addEventListener(MouseEvent.CLICK, clickHandler);
 				refreshRules();
 			}
 			

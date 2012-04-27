@@ -11,6 +11,7 @@
 				dragOver="onDragOver(event)"
 				dragExit="onDragExit(event)"
 				dragDrop="onDragDrop(event)"
+				click="itemClickHandler(event)"
 				>
 	<fx:Script>
 		<![CDATA[
@@ -38,6 +39,7 @@
 			import mx.core.IUIComponent;
 			import mx.events.DragEvent;
 			import mx.events.FlexEvent;
+			import mx.events.ItemClickEvent;
 			import mx.managers.DragManager;
 			import mx.rpc.events.ResultEvent;
 			
@@ -465,6 +467,14 @@
 			{
 				highlightOff();
 				FlexGlobals.topLevelApplication.refresh();
+			}
+			
+			protected function itemClickHandler(event:MouseEvent):void
+			{
+				var e:ItemClickEvent = new ItemClickEvent(ItemClickEvent.ITEM_CLICK, true);
+				e.item = data;
+				e.index = itemIndex;
+				dispatchEvent(e);
 			}
 			
 		]]>
