@@ -14,6 +14,7 @@
 			import com.mydlp.ui.domain.AbstractNamedEntity;
 			import com.mydlp.ui.domain.AuthUser;
 			import com.mydlp.ui.domain.InventoryCategory;
+			import com.mydlp.ui.domain.Rule;
 			import com.mydlp.ui.util.ClassMember;
 			import com.mydlp.ui.util.InteractionUtil;
 			import com.mydlp.ui.util.LangUtil;
@@ -130,6 +131,7 @@
 			
 			protected function okHandler(event:Event): void
 			{
+				FlexGlobals.topLevelApplication.topToolbar.policyInstallationState = false;
 				InteractionUtil.closeCurrentPopup();
 				Alert.show(	LangUtil.getString("messages", "generic.delete." + getSimpleName() + ".ok.message"),
 							LangUtil.getString("messages", "generic.delete." + getSimpleName() + ".title"));

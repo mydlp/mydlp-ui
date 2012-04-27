@@ -24,6 +24,7 @@
 			import com.mydlp.ui.util.LangUtil;
 			
 			import mx.controls.Alert;
+			import mx.core.FlexGlobals;
 			import mx.events.FlexEvent;
 			import mx.rpc.events.FaultEvent;
 			import mx.rpc.events.ResultEvent;
@@ -116,6 +117,7 @@
 			
 			protected function genericResultHandler(event:ResultEvent):void
 			{
+				FlexGlobals.topLevelApplication.topToolbar.policyInstallationState = false;
 				refresh();
 			}
 			

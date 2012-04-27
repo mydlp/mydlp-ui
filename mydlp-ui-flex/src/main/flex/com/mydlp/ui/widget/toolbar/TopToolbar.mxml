@@ -27,6 +27,9 @@
 			
 			protected var reloadFlag:Boolean = false;
 			
+			protected var logoutFlag:Boolean = false;
+			
+			public var policyInstallationState:Boolean = true;
 			
 			protected function onCreationComplete(event:FlexEvent):void
 			{
@@ -44,6 +47,7 @@
 			
 			protected function compilePolicyHandler(event:ResultEvent): void
 			{
+				policyInstallationState = true;
 				if (installPopup != null)
 				{
 					installPopup.currentState = "revision";
@@ -61,6 +65,14 @@
 					}
 					reloadApp();
 				}
+				else if(logoutFlag)
+				{
+					if(installPopup != null)
+					{
+						installPopup.currentState = "logout";
+					}
+					logoutApp();
+				}
 				else
 				{
 					if (installPopup != null)
@@ -72,6 +84,11 @@
 				}			
 			}
 			
+			public function logoutApp():void
+			{
+				navigateToURL(new URLRequest ('j_spring_security_logout'), '_self');
+			}
+			
 			public function reloadApp(): void
 			{
 				navigateToURL(new URLRequest ("/"), "_self");
@@ -80,6 +97,7 @@
 			public function installPolicy(): void
 			{
 				reloadFlag = false;
+				logoutFlag = false;
 				installPolicyFunc();
 			}
 			
@@ -95,8 +113,11 @@
 				installPolicyFunc();
 			}
 			
-			
-			
+			public function installPolicyAndLogout():void
+			{
+				logoutFlag = true;
+				installPolicyFunc();
+			}
 			
 			protected function settingButtonClickHandler(event:MouseEvent):void
 			{
@@ -106,8 +127,14 @@
 				eup.visible = true;
 			}
 			
-			
-			
+			protected function logoutButtonClickHandler(event:Event):void
+			{
+				if(policyInstallationState)
+					logoutApp();
+				else
+					var ipwp:InstallPolicyWarningPopup = InteractionUtil.newPopup(InstallPolicyWarningPopup, true) as InstallPolicyWarningPopup;
+			}
+				
 		]]>
 	</fx:Script>
 
@@ -138,6 +165,6 @@
 			  toolTip="@Resource(bundle = 'messages', key = 'toptoolbar.settings')"
 			  click="settingButtonClickHandler(event)"/>
 	<s:Button skinClass="com.mydlp.ui.skin.CloseBitmapButton16Skin" 
-			  click="{navigateToURL(new URLRequest ('j_spring_security_logout'), '_self')}"
+			  click="logoutButtonClickHandler(event)"
 			  toolTip="@Resource(bundle = 'messages', key = 'toptoolbar.logout')"/>
 </s:Group>

@@ -593,6 +593,8 @@
 				//Alert.show(	LangUtil.getString("messages", "generic.edit." + getSimpleName() + ".ok.message"),
 				//			LangUtil.getString("messages", "generic.edit." + getSimpleName() + ".title"));
 				
+				FlexGlobals.topLevelApplication.topToolbar.policyInstallationState = false;
+				
 				if (deleteList.length == 0)
 				{
 					InteractionUtil.closeCurrentPopup();
@@ -606,6 +608,7 @@
 			
 			protected function removeAllHandler(event:Event): void
 			{
+				FlexGlobals.topLevelApplication.topToolbar.policyInstallationState = false;
 				InteractionUtil.closeCurrentPopup();
 				FlexGlobals.topLevelApplication.refresh();
 			}

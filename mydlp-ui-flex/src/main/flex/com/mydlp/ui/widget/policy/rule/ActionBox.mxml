@@ -10,6 +10,7 @@
 			
 			import mx.collections.ArrayCollection;
 			import mx.collections.ListCollectionView;
+			import mx.core.FlexGlobals;
 			import mx.events.FlexEvent;
 			
 			import spark.events.IndexChangeEvent;
@@ -77,7 +78,7 @@
 							contentBackgroundAlpha="1"
 							dataProvider="{isReadOnly?actionsReadOnly:actions}" 
 							selectedItem="@{ruleObject.action}"
-							change="{ruleObject.save()}" 
+							change="{ruleObject.save();}" 
 							itemRenderer="com.mydlp.ui.widget.policy.rule.ActionDropDownListItemRenderer"/>
 		</s:Group>
 		<s:Spacer height="19" />

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:TitleWindow xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			   xmlns:s="library://ns.adobe.com/flex/spark" 
+			   xmlns:mx="library://ns.adobe.com/flex/mx"
+			   title="@Resource(bundle = 'messages', key = 'installPolicyWarningPopup.title.label')"
+			   close="InteractionUtil.closePopup(this)"
+			   width="100%" height="100%">
+	
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	<fx:Script>
+		<![CDATA[
+			import com.mydlp.ui.util.InteractionUtil;
+			
+			import mx.core.FlexGlobals;
+			
+		]]>
+	</fx:Script>
+	
+	<s:Group>	
+		<s:layout>
+			<s:HorizontalLayout gap="10" horizontalAlign="center"
+							    paddingBottom="20" paddingTop="20"
+							    paddingLeft="20" paddingRight="20"/>
+		</s:layout>
+		
+		<s:Button label="@Resource(bundle = 'messages', key = 'installPolicyWarningPopup.installBeforeButton.label')"
+			    	click="{FlexGlobals.topLevelApplication.topToolbar.installPolicyAndLogout()}"/>
+		<s:Button label="@Resource(bundle = 'messages', key = 'installPolicyWarningPopup.logout.label')"
+				  click="{navigateToURL(new URLRequest ('j_spring_security_logout'), '_self');}"/>
+	</s:Group>
+	
+	
+</s:TitleWindow>

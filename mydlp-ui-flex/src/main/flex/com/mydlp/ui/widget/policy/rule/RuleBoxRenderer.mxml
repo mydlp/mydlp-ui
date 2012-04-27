@@ -449,11 +449,13 @@
 			
 			protected function changeHandler(event:ResultEvent):void
 			{
+				FlexGlobals.topLevelApplication.topToolbar.policyInstallationState = false;
 				FlexGlobals.topLevelApplication.refresh();
 			}
 			
 			protected function saveHandler(event:ResultEvent):void
 			{
+				FlexGlobals.topLevelApplication.topToolbar.policyInstallationState = false;
 				if(deleteList == null || deleteList.length == 0)
 				{
 					highlightOff();
@@ -465,6 +467,7 @@
 			
 			protected function deleteRuleItemsHandler(event:ResultEvent):void
 			{
+				FlexGlobals.topLevelApplication.topToolbar.policyInstallationState = false;
 				highlightOff();
 				FlexGlobals.topLevelApplication.refresh();
 			}
