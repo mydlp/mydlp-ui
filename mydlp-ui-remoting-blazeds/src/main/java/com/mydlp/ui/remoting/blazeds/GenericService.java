@@ -18,5 +18,7 @@ public interface GenericService {
 	
 	@Secured({AuthSecurityRole.ROLE_ADMIN, AuthSecurityRole.ROLE_AUDITOR})
 	public void removeAll(List<AbstractEntity> items);
+	
+	public void sync();
 
 }

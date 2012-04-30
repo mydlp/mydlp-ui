@@ -39,6 +39,10 @@
 			
 			private var activityTimeout:uint;
 			
+			private var syncTimeout:uint;
+			
+			protected var isUserActive:Boolean = false;
+			
 			
 			protected function resetAutoLogout():void
 			{
@@ -54,7 +58,29 @@
 			
 			protected function handleUserActivity(event:Event):void
 			{
+				isUserActive = true;
 				resetAutoLogout();
+			}
+			
+			protected function syncResultHandler(event:ResultEvent):void
+			{
+				syncTimeIntervalHandler();
+			}
+			
+			protected function sendSyncPacket(event:TimerEvent):void
+			{
+				if(isUserActive)
+					genericRE.sync();
+				else
+					syncTimeIntervalHandler();
+				isUserActive = false;
+			}
+			
+			protected function syncTimeIntervalHandler():void
+			{
+				var timer:Timer = new Timer(1000*60, 1);
+				timer.addEventListener(TimerEvent.TIMER_COMPLETE, sendSyncPacket);
+				timer.start();
 			}
 			
 			protected function onCreationComplete(event:FlexEvent):void
@@ -68,6 +94,7 @@
 					stage.addEventListener(KeyboardEvent.KEY_DOWN, handleUserActivity);
 				}
 				resetAutoLogout();
+				syncTimeIntervalHandler();
 				
 				re.getCurrentUser();
 			}
@@ -129,6 +156,7 @@
 		<my:remote id="genericRE" destination="genericBRS" fault="faultHandler(event)" >
 			<my:method name="save" result="genericResultHandler(event)" fault="faultHandler(event)"/>
 			<my:method name="remove" result="genericResultHandler(event)" fault="faultHandler(event)"/>
+			<my:method name="sync" result="syncResultHandler(event)"/>
 		</my:remote>
 		<my:remote id="re" destination="userBRS" >
 			<my:method name="getCurrentUser" result="getCurrentUserHandler(event)" />

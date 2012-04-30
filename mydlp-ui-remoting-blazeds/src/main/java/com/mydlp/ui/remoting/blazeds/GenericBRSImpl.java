@@ -75,6 +75,10 @@ public class GenericBRSImpl implements GenericService
 						+ " ). Ignoring.");
 		}
 	}
+
+	@Override
+	public void sync() {
+	}
 	
 	
 }
