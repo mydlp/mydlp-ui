@@ -1,6 +1,9 @@
 package com.mydlp.ui.util
 {	
+	import com.mydlp.ui.domain.RegularExpression;
+	
 	import mx.collections.ArrayCollection;
+	import mx.controls.Alert;
 
 	public class FileUtil
 	{
@@ -30,13 +33,18 @@ package com.mydlp.ui.util
 		{
 			var result:ArrayCollection = new ArrayCollection;
 			var temp:Array;
-			temp = str.split("\n");
+			var regex:RegExp = /\r|\n/;
+			temp = str.split("\n")
 			for each(var mem:String in temp)
 			{
 				var keywords:Array;
 				keywords = mem.split(" ");
 				for each(var keyword:String in keywords)
-					result.addItem(keyword);
+				{
+					keyword = keyword.replace(regex, "");
+					if(!result.contains(keyword) )
+						result.addItem(keyword);
+				}
 			}
 			return result;
 		}
