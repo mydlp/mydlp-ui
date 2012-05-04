@@ -63,7 +63,7 @@
 				var message2:String = "";
 				
 				message += LangUtil.getString("messages", "generic.delete." + getSimpleName() + ".dialogMessage");
-				message += ": ";
+				message += " ";
 				
 				if(formObject is AuthUser)
 				{
@@ -83,6 +83,8 @@
 				{
 					message += formObject.toString();
 				}
+				
+				message +="?";
 				
 				if (message != "") 
 				{
