@@ -51,7 +51,7 @@
 			
 			protected function editClickHandler(event:MouseEvent):void
 			{
-				var popup:NameColumnPopup = InteractionUtil.newPopup(NameColumnPopup, true) as NameColumnPopup;
+				var popup:NameColumnPopup = InteractionUtil.newPopup(NameColumnPopup) as NameColumnPopup;
 				popup.revisionObject = data as Revision;
 			}
 			

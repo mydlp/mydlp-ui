@@ -11,6 +11,7 @@
 	
 	<fx:Script>
 		<![CDATA[
+			import mx.managers.PopUpManager;
 			public var container:GenericCRUDContainer = null;
 			
 			public function populate(): void
@@ -18,6 +19,7 @@
 				container.populate();
 				title = container.windowTitle;
 				visible = true;
+				PopUpManager.centerPopUp(this);
 			}
 			
 			public function set formObject(value:Object): void

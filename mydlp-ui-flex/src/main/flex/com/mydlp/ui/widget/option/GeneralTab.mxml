@@ -11,7 +11,7 @@
 			
 			protected function openHTML(event:MouseEvent):void
 			{
-				var deniedPagePopup:EditDeniedPagePopup = InteractionUtil.newPopup(EditDeniedPagePopup ,true) as EditDeniedPagePopup;
+				var deniedPagePopup:EditDeniedPagePopup = InteractionUtil.newPopup(EditDeniedPagePopup) as EditDeniedPagePopup;
 			}
 			
 		]]>

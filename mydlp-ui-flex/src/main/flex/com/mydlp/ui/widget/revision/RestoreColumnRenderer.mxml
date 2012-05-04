@@ -18,7 +18,7 @@
 			protected function restoreClickHandler(event:MouseEvent):void
 			{
 				re.restore(data as Revision);
-				restorePopup = InteractionUtil.newPopup(RestoreColumnPopup, true) as RestoreColumnPopup;
+				restorePopup = InteractionUtil.newPopup(RestoreColumnPopup) as RestoreColumnPopup;
 			}
 			
 			protected function restoreHandler(event:ResultEvent): void

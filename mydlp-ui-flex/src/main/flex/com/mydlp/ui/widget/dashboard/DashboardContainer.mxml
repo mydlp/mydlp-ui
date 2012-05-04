@@ -139,7 +139,7 @@
 			
 			<s:Button skinClass="com.mydlp.ui.skin.GetReportBitmapLabelButton24Skin"
 					  label="@Resource(bundle = 'messages', key = 'dashboard.displayWeeklyReport.label')"
-					  styleName="fontSize24Style" click="{InteractionUtil.newPopup(ReportPopup, true) as ReportPopup}"/>
+					  styleName="fontSize24Style" click="{InteractionUtil.newPopup(ReportPopup) as ReportPopup}"/>
 		</s:HGroup>
 
 		<s:Group id="dashboardItems" width="100%" height="100%">

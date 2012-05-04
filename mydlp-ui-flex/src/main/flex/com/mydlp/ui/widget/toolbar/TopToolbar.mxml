@@ -103,7 +103,7 @@
 			
 			protected function installPolicyFunc(): void
 			{
-				installPopup = InteractionUtil.newPopup(InstallPolicyPopup, true) as InstallPolicyPopup;
+				installPopup = InteractionUtil.newPopup(InstallPolicyPopup) as InstallPolicyPopup;
 				pe.compilePolicy(1);
 			}
 			
@@ -121,7 +121,7 @@
 			
 			protected function settingButtonClickHandler(event:MouseEvent):void
 			{
-				var eup:EditUserPopup = InteractionUtil.newPopup(EditUserPopup, true) as EditUserPopup;
+				var eup:EditUserPopup = InteractionUtil.newPopup(EditUserPopup) as EditUserPopup;
 				eup.currentUser = currentUser;
 				eup.initialUserName = currentUser.username;
 				eup.visible = true;
@@ -132,7 +132,7 @@
 				if(policyInstallationState)
 					logoutApp();
 				else
-					var ipwp:InstallPolicyWarningPopup = InteractionUtil.newPopup(InstallPolicyWarningPopup, true) as InstallPolicyWarningPopup;
+					var ipwp:InstallPolicyWarningPopup = InteractionUtil.newPopup(InstallPolicyWarningPopup) as InstallPolicyWarningPopup;
 			}
 				
 		]]>

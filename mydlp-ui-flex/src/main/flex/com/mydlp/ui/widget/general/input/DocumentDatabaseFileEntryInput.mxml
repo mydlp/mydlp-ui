@@ -33,7 +33,7 @@
 			protected function addClickHandler(event:MouseEvent):void
 			{
 				var ddPopup:DocumentDatabaseFileEntryPopup = 
-					InteractionUtil.newPopup(DocumentDatabaseFileEntryPopup, true) 
+					InteractionUtil.newPopup(DocumentDatabaseFileEntryPopup) 
 					as DocumentDatabaseFileEntryPopup;
 				ddPopup.ddfeInput = this;
 				ddPopup.populate();
