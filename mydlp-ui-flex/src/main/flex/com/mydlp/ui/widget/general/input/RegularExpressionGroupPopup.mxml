@@ -85,6 +85,10 @@
 				var fileData:String = data.readUTFBytes(data.length);
 				keywordsFromFileDP = FileUtil.splitString(fileData);
 				selectedKeyworsFromFile = FileUtil.splitString(fileData);
+				if(selectedKeyworsFromFile.length < 10)
+					fileKeywordList.height = 150;
+				else
+					fileKeywordList.height = 200;
 				saveButton.enabled = true;
 			}
 			
@@ -158,7 +162,7 @@
 	<s:Button id="selectFromFileButton" label="@Resource(bundle = 'messages', key = 'regularExpression.selectFile.button.label')"
 			  includeIn="file" click="selectButtonHandler(event)"/>
 	<s:Group>
-		<s:List dataProvider="{keywordsFromFileDP}" id="fileKeywordList" includeIn="file" borderVisible="false" width="200">
+		<s:List dataProvider="{keywordsFromFileDP}" id="fileKeywordList" includeIn="file" borderVisible="false" width="200" horizontalScrollPolicy="auto">
 			<s:layout>
 				<s:VerticalLayout horizontalAlign="left" gap="4" paddingLeft="10"/>
 			</s:layout>
