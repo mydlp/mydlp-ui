@@ -12,7 +12,7 @@
 			   xmlns:dashboard="com.mydlp.ui.widget.dashboard.*"
 			   xmlns:revision="com.mydlp.ui.widget.revision.*"
 			   minHeight="800" minWidth="1280" 
-			   usePreloader="true"
+			   preloader="com.mydlp.ui.util.DownloadProgressBarUtil"
 			   applicationComplete="onCreationComplete(event)" 
 			   >
 	<fx:Style source="/assets/style/general.css" />
