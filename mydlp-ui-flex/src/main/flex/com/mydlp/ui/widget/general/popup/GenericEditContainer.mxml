@@ -10,12 +10,10 @@
 	<fx:Script>
 		<![CDATA[
 			import com.mydlp.ui.domain.ADDomain;
-			import com.mydlp.ui.domain.ADDomainAlias;
 			import com.mydlp.ui.domain.ADDomainItem;
 			import com.mydlp.ui.domain.ADDomainItemGroup;
 			import com.mydlp.ui.domain.ADDomainRoot;
 			import com.mydlp.ui.domain.ADDomainUser;
-			import com.mydlp.ui.domain.AbstractEntity;
 			import com.mydlp.ui.domain.AbstractNamedEntity;
 			import com.mydlp.ui.domain.AuthUser;
 			import com.mydlp.ui.domain.DataFormat;
@@ -31,6 +29,7 @@
 			import com.mydlp.ui.domain.Rule;
 			import com.mydlp.ui.domain.RuleUserAD;
 			import com.mydlp.ui.domain.USBDevice;
+			import com.mydlp.ui.domain.UserSettings;
 			import com.mydlp.ui.util.ClassMember;
 			import com.mydlp.ui.util.ErrorTipManager;
 			import com.mydlp.ui.util.InteractionUtil;
@@ -50,22 +49,15 @@
 			import com.mydlp.ui.widget.general.input.RegularExpressionGroupInput;
 			import com.mydlp.ui.widget.general.validator.NullValidator;
 			
-			import flash.utils.getQualifiedClassName;
-			
-			import flashx.textLayout.container.ISandboxSupport;
-			
 			import mx.binding.utils.BindingUtils;
 			import mx.collections.ArrayCollection;
 			import mx.collections.ListCollectionView;
-			import mx.controls.Alert;
 			import mx.controls.TextArea;
 			import mx.core.FlexGlobals;
-			import mx.events.FlexEvent;
 			import mx.events.ValidationResultEvent;
 			import mx.validators.EmailValidator;
 			import mx.validators.NumberValidator;
 			import mx.validators.RegExpValidator;
-			import mx.validators.ValidationResult;
 			import mx.validators.Validator;
 			
 			import spark.components.Button;
@@ -150,7 +142,8 @@
 							(classMember.name == "editable" && classMember.type == Boolean) ||
 							(classMember.name == "matcher" && classMember.type == Matcher) ||
 							(classMember.name == "root" && classMember.type == ADDomainRoot) ||
-							(classMember.name == "parent" && classMember.type == ADDomainItemGroup)
+							(classMember.name == "parent" && classMember.type == ADDomainItemGroup) ||
+							(classMember.name == "settings" && classMember.type == UserSettings)
 						)
 					{
 						continue;
@@ -470,6 +463,7 @@
 							index = 3;
 						}
 						else if(classMember.name == "username"){
+							textInput.editable = false;
 							index = 3;
 						}
 						else if(classMember.name == "deviceId"){

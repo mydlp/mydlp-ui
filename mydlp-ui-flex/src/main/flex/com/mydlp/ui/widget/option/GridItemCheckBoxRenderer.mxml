@@ -6,6 +6,6 @@
 	<s:layout>
 		<s:HorizontalLayout horizontalAlign="center"/>
 	</s:layout>
-	<s:CheckBox id="userCheckBox" selected="{data.isActive}"/>
+	<s:CheckBox id="userCheckBox" selected="{data.isActive}" enabled="false"/>
 	
 </s:GridItemRenderer>
