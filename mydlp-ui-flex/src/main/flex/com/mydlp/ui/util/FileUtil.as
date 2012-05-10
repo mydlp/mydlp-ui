@@ -42,11 +42,22 @@ package com.mydlp.ui.util
 				for each(var keyword:String in keywords)
 				{
 					keyword = keyword.replace(regex, "");
-					if(!result.contains(keyword) )
+					if(!result.contains(keyword) && isValid(keyword))
 						result.addItem(keyword);
 				}
 			}
 			return result;
+		}
+		
+		public static function isValid(str:String):Boolean
+		{
+			if(str == "" || str == "\n" || str == "\r\n" || str == "=" ||
+				str == "\"" || str == "\'" || str == "|"  ||str == "\\" || 
+				str == "." || str == "," || str == "!" || str == "(" ||
+				str == ")" || str == "?" || str == "/" || str == "&" || str == "-")
+				return false;
+			else
+				return true;
 		}
 	}
 }
