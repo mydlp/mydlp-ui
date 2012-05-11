@@ -26,6 +26,6 @@
 							  paddingBottom="15" paddingTop="15" 
 							  paddingLeft="5" paddingRight="5"/>
 		</s:layout>
-		<s:Label id="lbl" text="License type: UNLIMITED" width="100%" fontSize="18" fontWeight="bold" textAlign="center"/>
+		<s:Label id="lbl" text="License type: TRIAL" width="100%" fontSize="18" fontWeight="bold" textAlign="center"/>
 	</s:Group>
 </s:Group>
