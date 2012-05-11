@@ -4,7 +4,7 @@
 			   xmlns:mx="library://ns.adobe.com/flex/mx"
 			   xmlns:input="com.mydlp.ui.widget.general.input.*"
 			   close="{close()}"
-			   visible="false" width="300" height="100%"
+			   visible="false" width="100%" height="100%"
 			   title="@Resource(bundle = 'messages', key = 'regularExpression.title.label')"
 			   >
 	
@@ -162,7 +162,7 @@
 	<s:Button id="selectFromFileButton" label="@Resource(bundle = 'messages', key = 'regularExpression.selectFile.button.label')"
 			  includeIn="file" click="selectButtonHandler(event)"/>
 	<s:Group>
-		<s:List dataProvider="{keywordsFromFileDP}" id="fileKeywordList" includeIn="file" borderVisible="false" width="200" horizontalScrollPolicy="auto">
+		<s:List dataProvider="{keywordsFromFileDP}" id="fileKeywordList" includeIn="file" borderVisible="false" width="300" horizontalScrollPolicy="auto">
 			<s:layout>
 				<s:VerticalLayout horizontalAlign="left" gap="4" paddingLeft="10"/>
 			</s:layout>

@@ -4,9 +4,11 @@ package com.mydlp.ui.util
 	
 	import mx.collections.ArrayCollection;
 	import mx.controls.Alert;
+	import mx.utils.StringUtil;
+	
 
 	public class FileUtil
-	{
+	{		
 		public static function getHumanReadableSize(size:Number): String
 		{			
 			if(size < 1024)
@@ -35,19 +37,16 @@ package com.mydlp.ui.util
 			var temp:Array;
 			var regex:RegExp = /\r|\n/;
 			temp = str.split("\n")
-			for each(var mem:String in temp)
+			for each(var keyword:String in temp)
 			{
-				var keywords:Array;
-				keywords = mem.split(" ");
-				for each(var keyword:String in keywords)
-				{
-					keyword = keyword.replace(regex, "");
-					if(!result.contains(keyword) && isValid(keyword))
-						result.addItem(keyword);
-				}
+				keyword = keyword.replace(regex, "");
+				keyword = StringUtil.trim(keyword);
+				if(!result.contains(keyword) && keyword.length >= 3 && keyword.length <= 128)
+					result.addItem(keyword);
 			}
 			return result;
 		}
+		
 		
 		public static function isValid(str:String):Boolean
 		{
