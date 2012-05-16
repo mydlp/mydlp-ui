@@ -14,8 +14,7 @@
 		Order allow,deny
 		Allow from all
 	</Proxy>
-	ProxyPass / ajp://localhost:8009/
-
+	ProxyPass / ajp://localhost:8009/ ttl=120 retry=10
 
 	ErrorLog /var/log/mydlp/apache2-error.log
 	LogLevel warn
