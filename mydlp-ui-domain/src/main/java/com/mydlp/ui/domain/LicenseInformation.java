@@ -9,12 +9,10 @@ import javax.persistence.TemporalType;
 @Entity
 public class LicenseInformation extends AbstractEntity {
 	
-	
-
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 7386589999887222954L;
+	private static final long serialVersionUID = -482277069235831278L;
 	
 	public static final String COMMUNITY_LICENSE = "community_license";
 	public static final String ENTERPRISE_LICENSE = "enterprise_license";
@@ -27,6 +25,7 @@ public class LicenseInformation extends AbstractEntity {
 	protected Date expirationDate;
 	
 	protected int userCount;
+	protected int administrativeUserCount;
 	protected String licenseType;
 	protected String licenseKey;
 	
@@ -47,6 +46,12 @@ public class LicenseInformation extends AbstractEntity {
 	}
 	public void setUserCount(int userCount) {
 		this.userCount = userCount;
+	}
+	public int getAdministrativeUserCount() {
+		return administrativeUserCount;
+	}
+	public void setAdministrativeUserCount(int administrativeUserCount) {
+		this.administrativeUserCount = administrativeUserCount;
 	}
 	public String getLicenseType() {
 		return licenseType;
