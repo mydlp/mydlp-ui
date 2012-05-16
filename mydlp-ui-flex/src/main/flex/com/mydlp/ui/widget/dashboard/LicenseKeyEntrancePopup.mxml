@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:TitleWindow xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			   xmlns:s="library://ns.adobe.com/flex/spark" 
+			   xmlns:mx="library://ns.adobe.com/flex/mx" 
+			   title="@Resource(bundle = 'messages', key = 'dashboard.license.confirmPopup.title')"
+			   width="400" >
+	<fx:Script>
+		<![CDATA[
+			import com.mydlp.ui.util.InteractionUtil;
+			
+		]]>
+	</fx:Script>
+	<s:layout>
+		<s:VerticalLayout verticalAlign="middle" horizontalAlign="center" 
+						  paddingTop="20" paddingBottom="20"
+						  paddingLeft="10" paddingRight="10"/>
+	</s:layout>
+	
+	<s:Label text="@Resource(bundle = 'messages', key = 'dashboard.license.confirmPopup.valid.label')"/>
+	<s:Label text="@Resource(bundle = 'messages', key = 'dashboard.license.confirmPopup.redirection.label')"/>
+	
+</s:TitleWindow>

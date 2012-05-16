@@ -151,13 +151,18 @@
 		</my:remote>
 	</fx:Declarations>
 	
+	<s:states>
+		<s:State name="default"/>
+		<s:State name="nolicense"/>
+	</s:states>
+	
 	<s:layout>
 		<s:HorizontalLayout verticalAlign="middle" horizontalAlign="right"/>
 	</s:layout>
 	
 	<s:Button id="installButton" skinClass="com.mydlp.ui.skin.InstallBitmapLabelButton24Skin" 
 			  label="@Resource(bundle = 'messages', key = 'toptoolbar.installPolicy')"
-			  styleName="fontSize24Style" click="{installPolicy()}" toolTip="@Resource(bundle = 'messages', key = 'toptoolbar.installPolicy.tooltip.label')"/>
+			  styleName="fontSize24Style" click="{installPolicy()}" includeIn="default"/>
 	<s:Spacer width="6" />
 	<s:Label id="userLabel" />
 	<s:Spacer width="4" />

@@ -2,19 +2,124 @@
 <s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
 		 xmlns:s="library://ns.adobe.com/flex/spark" 
 		 xmlns:mx="library://ns.adobe.com/flex/mx"
+		 xmlns:my="http://www.mydlp.com/flex/my"
 		 xmlns:util="com.mydlp.ui.util.*"
 		 width="300" creationComplete="onCreationComplete(event)">
 	<fx:Script>
 		<![CDATA[
+			import com.mydlp.ui.domain.LicenseInformation;
+			import com.mydlp.ui.util.InteractionUtil;
+			import com.mydlp.ui.util.LangUtil;
+			
+			import mx.controls.Alert;
+			import mx.core.FlexGlobals;
 			import mx.events.FlexEvent;
+			import mx.managers.PopUpManager;
+			import mx.rpc.events.ResultEvent;
+			
+			[Bindable]
+			public var licenseInformation:LicenseInformation = null;
+			
+			public var licenseKeyEntrancePopup:LicenseKeyEntrancePopup;
+			
+			public var timerBlicker:Timer = new Timer(1000*60);
 			
 			protected function onCreationComplete(event:FlexEvent):void
 			{
-				lbl.setStyle("color","red");
+				re.getLicense();
 			}
+			protected function getLicenseHandler(event:ResultEvent):void
+			{
+				licenseInformation = event.result as LicenseInformation;
+				re.isHardLimit();
+				
+			}
+			
+			protected function isHardLimitHandler(event:ResultEvent):void
+			{
+				var result:Boolean = event.result as Boolean;
+				if(result)
+				{
+					expirationDate.setStyle("color", "red");
+					textBlicker.play();
+					timerBlicker.addEventListener(TimerEvent.TIMER, blickingFinishHandler);
+					timerBlicker.start();
+				}
+				else
+					re.isSoftLimitOrNear();
+			}
+			
+			protected function isSoftLimitOrNearHandler(event:ResultEvent):void
+			{
+				var result:String = event.result as String;
+				if(result == "soft")
+				{
+					expirationDate.setStyle("color", "#ff9955");
+					textBlicker.play();
+					FlexGlobals.topLevelApplication.dashboardContainer.currentState="softLimit";
+				}
+				else if(result == "near")
+				{
+					expirationDate.setStyle("color", "#ffcc00");
+					textBlicker.play();
+					FlexGlobals.topLevelApplication.dashboardContainer.currentState="near";
+				}
+				timerBlicker.addEventListener(TimerEvent.TIMER, blickingFinishHandler);
+				timerBlicker.start();
+			}
+			
+			protected function blickingFinishHandler(event:TimerEvent):void
+			{
+				textBlicker.stop();
+			}
+			
+			public function saveLicenseKey(s:String):void
+			{
+				re.saveLicenseKey(s);
+			}
+			
+			protected function saveLicenseKeyHandler(event:ResultEvent):void
+			{
+				var result:Boolean = event.result as Boolean;
+				if(result)
+				{
+					licenseKeyEntrancePopup = InteractionUtil.newPopup(LicenseKeyEntrancePopup, true) as LicenseKeyEntrancePopup;
+					var timer:Timer = new Timer(3000);
+					timer.addEventListener(TimerEvent.TIMER, timerFinishHandler);
+					timer.start();
+				}
+				else
+					Alert.show("License Key is Invalid");
+			}
+			
+			protected function timerFinishHandler(event:TimerEvent):void
+			{
+				InteractionUtil.closePopup(licenseKeyEntrancePopup);
+				navigateToURL(new URLRequest ('j_spring_security_logout'), '_self');
+			}
+			
 			
 		]]>
 	</fx:Script>
+	<fx:Declarations>
+		<my:remote id="re" destination="licenseInformationBRS">
+			<my:method name="getLicense" result="getLicenseHandler(event)"/>
+			<my:method name="isSoftLimitOrNear" result="isSoftLimitOrNearHandler(event)"/>
+			<my:method name="isHardLimit" result="isHardLimitHandler(event)"/>
+			<my:method name="saveLicenseKey" result="saveLicenseKeyHandler(event)"/>
+		</my:remote>
+		<s:Animate id="textBlicker" duration="500" repeatBehavior="reverse" repeatCount="0"
+				   target="{expirationDate}" >
+			<s:SimpleMotionPath property="alpha" valueFrom="1.0" valueTo="0.0"/>
+		</s:Animate>
+		<mx:DateFormatter id="dateFormatter" formatString="DD/MM/YYYY"/> 
+	</fx:Declarations>
+	
+	<s:states>
+		<s:State name="default" />
+		<s:State name="nolicense" />
+	</s:states>
+	
 	<s:Rect left="0" right="0" top="0" bottom="0" >
 		<s:stroke>
 			<s:SolidColorStroke color="0xAEBBCF" alpha="0.3" weight="3"/>
@@ -22,10 +127,18 @@
 	</s:Rect>
 	<s:Group width="100%" height="100%">
 		<s:layout>
-			<s:HorizontalLayout verticalAlign="middle" horizontalAlign="center" 
+			<s:VerticalLayout horizontalAlign="center" 
 							  paddingBottom="15" paddingTop="15" 
 							  paddingLeft="5" paddingRight="5"/>
 		</s:layout>
-		<s:Label id="lbl" text="License type: TRIAL" width="100%" fontSize="18" fontWeight="bold" textAlign="center"/>
+
+		<s:Label id="lbl" text="{LangUtil.getString('messages','dashboard.license.licenseType.' + licenseInformation.licenseType)}"  
+				 width="100%" fontSize="18" fontWeight="bold" textAlign="center"/>
+		<s:Label id="issueDate" text="{LangUtil.getString('messages','dashboard.license.issueDate') + dateFormatter.format(licenseInformation.issueDate)}" 
+				 fontSize="18" fontWeight="bold" textAlign="center" width="100%"/>
+		<s:Label id="expirationDate" text="{LangUtil.getString('messages','dashboard.license.expirationDate') + dateFormatter.format(licenseInformation.expirationDate)}" 
+				 fontSize="18" fontWeight="bold" textAlign="center" width="100%"/>
+		<s:Label id="userCount"  text="{LangUtil.getString('messages','dashboard.license.userCount') + licenseInformation.userCount}" 
+				 fontSize="18" fontWeight="bold" textAlign="center" width="100%"/>
 	</s:Group>
 </s:Group>
