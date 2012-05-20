@@ -5,6 +5,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 
 @Entity
@@ -36,7 +37,7 @@ public class ADDomainUser extends ADDomainItem {
 		this.sAMAccountName = sAMAccountName;
 	}
 
-	@OneToMany(cascade={CascadeType.ALL})
+	@OneToMany(cascade={CascadeType.ALL},fetch=FetchType.EAGER)
 	public List<ADDomainUserAlias> getAliases() {
 		return aliases;
 	}

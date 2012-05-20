@@ -9,6 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.mydlp.ui.domain.ADDomain;
 import com.mydlp.ui.domain.ADDomainItem;
+import com.mydlp.ui.domain.ADDomainItemGroup;
+import com.mydlp.ui.domain.ADDomainRoot;
 import com.mydlp.ui.domain.AbstractEntity;
 
 
@@ -31,6 +33,7 @@ public class ADDomainDAOImpl extends AbstractPolicyDAO implements ADDomainDAO {
 	}
 
 	@Override
+	@Transactional(readOnly=false)
 	public void remove(AbstractEntity domainObj) {
 		getHibernateTemplate().delete(domainObj);
 	}
@@ -50,6 +53,37 @@ public class ADDomainDAOImpl extends AbstractPolicyDAO implements ADDomainDAO {
 	public List<ADDomain> getADDomains() {
 		DetachedCriteria criteria = DetachedCriteria.forClass(ADDomain.class);
 		return getHibernateTemplate().findByCriteria(criteria);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<ADDomainItem> getChildrenOf(ADDomainItemGroup domainItemGroup) {
+		DetachedCriteria criteria = 
+				DetachedCriteria.forClass(ADDomainItem.class)
+				.add(Restrictions.eq("parent.id", domainItemGroup.getId()));
+		return getHibernateTemplate().findByCriteria(criteria);
+	}
+
+	@Override
+	public void finalizeProcess(Integer domainId, String message) {
+		getHibernateTemplate().bulkUpdate(
+				"update from ADDomain d set d.currentlyEnumerating=false, d.message=? where d.id=?", 
+				message, domainId);
+	}
+
+	@Override
+	public AbstractEntity merge(AbstractEntity domainObj) {
+		return getHibernateTemplate().merge(domainObj);
+	}
+
+	@Override
+	public ADDomainRoot getDomainRoot(Integer domainId) {
+		DetachedCriteria criteria = 
+				DetachedCriteria.forClass(ADDomainRoot.class)
+				.add(Restrictions.eq("domain.id", domainId));
+		@SuppressWarnings("unchecked")
+		List<ADDomainRoot> l = getHibernateTemplate().findByCriteria(criteria);
+		return DAOUtil.getSingleResult(l);
 	}
 
 }

@@ -64,7 +64,7 @@
 
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-    <dao.show_sql>true</dao.show_sql>
+    <dao.show_sql>false</dao.show_sql>
 
     <dao.policy.dialect>org.hibernate.dialect.HSQLDialect</dao.policy.dialect>
     <ds.policy.driver>org.hsqldb.jdbcDriver</ds.policy.driver>

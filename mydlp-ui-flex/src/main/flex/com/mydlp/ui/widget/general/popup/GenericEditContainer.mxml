@@ -52,7 +52,6 @@
 			import mx.binding.utils.BindingUtils;
 			import mx.collections.ArrayCollection;
 			import mx.collections.ListCollectionView;
-			import mx.controls.TextArea;
 			import mx.core.FlexGlobals;
 			import mx.events.ValidationResultEvent;
 			import mx.validators.EmailValidator;
@@ -62,6 +61,7 @@
 			
 			import spark.components.Button;
 			import spark.components.CheckBox;
+			import spark.components.TextArea;
 			import spark.components.TextInput;
 			
 			protected var cButton:Button = new Button();
@@ -143,6 +143,7 @@
 							(classMember.name == "matcher" && classMember.type == Matcher) ||
 							(classMember.name == "root" && classMember.type == ADDomainRoot) ||
 							(classMember.name == "parent" && classMember.type == ADDomainItemGroup) ||
+							(classMember.name == "isDeleted" && classMember.type == Boolean) ||
 							(classMember.name == "settings" && classMember.type == UserSettings)
 						)
 					{
@@ -341,6 +342,25 @@
 						//nullValidator.addEventListener(ValidationResultEvent.VALID, validInput);
 						validators.push(nullValidator);
 					}
+					else if (targetObject is ADDomain &&
+						classMember.name == "message" && 
+						classMember.type == String)
+					{
+						index = 15;
+						var textArea2:TextArea = new TextArea();
+						textArea2.text = targetObject[classMember.name];
+						textArea2.width = InputLabel.VERTICAL_INPUT_WIDTH;
+						textArea2.height = 60;
+						textArea2.editable = false;
+						textArea2.setStyle("color", "red");
+						textArea2.setStyle("borderColor", "0x555555");
+						inputLabel = new VerticalInputLabel();
+						inputLabel.addElement(textArea2);
+						if (textArea2.text == "" || textArea2.text == null || textArea2.text == "null") {
+							inputLabel.includeInLayout = false;
+							inputLabel.visible = false;
+						}
+					}
 					else if (classMember.name == "currentlyEnumerating" && classMember.type == Boolean)
 					{
 						var addps:ADDomainEnumeratingProcessInput = new ADDomainEnumeratingProcessInput();
@@ -463,7 +483,12 @@
 							index = 3;
 						}
 						else if(classMember.name == "username"){
-							textInput.editable = false;
+							/*
+							if (targetObject is AuthUser)
+								textInput.editable = false;
+							else
+								textInput.editable = true;
+							*/
 							index = 3;
 						}
 						else if(classMember.name == "deviceId"){

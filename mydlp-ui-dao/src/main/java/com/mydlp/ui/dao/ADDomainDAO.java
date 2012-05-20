@@ -4,6 +4,8 @@ import java.util.List;
 
 import com.mydlp.ui.domain.ADDomain;
 import com.mydlp.ui.domain.ADDomainItem;
+import com.mydlp.ui.domain.ADDomainItemGroup;
+import com.mydlp.ui.domain.ADDomainRoot;
 import com.mydlp.ui.domain.AbstractEntity;
 
 public interface ADDomainDAO {
@@ -17,5 +19,13 @@ public interface ADDomainDAO {
 	public ADDomainItem findByDistinguishedName(String distinguishedName);
 	
 	public List<ADDomain> getADDomains();
+	
+	public List<ADDomainItem> getChildrenOf(ADDomainItemGroup domainItemGroup);
+	
+	public void finalizeProcess(Integer domainId, String message);
+	
+	public AbstractEntity merge(AbstractEntity domainObj);
+	
+	public ADDomainRoot getDomainRoot(Integer domainId);
 	
 }

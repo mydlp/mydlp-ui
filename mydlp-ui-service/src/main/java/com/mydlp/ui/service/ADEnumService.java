@@ -6,4 +6,6 @@ public interface ADEnumService {
 
 	public void enumerate(ADDomain domain);
 	
+	public String getLatestMessage(Integer domainId);
+	
 }

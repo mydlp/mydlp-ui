@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.mydlp.ui.dao.ADDomainDAO;
 import com.mydlp.ui.domain.ADDomain;
+import com.mydlp.ui.domain.ADDomainRoot;
 import com.mydlp.ui.service.ADEnumService;
 
 @Service("adDomainBRS")
@@ -28,7 +29,18 @@ public class ADDomainBRSImpl implements ADDomainService
 
 	@Override
 	public ADDomain save(ADDomain domain) {
-		domain = adDomainDAO.saveDomain(domain);
+		if (domain == null) return null;
+		
+		if (domain.getId() != null) {
+			if (domain.getRoot() != null){
+				ADDomainRoot persistentRoot = adDomainDAO.getDomainRoot(domain.getId());
+				domain.setRoot(persistentRoot);
+			}
+			domain.setMessage(adEnumService.getLatestMessage(domain.getId()));
+		}
+		
+		domain = (ADDomain) adDomainDAO.merge(domain);
+		
 		enumerate(domain);
 		return domain;
 	}

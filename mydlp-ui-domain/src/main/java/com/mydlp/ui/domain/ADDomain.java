@@ -28,6 +28,8 @@ public class ADDomain extends AbstractEntity {
 	
 	protected Boolean currentlyEnumerating;
 	
+	protected String message;
+	
 	protected ADDomainRoot root;
 	
 	protected List<ADDomainAlias> aliases;
@@ -100,6 +102,14 @@ public class ADDomain extends AbstractEntity {
 
 	public void setAliases(List<ADDomainAlias> aliases) {
 		this.aliases = aliases;
+	}
+
+	public String getMessage() {
+		return message;
+	}
+
+	public void setMessage(String message) {
+		this.message = message;
 	}
 	
 }

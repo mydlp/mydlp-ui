@@ -35,5 +35,5 @@ public abstract class ADDomainItem extends AbstractEntity {
 	public void setParent(ADDomainItemGroup parent) {
 		this.parent = parent;
 	}
-	
+
 }
