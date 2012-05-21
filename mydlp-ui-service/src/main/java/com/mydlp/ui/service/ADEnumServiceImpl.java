@@ -7,7 +7,6 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.TreeSet;
 
 import javax.naming.Context;
 import javax.naming.NamingEnumeration;
@@ -23,12 +22,17 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.UncategorizedSQLException;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.TransactionCallbackWithoutResult;
+import org.springframework.transaction.support.TransactionTemplate;
 
 import com.mydlp.ui.dao.ADDomainDAO;
 import com.mydlp.ui.domain.ADDomain;
+import com.mydlp.ui.domain.ADDomainGroup;
 import com.mydlp.ui.domain.ADDomainItem;
 import com.mydlp.ui.domain.ADDomainItemGroup;
 import com.mydlp.ui.domain.ADDomainOU;
@@ -47,9 +51,22 @@ public class ADEnumServiceImpl implements ADEnumService {
 	
 	@Autowired
 	protected ADDomainDAO adDomainDAO;
+
+	@Autowired
+	@Qualifier("policyTransactionTemplate")
+	protected TransactionTemplate transactionTemplate;
 	
 	@Async
-	public void enumerate(ADDomain domain) {
+	public void enumerate(final ADDomain domain) {
+		transactionTemplate.execute(new TransactionCallbackWithoutResult() {
+			@Override
+			protected void doInTransactionWithoutResult(TransactionStatus arg0) {
+				enumerateFun(domain);
+			}
+		});
+	}
+		
+	public void enumerateFun(ADDomain domain) {
 		if (currentlyProcessingDomains.contains(domain.getId()))
 		{
 			logger.info("Enumerating already scheduled for domain.", domain.getDomainName());
@@ -62,7 +79,6 @@ public class ADEnumServiceImpl implements ADEnumService {
 			ADDomainRoot root = new ADDomainRoot();
 			root.setDistinguishedName("mydlp-domain-root/" + domain.getDomainName());
 			root.setDomain(domain);
-			
 			root = (ADDomainRoot) adDomainDAO.saveDomainItem(root);
 			domain.setRoot(root);
 			domain = adDomainDAO.saveDomain(domain);
@@ -72,7 +88,9 @@ public class ADEnumServiceImpl implements ADEnumService {
 			domain.setCurrentlyEnumerating(true);
 			domain.setMessage("");
 			domain = (ADDomain) adDomainDAO.merge(domain);
-			enumerateDN(domain, domain.getRoot(), distinguishedName);
+			Map<String, Set<String>> memberships = initMemberships();
+			enumerateDN(domain, domain.getRoot(), distinguishedName, memberships);
+			enumerateMemberships(memberships);
 			adDomainDAO.finalizeProcess(domain.getId(), "");
 		} catch (RuntimeException e) {
 			processError(domain, e);
@@ -80,6 +98,59 @@ public class ADEnumServiceImpl implements ADEnumService {
 			processError(domain, e);
 		} finally {
 			currentlyProcessingDomains.remove(domain.getId());
+		}
+	}
+	
+	protected Map<String, Set<String>> initMemberships() {
+		Map<String, Set<String>> memberships = new HashMap<String, Set<String>>();
+		return memberships;
+	}
+	
+	protected void addToMemberships(Map<String, Set<String>> memberships, String userDN, String groupDN) {
+		if (!memberships.containsKey(userDN)) {
+			memberships.put(userDN, new HashSet<String>());
+		}
+		Set<String> groupDNs = memberships.get(userDN);
+		groupDNs.add(groupDN);
+	}
+	
+	protected void addToMemberships(Map<String, Set<String>> memberships, String userDN, Set<String> groups) {
+		for (String groupDN: groups) {
+			addToMemberships(memberships, userDN, groupDN);
+		}
+	}
+	
+	protected void enumerateMemberships(Map<String, Set<String>> memberships) {
+		for (String userDN : memberships.keySet()) {
+			enumerateUserMembership(userDN, memberships.get(userDN));
+		}
+	}
+
+	protected void enumerateUserMembership(String userDN, Set<String> groupDNs) {
+		ADDomainUser userObject = (ADDomainUser) adDomainDAO.findByDistinguishedName(userDN);
+		Set<ADDomainGroup> dummy = new HashSet<ADDomainGroup>();
+		if (userObject.getGroups() != null)
+			dummy.addAll(userObject.getGroups());
+		for (String groupDN : groupDNs) {
+			ADDomainGroup groupObject = (ADDomainGroup) adDomainDAO.findByDistinguishedName(groupDN);
+			dummy.remove(groupObject);
+			if (userObject.getGroups() == null || !userObject.getGroups().contains(groupObject)) {
+				if (userObject.getGroups() == null)
+					userObject.setGroups(new HashSet<ADDomainGroup>());
+				userObject.getGroups().add(groupObject);
+				if (groupObject.getUsers() == null)
+					groupObject.setUsers(new HashSet<ADDomainUser>());
+				groupObject.getUsers().add(userObject);
+				adDomainDAO.saveDomainItem(groupObject);
+				adDomainDAO.saveDomainItem(userObject);
+			}
+		}
+		
+		for (ADDomainGroup exGroup : dummy) {
+			exGroup.getUsers().remove(userObject);
+			userObject.getGroups().remove(exGroup);
+			adDomainDAO.saveDomainItem(exGroup);
+			adDomainDAO.saveDomainItem(userObject);
 		}
 	}
 	
@@ -102,15 +173,17 @@ public class ADEnumServiceImpl implements ADEnumService {
 		return ctx;
 	}
 	
-	protected void enumerateDN(ADDomain domain, ADDomainItemGroup parent, String distinguishedName) throws NamingException {
+	protected void enumerateDN(ADDomain domain, ADDomainItemGroup parent, String distinguishedName, Map<String, Set<String>> memberships) throws NamingException {
 		List<ADDomainItem> children = adDomainDAO.getChildrenOf(parent);
-		List<ADDomainItem> enumeratedUsers = searchDNforUsers(domain, parent, distinguishedName);
-		List<ADDomainItem> enumeratedOUs = searchDNforOU(domain, parent, distinguishedName);
+		List<ADDomainItem> enumeratedUsers = searchDNforUsers(domain, parent, distinguishedName, memberships);
+		List<ADDomainItem> enumeratedGroups = searchDNforGroups(domain, parent, distinguishedName);
+		List<ADDomainItem> enumeratedOUs = searchDNforOU(domain, parent, distinguishedName, memberships);
 		
 		List<ADDomainItem> dummy = new ArrayList<ADDomainItem>(); 
 		dummy.addAll(children);
 		
 		dummy.removeAll(enumeratedUsers);
+		dummy.removeAll(enumeratedGroups);
 		dummy.removeAll(enumeratedOUs);
 		
 		for (ADDomainItem adDomainItem : dummy) {
@@ -124,20 +197,20 @@ public class ADEnumServiceImpl implements ADEnumService {
 		}
 	}
 	
-	protected List<ADDomainItem> searchDNforUsers(ADDomain domain, ADDomainItemGroup parent, String distinguishedName) throws NamingException {
+	protected List<ADDomainItem> searchDNforUsers(ADDomain domain, ADDomainItemGroup parent, String distinguishedName, Map<String, Set<String>> memberships) throws NamingException {
 		DirContext ctx = context(domain);
 		SearchControls ctls = new SearchControls();
-		String[] attrIDs =  { "displayName", "sAMAccountName", "distinguishedName", "proxyAddresses", "mailNickname"};
+		String[] attrIDs =  { "displayName", "sAMAccountName", "distinguishedName", "proxyAddresses", "mailNickname","memberOf"};
 		ctls.setReturningAttributes(attrIDs);
 		
 		ctls.setSearchScope(SearchControls.ONELEVEL_SCOPE);
 		NamingEnumeration<SearchResult> queryResults = ctx.search(distinguishedName,
-				"(&(objectCategory=person)(objectClass=user)(!(isCriticalSystemObject=TRUE)))"
+				"(&(objectCategory=person)(objectClass=user))"
 				, ctls);
-		return saveUsers(parent, queryResults);
+		return saveUsers(parent, queryResults, memberships);
 	}
 	
-	protected List<ADDomainItem> searchDNforOU(ADDomain domain, ADDomainItemGroup parent, String distinguishedName) throws NamingException {
+	protected List<ADDomainItem> searchDNforOU(ADDomain domain, ADDomainItemGroup parent, String distinguishedName, Map<String, Set<String>> memberships) throws NamingException {
 		DirContext ctx = context(domain);
 		SearchControls ctls = new SearchControls();
 		String[] attrIDs =  { "name", "distinguishedName" };
@@ -149,7 +222,22 @@ public class ADEnumServiceImpl implements ADEnumService {
 				"(&(objectClass=organizationalUnit)(!(isCriticalSystemObject=TRUE))(!(msExchVersion=*)))"
 				, ctls);
 		
-		return saveOUs(domain, parent, queryResults);
+		return saveOUs(domain, parent, queryResults, memberships);
+	}
+
+	protected List<ADDomainItem> searchDNforGroups(ADDomain domain, ADDomainItemGroup parent, String distinguishedName) throws NamingException {
+		DirContext ctx = context(domain);
+		SearchControls ctls = new SearchControls();
+		String[] attrIDs =  { "name", "distinguishedName" };
+		ctls.setReturningAttributes(attrIDs);
+		
+		ctls.setSearchScope(SearchControls.ONELEVEL_SCOPE);
+
+		NamingEnumeration<SearchResult> queryResults = ctx.search(distinguishedName,
+				"(&(objectClass=group))"
+				, ctls);
+		
+		return saveGroups(domain, parent, queryResults);
 	}
 
 	protected String fqdnToLdapdn(String domainName) {
@@ -161,7 +249,7 @@ public class ADEnumServiceImpl implements ADEnumService {
 		return StringUtils.join(dcList, ",");
 	}
 	
-	protected List<ADDomainItem> saveUsers(ADDomainItemGroup parent, NamingEnumeration<SearchResult> queryResults) throws NamingException {
+	protected List<ADDomainItem> saveUsers(ADDomainItemGroup parent, NamingEnumeration<SearchResult> queryResults, Map<String, Set<String>> memberships) throws NamingException {
 		
 		List<ADDomainItem> resultList = new ArrayList<ADDomainItem>();
 		
@@ -172,12 +260,13 @@ public class ADEnumServiceImpl implements ADEnumService {
 
 			if (null != attribs)
 			{
-				// "displayName", "sAMAccountName", "distinguishedName", "proxyAddresses","mailNickname"
+				// "displayName", "sAMAccountName", "distinguishedName", "proxyAddresses","mailNickname","memberOf"
 				String displayName = null;
 				String sAMAccountName = null;
 				String distinguishedName = null;
 				
-				Set<String> userAliases = new TreeSet<String>();
+				Set<String> userAliases = new HashSet<String>();
+				Set<String> groups = new HashSet<String>();
 				
 				
 				for (NamingEnumeration<? extends Attribute> ae = attribs.getAll(); ae.hasMoreElements();)
@@ -187,7 +276,6 @@ public class ADEnumServiceImpl implements ADEnumService {
 					
 					//for (int i = 0; i < atr.size(); i++) 
 					//	System.out.println(attributeID + ": " + atr.get(i));
-					
 					
 					if (atr.size() > 0)
 					{
@@ -214,6 +302,8 @@ public class ADEnumServiceImpl implements ADEnumService {
 								val = val.toLowerCase();
 								userAliases.add(val);
 							}
+						else if (attributeID.equals("memberOf"))
+							groups.add((String) atr.get(0));
 					}
 				}
 		
@@ -269,6 +359,8 @@ public class ADEnumServiceImpl implements ADEnumService {
 				for (ADDomainUserAlias adDomainUserAlias : aliasesToDelete) {
 					adDomainDAO.remove(adDomainUserAlias);
 				}
+				
+				addToMemberships(memberships, distinguishedName, groups);
 				resultList.add(domainUser);
 			}
 		}
@@ -276,7 +368,7 @@ public class ADEnumServiceImpl implements ADEnumService {
 		return resultList;
 	}
 	
-	protected List<ADDomainItem> saveOUs(ADDomain domain, ADDomainItemGroup parent, NamingEnumeration<SearchResult> queryResults) throws NamingException {
+	protected List<ADDomainItem> saveOUs(ADDomain domain, ADDomainItemGroup parent, NamingEnumeration<SearchResult> queryResults, Map<String, Set<String>> memberships) throws NamingException {
 		List<ADDomainItem> resultList = new ArrayList<ADDomainItem>();
 		
 		while (queryResults.hasMoreElements())
@@ -324,8 +416,63 @@ public class ADEnumServiceImpl implements ADEnumService {
 				if (saveFlag)
 					domainOU = (ADDomainOU) adDomainDAO.saveDomainItem(domainOU);
 				
-				enumerateDN(domain, domainOU, domainOU.getDistinguishedName());
+				enumerateDN(domain, domainOU, domainOU.getDistinguishedName(), memberships);
 				resultList.add(domainOU);
+			}
+		}
+		
+		return resultList;
+	}
+	
+	protected List<ADDomainItem> saveGroups(ADDomain domain, ADDomainItemGroup parent, NamingEnumeration<SearchResult> queryResults) throws NamingException {
+		List<ADDomainItem> resultList = new ArrayList<ADDomainItem>();
+		
+		while (queryResults.hasMoreElements())
+		{
+			SearchResult result = queryResults.next();
+			Attributes attribs = result.getAttributes();
+
+			if (null != attribs)
+			{
+				String name = null;
+				String distinguishedName = null;
+				
+				for (NamingEnumeration<? extends Attribute> ae = attribs.getAll(); ae.hasMoreElements();)
+				{
+					Attribute atr = (Attribute) ae.next();
+					String attributeID = atr.getID();
+					
+					//for (int i = 0; i < atr.size(); i++) 
+					//	System.out.println(attributeID + ": " + atr.get(i));
+					
+					if (atr.size() > 0)
+					{
+						if (attributeID.equals("name"))
+							name = (String) atr.get(0);
+						else if (attributeID.equals("distinguishedName"))
+							distinguishedName = (String) atr.get(0);
+					}
+				}
+				
+				ADDomainGroup domainGroup = (ADDomainGroup) adDomainDAO.findByDistinguishedName(distinguishedName);
+				Boolean saveFlag = false;
+				
+				if (domainGroup == null) {
+					domainGroup = new ADDomainGroup();
+					domainGroup.setParent(parent);
+					domainGroup.setDistinguishedName(distinguishedName);
+					saveFlag=true;
+				}
+				
+				if (!name.equals(domainGroup.getName())) {
+					domainGroup.setName(name);
+					saveFlag = true;
+				}
+				
+				if (saveFlag)
+					domainGroup = (ADDomainGroup) adDomainDAO.saveDomainItem(domainGroup);
+				
+				resultList.add(domainGroup);
 			}
 		}
 		

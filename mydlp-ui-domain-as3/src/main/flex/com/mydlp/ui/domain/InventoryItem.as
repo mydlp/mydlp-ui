@@ -17,6 +17,9 @@ package com.mydlp.ui.domain {
 		[Embed("../../../../../../../../mydlp-ui-flex/src/main/flex/assets/icons/16x16/page.png")]
 		public static const ICON_INFORMATION_TYPE:Class;
 		
+		[Embed("../../../../../../../../mydlp-ui-flex/src/main/flex/assets/icons/16x16/user_static.png")]
+		public static const ICON_RULE_USER_STATIC:Class;
+		
 		private var _icon:Object = null;
 		
 		public function get icon(): Object
@@ -32,13 +35,21 @@ package com.mydlp.ui.domain {
 					else if (iitem is Network)
 						_icon = ICON_NETWORK; 
 					else if (iitem is RuleUserStatic)
-						_icon = ADDomainUser.ICON_CLASS;
-					else if (iitem is RuleUserAD)
-						_icon = ADDomainOU.ICON_CLASS;
+						_icon = ICON_RULE_USER_STATIC;
+					else if (iitem is RuleUserAD) {
+						var ruser:RuleUserAD = iitem as RuleUserAD;
+						if (ruser.domainItem is ADDomainOU)
+							_icon = ADDomainOU.ICON_CLASS;
+						else if (ruser.domainItem is ADDomainUser)
+							_icon = ADDomainUser.ICON_CLASS;
+						else if (ruser.domainItem is ADDomainGroup)
+							_icon = ADDomainGroup.ICON_CLASS;
+						else
+							_icon = ADDomainGroup.ICON_CLASS;
+					}
 				}
 			}
 			return _icon;
 		}
-		
     }
 }
