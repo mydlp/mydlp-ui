@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Hashtable;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -188,13 +189,52 @@ public class ADEnumServiceImpl implements ADEnumService {
 		
 		for (ADDomainItem adDomainItem : dummy) {
 			try {
-				adDomainDAO.remove(adDomainItem);
+				removeDomainItem(adDomainItem, parent);
+				parent.getChildren().remove(adDomainItem);
+				adDomainDAO.saveDomainItem(parent);
 			} catch (UncategorizedSQLException e) {
 				logger.error("Does not removing ADDomainItem, because item is used in inventory: ", adDomainItem.getId());
 			} catch (Throwable e) {
 				logger.error("Error occurred when trying to remove domain item", e);
 			}
 		}
+	}
+	
+	protected void removeDomainItem(ADDomainItem adDomainItem, ADDomainItemGroup parent) {
+		if (adDomainItem instanceof ADDomainGroup) {
+			ADDomainGroup adDomainGroup = (ADDomainGroup) adDomainItem;
+			for (ADDomainUser adDomainUser : adDomainGroup.getUsers()) {
+				adDomainUser.getGroups().remove(adDomainGroup);
+				adDomainGroup.getUsers().remove(adDomainUser);
+				adDomainDAO.saveDomainItem(adDomainGroup);
+				adDomainDAO.saveDomainItem(adDomainUser);
+			}
+		} else if (adDomainItem instanceof ADDomainUser) {
+			ADDomainUser adDomainUser = (ADDomainUser) adDomainItem;
+			for (ADDomainGroup adDomainGroup : adDomainUser.getGroups()) {
+				adDomainGroup.getUsers().remove(adDomainUser);
+				adDomainUser.getGroups().remove(adDomainGroup);
+				adDomainDAO.saveDomainItem(adDomainGroup);
+				adDomainDAO.saveDomainItem(adDomainUser);
+			}
+		} else if (adDomainItem instanceof ADDomainOU) {
+			ADDomainOU adDomainOU = (ADDomainOU) adDomainItem;
+			List<ADDomainItem> dummy = new LinkedList<ADDomainItem>();
+			dummy.addAll(adDomainOU.getChildren());
+			for (ADDomainItem innerItem : dummy) {
+				try {
+					removeDomainItem(innerItem, adDomainOU);
+					adDomainOU.getChildren().remove(innerItem);
+					adDomainDAO.saveDomainItem(adDomainOU);
+				} catch (UncategorizedSQLException e) {
+					logger.error("Does not removing ADDomainItem, because item is used in inventory: ", adDomainItem.getId());
+				} catch (Throwable e) {
+					logger.error("Error occurred when trying to remove domain item", e);
+				}
+			}
+		}
+		
+		adDomainDAO.remove(adDomainItem);
 	}
 	
 	protected List<ADDomainItem> searchDNforUsers(ADDomain domain, ADDomainItemGroup parent, String distinguishedName, Map<String, Set<String>> memberships) throws NamingException {
@@ -303,7 +343,8 @@ public class ADEnumServiceImpl implements ADEnumService {
 								userAliases.add(val);
 							}
 						else if (attributeID.equals("memberOf"))
-							groups.add((String) atr.get(0));
+							for (int i = 0; i < atr.size(); i++)
+								groups.add((String) atr.get(i));
 					}
 				}
 		
