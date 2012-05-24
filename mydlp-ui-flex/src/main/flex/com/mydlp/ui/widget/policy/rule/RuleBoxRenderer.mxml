@@ -321,7 +321,7 @@
 			{
 				if(treeItem is InventoryItem)
 				{
-					if (treeItem.item is InformationType )
+					if ( treeItem.item is InformationType )
 						return true;
 					else if ( treeItem.item is Network && (
 								ruleObject is WebRule ||
@@ -330,12 +330,7 @@
 								ruleObject is DiscoveryRule
 							  ))
 						return true;
-					else if ( treeItem.item is RuleUser && (
-						ruleObject is MailRule ||
-						ruleObject is EndpointRule ||
-						ruleObject is PrinterRule ||
-						ruleObject is DiscoveryRule
-					))
+					else if ( treeItem.item is RuleUser )
 						return true;
 				}
 				else if (treeItem is InventoryCategory)
