@@ -24,7 +24,7 @@ JETTY_PORT=8010
 #JETTY_ARGS=
 
 # Extra options to pass to the JVM         
-JAVA_OPTIONS="-Xms32m -Xmx1024m -Djava.awt.headless=true"
+JAVA_OPTIONS="-Xms64m -Xmx512m -Djava.awt.headless=true"
 
 # Home of Java installation.
 #JAVA_HOME=
