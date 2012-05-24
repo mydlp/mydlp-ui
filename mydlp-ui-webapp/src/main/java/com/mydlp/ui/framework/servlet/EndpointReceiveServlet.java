@@ -25,7 +25,7 @@ public class EndpointReceiveServlet implements HttpRequestHandler {
 			.getLogger(EndpointReceiveServlet.class);
 
 	private static final String ERROR = "error";
-	private static final int READ_BLOCK = 8192;
+	public static final int READ_BLOCK = 8192;
 
 	@Autowired
 	protected MyDLPUIThriftService thriftService;
@@ -63,7 +63,7 @@ public class EndpointReceiveServlet implements HttpRequestHandler {
 		out.close();
 	}
 
-	private static ByteBuffer resizeBuffer(ByteBuffer in) {
+	public static ByteBuffer resizeBuffer(ByteBuffer in) {
 		ByteBuffer result = in;
 		if (in.remaining() < READ_BLOCK) {
 			// create new buffer

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.channels.Channels;
+import java.nio.channels.ReadableByteChannel;
 import java.nio.channels.WritableByteChannel;
 import java.nio.charset.Charset;
 
@@ -43,9 +44,22 @@ public class EndpointSyncServlet implements HttpRequestHandler {
 			String urlKey = req.getParameter("rid");
 			String userH = req.getParameter("uh");
 			String ipAddress = req.getRemoteAddr();
+			
+			try {
+				ByteBuffer payload = ByteBuffer.allocate(EndpointReceiveServlet.READ_BLOCK);
+				ReadableByteChannel channel = Channels.newChannel(req.getInputStream());
+				while (channel.read(payload) != -1)  
+					payload = EndpointReceiveServlet.resizeBuffer(payload);
+				payload.position(0);
+				channel.close();
+				thriftService.registerUserAddress(ipAddress, userH, payload);
+			} catch (Throwable e) {
+				logger.error("Runtime error occured when reading payload", e);
+			}
+			
 			responseBuffer = thriftService.getRuletable(ipAddress, userH, urlKey);
 			endpointStatusDAO.upToDateEndpoint(ipAddress);
-		} catch (RuntimeException e) {
+		} catch (Throwable e) {
 			logger.error("Runtime error occured", e);
 		}
 		

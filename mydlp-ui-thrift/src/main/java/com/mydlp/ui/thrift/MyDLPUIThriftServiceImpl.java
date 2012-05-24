@@ -209,4 +209,16 @@ public class MyDLPUIThriftServiceImpl implements MyDLPUIThriftService {
 		});
 	}
 
+	@Override
+	public void registerUserAddress(final String ipAddress, final String userH,
+			final ByteBuffer payload) {
+		call(new ThriftCall<Void>() {
+			@Override
+			public Void execute(Connection thriftConnection) throws TException {
+				thriftConnection.client.registerUserAddress(ipAddress, userH, payload);
+				return null;
+			}
+		});
+	}
+
 }
