@@ -36,6 +36,8 @@ public class Mydlp_ui {
 
     public void requeueIncident(long Incidentid) throws org.apache.thrift.TException;
 
+    public void registerUserAddress(String Ipaddress, String Userh, ByteBuffer Payload) throws org.apache.thrift.TException;
+
   }
 
   public interface AsyncIface {
@@ -51,6 +53,8 @@ public class Mydlp_ui {
     public void getFingerprints(String Filename, ByteBuffer Data, org.apache.thrift.async.AsyncMethodCallback<AsyncClient.getFingerprints_call> resultHandler) throws org.apache.thrift.TException;
 
     public void requeueIncident(long Incidentid, org.apache.thrift.async.AsyncMethodCallback<AsyncClient.requeueIncident_call> resultHandler) throws org.apache.thrift.TException;
+
+    public void registerUserAddress(String Ipaddress, String Userh, ByteBuffer Payload, org.apache.thrift.async.AsyncMethodCallback<AsyncClient.registerUserAddress_call> resultHandler) throws org.apache.thrift.TException;
 
   }
 
@@ -203,6 +207,20 @@ public class Mydlp_ui {
       requeueIncident_args args = new requeueIncident_args();
       args.setIncidentid(Incidentid);
       sendBase("requeueIncident", args);
+    }
+
+    public void registerUserAddress(String Ipaddress, String Userh, ByteBuffer Payload) throws org.apache.thrift.TException
+    {
+      send_registerUserAddress(Ipaddress, Userh, Payload);
+    }
+
+    public void send_registerUserAddress(String Ipaddress, String Userh, ByteBuffer Payload) throws org.apache.thrift.TException
+    {
+      registerUserAddress_args args = new registerUserAddress_args();
+      args.setIpaddress(Ipaddress);
+      args.setUserh(Userh);
+      args.setPayload(Payload);
+      sendBase("registerUserAddress", args);
     }
 
   }
@@ -435,6 +453,43 @@ public class Mydlp_ui {
       }
     }
 
+    public void registerUserAddress(String Ipaddress, String Userh, ByteBuffer Payload, org.apache.thrift.async.AsyncMethodCallback<registerUserAddress_call> resultHandler) throws org.apache.thrift.TException {
+      checkReady();
+      registerUserAddress_call method_call = new registerUserAddress_call(Ipaddress, Userh, Payload, resultHandler, this, ___protocolFactory, ___transport);
+      this.___currentMethod = method_call;
+      ___manager.call(method_call);
+    }
+
+    public static class registerUserAddress_call extends org.apache.thrift.async.TAsyncMethodCall {
+      private String Ipaddress;
+      private String Userh;
+      private ByteBuffer Payload;
+      public registerUserAddress_call(String Ipaddress, String Userh, ByteBuffer Payload, org.apache.thrift.async.AsyncMethodCallback<registerUserAddress_call> resultHandler, org.apache.thrift.async.TAsyncClient client, org.apache.thrift.protocol.TProtocolFactory protocolFactory, org.apache.thrift.transport.TNonblockingTransport transport) throws org.apache.thrift.TException {
+        super(client, protocolFactory, transport, resultHandler, true);
+        this.Ipaddress = Ipaddress;
+        this.Userh = Userh;
+        this.Payload = Payload;
+      }
+
+      public void write_args(org.apache.thrift.protocol.TProtocol prot) throws org.apache.thrift.TException {
+        prot.writeMessageBegin(new org.apache.thrift.protocol.TMessage("registerUserAddress", org.apache.thrift.protocol.TMessageType.CALL, 0));
+        registerUserAddress_args args = new registerUserAddress_args();
+        args.setIpaddress(Ipaddress);
+        args.setUserh(Userh);
+        args.setPayload(Payload);
+        args.write(prot);
+        prot.writeMessageEnd();
+      }
+
+      public void getResult() throws org.apache.thrift.TException {
+        if (getState() != org.apache.thrift.async.TAsyncMethodCall.State.RESPONSE_READ) {
+          throw new IllegalStateException("Method call not finished!");
+        }
+        org.apache.thrift.transport.TMemoryInputTransport memoryTransport = new org.apache.thrift.transport.TMemoryInputTransport(getFrameBuffer().array());
+        org.apache.thrift.protocol.TProtocol prot = client.getProtocolFactory().getProtocol(memoryTransport);
+      }
+    }
+
   }
 
   public static class Processor<I extends Iface> extends org.apache.thrift.TBaseProcessor implements org.apache.thrift.TProcessor {
@@ -454,6 +509,7 @@ public class Mydlp_ui {
       processMap.put("receiveChunk", new receiveChunk());
       processMap.put("getFingerprints", new getFingerprints());
       processMap.put("requeueIncident", new requeueIncident());
+      processMap.put("registerUserAddress", new registerUserAddress());
       return processMap;
     }
 
@@ -548,6 +604,21 @@ public class Mydlp_ui {
 
       protected org.apache.thrift.TBase getResult(I iface, requeueIncident_args args) throws org.apache.thrift.TException {
         iface.requeueIncident(args.Incidentid);
+        return null;
+      }
+    }
+
+    private static class registerUserAddress<I extends Iface> extends org.apache.thrift.ProcessFunction<I, registerUserAddress_args> {
+      public registerUserAddress() {
+        super("registerUserAddress");
+      }
+
+      protected registerUserAddress_args getEmptyArgsInstance() {
+        return new registerUserAddress_args();
+      }
+
+      protected org.apache.thrift.TBase getResult(I iface, registerUserAddress_args args) throws org.apache.thrift.TException {
+        iface.registerUserAddress(args.Ipaddress, args.Userh, args.Payload);
         return null;
       }
     }
@@ -4394,6 +4465,492 @@ public class Mydlp_ui {
       try {
         // it doesn't seem like you should have to do this, but java serialization is wacky, and doesn't call the default constructor.
         __isset_bit_vector = new BitSet(1);
+        read(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(in)));
+      } catch (org.apache.thrift.TException te) {
+        throw new java.io.IOException(te);
+      }
+    }
+
+  }
+
+  public static class registerUserAddress_args implements org.apache.thrift.TBase<registerUserAddress_args, registerUserAddress_args._Fields>, java.io.Serializable, Cloneable   {
+    private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("registerUserAddress_args");
+
+    private static final org.apache.thrift.protocol.TField IPADDRESS_FIELD_DESC = new org.apache.thrift.protocol.TField("Ipaddress", org.apache.thrift.protocol.TType.STRING, (short)1);
+    private static final org.apache.thrift.protocol.TField USERH_FIELD_DESC = new org.apache.thrift.protocol.TField("Userh", org.apache.thrift.protocol.TType.STRING, (short)2);
+    private static final org.apache.thrift.protocol.TField PAYLOAD_FIELD_DESC = new org.apache.thrift.protocol.TField("Payload", org.apache.thrift.protocol.TType.STRING, (short)3);
+
+    public String Ipaddress; // required
+    public String Userh; // required
+    public ByteBuffer Payload; // required
+
+    /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
+    public enum _Fields implements org.apache.thrift.TFieldIdEnum {
+      IPADDRESS((short)1, "Ipaddress"),
+      USERH((short)2, "Userh"),
+      PAYLOAD((short)3, "Payload");
+
+      private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+
+      static {
+        for (_Fields field : EnumSet.allOf(_Fields.class)) {
+          byName.put(field.getFieldName(), field);
+        }
+      }
+
+      /**
+       * Find the _Fields constant that matches fieldId, or null if its not found.
+       */
+      public static _Fields findByThriftId(int fieldId) {
+        switch(fieldId) {
+          case 1: // IPADDRESS
+            return IPADDRESS;
+          case 2: // USERH
+            return USERH;
+          case 3: // PAYLOAD
+            return PAYLOAD;
+          default:
+            return null;
+        }
+      }
+
+      /**
+       * Find the _Fields constant that matches fieldId, throwing an exception
+       * if it is not found.
+       */
+      public static _Fields findByThriftIdOrThrow(int fieldId) {
+        _Fields fields = findByThriftId(fieldId);
+        if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+        return fields;
+      }
+
+      /**
+       * Find the _Fields constant that matches name, or null if its not found.
+       */
+      public static _Fields findByName(String name) {
+        return byName.get(name);
+      }
+
+      private final short _thriftId;
+      private final String _fieldName;
+
+      _Fields(short thriftId, String fieldName) {
+        _thriftId = thriftId;
+        _fieldName = fieldName;
+      }
+
+      public short getThriftFieldId() {
+        return _thriftId;
+      }
+
+      public String getFieldName() {
+        return _fieldName;
+      }
+    }
+
+    // isset id assignments
+
+    public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
+    static {
+      Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
+      tmpMap.put(_Fields.IPADDRESS, new org.apache.thrift.meta_data.FieldMetaData("Ipaddress", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+          new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
+      tmpMap.put(_Fields.USERH, new org.apache.thrift.meta_data.FieldMetaData("Userh", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+          new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
+      tmpMap.put(_Fields.PAYLOAD, new org.apache.thrift.meta_data.FieldMetaData("Payload", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+          new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING          , true)));
+      metaDataMap = Collections.unmodifiableMap(tmpMap);
+      org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(registerUserAddress_args.class, metaDataMap);
+    }
+
+    public registerUserAddress_args() {
+    }
+
+    public registerUserAddress_args(
+      String Ipaddress,
+      String Userh,
+      ByteBuffer Payload)
+    {
+      this();
+      this.Ipaddress = Ipaddress;
+      this.Userh = Userh;
+      this.Payload = Payload;
+    }
+
+    /**
+     * Performs a deep copy on <i>other</i>.
+     */
+    public registerUserAddress_args(registerUserAddress_args other) {
+      if (other.isSetIpaddress()) {
+        this.Ipaddress = other.Ipaddress;
+      }
+      if (other.isSetUserh()) {
+        this.Userh = other.Userh;
+      }
+      if (other.isSetPayload()) {
+        this.Payload = org.apache.thrift.TBaseHelper.copyBinary(other.Payload);
+;
+      }
+    }
+
+    public registerUserAddress_args deepCopy() {
+      return new registerUserAddress_args(this);
+    }
+
+    @Override
+    public void clear() {
+      this.Ipaddress = null;
+      this.Userh = null;
+      this.Payload = null;
+    }
+
+    public String getIpaddress() {
+      return this.Ipaddress;
+    }
+
+    public registerUserAddress_args setIpaddress(String Ipaddress) {
+      this.Ipaddress = Ipaddress;
+      return this;
+    }
+
+    public void unsetIpaddress() {
+      this.Ipaddress = null;
+    }
+
+    /** Returns true if field Ipaddress is set (has been assigned a value) and false otherwise */
+    public boolean isSetIpaddress() {
+      return this.Ipaddress != null;
+    }
+
+    public void setIpaddressIsSet(boolean value) {
+      if (!value) {
+        this.Ipaddress = null;
+      }
+    }
+
+    public String getUserh() {
+      return this.Userh;
+    }
+
+    public registerUserAddress_args setUserh(String Userh) {
+      this.Userh = Userh;
+      return this;
+    }
+
+    public void unsetUserh() {
+      this.Userh = null;
+    }
+
+    /** Returns true if field Userh is set (has been assigned a value) and false otherwise */
+    public boolean isSetUserh() {
+      return this.Userh != null;
+    }
+
+    public void setUserhIsSet(boolean value) {
+      if (!value) {
+        this.Userh = null;
+      }
+    }
+
+    public byte[] getPayload() {
+      setPayload(org.apache.thrift.TBaseHelper.rightSize(Payload));
+      return Payload == null ? null : Payload.array();
+    }
+
+    public ByteBuffer bufferForPayload() {
+      return Payload;
+    }
+
+    public registerUserAddress_args setPayload(byte[] Payload) {
+      setPayload(Payload == null ? (ByteBuffer)null : ByteBuffer.wrap(Payload));
+      return this;
+    }
+
+    public registerUserAddress_args setPayload(ByteBuffer Payload) {
+      this.Payload = Payload;
+      return this;
+    }
+
+    public void unsetPayload() {
+      this.Payload = null;
+    }
+
+    /** Returns true if field Payload is set (has been assigned a value) and false otherwise */
+    public boolean isSetPayload() {
+      return this.Payload != null;
+    }
+
+    public void setPayloadIsSet(boolean value) {
+      if (!value) {
+        this.Payload = null;
+      }
+    }
+
+    public void setFieldValue(_Fields field, Object value) {
+      switch (field) {
+      case IPADDRESS:
+        if (value == null) {
+          unsetIpaddress();
+        } else {
+          setIpaddress((String)value);
+        }
+        break;
+
+      case USERH:
+        if (value == null) {
+          unsetUserh();
+        } else {
+          setUserh((String)value);
+        }
+        break;
+
+      case PAYLOAD:
+        if (value == null) {
+          unsetPayload();
+        } else {
+          setPayload((ByteBuffer)value);
+        }
+        break;
+
+      }
+    }
+
+    public Object getFieldValue(_Fields field) {
+      switch (field) {
+      case IPADDRESS:
+        return getIpaddress();
+
+      case USERH:
+        return getUserh();
+
+      case PAYLOAD:
+        return getPayload();
+
+      }
+      throw new IllegalStateException();
+    }
+
+    /** Returns true if field corresponding to fieldID is set (has been assigned a value) and false otherwise */
+    public boolean isSet(_Fields field) {
+      if (field == null) {
+        throw new IllegalArgumentException();
+      }
+
+      switch (field) {
+      case IPADDRESS:
+        return isSetIpaddress();
+      case USERH:
+        return isSetUserh();
+      case PAYLOAD:
+        return isSetPayload();
+      }
+      throw new IllegalStateException();
+    }
+
+    @Override
+    public boolean equals(Object that) {
+      if (that == null)
+        return false;
+      if (that instanceof registerUserAddress_args)
+        return this.equals((registerUserAddress_args)that);
+      return false;
+    }
+
+    public boolean equals(registerUserAddress_args that) {
+      if (that == null)
+        return false;
+
+      boolean this_present_Ipaddress = true && this.isSetIpaddress();
+      boolean that_present_Ipaddress = true && that.isSetIpaddress();
+      if (this_present_Ipaddress || that_present_Ipaddress) {
+        if (!(this_present_Ipaddress && that_present_Ipaddress))
+          return false;
+        if (!this.Ipaddress.equals(that.Ipaddress))
+          return false;
+      }
+
+      boolean this_present_Userh = true && this.isSetUserh();
+      boolean that_present_Userh = true && that.isSetUserh();
+      if (this_present_Userh || that_present_Userh) {
+        if (!(this_present_Userh && that_present_Userh))
+          return false;
+        if (!this.Userh.equals(that.Userh))
+          return false;
+      }
+
+      boolean this_present_Payload = true && this.isSetPayload();
+      boolean that_present_Payload = true && that.isSetPayload();
+      if (this_present_Payload || that_present_Payload) {
+        if (!(this_present_Payload && that_present_Payload))
+          return false;
+        if (!this.Payload.equals(that.Payload))
+          return false;
+      }
+
+      return true;
+    }
+
+    @Override
+    public int hashCode() {
+      return 0;
+    }
+
+    public int compareTo(registerUserAddress_args other) {
+      if (!getClass().equals(other.getClass())) {
+        return getClass().getName().compareTo(other.getClass().getName());
+      }
+
+      int lastComparison = 0;
+      registerUserAddress_args typedOther = (registerUserAddress_args)other;
+
+      lastComparison = Boolean.valueOf(isSetIpaddress()).compareTo(typedOther.isSetIpaddress());
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+      if (isSetIpaddress()) {
+        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.Ipaddress, typedOther.Ipaddress);
+        if (lastComparison != 0) {
+          return lastComparison;
+        }
+      }
+      lastComparison = Boolean.valueOf(isSetUserh()).compareTo(typedOther.isSetUserh());
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+      if (isSetUserh()) {
+        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.Userh, typedOther.Userh);
+        if (lastComparison != 0) {
+          return lastComparison;
+        }
+      }
+      lastComparison = Boolean.valueOf(isSetPayload()).compareTo(typedOther.isSetPayload());
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+      if (isSetPayload()) {
+        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.Payload, typedOther.Payload);
+        if (lastComparison != 0) {
+          return lastComparison;
+        }
+      }
+      return 0;
+    }
+
+    public _Fields fieldForId(int fieldId) {
+      return _Fields.findByThriftId(fieldId);
+    }
+
+    public void read(org.apache.thrift.protocol.TProtocol iprot) throws org.apache.thrift.TException {
+      org.apache.thrift.protocol.TField field;
+      iprot.readStructBegin();
+      while (true)
+      {
+        field = iprot.readFieldBegin();
+        if (field.type == org.apache.thrift.protocol.TType.STOP) { 
+          break;
+        }
+        switch (field.id) {
+          case 1: // IPADDRESS
+            if (field.type == org.apache.thrift.protocol.TType.STRING) {
+              this.Ipaddress = iprot.readString();
+            } else { 
+              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, field.type);
+            }
+            break;
+          case 2: // USERH
+            if (field.type == org.apache.thrift.protocol.TType.STRING) {
+              this.Userh = iprot.readString();
+            } else { 
+              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, field.type);
+            }
+            break;
+          case 3: // PAYLOAD
+            if (field.type == org.apache.thrift.protocol.TType.STRING) {
+              this.Payload = iprot.readBinary();
+            } else { 
+              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, field.type);
+            }
+            break;
+          default:
+            org.apache.thrift.protocol.TProtocolUtil.skip(iprot, field.type);
+        }
+        iprot.readFieldEnd();
+      }
+      iprot.readStructEnd();
+
+      // check for required fields of primitive type, which can't be checked in the validate method
+      validate();
+    }
+
+    public void write(org.apache.thrift.protocol.TProtocol oprot) throws org.apache.thrift.TException {
+      validate();
+
+      oprot.writeStructBegin(STRUCT_DESC);
+      if (this.Ipaddress != null) {
+        oprot.writeFieldBegin(IPADDRESS_FIELD_DESC);
+        oprot.writeString(this.Ipaddress);
+        oprot.writeFieldEnd();
+      }
+      if (this.Userh != null) {
+        oprot.writeFieldBegin(USERH_FIELD_DESC);
+        oprot.writeString(this.Userh);
+        oprot.writeFieldEnd();
+      }
+      if (this.Payload != null) {
+        oprot.writeFieldBegin(PAYLOAD_FIELD_DESC);
+        oprot.writeBinary(this.Payload);
+        oprot.writeFieldEnd();
+      }
+      oprot.writeFieldStop();
+      oprot.writeStructEnd();
+    }
+
+    @Override
+    public String toString() {
+      StringBuilder sb = new StringBuilder("registerUserAddress_args(");
+      boolean first = true;
+
+      sb.append("Ipaddress:");
+      if (this.Ipaddress == null) {
+        sb.append("null");
+      } else {
+        sb.append(this.Ipaddress);
+      }
+      first = false;
+      if (!first) sb.append(", ");
+      sb.append("Userh:");
+      if (this.Userh == null) {
+        sb.append("null");
+      } else {
+        sb.append(this.Userh);
+      }
+      first = false;
+      if (!first) sb.append(", ");
+      sb.append("Payload:");
+      if (this.Payload == null) {
+        sb.append("null");
+      } else {
+        org.apache.thrift.TBaseHelper.toString(this.Payload, sb);
+      }
+      first = false;
+      sb.append(")");
+      return sb.toString();
+    }
+
+    public void validate() throws org.apache.thrift.TException {
+      // check for required fields
+    }
+
+    private void writeObject(java.io.ObjectOutputStream out) throws java.io.IOException {
+      try {
+        write(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(out)));
+      } catch (org.apache.thrift.TException te) {
+        throw new java.io.IOException(te);
+      }
+    }
+
+    private void readObject(java.io.ObjectInputStream in) throws java.io.IOException, ClassNotFoundException {
+      try {
         read(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(in)));
       } catch (org.apache.thrift.TException te) {
         throw new java.io.IOException(te);
