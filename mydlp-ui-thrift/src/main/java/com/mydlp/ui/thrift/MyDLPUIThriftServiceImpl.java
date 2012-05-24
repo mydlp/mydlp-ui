@@ -89,8 +89,10 @@ public class MyDLPUIThriftServiceImpl implements MyDLPUIThriftService {
 		Connection conn = null;
 		while (conn == null) {
 			synchronized (freeInstances) {
-				if (freeInstances.size() == 0)
+				if (freeInstances.size() == 0) {
 					newConnection();
+					logger.info("All " + busyInstances.size() + " connections are busy. Spawning new.");
+				}
 				conn = freeInstances.poll();
 			}
 			if (conn != null) {
@@ -105,9 +107,6 @@ public class MyDLPUIThriftServiceImpl implements MyDLPUIThriftService {
 				}
 			}
 		}
-		System.out.println("Take over: " + conn.hashCode() );
-		System.out.println("Free: " + freeInstances.size() );
-		System.out.println("Busy: " + busyInstances.size() );
 		conn.ensureOpen();
 		return conn;
 	}
@@ -118,6 +117,7 @@ public class MyDLPUIThriftServiceImpl implements MyDLPUIThriftService {
 			freeInstances.add(conn);
 			int gap = freeInstances.size() - POOL_SIZE;
 			if (gap > 0) {
+				logger.info("There are " + gap + " extra connections waiting redundantly. Destroying...");
 				for (int i = 0; i < gap; i++) {
 					Connection c = freeInstances.poll();
 					c.destroy();
@@ -153,8 +153,7 @@ public class MyDLPUIThriftServiceImpl implements MyDLPUIThriftService {
 			@Override
 			public Void execute(Connection thriftConnection) throws TException {
 				thriftConnection.client.compileCustomer(filterId);
-				throw new TException("zart");
-				
+				return null;
 			}
 		});
 	}
