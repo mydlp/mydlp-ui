@@ -7,6 +7,7 @@
 		  height="150" creationComplete="{refresh()}" xmlns:domain="com.mydlp.ui.domain.*">
 	<fx:Script>
 		<![CDATA[
+			import com.mydlp.ui.domain.ADDomainGroup;
 			import com.mydlp.ui.domain.ADDomainOU;
 			import com.mydlp.ui.domain.ADDomainRoot;
 			import com.mydlp.ui.domain.ADDomainUser;
@@ -76,6 +77,10 @@
 				{
 					domainItem = adTree.selectedItem as ADDomainOU;
 				}
+				else if(adTree.selectedItem is ADDomainGroup)
+				{
+					domainItem = adTree.selectedItem as ADDomainGroup;
+				}
 				else
 					domainItem = null;
 				
@@ -95,7 +100,7 @@
 		<s:HorizontalLayout verticalAlign="middle" gap="2"/>
 	</s:layout>
 	
-	<s:Group width="53%" height="100%">
+	<s:Group width="100%" height="100%">
 		<s:layout>
 			<s:VerticalLayout gap="2"/>
 		</s:layout>

@@ -29,7 +29,7 @@ package com.mydlp.ui.domain {
 				return null;
 			else
 			{
-				for each (var i:* in this.root.children)  // Workaround for type losing
+				for each (var i:* in this.root.children)  // Workaround for type loss
 					if (i is ADDomainUser)
 						i as ADDomainUser;
 					else if (i is ADDomainOU)

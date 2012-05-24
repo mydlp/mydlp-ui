@@ -20,10 +20,17 @@ package com.mydlp.ui.domain {
 		
 		private var _uid:String = null;
 		
+		private var _uid_seed:String = null;
+		
+		private function generate_uid(): void
+		{
+			_uid = getQualifiedClassName(this) + ":" + id.toString();
+		}
+		
 		public function get uid():String
 		{
 			if (_uid == null)
-				_uid = getQualifiedClassName(this) + ":" + id.toString();
+				generate_uid();
 			return _uid;
 		}
 		

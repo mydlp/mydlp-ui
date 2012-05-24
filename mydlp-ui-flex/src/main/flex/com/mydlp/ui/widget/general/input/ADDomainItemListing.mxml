@@ -13,7 +13,7 @@
 	</fx:Script>
 	
 	<fx:Declarations>
-		<mx:ListCollectionView id="adDomainUserAliases"/>
+		<mx:ListCollectionView id="adDomainItems"/>
 	</fx:Declarations>
 
 	<s:layout>
@@ -24,21 +24,21 @@
 		<s:layout>
 			<s:HorizontalLayout verticalAlign="middle" gap="2"/>
 		</s:layout>
-		<s:List id="daList" dataProvider="{adDomainUserAliases}"  width="50%" height="100%" >
+		<s:List id="daList" dataProvider="{adDomainItems}"  width="100%" height="100%" >
 			<s:itemRenderer>
 				<fx:Component>
 					<s:ItemRenderer
 						height="20"
-						creationComplete="{data = data as ADDomainUserAlias}">
+						creationComplete="{data = data as ADDomainItem}">
 						<fx:Script>
 							<![CDATA[
-								import com.mydlp.ui.domain.ADDomainUserAlias;
+								import com.mydlp.ui.domain.ADDomainItem;
 							]]>
 						</fx:Script>
 						<s:layout>
 							<s:HorizontalLayout paddingLeft="4" verticalAlign="middle" />
 						</s:layout>
-						<s:Label text="{data.userAlias}" />
+						<s:Label text="{data.label + ' (' + data.distinguishedName + ')' }" />
 					</s:ItemRenderer>
 				</fx:Component>
 			</s:itemRenderer>

@@ -10,6 +10,7 @@
 	<fx:Script>
 		<![CDATA[
 			import com.mydlp.ui.domain.ADDomain;
+			import com.mydlp.ui.domain.ADDomainGroup;
 			import com.mydlp.ui.domain.ADDomainItem;
 			import com.mydlp.ui.domain.ADDomainItemGroup;
 			import com.mydlp.ui.domain.ADDomainRoot;
@@ -38,7 +39,8 @@
 			import com.mydlp.ui.widget.general.input.ADDomainAliasInput;
 			import com.mydlp.ui.widget.general.input.ADDomainEnumeratingProcessInput;
 			import com.mydlp.ui.widget.general.input.ADDomainItemInput;
-			import com.mydlp.ui.widget.general.input.ADDomainUserAliasInput;
+			import com.mydlp.ui.widget.general.input.ADDomainItemListing;
+			import com.mydlp.ui.widget.general.input.ADDomainUserAliasListing;
 			import com.mydlp.ui.widget.general.input.AuthSecurityRolesInput;
 			import com.mydlp.ui.widget.general.input.AuthorityScopeADItemInput;
 			import com.mydlp.ui.widget.general.input.DataFormatInput;
@@ -315,7 +317,7 @@
 						classMember.name == "aliases" && 
 						classMember.type == ListCollectionView)
 					{
-						var aduaiInput:ADDomainUserAliasInput = new ADDomainUserAliasInput();
+						var aduaiInput:ADDomainUserAliasListing = new ADDomainUserAliasListing();
 						if (targetObject[classMember.name] == null)
 							aduaiInput.adDomainUserAliases = new ArrayCollection();
 						else
@@ -323,6 +325,22 @@
 						inputLabel = new VerticalInputLabel();
 						inputLabel.addElement(aduaiInput);
 						index = 7;
+					}
+					else if ((targetObject is ADDomainUser && 
+								classMember.name == "groups" && 
+								classMember.type == ListCollectionView) ||
+							(targetObject is ADDomainGroup && 
+								classMember.name == "users" &&
+								classMember.type == ListCollectionView) )
+					{
+						var adiInput:ADDomainItemListing = new ADDomainItemListing();
+						if (targetObject[classMember.name] == null)
+							adiInput.adDomainItems = new ArrayCollection();
+						else
+							adiInput.adDomainItems = targetObject[classMember.name];
+						inputLabel = new VerticalInputLabel();
+						inputLabel.addElement(adiInput);
+						index = 8;
 					}
 					else if (targetObject is RuleUserAD &&
 						classMember.name == "domainItem" && 

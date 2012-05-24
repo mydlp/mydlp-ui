@@ -6,12 +6,13 @@
  */
 
 package com.mydlp.ui.domain {
+	import mx.collections.ListCollectionView;
 
     [Managed]
-    [RemoteClass(alias="com.mydlp.ui.domain.ADDomainOU")]
-    public class ADDomainOU extends ADDomainOUBase {
+    [RemoteClass(alias="com.mydlp.ui.domain.ADDomainGroup")]
+    public class ADDomainGroup extends ADDomainGroupBase {
 		
-		[Embed("../../../../../../../../mydlp-ui-flex/src/main/flex/assets/icons/16x16/user_ou.png")]
+		[Embed("../../../../../../../../mydlp-ui-flex/src/main/flex/assets/icons/16x16/users.png")]
 		public static const ICON_CLASS:Class;
 		
 		public function get icon(): Object
@@ -23,5 +24,6 @@ package com.mydlp.ui.domain {
 		{
 			return this.name;
 		}
+		
     }
 }
