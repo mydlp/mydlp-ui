@@ -3,7 +3,7 @@
 		 xmlns:s="library://ns.adobe.com/flex/spark" 
 		 xmlns:mx="library://ns.adobe.com/flex/mx"
 		 xmlns:my="http://www.mydlp.com/flex/my"
-		 width="670" height="200"
+		 width="670" height="300"
 		 creationComplete="onCreationComplete(event)">
 	<fx:Script>
 		<![CDATA[
@@ -18,6 +18,8 @@
 			
 			protected const PENDING_OBJECT:Object = 
 				{id: LangUtil.getString("messages", "options.usbsac.pending.message")};
+			
+			protected var searchStr:String = null;
 			
 			[Bindable]
 			protected var usbsacDP:AsyncListDataProvider = null;
@@ -39,14 +41,29 @@
 			
 			protected function countRevisions(): AsyncToken
 			{
-				return re.getUSBDeviceCount();
+				return re.getUSBDeviceCount(searchStr);
 			}
 			
 			protected function fetchRevisions(offset:Number, count:Number): AsyncToken
 			{
-				return re.getUSBDevices(offset, count);
+				return re.getUSBDevices(searchStr, offset, count);
 			}
 			
+			
+			protected function onSearchClick(event:MouseEvent):void
+			{
+				if (searchStrTextInput.text.length > 3)
+				{
+					searchStr = searchStrTextInput.text;
+					refresh();
+				}
+			}
+			
+			protected function onResetClick(event:MouseEvent):void
+			{
+				searchStr = null;
+				refresh();
+			}
 			
 		]]>
 	</fx:Script>
@@ -64,9 +81,18 @@
 	<s:VGroup gap="8" width="100%" height="100%"
 			  paddingTop="8" paddingBottom="6"
 			  paddingLeft="6" paddingRight="6">
-		<s:Button skinClass="com.mydlp.ui.skin.AddBitmapLabelButton16Skin"
-				  label="@Resource(key='options.usbsac.add.label', bundle='messages')"
-				  click="{InteractionUtil.newEditDialog(new USBDevice())}" />
+		<s:HGroup>
+			<s:Button skinClass="com.mydlp.ui.skin.AddBitmapLabelButton16Skin"
+					  label="@Resource(key='options.usbsac.add.label', bundle='messages')"
+					  click="{InteractionUtil.newEditDialog(new USBDevice())}" />
+			<s:Spacer width="30" />
+			<s:TextInput id="searchStrTextInput" width="300"/>
+			<s:Spacer width="5" />
+			<s:Button label="@Resource(key='options.usbsac.search.button.label', bundle='messages')" click="onSearchClick(event)"/>
+			<s:Button label="@Resource(key='options.usbsac.reset.button.label', bundle='messages')" click="onResetClick(event)"/>
+			
+		</s:HGroup>
+		
 		<s:DataGrid id="usbDevices" dataProvider="{usbsacDP.asyncListView}" width="100%" height="100%"
 					variableRowHeight="true">
 			<s:columns>

@@ -18,13 +18,13 @@ public class USBDeviceBRSImpl implements USBDeviceService
 	protected USBDeviceDAO usbDeviceDAO;
 	
 	@Override
-	public List<USBDevice> getUSBDevices(Integer offset, Integer limit) {
-		return usbDeviceDAO.getUSBDevices(offset, limit);
+	public List<USBDevice> getUSBDevices(String searchStr, Integer offset, Integer limit) {
+		return usbDeviceDAO.getUSBDevices(searchStr, offset, limit);
 	}
 
 	@Override
-	public Long getUSBDeviceCount() {
-		return usbDeviceDAO.getUSBDeviceCount();
+	public Long getUSBDeviceCount(String searchStr) {
+		return usbDeviceDAO.getUSBDeviceCount(searchStr);
 	}
 
 }

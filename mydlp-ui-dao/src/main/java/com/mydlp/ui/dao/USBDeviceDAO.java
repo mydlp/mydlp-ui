@@ -7,8 +7,8 @@ import com.mydlp.ui.domain.USBDevice;
 
 public interface USBDeviceDAO {
 
-	public List<USBDevice> getUSBDevices(Integer offset, Integer limit);
+	public List<USBDevice> getUSBDevices(String searchStr, Integer offset, Integer limit);
 	
-	public Long getUSBDeviceCount();
+	public Long getUSBDeviceCount(String searchStr);
 	
 }
