@@ -136,9 +136,9 @@
 				 width="100%" fontSize="18" fontWeight="bold" textAlign="center"/>
 		<s:Label id="expirationDate" text="{LangUtil.getString('messages','dashboard.license.expirationDate') + dateFormatter.format(licenseInformation.expirationDate)}" 
 				 fontSize="18" fontWeight="bold" textAlign="center" width="100%"/>
-		<s:Label id="userCount"  text="{LangUtil.getString('messages','dashboard.license.userCount') + licenseInformation.userCount}" 
+		<s:Label id="userCount"  text="{LangUtil.getString('messages','dashboard.license.userCount') + 'UNLIMITED'}" 
 				 fontSize="18" fontWeight="bold" textAlign="center" width="100%"/>
-		<s:Label id="administrativeUserCount" text="{LangUtil.getString('messages','dashboard.license.administrativeUserCount') + licenseInformation.administrativeUserCount}"
+		<s:Label id="administrativeUserCount" text="{LangUtil.getString('messages','dashboard.license.administrativeUserCount') + 'UNLIMITED'}"
 				 fontSize="18" fontWeight="bold" textAlign="center" width="100%"/>
 	</s:Group>
 </s:Group>

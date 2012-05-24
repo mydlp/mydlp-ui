@@ -10,7 +10,6 @@ import javax.annotation.PreDestroy;
 import org.apache.thrift.TException;
 import org.apache.thrift.protocol.TBinaryProtocol;
 import org.apache.thrift.protocol.TProtocol;
-import org.apache.thrift.transport.TFramedTransport;
 import org.apache.thrift.transport.TSocket;
 import org.apache.thrift.transport.TTransport;
 import org.slf4j.Logger;
@@ -23,7 +22,7 @@ public class MyDLPUIThriftServiceImpl implements MyDLPUIThriftService {
 	private static Logger logger = LoggerFactory
 			.getLogger(MyDLPUIThriftServiceImpl.class);
 	
-	protected static final String THRIFT_HOST = "192.168.179.180";
+	protected static final String THRIFT_HOST = "127.0.0.1";
 	protected static final int THRIFT_PORT = 9092;
 	protected static final int MAX_POOL_SIZE = 128;
 	protected static final int POOL_SIZE = 16;
