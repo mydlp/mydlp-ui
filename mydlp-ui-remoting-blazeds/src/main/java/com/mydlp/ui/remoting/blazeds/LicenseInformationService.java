@@ -7,23 +7,10 @@ import com.mydlp.ui.domain.LicenseInformation;
 
 @Secured(AuthSecurityRole.ROLE_ADMIN)
 public interface LicenseInformationService {
-	
+
+	@Secured({AuthSecurityRole.ROLE_ADMIN, AuthSecurityRole.ROLE_AUDITOR})
 	public LicenseInformation getLicense();
 	
-	public LicenseInformation save(LicenseInformation l);
-	
 	public Boolean saveLicenseKey(String s);
-	
-	public void remove(LicenseInformation l);
-	
-	public Boolean isSoftLimit();
-	
-	public Boolean isHardLimit();
-	
-	public Boolean isExpirationDateNear();
-	
-	public String isSoftLimitOrNear();
-	
-	public long getDayInformation();
 	
 }

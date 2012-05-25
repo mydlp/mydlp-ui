@@ -7,6 +7,7 @@
 	<fx:Script>
 		<![CDATA[
 			import com.mydlp.ui.domain.Rule;
+			import com.mydlp.ui.util.SessionUtil;
 			
 			import mx.collections.ArrayCollection;
 			import mx.collections.ListCollectionView;
@@ -34,20 +35,18 @@
 				);
 			
 			[Bindable]
-			protected var actionsReadOnly:ListCollectionView = 
+			protected var actionsForCommunity:ListCollectionView = 
 				new ArrayCollection(
 					new Array(
 						Rule.ACTION_PASS,
 						Rule.ACTION_LOG,
-						Rule.ACTION_ARCHIVE
+						Rule.ACTION_BLOCK
 					)
 				);
 			
 		]]>
 	</fx:Script>
-	<fx:Declarations>
-		<fx:Boolean id="isReadOnly" />
-	</fx:Declarations>
+	
 	<s:states>
 		<s:State name="normal" />
 		<s:State name="hovered" />
@@ -76,7 +75,7 @@
 			<s:Spacer width="13" />
 			<s:DropDownList id="actionList" width="120"
 							contentBackgroundAlpha="1"
-							dataProvider="{isReadOnly?actionsReadOnly:actions}" 
+							dataProvider="{SessionUtil.isEnterprise()? actions:actionsForCommunity}" 
 							selectedItem="@{ruleObject.action}"
 							change="{ruleObject.save();}" 
 							itemRenderer="com.mydlp.ui.widget.policy.rule.ActionDropDownListItemRenderer"/>

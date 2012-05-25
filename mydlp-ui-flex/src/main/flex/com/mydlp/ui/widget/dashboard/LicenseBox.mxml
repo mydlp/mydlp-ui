@@ -4,12 +4,14 @@
 		 xmlns:mx="library://ns.adobe.com/flex/mx"
 		 xmlns:my="http://www.mydlp.com/flex/my"
 		 xmlns:util="com.mydlp.ui.util.*"
-		 width="310" creationComplete="onCreationComplete(event)">
+		 width="310" creationComplete="onCreationComplete(event)"
+		 >
 	<fx:Script>
 		<![CDATA[
 			import com.mydlp.ui.domain.LicenseInformation;
 			import com.mydlp.ui.util.InteractionUtil;
 			import com.mydlp.ui.util.LangUtil;
+			import com.mydlp.ui.util.SessionUtil;
 			
 			import mx.controls.Alert;
 			import mx.core.FlexGlobals;
@@ -18,7 +20,7 @@
 			import mx.rpc.events.ResultEvent;
 			
 			[Bindable]
-			public var licenseInformation:LicenseInformation = null;
+			protected var license:LicenseInformation;
 			
 			public var licenseKeyEntrancePopup:LicenseKeyEntrancePopup;
 			
@@ -26,51 +28,38 @@
 			
 			protected function onCreationComplete(event:FlexEvent):void
 			{
-				re.getLicense();
-			}
-			protected function getLicenseHandler(event:ResultEvent):void
-			{
-				licenseInformation = event.result as LicenseInformation;
-				re.isHardLimit();
-				
+				licenseChangeHandler();
 			}
 			
-			protected function isHardLimitHandler(event:ResultEvent):void
+			public function licenseChangeHandler():void
 			{
-				var result:Boolean = event.result as Boolean;
-				if(result)
+				if(!(FlexGlobals.topLevelApplication.license is LicenseInformation))
+					return;
+				if(SessionUtil.isHardLimit())
 				{
 					expirationDate.setStyle("color", "red");
 					textBlicker.play();
-					timerBlicker.addEventListener(TimerEvent.TIMER, blickingFinishHandler);
-					timerBlicker.start();
 				}
-				else
-					re.isSoftLimitOrNear();
-			}
-			
-			protected function isSoftLimitOrNearHandler(event:ResultEvent):void
-			{
-				var result:String = event.result as String;
-				if(result == "soft")
+				else if(SessionUtil.isSoftLimit())
 				{
 					expirationDate.setStyle("color", "#ff9955");
 					textBlicker.play();
 					FlexGlobals.topLevelApplication.dashboardContainer.currentState="softLimit";
 				}
-				else if(result == "near")
+				else if(SessionUtil.isExpirationDateNear())
 				{
 					expirationDate.setStyle("color", "#ffcc00");
 					textBlicker.play();
 					FlexGlobals.topLevelApplication.dashboardContainer.currentState="near";
 				}
 				timerBlicker.addEventListener(TimerEvent.TIMER, blickingFinishHandler);
-				timerBlicker.start();
+				timerBlicker.start();	
 			}
 			
 			protected function blickingFinishHandler(event:TimerEvent):void
 			{
 				textBlicker.stop();
+				expirationDate.alpha = 1.0;
 			}
 			
 			public function saveLicenseKey(s:String):void
@@ -103,9 +92,6 @@
 	</fx:Script>
 	<fx:Declarations>
 		<my:remote id="re" destination="licenseInformationBRS">
-			<my:method name="getLicense" result="getLicenseHandler(event)"/>
-			<my:method name="isSoftLimitOrNear" result="isSoftLimitOrNearHandler(event)"/>
-			<my:method name="isHardLimit" result="isHardLimitHandler(event)"/>
 			<my:method name="saveLicenseKey" result="saveLicenseKeyHandler(event)"/>
 		</my:remote>
 		<s:Animate id="textBlicker" duration="500" repeatBehavior="reverse" repeatCount="0"
@@ -132,13 +118,13 @@
 							  paddingLeft="5" paddingRight="5"/>
 		</s:layout>
 
-		<s:Label id="lbl" text="{LangUtil.getString('messages','dashboard.license.licenseType.' + licenseInformation.licenseType)}"  
+		<s:Label id="lbl" text="{LangUtil.getString('messages','dashboard.license.licenseType.' + FlexGlobals.topLevelApplication.license.licenseType)}"  
 				 width="100%" fontSize="18" fontWeight="bold" textAlign="center"/>
-		<s:Label id="expirationDate" text="{LangUtil.getString('messages','dashboard.license.expirationDate') + dateFormatter.format(licenseInformation.expirationDate)}" 
+		<s:Label id="expirationDate" text="{LangUtil.getString('messages','dashboard.license.expirationDate') + dateFormatter.format(FlexGlobals.topLevelApplication.license.expirationDate)}" 
 				 fontSize="18" fontWeight="bold" textAlign="center" width="100%"/>
-		<s:Label id="userCount"  text="{LangUtil.getString('messages','dashboard.license.userCount') + 'UNLIMITED'}" 
+		<s:Label id="userCount"  text="{LangUtil.getString('messages','dashboard.license.userCount') + FlexGlobals.topLevelApplication.license.userCount}" 
 				 fontSize="18" fontWeight="bold" textAlign="center" width="100%"/>
-		<s:Label id="administrativeUserCount" text="{LangUtil.getString('messages','dashboard.license.administrativeUserCount') + 'UNLIMITED'}"
+		<s:Label id="administrativeUserCount" text="{LangUtil.getString('messages','dashboard.license.administrativeUserCount') + FlexGlobals.topLevelApplication.license.administrativeUserCount}"
 				 fontSize="18" fontWeight="bold" textAlign="center" width="100%"/>
 	</s:Group>
 </s:Group>

@@ -8,6 +8,7 @@
 	<fx:Script>
 		<![CDATA[
 			import com.mydlp.ui.util.LangUtil;
+			import com.mydlp.ui.util.SessionUtil;
 			
 			import mx.events.FlexEvent;
 			import mx.rpc.events.ResultEvent;
@@ -15,48 +16,31 @@
 			
 			protected function onCreationComplete(event:FlexEvent):void
 			{
-				re.getDayInformation();
-			}
-			
-			protected function getDayInformationHandler(event:ResultEvent):void
-			{
-				var result:Number = event.result as Number;
-				if(result < 0)
+				var day:Number = SessionUtil.getDayInformation()
+				if(day < 0)
 				{
-					dayInformation.text = (-result).toString() + " " + LangUtil.getString('messages', 'dashboard.license.dayInformation.remainingDay.label');
+					dayInformation.text = (-day).toString() + " " + LangUtil.getString('messages', 'dashboard.license.dayInformation.remainingDay.label');
 					dayInformation.setStyle("color", "#ffcc00");
 				}
-				else if(result < 30)
+				else if(day < 30)
 				{
 					dayInformation.text = LangUtil.getString('messages', 'dashboard.license.dayInformation.passedDay.label') + " " + 
-											result.toString() + " " + LangUtil.getString('messages', 'dashboard.license.dayInformation.ago');
+											day.toString() + " " + LangUtil.getString('messages', 'dashboard.license.dayInformation.ago');
 					dayInformation..setStyle("color", "#ff9955");
-					remainingDay.text = LangUtil.getString('messages', 'dashboard.license.dayInformation.after')+" "+(30 - result).toString() 
+					remainingDay.text = LangUtil.getString('messages', 'dashboard.license.dayInformation.after')+" "+(30 - day).toString() 
 										+ " " + LangUtil.getString('messages', 'dashboard.license.dayInformation.remainingDayToHardLimit.label');
 					remainingDay.setStyle("color", "#ff9955");
 				}
 				else
 				{
-					dayInformation.text = LangUtil.getString('messages', 'dashboard.license.dayInformation.passedDay.label') + " " + result.toString()
+					dayInformation.text = LangUtil.getString('messages', 'dashboard.license.dayInformation.passedDay.label') + " " + day.toString()
 											+ " " + LangUtil.getString('messages', 'dashboard.license.dayInformation.ago');
 					dayInformation.setStyle("color", "red");
 				}
-				//textBlicker.play();
 			}
 			
 		]]>
 	</fx:Script>
-	
-	<fx:Declarations>
-		<my:remote id="re" destination="licenseInformationBRS">
-			<my:method name="getDayInformation" result="getDayInformationHandler(event)"/>
-		</my:remote>
-		
-		<!--<s:Animate id="textBlicker" duration="500" repeatBehavior="reverse" repeatCount="0"
-				   target="{dayInformation, remainingDay}" >
-			<s:SimpleMotionPath property="alpha" valueFrom="1.0" valueTo="0.0"/>
-		</s:Animate>-->
-	</fx:Declarations>
 	
 	<s:layout>
 		<s:VerticalLayout horizontalAlign="center" gap="5"/>	

@@ -15,7 +15,7 @@ public class _000_00033_LicenseInformation extends AbstractGranule{
 		Calendar issueCalendar = new GregorianCalendar();
 		licenseInformation.setIssueDate(issueCalendar.getTime());
 		licenseInformation.setUserCount(100);
-		licenseInformation.setLicenseType(LicenseInformation.TRIAL_LICENSE);
+		licenseInformation.setLicenseType(LicenseInformation.ENTERPRISE_LICENSE);
 		licenseInformation.setLicenseKey("testLicenseKey");
 		licenseInformation.setAdministrativeUserCount(1);
 		Calendar expireCalendar = new GregorianCalendar();

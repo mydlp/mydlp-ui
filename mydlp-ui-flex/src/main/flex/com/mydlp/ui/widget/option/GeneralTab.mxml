@@ -8,6 +8,7 @@
 	<fx:Script>
 		<![CDATA[
 			import com.mydlp.ui.util.InteractionUtil;
+			import com.mydlp.ui.util.SessionUtil;
 			
 			protected function openHTML(event:MouseEvent):void
 			{
@@ -36,7 +37,7 @@
 					</s:dataProvider>						
 				</s:DropDownList>				
 			</s:FormItem>		
-			<s:FormItem label="{mailArchive.label}">
+			<s:FormItem label="{mailArchive.label}" includeInLayout="{SessionUtil.isEnterprise()}" visible="{SessionUtil.isEnterprise()}">
 				<s:CheckBox id="mailArchiveCheckBox" selected="{mailArchive.value == 'true'}" 
 							change="{mailArchive.value = mailArchiveCheckBox.selected ? 'true' : 'false'}"/>			
 			</s:FormItem>			

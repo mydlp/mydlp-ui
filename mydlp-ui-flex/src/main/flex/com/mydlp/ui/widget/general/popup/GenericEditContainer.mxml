@@ -36,6 +36,7 @@
 			import com.mydlp.ui.util.InteractionUtil;
 			import com.mydlp.ui.util.LangUtil;
 			import com.mydlp.ui.util.ReflectionUtil;
+			import com.mydlp.ui.util.SessionUtil;
 			import com.mydlp.ui.widget.general.input.ADDomainAliasInput;
 			import com.mydlp.ui.widget.general.input.ADDomainEnumeratingProcessInput;
 			import com.mydlp.ui.widget.general.input.ADDomainItemInput;
@@ -55,6 +56,7 @@
 			import mx.collections.ArrayCollection;
 			import mx.collections.ListCollectionView;
 			import mx.core.FlexGlobals;
+			import mx.events.ItemClickEvent;
 			import mx.events.ValidationResultEvent;
 			import mx.validators.EmailValidator;
 			import mx.validators.NumberValidator;
@@ -78,6 +80,9 @@
 			protected var validators:Array = new Array();
 			
 			protected var regExpValidator2:RegExpValidator = new RegExpValidator();
+			
+			protected var inputLabelForEnterprise:InputLabel = null;
+			protected var roleAdminSelected:Boolean = false;
 			
 			
 			protected function cancelButtonClickHandler(event:Event):void
@@ -255,7 +260,8 @@
 							srInput.authSecurityRoles = targetObject[classMember.name];
 						BindingUtils.bindProperty(targetObject, classMember.name, srInput, "authSecurityRoles");
 						inputLabel = new VerticalInputLabel();
-						inputLabel.addElement(srInput);		
+						inputLabel.addElement(srInput);
+						this.addEventListener(ItemClickEvent.ITEM_CLICK, itemClickHandler);
 						index = 5;
 					}
 					
@@ -294,8 +300,12 @@
 						else
 							asaiInput.authorityScopeADItems = targetObject[classMember.name];
 						BindingUtils.bindProperty(targetObject, classMember.name, asaiInput, "authorityScopeADItems");
-						inputLabel = new VerticalInputLabel();
-						inputLabel.addElement(asaiInput);
+						inputLabelForEnterprise = new VerticalInputLabel();
+						
+						inputLabelForEnterprise.includeInLayout = SessionUtil.isEnterprise();
+						inputLabelForEnterprise.visible = SessionUtil.isEnterprise();
+						
+						inputLabelForEnterprise.addElement(asaiInput);
 						index = 7;
 					}
 					else if (targetObject is ADDomain &&
@@ -413,7 +423,14 @@
 						if (classMember.name == "isActive")
 							index = 4;
 						else 
+						{
+							if(!SessionUtil.isEnterprise())
+							{
+								inputLabel.includeInLayout = false;
+								inputLabel.visible = false;
+							}
 							index = 6;
+						}
 					}
 					
 					else
@@ -430,14 +447,10 @@
 						inputLabel.addElement(textInput);
 						if(classMember.name == "name"){
 							index = 0;
-							//var regExpValidator2:RegExpValidator = new RegExpValidator();
 							regExpValidator2.source = textInput;
 							regExpValidator2.property = "text";
 							regExpValidator2.expression = "^[a-zA-Z0-9_/\.\ ]+$";
 							ErrorTipManager.registerValidator(regExpValidator2);
-							//var ev:ValidationResultEvent = new ValidationResultEvent();
-							//regExpValidator2.addEventListener(ValidationResultEvent.INVALID, ErrorTipManager.invalidHandler);
-							//regExpValidator2.addEventListener(ValidationResultEvent.VALID, ErrorTipManager.validHandler);
 							validators.push(regExpValidator2);
 						}
 						else if(classMember.name == "displayName"){
@@ -450,8 +463,6 @@
 							regExpValidator4.property = "text";
 							regExpValidator4.expression = "^([\\w\\.-]{1,255})$";
 							ErrorTipManager.registerValidator(regExpValidator4);
-							//regExpValidator4.addEventListener(ValidationResultEvent.INVALID, invalidInput);
-							//regExpValidator4.addEventListener(ValidationResultEvent.VALID, validInput);
 							validators.push(regExpValidator4);
 						}
 						else if(classMember.name == "serverIp"){
@@ -461,8 +472,6 @@
 							regExpValidator3.property = "text";
 							regExpValidator3.expression = "^([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])$";
 							ErrorTipManager.registerValidator(regExpValidator3);
-							//regExpValidator3.addEventListener(ValidationResultEvent.INVALID, invalidInput);
-							//regExpValidator3.addEventListener(ValidationResultEvent.VALID, validInput);
 							validators.push(regExpValidator3);
 						}
 						else if(classMember.name == "netbiosName"){
@@ -472,8 +481,6 @@
 							regExpValidator6.property = "text";
 							regExpValidator6.expression = "^([\\w-]{1,15})$";
 							ErrorTipManager.registerValidator(regExpValidator6);
-							//regExpValidator6.addEventListener(ValidationResultEvent.INVALID, invalidInput);
-							//regExpValidator6.addEventListener(ValidationResultEvent.VALID, validInput);
 							validators.push(regExpValidator6);
 						}
 						else if(classMember.name == "loginPassword"){
@@ -487,8 +494,6 @@
 							regExpValidator5.property = "text";
 							regExpValidator5.expression = "^([\\w\\.-@]{1,255})$";
 							ErrorTipManager.registerValidator(regExpValidator5);
-							//regExpValidator5.addEventListener(ValidationResultEvent.INVALID, invalidInput);
-							//regExpValidator5.addEventListener(ValidationResultEvent.VALID, validInput);
 							validators.push(regExpValidator5);
 						}
 						else if(classMember.name == "distinguishedName"){
@@ -520,8 +525,6 @@
 							emailValidator.source = textInput;
 							emailValidator.property = "text";
 							ErrorTipManager.registerValidator(emailValidator);
-							//emailValidator.addEventListener(ValidationResultEvent.INVALID, invalidInput);
-							//emailValidator.addEventListener(ValidationResultEvent.VALID, validInput);
 							validators.push(emailValidator);
 							index = 2;
 						}
@@ -538,8 +541,6 @@
 							numberValidator.domain = "int";
 							numberValidator.minValue = "1";
 							ErrorTipManager.registerValidator(numberValidator);
-							//numberValidator.addEventListener(ValidationResultEvent.INVALID, invalidInput);
-							//numberValidator.addEventListener(ValidationResultEvent.VALID, validInput);
 							validators.push(numberValidator);
 						}
 					}
@@ -549,6 +550,13 @@
 						inputLabel.label = LangUtil.getString("messages", "generic.edit." + getObjectName(targetObject) + "." + classMember.name + ".label");
 						sourceLabelList.push(new InputLabelIndexTuple(index, inputLabel));
 					}
+					
+					else if(inputLabelForEnterprise != null)
+					{
+						inputLabelForEnterprise.label = LangUtil.getString("messages", "generic.edit." + getObjectName(targetObject) + "." + classMember.name + ".label");
+						sourceLabelList.push(new InputLabelIndexTuple(index, inputLabelForEnterprise));
+					}
+					
 				}
 			}
 			
@@ -648,6 +656,40 @@
 				FlexGlobals.topLevelApplication.topToolbar.policyInstallationState = false;
 				InteractionUtil.closeCurrentPopup();
 				FlexGlobals.topLevelApplication.refresh();
+			}
+			
+			protected function itemClickHandler(event:ItemClickEvent):void
+			{
+				if(SessionUtil.isEnterprise() && event.index != -1)
+				{
+					inputLabelForEnterprise.includeInLayout = true;
+					inputLabelForEnterprise.visible = true;
+				}
+				else
+				{
+					inputLabelForEnterprise.includeInLayout = false;
+					inputLabelForEnterprise.visible = false;
+				}
+			/*	if(event.item.roleName == "ROLE_ADMIN" && SessionUtil.isEnterprise() && event.index != -1)
+				{
+					inputLabelForEnterprise.includeInLayout = true;
+					inputLabelForEnterprise.visible = true;
+					roleAdminSelected = true;
+				}
+				else if(event.item.roleName == "ROLE_ADMIN" && event.index == -1)
+				{
+					roleAdminSelected = false;
+					inputLabelForEnterprise.includeInLayout = false;
+					inputLabelForEnterprise.visible = false;
+				}
+				else
+				{
+					if(!roleAdminSelected)
+					{
+						inputLabelForEnterprise.includeInLayout = false;
+						inputLabelForEnterprise.visible = false;
+					}
+				}*/
 			}
 			
 		]]>

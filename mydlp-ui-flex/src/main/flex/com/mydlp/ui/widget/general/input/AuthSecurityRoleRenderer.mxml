@@ -2,12 +2,71 @@
 <s:ItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009" 
 				xmlns:s="library://ns.adobe.com/flex/spark" 
 				xmlns:mx="library://ns.adobe.com/flex/mx" 
-				autoDrawBackground="true">
+				autoDrawBackground="true"
+				click="itemClickHandler(event)">
+				<!--updateComplete="updateCompleteHandler(event)">-->
 				<!--creationComplete="{data = data as AuthSecurityRole}">-->
 	<fx:Script>
 		<![CDATA[
-			import com.mydlp.ui.domain.AuthSecurityRole;			
+			import com.mydlp.ui.domain.AuthSecurityRole;
+			
+			import mx.collections.ArrayCollection;
+			import mx.controls.Alert;
+			import mx.controls.listClasses.ListBase;
+			import mx.core.FlexGlobals;
+			import mx.events.FlexEvent;
+			import mx.events.ItemClickEvent;
+			
+			import spark.events.IndexChangeEvent;
+			
+			
 		
+			protected function itemClickHandler(event:MouseEvent):void
+			{
+				var e:ItemClickEvent = new ItemClickEvent(ItemClickEvent.ITEM_CLICK, true);
+				e.item = data;
+				if(this.checkBox.selected)
+					e.index = itemIndex;
+				else
+					e.index = -1;
+				if(this.data.roleName == "ROLE_ADMIN")
+					dispatchEvent(e);
+			}
+			
+			protected function isRoleSelected(data:*):Boolean
+			{
+				var roles:ArrayCollection = FlexGlobals.topLevelApplication.userRoles
+				for(var i:int = 0; i < roles.length; i++)
+				{
+					if(roles[i] == itemIndex)
+						return true;
+				}
+				return false;
+			}
+			
+			protected function onChangeHandler(event:Event):void
+			{
+				//Alert.show("buraya geldi");
+				var roles:ArrayCollection = FlexGlobals.topLevelApplication.userRoles;
+				if(event.currentTarget.selected == true)
+					FlexGlobals.topLevelApplication.userRoles.addItem(itemIndex);
+				else
+				{
+					for(var j:int = 0; j < roles.length; j++)
+					{
+						if(roles[j] == itemIndex)
+						{
+							FlexGlobals.topLevelApplication.userRoles.removeItemAt(j);
+							break;
+						}
+					}
+				}
+				var e:IndexChangeEvent = new IndexChangeEvent(IndexChangeEvent.CHANGE, true);
+				e.newIndex = itemIndex;
+				e.oldIndex = -1;
+				dispatchEvent(e);
+			}
+			
 		]]>
 	</fx:Script>
 	
@@ -23,7 +82,8 @@
 	</s:layout>-->
 	
 	<!--<s:CheckBox selected="{this.currentState == 'selected'}" />-->
-	<s:Label text="{data.roleName}"/>	
+	<s:CheckBox label="{data.roleName}" id="checkBox" selected="{isRoleSelected(data)}"
+				change="onChangeHandler(event)"/>	
 	
 </s:ItemRenderer>
 

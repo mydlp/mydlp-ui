@@ -33,12 +33,14 @@
 			
 			protected function onCreationComplete(event:FlexEvent):void
 			{
-				re.getCurrentUser();
+				getCurrentUserHandler();
 			}
 			
-			protected function getCurrentUserHandler(event:ResultEvent): void
+			public function getCurrentUserHandler(): void
 			{
-				currentUser = event.result as AuthUser;
+				if(!(FlexGlobals.topLevelApplication.user is AuthUser))
+					return;
+				currentUser = FlexGlobals.topLevelApplication.user as AuthUser;
 				
 				if (currentUser != null)
 					userLabel.text = 	LangUtil.getString("messages", "toptoolbar.loggedinas") + " " +
@@ -140,9 +142,6 @@
 
 	
 	<fx:Declarations>
-		<my:remote id="re" destination="userBRS" >
-			<my:method name="getCurrentUser" result="getCurrentUserHandler(event)" />
-		</my:remote>
 		<my:remote id="pe" destination="policyBRS" >
 			<my:method name="compilePolicy" result="compilePolicyHandler(event)" />
 		</my:remote>

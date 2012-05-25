@@ -9,8 +9,13 @@
 	<fx:Script>
 		<![CDATA[
 			import com.mydlp.ui.domain.AuthSecurityRole;
+			import com.mydlp.ui.util.SessionUtil;
 			import com.mydlp.ui.widget.general.popup.InputLabel;
 			
+			import mx.collections.ArrayCollection;
+			import mx.controls.Alert;
+			import mx.core.FlexGlobals;
+			import mx.events.ItemClickEvent;
 			import mx.events.ListEvent;
 			import mx.rpc.events.ResultEvent;
 			
@@ -20,28 +25,60 @@
 			[Bindable]
 			protected var allAuthSecurity:ListCollectionView;
 			
+			protected function regulatePopupWindow():void
+			{
+				var e:ItemClickEvent = new ItemClickEvent(ItemClickEvent.ITEM_CLICK, true);
+				for(var i:int = 0; i < authSecurityRoles.length; i++)
+				{
+					if(authSecurityRoles[i].roleName == "ROLE_ADMIN")
+					{
+						//e.item = authSecurityRoles[i];
+						e.index = 0;
+						dispatchEvent(e);
+						return
+					}
+				}
+				e.index = -1;
+				dispatchEvent(e);
+			}
+			
 					
 			protected function getRolesHandler(event:ResultEvent): void
 			{
 				allAuthSecurity = event.result as ListCollectionView;
+				if(!SessionUtil.isEnterprise())
+				{
+					for(var j:int = 0; j < allAuthSecurity.length; j++)
+					{
+						if(allAuthSecurity[j].roleName != "ROLE_ADMIN")
+							allAuthSecurity.removeItemAt(j);
+					}
+				}
+				
+				FlexGlobals.topLevelApplication.userRoles.removeAll();
 			
 				for (var i:int=0; i < allAuthSecurity.length; i++)				
 				{
 					for each (var role:AuthSecurityRole in authSecurityRoles)
 					{
 						if (allAuthSecurity[i].roleName == role.roleName)
-							srList.selectedIndices.push(i);
+						{
+							FlexGlobals.topLevelApplication.userRoles.addItem(i);
+						}
 					}					
-				}				
+				}
+				regulatePopupWindow();
 			}
+			
 			
 			public function onChange(event:IndexChangeEvent): void
 			{
 				authSecurityRoles.removeAll();
-				for each (var i:int in srList.selectedIndices )		
+				var roles:ArrayCollection = FlexGlobals.topLevelApplication.userRoles;
+				for(var i:int = 0; i < roles.length; i++ )		
 				{
-					authSecurityRoles.addItem(allAuthSecurity[i]);
-				}			
+					authSecurityRoles.addItem(allAuthSecurity[roles[i]]);
+				}
 			}
 			
 		]]>
@@ -62,10 +99,10 @@
 			<s:VerticalLayout gap="2"/>
 		</s:layout>
 		<s:Label text="@Resource(bundle = 'messages', key = 'generic.edit.input.authSecurity.srList.label')" />
-		<s:List id="srList" dataProvider="{allAuthSecurity}" 
+		<s:List id="srList" dataProvider="{allAuthSecurity}"
 				width="100%" height="64"
 				itemRenderer="com.mydlp.ui.widget.general.input.AuthSecurityRoleRenderer"
-				allowMultipleSelection="false"
+				allowMultipleSelection="true"
 				change="onChange(event)" />
 	</s:Group>
 	

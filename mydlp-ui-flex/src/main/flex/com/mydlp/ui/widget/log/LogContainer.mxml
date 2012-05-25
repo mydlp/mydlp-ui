@@ -12,6 +12,7 @@
 			import com.mydlp.ui.domain.IncidentLogFileContent;
 			import com.mydlp.ui.util.AsyncListDataProvider;
 			import com.mydlp.ui.util.LangUtil;
+			import com.mydlp.ui.util.SessionUtil;
 			import com.mydlp.ui.util.SpecialCharacterUtil;
 			
 			import mx.collections.ArrayCollection;
@@ -175,7 +176,7 @@
 			<s:Button label="@Resource(bundle = 'messages', key = 'log.container.refresh.button.label')"
 					  click="searchLogHandler(event)"/>
 		</s:HGroup>
-		<s:HGroup width="400" verticalAlign="middle" >
+		<s:HGroup width="400" verticalAlign="middle" includeInLayout="{SessionUtil.isEnterprise()}">
 			<s:Button label="@Resource(bundle = 'messages', key = 'log.container.search.fulltext.label')"
 					  click="searchContentHandler(event)" enabled="{fulltextInput.text.length > 3}"/>
 			<s:TextInput id="fulltextInput" width="100%"/>
