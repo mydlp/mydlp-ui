@@ -23,11 +23,11 @@ package com.mydlp.ui.domain {
 			
 			var resourceVal:String = ResourceManager.getInstance().getString("messages", generatedNameKey);
 			if (resourceVal == null || resourceVal.length == 0)
-				return "Custom" + " - " + this.weight.toString();
+				return "Custom" + " - " + this.threshold.toString();
 			else if(this.matcher.functionName == "keyword")
-				return resourceVal + " - " + removeEscapeCharacter(this.matcher.matcherArguments.getItemAt(0).coupledArgument.regex) + " - " + this.weight.toString();
+				return resourceVal + " - " + removeEscapeCharacter(this.matcher.matcherArguments.getItemAt(0).coupledArgument.regex) + " - " + this.threshold.toString();
 			else 
-				return resourceVal + " - " + this.weight.toString();
+				return resourceVal + " - " + this.threshold.toString();
 		}
 		public static function removeEscapeCharacter(string:String):String
 		{

@@ -39,12 +39,11 @@ public class _000_00013_InformationType_Predefined_IBAN extends AbstractGranule 
 		m.setFunctionName("iban");
 		
 		InformationFeature ift = new InformationFeature();
-		ift.setWeight(new Long(1));
+		ift.setThreshold(new Long(1));
 		ift.setMatcher(m);
 		m.setCoupledInformationFeature(ift);
 		
 		InformationDescription id = new InformationDescription();
-		id.setThreshold(new Long(1));
 		//ift.setInformationDescription(id);
 		List<InformationFeature> ifts = new ArrayList<InformationFeature>();
 		ifts.add(ift);

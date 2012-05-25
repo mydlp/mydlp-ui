@@ -12,19 +12,19 @@ public class InformationFeature extends AbstractEntity {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -5842428509062650962L;
+	private static final long serialVersionUID = -4010714139618324129L;
 
-	protected Long weight;
+	protected Long threshold;
 	
 	protected Matcher matcher;
-	
+
 	@Column(nullable=false)
-	public Long getWeight() {
-		return weight;
+	public Long getThreshold() {
+		return threshold;
 	}
 
-	public void setWeight(Long weight) {
-		this.weight = weight;
+	public void setThreshold(Long threshold) {
+		this.threshold = threshold;
 	}
 
 	@OneToOne(cascade={CascadeType.ALL})

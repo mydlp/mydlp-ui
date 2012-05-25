@@ -1,7 +1,6 @@
 package com.mydlp.ui.remoting.blazeds;
 
 import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
 
 import org.springframework.beans.factory.annotation.Autowired;

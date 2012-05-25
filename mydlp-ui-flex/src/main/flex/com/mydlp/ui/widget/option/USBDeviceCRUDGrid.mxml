@@ -61,6 +61,7 @@
 			
 			protected function onResetClick(event:MouseEvent):void
 			{
+				searchStrTextInput.text = "";
 				searchStr = null;
 				refresh();
 			}
@@ -90,7 +91,6 @@
 			<s:Spacer width="5" />
 			<s:Button label="@Resource(key='options.usbsac.search.button.label', bundle='messages')" click="onSearchClick(event)"/>
 			<s:Button label="@Resource(key='options.usbsac.reset.button.label', bundle='messages')" click="onResetClick(event)"/>
-			
 		</s:HGroup>
 		
 		<s:DataGrid id="usbDevices" dataProvider="{usbsacDP.asyncListView}" width="100%" height="100%"
