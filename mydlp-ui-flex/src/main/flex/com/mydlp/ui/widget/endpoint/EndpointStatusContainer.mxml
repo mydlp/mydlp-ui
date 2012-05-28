@@ -131,7 +131,7 @@
 	<s:VGroup gap="8" width="100%" height="100%"
 			  paddingTop="8" paddingBottom="6"
 			  paddingLeft="6" paddingRight="6">
-		<s:HGroup>
+		<s:HGroup width="100%" height="32">
 			<s:Spacer width="10" />
 			<s:TextInput id="searchStrTextInput" width="300"/>
 			<s:Spacer width="5" />
