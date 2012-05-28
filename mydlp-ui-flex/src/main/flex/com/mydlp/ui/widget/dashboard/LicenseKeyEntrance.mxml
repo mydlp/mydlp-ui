@@ -1,25 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
 		 xmlns:s="library://ns.adobe.com/flex/spark" 
-		 xmlns:mx="library://ns.adobe.com/flex/mx" width="100%" height="100">
+		 xmlns:mx="library://ns.adobe.com/flex/mx"
+		 xmlns:my="http://www.mydlp.com/flex/my"
+		 width="100%" height="100">
 	
 	<fx:Script>
 		<![CDATA[
-			import mx.core.FlexGlobals;
+			import com.mydlp.ui.util.InteractionUtil;
 			
+			import mx.controls.Alert;
+			import mx.core.FlexGlobals;
+			import mx.rpc.events.ResultEvent;
+			
+			public var licenseKeyEntrancePopup:LicenseKeyEntrancePopup;
 			
 			protected function saveLicenceKeyHandler(event:MouseEvent):void
 			{
-				FlexGlobals.topLevelApplication.dashboardContainer.licenseBox.saveLicenseKey(licenseKey.text);
+				re.saveLicenseKey(licenseKey.text);
 			}
+			
+			protected function saveLicenseKeyHandler(event:ResultEvent):void
+			{
+				var result:Boolean = event.result as Boolean;
+				if(result)
+				{
+					licenseKeyEntrancePopup = InteractionUtil.newPopup(LicenseKeyEntrancePopup) as LicenseKeyEntrancePopup;
+					var timer:Timer = new Timer(3000);
+					timer.addEventListener(TimerEvent.TIMER, timerFinishHandler);
+					timer.start();
+				}
+				else
+					Alert.show("License Key is Invalid");
+			}
+			
+			protected function timerFinishHandler(event:TimerEvent):void
+			{
+				InteractionUtil.closePopup(licenseKeyEntrancePopup);
+				navigateToURL(new URLRequest ('j_spring_security_logout'), '_self');
+			}
+			
 		]]>
 	</fx:Script>
 	
 	<fx:Declarations>
-		<!--<s:Animate id="textBlink" duration="500" repeatBehavior="reverse" repeatCount="0"
-				   target="{enterLicenceKey}" >
-			<s:SimpleMotionPath property="alpha" valueFrom="1.0" valueTo="0.0"/>			
-		</s:Animate>-->
+		<my:remote id="re" destination="licenseInformationBRS">
+			<my:method name="saveLicenseKey" result="saveLicenseKeyHandler(event)"/>
+		</my:remote>
 	</fx:Declarations>
 	
 	<s:layout>

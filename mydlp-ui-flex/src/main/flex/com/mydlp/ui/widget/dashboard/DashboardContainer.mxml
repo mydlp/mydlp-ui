@@ -13,7 +13,6 @@
 			import com.mydlp.ui.domain.DashboardItem;
 			import com.mydlp.ui.domain.UserSettings;
 			import com.mydlp.ui.util.InteractionUtil;
-			import com.mydlp.ui.util.LangUtil;
 			
 			import mx.core.FlexGlobals;
 			import mx.rpc.events.ResultEvent;
@@ -108,6 +107,15 @@
 				FlexGlobals.topLevelApplication.currentPopup = dip;
 			}
 			
+			public function addLicenseElements(licenseState:String):void
+			{
+				this.currentState = licenseState;
+				var licenseDayInformation:LicenseDayInformation = new LicenseDayInformation();
+				licenseGroup.addElement(licenseDayInformation);
+				var licenseKeyEntrance:LicenseKeyEntrance = new LicenseKeyEntrance();
+				licenseGroup.addElement(licenseKeyEntrance);
+			}
+			
 		]]>
 	</fx:Script>
 	
@@ -129,7 +137,7 @@
 		<s:HorizontalLayout horizontalAlign="center" />
 	</s:layout>
 	
-	<s:Group width="400" height="100%" id="printedGroup" includeIn="default, softLimit, near">
+	<s:Group width="400" height="100%" id="licenseGroup" includeIn="default, softLimit, near">
 		<s:layout>
 			<s:VerticalLayout verticalAlign="middle" horizontalAlign="center" gap="20"/>
 		</s:layout>
@@ -137,9 +145,6 @@
 		<s:Spacer height="2%" />
 		<dashboard:LicenseBox id="licenseBox" currentState.nolicense="nolicense" currentState="default"/>
 		<s:Spacer height="2%" />
-		<dashboard:LicenseDayInformation includeIn="softLimit, near"/>
-		<s:Spacer height="2%" />
-		<dashboard:LicenseKeyEntrance includeIn="softLimit, near"/>
 	</s:Group>
 	<s:VGroup width="100%" height="100%" paddingTop="20" gap="20" includeIn="default, softLimit, near">
 		<s:HGroup gap="30">
@@ -158,17 +163,4 @@
 			</s:layout>
 		</s:Group>
 	</s:VGroup>
-	<s:Group width="100%" height="100%" includeIn="nolicense">
-		<s:layout>
-			<s:VerticalLayout horizontalAlign="center" verticalAlign="middle"/>
-		</s:layout>
-				
-		<s:BitmapImage source="@Embed('/assets/images/logo_314x124.png')" />
-		<s:Spacer height="5%" />
-		<dashboard:LicenseBox currentState.nolicense="nolicense" currentState="default"/>
-		<s:Spacer height="5%" />
-		<dashboard:LicenseDayInformation />
-		<s:Spacer height="5%" />
-		<dashboard:LicenseKeyEntrance/>
-	</s:Group>
 </s:SkinnableContainer>
