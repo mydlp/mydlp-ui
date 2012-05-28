@@ -23,6 +23,7 @@ public class EndpointStatus extends AbstractEntity {
 	protected Date firstAppeared;
 	@Temporal(TemporalType.TIMESTAMP)
 	protected Date lastUpdate;
+	protected String username;
 	
 	@Index(name="ipAddressIndex")
 	@Column(nullable=false)
@@ -53,5 +54,10 @@ public class EndpointStatus extends AbstractEntity {
 	public void setLastUpdate(Date lastUpdate) {
 		this.lastUpdate = lastUpdate;
 	}
-
+	public String getUsername() {
+		return username;
+	}
+	public void setUsername(String username) {
+		this.username = username;
+	}
 }

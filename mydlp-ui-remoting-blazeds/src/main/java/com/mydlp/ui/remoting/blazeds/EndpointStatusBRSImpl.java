@@ -18,14 +18,14 @@ public class EndpointStatusBRSImpl implements EndpointStatusService
 	protected EndpointStatusDAO endpointStatusDAO;
 
 	@Override
-	public List<EndpointStatus> getEndpointStatuses(Integer offset,
+	public List<EndpointStatus> getEndpointStatuses(String searchString, Integer offset,
 			Integer limit) {
-		return endpointStatusDAO.getEndpointStatuses(offset, limit);
+		return endpointStatusDAO.getEndpointStatuses(searchString, offset, limit);
 	}
 
 	@Override
-	public Long getEndpointStatusCount() {
-		return endpointStatusDAO.getEndpointStatusCount();
+	public Long getEndpointStatusCount(String searchString) {
+		return endpointStatusDAO.getEndpointStatusCount(searchString);
 	}
 	
 

@@ -210,13 +210,12 @@ public class MyDLPUIThriftServiceImpl implements MyDLPUIThriftService {
 	}
 
 	@Override
-	public void registerUserAddress(final String ipAddress, final String userH,
+	public String registerUserAddress(final String ipAddress, final String userH,
 			final ByteBuffer payload) {
-		call(new ThriftCall<Void>() {
+		return call(new ThriftCall<String>() {
 			@Override
-			public Void execute(Connection thriftConnection) throws TException {
-				thriftConnection.client.registerUserAddress(ipAddress, userH, payload);
-				return null;
+			public String execute(Connection thriftConnection) throws TException {
+				return thriftConnection.client.registerUserAddress(ipAddress, userH, payload);
 			}
 		});
 	}

@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.HttpRequestHandler;
 
 import com.mydlp.ui.dao.EndpointStatusDAO;
+import com.mydlp.ui.service.EndpointSyncService;
 import com.mydlp.ui.thrift.MyDLPUIThriftService;
 
 @Service("syncServlet")
@@ -36,6 +37,9 @@ public class EndpointSyncServlet implements HttpRequestHandler {
 	@Autowired
 	protected EndpointStatusDAO endpointStatusDAO;
 	
+	@Autowired
+	protected EndpointSyncService endpointSyncService;
+	
 	@Override
 	public void handleRequest(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
@@ -52,13 +56,11 @@ public class EndpointSyncServlet implements HttpRequestHandler {
 					payload = EndpointReceiveServlet.resizeBuffer(payload);
 				payload.position(0);
 				channel.close();
-				thriftService.registerUserAddress(ipAddress, userH, payload);
+				endpointSyncService.asyncRegisterEndpointMeta(ipAddress, userH, payload);
 			} catch (Throwable e) {
 				logger.error("Runtime error occured when reading payload", e);
 			}
-			
 			responseBuffer = thriftService.getRuletable(ipAddress, userH, urlKey);
-			endpointStatusDAO.upToDateEndpoint(ipAddress);
 		} catch (Throwable e) {
 			logger.error("Runtime error occured", e);
 		}

@@ -116,6 +116,7 @@
 				 folderClosedIcon="@Embed('/assets/icons/16x16/folder.png')"
 				 change="onSelectedItemChange(event)"
 				 selectedIndex="{domainItemIdx}"
+				 variableRowHeight="true"
 				 />
 		
 	</s:Group>
