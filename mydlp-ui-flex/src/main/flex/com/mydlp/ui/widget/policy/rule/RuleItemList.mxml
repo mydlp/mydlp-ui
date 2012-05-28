@@ -66,7 +66,7 @@
 					{
 						deselect(l);
 					}
-					else if ( FlexGlobals.topLevelApplication.ruleContainer.ruleList.selectedItem != null &&
+					else if ( FlexGlobals.topLevelApplication.policyContainer.ruleContainer.ruleList.selectedItem != null &&
 								(
 									l.selectedItem == null ||
 									! l.selectedItem is RuleItem ||

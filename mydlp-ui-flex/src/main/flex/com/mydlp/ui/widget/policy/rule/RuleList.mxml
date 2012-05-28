@@ -49,9 +49,9 @@
 				isItemClicked = false;
 				*/
 				if(!itemClick && !isSelected)
-					FlexGlobals.topLevelApplication.ruleContainer.isSelection = false;
+					FlexGlobals.topLevelApplication.policyContainer.ruleContainer.isSelection = false;
 				else
-					FlexGlobals.topLevelApplication.ruleContainer.isSelection = true;
+					FlexGlobals.topLevelApplication.policyContainer.ruleContainer.isSelection = true;
 				isSelected = false;
 				itemClick = false;
 			}

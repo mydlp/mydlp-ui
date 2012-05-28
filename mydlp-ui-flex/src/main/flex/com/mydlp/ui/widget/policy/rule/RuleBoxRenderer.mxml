@@ -71,7 +71,7 @@
 			protected var matcherDataProvider:ArrayCollection = new ArrayCollection();
 			
 			[Bindable]
-			protected var ruleList:List = FlexGlobals.topLevelApplication.ruleContainer.ruleList;
+			protected var ruleList:List = FlexGlobals.topLevelApplication.policyContainer.ruleContainer.ruleList;
 			
 			protected var deleteList:ListCollectionView;
 			
@@ -249,7 +249,7 @@
 			{
 				droppedMatchers = new ArrayCollection();
 				droppedSources = new ArrayCollection();
-				var treeItems:* = FlexGlobals.topLevelApplication.inventoryTree.selectedItems;
+				var treeItems:* = FlexGlobals.topLevelApplication.policyContainer.inventoryTree.selectedItems;
 				if (isAllDroppable(treeItems) && checkConsistency(treeItems))
 					acceptDrop();
 				else
@@ -351,7 +351,7 @@
 			protected function onDragDrop(dragEvent:DragEvent):void
 			{
 				deleteList = new ArrayCollection();
-				var inventoryObjects:* = FlexGlobals.topLevelApplication.inventoryTree.selectedItems;
+				var inventoryObjects:* = FlexGlobals.topLevelApplication.policyContainer.inventoryTree.selectedItems;
 				for each (var o:* in inventoryObjects)
 					addDroppedObject(o as InventoryBase);
 				

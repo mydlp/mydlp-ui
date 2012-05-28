@@ -62,9 +62,9 @@
 			
 			protected function onCreationComplete(event:FlexEvent):void
 			{
-				if (FlexGlobals.topLevelApplication.ruleContainer.ruleList.dataProvider.length > 0)
+				if (FlexGlobals.topLevelApplication.policyContainer.ruleContainer.ruleList.dataProvider.length > 0)
 				{
-					var rule:Rule = FlexGlobals.topLevelApplication.ruleContainer.ruleList.dataProvider.getItemAt(0);
+					var rule:Rule = FlexGlobals.topLevelApplication.policyContainer.ruleContainer.ruleList.dataProvider.getItemAt(0);
 					recommendedPriority = rule.priority + 100;
 				}
 			}

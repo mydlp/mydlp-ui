@@ -22,7 +22,7 @@
 			[Bindable]
 			protected var license:LicenseInformation;
 			
-			public var licenseKeyEntrancePopup:LicenseKeyEntrancePopup;
+			//public var licenseKeyEntrancePopup:LicenseKeyEntrancePopup;
 			
 			public var timerBlicker:Timer = new Timer(1000*60);
 			
@@ -45,12 +45,14 @@
 					expirationDate.setStyle("color", "#ff9955");
 					textBlicker.play();
 					FlexGlobals.topLevelApplication.dashboardContainer.currentState="softLimit";
+					FlexGlobals.topLevelApplication.dashboardContainer.addLicenseElements("softlimit");
 				}
 				else if(SessionUtil.isExpirationDateNear())
 				{
 					expirationDate.setStyle("color", "#ffcc00");
 					textBlicker.play();
 					FlexGlobals.topLevelApplication.dashboardContainer.currentState="near";
+					FlexGlobals.topLevelApplication.dashboardContainer.addLicenseElements("near");
 				}
 				timerBlicker.addEventListener(TimerEvent.TIMER, blickingFinishHandler);
 				timerBlicker.start();	
@@ -62,38 +64,9 @@
 				expirationDate.alpha = 1.0;
 			}
 			
-			public function saveLicenseKey(s:String):void
-			{
-				re.saveLicenseKey(s);
-			}
-			
-			protected function saveLicenseKeyHandler(event:ResultEvent):void
-			{
-				var result:Boolean = event.result as Boolean;
-				if(result)
-				{
-					licenseKeyEntrancePopup = InteractionUtil.newPopup(LicenseKeyEntrancePopup) as LicenseKeyEntrancePopup;
-					var timer:Timer = new Timer(3000);
-					timer.addEventListener(TimerEvent.TIMER, timerFinishHandler);
-					timer.start();
-				}
-				else
-					Alert.show("License Key is Invalid");
-			}
-			
-			protected function timerFinishHandler(event:TimerEvent):void
-			{
-				InteractionUtil.closePopup(licenseKeyEntrancePopup);
-				navigateToURL(new URLRequest ('j_spring_security_logout'), '_self');
-			}
-			
-			
 		]]>
 	</fx:Script>
 	<fx:Declarations>
-		<my:remote id="re" destination="licenseInformationBRS">
-			<my:method name="saveLicenseKey" result="saveLicenseKeyHandler(event)"/>
-		</my:remote>
 		<s:Animate id="textBlicker" duration="500" repeatBehavior="reverse" repeatCount="0"
 				   target="{expirationDate}" >
 			<s:SimpleMotionPath property="alpha" valueFrom="1.0" valueTo="0.0"/>

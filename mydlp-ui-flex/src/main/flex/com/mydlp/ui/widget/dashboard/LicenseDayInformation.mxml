@@ -22,7 +22,7 @@
 					dayInformation.text = (-day).toString() + " " + LangUtil.getString('messages', 'dashboard.license.dayInformation.remainingDay.label');
 					dayInformation.setStyle("color", "#ffcc00");
 				}
-				else if(day < 30)
+				else if(day < 31)
 				{
 					dayInformation.text = LangUtil.getString('messages', 'dashboard.license.dayInformation.passedDay.label') + " " + 
 											day.toString() + " " + LangUtil.getString('messages', 'dashboard.license.dayInformation.ago');
