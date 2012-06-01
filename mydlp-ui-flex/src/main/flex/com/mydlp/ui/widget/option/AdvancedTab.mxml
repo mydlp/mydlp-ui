@@ -20,8 +20,11 @@
 		<domain:Config id="queryCacheMaximumSize" />	
 	</fx:Declarations>
 	
-	<s:HGroup width="100%" height="100%">		
-		<s:Form>			
+	<s:HGroup width="100%" height="100%" gap="50">
+		<s:Form>
+			<!--<s:layout>
+				<s:VerticalLayout gap="20"/>
+			</s:layout>-->
 			<s:FormItem label="{archiveMinimumSize.label}">
 				<s:TextInput text="@{archiveMinimumSize.value}"/>
 			</s:FormItem>
@@ -42,7 +45,10 @@
 				<s:TextInput text="@{fsmTimeout.value}"/>
 			</s:FormItem>
 		</s:Form>
-		<s:Form>		
+		<s:Form lineHeight="20">	
+			<!--<s:layout>
+				<s:VerticalLayout gap="20"/>
+			</s:layout>-->
 			<s:FormItem label="{supervisorMaxRestartCount.label}">
 				<s:TextInput text="@{supervisorMaxRestartCount.value}"/>
 			</s:FormItem>

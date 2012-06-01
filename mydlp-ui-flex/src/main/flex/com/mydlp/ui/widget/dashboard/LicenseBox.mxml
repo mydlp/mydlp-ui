@@ -64,6 +64,12 @@
 				expirationDate.alpha = 1.0;
 			}
 			
+			protected function expirationToDate():Date
+			{
+				var expDate:Date = new Date(FlexGlobals.topLevelApplication.license.expirationDate*1000);
+				return expDate;
+			}
+			
 		]]>
 	</fx:Script>
 	<fx:Declarations>
@@ -93,7 +99,7 @@
 
 		<s:Label id="lbl" text="{LangUtil.getString('messages','dashboard.license.licenseType.' + FlexGlobals.topLevelApplication.license.licenseType)}"  
 				 width="100%" fontSize="18" fontWeight="bold" textAlign="center"/>
-		<s:Label id="expirationDate" text="{LangUtil.getString('messages','dashboard.license.expirationDate') + dateFormatter.format(FlexGlobals.topLevelApplication.license.expirationDate)}" 
+		<s:Label id="expirationDate" text="{LangUtil.getString('messages','dashboard.license.expirationDate') + dateFormatter.format(expirationToDate())}" 
 				 fontSize="18" fontWeight="bold" textAlign="center" width="100%"/>
 		<s:Label id="userCount"  text="{LangUtil.getString('messages','dashboard.license.userCount') + FlexGlobals.topLevelApplication.license.userCount}" 
 				 fontSize="18" fontWeight="bold" textAlign="center" width="100%"/>

@@ -31,6 +31,8 @@
 			import com.mydlp.ui.widget.objects.ObjectsContainer;
 			import com.mydlp.ui.widget.option.OptionContainer;
 			import com.mydlp.ui.widget.policy.PolicyContainer;
+			import com.mydlp.ui.widget.policy.inventory.InventoryTree;
+			import com.mydlp.ui.widget.policy.rule.RuleContainer;
 			import com.mydlp.ui.widget.revision.RevisionContainer;
 			
 			import mx.collections.ArrayCollection;
@@ -63,6 +65,10 @@
 			public var noLicenseDashboardContainer:NoLicenseDashboardContainer = null;
 			[Bindable]
 			public var policyContainer:PolicyContainer = null;
+			[Bindable]
+			public var ruleContainer:RuleContainer = null;
+			[Bindable]
+			public var inventoryTree:InventoryTree = null;
 			[Bindable]
 			public var objectsContainer:ObjectsContainer = null;
 			[Bindable] 
@@ -153,6 +159,8 @@
 						navigatorContent.label = LangUtil.getString("messages", "maintab.policy");
 						element = new PolicyContainer();
 						policyContainer = element;
+						ruleContainer = policyContainer.ruleContainer;
+						inventoryTree = policyContainer.inventoryTree;						
 					}
 					else if(i == 2 && user.hasRole(AuthSecurityRole.ROLE_ADMIN))
 					{
@@ -215,7 +223,16 @@
 			
 			protected function getLicenseHandler(event:ResultEvent):void
 			{
-				license = event.result as LicenseInformation;
+				//license = event.result as LicenseInformation;
+				//for development
+				var testLicense:LicenseInformation = new LicenseInformation();
+				testLicense.administrativeUserCount = 1;
+				testLicense.licenseType = LicenseInformation.ENTERPRISE_LICENSE;
+				testLicense.expirationDate = 1343836800;
+				//testLicense.expirationDate = 1339344000;
+				testLicense.userCount = 100;
+				license = testLicense;
+				////////////////
 				re.getCurrentUser();
 			}
 			

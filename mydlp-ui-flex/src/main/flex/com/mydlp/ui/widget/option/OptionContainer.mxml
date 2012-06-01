@@ -43,7 +43,11 @@
 				/*var miscTab:UIComponent = tabbar.dataGroup.getElementAt(7) as UIComponent;
 				miscTab.visible = SessionUtil.isEnterprise();
 				miscTab.enabled = SessionUtil.isEnterprise();
-				miscTab.includeInLayout = SessionUtil.isEnterprise();*/
+				miscTab.includeInLayout = SessionUtil.isEnterprise();
+				var enterpriseTab:UIComponent = tabbar.dataGroup.getElementAt(8) as UIComponent;
+				enterpriseTab.visible = SessionUtil.isEnterprise();
+				enterpriseTab.enabled = SessionUtil.isEnterprise();
+				enterpriseTab.includeInLayout = SessionUtil.isEnterprise();*/
 			}
 			
 			public function refresh(): void
@@ -151,7 +155,7 @@
 	
 	<s:TabBar dataProvider="{vs}" fontSize="14" fontWeight="bold" id="tabbar"/>
 	
-	<s:Group id="optionContainerGroup" width="730" height="430">
+	<s:Group id="optionContainerGroup" width="980" height="580">
 		<s:Rect left="0" right="0" top="0" bottom="30">
 			<s:stroke>
 				<s:SolidColorStroke color="0xACADAF" weight="3"/>
@@ -181,7 +185,7 @@
 					<option:AdvancedTab id="advancedTab" />
 				</s:NavigatorContent>
 				<s:NavigatorContent label="@Resource(bundle = 'messages', key = 'options.tab.misc')" width="100%" height="100%">
-					<option:MiscTab id="miscTab" enabled="{SessionUtil.isEnterprise()}" visible="{SessionUtil.isEnterprise()}"/>
+					<option:MiscTab id="miscTab"/> <!--enabled="{SessionUtil.isEnterprise()}" visible="{SessionUtil.isEnterprise()}"/>-->
 				</s:NavigatorContent>
 				<!--<s:NavigatorContent label="@Resource(bundle = 'messages', key = 'options.tab.enterprise')" width="100%" height="100%">
 					<option:MiscTab id="enterpriseTab"/>

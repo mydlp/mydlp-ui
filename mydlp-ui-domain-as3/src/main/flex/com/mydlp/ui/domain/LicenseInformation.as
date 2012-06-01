@@ -10,8 +10,8 @@ package com.mydlp.ui.domain {
     [Managed]
     [RemoteClass(alias="com.mydlp.ui.domain.LicenseInformation")]
     public class LicenseInformation extends LicenseInformationBase {
-		public static const COMMUNITY_LICENSE:String = "community_license";
-		public static const ENTERPRISE_LICENSE:String = "enterprise_license";
-		public static const TRIAL_LICENSE:String = "trial_license";
+		public static const COMMUNITY_LICENSE:String = "community";
+		public static const ENTERPRISE_LICENSE:String = "enterprise";
+		public static const TRIAL_LICENSE:String = "trial";
     }
 }
