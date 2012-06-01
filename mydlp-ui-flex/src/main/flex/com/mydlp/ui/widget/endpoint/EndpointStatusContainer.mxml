@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:SkinnableContainer xmlns:fx="http://ns.adobe.com/mxml/2009" 
+					  xmlns:s="library://ns.adobe.com/flex/spark" 
+					  xmlns:mx="library://ns.adobe.com/flex/mx"
+					  xmlns:my="http://www.mydlp.com/flex/my"
+					  xmlns:util="com.mydlp.ui.util.*"
+					  width="100%" height="100%" 
+					  creationComplete="onCreationComplete(event)">
+	<fx:Script>
+		<![CDATA[
+			import com.mydlp.ui.domain.EndpointStatus;
+			import com.mydlp.ui.util.AsyncListDataProvider;
+			import com.mydlp.ui.util.LangUtil;
+			
+			import mx.events.FlexEvent;
+			import mx.rpc.AsyncToken;
+			import mx.rpc.events.ResultEvent;
+			
+			import spark.skins.spark.DefaultGridItemRenderer;
+			
+			protected const ENDPOINT_PENDING_OBJECT:Object = 
+				{ipAddress: LangUtil.getString("messages", "endpoints.pending.message")};
+			
+			protected const SYNC_INTERVAL_KEY:String = "sync_interval";
+			
+			protected const OFFLINE_RATIO:Number = 3; 
+			
+			[Bindable]
+			protected var endpointsDP:AsyncListDataProvider = null;
+			
+			protected var searchString:String = null;
+			
+			protected var currentSystemTime:Date = null;
+			protected var currentSyncInterval:Number = Number.NaN;
+			
+			protected function onCreationComplete(event:FlexEvent):void
+			{
+				endpointsDP = new AsyncListDataProvider();
+				endpointsDP.countFunction = countEndpoints;
+				endpointsDP.fetchFunction = fetchEndpints;
+				endpointsDP.pendingObject = ENDPOINT_PENDING_OBJECT;
+				
+				refresh();
+			}
+			
+			protected function countEndpoints(): AsyncToken
+			{
+				return re.getEndpointStatusCount(searchString);
+			}
+			
+			protected function fetchEndpints(offset:Number, count:Number): AsyncToken
+			{
+				return re.getEndpointStatuses(searchString, offset, count);
+			}
+			
+			protected function onSearchClick(event:MouseEvent):void
+			{
+				if (searchStrTextInput.text.length > 3)
+				{
+					searchString = searchStrTextInput.text;
+					refresh();
+				}
+			}
+			
+			protected function onResetClick(event:MouseEvent):void
+			{
+				searchStrTextInput.text = "";
+				searchString = null;
+				refresh();
+			}
+			
+			public function refresh(): void 
+			{
+				gre.getSystemTime();
+			}
+			
+			protected function isOffline(endpointStatus:EndpointStatus): Boolean
+			{
+				if (currentSystemTime == null || isNaN(currentSyncInterval) || 
+						endpointStatus == null || ! endpointStatus is EndpointStatus || 
+						endpointStatus.lastUpdate == null)
+					return false;
+				return (currentSystemTime.time - endpointStatus.lastUpdate.time) > ( currentSyncInterval * OFFLINE_RATIO);
+			}
+			
+			protected function endpointStatusItemRendererFunction(item:Object, column:GridColumn):ClassFactory {
+				if (item is EndpointStatus)
+				{
+					var es:EndpointStatus = item as EndpointStatus;
+					if (!es.isUpToDate)
+						return new ClassFactory(NotUpToDateItemRenderer);
+					else if (isOffline(es))
+						return new ClassFactory(OfflineItemRenderer);
+					else
+						return new ClassFactory(DefaultGridItemRenderer);	
+				}
+				else
+				{
+					return new ClassFactory(DefaultGridItemRenderer);
+				}
+			}
+			
+			protected function getSystemTimeHandler(event:ResultEvent):void
+			{
+				currentSystemTime = event.result as Date;
+				cre.getConfigValue(SYNC_INTERVAL_KEY);
+			}
+			
+			protected function getConfigValueHandler(event:ResultEvent):void
+			{
+				currentSyncInterval = Number(event.result as String);
+				endpointsDP.init();
+			}
+			
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<my:remote id="re" destination="endpointStatusBRS" />
+		<my:remote id="gre" destination="genericBRS" >
+			<my:method name="getSystemTime" result="getSystemTimeHandler(event)"/>
+		</my:remote>
+		<my:remote id="cre" destination="configBRS">
+			<my:method name="getConfigValue" result="getConfigValueHandler(event)"/>
+		</my:remote>
+	</fx:Declarations>
+	
+	<s:layout>
+		<s:VerticalLayout paddingTop="10" />
+	</s:layout>
+	
+	<s:VGroup gap="8" width="100%" height="100%"
+			  paddingTop="8" paddingBottom="6"
+			  paddingLeft="6" paddingRight="6">
+		<s:HGroup width="100%" height="32">
+			<s:Spacer width="10" />
+			<s:TextInput id="searchStrTextInput" width="300"/>
+			<s:Spacer width="5" />
+			<s:Button label="@Resource(key='endpoints.search.button.label', bundle='messages')" click="onSearchClick(event)"/>
+			<s:Button label="@Resource(key='endpoints.reset.button.label', bundle='messages')" click="onResetClick(event)"/>
+		</s:HGroup>
+		
+		<s:DataGrid id="endpoints" dataProvider="{endpointsDP.asyncListView}" width="100%" height="100%"
+					variableRowHeight="true" >
+			<s:columns>
+				<s:ArrayList>
+					<s:GridColumn headerText="@Resource(bundle = 'messages', key = 'endpoints.header.ipAddress')"
+								  dataField="ipAddress" itemRendererFunction="endpointStatusItemRendererFunction"/>
+					<s:GridColumn headerText="@Resource(bundle = 'messages', key = 'endpoints.header.username')"
+								  dataField="username" itemRendererFunction="endpointStatusItemRendererFunction"/>
+					<s:GridColumn headerText="@Resource(bundle = 'messages', key = 'endpoints.header.firstSeen')"
+								  dataField="lastUpdate" itemRendererFunction="endpointStatusItemRendererFunction"/>
+					<s:GridColumn headerText="@Resource(bundle = 'messages', key = 'endpoints.header.lastUpdate')"
+								  dataField="firstAppeared" itemRendererFunction="endpointStatusItemRendererFunction"/>
+				</s:ArrayList>
+			</s:columns>
+		</s:DataGrid>
+	</s:VGroup>
+	
+</s:SkinnableContainer>

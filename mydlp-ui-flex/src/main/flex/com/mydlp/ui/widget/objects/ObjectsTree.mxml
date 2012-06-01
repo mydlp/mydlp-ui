@@ -14,6 +14,7 @@
 		 folderOpenIcon="@Embed('/assets/icons/16x16/folder.png')"
 		 folderClosedIcon="@Embed('/assets/icons/16x16/folder.png')"
 		 itemClick="onItemClick(event)"
+		 variableRowHeight="true"
 		 >
 	<fx:Script>
 		<![CDATA[

@@ -10,8 +10,8 @@ import com.mydlp.ui.domain.EndpointStatus;
 @Secured(AuthSecurityRole.ROLE_ADMIN)
 public interface EndpointStatusService {
 	
-	public List<EndpointStatus> getEndpointStatuses(Integer offset, Integer limit);
+	public List<EndpointStatus> getEndpointStatuses(String searchString, Integer offset, Integer limit);
 	
-	public Long getEndpointStatusCount();
+	public Long getEndpointStatusCount(String searchString);
 	
 }

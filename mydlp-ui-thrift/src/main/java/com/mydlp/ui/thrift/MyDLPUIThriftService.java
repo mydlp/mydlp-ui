@@ -18,5 +18,5 @@ public interface MyDLPUIThriftService {
     
     public void requeueIncident(Integer incidentId);
     
-    public void registerUserAddress(String ipAddress, String userH, ByteBuffer payload);
+    public String registerUserAddress(String ipAddress, String userH, ByteBuffer payload);
 }

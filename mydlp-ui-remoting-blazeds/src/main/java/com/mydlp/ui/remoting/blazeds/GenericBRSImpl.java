@@ -1,5 +1,6 @@
 package com.mydlp.ui.remoting.blazeds;
 
+import java.util.Date;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -77,8 +78,13 @@ public class GenericBRSImpl implements GenericService
 	}
 
 	@Override
-	public void sync() {
+	public void sync() {}
+
+	@Override
+	public Date getSystemTime() {
+		return new Date();
 	}
+	
 	
 	
 }

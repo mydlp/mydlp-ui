@@ -25,4 +25,9 @@ public class ConfigBRSImpl implements ConfigService
 	public void saveAll(List<Config> configs) {
 		configDAO.saveAll(configs);
 	}
+
+	@Override
+	public String getConfigValue(String configKey) {
+		return configDAO.getValue(configKey);
+	}
 }

@@ -82,6 +82,7 @@
 				 itemRenderer="com.mydlp.ui.widget.general.input.ADDomainItemGroupTreeRenderer"
 				 folderOpenIcon="@Embed('/assets/icons/16x16/folder.png')"
 				 folderClosedIcon="@Embed('/assets/icons/16x16/folder.png')"
+				 variableRowHeight="true"
 				 />
 		
 	</s:Group>

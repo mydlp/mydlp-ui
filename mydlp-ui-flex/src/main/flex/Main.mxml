@@ -13,7 +13,7 @@
 			   xmlns:revision="com.mydlp.ui.widget.revision.*"
 			   minHeight="800" minWidth="1280" 
 			   preloader="com.mydlp.ui.util.DownloadProgressBarUtil"
-			   applicationComplete="onCreationComplete(event)"
+			   applicationComplete="onCreationComplete(event)" xmlns:endpoint="com.mydlp.ui.widget.endpoint.*"
 			   >
 	<fx:Style source="/assets/style/general.css" />
 	
@@ -26,6 +26,7 @@
 			import com.mydlp.ui.util.SessionUtil;
 			import com.mydlp.ui.widget.dashboard.DashboardContainer;
 			import com.mydlp.ui.widget.dashboard.NoLicenseDashboardContainer;
+			import com.mydlp.ui.widget.endpoint.EndpointStatusContainer;
 			import com.mydlp.ui.widget.log.LogContainer;
 			import com.mydlp.ui.widget.objects.ObjectsContainer;
 			import com.mydlp.ui.widget.option.OptionContainer;
@@ -68,6 +69,8 @@
 			public var optionContainer:OptionContainer = null;
 			[Bindable]
 			public var logContainer:LogContainer = null;
+			[Bindable]
+			public var endpointStatusContainer:EndpointStatusContainer = null;
 			[Bindable] 
 			public var revisionContainer:RevisionContainer = null;
 			
@@ -87,11 +90,6 @@
 			{
 				isUserActive = true;
 				resetAutoLogout();
-			}
-			
-			protected function syncResultHandler(event:ResultEvent):void
-			{
-				syncTimeIntervalHandler();
 			}
 			
 			protected function sendSyncPacket(event:TimerEvent):void
@@ -129,7 +127,7 @@
 			
 			protected function regulateVisibilty():void
 			{
-				for(var i:int = 0; i < 6; i++)
+				for(var i:int = 0; i < 7; i++)
 				{
 					var navigatorContent:NavigatorContent = new NavigatorContent();
 					navigatorContent.percentHeight = 100;
@@ -168,13 +166,19 @@
 						element = new OptionContainer();
 						optionContainer = element;
 					}
-					else if(i == 4)
+					else if(i == 4 && ( user.hasRole(AuthSecurityRole.ROLE_ADMIN) || user.hasRole(AuthSecurityRole.ROLE_AUDITOR) ) )
 					{
 						navigatorContent.label = LangUtil.getString("messages", "maintab.logs");
 						element = new LogContainer();
 						logContainer = element;
 					}
 					else if(i == 5 && user.hasRole(AuthSecurityRole.ROLE_ADMIN))
+					{
+						navigatorContent.label = LangUtil.getString("messages", "maintab.endpointStatus");
+						element = new EndpointStatusContainer;
+						endpointStatusContainer = element;
+					}
+					else if(i == 6 && user.hasRole(AuthSecurityRole.ROLE_ADMIN))
 					{
 						navigatorContent.label = LangUtil.getString("messages", "maintab.revisions");
 						element = new RevisionContainer();
@@ -246,17 +250,14 @@
 					objectsContainer.refreshObjects();
 				if (dashboardContainer != null)
 					dashboardContainer.refreshDashboard();
+				if (endpointStatusContainer != null)
+					endpointStatusContainer.refresh();
 			}
 			
 			protected function genericResultHandler(event:ResultEvent):void
 			{
 				FlexGlobals.topLevelApplication.topToolbar.policyInstallationState = false;
 				refresh();
-			}
-			
-			protected function onInitialize(event:FlexEvent):void
-			{
-				
 			}
 			
 		]]>
@@ -270,7 +271,7 @@
 		<my:remote id="genericRE" destination="genericBRS" fault="faultHandler(event)" >
 			<my:method name="save" result="genericResultHandler(event)" fault="faultHandler(event)"/>
 			<my:method name="remove" result="genericResultHandler(event)" fault="faultHandler(event)"/>
-			<my:method name="sync" result="syncResultHandler(event)"/>
+			<my:method name="sync" result="{syncTimeIntervalHandler();}"/>
 		</my:remote>
 		<my:remote id="re" destination="userBRS" >
 			<my:method name="getCurrentUser" result="getCurrentUserHandler(event)" />
@@ -307,7 +308,6 @@
 		</s:Rect>
 		<s:VGroup paddingTop="6" paddingBottom="6" paddingLeft="6" paddingRight="6" width="100%" height="100%">
 			<mx:ViewStack id="vs" width="100%" height="100%" creationPolicy="all">
-				
 			</mx:ViewStack>
 		</s:VGroup>
 	</s:Group>

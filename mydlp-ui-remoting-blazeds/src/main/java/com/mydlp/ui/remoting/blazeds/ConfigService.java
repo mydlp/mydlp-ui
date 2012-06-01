@@ -13,5 +13,7 @@ public interface ConfigService {
 	public List<Config> getConfigs();
 	
 	public void saveAll(List<Config> configs);
+	
+	public String getConfigValue(String configKey);
 
 }

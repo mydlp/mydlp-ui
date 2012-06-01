@@ -14,7 +14,7 @@ package com.mydlp.ui.domain {
 		{
 			if (roles == null) return false;
 			
-			for each (var i:* in roles)	
+			for each (var i:* in roles)
 				if ((i as AuthSecurityRole).roleName == roleName)
 					return true;
 			
