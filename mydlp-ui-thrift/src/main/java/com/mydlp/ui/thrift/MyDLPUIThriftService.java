@@ -19,4 +19,9 @@ public interface MyDLPUIThriftService {
     public void requeueIncident(Integer incidentId);
     
     public String registerUserAddress(String ipAddress, String userH, ByteBuffer payload);
+    
+    public void saveLicenseKey(String licenseKey);
+
+    public LicenseObject getLicense();
+
 }
