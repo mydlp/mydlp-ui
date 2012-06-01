@@ -37,6 +37,9 @@ public class LicenseServiceImpl implements LicenseService {
 	protected void scheduleLicenseCheckFun() {
 		LicenseObject thriftResult = myDLPUIThriftService.getLicense();
 		
+		if (thriftResult == null)
+			return;
+		
 		if (!thriftResult.is_valid) {
 			licenseInformationDAO.invalidateLicense();
 			return;
