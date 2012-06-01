@@ -13,7 +13,7 @@ package com.mydlp.ui.util
 		
 		public static function isEnterprise():Boolean {
 			var license:LicenseInformation = FlexGlobals.topLevelApplication.license as LicenseInformation;
-			if(license.licenseType == LicenseInformation.ENTERPRISE_LICENSE)
+			if(license.licenseType == LicenseInformation.ENTERPRISE_LICENSE || license.licenseType == LicenseInformation.TRIAL_LICENSE)
 				return true;
 			else return false;
 		}
