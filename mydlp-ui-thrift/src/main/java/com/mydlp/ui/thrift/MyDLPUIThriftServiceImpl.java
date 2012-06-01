@@ -22,7 +22,7 @@ public class MyDLPUIThriftServiceImpl implements MyDLPUIThriftService {
 	private static Logger logger = LoggerFactory
 			.getLogger(MyDLPUIThriftServiceImpl.class);
 	
-	protected static final String THRIFT_HOST = "127.0.0.1";
+	protected static final String THRIFT_HOST = "192.168.179.195";
 	protected static final int THRIFT_PORT = 9092;
 	protected static final int MAX_POOL_SIZE = 128;
 	protected static final int POOL_SIZE = 16;
@@ -111,7 +111,9 @@ public class MyDLPUIThriftServiceImpl implements MyDLPUIThriftService {
 	}
 	
 	protected void releaseConnection(Connection conn) {
-		busyInstances.remove(conn);
+		synchronized (busyInstances) {
+			busyInstances.remove(conn);
+		}
 		synchronized (freeInstances) {
 			freeInstances.add(conn);
 			int gap = freeInstances.size() - POOL_SIZE;
@@ -216,6 +218,27 @@ public class MyDLPUIThriftServiceImpl implements MyDLPUIThriftService {
 			@Override
 			public String execute(Connection thriftConnection) throws TException {
 				return thriftConnection.client.registerUserAddress(ipAddress, userH, payload);
+			}
+		});
+	}
+
+	@Override
+	public void saveLicenseKey(final String licenseKey) {
+		call(new ThriftCall<Void>() {
+			@Override
+			public Void execute(Connection thriftConnection) throws TException {
+				thriftConnection.client.saveLicenseKey(licenseKey);
+				return null;
+			}
+		});
+	}
+
+	@Override
+	public LicenseObject getLicense() {
+		return call(new ThriftCall<LicenseObject>() {
+			@Override
+			public LicenseObject execute(Connection thriftConnection) throws TException {
+				return thriftConnection.client.getLicense();
 			}
 		});
 	}
