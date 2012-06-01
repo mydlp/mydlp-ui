@@ -205,7 +205,7 @@
 				
 				topToolbar.getCurrentUserHandler();
 				
-				if(SessionUtil.isHardLimit())
+				if(SessionUtil.isHardLimit() || license == null)
 					currentState = "nolicense";
 				else
 					currentState = "user";

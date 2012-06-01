@@ -18,6 +18,12 @@ package com.mydlp.ui.util
 			else return false;
 		}
 		
+		public static function isLicenseAvailable():Boolean {
+			if(FlexGlobals.topLevelApplication.license == null)
+				return false;
+			else return true;
+		}
+		
 		public static function isHardLimit():Boolean {
 			var nDiffDays:Number = getDayInformation();
 			if(nDiffDays > 30)

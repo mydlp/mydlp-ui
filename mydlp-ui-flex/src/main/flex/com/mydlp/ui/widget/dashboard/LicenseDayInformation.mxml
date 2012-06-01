@@ -16,6 +16,8 @@
 			
 			protected function onCreationComplete(event:FlexEvent):void
 			{
+				if(!SessionUtil.isLicenseAvailable())
+					return;
 				var day:Number = SessionUtil.getDayInformation()
 				if(day < 0)
 				{
