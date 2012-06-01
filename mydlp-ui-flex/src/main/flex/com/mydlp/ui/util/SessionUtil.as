@@ -45,7 +45,8 @@ package com.mydlp.ui.util
 			if(license == null) 
 				return -1;
 			var currentDate:Date = new Date();
-			var expirationDate:Date = license.expirationDate;
+			//var expirationDate:Date = license.expirationDate;
+			var expirationDate:Date = new Date();
 			var nDiffDays:int = Math.floor((currentDate.getTime() - expirationDate.getTime())/86400000);
 			return nDiffDays;
 		}
