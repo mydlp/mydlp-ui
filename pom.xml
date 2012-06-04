@@ -84,7 +84,7 @@
       <id>production</id>
       <properties>
         <dao.show_sql>false</dao.show_sql>
-        <dao.policy.dialect>org.hibernate.dialect.MySQLMyISAMDialect</dao.policy.dialect>
+        <dao.policy.dialect>org.hibernate.dialect.MySQL5InnoDBDialect</dao.policy.dialect>
         <ds.policy.driver>com.mysql.jdbc.Driver</ds.policy.driver>
         <ds.policy.url>jdbc:mysql://localhost/mydlp</ds.policy.url>
         <ds.policy.username>root</ds.policy.username>
