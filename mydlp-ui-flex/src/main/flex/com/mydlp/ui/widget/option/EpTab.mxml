@@ -77,16 +77,16 @@
 				</s:DropDownList>				
 			</s:FormItem>
 			<s:FormItem label="{syncInterval.label}">
-				<s:TextInput id="sync" text="@{syncInterval.value}"/>
+				<s:TextInput id="sync" text="@{syncInterval.value}" width="200"/>
 			</s:FormItem>
 			<s:FormItem label="{logLimit.label}">
-				<s:TextInput id="log" text="@{logLimit.value}"/>
+				<s:TextInput id="log" text="@{logLimit.value}" width="200"/>
 			</s:FormItem>
 			<s:FormItem label="{discoverFSInterval.label}">
-				<s:TextInput id="discoverFSIntervalInput" text="@{discoverFSInterval.value}"/>
+				<s:TextInput id="discoverFSIntervalInput" text="@{discoverFSInterval.value}" width="200"/>
 			</s:FormItem>
 			<s:FormItem label="{discoverFSPaths.label}">
-				<s:TextInput id="discoverFSPathsInput" text="@{discoverFSPaths.value}"/>
+				<s:TextInput id="discoverFSPathsInput" text="@{discoverFSPaths.value}" width="200"/>
 			</s:FormItem>
 			<s:FormItem label="{discoverFSOnStartup.label}">
 				<s:CheckBox id="discoverFSOnStartupCheckBox" selected="{discoverFSOnStartup.value == 'true'}" 

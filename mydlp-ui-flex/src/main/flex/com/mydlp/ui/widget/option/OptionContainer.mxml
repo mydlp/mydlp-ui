@@ -32,22 +32,22 @@
 			
 			protected function init():void
 			{
-				validators.push(icapTab.icapRegExValidator);
-				validators.push(icapTab.icapConValidator);
-				validators.push(icapTab.icapLogPassValidator);
-				validators.push(icapTab.icapTTLValidator);
+				validators.push(protocolsTab.icapRegExValidator);
+				validators.push(protocolsTab.icapConValidator);
+				validators.push(enterpriseTab.icapLogPassValidator);
+				validators.push(protocolsTab.icapTTLValidator);
 				validators.push(epTab.epLogValidator);
 				validators.push(epTab.epSyncValidator);
 				validators.push(epTab.discSyncValidator);
 				refresh();
-				/*var miscTab:UIComponent = tabbar.dataGroup.getElementAt(7) as UIComponent;
-				miscTab.visible = SessionUtil.isEnterprise();
-				miscTab.enabled = SessionUtil.isEnterprise();
-				miscTab.includeInLayout = SessionUtil.isEnterprise();
-				var enterpriseTab:UIComponent = tabbar.dataGroup.getElementAt(8) as UIComponent;
-				enterpriseTab.visible = SessionUtil.isEnterprise();
-				enterpriseTab.enabled = SessionUtil.isEnterprise();
-				enterpriseTab.includeInLayout = SessionUtil.isEnterprise();*/
+				var tempMiscTab:UIComponent = tabbar.dataGroup.getElementAt(4) as UIComponent;
+				tempMiscTab.visible = SessionUtil.isEnterprise();
+				tempMiscTab.enabled = SessionUtil.isEnterprise();
+				tempMiscTab.includeInLayout = SessionUtil.isEnterprise();
+				var tempEnterpriseTab:UIComponent = tabbar.dataGroup.getElementAt(5) as UIComponent;
+				tempEnterpriseTab.visible = SessionUtil.isEnterprise();
+				tempEnterpriseTab.enabled = SessionUtil.isEnterprise();
+				tempEnterpriseTab.includeInLayout = SessionUtil.isEnterprise();
 			}
 			
 			public function refresh(): void
@@ -62,24 +62,24 @@
 				for each (var c:* in configs)
 				{
 					var config:Config = c as Config;
-					if (config.key == "error_action") generalTab.errorAction = config;
-					else if (config.key == "mail_archive") generalTab.mailArchive = config;
+					if (config.key == "error_action") advancedTab.errorAction = config;
+					else if (config.key == "mail_archive") enterpriseTab.mailArchive = config;
 						
-					else if (config.key == "smtp_helo_name") smtpTab.smtpHeloName = config;
-					else if (config.key == "smtp_next_hop_host") smtpTab.smtpNextHopHost = config;
-					else if (config.key == "smtp_next_hop_port") smtpTab.smtpNextHopPort = config;
-					else if (config.key == "smtp_bypass_on_fail") smtpTab.smtpBypassOnFail = config;
-					else if (config.key == "smtp_enable_for_all") smtpTab.smtpEnableForAll = config;
+					else if (config.key == "smtp_helo_name") protocolsTab.smtpHeloName = config;
+					else if (config.key == "smtp_next_hop_host") protocolsTab.smtpNextHopHost = config;
+					else if (config.key == "smtp_next_hop_port") protocolsTab.smtpNextHopPort = config;
+					else if (config.key == "smtp_bypass_on_fail") protocolsTab.smtpBypassOnFail = config;
+					else if (config.key == "smtp_enable_for_all") protocolsTab.smtpEnableForAll = config;
 						
-					else if (config.key == "icap_reqmod_path") icapTab.icapReqModPath = config;
-					else if (config.key == "icap_respmod_path") icapTab.icapRespModPath = config;
-					else if (config.key == "icap_max_connections") icapTab.icapMaxConnections = config;
-					else if (config.key == "icap_options_ttl") icapTab.icapOptionsTTL = config;
-					else if (config.key == "icap_log_pass") icapTab.icapLogPass = config;
-					else if (config.key == "icap_log_pass_lower_limit") icapTab.icapLogPassLowerLimit = config;
+					else if (config.key == "icap_reqmod_path") protocolsTab.icapReqModPath = config;
+					else if (config.key == "icap_respmod_path") protocolsTab.icapRespModPath = config;
+					else if (config.key == "icap_max_connections") protocolsTab.icapMaxConnections = config;
+					else if (config.key == "icap_options_ttl") protocolsTab.icapOptionsTTL = config;
+					else if (config.key == "icap_log_pass") enterpriseTab.icapLogPass = config;
+					else if (config.key == "icap_log_pass_lower_limit") enterpriseTab.icapLogPassLowerLimit = config;
 						
-					else if (config.key == "archive_inbound") advancedTab.archiveInbound = config;
-					else if (config.key == "archive_minimum_size") advancedTab.archiveMinimumSize = config;
+					else if (config.key == "archive_inbound") enterpriseTab.archiveInbound = config;
+					else if (config.key == "archive_minimum_size") enterpriseTab.archiveMinimumSize = config;
 					else if (config.key == "maximum_object_size") advancedTab.maximumObjectSize = config;
 					else if (config.key == "maximum_memory_object") advancedTab.maximumMemoryObject = config;
 					else if (config.key == "maximum_chunk_size") advancedTab.maximumChunkSize = config;
@@ -91,8 +91,8 @@
 					else if (config.key == "query_cache_cleanup_interval") advancedTab.queryCacheCleanupInterval = config;
 					else if (config.key == "query_cache_maximum_size") advancedTab.queryCacheMaximumSize = config;					
 						
-					else if (config.key == "auto_distribution") haTab.autoDistribution = config;
-					else if (config.key == "auto_distribution_nodes") haTab.autoDistributionNodes = config;
+					else if (config.key == "auto_distribution") advancedTab.autoDistribution = config;
+					else if (config.key == "auto_distribution_nodes") advancedTab.autoDistributionNodes = config;
 						
 					else if (config.key == "print_monitor") epTab.printMonitor = config;
 					else if (config.key == "log_level") epTab.logLevel = config;
@@ -163,20 +163,11 @@
 		</s:Rect>
 		<s:VGroup paddingTop="6" paddingBottom="6" paddingLeft="6" paddingRight="6" width="100%" top="0" bottom="30" >
 			<mx:ViewStack id="vs" width="100%" height="100%" creationPolicy="all">
-				<s:NavigatorContent label="@Resource(bundle = 'messages', key = 'options.tab.general')" width="100%" height="100%">
-					<option:GeneralTab id="generalTab" />
-				</s:NavigatorContent>
-				<s:NavigatorContent label="@Resource(bundle = 'messages', key = 'options.tab.icap')" width="100%" height="100%">
-					<option:IcapTab id="icapTab" optionContainer="{this}"/>
-				</s:NavigatorContent>
-				<s:NavigatorContent label="@Resource(bundle = 'messages', key = 'options.tab.smtp')" width="100%" height="100%">
-					<option:SmtpTab id="smtpTab"/>
+				<s:NavigatorContent label="@Resource(bundle = 'messages', key = 'options.tab.protocols')" width="100%" height="100%">
+					<option:ProtocolsTab id="protocolsTab" optionContainer="{this}"/>
 				</s:NavigatorContent>
 				<s:NavigatorContent label="@Resource(bundle = 'messages', key = 'options.tab.user')" width="100%" height="100%">
 					<option:UserManagerTab id="userManagerTab" />
-				</s:NavigatorContent>
-				<s:NavigatorContent label="@Resource(bundle = 'messages', key = 'options.tab.ha')" width="100%" height="100%">
-					<option:HaTab id="haTab" />
 				</s:NavigatorContent>		
 				<s:NavigatorContent label="@Resource(bundle = 'messages', key = 'options.tab.ep')" width="100%" height="100%">
 					<option:EpTab id="epTab" optionContainer="{this}"/>
@@ -187,9 +178,9 @@
 				<s:NavigatorContent label="@Resource(bundle = 'messages', key = 'options.tab.misc')" width="100%" height="100%">
 					<option:MiscTab id="miscTab"/> <!--enabled="{SessionUtil.isEnterprise()}" visible="{SessionUtil.isEnterprise()}"/>-->
 				</s:NavigatorContent>
-				<!--<s:NavigatorContent label="@Resource(bundle = 'messages', key = 'options.tab.enterprise')" width="100%" height="100%">
-					<option:MiscTab id="enterpriseTab"/>
-				</s:NavigatorContent>-->
+				<s:NavigatorContent label="@Resource(bundle = 'messages', key = 'options.tab.enterprise')" width="100%" height="100%">
+					<option:EnterpriseTab id="enterpriseTab" optionContainer="{this}"/>
+				</s:NavigatorContent>
 			</mx:ViewStack>
 		</s:VGroup>		
 		

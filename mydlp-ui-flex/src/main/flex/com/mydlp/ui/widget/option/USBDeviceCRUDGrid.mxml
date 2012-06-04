@@ -73,7 +73,7 @@
 		<my:remote id="re" destination="usbDeviceBRS" />
 	</fx:Declarations>
 	
-	<s:Rect left="0" right="0" top="0" bottom="0" >
+	<s:Rect left="0" right="-200" top="0" bottom="-165">
 		<s:stroke>
 			<s:SolidColorStroke color="0xAEBBCF" alpha="0.3" weight="3"/>
 		</s:stroke>
@@ -82,18 +82,21 @@
 	<s:VGroup gap="8" width="100%" height="100%"
 			  paddingTop="8" paddingBottom="6"
 			  paddingLeft="6" paddingRight="6">
-		<s:HGroup>
-			<s:Button skinClass="com.mydlp.ui.skin.AddBitmapLabelButton16Skin"
-					  label="@Resource(key='options.usbsac.add.label', bundle='messages')"
-					  click="{InteractionUtil.newEditDialog(new USBDevice())}" />
-			<s:Spacer width="30" />
-			<s:TextInput id="searchStrTextInput" width="300"/>
-			<s:Spacer width="5" />
-			<s:Button label="@Resource(key='options.usbsac.search.button.label', bundle='messages')" click="onSearchClick(event)"/>
-			<s:Button label="@Resource(key='options.usbsac.reset.button.label', bundle='messages')" click="onResetClick(event)"/>
+		<s:HGroup width="100%">
+			<s:HGroup horizontalAlign="left" width="50%">
+				<s:Button skinClass="com.mydlp.ui.skin.AddBitmapLabelButton16Skin"
+						  label="@Resource(key='options.usbsac.add.label', bundle='messages')"
+						  click="{InteractionUtil.newEditDialog(new USBDevice())}"/>
+			</s:HGroup>
+			<s:HGroup horizontalAlign="right" width="50%">
+				<s:TextInput id="searchStrTextInput" width="300"/>
+				<s:Spacer width="5" />
+				<s:Button label="@Resource(key='options.usbsac.search.button.label', bundle='messages')" click="onSearchClick(event)"/>
+				<s:Button label="@Resource(key='options.usbsac.reset.button.label', bundle='messages')" click="onResetClick(event)"/>
+			</s:HGroup>
 		</s:HGroup>
 		
-		<s:DataGrid id="usbDevices" dataProvider="{usbsacDP.asyncListView}" width="100%" height="100%"
+		<s:DataGrid id="usbDevices" dataProvider="{usbsacDP.asyncListView}" width="850" height="400"
 					variableRowHeight="true">
 			<s:columns>
 				<s:ArrayList>

@@ -14,7 +14,7 @@
 			import mx.core.IFlexDisplayObject;
 			import mx.managers.PopUpManager;
 			
-			public var parentTab:HaTab;		
+			public var parentTab:AdvancedTab;		
 			
 			protected function addNodeClickHandler():void
 			{
