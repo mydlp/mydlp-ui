@@ -69,6 +69,7 @@
 			import spark.components.TextInput;
 			
 			protected var cButton:Button = new Button();
+			protected var miscButton:Button = new Button();
 			protected var cancelButton:Button = new Button();
 			protected var formItemOrder:ListCollectionView = new ArrayCollection();
 			
@@ -596,9 +597,15 @@
 				cancelButton.addEventListener(MouseEvent.CLICK, cancelButtonClickHandler);
 				cancelButton.addEventListener(KeyboardEvent.KEY_DOWN, cancelButtonClickHandler);
 				buttonGroup.addElement(cButton);
+				if (formObject is ADDomain)
+				{
+					miscButton.label = LangUtil.getString("messages", "generic.edit." + getSimpleName() + ".enumButton.label");
+					miscButton.addEventListener(MouseEvent.CLICK, enumADDomainButtonClickHandler);
+					miscButton.addEventListener(KeyboardEvent.KEY_DOWN, keyPressed);
+					buttonGroup.addElement(miscButton);
+				}
 				buttonGroup.addElement(cancelButton);
 			}
-				
 			
 			override public function populate(): void
 			{
@@ -627,9 +634,31 @@
 				var validationErrorArray:Array = Validator.validateAll(validators);
 				if(validationErrorArray.length == 0)
 				{	
+					if (formObject is ADDomain)
+					{
+						(formObject as ADDomain).message = null;
+						(formObject as ADDomain).root = null; // to prevent sending whole tree
+					}
 					re.save(formObject);
 					cButton.enabled = false;
 				}
+			}
+			
+			protected function enumADDomainButtonClickHandler(event:Event): void
+			{
+				read.enumerate((formObject as ADDomain).id);
+				
+				cButton.enabled = false;
+				miscButton.enabled = false;
+			}
+			
+			protected function enumerateHandler(event:Event): void
+			{
+				cButton.enabled = true;
+				miscButton.enabled = true;
+				
+				InteractionUtil.closeCurrentPopup();
+				FlexGlobals.topLevelApplication.refresh();
 			}
 			
 			protected function saveHandler(event:Event): void
@@ -699,6 +728,9 @@
 		<my:remote id="re" destination="genericBRS" >
 			<my:method name="save" result="saveHandler(event)" />
 			<my:method name="removeAll" result="removeAllHandler(event)" />
+		</my:remote>
+		<my:remote id="read" destination="adDomainBRS" >
+			<my:method name="enumerate" result="enumerateHandler(event)" />
 		</my:remote>
 	</fx:Declarations>
 	

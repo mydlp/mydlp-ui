@@ -10,7 +10,7 @@ import com.mydlp.ui.domain.AuthSecurityRole;
 @Secured(AuthSecurityRole.ROLE_ADMIN)
 public interface ADDomainService {
 
-	public void enumerate(ADDomain domain);
+	public void enumerate(Integer domainId);
 	
 	public ADDomain save(ADDomain domain);
 	

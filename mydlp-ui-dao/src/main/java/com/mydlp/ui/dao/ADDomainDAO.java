@@ -10,6 +10,8 @@ import com.mydlp.ui.domain.AbstractEntity;
 
 public interface ADDomainDAO {
 	
+	public ADDomain getDomainById(Integer id);
+	
 	public ADDomain saveDomain(ADDomain domain);
 	
 	public ADDomainItem saveDomainItem(ADDomainItem domainItem);

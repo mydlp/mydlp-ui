@@ -86,4 +86,14 @@ public class ADDomainDAOImpl extends AbstractPolicyDAO implements ADDomainDAO {
 		return DAOUtil.getSingleResult(l);
 	}
 
+	@Override
+	public ADDomain getDomainById(Integer id) {
+		DetachedCriteria criteria = 
+				DetachedCriteria.forClass(ADDomain.class)
+				.add(Restrictions.eq("id", id));
+		@SuppressWarnings("unchecked")
+		List<ADDomain> l = getHibernateTemplate().findByCriteria(criteria);
+		return DAOUtil.getSingleResult(l);
+	}
+
 }

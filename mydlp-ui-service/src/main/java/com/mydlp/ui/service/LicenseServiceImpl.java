@@ -1,5 +1,8 @@
 package com.mydlp.ui.service;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,12 +19,16 @@ import com.mydlp.ui.thrift.MyDLPUIThriftService;
 @Service("licenseService")
 public class LicenseServiceImpl implements LicenseService {
 	
+	//private static Logger logger = LoggerFactory.getLogger(LicenseServiceImpl.class);
+	
 	@Autowired
 	protected MyDLPUIThriftService myDLPUIThriftService;
 	
 	@Autowired
 	protected LicenseInformationDAO licenseInformationDAO;
 	
+	protected Integer retryCounter = 0;
+	protected Boolean licenseAcquired = true;
 	
 	@Scheduled(cron="0 0 4 * * ?")
 	public void checkLicense() {
@@ -35,10 +42,12 @@ public class LicenseServiceImpl implements LicenseService {
 	
 	@Async
 	protected void scheduleLicenseCheckFun() {
+		licenseAcquired = false;
 		LicenseObject thriftResult = myDLPUIThriftService.getLicense();
 		
-		if (thriftResult == null)
+		if (thriftResult == null) {
 			return;
+		}
 		
 		if (!thriftResult.is_valid) {
 			licenseInformationDAO.invalidateLicense();
@@ -47,6 +56,7 @@ public class LicenseServiceImpl implements LicenseService {
 		
 		Boolean saveFlag = false;
 		LicenseInformation currentLicense = licenseInformationDAO.getLicense();
+		
 		if (currentLicense == null) {
 			currentLicense = new LicenseInformation();
 			saveFlag = true;
@@ -81,12 +91,15 @@ public class LicenseServiceImpl implements LicenseService {
 		if (saveFlag) {
 			licenseInformationDAO.saveLicense(currentLicense);
 		}
+		licenseAcquired = true;
 	}
 
 
 	@Override
 	public void enterLicenseKey(String licenseKey) {
 		myDLPUIThriftService.saveLicenseKey(licenseKey);
+		incrementRetryCounter(3);
+		scheduleLicenseCheck(5000);
 	}
 
 	@Override
@@ -96,7 +109,29 @@ public class LicenseServiceImpl implements LicenseService {
 
 	@Override
 	public void scheduleLicenseCheck() {
-		scheduleLicenseCheckFun();
+		scheduleLicenseCheck(100);
+	}
+	
+	protected void scheduleLicenseCheck(final int delay) {
+		Timer timer = new Timer();
+		timer.schedule(new TimerTask() {
+		   public void run() {
+			   scheduleLicenseCheckFun();
+			   if (!licenseAcquired && retryCounter > 0)
+			   {
+				   retryCounter--;
+				   scheduleLicenseCheck(delay);
+			   }
+		   }
+		}, delay);
+	}
+	
+	protected void incrementRetryCounter() {
+		incrementRetryCounter(1);
+	}
+	
+	protected void incrementRetryCounter(int i) {
+		retryCounter += i;
 	}
 	
 }

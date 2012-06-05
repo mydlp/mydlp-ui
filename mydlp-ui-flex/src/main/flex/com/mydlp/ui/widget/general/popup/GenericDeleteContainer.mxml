@@ -15,6 +15,7 @@
 			import com.mydlp.ui.domain.AuthUser;
 			import com.mydlp.ui.domain.InventoryCategory;
 			import com.mydlp.ui.domain.Rule;
+			import com.mydlp.ui.domain.USBDevice;
 			import com.mydlp.ui.util.ClassMember;
 			import com.mydlp.ui.util.InteractionUtil;
 			import com.mydlp.ui.util.LangUtil;
@@ -69,7 +70,10 @@
 				{
 					message += formObject.username;
 				}
-				
+				else if(formObject is USBDevice)
+				{					
+					message += formObject.uniqId;
+				}
 				else if (formObject["label"] != null) 
 				{
 					message += formObject.label;

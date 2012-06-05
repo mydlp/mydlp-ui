@@ -23,7 +23,8 @@ public class ADDomainBRSImpl implements ADDomainService
 	protected ADEnumService adEnumService;
 
 	@Override
-	public void enumerate(ADDomain domain) {
+	public void enumerate(Integer domainId) {
+		ADDomain domain = adDomainDAO.getDomainById(domainId);
 		adEnumService.enumerate(domain);
 	}
 
@@ -40,8 +41,6 @@ public class ADDomainBRSImpl implements ADDomainService
 		}
 		
 		domain = (ADDomain) adDomainDAO.merge(domain);
-		
-		enumerate(domain);
 		return domain;
 	}
 
