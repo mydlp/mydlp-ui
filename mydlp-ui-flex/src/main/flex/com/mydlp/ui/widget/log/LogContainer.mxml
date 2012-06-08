@@ -116,9 +116,10 @@
 				criteriaList = new ArrayCollection();
 				searchString = "";
 				contentId = Number.NaN;
+				showAll.selected = false;
 				
 				// requery
-				logSearchDP.init();
+				searchLogHandler(null);
 				
 				// reset view
 				currentState = "normal";
