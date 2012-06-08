@@ -79,6 +79,8 @@
 				{
 					authSecurityRoles.addItem(allAuthSecurity[roles[i]]);
 				}
+				for(var j:int = 0; j < allAuthSecurity.length; j++)
+					srList.dataProvider.itemUpdated(allAuthSecurity.getItemAt(j));
 			}
 			
 		]]>

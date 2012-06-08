@@ -8,6 +8,7 @@
 		<![CDATA[
 			import com.mydlp.ui.domain.AuthUser;
 			import com.mydlp.ui.util.InteractionUtil;
+			import com.mydlp.ui.util.LangUtil;
 			
 			import mx.collections.ArrayCollection;
 			import mx.collections.ListCollectionView;
@@ -91,9 +92,10 @@
 					gridClick="mouseMoveOnDataGrid(event)">
 			<s:columns>
 				<s:ArrayList>					
-					<s:GridColumn dataField="username" />
-					<s:GridColumn dataField="email" />
-					<s:GridColumn dataField="isActive" itemRenderer="com.mydlp.ui.widget.option.GridItemCheckBoxRenderer" />
+					<s:GridColumn dataField="username" headerText="{LangUtil.getString('messages', 'options.user.username')}"/>
+					<s:GridColumn dataField="email" headerText="{LangUtil.getString('messages', 'options.user.email')}"/>
+					<s:GridColumn dataField="isActive" headerText="{LangUtil.getString('messages', 'options.user.isActive')}" 
+								  itemRenderer="com.mydlp.ui.widget.option.GridItemCheckBoxRenderer" />
 				</s:ArrayList>
 			</s:columns>
 		</s:DataGrid>

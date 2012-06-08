@@ -89,7 +89,7 @@
 		
 		<s:HGroup width="100%" height="100%" gap="170">
 			<s:Form>
-				<s:FormItem label="{errorAction.label}">
+				<s:FormItem label="{errorAction.label}" >
 					<s:DropDownList id="errorActionComboBox" selectedIndex="{(errorAction.value == 'pass') ? 0 : 1}" 
 									change="{errorAction.value = (errorActionComboBox.selectedIndex == 0) ? 'pass' : 'block'}">
 						<s:dataProvider>

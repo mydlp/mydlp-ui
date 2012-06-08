@@ -699,26 +699,6 @@
 					inputLabelForEnterprise.includeInLayout = false;
 					inputLabelForEnterprise.visible = false;
 				}
-			/*	if(event.item.roleName == "ROLE_ADMIN" && SessionUtil.isEnterprise() && event.index != -1)
-				{
-					inputLabelForEnterprise.includeInLayout = true;
-					inputLabelForEnterprise.visible = true;
-					roleAdminSelected = true;
-				}
-				else if(event.item.roleName == "ROLE_ADMIN" && event.index == -1)
-				{
-					roleAdminSelected = false;
-					inputLabelForEnterprise.includeInLayout = false;
-					inputLabelForEnterprise.visible = false;
-				}
-				else
-				{
-					if(!roleAdminSelected)
-					{
-						inputLabelForEnterprise.includeInLayout = false;
-						inputLabelForEnterprise.visible = false;
-					}
-				}*/
 			}
 			
 		]]>
