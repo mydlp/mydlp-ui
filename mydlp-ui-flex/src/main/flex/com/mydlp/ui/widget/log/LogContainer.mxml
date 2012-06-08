@@ -50,7 +50,7 @@
 				contentSearchDP.fetchFunction = fetchContentSearch;
 				contentSearchDP.pendingObject = CONTENT_PENDING_OBJECT;
 				
-				logSearchDP.init();
+				refresh();
 			}
 			
 			protected function countLogSearch(): AsyncToken
@@ -106,8 +106,7 @@
 			
 			protected function searchLogHandler(event:MouseEvent):void
 			{
-				generateCriteriaList();
-				logSearchDP.init();
+				refresh();
 			}
 			
 			protected function resetHandler(event:MouseEvent):void
@@ -119,7 +118,7 @@
 				showAll.selected = false;
 				
 				// requery
-				searchLogHandler(null);
+				refresh();
 				
 				// reset view
 				currentState = "normal";
@@ -141,13 +140,18 @@
 				var content:IncidentLogFileContent = 
 						event.item as IncidentLogFileContent;
 				contentId = content.id;
-				generateCriteriaList();
-				logSearchDP.init();
+				refresh();
 			}
 			
 			public function requeueIncident(value:IncidentLog): void
 			{
 				re.requeueIncident(value);
+			}
+			
+			protected function refresh(): void
+			{
+				generateCriteriaList();
+				logSearchDP.init();
 			}
 			
 		]]>
