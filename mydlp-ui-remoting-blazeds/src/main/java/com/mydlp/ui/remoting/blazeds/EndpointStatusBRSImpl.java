@@ -27,6 +27,21 @@ public class EndpointStatusBRSImpl implements EndpointStatusService
 	public Long getEndpointStatusCount(String searchString) {
 		return endpointStatusDAO.getEndpointStatusCount(searchString);
 	}
+
+	@Override
+	public Long getEndpointOnlineCount(String searchString) {
+		return endpointStatusDAO.getEndpointOnlineCount(searchString);
+	}
+
+	@Override
+	public Long getEndpointOfflineCount(String searchString) {
+		return endpointStatusDAO.getEndpointOfflineCount(searchString);
+	}
+
+	@Override
+	public Long getEndpointNotUpToDateCount(String searchString) {
+		return endpointStatusDAO.getEndpointNotUpToDateCount(searchString);
+	}
 	
 
 }

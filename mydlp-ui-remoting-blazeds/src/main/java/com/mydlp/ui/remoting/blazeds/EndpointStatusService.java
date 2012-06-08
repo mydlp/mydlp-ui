@@ -14,4 +14,10 @@ public interface EndpointStatusService {
 	
 	public Long getEndpointStatusCount(String searchString);
 	
+	public Long getEndpointOnlineCount(String searchString);
+	
+	public Long getEndpointOfflineCount(String searchString);
+	
+	public Long getEndpointNotUpToDateCount(String searchString);
+	
 }

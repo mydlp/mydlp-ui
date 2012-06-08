@@ -8,6 +8,7 @@ import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,6 +17,13 @@ import com.mydlp.ui.domain.EndpointStatus;
 @Repository("endpointStatusDAO")
 @Transactional
 public class EndpointStatusDAOImpl extends AbstractLogDAO implements EndpointStatusDAO {
+	
+	protected static final String SYNC_INTERVAL_KEY="sync_interval";
+	
+	protected static final long OFFLINE_RATIO=3;
+	
+	@Autowired
+	protected ConfigDAO configDAO;
 
 	@Override
 	public void upToDateEndpoint(String ipAddress) {
@@ -90,6 +98,52 @@ public class EndpointStatusDAOImpl extends AbstractLogDAO implements EndpointSta
 		criteria = criteria.add(disjunction);
 		
 		return criteria;
+	}
+	
+	protected Date getOfflineLimit() {
+		long now = new Date().getTime();
+		long sync_interval = Long.parseLong(configDAO.getValue(SYNC_INTERVAL_KEY));
+		return new Date(now - (sync_interval * OFFLINE_RATIO));
+	}
+
+	@Override
+	public Long getEndpointOnlineCount(String searchString) {
+		Date offlineLimit = getOfflineLimit();
+		DetachedCriteria criteria = 
+				DetachedCriteria.forClass(EndpointStatus.class)
+					.setProjection(Projections.rowCount());
+		criteria.add(Restrictions.eq("isUpToDate", true))
+				.add(Restrictions.gt("lastUpdate", offlineLimit));
+		criteria = applySearchCriteria(criteria, searchString);
+		@SuppressWarnings("unchecked")
+		List<Long> returnList = getHibernateTemplate().findByCriteria(criteria);
+		return DAOUtil.getSingleResult(returnList);
+	}
+
+	@Override
+	public Long getEndpointOfflineCount(String searchString) {
+		Date offlineLimit = getOfflineLimit();
+		DetachedCriteria criteria = 
+				DetachedCriteria.forClass(EndpointStatus.class)
+					.setProjection(Projections.rowCount());
+		criteria.add(Restrictions.eq("isUpToDate", true))
+				.add(Restrictions.lt("lastUpdate", offlineLimit));
+		criteria = applySearchCriteria(criteria, searchString);
+		@SuppressWarnings("unchecked")
+		List<Long> returnList = getHibernateTemplate().findByCriteria(criteria);
+		return DAOUtil.getSingleResult(returnList);
+	}
+
+	@Override
+	public Long getEndpointNotUpToDateCount(String searchString) {
+		DetachedCriteria criteria = 
+				DetachedCriteria.forClass(EndpointStatus.class)
+					.setProjection(Projections.rowCount());
+		criteria.add(Restrictions.eq("isUpToDate", false));
+		criteria = applySearchCriteria(criteria, searchString);
+		@SuppressWarnings("unchecked")
+		List<Long> returnList = getHibernateTemplate().findByCriteria(criteria);
+		return DAOUtil.getSingleResult(returnList);
 	}
 
 			

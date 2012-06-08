@@ -15,4 +15,11 @@ public interface EndpointStatusDAO {
 	public void upToDateEndpoint(String ipAddress, String username);
 	
 	public void outOfDateAllEndpoints();
+	
+	public Long getEndpointOnlineCount(String searchString);
+	
+	public Long getEndpointOfflineCount(String searchString);
+	
+	public Long getEndpointNotUpToDateCount(String searchString);
+	
 }

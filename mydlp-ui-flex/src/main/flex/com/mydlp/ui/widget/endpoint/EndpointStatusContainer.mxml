@@ -45,12 +45,12 @@
 			
 			protected function countEndpoints(): AsyncToken
 			{
-				return re.getEndpointStatusCount(searchString);
+				return are.getEndpointStatusCount(searchString);
 			}
 			
 			protected function fetchEndpints(offset:Number, count:Number): AsyncToken
 			{
-				return re.getEndpointStatuses(searchString, offset, count);
+				return are.getEndpointStatuses(searchString, offset, count);
 			}
 			
 			protected function onSearchClick(event:MouseEvent):void
@@ -72,6 +72,7 @@
 			public function refresh(): void 
 			{
 				gre.getSystemTime();
+				populateStats();
 			}
 			
 			protected function isOffline(endpointStatus:EndpointStatus): Boolean
@@ -112,10 +113,24 @@
 				endpointsDP.init();
 			}
 			
+			protected function populateStats(): void
+			{
+				re.getEndpointStatusCount(searchString);
+				re.getEndpointOnlineCount(searchString);
+				re.getEndpointOfflineCount(searchString);
+				re.getEndpointNotUpToDateCount(searchString);
+			}
+			
 		]]>
 	</fx:Script>
 	<fx:Declarations>
-		<my:remote id="re" destination="endpointStatusBRS" />
+		<my:remote id="re" destination="endpointStatusBRS">
+			<my:method name="getEndpointStatusCount" result="{totalVal.text = event.result.toString()}"/>
+			<my:method name="getEndpointOnlineCount" result="{onlineVal.text = event.result.toString()}"/>
+			<my:method name="getEndpointOfflineCount" result="{offlineVal.text = event.result.toString()}"/>
+			<my:method name="getEndpointNotUpToDateCount" result="{notUpToDateVal.text = event.result.toString()}"/>
+		</my:remote>
+		<my:remote id="are" destination="endpointStatusBRS" />
 		<my:remote id="gre" destination="genericBRS" >
 			<my:method name="getSystemTime" result="getSystemTimeHandler(event)"/>
 		</my:remote>
@@ -129,14 +144,39 @@
 	</s:layout>
 	
 	<s:VGroup gap="8" width="100%" height="100%"
-			  paddingTop="8" paddingBottom="6"
+			  paddingTop="6" paddingBottom="6"
 			  paddingLeft="6" paddingRight="6">
-		<s:HGroup width="100%" height="32">
+		<s:HGroup width="100%" horizontalAlign="center">
 			<s:Spacer width="10" />
 			<s:TextInput id="searchStrTextInput" width="300"/>
 			<s:Spacer width="5" />
 			<s:Button label="@Resource(key='endpoints.search.button.label', bundle='messages')" click="onSearchClick(event)"/>
 			<s:Button label="@Resource(key='endpoints.reset.button.label', bundle='messages')" click="onResetClick(event)"/>
+			<s:Spacer width="100%"/>
+			
+			<s:VGroup paddingBottom="0" paddingTop="0" width="90" height="100%">
+				<s:HGroup paddingBottom="0" paddingTop="0">
+					<s:Label text="@Resource(key='endpoints.stats.online.label', bundle='messages')" width="50"/>
+					<s:Label id="onlineVal" width="30"/>
+				</s:HGroup>
+				<s:HGroup paddingBottom="0" paddingTop="0">
+					<s:Label text="@Resource(key='endpoints.stats.offline.label', bundle='messages')" width="50"/>
+					<s:Label id="offlineVal" width="30"/>
+				</s:HGroup>	
+			</s:VGroup>
+			
+			<s:VGroup paddingBottom="0" paddingTop="0" width="130" height="100%">
+				<s:HGroup paddingBottom="0" paddingTop="0">
+					<s:Label text="@Resource(key='endpoints.stats.notUpToDate.label', bundle='messages')" width="90"/>
+					<s:Label id="notUpToDateVal" width="30"/>
+				</s:HGroup>	
+				<s:HGroup paddingBottom="0" paddingTop="0">
+					<s:Label text="@Resource(key='endpoints.stats.total.label', bundle='messages')" width="90" fontWeight="bold"/>
+					<s:Label id="totalVal" fontWeight="bold" width="30"/>
+				</s:HGroup>	
+			</s:VGroup>
+			
+			<s:Spacer width="20"/>
 		</s:HGroup>
 		
 		<s:DataGrid id="endpoints" dataProvider="{endpointsDP.asyncListView}" width="100%" height="100%"
