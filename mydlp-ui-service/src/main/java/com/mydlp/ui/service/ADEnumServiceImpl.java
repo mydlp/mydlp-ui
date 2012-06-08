@@ -301,9 +301,9 @@ public class ADEnumServiceImpl implements ADEnumService {
 			if (null != attribs)
 			{
 				// "displayName", "sAMAccountName", "distinguishedName", "proxyAddresses","mailNickname","memberOf"
-				String displayName = null;
-				String sAMAccountName = null;
-				String distinguishedName = null;
+				String displayName = "";
+				String sAMAccountName = "";
+				String distinguishedName = "";
 				
 				Set<String> userAliases = new HashSet<String>();
 				Set<String> groups = new HashSet<String>();
@@ -419,8 +419,8 @@ public class ADEnumServiceImpl implements ADEnumService {
 
 			if (null != attribs)
 			{
-				String name = null;
-				String distinguishedName = null;
+				String name = "";
+				String distinguishedName = "";
 				
 				for (NamingEnumeration<? extends Attribute> ae = attribs.getAll(); ae.hasMoreElements();)
 				{
@@ -475,8 +475,8 @@ public class ADEnumServiceImpl implements ADEnumService {
 
 			if (null != attribs)
 			{
-				String name = null;
-				String distinguishedName = null;
+				String name = "";
+				String distinguishedName = "";
 				
 				for (NamingEnumeration<? extends Attribute> ae = attribs.getAll(); ae.hasMoreElements();)
 				{
