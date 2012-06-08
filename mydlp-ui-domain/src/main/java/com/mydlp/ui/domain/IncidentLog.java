@@ -18,7 +18,7 @@ public class IncidentLog extends AbstractLog {
 	protected List<IncidentLogFile> files;
 	
 	protected IncidentLogRequeueStatus requeueStatus;
-
+	
 	@OneToMany(mappedBy="incidentLog", cascade={CascadeType.ALL})
 	public List<IncidentLogFile> getFiles() {
 		return files;

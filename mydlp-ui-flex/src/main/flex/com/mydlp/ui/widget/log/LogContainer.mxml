@@ -95,6 +95,13 @@
 					
 					criteriaList.addItem(criteria2);
 				}
+				
+				var criteriaSA:ListCollectionView = new ArrayCollection();
+				criteriaSA.addItem("showAll");
+				criteriaSA.addItem("eq");
+				criteriaSA.addItem(showAll.selected);
+				
+				criteriaList.addItem(criteriaSA);
 			}
 			
 			protected function searchLogHandler(event:MouseEvent):void
@@ -141,7 +148,6 @@
 			{
 				re.requeueIncident(value);
 			}
-				
 			
 		]]>
 	</fx:Script>
@@ -164,6 +170,7 @@
 		</s:layout>
 		
 		<s:HGroup verticalAlign="middle" width="100%">
+			<s:Spacer width="5"/>
 			<s:Label text="@Resource(bundle = 'messages', key = 'log.container.search.date.start.label')"/>
 			<mx:DateField id="startDate"/>
 			<s:Label text="@Resource(bundle = 'messages', key = 'log.container.search.date.end.label')"/>
@@ -175,6 +182,9 @@
 					  click="resetHandler(event)"/>
 			<s:Button label="@Resource(bundle = 'messages', key = 'log.container.refresh.button.label')"
 					  click="searchLogHandler(event)"/>
+			<s:Spacer width="5"/>
+			<s:CheckBox id="showAll" change="{searchLogHandler(null)}"
+				label="@Resource(bundle = 'messages', key = 'log.container.showAll.checkbox.label')" />
 		</s:HGroup>
 		<s:HGroup width="400" verticalAlign="middle" includeInLayout="{SessionUtil.isEnterprise()}">
 			<s:Button label="@Resource(bundle = 'messages', key = 'log.container.search.fulltext.label')"

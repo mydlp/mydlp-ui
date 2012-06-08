@@ -138,12 +138,20 @@ public class IncidentLogDAOImpl extends AbstractLogDAO implements IncidentLogDAO
 				Date startDate = (Date) list.get(2);
 				Date endDate = (Date) list.get(3);
 				criteria = criteria.add(Restrictions.between(field, startDate, endDate));
-			}
-			if (field.equals("contentId") && operation.equals("eq"))
+			} 
+			else if (field.equals("contentId") && operation.equals("eq"))
 			{
 				criteria.createAlias("files", "incidentFile", CriteriaSpecification.LEFT_JOIN);
 				Integer contentId = (Integer) list.get(2);
 				criteria.add(Restrictions.eq("incidentFile.content.id", contentId));
+			}
+			else if (field.equals("showAll") && operation.equals("eq"))
+			{
+				Boolean showAll = (Boolean) list.get(2); 
+				if (!showAll)
+				{
+					criteria.add(Restrictions.eq("visible", true));
+				}
 			}
 		}
 		return criteria;

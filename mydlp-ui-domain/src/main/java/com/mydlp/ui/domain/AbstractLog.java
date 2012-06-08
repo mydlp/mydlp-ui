@@ -37,6 +37,9 @@ public abstract class AbstractLog extends AbstractEntity {
 	public void setDate(Date date) {
 		this.date = date;
 	}
+	
+	@Index(name="visibleIndex")
+	@Column(nullable=false)
 	public Boolean getVisible() {
 		return visible;
 	}
