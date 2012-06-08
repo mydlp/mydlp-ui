@@ -18,7 +18,7 @@ public abstract class ADDomainItem extends AbstractEntity {
 	protected String distinguishedName;
 	protected ADDomainItemGroup parent;
 	
-	@Column(nullable=false, unique=true, length=1024)
+	@Column(nullable=false, unique=true, length=767)
 	public String getDistinguishedName() {
 		return distinguishedName;
 	}
