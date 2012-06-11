@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.mydlp.ui.domain.AbstractEntity;
+import com.mydlp.ui.domain.RDBMSConnection;
 import com.mydlp.ui.domain.RDBMSEnumeratedValue;
 import com.mydlp.ui.domain.RDBMSInformationTarget;
 
@@ -25,6 +26,8 @@ public class RDBMSConnectionDAOImpl extends AbstractPolicyDAO implements RDBMSCo
 
 	@Override
 	public void remove(AbstractEntity entity) {
+		if (entity instanceof RDBMSInformationTarget)
+			deleteValues((RDBMSInformationTarget) entity);
 		getHibernateTemplate().delete(entity);
 	}
 
@@ -83,6 +86,13 @@ public class RDBMSConnectionDAOImpl extends AbstractPolicyDAO implements RDBMSCo
 		else if (l.size() == 0)
 			return false;
 		throw new RuntimeException("Illegal number of objects.");
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<RDBMSConnection> getRDBMSConnections() {
+		DetachedCriteria criteria = DetachedCriteria.forClass(RDBMSConnection.class);
+		return getHibernateTemplate().findByCriteria(criteria);
 	}
 
 		

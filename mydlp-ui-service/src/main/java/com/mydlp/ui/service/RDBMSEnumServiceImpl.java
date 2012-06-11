@@ -5,6 +5,10 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,7 +62,7 @@ public class RDBMSEnumServiceImpl implements RDBMSEnumService {
 		ResultSet rs = null;
 		String identifier = null;
 		try {
-			rs = connection.getMetaData().getPrimaryKeys(rdbmsInformationTarget.getCategoryName(),
+			rs = connection.getMetaData().getPrimaryKeys(rdbmsInformationTarget.getCatalogName(),
 					rdbmsInformationTarget.getSchemaName(), 
 					rdbmsInformationTarget.getTableName());
 			if (rs.next()) 
@@ -88,7 +92,6 @@ public class RDBMSEnumServiceImpl implements RDBMSEnumService {
 			connection = getSQLConnection(rdbmsInformationTarget.getRdbmsConnection());
 			String identifier = getIdentifier(rdbmsInformationTarget, connection);
 			Boolean incrementalEnum = (identifier != null);
-			System.out.println("incrementalEnum: " + incrementalEnum);
 			if (!incrementalEnum)
 				rdbmsConnectionDAO.deleteValues(rdbmsInformationTarget);
 			statement = connection.createStatement();
@@ -112,9 +115,7 @@ public class RDBMSEnumServiceImpl implements RDBMSEnumService {
 					Object idObj = rs.getObject(2);
 					idValue = idObj.toString();
 					ev = rdbmsConnectionDAO.getValue(rdbmsInformationTarget, idValue);
-					System.out.println("if exist check before");
 					if (ev != null && ev.getHashCode() == stringHashCode) continue; // we already have this value
-					System.out.println("if exist check after");
 					valueIsAlreadyStored = rdbmsConnectionDAO.hasOtherValue(
 							rdbmsInformationTarget, stringHashCode, idValue);
 				}
@@ -129,13 +130,11 @@ public class RDBMSEnumServiceImpl implements RDBMSEnumService {
 					ev = new RDBMSEnumeratedValue();
 					ev.setInformationTarget(rdbmsInformationTarget);
 					ev.setOriginalId(idValue);
-					System.out.println("new object");
 				}
 				
 				ev.setHashCode(stringHashCode);
 				if (enumProxy.shouldStoreValue())
 					ev.setString(stringValue);
-				System.out.println("object save");
 				rdbmsConnectionDAO.save(ev);
 			}
 		} catch (ClassNotFoundException e) {
@@ -153,7 +152,6 @@ public class RDBMSEnumServiceImpl implements RDBMSEnumService {
 			} catch (SQLException e) {
 				logger.error("Error occurred when closing sql objects", e);
 			}
-				
 		}
 		
 	}
@@ -185,7 +183,7 @@ public class RDBMSEnumServiceImpl implements RDBMSEnumService {
 
 		Class.forName(dialect.getDriverClassName());
 		return DriverManager.getConnection(connectionObj.getJdbcUrl(),
-				connectionObj.getUsername(), connectionObj.getPassword());
+				connectionObj.getLoginUsername(), connectionObj.getLoginPassword());
 	}
 
 	protected ResultSet getValues(
@@ -216,5 +214,127 @@ public class RDBMSEnumServiceImpl implements RDBMSEnumService {
 			logger.error("Error occured when getting result set", e);
 			return null;
 		}
+	}
+
+	@Override
+	public String testConnection(RDBMSConnection rdbmsConnection) {
+		Connection connection = null;
+		try {
+			connection = getSQLConnection(rdbmsConnection);
+			return "OK";
+		} catch (Throwable e) {
+			return e.toString();
+		} finally {
+			try {
+				if (connection != null && ! connection.isClosed())
+					connection.close();
+			} catch (Exception e) {
+				logger.error("Error occured when closing test connection", e);
+			}
+		}
+	}
+
+	@Override
+	public List<Map<String, String>> getTableNames(RDBMSConnection rdbmsConnection,
+			String tableSearchString) {
+		List<Map<String, String>> returnList = new LinkedList<Map<String, String>>();
+		Connection connection = null;
+		ResultSet rs = null;
+		try {
+			connection = getSQLConnection(rdbmsConnection);
+			rs = connection.getMetaData().getTables(null, null, "%" + tableSearchString + "%", null);
+			while (rs.next ()) {
+				Map<String, String> rowResults = new HashMap<String, String>();
+				rowResults.put("schema", rs.getString("TABLE_SCHEM"));
+				rowResults.put("catalog", rs.getString("TABLE_CAT"));
+				rowResults.put("name", rs.getString("TABLE_NAME"));
+				rowResults.put("type", rs.getString("TABLE_TYPE"));
+				returnList.add(rowResults);
+				if (returnList.size() == 10) break;
+			}
+		} catch (ClassNotFoundException e) {
+			logger.error("Probably JDBC driver is not found", e);
+		} catch (SQLException e) {
+			logger.error("An error occured during establishing connection and getting table names", e);
+		} finally {
+			try {
+				if (connection != null && ! connection.isClosed() )
+					connection.close();
+				if (rs != null && ! rs.isClosed() )
+					rs.close();
+			} catch (SQLException e) {
+				logger.error("Error occurred when closing sql objects", e);
+			}
+		}
+		return returnList;
+	}
+
+	@Override
+	public List<Map<String, String>> getColumnNames(RDBMSConnection rdbmsConnection, String catalogName,
+			String schemaName, String tableName, String columnSearchString) {
+		List<Map<String, String>> returnList = new LinkedList<Map<String, String>>();
+		Connection connection = null;
+		ResultSet rs = null;
+		try {
+			connection = getSQLConnection(rdbmsConnection);
+			rs = connection.getMetaData().getColumns(catalogName, schemaName, tableName, "%" + columnSearchString + "%");
+			while (rs.next ()) {
+				Map<String, String> rowResults = new HashMap<String, String>();
+				rowResults.put("name", rs.getString("COLUMN_NAME"));
+				rowResults.put("type", rs.getString("TYPE_NAME"));
+				returnList.add(rowResults);
+				if (returnList.size() == 10) break;
+			}
+		} catch (ClassNotFoundException e) {
+			logger.error("Probably JDBC driver is not found", e);
+		} catch (SQLException e) {
+			logger.error("An error occured during establishing connection and getting column names", e);
+		} finally {
+			try {
+				if (connection != null && ! connection.isClosed() )
+					connection.close();
+				if (rs != null && ! rs.isClosed() )
+					rs.close();
+			} catch (SQLException e) {
+				logger.error("Error occurred when closing sql objects", e);
+			}
+		}
+		return returnList;
+	}
+
+	@Override
+	public List<String> getSampleValues(
+			RDBMSInformationTarget rdbmsInformationTarget) {
+		List<String> returnList = new LinkedList<String>();
+		Connection connection = null;
+		Statement statement = null;
+		ResultSet rs = null;
+		try {
+			connection = getSQLConnection(rdbmsInformationTarget.getRdbmsConnection());
+			statement = connection.createStatement();
+			rs = getValues(rdbmsInformationTarget, statement, null);
+			while (rs.next ()) {
+				Object obj = rs.getObject(1);
+				String stringValue = obj.toString();
+				returnList.add(stringValue);
+				if (returnList.size() == 10) break;
+			}
+		} catch (ClassNotFoundException e) {
+			logger.error("Probably JDBC driver is not found", e);
+		} catch (SQLException e) {
+			logger.error("An error occured during establishing connection and getting sample values", e);
+		} finally {
+			try {
+				if (connection != null && ! connection.isClosed() )
+					connection.close();
+				if (statement != null && ! statement.isClosed() )
+					statement.close();
+				if (rs != null && ! rs.isClosed() )
+					rs.close();
+			} catch (SQLException e) {
+				logger.error("Error occurred when closing sql objects", e);
+			}
+		}
+		return returnList;
 	}
 }

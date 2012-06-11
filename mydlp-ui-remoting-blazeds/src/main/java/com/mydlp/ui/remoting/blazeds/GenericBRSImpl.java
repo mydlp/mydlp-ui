@@ -14,6 +14,7 @@ import com.mydlp.ui.domain.ADDomain;
 import com.mydlp.ui.domain.AbstractEntity;
 import com.mydlp.ui.domain.DashboardItem;
 import com.mydlp.ui.domain.InventoryBase;
+import com.mydlp.ui.domain.RDBMSConnection;
 import com.mydlp.ui.domain.Rule;
 
 @Service("genericBRS")
@@ -36,6 +37,9 @@ public class GenericBRSImpl implements GenericService
 	
 	@Autowired
 	protected DashboardService dashboardService;
+	
+	@Autowired
+	protected RDBMSConnectionService rdbmsConnectionService;
 
 	@Override
 	public AbstractEntity save(AbstractEntity item) {
@@ -48,6 +52,8 @@ public class GenericBRSImpl implements GenericService
 			return adDomainService.save((ADDomain) item);
 		else if (item instanceof DashboardItem)
 			return dashboardService.saveDashboardItem((DashboardItem) item);
+		else if (item instanceof RDBMSConnection)
+			return rdbmsConnectionService.save(item);
 		else
 			return genericDAO.save(item);
 	}
@@ -61,6 +67,8 @@ public class GenericBRSImpl implements GenericService
 			ruleService.remove((Rule) item);
 		else if (item instanceof DashboardItem)
 			dashboardService.remove((DashboardItem) item);
+		else if (item instanceof RDBMSConnection)
+			rdbmsConnectionService.remove(item);
 		else
 			genericDAO.remove(item);
 	}

@@ -27,6 +27,7 @@
 			import com.mydlp.ui.domain.InventoryItem;
 			import com.mydlp.ui.domain.Item;
 			import com.mydlp.ui.domain.Network;
+			import com.mydlp.ui.domain.RDBMSConnection;
 			import com.mydlp.ui.domain.RegularExpression;
 			import com.mydlp.ui.domain.RegularExpressionGroup;
 			import com.mydlp.ui.util.InteractionUtil;
@@ -42,13 +43,10 @@
 			protected var objects:ListCollectionView = null;
 			
 			protected var dataFormats:ArrayCollection = new ArrayCollection();
-			protected var networks:ArrayCollection = new ArrayCollection();
-			protected var informationTypes:ArrayCollection = new ArrayCollection();
-			protected var keywordGroups:ArrayCollection = new ArrayCollection();
-			protected var others:ArrayCollection = new ArrayCollection();
 			protected var regularExpressionGroups:ArrayCollection = new ArrayCollection();
 			protected var documentDatabases:ArrayCollection = new ArrayCollection();
 			protected var adDomains:ArrayCollection = new ArrayCollection();
+			protected var rdbmsConnections:ArrayCollection = new ArrayCollection();
 			
 			protected var tempOpenItems:Object;
 			
@@ -74,13 +72,10 @@
 				var _objects:ListCollectionView = event.result as ListCollectionView;
 				
 				dataFormats.removeAll();
-				networks.removeAll();
-				informationTypes.removeAll();
-				keywordGroups.removeAll();
 				regularExpressionGroups.removeAll();
 				documentDatabases.removeAll();
 				adDomains.removeAll();
-				others.removeAll();
+				rdbmsConnections.removeAll();
 				
 				for each(var item:* in _objects)
 				{
@@ -92,6 +87,8 @@
 						documentDatabases.addItem(item);
 					else if(item is ADDomain)
 						adDomains.addItem(item);
+					else if(item is RDBMSConnection)
+						rdbmsConnections.addItem(item);
 				}
 				openItems = tempOpenItems;
 				validateNow();
@@ -126,6 +123,12 @@
 					parentADDomains.classType = ADDomain;
 					parentADDomains.children = adDomains;
 					objects.addItem(parentADDomains);
+					
+					var parentRDBMSConnections:ObjectGroup = new ObjectGroup();
+					parentRDBMSConnections.label = LangUtil.getString("messages", "objects.rdbmsConnections.label");
+					parentRDBMSConnections.classType = RDBMSConnection;
+					parentRDBMSConnections.children = rdbmsConnections;
+					objects.addItem(parentRDBMSConnections);
 				}
 				refreshTree();
 			}

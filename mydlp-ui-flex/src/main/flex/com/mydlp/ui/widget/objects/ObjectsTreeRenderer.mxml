@@ -4,16 +4,8 @@
 					  xmlns:mx="library://ns.adobe.com/flex/mx">
 	<fx:Script>
 		<![CDATA[
-			import com.mydlp.ui.domain.ADDomain;
 			import com.mydlp.ui.domain.ADDomainItem;
 			import com.mydlp.ui.domain.AbstractEntity;
-			import com.mydlp.ui.domain.DataFormat;
-			import com.mydlp.ui.domain.DocumentDatabase;
-			import com.mydlp.ui.domain.InformationType;
-			import com.mydlp.ui.domain.InventoryItem;
-			import com.mydlp.ui.domain.Network;
-			import com.mydlp.ui.domain.RegularExpressionGroup;
-			import com.mydlp.ui.domain.Rule;
 			import com.mydlp.ui.util.InteractionUtil;
 			import com.mydlp.ui.util.LangUtil;
 			
@@ -25,26 +17,9 @@
 			
 			protected function clickAddButton(event:MouseEvent):void
 			{
-				if(treeListData.item.classType == DataFormat)
-				{
-					var newDataFormat:DataFormat = new DataFormat();
-					InteractionUtil.newEditDialog(newDataFormat);
-				}
-				else if(treeListData.item.classType == RegularExpressionGroup)
-				{
-					var newRegularExpressionGroup:RegularExpressionGroup = new RegularExpressionGroup();
-					InteractionUtil.newEditDialog(newRegularExpressionGroup);
-				}
-				else if(treeListData.item.classType == DocumentDatabase)
-				{
-					var newDocumnetDatabase:DocumentDatabase = new DocumentDatabase();
-					InteractionUtil.newEditDialog(newDocumnetDatabase);
-				}
-				else if(treeListData.item.classType == ADDomain)
-				{
-					var newADDomain:ADDomain = new ADDomain();
-					InteractionUtil.newEditDialog(newADDomain);
-				}
+				var objectType:Class = treeListData.item.classType; 
+				var newObject:* = new objectType();
+				InteractionUtil.newEditDialog(newObject);
 				event.stopPropagation();
 			}
 			

@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:TitleWindow xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			   xmlns:s="library://ns.adobe.com/flex/spark" 
+			   xmlns:mx="library://ns.adobe.com/flex/mx"
+			   xmlns:my="http://www.mydlp.com/flex/my"
+			   xmlns:input="com.mydlp.ui.widget.general.input.*"
+			   close="{close()}"
+			   visible="false"
+			   title="@Resource(bundle = 'messages', key = 'rdbmsInformationTarget.title.label')"
+			   >
+	
+	<fx:Script>
+		<![CDATA[
+			import com.mydlp.ui.domain.RDBMSInformationTarget;
+			import com.mydlp.ui.util.InteractionUtil;
+			
+			import mx.collections.ArrayCollection;
+			import mx.collections.ListCollectionView;
+			import mx.events.FlexEvent;
+			import mx.rpc.events.ResultEvent;
+			
+			import spark.events.TextOperationEvent;
+			
+			public var rdbmsInformationTargetInput:RDBMSInformationTargetInput = null;
+			
+			[Bindable]
+			public var informationTarget:RDBMSInformationTarget = null;
+			
+			[Bindable]
+			protected var rdbmsConnections:ListCollectionView = null;
+			
+			protected function close(): void
+			{
+				rdbmsInformationTargetInput.informationTarget = informationTarget;
+				rdbmsInformationTargetInput.refresh();
+				InteractionUtil.closePopup(this);
+			}
+			
+			public function populate():void
+			{
+				visible = true;
+			}
+			
+			protected function enterConnectionState(event:FlexEvent):void
+			{
+				if (rdbmsConnections == null)
+					re.getRDBMSConnections();
+			}
+			
+			protected function searchInputChangeHandler(event:TextOperationEvent):void
+			{
+				if (currentState == "table")
+					re.getTableNames(informationTarget.rdbmsConnection, searchTextInput.text);
+				else if (currentState == "column")
+					re.getColumnNames(informationTarget.rdbmsConnection, informationTarget.catalogName ,
+						informationTarget.schemaName, informationTarget.tableName, searchTextInput.text);
+			}
+			
+			protected function enterFinalState(event:FlexEvent):void
+			{
+				nextButton.enabled = false;
+				re.getSampleValues(informationTarget);
+			}
+			
+			protected function getSampleValuesHandler(event:ResultEvent):void
+			{
+				sampleValuesList.dataProvider = event.result as ListCollectionView;
+				nextButton.enabled = true;
+			}
+			
+			protected function exitTableState(event:FlexEvent):void
+			{
+				informationTarget.tableName = searchResultsList.selectedItem.name;
+				informationTarget.catalogName = searchResultsList.selectedItem.catalog;
+				informationTarget.schemaName = searchResultsList.selectedItem.schema;
+				clearSearch();
+			}
+			
+			protected function clearSearch(): void
+			{
+				searchResultsList.dataProvider = new ArrayCollection();
+				searchTextInput.text = "";
+			}
+			
+			protected function tableEntryToLabel(item:Object): String
+			{
+				if (item == null) return "";
+				
+				var strRet:String = "";
+				strRet += item.name + " ";
+				if (item.catalog != null)
+					strRet += "[catalog: " + item.catalog + "] ";
+				if (item.schema != null)
+					strRet += "[schema: " + item.schema + "] ";
+				if (item.type != null)
+					strRet += "[type: " + item.type+ "]";
+				return strRet;
+			}
+			
+			protected function columnEntryToLabel(item:Object): String
+			{
+				if (item == null) return "";
+				
+				var strRet:String = "";
+				strRet += item.name + " ";
+				if (item.type != null)
+					strRet += "[type: " + item.type+ "]";
+				return strRet;
+			}
+			
+			protected function exitColumnState(event:FlexEvent):void
+			{
+				informationTarget.columnName = searchResultsList.selectedItem.name;
+				clearSearch();
+			}
+			
+			protected function getRDBMSConnectionsHandler(event:ResultEvent):void
+			{
+				rdbmsConnections = event.result as ListCollectionView;
+				if (informationTarget.rdbmsConnection != null)
+					connectionsComboBox.selectedItem = informationTarget.rdbmsConnection;
+			}
+			
+			protected function getTableNamesHandler(event:ResultEvent):void
+			{
+				searchResultsList.dataProvider = event.result as ListCollectionView;
+				if (informationTarget.tableName != null)
+					searchTextInput.text = informationTarget.tableName;
+			}
+			
+			protected function getColumnNamesHandler(event:ResultEvent):void
+			{
+				searchResultsList.dataProvider = event.result as ListCollectionView;
+				if (informationTarget.columnName != null)
+					searchTextInput.text = informationTarget.columnName;
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<fx:Declarations>
+		<my:remote id="re" destination="rdbmsConnectionBRS" >
+			<my:method name="getRDBMSConnections" result="getRDBMSConnectionsHandler(event)"/>
+			<my:method name="getTableNames" result="getTableNamesHandler(event)"/>
+			<my:method name="getColumnNames" result="getColumnNamesHandler(event)"/>
+			<my:method name="getSampleValues" result="getSampleValuesHandler(event)"/>
+		</my:remote>
+	</fx:Declarations>
+	
+	<s:states>
+		<s:State name="connection" 
+				 enterState="enterConnectionState(event)"
+				 exitState="{informationTarget.rdbmsConnection = connectionsComboBox.selectedItem}"/>
+		<s:State name="table" 
+				 exitState="exitTableState(event)"/>
+		<s:State name="column" 
+				 exitState="exitColumnState(event)"/>
+		<s:State name="final"
+				 enterState="enterFinalState(event)"/>
+	</s:states>
+	
+	<s:VGroup width="100%" height="100%" horizontalAlign="left" verticalAlign="middle"
+			  paddingBottom="8" paddingLeft="8" paddingRight="8" paddingTop="8">
+		<s:HGroup width="100%" height="100%"
+				  verticalAlign="top">
+			<s:Label width="150" fontWeight="bold" 
+					 text.connection="@Resource(bundle = 'messages', key = 'rdbmsInformationTarget.input.rdbmsConnection.label')"
+					 text.table="@Resource(bundle = 'messages', key = 'rdbmsInformationTarget.input.tableName.label')"
+					 text.column="@Resource(bundle = 'messages', key = 'rdbmsInformationTarget.input.columnName.label')"
+					 text.final="@Resource(bundle = 'messages', key = 'rdbmsInformationTarget.input.sampleValues.label')"/>
+			<s:ComboBox includeIn="connection" id="connectionsComboBox" 
+						dataProvider="{rdbmsConnections}" labelField="label" width="150"/>
+			<s:VGroup includeIn="table,column" width="500" height="100%" 
+					  horizontalAlign="left" verticalAlign="top" gap="5">
+				<s:TextInput id="searchTextInput" width="50%" change="searchInputChangeHandler(event)"/>
+				<s:List id="searchResultsList" width="100%" height="100" allowMultipleSelection="false"
+						labelFunction.table="tableEntryToLabel"
+						labelFunction.column="columnEntryToLabel"/>
+			</s:VGroup>
+			<s:VGroup includeIn="final" width="500" height="200" 
+					  horizontalAlign="left" verticalAlign="top" gap="5">
+				<s:List id="sampleValuesList" width="100%" height="100%" allowMultipleSelection="false"/>
+				<s:Label text="@Resource(bundle = 'messages', key = 'rdbmsInformationTarget.input.sampleValues.message')"
+						 width="100%"/>
+			</s:VGroup>
+		</s:HGroup>
+		
+		<s:HGroup width="100%" height="100%" horizontalAlign="center" verticalAlign="middle" gap="20">
+			<s:Button id="nextButton" includeIn="connection, table, column"
+					  label="@Resource(bundle = 'messages', key = 'rdbmsInformationTarget.popup.nextButton.label')"
+					  enabled.connection="{connectionsComboBox.selectedItem != null}"
+					  enabled.table="{searchResultsList.selectedItem != null}"
+					  enabled.column="{searchResultsList.selectedItem != null}"
+					  click.connection="{currentState='table'}"
+					  click.table="{currentState='column'}"
+					  click.column="{currentState='final'}"
+					  />
+			<s:Button id="closeButton" 
+					  label="@Resource(bundle = 'messages', key = 'rdbmsInformationTarget.popup.closeButton.label')"
+					  click="{close();}"/>
+		</s:HGroup>  
+		
+	</s:VGroup>  
+	
+</s:TitleWindow>

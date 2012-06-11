@@ -26,6 +26,8 @@
 			import com.mydlp.ui.domain.InventoryItem;
 			import com.mydlp.ui.domain.Item;
 			import com.mydlp.ui.domain.Matcher;
+			import com.mydlp.ui.domain.RDBMSConnection;
+			import com.mydlp.ui.domain.RDBMSInformationTarget;
 			import com.mydlp.ui.domain.RegularExpressionGroup;
 			import com.mydlp.ui.domain.Rule;
 			import com.mydlp.ui.domain.RuleUserAD;
@@ -49,15 +51,20 @@
 			import com.mydlp.ui.widget.general.input.InformationFeatureInput;
 			import com.mydlp.ui.widget.general.input.IpAddressInput;
 			import com.mydlp.ui.widget.general.input.MimeTypeInput;
+			import com.mydlp.ui.widget.general.input.RDBMSInformationTargetInput;
 			import com.mydlp.ui.widget.general.input.RegularExpressionGroupInput;
 			import com.mydlp.ui.widget.general.validator.NullValidator;
 			
 			import mx.binding.utils.BindingUtils;
 			import mx.collections.ArrayCollection;
 			import mx.collections.ListCollectionView;
+			import mx.controls.Alert;
 			import mx.core.FlexGlobals;
 			import mx.events.ItemClickEvent;
 			import mx.events.ValidationResultEvent;
+			import mx.messaging.messages.ErrorMessage;
+			import mx.rpc.events.FaultEvent;
+			import mx.rpc.events.ResultEvent;
 			import mx.validators.EmailValidator;
 			import mx.validators.NumberValidator;
 			import mx.validators.RegExpValidator;
@@ -65,6 +72,7 @@
 			
 			import spark.components.Button;
 			import spark.components.CheckBox;
+			import spark.components.ComboBox;
 			import spark.components.TextArea;
 			import spark.components.TextInput;
 			
@@ -413,6 +421,37 @@
 						inputLabel.addElement(textArea);
 						index = 12;
 					}
+					else if (classMember.name == "dbType" && classMember.type == String)
+					{
+						const finalObjectName:String = getObjectName(targetObject);
+						const finalClassMemberName:String = classMember.name;
+						var comboBox:ComboBox = new ComboBox();
+						comboBox.dataProvider = RDBMSConnection.DB_TYPES;
+						comboBox.labelFunction = function(item:Object): String {
+							if (item == null) return "";
+							return LangUtil.getString("messages", 
+								"generic.edit." + finalObjectName + "." + finalClassMemberName + 
+								".comboBoxItem." + item.toString() + ".label");
+						};
+						comboBox.width = InputLabel.HORIZONTAL_INPUT_WIDTH;
+						comboBox.selectedItem = targetObject[classMember.name];
+						BindingUtils.bindProperty(targetObject, classMember.name, comboBox, "selectedItem");
+						inputLabel = new HorizontalInputLabel();
+						inputLabel.addElement(comboBox);
+						index = 1;
+					}
+						
+					else if (classMember.type == RDBMSInformationTarget)
+					{
+						var rdbmsitInput:RDBMSInformationTargetInput = new RDBMSInformationTargetInput();
+						rdbmsitInput.informationTarget = targetObject[classMember.name];
+						rdbmsitInput.deleteList = this.deleteList;
+						BindingUtils.bindProperty(targetObject, classMember.name, rdbmsitInput, "informationTarget");
+						inputLabel = new VerticalInputLabel();
+						inputLabel.addElement(rdbmsitInput);
+						index = 8;
+					}
+					
 					else if(classMember.type == Boolean)
 					{
 						var checkBox:CheckBox = new CheckBox();
@@ -488,14 +527,17 @@
 							index = 4;
 							textInput.displayAsPassword = true;
 						}
-						else if(classMember.name == "loginUsername") {
+						else if(targetObject is ADDomain && classMember.name == "loginUsername") {
 							index = 3;
 							var regExpValidator5:RegExpValidator = new RegExpValidator();
 							regExpValidator5.source = textInput;
 							regExpValidator5.property = "text";
-							regExpValidator5.expression = "^([\\w\\.-@]{1,255})$";
+							regExpValidator5.expression = "^[\\w\\.-_]{1,255}@[\\w\\.-]{1,255}$";
 							ErrorTipManager.registerValidator(regExpValidator5);
 							validators.push(regExpValidator5);
+						}
+						else if(classMember.name == "loginUsername") {
+							index = 3;
 						}
 						else if(classMember.name == "distinguishedName"){
 							index = 1;
@@ -505,6 +547,9 @@
 						}
 						else if(classMember.name == "userPrincipalName"){
 							index = 3;
+						}
+						else if(classMember.name == "jdbcUrl"){
+							index = 2;
 						}
 						else if(classMember.name == "username"){
 							/*
@@ -604,6 +649,14 @@
 					miscButton.addEventListener(KeyboardEvent.KEY_DOWN, keyPressed);
 					buttonGroup.addElement(miscButton);
 				}
+				else if (formObject is RDBMSConnection)
+				{
+					miscButton.label = LangUtil.getString("messages", "generic.edit." + getSimpleName() + ".testButton.label");
+					miscButton.addEventListener(MouseEvent.CLICK, testRDBMSConnectionButtonClickHandler);
+					miscButton.addEventListener(KeyboardEvent.KEY_DOWN, keyPressed);
+					buttonGroup.addElement(miscButton);
+					cButton.enabled = false;
+				} 
 				buttonGroup.addElement(cancelButton);
 			}
 			
@@ -661,6 +714,29 @@
 				FlexGlobals.topLevelApplication.refresh();
 			}
 			
+			protected function testRDBMSConnectionButtonClickHandler(event:Event): void
+			{
+				redb.testConnection(formObject as RDBMSConnection);
+			}
+			
+			protected function testConnectionHandler(event:ResultEvent): void
+			{
+				var eventResult:String = event.result as String;
+				if (eventResult == "OK")
+				{
+					cButton.enabled = true;
+					Alert.show(	LangUtil.getString("messages", "generic.edit." + getSimpleName() + ".testConnection.ok.message"),
+								LangUtil.getString("messages", "generic.edit." + getSimpleName() + ".testConnection.ok.title"));
+				}
+				else
+				{
+					cButton.enabled = false;
+					Alert.show(	LangUtil.getString("messages", "generic.edit." + getSimpleName() + ".testConnection.failure.message")
+						+ ":\n\n" + eventResult,
+						LangUtil.getString("messages", "generic.edit." + getSimpleName() + ".testConnection.failure.title"));
+				}
+			}
+			
 			protected function saveHandler(event:Event): void
 			{
 				//InteractionUtil.closeCurrentPopup();
@@ -711,6 +787,9 @@
 		</my:remote>
 		<my:remote id="read" destination="adDomainBRS" >
 			<my:method name="enumerate" result="enumerateHandler(event)" />
+		</my:remote>
+		<my:remote id="redb" destination="rdbmsConnectionBRS" >
+			<my:method name="testConnection" result="testConnectionHandler(event)"/>
 		</my:remote>
 	</fx:Declarations>
 	

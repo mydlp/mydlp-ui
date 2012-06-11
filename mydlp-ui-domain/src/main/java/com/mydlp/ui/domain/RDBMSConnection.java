@@ -19,8 +19,8 @@ public class RDBMSConnection extends AbstractNamedEntity {
 	
 	protected String dbType;
 	protected String jdbcUrl;
-	protected String username;
-	protected String password;
+	protected String loginUsername;
+	protected String loginPassword;
 	
 	@Column(nullable=false)
 	public String getDbType() {
@@ -37,18 +37,19 @@ public class RDBMSConnection extends AbstractNamedEntity {
 		this.jdbcUrl = jdbcUrl;
 	}
 	@Column(nullable=false)
-	public String getUsername() {
-		return username;
+	public String getLoginUsername() {
+		return loginUsername;
 	}
-	public void setUsername(String username) {
-		this.username = username;
+	public void setLoginUsername(String loginUsername) {
+		this.loginUsername = loginUsername;
 	}
 	@Column(nullable=false)
-	public String getPassword() {
-		return password;
+	public String getLoginPassword() {
+		return loginPassword;
 	}
-	public void setPassword(String password) {
-		this.password = password;
+	public void setLoginPassword(String loginPassword) {
+		this.loginPassword = loginPassword;
 	}
+	
 	
 }

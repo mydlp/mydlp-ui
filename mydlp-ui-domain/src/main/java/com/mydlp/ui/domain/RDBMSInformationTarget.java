@@ -14,7 +14,7 @@ public class RDBMSInformationTarget extends AbstractEntity {
 	private static final long serialVersionUID = -4581040878897738334L;
 	
 	protected RDBMSConnection rdbmsConnection;
-	protected String categoryName;
+	protected String catalogName;
 	protected String schemaName;
 	protected String tableName;
 	protected String columnName;
@@ -41,11 +41,11 @@ public class RDBMSInformationTarget extends AbstractEntity {
 	public void setColumnName(String columnName) {
 		this.columnName = columnName;
 	}
-	public String getCategoryName() {
-		return categoryName;
+	public String getCatalogName() {
+		return catalogName;
 	}
-	public void setCategoryName(String categoryName) {
-		this.categoryName = categoryName;
+	public void setCatalogName(String catalogName) {
+		this.catalogName = catalogName;
 	}
 	public String getSchemaName() {
 		return schemaName;
