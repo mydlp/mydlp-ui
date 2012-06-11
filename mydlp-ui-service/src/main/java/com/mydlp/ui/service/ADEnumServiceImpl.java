@@ -44,7 +44,7 @@ import com.mydlp.ui.domain.ADDomainUserAlias;
 @Service("adEnumService")
 public class ADEnumServiceImpl implements ADEnumService {
 
-	private static Logger logger = LoggerFactory.getLogger(ADEnumService.class);
+	private static Logger logger = LoggerFactory.getLogger(ADEnumServiceImpl.class);
 	
 	protected Set<Integer> currentlyProcessingDomains = new HashSet<Integer>();
 	

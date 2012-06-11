@@ -49,6 +49,9 @@
          <value>com.mydlp.ui.domain.MIMEType</value>
          <value>com.mydlp.ui.domain.Network</value>
          <value>com.mydlp.ui.domain.PrinterRule</value>
+         <value>com.mydlp.ui.domain.RDBMSConnection</value>
+         <value>com.mydlp.ui.domain.RDBMSEnumeratedValue</value>
+         <value>com.mydlp.ui.domain.RDBMSInformationTarget</value>
          <value>com.mydlp.ui.domain.RegularExpression</value>
          <value>com.mydlp.ui.domain.RegularExpressionGroup</value>
          <value>com.mydlp.ui.domain.RegularExpressionGroupEntry</value>
