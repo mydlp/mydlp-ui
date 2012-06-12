@@ -10,6 +10,8 @@
 	
 	<fx:Script>
 		<![CDATA[
+			import com.mydlp.ui.domain.AuthSecurityRole;
+			import com.mydlp.ui.domain.AuthUser;
 			import com.mydlp.ui.domain.DashboardItem;
 			import com.mydlp.ui.domain.UserSettings;
 			import com.mydlp.ui.util.InteractionUtil;
@@ -22,7 +24,8 @@
 			
 			public function refreshDashboard(): void
 			{
-				re.getUserSettings();
+				if(isAdmin())
+					re.getUserSettings();
 			}
 			
 			protected function getUserSettingsHandler(event:ResultEvent): void
@@ -112,8 +115,19 @@
 				this.currentState = licenseState;
 				var licenseDayInformation:LicenseDayInformation = new LicenseDayInformation();
 				licenseGroup.addElement(licenseDayInformation);
-				var licenseKeyEntrance:LicenseKeyEntrance = new LicenseKeyEntrance();
-				licenseGroup.addElement(licenseKeyEntrance);
+				if(isAdmin())
+				{
+					var licenseKeyEntrance:LicenseKeyEntrance = new LicenseKeyEntrance();
+					licenseGroup.addElement(licenseKeyEntrance);
+				}
+			}
+			
+			protected function isAdmin():Boolean
+			{
+				var currentUser:AuthUser = FlexGlobals.topLevelApplication.user;
+				if(currentUser.hasRole(AuthSecurityRole.ROLE_ADMIN))
+					return true;
+				else return false;
 			}
 			
 		]]>
@@ -150,11 +164,15 @@
 		<s:HGroup gap="30">
 			<s:Button skinClass="com.mydlp.ui.skin.AddBitmapLabelButton24Skin" 
 					  label="@Resource(key='dashboard.additem', bundle='messages')"
-					  click="{newDashboardItem(event)}" styleName="fontSize24Style"/>
+					  click="{newDashboardItem(event)}" styleName="fontSize24Style"
+					  includeInLayout="{isAdmin()}"
+					  visible="{isAdmin()}"/>
 			
 			<s:Button skinClass="com.mydlp.ui.skin.GetReportBitmapLabelButton24Skin"
 					  label="@Resource(bundle = 'messages', key = 'dashboard.displayWeeklyReport.label')"
-					  styleName="fontSize24Style" click="{InteractionUtil.newPopup(ReportPopup) as ReportPopup}"/>
+					  styleName="fontSize24Style" click="{InteractionUtil.newPopup(ReportPopup) as ReportPopup}"
+					  includeInLayout="{isAdmin()}"
+					  visible="{isAdmin()}"/>
 		</s:HGroup>
 
 		<s:Group id="dashboardItems" width="100%" height="100%">

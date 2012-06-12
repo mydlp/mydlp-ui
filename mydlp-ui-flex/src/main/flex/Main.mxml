@@ -127,12 +127,16 @@
 				resetAutoLogout();
 				syncTimeIntervalHandler();
 				
-				//dashboardContainer.licenseBox.invalidateDisplayList();
 				licenseRE.getLicense();
 			}
 			
 			protected function regulateVisibilty():void
 			{
+				if(!(user as AuthUser).hasRole(AuthSecurityRole.ROLE_ADMIN))
+				{
+					topToolbar.installButton.includeInLayout = false;
+					topToolbar.installButton.visible = false;
+				}
 				for(var i:int = 0; i < 7; i++)
 				{
 					var navigatorContent:NavigatorContent = new NavigatorContent();
@@ -162,7 +166,7 @@
 						ruleContainer = policyContainer.ruleContainer;
 						inventoryTree = policyContainer.inventoryTree;						
 					}
-					else if(i == 2 && user.hasRole(AuthSecurityRole.ROLE_ADMIN))
+					else if(i == 2 && ( user.hasRole(AuthSecurityRole.ROLE_ADMIN) || user.hasRole(AuthSecurityRole.ROLE_CLASSIFIER) ) )
 					{
 						navigatorContent.label = LangUtil.getString("messages", "maintab.objects");
 						element = new ObjectsContainer;
@@ -252,9 +256,9 @@
 			
 			public function refresh(): void
 			{
-				if (policyContainer.inventoryTree != null)
+				if (policyContainer != null && policyContainer.inventoryTree != null)
 					policyContainer.inventoryTree.refreshTree();
-				if (policyContainer.ruleContainer != null)
+				if (policyContainer != null && policyContainer.ruleContainer != null)
 					policyContainer.ruleContainer.refreshRules();
 				if (optionContainer != null)
 				{

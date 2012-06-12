@@ -13,6 +13,7 @@ import com.mydlp.ui.dao.GenericDAO;
 import com.mydlp.ui.domain.ADDomain;
 import com.mydlp.ui.domain.AbstractEntity;
 import com.mydlp.ui.domain.DashboardItem;
+import com.mydlp.ui.domain.DocumentDatabase;
 import com.mydlp.ui.domain.InventoryBase;
 import com.mydlp.ui.domain.RDBMSConnection;
 import com.mydlp.ui.domain.Rule;
@@ -40,6 +41,7 @@ public class GenericBRSImpl implements GenericService
 	
 	@Autowired
 	protected RDBMSConnectionService rdbmsConnectionService;
+	protected DocumentDatabaseService documentDatabaseService;
 
 	@Override
 	public AbstractEntity save(AbstractEntity item) {
@@ -54,6 +56,8 @@ public class GenericBRSImpl implements GenericService
 			return dashboardService.saveDashboardItem((DashboardItem) item);
 		else if (item instanceof RDBMSConnection)
 			return rdbmsConnectionService.save(item);
+		else if (item instanceof DocumentDatabase)
+			return documentDatabaseService.save((DocumentDatabase) item);
 		else
 			return genericDAO.save(item);
 	}

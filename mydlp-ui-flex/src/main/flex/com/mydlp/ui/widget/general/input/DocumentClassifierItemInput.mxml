@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:SkinnableContainer xmlns:fx="http://ns.adobe.com/mxml/2009" 
+					  xmlns:s="library://ns.adobe.com/flex/spark" 
+					  xmlns:my="http://www.mydlp.com/flex/my"
+					  xmlns:mx="library://ns.adobe.com/flex/mx"
+					  width="{InputLabel.VERTICAL_INPUT_WIDTH}"
+					  height="150" creationComplete="{refresh()}">
+	<fx:Script>
+		<![CDATA[
+			import com.mydlp.ui.domain.DocumentDatabase;
+			import com.mydlp.ui.widget.general.popup.InputLabel;
+			
+			import mx.rpc.events.ResultEvent;
+			
+			[Bindable]
+			protected var documentDatabases:ListCollectionView;
+			
+			protected function removeClickHandler(event:MouseEvent):void
+			{
+				ddList.dataGroup.invalidateDisplayList();
+				for each (var o:Object in ddList.selectedIndices)
+				documentClassifierItems.removeItemAt(o as int);
+				ddList.validateNow();
+			}
+			
+			protected function addClickHandler(event:MouseEvent):void
+			{
+				ddList.dataGroup.invalidateDisplayList();
+				
+				for each (var o:DocumentDatabase in ddTree.selectedItems)
+				{
+					if (!documentClassifierItems.contains(o))
+						documentClassifierItems.addItem(o);
+				}
+				
+				ddList.validateNow();
+			}
+			
+			protected function getDocumentDatabasesHandler(event:ResultEvent): void
+			{
+				documentDatabases = event.result as ListCollectionView;
+				ddTree.validateNow();
+			}
+			
+			public function refresh(): void
+			{
+				ddTree.invalidateDisplayList();
+				re.getDocumentDatabases();
+			}
+			
+			
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<mx:ListCollectionView id="documentClassifierItems" />
+		
+		<my:remote id="re" destination="objectsBRS">
+			<my:method name="getDocumentDatabases" result="getDocumentDatabasesHandler(event)" />
+		</my:remote>
+	</fx:Declarations>
+	
+	<s:layout>
+		<s:HorizontalLayout verticalAlign="middle" gap="2"/>
+	</s:layout>
+	
+	<s:Group width="53%" height="100%">
+		<s:layout>
+			<s:VerticalLayout gap="2"/>
+		</s:layout>
+		<s:Label text="@Resource(bundle = 'messages', key = 'generic.edit.input.dataFormats.odfList.label')" />
+		
+		<s:List id="ddTree"
+				 labelField="label"
+				 width="100%" height="80%"
+				 allowMultipleSelection="true"
+				 dataProvider="{documentDatabases}"
+				 />
+		
+	</s:Group>
+	
+	<s:Group width="14%" height="100%">
+		<s:layout>
+			<s:VerticalLayout gap="2" verticalAlign="middle" horizontalAlign="center"/>
+		</s:layout>
+		<s:Button skinClass="com.mydlp.ui.skin.RightBitmapButton32Skin" click="addClickHandler(event)"/>
+		<s:Button skinClass="com.mydlp.ui.skin.LeftBitmapButton32Skin" click="removeClickHandler(event)" 
+				  enabled="{ddList.selectedIndex != -1}"/>
+	</s:Group>
+	
+	<s:Group width="33%" height="100%">
+		<s:layout>
+			<s:VerticalLayout gap="2"/>
+		</s:layout>
+		<s:Label text="@Resource(bundle = 'messages', key = 'generic.edit.input.authorityScopeADItems.asaiList.label')" />
+		<s:List id="ddList" dataProvider="{documentClassifierItems}" 
+				width="100%" height="80%"
+				itemRenderer="com.mydlp.ui.widget.general.input.DocumentDatabaseGroupRenderer" />
+	</s:Group>
+	
+</s:SkinnableContainer>

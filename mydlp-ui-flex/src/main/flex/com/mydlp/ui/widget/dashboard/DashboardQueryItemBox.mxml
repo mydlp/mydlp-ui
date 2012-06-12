@@ -8,7 +8,11 @@
 	
 	<fx:Script>
 		<![CDATA[
+			import com.mydlp.ui.domain.AuthSecurityRole;
+			import com.mydlp.ui.domain.AuthUser;
+			
 			import mx.collections.ArrayCollection;
+			import mx.core.FlexGlobals;
 			import mx.rpc.events.ResultEvent;
 			[Bindable]
 			protected var itemDP:Object = null;
@@ -17,7 +21,8 @@
 			
 			protected function reget(): void
 			{
-				re.get(itemKey);
+				if((FlexGlobals.topLevelApplication.user as AuthUser).hasRole(AuthSecurityRole.ROLE_ADMIN))
+					re.get(itemKey);
 			}
 			
 			protected function getHandler(event:ResultEvent): void

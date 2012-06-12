@@ -7,17 +7,19 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.Transient;
 
 import org.dphibernate.serialization.annotations.NeverSerialize;
 
 @Entity
 public class AuthUser extends AbstractEntity {
 
-
+	
+	
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 5054573190269821453L;
+	private static final long serialVersionUID = 2277869102174042066L;
 	
 	
 	protected String username;
@@ -27,6 +29,16 @@ public class AuthUser extends AbstractEntity {
 	protected List<AuthSecurityRole> roles;
 	protected Boolean hasAuthorityScope;
 	protected List<ADDomainItem> authorityScopeADItems;
+	protected List<DocumentDatabase> documentDatabases;
+	
+	@ManyToMany
+	public List<DocumentDatabase> getDocumentDatabases() {
+		return documentDatabases;
+	}
+	public void setDocumentDatabases(List<DocumentDatabase> documentDatabases) {
+		this.documentDatabases = documentDatabases;
+	}
+
 	protected UserSettings settings;
 
 	@Column(unique=true)
@@ -89,4 +101,14 @@ public class AuthUser extends AbstractEntity {
 		this.settings = settings;
 	}
 	
+	@Transient
+	public Boolean hasRole(String roleName) {
+		if (roles == null || roles.size() == 0)
+			return false;
+		for (AuthSecurityRole role: roles)
+			if (role.getRoleName().equals(roleName))
+				return true;
+		
+		return false;
+	}
 }

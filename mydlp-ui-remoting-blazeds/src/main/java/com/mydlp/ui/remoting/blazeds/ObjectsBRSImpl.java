@@ -14,6 +14,9 @@ import com.mydlp.ui.dao.InventoryDAO;
 import com.mydlp.ui.dao.RDBMSConnectionDAO;
 import com.mydlp.ui.dao.RegularExpressionGroupDAO;
 import com.mydlp.ui.domain.AbstractEntity;
+import com.mydlp.ui.domain.AuthSecurityRole;
+import com.mydlp.ui.domain.AuthUser;
+import com.mydlp.ui.domain.DocumentDatabase;
 
 @Service("objectsBRS")
 @RemotingDestination
@@ -36,18 +39,34 @@ public class ObjectsBRSImpl implements ObjectsService
 	
 	@Autowired
 	protected RDBMSConnectionDAO rdbmsConnectionDAO;
+	protected UserService userService;
 
 	public List<AbstractEntity> getObjects() {
 		
 		List<AbstractEntity> objects = new ArrayList<AbstractEntity>(); 
 		
-		objects.addAll(dataFormatDAO.getDataFormats());
-		objects.addAll(regexDAO.getRegularExpressionGroups());
-		objects.addAll(documentDatabaseDAO.getDocumentDatabases());
-		objects.addAll(adDomainDAO.getADDomains());
-		objects.addAll(rdbmsConnectionDAO.getRDBMSConnections());
+		AuthUser authUser = userService.getCurrentUser();
+		
+		if(authUser.hasRole(AuthSecurityRole.ROLE_ADMIN))
+		{
+			objects.addAll(dataFormatDAO.getDataFormats());
+			objects.addAll(regexDAO.getRegularExpressionGroups());
+			objects.addAll(adDomainDAO.getADDomains());
+			objects.addAll(rdbmsConnectionDAO.getRDBMSConnections());
+		}
+		if(authUser.hasRole(AuthSecurityRole.ROLE_ADMIN) || authUser.hasRole(AuthSecurityRole.ROLE_CLASSIFIER))
+			objects.addAll(documentDatabaseDAO.getDocumentDatabases());
 		
 		return objects;
+	}
+	
+	public List<DocumentDatabase> getDocumentDatabases()
+	{
+		List<DocumentDatabase> documentDatabases = new ArrayList<DocumentDatabase>();
+		AuthUser authUser = userService.getCurrentUser();
+		if(authUser.hasRole(AuthSecurityRole.ROLE_ADMIN) || authUser.hasRole(AuthSecurityRole.ROLE_CLASSIFIER))
+			documentDatabases.addAll(documentDatabaseDAO.getDocumentDatabases());
+		return documentDatabases;
 	}
 
 }

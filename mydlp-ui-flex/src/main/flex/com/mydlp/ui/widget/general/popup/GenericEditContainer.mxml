@@ -47,6 +47,7 @@
 			import com.mydlp.ui.widget.general.input.AuthSecurityRolesInput;
 			import com.mydlp.ui.widget.general.input.AuthorityScopeADItemInput;
 			import com.mydlp.ui.widget.general.input.DataFormatInput;
+			import com.mydlp.ui.widget.general.input.DocumentClassifierItemInput;
 			import com.mydlp.ui.widget.general.input.DocumentDatabaseFileEntryInput;
 			import com.mydlp.ui.widget.general.input.InformationFeatureInput;
 			import com.mydlp.ui.widget.general.input.IpAddressInput;
@@ -91,6 +92,9 @@
 			protected var regExpValidator2:RegExpValidator = new RegExpValidator();
 			
 			protected var inputLabelForEnterprise:InputLabel = null;
+			protected var inputLabelForEnterprise2:InputLabel = null;
+			protected var inputLabelForClassifier:InputLabel = null;
+			protected var inputLabelForClassifier2:InputLabel = null;
 			protected var roleAdminSelected:Boolean = false;
 			
 			
@@ -193,8 +197,6 @@
 						regExpValidator.property = "text";
 						regExpValidator.expression = "^([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])$";
 						ErrorTipManager.registerValidator(regExpValidator);
-						//regExpValidator.addEventListener(ValidationResultEvent.INVALID, invalidInput);
-						//regExpValidator.addEventListener(ValidationResultEvent.VALID, validInput);
 						validators.push(regExpValidator);
 					}
 					else if (targetObject is InformationType && 
@@ -316,6 +318,25 @@
 						
 						inputLabelForEnterprise.addElement(asaiInput);
 						index = 7;
+					}
+					
+					else if (targetObject is AuthUser &&
+						classMember.name == "documentDatabases" &&
+						classMember.type == ListCollectionView)
+					{
+						var dciInput:DocumentClassifierItemInput = new DocumentClassifierItemInput();
+						if(targetObject[classMember.name] == null)
+							dciInput.documentClassifierItems = new ArrayCollection();
+						else
+							dciInput.documentClassifierItems = targetObject[classMember.name];
+						BindingUtils.bindProperty(targetObject, classMember.name, dciInput, "documentClassifierItems");
+						inputLabelForClassifier = new VerticalInputLabel();
+						
+						inputLabelForClassifier.includeInLayout = SessionUtil.isEnterprise();
+						inputLabelForClassifier.visible = SessionUtil.isEnterprise();
+						
+						inputLabelForClassifier.addElement(dciInput);
+						index = 8;						
 					}
 					else if (targetObject is ADDomain &&
 						classMember.name == "aliases" && 
@@ -457,17 +478,21 @@
 						var checkBox:CheckBox = new CheckBox();
 						checkBox.selected = targetObject[classMember.name];
 						BindingUtils.bindProperty(targetObject, classMember.name, checkBox, "selected");
-						inputLabel = new HorizontalInputLabel();
-						inputLabel.addElement(checkBox);
 
 						if (classMember.name == "isActive")
+						{
+							inputLabel = new HorizontalInputLabel();
+							inputLabel.addElement(checkBox);
 							index = 4;
+						}
 						else 
 						{
+							inputLabelForEnterprise2 = new HorizontalInputLabel();
+							inputLabelForEnterprise2.addElement(checkBox);
 							if(!SessionUtil.isEnterprise())
 							{
-								inputLabel.includeInLayout = false;
-								inputLabel.visible = false;
+								inputLabelForEnterprise2.includeInLayout = true;
+								inputLabelForEnterprise2.visible = true;
 							}
 							index = 6;
 						}
@@ -552,12 +577,6 @@
 							index = 2;
 						}
 						else if(classMember.name == "username"){
-							/*
-							if (targetObject is AuthUser)
-								textInput.editable = false;
-							else
-								textInput.editable = true;
-							*/
 							index = 3;
 						}
 						else if(classMember.name == "deviceId"){
@@ -597,12 +616,23 @@
 						sourceLabelList.push(new InputLabelIndexTuple(index, inputLabel));
 					}
 					
-					else if(inputLabelForEnterprise != null)
+					else if(inputLabelForEnterprise != null && classMember.name == "authorityScopeADItems")
 					{
 						inputLabelForEnterprise.label = LangUtil.getString("messages", "generic.edit." + getObjectName(targetObject) + "." + classMember.name + ".label");
 						sourceLabelList.push(new InputLabelIndexTuple(index, inputLabelForEnterprise));
 					}
 					
+					else if(inputLabelForEnterprise2 != null && classMember.name == "hasAuthorityScope")
+					{
+						inputLabelForEnterprise2.label = LangUtil.getString("messages", "generic.edit." + getObjectName(targetObject) + "." + classMember.name + ".label");
+						sourceLabelList.push(new InputLabelIndexTuple(index, inputLabelForEnterprise2));
+					}
+					
+					else if(inputLabelForClassifier != null && classMember.name == "documentDatabases")
+					{
+						inputLabelForClassifier.label = LangUtil.getString("messages", "generic.edit." + getObjectName(targetObject) + "." + classMember.name + ".label");
+						sourceLabelList.push(new InputLabelIndexTuple(index, inputLabelForClassifier));
+					}
 				}
 			}
 			
@@ -765,15 +795,45 @@
 			
 			protected function itemClickHandler(event:ItemClickEvent):void
 			{
-				if(SessionUtil.isEnterprise() && event.index != -1)
-				{
-					inputLabelForEnterprise.includeInLayout = true;
-					inputLabelForEnterprise.visible = true;
-				}
-				else
+				if(event.item.roleName == "ROLE_ADMIN" && event.index != -1)
 				{
 					inputLabelForEnterprise.includeInLayout = false;
 					inputLabelForEnterprise.visible = false;
+					inputLabelForEnterprise2.includeInLayout = false;
+					inputLabelForEnterprise2.visible = false;
+					inputLabelForClassifier.includeInLayout = false;
+					inputLabelForClassifier.visible = false;
+				}
+				
+				else if(event.item.roleName == "ROLE_AUDITOR")
+				{	
+					if(SessionUtil.isEnterprise() && event.index != -1)
+					{
+						inputLabelForEnterprise.includeInLayout = true;
+						inputLabelForEnterprise.visible = true;
+						inputLabelForEnterprise2.includeInLayout = true;
+						inputLabelForEnterprise2.visible = true;
+					}
+					else
+					{
+						inputLabelForEnterprise.includeInLayout = false;
+						inputLabelForEnterprise.visible = false;
+						inputLabelForEnterprise2.includeInLayout = false;
+						inputLabelForEnterprise2.visible = false;
+					}
+				}
+				else if(event.item.roleName == "ROLE_CLASSIFIER")
+				{
+					if(SessionUtil.isEnterprise() && event.index != -1)
+					{
+						inputLabelForClassifier.includeInLayout = true;
+						inputLabelForClassifier.visible = true;
+					}
+					else
+					{
+						inputLabelForClassifier.includeInLayout = false;
+						inputLabelForClassifier.visible = false;
+					}
 				}
 			}
 			

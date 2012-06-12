@@ -14,17 +14,17 @@ public interface UserService {
 	
 	public void remove(AuthUser item);
 
-	@Secured({AuthSecurityRole.ROLE_ADMIN, AuthSecurityRole.ROLE_AUDITOR})
+	@Secured({AuthSecurityRole.ROLE_ADMIN, AuthSecurityRole.ROLE_AUDITOR, AuthSecurityRole.ROLE_CLASSIFIER})
 	public AuthUser getCurrentUser();
 	
 	public List<AuthSecurityRole> getRoles();
 	
 	public AuthUser save(AuthUser user);
 	
-	@Secured({AuthSecurityRole.ROLE_ADMIN, AuthSecurityRole.ROLE_AUDITOR})
+	@Secured({AuthSecurityRole.ROLE_ADMIN, AuthSecurityRole.ROLE_AUDITOR, AuthSecurityRole.ROLE_CLASSIFIER})
 	public Boolean isPasswordTrue(String username, String passwd);
 	
-	@Secured({AuthSecurityRole.ROLE_ADMIN, AuthSecurityRole.ROLE_AUDITOR})
+	@Secured({AuthSecurityRole.ROLE_ADMIN, AuthSecurityRole.ROLE_AUDITOR, AuthSecurityRole.ROLE_CLASSIFIER})
 	public AuthUser save(AuthUser user, String passwd);
 	
 	

@@ -12,5 +12,6 @@ package com.mydlp.ui.domain {
     public class AuthSecurityRole extends AuthSecurityRoleBase {
 		public static const ROLE_ADMIN:String = "ROLE_ADMIN";
 		public static const ROLE_AUDITOR:String = "ROLE_AUDITOR";
+		public static const ROLE_CLASSIFIER:String = "ROLE_CLASSIFIER";
     }
 }

@@ -16,9 +16,12 @@ public class _000_00003_Users extends AbstractGranule {
 		roleAdmin.setRoleName(AuthSecurityRole.ROLE_ADMIN);
 		AuthSecurityRole roleAuditor = new AuthSecurityRole();
 		roleAuditor.setRoleName(AuthSecurityRole.ROLE_AUDITOR);
+		AuthSecurityRole roleClassifier = new AuthSecurityRole();
+		roleClassifier.setRoleName(AuthSecurityRole.ROLE_CLASSIFIER);
 		
 		getHibernateTemplate().saveOrUpdate(roleAdmin);
 		getHibernateTemplate().saveOrUpdate(roleAuditor);
+		getHibernateTemplate().saveOrUpdate(roleClassifier);
 		
 		AuthUser user = new AuthUser();
 		user.setUsername("mydlp");
@@ -37,7 +40,7 @@ public class _000_00003_Users extends AbstractGranule {
 		user2.setIsActive(true);
 		user2.setHasAuthorityScope(false);
 		List<AuthSecurityRole> roles2 = new ArrayList<AuthSecurityRole>();
-		roles2.add(roleAuditor);
+		roles2.add(roleClassifier);
 		user2.setRoles(roles2);
 		
 		getHibernateTemplate().saveOrUpdate(user);

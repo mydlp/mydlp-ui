@@ -27,32 +27,44 @@
 			
 			protected function regulatePopupWindow():void
 			{
+				var isAuditorRoleAvailable:Boolean = false;
+				var isClassifierRoleAvailable:Boolean = false;
 				var e:ItemClickEvent = new ItemClickEvent(ItemClickEvent.ITEM_CLICK, true);
 				for(var i:int = 0; i < authSecurityRoles.length; i++)
 				{
-					if(authSecurityRoles[i].roleName == "ROLE_ADMIN")
-					{
-						//e.item = authSecurityRoles[i];
-						e.index = 0;
-						dispatchEvent(e);
-						return
-					}
+					if(authSecurityRoles[i].roleName == "ROLE_AUDITOR")
+						isAuditorRoleAvailable = true;
+					if(authSecurityRoles[i].roleName == "ROLE_CLASSIFIER")
+						isClassifierRoleAvailable = true;
 				}
-				e.index = -1;
-				dispatchEvent(e);
+				if(!isAuditorRoleAvailable)
+				{
+					e.item = allAuthSecurity[1];//1 means ROLE_AUDITOR
+					e.index = -1;
+					dispatchEvent(e);
+				}
+				if(!isClassifierRoleAvailable)
+				{
+					e.item = allAuthSecurity[2];//2 means ROLE_CLASSIFIER
+					e.index = -1;
+					dispatchEvent(e);
+				}
 			}
 			
 					
 			protected function getRolesHandler(event:ResultEvent): void
 			{
 				allAuthSecurity = event.result as ListCollectionView;
+				var tempAuthSecurityRoles:ListCollectionView = new ArrayCollection();
 				if(!SessionUtil.isEnterprise())
 				{
 					for(var j:int = 0; j < allAuthSecurity.length; j++)
 					{
-						if(allAuthSecurity[j].roleName != "ROLE_ADMIN")
-							allAuthSecurity.removeItemAt(j);
+						if(allAuthSecurity[j].roleName == "ROLE_ADMIN")
+							tempAuthSecurityRoles.addItem(allAuthSecurity[j]);
 					}
+					allAuthSecurity.removeAll();
+					allAuthSecurity = tempAuthSecurityRoles;
 				}
 				
 				FlexGlobals.topLevelApplication.userRoles.removeAll();

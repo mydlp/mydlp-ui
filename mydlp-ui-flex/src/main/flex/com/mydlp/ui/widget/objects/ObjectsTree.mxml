@@ -20,6 +20,8 @@
 		<![CDATA[
 			import com.mydlp.ui.domain.ADDomain;
 			import com.mydlp.ui.domain.AbstractEntity;
+			import com.mydlp.ui.domain.AuthSecurityRole;
+			import com.mydlp.ui.domain.AuthUser;
 			import com.mydlp.ui.domain.DataFormat;
 			import com.mydlp.ui.domain.DocumentDatabase;
 			import com.mydlp.ui.domain.InformationType;
@@ -35,6 +37,7 @@
 			
 			import mx.collections.ArrayCollection;
 			import mx.collections.ListCollectionView;
+			import mx.controls.Alert;
 			import mx.core.FlexGlobals;
 			import mx.events.ListEvent;
 			import mx.rpc.events.ResultEvent;
@@ -70,6 +73,7 @@
 			protected function getObjectsHandler(event:ResultEvent): void
 			{
 				var _objects:ListCollectionView = event.result as ListCollectionView;
+				var currentUser:AuthUser = FlexGlobals.topLevelApplication.user as AuthUser;
 				
 				dataFormats.removeAll();
 				regularExpressionGroups.removeAll();
@@ -84,7 +88,19 @@
 					else if(item is RegularExpressionGroup)
 						regularExpressionGroups.addItem(item);
 					else if(item is DocumentDatabase)
-						documentDatabases.addItem(item);
+					{
+						if(!currentUser.hasRole(AuthSecurityRole.ROLE_ADMIN))
+						{
+							var ddOfUser:ListCollectionView = currentUser.documentDatabases;
+							for(var i:int = 0; i < ddOfUser.length; i++)
+							{
+								if(ddOfUser[i].name == item.name)
+									documentDatabases.addItem(item);
+							}
+						}
+						else
+							documentDatabases.addItem(item);
+					}
 					else if(item is ADDomain)
 						adDomains.addItem(item);
 					else if(item is RDBMSConnection)
@@ -100,35 +116,44 @@
 				{
 					objects = new ArrayCollection();
 					
-					var parentDataFormats:ObjectGroup = new ObjectGroup();
-					parentDataFormats.label = LangUtil.getString("messages", "objects.dataFormats.label");
-					parentDataFormats.classType = DataFormat;
-					parentDataFormats.children = dataFormats;
-					objects.addItem(parentDataFormats);
+					var currentUser:AuthUser = FlexGlobals.topLevelApplication.user as AuthUser;
 					
-					var parentRegularExpressionGroups:ObjectGroup = new ObjectGroup();
-					parentRegularExpressionGroups.label = LangUtil.getString("messages", "objects.regularExpressionGroups.label");
-					parentRegularExpressionGroups.classType = RegularExpressionGroup;
-					parentRegularExpressionGroups.children = regularExpressionGroups;
-					objects.addItem(parentRegularExpressionGroups);
-					
-					var parentDocumentDatabases:ObjectGroup = new ObjectGroup();
-					parentDocumentDatabases.label = LangUtil.getString("messages", "objects.documentDatabases.label");
-					parentDocumentDatabases.classType = DocumentDatabase;
-					parentDocumentDatabases.children = documentDatabases;
-					objects.addItem(parentDocumentDatabases);
-					
-					var parentADDomains:ObjectGroup = new ObjectGroup();
-					parentADDomains.label = LangUtil.getString("messages", "objects.adDomains.label");
-					parentADDomains.classType = ADDomain;
-					parentADDomains.children = adDomains;
-					objects.addItem(parentADDomains);
-					
-					var parentRDBMSConnections:ObjectGroup = new ObjectGroup();
-					parentRDBMSConnections.label = LangUtil.getString("messages", "objects.rdbmsConnections.label");
-					parentRDBMSConnections.classType = RDBMSConnection;
-					parentRDBMSConnections.children = rdbmsConnections;
-					objects.addItem(parentRDBMSConnections);
+					if(currentUser.hasRole(AuthSecurityRole.ROLE_ADMIN))
+					{
+						var parentDataFormats:ObjectGroup = new ObjectGroup();
+						parentDataFormats.label = LangUtil.getString("messages", "objects.dataFormats.label");
+						parentDataFormats.classType = DataFormat;
+						parentDataFormats.children = dataFormats;
+						objects.addItem(parentDataFormats);
+						
+						var parentRegularExpressionGroups:ObjectGroup = new ObjectGroup();
+						parentRegularExpressionGroups.label = LangUtil.getString("messages", "objects.regularExpressionGroups.label");
+						parentRegularExpressionGroups.classType = RegularExpressionGroup;
+						parentRegularExpressionGroups.children = regularExpressionGroups;
+						objects.addItem(parentRegularExpressionGroups);
+					}
+					if(currentUser.hasRole(AuthSecurityRole.ROLE_ADMIN) || currentUser.hasRole(AuthSecurityRole.ROLE_CLASSIFIER))
+					{
+						var parentDocumentDatabases:ObjectGroup = new ObjectGroup();
+						parentDocumentDatabases.label = LangUtil.getString("messages", "objects.documentDatabases.label");
+						parentDocumentDatabases.classType = DocumentDatabase;
+						parentDocumentDatabases.children = documentDatabases;
+						objects.addItem(parentDocumentDatabases);
+					}
+					if(currentUser.hasRole(AuthSecurityRole.ROLE_ADMIN))
+					{
+						var parentADDomains:ObjectGroup = new ObjectGroup();
+						parentADDomains.label = LangUtil.getString("messages", "objects.adDomains.label");
+						parentADDomains.classType = ADDomain;
+						parentADDomains.children = adDomains;
+						objects.addItem(parentADDomains);
+						
+						var parentRDBMSConnections:ObjectGroup = new ObjectGroup();
+						parentRDBMSConnections.label = LangUtil.getString("messages", "objects.rdbmsConnections.label");
+						parentRDBMSConnections.classType = RDBMSConnection;
+						parentRDBMSConnections.children = rdbmsConnections;
+						objects.addItem(parentRDBMSConnections);
+					}
 				}
 				refreshTree();
 			}

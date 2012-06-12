@@ -3,6 +3,21 @@
 		 xmlns:s="library://ns.adobe.com/flex/spark" 
 		 xmlns:mx="library://ns.adobe.com/flex/mx" width="100%" height="100%" 
 		 xmlns:dashboard="com.mydlp.ui.widget.dashboard.*">
+	<fx:Script>
+		<![CDATA[
+			import com.mydlp.ui.domain.AuthSecurityRole;
+			import com.mydlp.ui.domain.AuthUser;
+			
+			import mx.core.FlexGlobals;
+			protected function isAdmin():Boolean
+			{
+				var currentUser:AuthUser = FlexGlobals.topLevelApplication.user as AuthUser;
+				if(currentUser.hasRole(AuthSecurityRole.ROLE_ADMIN))
+					return true;
+				else return false;
+			}
+		]]>
+	</fx:Script>
 	<fx:Declarations>
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
 	</fx:Declarations>
@@ -16,5 +31,5 @@
 	<s:Spacer height="5%" />
 	<dashboard:LicenseDayInformation />
 	<s:Spacer height="5%" />
-	<dashboard:LicenseKeyEntrance/>
+	<dashboard:LicenseKeyEntrance includeInLayout="{isAdmin()}"/>
 </s:Group>

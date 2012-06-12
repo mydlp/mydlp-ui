@@ -13,6 +13,8 @@ public class AuthSecurityRole extends AbstractEntity {
 	public static final String ROLE_ADMIN = "ROLE_ADMIN";
 	
 	public static final String ROLE_AUDITOR = "ROLE_AUDITOR";
+	
+	public static final String ROLE_CLASSIFIER = "ROLE_CLASSIFIER";
 
 	protected String roleName;
 

@@ -6,14 +6,11 @@
 		<![CDATA[
 			import com.mydlp.ui.domain.ADDomainItem;
 			import com.mydlp.ui.domain.AbstractEntity;
+			import com.mydlp.ui.domain.AuthSecurityRole;
+			import com.mydlp.ui.domain.AuthUser;
 			import com.mydlp.ui.util.InteractionUtil;
-			import com.mydlp.ui.util.LangUtil;
 			
-			import mx.collections.ListCollectionView;
-			import mx.controls.Alert;
-			import mx.controls.treeClasses.TreeListData;
 			import mx.core.FlexGlobals;
-			import mx.events.FlexEvent;
 			
 			protected function clickAddButton(event:MouseEvent):void
 			{
@@ -37,6 +34,14 @@
 				if (item is AbstractEntity)
 					return true;
 				return false;
+			}
+			
+			protected function isAdmin():Boolean
+			{
+				var currentUser:AuthUser = FlexGlobals.topLevelApplication.user as AuthUser;
+				if(currentUser.hasRole(AuthSecurityRole.ROLE_ADMIN))
+					return true;
+				else return false; 
 			}
 		
 		]]>
@@ -63,10 +68,12 @@
 		<s:HGroup width="45" height="20" verticalAlign="middle">
 			<s:Button includeIn="selected" styleName="addButtonStyle"
 					  click="clickAddButton(event)"
-					  visible="{hasAddButton(treeListData.item)}"/>
+					  visible="{hasAddButton(treeListData.item)}"
+					  includeInLayout="{isAdmin()}"/>
 			<s:Button includeIn="selected" styleName="removeButtonStyle"
 					  click="{InteractionUtil.newDeleteDialog(treeListData.item)}"
-					  visible="{hasRemoveButton(treeListData.item)}"/>
+					  visible="{hasRemoveButton(treeListData.item)}"
+					  includeInLayout="{isAdmin()}"/>
 		</s:HGroup>
 	</s:HGroup>
 </s:MXTreeItemRenderer>

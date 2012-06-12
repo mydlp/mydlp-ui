@@ -30,10 +30,7 @@
 					e.index = itemIndex;
 				else
 					e.index = -1;
-				if(this.data.roleName == "ROLE_ADMIN")
-				{
-					dispatchEvent(e);
-				}
+				dispatchEvent(e);
 			}
 			
 			protected function isRoleSelected(data:*):Boolean
@@ -82,12 +79,6 @@
 		<s:State name="selected" />
 	</s:states>
 	
-	<!--<s:layout>
-		<s:HorizontalLayout verticalAlign="middle" 
-							paddingLeft="2" paddingRight="2"/>
-	</s:layout>-->
-	
-	<!--<s:CheckBox selected="{this.currentState == 'selected'}" />-->
 	<s:CheckBox label="{data.roleName}" id="checkBox" selected="{isRoleSelected(data)}"
 				change="onChangeHandler(event)"/>	
 	
