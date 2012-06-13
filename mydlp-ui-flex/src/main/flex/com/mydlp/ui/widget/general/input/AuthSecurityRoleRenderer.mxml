@@ -51,6 +51,11 @@
 				{
 					if(this.data.roleName == "ROLE_ADMIN")
 						FlexGlobals.topLevelApplication.userRoles.removeAll();
+					else
+					{
+						if(FlexGlobals.topLevelApplication.userRoles.length != 0 && FlexGlobals.topLevelApplication.userRoles[0] == 0)
+							FlexGlobals.topLevelApplication.userRoles.removeAll();
+					}
 					FlexGlobals.topLevelApplication.userRoles.addItem(itemIndex);
 				}
 				else
