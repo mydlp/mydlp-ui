@@ -39,6 +39,8 @@ public class ObjectsBRSImpl implements ObjectsService
 	
 	@Autowired
 	protected RDBMSConnectionDAO rdbmsConnectionDAO;
+	
+	@Autowired
 	protected UserService userService;
 
 	public List<AbstractEntity> getObjects() {

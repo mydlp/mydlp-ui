@@ -106,6 +106,7 @@ public class IncidentLogDAOImpl extends AbstractLogDAO implements IncidentLogDAO
 		Disjunction disjunction = Restrictions.disjunction();
 		disjunction.add(Restrictions.sqlRestriction("(1=0)")); //  defaults to false
 		
+		// TODO: should check whether user has auditor role
 		for (ADDomainItem item : user.getAuthorityScopeADItems()) {
 			if (item instanceof ADDomainUser) {
 				ADDomainUser adUser = (ADDomainUser) item;
@@ -137,7 +138,7 @@ public class IncidentLogDAOImpl extends AbstractLogDAO implements IncidentLogDAO
 			{
 				Date startDate = (Date) list.get(2);
 				Date endDate = (Date) list.get(3);
-				criteria = criteria.add(Restrictions.between(field, startDate, endDate));
+				criteria.add(Restrictions.between(field, startDate, endDate));
 			} 
 			else if (field.equals("contentId") && operation.equals("eq"))
 			{

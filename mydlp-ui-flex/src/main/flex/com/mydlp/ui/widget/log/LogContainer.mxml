@@ -76,7 +76,7 @@
 			protected function generateCriteriaList():void
 			{
 				criteriaList = new ArrayCollection();
-				if (startDate.selectedDate != null && startDate.selectedDate != null)
+				if (startDate.selectedDate != null && endDate.selectedDate != null)
 				{
 					var criteria:ListCollectionView = new ArrayCollection();
 					criteria.addItem("date");
