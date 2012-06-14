@@ -68,24 +68,24 @@ public class ADEnumServiceImpl implements ADEnumService {
 	}
 		
 	public void enumerateFun(ADDomain domain) {
-		if (currentlyProcessingDomains.contains(domain.getId()))
-		{
-			logger.info("Enumerating already scheduled for domain.", domain.getDomainName());
-			return;
-		}
-		currentlyProcessingDomains.add(domain.getId());
-		
-		String distinguishedName = fqdnToLdapdn(domain.getDomainName());
-		if (domain.getRoot() == null) {
-			ADDomainRoot root = new ADDomainRoot();
-			root.setDistinguishedName("mydlp-domain-root/" + domain.getDomainName());
-			root.setDomain(domain);
-			root = (ADDomainRoot) adDomainDAO.saveDomainItem(root);
-			domain.setRoot(root);
-			domain = adDomainDAO.saveDomain(domain);
-		}
-		
 		try {
+			if (currentlyProcessingDomains.contains(domain.getId()))
+			{
+				logger.info("Enumerating already scheduled for domain.", domain.getDomainName());
+				return;
+			}
+			currentlyProcessingDomains.add(domain.getId());
+			
+			String distinguishedName = fqdnToLdapdn(domain.getDomainName());
+			if (domain.getRoot() == null) {
+				ADDomainRoot root = new ADDomainRoot();
+				root.setDistinguishedName("mydlp-domain-root/" + domain.getDomainName());
+				root.setDomain(domain);
+				root = (ADDomainRoot) adDomainDAO.saveDomainItem(root);
+				domain.setRoot(root);
+				domain = adDomainDAO.saveDomain(domain);
+			}
+			
 			domain.setCurrentlyEnumerating(true);
 			domain.setMessage("");
 			domain = (ADDomain) adDomainDAO.merge(domain);

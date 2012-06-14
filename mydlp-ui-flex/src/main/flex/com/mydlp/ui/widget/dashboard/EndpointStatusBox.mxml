@@ -29,12 +29,12 @@
 			
 			protected function countObjects(): AsyncToken
 			{
-				return re.getEndpointStatusCount();
+				return re.getEndpointStatusCount(null);
 			}
 			
 			protected function fetchObjects(offset:Number, count:Number): AsyncToken
 			{
-				return re.getEndpointStatuses(offset, count);
+				return re.getEndpointStatuses(null, offset, count);
 			}
 			
 			public function refresh(): void
