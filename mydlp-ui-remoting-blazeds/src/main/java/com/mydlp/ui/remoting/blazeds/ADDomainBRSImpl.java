@@ -24,8 +24,7 @@ public class ADDomainBRSImpl implements ADDomainService
 
 	@Override
 	public void enumerate(Integer domainId) {
-		ADDomain domain = adDomainDAO.getDomainById(domainId);
-		adEnumService.enumerate(domain);
+		adEnumService.enumerate(domainId);
 	}
 
 	@Override

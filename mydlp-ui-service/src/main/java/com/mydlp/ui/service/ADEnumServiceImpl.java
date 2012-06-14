@@ -58,24 +58,27 @@ public class ADEnumServiceImpl implements ADEnumService {
 	protected TransactionTemplate transactionTemplate;
 	
 	@Async
-	public void enumerate(final ADDomain domain) {
+	public void enumerate(final Integer domainId) {
 		transactionTemplate.execute(new TransactionCallbackWithoutResult() {
 			@Override
 			protected void doInTransactionWithoutResult(TransactionStatus arg0) {
-				enumerateFun(domain);
+				enumerateFun(domainId);
 			}
 		});
 	}
 		
-	public void enumerateFun(ADDomain domain) {
+	public void enumerateFun(Integer domainId) {
+		ADDomain domain = null;
 		try {
+			logger.info("Getting domain object.", domainId);
+			domain = adDomainDAO.getDomainById(domainId);
+			
 			if (currentlyProcessingDomains.contains(domain.getId()))
 			{
 				logger.info("Enumerating already scheduled for domain.", domain.getDomainName());
 				return;
 			}
 			logger.info("Enumerating started for domain.", domain.getDomainName());
-			
 			currentlyProcessingDomains.add(domain.getId());
 			
 			String distinguishedName = fqdnToLdapdn(domain.getDomainName());
@@ -165,6 +168,7 @@ public class ADEnumServiceImpl implements ADEnumService {
 	
 	protected void processError(ADDomain domain, Throwable e) {
 		logger.error("Error occured", e);
+		if (domain == null) return;
 		adDomainDAO.finalizeProcess(domain.getId(), e.getMessage());
 		messageMap.put(domain.getId(), e.getMessage());
 		//throw new RuntimeException(e);
