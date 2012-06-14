@@ -53,6 +53,7 @@
     <libthrift.version>0.7.0</libthrift.version>
     <solrj.version>1.4.1</solrj.version>
     <AlivePDF.version>0.1.5-RC</AlivePDF.version>
+    <commons-pool.version>1.6</commons-pool.version>
 
     <flex.debug>true</flex.debug>
     <flex.optimize>false</flex.optimize>

@@ -2,16 +2,13 @@ package com.mydlp.ui.thrift;
 
 import java.nio.ByteBuffer;
 import java.util.List;
-import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.NoSuchElementException;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
+import org.apache.commons.pool.impl.GenericObjectPool;
 import org.apache.thrift.TException;
-import org.apache.thrift.protocol.TBinaryProtocol;
-import org.apache.thrift.protocol.TProtocol;
-import org.apache.thrift.transport.TSocket;
-import org.apache.thrift.transport.TTransport;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -22,128 +19,64 @@ public class MyDLPUIThriftServiceImpl implements MyDLPUIThriftService {
 	private static Logger logger = LoggerFactory
 			.getLogger(MyDLPUIThriftServiceImpl.class);
 	
-	protected static final String THRIFT_HOST = "127.0.0.1";
-	protected static final int THRIFT_PORT = 9092;
-	protected static final int MAX_POOL_SIZE = 128;
-	protected static final int POOL_SIZE = 16;
-
-	protected class Connection {
-		protected Mydlp_ui.Client client;
-		protected TTransport transport;
-		
-		public void init() {
-			if (transport != null)
-			{
-				destroy();
-			}
-			try {
-				transport = new TSocket(THRIFT_HOST, THRIFT_PORT);
-				transport.open();
-
-				TProtocol protocol = new TBinaryProtocol(transport);
-				client = new Mydlp_ui.Client(protocol);
-			} catch (TException e) {
-				logger.error("Thrift init", e);
-				destroy();
-			}
-		}
-		
-		public void destroy() {
-			if (transport != null && ! transport.isOpen())
-				transport.close();
-			transport = null;
-			client = null;
-		}
-		
-		public void ensureOpen() {
-			if (transport == null || !transport.isOpen())
-				init();
-		}
-		
+	protected static final org.apache.commons.pool.impl.GenericObjectPool.Config poolConfig = 
+			new org.apache.commons.pool.impl.GenericObjectPool.Config();
+	
+	static {
+		poolConfig.lifo=false;
+		poolConfig.maxActive=128;
+		poolConfig.maxIdle=8;
+		poolConfig.whenExhaustedAction = GenericObjectPool.WHEN_EXHAUSTED_BLOCK;
+		poolConfig.maxWait=8000; // after maxWait ms NoSuchElementException will be thrown
+		poolConfig.testOnBorrow = true;
+		poolConfig.testOnReturn = true;
+		poolConfig.timeBetweenEvictionRunsMillis = 10000;
+		poolConfig.minEvictableIdleTimeMillis = 600000;
+		poolConfig.testWhileIdle = true;
+		poolConfig.numTestsPerEvictionRun = 2;
 	}
 	
-	private final ConcurrentLinkedQueue<Connection> freeInstances = new ConcurrentLinkedQueue<Connection>();
-	private final ConcurrentLinkedQueue<Connection> busyInstances = new ConcurrentLinkedQueue<Connection>();
-   
-
+	protected GenericObjectPool<MyDLPUIThriftConnection> mydlpUIConnectionPool = null;
+	
 	@PostConstruct
 	protected synchronized void init() {
-		for (int i = 0; i < POOL_SIZE; i++) {
-			newConnection();
-		}
+		mydlpUIConnectionPool = new GenericObjectPool<MyDLPUIThriftConnection>(new MyDLPUIThriftConnectionFactory(), poolConfig);
 	}
 	
 	@PreDestroy
 	protected synchronized void destroy() {
-	}
-	
-	protected void newConnection() {
-		if (freeInstances.size() + busyInstances.size() < MAX_POOL_SIZE) {
-			Connection conn = new Connection();
-			freeInstances.add(conn);
-		}
-	}
-	
-	protected Connection takeOverConnection() {
-		Connection conn = null;
-		while (conn == null) {
-			synchronized (freeInstances) {
-				if (freeInstances.size() == 0) {
-					newConnection();
-					logger.info("All " + busyInstances.size() + " connections are busy. Spawning new.");
-				}
-				conn = freeInstances.poll();
-			}
-			if (conn != null) {
-				synchronized (busyInstances) {
-					busyInstances.add(conn);
-				}
-			} else {
-				try {
-					Thread.sleep(100);
-				} catch (InterruptedException e) {
-					logger.error("sleep interrupted",e);
-				}
-			}
-		}
-		conn.ensureOpen();
-		return conn;
-	}
-	
-	protected void releaseConnection(Connection conn) {
-		synchronized (busyInstances) {
-			busyInstances.remove(conn);
-		}
-		synchronized (freeInstances) {
-			freeInstances.add(conn);
-			int gap = freeInstances.size() - POOL_SIZE;
-			if (gap > 0) {
-				logger.info("There are " + gap + " extra connections waiting redundantly. Destroying...");
-				for (int i = 0; i < gap; i++) {
-					Connection c = freeInstances.poll();
-					c.destroy();
-				}
-			}
+		try {
+			mydlpUIConnectionPool.close();
+		} catch (Exception e) {
+			logger.error("Error occured when closing pool", e);
 		}
 	}
 	
 	protected interface ThriftCall<T> {
-		public T execute(Connection thriftConnection) throws TException;
+		public T execute(MyDLPUIThriftConnection thriftConnection) throws TException;
 	}
 	
 	protected <T> T call(ThriftCall<T> thriftCall) {
-		Connection conn = null;
+		MyDLPUIThriftConnection conn = null;
 		T result = null;
 		try {
-			conn = takeOverConnection();
+			conn = mydlpUIConnectionPool.borrowObject();
 			result = thriftCall.execute(conn);
 		} catch (NullPointerException e) {
 			logger.error("Can not establish thrift service connection.");
 		} catch (TException e) {
 			logger.error("Thrift execution error", e);
-			conn.destroy();
+			if (conn != null) conn.destroy();
+		} catch (NoSuchElementException e) {
+			logger.error("Pool has been exhausted", e);
+		} catch (Exception e) {
+			logger.error("Error occured when calling thrift", e);
 		} finally {
-			releaseConnection(conn);
+			try {
+				if (conn != null) mydlpUIConnectionPool.returnObject(conn);
+			} catch (Exception e) {
+				logger.error("Error occured when return object to pool", e);
+			}
 		}
 		return result;
 	}
@@ -152,7 +85,7 @@ public class MyDLPUIThriftServiceImpl implements MyDLPUIThriftService {
 	public void compileFilter(final Integer filterId) {
 		call(new ThriftCall<Void>() {
 			@Override
-			public Void execute(Connection thriftConnection) throws TException {
+			public Void execute(MyDLPUIThriftConnection thriftConnection) throws TException {
 				thriftConnection.client.compileCustomer(filterId);
 				return null;
 			}
@@ -163,7 +96,7 @@ public class MyDLPUIThriftServiceImpl implements MyDLPUIThriftService {
 	public ByteBuffer getRuletable(final String ipAddress, final String userH, final String revisionId) {
 		return call(new ThriftCall<ByteBuffer>() {
 			@Override
-			public ByteBuffer execute(Connection thriftConnection) throws TException {
+			public ByteBuffer execute(MyDLPUIThriftConnection thriftConnection) throws TException {
 				return thriftConnection.client.getRuletable(ipAddress, userH, revisionId);
 			}
 		});
@@ -173,7 +106,7 @@ public class MyDLPUIThriftServiceImpl implements MyDLPUIThriftService {
 	public String receiveBegin(final String ipAddress) {
 		return call(new ThriftCall<String>() {
 			@Override
-			public String execute(Connection thriftConnection) throws TException {
+			public String execute(MyDLPUIThriftConnection thriftConnection) throws TException {
 				return thriftConnection.client.receiveBegin(ipAddress);
 			}
 		});
@@ -184,7 +117,7 @@ public class MyDLPUIThriftServiceImpl implements MyDLPUIThriftService {
 			final ByteBuffer chunkData, final int chunkNum, final int chunkNumTotal) {
 		return call(new ThriftCall<String>() {
 			@Override
-			public String execute(Connection thriftConnection) throws TException {
+			public String execute(MyDLPUIThriftConnection thriftConnection) throws TException {
 				return thriftConnection.client.receiveChunk(ipAddress, itemId, chunkData, chunkNum, chunkNumTotal);
 			}
 		});
@@ -194,7 +127,7 @@ public class MyDLPUIThriftServiceImpl implements MyDLPUIThriftService {
 	public List<Long> getFingerprints(final String filename, final ByteBuffer data) {
 		return call(new ThriftCall<List<Long>>() {
 			@Override
-			public List<Long> execute(Connection thriftConnection) throws TException {
+			public List<Long> execute(MyDLPUIThriftConnection thriftConnection) throws TException {
 				return thriftConnection.client.getFingerprints(filename, data);
 			}
 		});
@@ -204,7 +137,7 @@ public class MyDLPUIThriftServiceImpl implements MyDLPUIThriftService {
 	public void requeueIncident(final Integer incidentId) {
 		call(new ThriftCall<Void>() {
 			@Override
-			public Void execute(Connection thriftConnection) throws TException {
+			public Void execute(MyDLPUIThriftConnection thriftConnection) throws TException {
 				thriftConnection.client.requeueIncident(incidentId);
 				return null;
 			}
@@ -216,7 +149,7 @@ public class MyDLPUIThriftServiceImpl implements MyDLPUIThriftService {
 			final ByteBuffer payload) {
 		return call(new ThriftCall<String>() {
 			@Override
-			public String execute(Connection thriftConnection) throws TException {
+			public String execute(MyDLPUIThriftConnection thriftConnection) throws TException {
 				return thriftConnection.client.registerUserAddress(ipAddress, userH, payload);
 			}
 		});
@@ -226,7 +159,7 @@ public class MyDLPUIThriftServiceImpl implements MyDLPUIThriftService {
 	public void saveLicenseKey(final String licenseKey) {
 		call(new ThriftCall<Void>() {
 			@Override
-			public Void execute(Connection thriftConnection) throws TException {
+			public Void execute(MyDLPUIThriftConnection thriftConnection) throws TException {
 				thriftConnection.client.saveLicenseKey(licenseKey);
 				return null;
 			}
@@ -237,7 +170,7 @@ public class MyDLPUIThriftServiceImpl implements MyDLPUIThriftService {
 	public LicenseObject getLicense() {
 		return call(new ThriftCall<LicenseObject>() {
 			@Override
-			public LicenseObject execute(Connection thriftConnection) throws TException {
+			public LicenseObject execute(MyDLPUIThriftConnection thriftConnection) throws TException {
 				return thriftConnection.client.getLicense();
 			}
 		});
