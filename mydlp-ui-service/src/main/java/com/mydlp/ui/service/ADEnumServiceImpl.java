@@ -74,10 +74,13 @@ public class ADEnumServiceImpl implements ADEnumService {
 				logger.info("Enumerating already scheduled for domain.", domain.getDomainName());
 				return;
 			}
+			logger.info("Enumerating started for domain.", domain.getDomainName());
+			
 			currentlyProcessingDomains.add(domain.getId());
 			
 			String distinguishedName = fqdnToLdapdn(domain.getDomainName());
 			if (domain.getRoot() == null) {
+				logger.info("Creating root object for domain.", domain.getDomainName());
 				ADDomainRoot root = new ADDomainRoot();
 				root.setDistinguishedName("mydlp-domain-root/" + domain.getDomainName());
 				root.setDomain(domain);
@@ -85,19 +88,24 @@ public class ADEnumServiceImpl implements ADEnumService {
 				domain.setRoot(root);
 				domain = adDomainDAO.saveDomain(domain);
 			}
-			
+			logger.info("Resetting messages for domain.", domain.getDomainName());
 			domain.setCurrentlyEnumerating(true);
 			domain.setMessage("");
+			logger.info("Last save before querying LDAP server.", domain.getDomainName());
 			domain = (ADDomain) adDomainDAO.merge(domain);
 			Map<String, Set<String>> memberships = initMemberships();
+			logger.info("Starting querying LDAP server.", domain.getDomainName());
 			enumerateDN(domain, domain.getRoot(), distinguishedName, memberships);
+			logger.info("Starting populating groups.", domain.getDomainName());
 			enumerateMemberships(memberships);
+			logger.info("Finalizing process.", domain.getDomainName());
 			adDomainDAO.finalizeProcess(domain.getId(), "");
 		} catch (RuntimeException e) {
 			processError(domain, e);
 		} catch (Throwable e) {
 			processError(domain, e);
 		} finally {
+			logger.info("Removing domain from enumeration queue list.", domain.getDomainName());
 			currentlyProcessingDomains.remove(domain.getId());
 		}
 	}
