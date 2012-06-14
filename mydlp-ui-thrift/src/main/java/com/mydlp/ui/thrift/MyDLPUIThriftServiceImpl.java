@@ -8,6 +8,7 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
 import org.apache.commons.pool.impl.GenericObjectPool;
+import org.apache.thrift.TApplicationException;
 import org.apache.thrift.TException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -64,6 +65,9 @@ public class MyDLPUIThriftServiceImpl implements MyDLPUIThriftService {
 			result = thriftCall.execute(conn);
 		} catch (NullPointerException e) {
 			logger.error("Can not establish thrift service connection.");
+		} catch (TApplicationException e) {
+			logger.error("Thrift execution error. Type code: " + e.getType(), e);
+			if (conn != null) conn.destroy();
 		} catch (TException e) {
 			logger.error("Thrift execution error", e);
 			if (conn != null) conn.destroy();
