@@ -140,11 +140,20 @@ public class ADEnumServiceImpl implements ADEnumService {
 
 	protected void enumerateUserMembership(String userDN, Set<String> groupDNs) {
 		ADDomainUser userObject = (ADDomainUser) adDomainDAO.findByDistinguishedName(userDN);
+		if (userObject == null) {
+			logger.info("Cannot find userObject for dn '" + userDN + "'.");
+			return;
+		}
 		Set<ADDomainGroup> dummy = new HashSet<ADDomainGroup>();
 		if (userObject.getGroups() != null)
 			dummy.addAll(userObject.getGroups());
 		for (String groupDN : groupDNs) {
 			ADDomainGroup groupObject = (ADDomainGroup) adDomainDAO.findByDistinguishedName(groupDN);
+			if (groupObject == null) {
+				logger.info("Cannot find groupObject for dn '" + groupDN + 
+						"'. Related membership of userObject with dn '" + userDN + "' will be ignored.");
+				continue;
+			}
 			dummy.remove(groupObject);
 			if (userObject.getGroups() == null || !userObject.getGroups().contains(groupObject)) {
 				if (userObject.getGroups() == null)
