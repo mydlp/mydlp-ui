@@ -146,6 +146,41 @@ public class IncidentLogDAOImpl extends AbstractLogDAO implements IncidentLogDAO
 				Integer contentId = (Integer) list.get(2);
 				criteria.add(Restrictions.eq("incidentFile.content.id", contentId));
 			}
+			else if (field.equals("sourceUser") && operation.equals("eq"))
+			{
+				String sourceUser = (String) list.get(2);
+				String sourceUserLike = "%"+sourceUser+"%";
+				criteria.add(Restrictions.like(field, sourceUserLike));
+			}
+			else if (field.equals("sourceIp") && operation.equals("eq"))
+			{
+				Object sourceIpObj = list.get(2);
+				Long sourceIp = null;
+				if (sourceIpObj instanceof Integer) {
+					Integer sourceIpD = (Integer) list.get(2);
+					sourceIp = new Long(sourceIpD.longValue());
+				} else if (sourceIpObj instanceof Double){
+					Double sourceIpD = (Double) list.get(2);
+					sourceIp = new Long(sourceIpD.longValue());
+				}
+				criteria.add(Restrictions.eq(field, sourceIp));
+			}
+			else if(field.equals("channel") && operation.equals("eq"))
+			{
+				String channel = (String) list.get(2);
+				criteria.add(Restrictions.eq(field, channel));
+			}
+			else if(field.equals("action") && operation.equals("eq"))
+			{
+				String action = (String) list.get(2);
+				criteria.add(Restrictions.eq(field, action));
+			}
+			else if(field.equals("destination") && operation.equals("eq"))
+			{
+				String dest = (String) list.get(2);
+				String destLike = "%"+dest+"%";
+				criteria.add(Restrictions.like(field, destLike));
+			}
 			else if (field.equals("showAll") && operation.equals("eq"))
 			{
 				Boolean showAll = (Boolean) list.get(2); 
