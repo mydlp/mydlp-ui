@@ -18,6 +18,7 @@ public class RDBMSInformationTarget extends AbstractEntity {
 	protected String schemaName;
 	protected String tableName;
 	protected String columnName;
+	protected Boolean currentlyEnumerating;
 
 	@ManyToOne
 	@JoinColumn(nullable=false)
@@ -52,5 +53,11 @@ public class RDBMSInformationTarget extends AbstractEntity {
 	}
 	public void setSchemaName(String schemaName) {
 		this.schemaName = schemaName;
+	}
+	public Boolean getCurrentlyEnumerating() {
+		return currentlyEnumerating;
+	}
+	public void setCurrentlyEnumerating(Boolean currentlyEnumerating) {
+		this.currentlyEnumerating = currentlyEnumerating;
 	}
 }

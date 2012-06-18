@@ -15,7 +15,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
@@ -27,6 +26,7 @@ import com.mydlp.ui.domain.RDBMSConnection;
 import com.mydlp.ui.domain.RDBMSEnumeratedValue;
 import com.mydlp.ui.domain.RDBMSInformationTarget;
 import com.mydlp.ui.domain.RegularExpressionGroup;
+import com.mydlp.ui.service.EnumMasterService.EnumJob;
 import com.mydlp.ui.service.rdbms.dialect.AbstactDialect;
 import com.mydlp.ui.service.rdbms.dialect.MySQLDialectImpl;
 import com.mydlp.ui.service.rdbms.proxy.RDBMSObjectEnumProxy;
@@ -46,13 +46,43 @@ public class RDBMSEnumServiceImpl implements RDBMSEnumService {
 	
 	@Autowired
 	protected RDBMSConnectionDAO rdbmsConnectionDAO;
+	
+	@Autowired
+	protected EnumMasterService enumMasterService;
+	
+	public class RDBMSEnumJob extends EnumJob {
 
-	@Async
-	public void enumerate(final RDBMSInformationTarget rdbmsInformationTarget, final AbstractEntity entity) {
+		protected RDBMSEnumService rdbmsEnumService;
+		
+		protected Integer rdbmsInformationTargetId;
+
+		protected AbstractEntity entity;
+		
+		@Override
+		public void enumerateNow() {
+			rdbmsEnumService.enumerate(rdbmsInformationTargetId, entity);
+		}
+
+		@Override
+		public String toString() {
+			return "RDBMSEnumService_" + rdbmsInformationTargetId + "_" + entity.getClass().getCanonicalName() + "_" + entity.getId();
+		}
+		
+	}
+	
+	public void schedule(Integer enumRdbmsInformationTargetId, AbstractEntity enumEntity) {
+		RDBMSEnumJob rdbmsEnumJob = new RDBMSEnumJob();
+		rdbmsEnumJob.rdbmsEnumService = this;
+		rdbmsEnumJob.rdbmsInformationTargetId = enumRdbmsInformationTargetId;
+		rdbmsEnumJob.entity = enumEntity;
+		enumMasterService.schedule(rdbmsEnumJob);
+	}
+	
+	public void enumerate(final Integer rdbmsInformationTargetId, final AbstractEntity entity) {
 		transactionTemplate.execute(new TransactionCallbackWithoutResult() {
 			@Override
 			protected void doInTransactionWithoutResult(TransactionStatus arg0) {
-				enumerateFun(rdbmsInformationTarget, entity);
+				enumerateFun(rdbmsInformationTargetId, entity);
 			}
 		});
 	}
@@ -81,7 +111,7 @@ public class RDBMSEnumServiceImpl implements RDBMSEnumService {
 		
 	}
 	
-	public void enumerateFun(RDBMSInformationTarget rdbmsInformationTarget, AbstractEntity entity) {
+	public void enumerateFun(Integer rdbmsInformationTargetId, AbstractEntity entity) {
 		RDBMSObjectEnumProxy enumProxy = getEnumProxy(entity);
 		if (enumProxy == null) return ;
 		
@@ -89,6 +119,8 @@ public class RDBMSEnumServiceImpl implements RDBMSEnumService {
 		Statement statement = null;
 		ResultSet rs = null;
 		try {
+			rdbmsConnectionDAO.startProcess(rdbmsInformationTargetId);
+			RDBMSInformationTarget rdbmsInformationTarget = rdbmsConnectionDAO.getInformationTargetById(rdbmsInformationTargetId);
 			connection = getSQLConnection(rdbmsInformationTarget.getRdbmsConnection());
 			String identifier = getIdentifier(rdbmsInformationTarget, connection);
 			Boolean incrementalEnum = (identifier != null);
@@ -142,6 +174,7 @@ public class RDBMSEnumServiceImpl implements RDBMSEnumService {
 		} catch (SQLException e) {
 			logger.error("An error occured during establishing connection and getting results of query", e);
 		} finally {
+			rdbmsConnectionDAO.finalizeProcess(rdbmsInformationTargetId);
 			try {
 				if (connection != null && ! connection.isClosed() )
 					connection.close();

@@ -23,4 +23,10 @@ public interface RDBMSConnectionDAO {
 	public RDBMSEnumeratedValue getValue(RDBMSInformationTarget rdbmsInformationTarget, String origIdValue);
 	
 	public List<RDBMSConnection> getRDBMSConnections();
+	
+	public void finalizeProcess(Integer rdbmsInformationTargetId);
+	
+	public void startProcess(Integer rdbmsInformationTargetId);
+	
+	public RDBMSInformationTarget getInformationTargetById(Integer id);
 }

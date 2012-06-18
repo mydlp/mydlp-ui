@@ -68,8 +68,8 @@
 	</fx:Declarations>
 
 	<s:HGroup verticalAlign="middle">
-		<s:Label id="label" text="{getText(informationTarget)}" width="300"/>
-		<s:Spacer width="100%" />
+		<s:Label id="label" text="{getText(informationTarget)}" width="240"/>
+		<s:Spacer width="10" />
 		<s:Button label="@Resource(bundle = 'messages', key = 'rdbmsInformationTarget.input.configureButton.label')"
 				  click="configureClickHandler(event)"/>
 		<s:Button label="@Resource(bundle = 'messages', key = 'rdbmsInformationTarget.input.removeButton.label')"

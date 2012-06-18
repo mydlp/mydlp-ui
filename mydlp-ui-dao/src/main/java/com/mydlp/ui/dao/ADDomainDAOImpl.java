@@ -65,10 +65,17 @@ public class ADDomainDAOImpl extends AbstractPolicyDAO implements ADDomainDAO {
 	}
 
 	@Override
-	public void finalizeProcess(Integer domainId, String message) {
+	public void finalizeProcess(Integer domainId) {
 		getHibernateTemplate().bulkUpdate(
-				"update from ADDomain d set d.currentlyEnumerating=false, d.message=? where d.id=?", 
-				message, domainId);
+				"update from ADDomain d set d.currentlyEnumerating=false where d.id=?", 
+				domainId);
+	}
+
+	@Override
+	public void startProcess(Integer domainId) {
+		getHibernateTemplate().bulkUpdate(
+				"update from ADDomain d set d.currentlyEnumerating=true where d.id=?", 
+				domainId);
 	}
 
 	@Override

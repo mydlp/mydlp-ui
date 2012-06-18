@@ -95,5 +95,29 @@ public class RDBMSConnectionDAOImpl extends AbstractPolicyDAO implements RDBMSCo
 		return getHibernateTemplate().findByCriteria(criteria);
 	}
 
+	@Override
+	public void finalizeProcess(Integer rdbmsInformationTargetId) {
+		getHibernateTemplate().bulkUpdate(
+				"update from RDBMSInformationTarget r set r.currentlyEnumerating=false where r.id=?", 
+				rdbmsInformationTargetId);
+	}
+
+	@Override
+	public void startProcess(Integer rdbmsInformationTargetId) {
+		getHibernateTemplate().bulkUpdate(
+				"update from RDBMSInformationTarget r set r.currentlyEnumerating=true where r.id=?", 
+				rdbmsInformationTargetId);
+	}
+
+	@Override
+	public RDBMSInformationTarget getInformationTargetById(Integer id) {
+		DetachedCriteria criteria = 
+				DetachedCriteria.forClass(RDBMSInformationTarget.class)
+				.add(Restrictions.eq("id", id));
+		@SuppressWarnings("unchecked")
+		List<RDBMSInformationTarget> l = getHibernateTemplate().findByCriteria(criteria);
+		return DAOUtil.getSingleResult(l);
+	}
+
 		
 }

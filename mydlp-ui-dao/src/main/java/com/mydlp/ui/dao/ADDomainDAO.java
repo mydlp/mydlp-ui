@@ -24,7 +24,9 @@ public interface ADDomainDAO {
 	
 	public List<ADDomainItem> getChildrenOf(ADDomainItemGroup domainItemGroup);
 	
-	public void finalizeProcess(Integer domainId, String message);
+	public void finalizeProcess(Integer domainId);
+	
+	public void startProcess(Integer domainId);
 	
 	public AbstractEntity merge(AbstractEntity domainObj);
 	

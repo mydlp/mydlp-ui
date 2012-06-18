@@ -40,12 +40,12 @@
 			import com.mydlp.ui.util.ReflectionUtil;
 			import com.mydlp.ui.util.SessionUtil;
 			import com.mydlp.ui.widget.general.input.ADDomainAliasInput;
-			import com.mydlp.ui.widget.general.input.ADDomainEnumeratingProcessInput;
 			import com.mydlp.ui.widget.general.input.ADDomainItemInput;
 			import com.mydlp.ui.widget.general.input.ADDomainItemListing;
 			import com.mydlp.ui.widget.general.input.ADDomainUserAliasListing;
 			import com.mydlp.ui.widget.general.input.AuthSecurityRolesInput;
 			import com.mydlp.ui.widget.general.input.AuthorityScopeADItemInput;
+			import com.mydlp.ui.widget.general.input.CurrentlyEnumeratingBar;
 			import com.mydlp.ui.widget.general.input.DataFormatInput;
 			import com.mydlp.ui.widget.general.input.DocumentClassifierItemInput;
 			import com.mydlp.ui.widget.general.input.DocumentDatabaseFileEntryInput;
@@ -79,6 +79,7 @@
 			
 			protected var cButton:Button = new Button();
 			protected var miscButton:Button = new Button();
+			protected var misc2Button:Button = new Button();
 			protected var cancelButton:Button = new Button();
 			protected var formItemOrder:ListCollectionView = new ArrayCollection();
 			
@@ -421,13 +422,12 @@
 					}
 					else if (classMember.name == "currentlyEnumerating" && classMember.type == Boolean)
 					{
-						var addps:ADDomainEnumeratingProcessInput = new ADDomainEnumeratingProcessInput();
+						var addps:CurrentlyEnumeratingBar = new CurrentlyEnumeratingBar();
 						addps.currentlyEnumerating = targetObject[classMember.name];
 						inputLabel = new NoLabelInputLabel();
 						inputLabel.addElement(addps);
 						index = 9;
 					}
-					
 					else if ( 
 							(targetObject is Rule && classMember.name == "description") ||
 							(targetObject is USBDevice && classMember.name == "comment") 
@@ -672,6 +672,7 @@
 				cancelButton.addEventListener(MouseEvent.CLICK, cancelButtonClickHandler);
 				cancelButton.addEventListener(KeyboardEvent.KEY_DOWN, cancelButtonClickHandler);
 				buttonGroup.addElement(cButton);
+				/*
 				if (formObject is ADDomain)
 				{
 					miscButton.label = LangUtil.getString("messages", "generic.edit." + getSimpleName() + ".enumButton.label");
@@ -679,14 +680,24 @@
 					miscButton.addEventListener(KeyboardEvent.KEY_DOWN, keyPressed);
 					buttonGroup.addElement(miscButton);
 				}
-				else if (formObject is RDBMSConnection)
+				else */ 
+				if (formObject is RDBMSConnection || formObject is ADDomain)
 				{
 					miscButton.label = LangUtil.getString("messages", "generic.edit." + getSimpleName() + ".testButton.label");
-					miscButton.addEventListener(MouseEvent.CLICK, testRDBMSConnectionButtonClickHandler);
+					miscButton.addEventListener(MouseEvent.CLICK, testConnectionButtonClickHandler);
 					miscButton.addEventListener(KeyboardEvent.KEY_DOWN, keyPressed);
 					buttonGroup.addElement(miscButton);
+					
 					cButton.enabled = false;
 				} 
+				if (!isNaN(formObject.id) &&
+						(formObject is RegularExpressionGroup || formObject is DocumentDatabase || formObject is ADDomain)
+						) {
+					misc2Button.label = LangUtil.getString("messages", "generic.edit." + getSimpleName() + ".enumButton.label");
+					misc2Button.addEventListener(MouseEvent.CLICK, enumButtonClickHandler);
+					misc2Button.addEventListener(KeyboardEvent.KEY_DOWN, keyPressed);
+					buttonGroup.addElement(misc2Button);
+				}
 				buttonGroup.addElement(cancelButton);
 			}
 			
@@ -719,7 +730,6 @@
 				{	
 					if (formObject is ADDomain)
 					{
-						(formObject as ADDomain).message = null;
 						(formObject as ADDomain).root = null; // to prevent sending whole tree
 					}
 					re.save(formObject);
@@ -727,40 +737,53 @@
 				}
 			}
 			
-			protected function enumADDomainButtonClickHandler(event:Event): void
+			protected function enumButtonClickHandler(event:Event): void
 			{
-				read.enumerate((formObject as ADDomain).id);
-				
-				cButton.enabled = false;
-				miscButton.enabled = false;
+				if (formObject is RegularExpressionGroup) 
+				{
+					redb.schedule((formObject as RegularExpressionGroup).rdbmsInformationTarget.id, formObject as RegularExpressionGroup);
+				}
+				else if (formObject is DocumentDatabase) 
+				{
+					redb.schedule((formObject as DocumentDatabase).rdbmsInformationTarget.id, formObject as DocumentDatabase);
+				} 
+				else if (formObject is ADDomain) 
+				{
+					read.schedule((formObject as ADDomain).id);
+				}
 			}
 			
 			protected function enumerateHandler(event:Event): void
-			{
-				cButton.enabled = true;
-				miscButton.enabled = true;
-				
-				InteractionUtil.closeCurrentPopup();
-				FlexGlobals.topLevelApplication.refresh();
+			{	
+				Alert.show(	LangUtil.getString("messages", "generic.edit." + getSimpleName() + ".enum.message"),
+							LangUtil.getString("messages", "generic.edit." + getSimpleName() + ".enum.title"));
 			}
 			
-			protected function testRDBMSConnectionButtonClickHandler(event:Event): void
+			protected function testConnectionButtonClickHandler(event:Event): void
 			{
-				redb.testConnection(formObject as RDBMSConnection);
+				miscButton.enabled = false;
+				if (formObject is RDBMSConnection) {
+					redb.testConnection(formObject as RDBMSConnection);
+				} else if (formObject is ADDomain) {
+					read.testConnection(formObject as ADDomain);
+				}
 			}
 			
 			protected function testConnectionHandler(event:ResultEvent): void
 			{
 				var eventResult:String = event.result as String;
+				miscButton.enabled = true;
 				if (eventResult == "OK")
 				{
 					cButton.enabled = true;
+					misc2Button.enabled = true;
 					Alert.show(	LangUtil.getString("messages", "generic.edit." + getSimpleName() + ".testConnection.ok.message"),
 								LangUtil.getString("messages", "generic.edit." + getSimpleName() + ".testConnection.ok.title"));
 				}
 				else
 				{
 					cButton.enabled = false;
+					misc2Button.enabled = false;
 					Alert.show(	LangUtil.getString("messages", "generic.edit." + getSimpleName() + ".testConnection.failure.message")
 						+ ":\n\n" + eventResult,
 						LangUtil.getString("messages", "generic.edit." + getSimpleName() + ".testConnection.failure.title"));
@@ -769,10 +792,6 @@
 			
 			protected function saveHandler(event:Event): void
 			{
-				//InteractionUtil.closeCurrentPopup();
-				//Alert.show(	LangUtil.getString("messages", "generic.edit." + getSimpleName() + ".ok.message"),
-				//			LangUtil.getString("messages", "generic.edit." + getSimpleName() + ".title"));
-				
 				FlexGlobals.topLevelApplication.topToolbar.policyInstallationState = false;
 				
 				if (deleteList.length == 0)
@@ -846,10 +865,12 @@
 			<my:method name="removeAll" result="removeAllHandler(event)" />
 		</my:remote>
 		<my:remote id="read" destination="adDomainBRS" >
-			<my:method name="enumerate" result="enumerateHandler(event)" />
+			<my:method name="testConnection" result="testConnectionHandler(event)"/>
+			<my:method name="schedule" result="enumerateHandler(event)"/>
 		</my:remote>
 		<my:remote id="redb" destination="rdbmsConnectionBRS" >
 			<my:method name="testConnection" result="testConnectionHandler(event)"/>
+			<my:method name="schedule" result="enumerateHandler(event)"/>
 		</my:remote>
 	</fx:Declarations>
 	
@@ -864,7 +885,9 @@
 		</s:Group>
 		<s:Group id="buttonGroup" width="100%" height="100%">
 			<s:layout>
-				<s:HorizontalLayout gap="5" verticalAlign="middle" paddingBottom="5" paddingTop="5" paddingLeft="135"/>
+				<s:HorizontalLayout verticalAlign="middle" horizontalAlign="center" 
+									paddingBottom="5" paddingTop="5"
+									gap="5" />
 			</s:layout>
 		</s:Group>
 	</s:Group>

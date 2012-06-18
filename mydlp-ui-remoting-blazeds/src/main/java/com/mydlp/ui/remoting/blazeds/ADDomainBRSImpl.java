@@ -23,7 +23,7 @@ public class ADDomainBRSImpl implements ADDomainService
 	protected ADEnumService adEnumService;
 
 	@Override
-	public void enumerate(Integer domainId) {
+	public void schedule(Integer domainId) {
 		adEnumService.enumerate(domainId);
 	}
 
@@ -36,7 +36,6 @@ public class ADDomainBRSImpl implements ADDomainService
 				ADDomainRoot persistentRoot = adDomainDAO.getDomainRoot(domain.getId());
 				domain.setRoot(persistentRoot);
 			}
-			domain.setMessage(adEnumService.getLatestMessage(domain.getId()));
 		}
 		
 		domain = (ADDomain) adDomainDAO.merge(domain);
@@ -46,6 +45,11 @@ public class ADDomainBRSImpl implements ADDomainService
 	@Override
 	public List<ADDomain> getADDomains() {
 		return adDomainDAO.getADDomains();
+	}
+
+	@Override
+	public String testConnection(ADDomain adDomain) {
+		return adEnumService.testConnection(adDomain);
 	}
 	
 

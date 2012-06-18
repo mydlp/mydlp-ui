@@ -25,7 +25,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.UncategorizedSQLException;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
@@ -40,15 +39,12 @@ import com.mydlp.ui.domain.ADDomainOU;
 import com.mydlp.ui.domain.ADDomainRoot;
 import com.mydlp.ui.domain.ADDomainUser;
 import com.mydlp.ui.domain.ADDomainUserAlias;
+import com.mydlp.ui.service.EnumMasterService.EnumJob;
 
 @Service("adEnumService")
 public class ADEnumServiceImpl implements ADEnumService {
 
 	private static Logger logger = LoggerFactory.getLogger(ADEnumServiceImpl.class);
-	
-	protected Set<Integer> currentlyProcessingDomains = new HashSet<Integer>();
-	
-	protected Map<Integer, String> messageMap = new HashMap<Integer,String>();
 	
 	@Autowired
 	protected ADDomainDAO adDomainDAO;
@@ -57,7 +53,34 @@ public class ADEnumServiceImpl implements ADEnumService {
 	@Qualifier("policyTransactionTemplate")
 	protected TransactionTemplate transactionTemplate;
 	
-	@Async
+	@Autowired
+	protected EnumMasterService enumMasterService;
+	
+	public class ADEnumJob extends EnumJob {
+
+		protected ADEnumService adEnumService;
+		
+		protected Integer domainId;
+		
+		@Override
+		public void enumerateNow() {
+			adEnumService.enumerate(domainId);
+		}
+
+		@Override
+		public String toString() {
+			return "ADEnumService_" + domainId;
+		}
+		
+	}
+	
+	public void schedule(Integer enumDomainId) {
+		ADEnumJob adEnumJob = new ADEnumJob();
+		adEnumJob.domainId = enumDomainId;
+		adEnumJob.adEnumService = this;
+		enumMasterService.schedule(adEnumJob);
+	}
+	
 	public void enumerate(final Integer domainId) {
 		transactionTemplate.execute(new TransactionCallbackWithoutResult() {
 			@Override
@@ -70,17 +93,10 @@ public class ADEnumServiceImpl implements ADEnumService {
 	public void enumerateFun(Integer domainId) {
 		ADDomain domain = null;
 		try {
+			adDomainDAO.startProcess(domainId);
 			logger.info("Getting domain object.", domainId);
 			domain = adDomainDAO.getDomainById(domainId);
-			
-			if (currentlyProcessingDomains.contains(domain.getId()))
-			{
-				logger.info("Enumerating already scheduled for domain.", domain.getDomainName());
-				return;
-			}
 			logger.info("Enumerating started for domain.", domain.getDomainName());
-			currentlyProcessingDomains.add(domain.getId());
-			
 			String distinguishedName = fqdnToLdapdn(domain.getDomainName());
 			if (domain.getRoot() == null) {
 				logger.info("Creating root object for domain.", domain.getDomainName());
@@ -91,9 +107,6 @@ public class ADEnumServiceImpl implements ADEnumService {
 				domain.setRoot(root);
 				domain = adDomainDAO.saveDomain(domain);
 			}
-			logger.info("Resetting messages for domain.", domain.getDomainName());
-			domain.setCurrentlyEnumerating(true);
-			domain.setMessage("");
 			logger.info("Last save before querying LDAP server.", domain.getDomainName());
 			domain = (ADDomain) adDomainDAO.merge(domain);
 			Map<String, Set<String>> memberships = initMemberships();
@@ -102,14 +115,11 @@ public class ADEnumServiceImpl implements ADEnumService {
 			logger.info("Starting populating groups.", domain.getDomainName());
 			enumerateMemberships(memberships);
 			logger.info("Finalizing process.", domain.getDomainName());
-			adDomainDAO.finalizeProcess(domain.getId(), "");
-		} catch (RuntimeException e) {
-			processError(domain, e);
 		} catch (Throwable e) {
-			processError(domain, e);
+			logger.error("Error occured", e);
 		} finally {
+			adDomainDAO.finalizeProcess(domainId);
 			logger.info("Removing domain from enumeration queue list.", domain.getDomainName());
-			currentlyProcessingDomains.remove(domain.getId());
 		}
 	}
 	
@@ -173,14 +183,6 @@ public class ADEnumServiceImpl implements ADEnumService {
 			adDomainDAO.saveDomainItem(exGroup);
 			adDomainDAO.saveDomainItem(userObject);
 		}
-	}
-	
-	protected void processError(ADDomain domain, Throwable e) {
-		logger.error("Error occured", e);
-		if (domain == null) return;
-		adDomainDAO.finalizeProcess(domain.getId(), e.getMessage());
-		messageMap.put(domain.getId(), e.getMessage());
-		//throw new RuntimeException(e);
 	}
 	
 	protected DirContext context(ADDomain domain) throws NamingException {
@@ -542,10 +544,34 @@ public class ADEnumServiceImpl implements ADEnumService {
 	}
 
 	@Override
-	public String getLatestMessage(Integer domainId) {
-		if (messageMap.containsKey(domainId))
-			return messageMap.get(domainId);
-		return "";
+	public String testConnection(ADDomain domain) {
+		DirContext ctx = null;
+		NamingEnumeration<SearchResult> queryResults = null;
+		try {
+			String distinguishedName = fqdnToLdapdn(domain.getDomainName());
+			ctx = context(domain);
+			SearchControls ctls = new SearchControls();
+			String[] attrIDs =  { "name", "distinguishedName" };
+			ctls.setReturningAttributes(attrIDs);
+			ctls.setSearchScope(SearchControls.ONELEVEL_SCOPE);
+			queryResults = ctx.search(distinguishedName,
+					"(&(objectClass=organizationalUnit)(!(isCriticalSystemObject=TRUE))(!(msExchVersion=*)))"
+					, ctls);
+			return "OK";
+		} catch (NamingException e) {
+			logger.error("Error occured when connecting to LDAP server.", e);
+			return e.toString();
+		} catch (Throwable e) {
+			logger.error("Error occured when connecting to LDAP server.", e);
+			return e.toString();
+		} finally {
+			try {
+				if (queryResults != null) queryResults.close();
+				if (ctx != null) ctx.close();
+			} catch (Throwable e) {
+				logger.error("Error occured when closing contexts.", e);
+			}
+		}
 	}
 	
 }

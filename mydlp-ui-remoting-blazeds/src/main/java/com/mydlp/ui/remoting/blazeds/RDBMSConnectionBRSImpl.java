@@ -63,5 +63,11 @@ public class RDBMSConnectionBRSImpl implements RDBMSConnectionService {
 		return rdbmsEnumService.getSampleValues(rdbmsInformationTarget);
 	}
 
+	@Override
+	public void schedule(Integer rdbmsInformationTargetId,
+			AbstractEntity entity) {
+		rdbmsEnumService.schedule(rdbmsInformationTargetId, entity);
+	}
+
 	
 }

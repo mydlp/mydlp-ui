@@ -27,4 +27,7 @@ public interface RDBMSConnectionService {
 			String schemaName, String tableName, String columnSearchString);
 	
 	public List<String> getSampleValues(RDBMSInformationTarget rdbmsInformationTarget);
+	
+	public void schedule(Integer rdbmsInformationTargetId, AbstractEntity entity);
+	
 }

@@ -9,8 +9,10 @@ import com.mydlp.ui.domain.RDBMSInformationTarget;
 
 
 public interface RDBMSEnumService {
+	
+	public void schedule(Integer rdbmsInformationTargetId, AbstractEntity entity);
 
-	public void enumerate(RDBMSInformationTarget rdbmsInformationTarget, AbstractEntity entity);
+	public void enumerate(Integer rdbmsInformationTargetId, AbstractEntity entity);
 	
 	public String testConnection(RDBMSConnection rdbmsConnection);
 	
