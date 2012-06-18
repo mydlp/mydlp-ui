@@ -153,4 +153,10 @@ public class EndpointStatusDAOImpl extends AbstractLogDAO implements
 		return DAOUtil.getSingleResult(returnList);
 	}
 
+	@Override
+	public Boolean truncateEndpointStatus() {
+		getHibernateTemplate().bulkUpdate("delete from EndpointStatus e");
+		return true;
+	}
+
 }

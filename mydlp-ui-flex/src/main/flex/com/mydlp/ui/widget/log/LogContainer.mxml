@@ -10,10 +10,13 @@
 		<![CDATA[
 			import com.mydlp.ui.domain.IncidentLog;
 			import com.mydlp.ui.domain.IncidentLogFileContent;
+			import com.mydlp.ui.domain.Rule;
+			import com.mydlp.ui.skin.DetailSearchLabelButton16Skin;
 			import com.mydlp.ui.util.AsyncListDataProvider;
 			import com.mydlp.ui.util.LangUtil;
 			import com.mydlp.ui.util.SessionUtil;
 			import com.mydlp.ui.util.SpecialCharacterUtil;
+			import com.mydlp.ui.widget.general.input.IpAddressInput;
 			
 			import mx.collections.ArrayCollection;
 			import mx.collections.ListCollectionView;
@@ -37,6 +40,29 @@
 			
 			[Bindable]
 			protected var contentSearchDP:AsyncListDataProvider = null;
+			
+			[Bindable]
+			protected var actionSearch:ListCollectionView = 
+				new ArrayCollection(
+					new Array(
+						Rule.ACTION_ARCHIVE,
+						Rule.ACTION_BLOCK,
+						Rule.ACTION_LOG,
+						Rule.ACTION_QUARANTINE
+					)
+				);
+				
+			[Bindable]
+			protected var channelSearch:ListCollectionView = 
+				new ArrayCollection(
+					new Array(
+						"Web",
+						"Mail",
+						"Endpoint",
+						"Printer",
+						"Discovery"
+					)
+				);
 			
 			protected function onCreationComplete(event:FlexEvent):void
 			{
@@ -96,6 +122,72 @@
 					criteriaList.addItem(criteria2);
 				}
 				
+				if(ipField.text != "")
+				{
+					var ipUint:uint = IpAddressInput.ipStrToNumber(ipField.text);
+					var ipNumber:Number = new Number(ipUint);
+					var criteria3:ListCollectionView = new ArrayCollection();
+					criteria3.addItem("sourceIp");
+					criteria3.addItem("eq");
+					criteria3.addItem(ipNumber);
+					criteriaList.addItem(criteria3);
+				}
+				
+				if(destinationField.text != "")
+				{
+					var criteria4:ListCollectionView = new ArrayCollection();
+					criteria4.addItem("destination");
+					criteria4.addItem("eq");
+					criteria4.addItem(destinationField.text);
+					criteriaList.addItem(criteria4);
+				}
+				
+				if(userField.text != "")
+				{
+					var criteria5:ListCollectionView = new ArrayCollection();
+					criteria5.addItem("sourceUser");
+					criteria5.addItem("eq");
+					criteria5.addItem(userField.text);
+					criteriaList.addItem(criteria5);
+				}
+				
+				if(actionList.selectedIndex != -1)
+				{
+					var actionValue:String;
+					switch(actionSearch.getItemAt(actionList.selectedIndex))
+					{
+						case Rule.ACTION_BLOCK: actionValue = "B"; break;
+						case Rule.ACTION_LOG: actionValue = "L"; break;
+						case Rule.ACTION_QUARANTINE: actionValue = "Q"; break;
+						case Rule.ACTION_ARCHIVE: actionValue = "A"; break;
+						default: break;
+					}
+					var criteria6:ListCollectionView = new ArrayCollection();
+					criteria6.addItem("action");
+					criteria6.addItem("eq");
+					criteria6.addItem(actionValue);
+					criteriaList.addItem(criteria6);
+				}
+				
+				if(channelList.selectedIndex != -1)
+				{
+					var channelValue:String;
+					switch(channelSearch.getItemAt(channelList.selectedIndex))
+					{
+						case "Web": channelValue = "W"; break;
+						case "Endpoint": channelValue = "E"; break;
+						case "Mail": channelValue = "M"; break;
+						case "Printer": channelValue = "P"; break;
+						case "Discovery": channelValue = "D"; break;
+						default: break;
+					}
+					var criteria7:ListCollectionView = new ArrayCollection();
+					criteria7.addItem("channel");
+					criteria7.addItem("eq");
+					criteria7.addItem(channelValue);
+					criteriaList.addItem(criteria7);
+				}
+				
 				var criteriaSA:ListCollectionView = new ArrayCollection();
 				criteriaSA.addItem("showAll");
 				criteriaSA.addItem("eq");
@@ -116,6 +208,11 @@
 				searchString = "";
 				contentId = Number.NaN;
 				showAll.selected = false;
+				ipField.text = "";
+				userField.text = "";
+				destinationField.text = "";
+				actionList.selectedIndex = -1;
+				channelList.selectedIndex = -1;
 				
 				// requery
 				refresh();
@@ -154,6 +251,20 @@
 				logSearchDP.init();
 			}
 			
+			protected function onDetailSearchClickHandler(event:MouseEvent):void
+			{
+				if(detailSearchGroup.visible == false)
+				{
+					detailSearchGroup.includeInLayout = true;
+					detailSearchGroup.visible = true;
+				}
+				else
+				{
+					detailSearchGroup.includeInLayout = false;
+					detailSearchGroup.visible = false;
+				}
+			}
+			
 		]]>
 	</fx:Script>
 	<fx:Declarations>
@@ -190,12 +301,42 @@
 			<s:Spacer width="5"/>
 			<s:CheckBox id="showAll" change="{searchLogHandler(null)}"
 				label="@Resource(bundle = 'messages', key = 'log.container.showAll.checkbox.label')" />
+			<s:Spacer width="20"/>
+			<s:Button id="detailSearchButton" skinClass="com.mydlp.ui.skin.DetailSearchLabelButton16Skin"
+					  label="@Resource(bundle = 'messages', key = 'log.container.detailSearch.button.label')"
+					  click="onDetailSearchClickHandler(event)"/>
 		</s:HGroup>
 		<s:HGroup width="400" verticalAlign="middle" includeInLayout="{SessionUtil.isEnterprise()}">
 			<s:Button label="@Resource(bundle = 'messages', key = 'log.container.search.fulltext.label')"
 					  click="searchContentHandler(event)" enabled="{fulltextInput.text.length > 3}"/>
 			<s:TextInput id="fulltextInput" width="100%"/>
 		</s:HGroup>
+	</s:Group>
+	<s:Group id="detailSearchGroup" height="32" includeInLayout="false" visible="false">
+		<s:layout>
+			<s:HorizontalLayout verticalAlign="middle"/>
+		</s:layout>
+		<s:HGroup width="100%" verticalAlign="middle">
+			<s:Label text="@Resource(bundle = 'messages', key = 'log.container.search.sourceIp.label')"/>
+			<s:TextInput  id="ipField"/>
+			<s:Spacer width="20"/>
+			<s:Label text="@Resource(bundle = 'messages', key = 'log.container.search.sourceUser.label')"/>
+			<s:TextInput id="userField"/>
+			<s:Spacer width="20"/>
+			<s:Label text="@Resource(bundle = 'messages', key = 'log.container.search.destination.label')"/>
+			<s:TextInput id="destinationField"/>
+			<s:Spacer width="20"/>
+			<s:Label text="@Resource(bundle = 'messages', key = 'log.container.search.actionList.label')"/>
+			<s:DropDownList id="actionList" width="120"
+							contentBackgroundAlpha="1"
+							dataProvider="{actionSearch}"/>
+			<s:Spacer width="20"/>
+			<s:Label text="@Resource(bundle = 'messages', key = 'log.container.search.channelList.label')"/>
+			<s:DropDownList id="channelList" width="120"
+							contentBackgroundAlpha="1"
+							dataProvider="{channelSearch}"/>
+		</s:HGroup>  
+				
 	</s:Group>
 	
 	<s:Group width="100%" height="100%">
