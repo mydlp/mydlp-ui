@@ -11,7 +11,6 @@
 			import com.mydlp.ui.domain.IncidentLog;
 			import com.mydlp.ui.domain.IncidentLogFileContent;
 			import com.mydlp.ui.domain.Rule;
-			import com.mydlp.ui.skin.DetailSearchCloseLabelButton16Skin;
 			import com.mydlp.ui.skin.DetailSearchLabelButton16Skin;
 			import com.mydlp.ui.util.AsyncListDataProvider;
 			import com.mydlp.ui.util.LangUtil;
@@ -19,10 +18,8 @@
 			import com.mydlp.ui.util.SpecialCharacterUtil;
 			import com.mydlp.ui.widget.general.input.IpAddressInput;
 			
-			import mx.binding.utils.BindingUtils;
 			import mx.collections.ArrayCollection;
 			import mx.collections.ListCollectionView;
-			import mx.controls.Alert;
 			import mx.events.FlexEvent;
 			import mx.rpc.AsyncToken;
 			
