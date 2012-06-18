@@ -121,6 +121,7 @@
 				re.getEndpointNotUpToDateCount(searchString);
 			}
 			
+			
 		]]>
 	</fx:Script>
 	<fx:Declarations>
@@ -129,6 +130,7 @@
 			<my:method name="getEndpointOnlineCount" result="{onlineVal.text = event.result.toString()}"/>
 			<my:method name="getEndpointOfflineCount" result="{offlineVal.text = event.result.toString()}"/>
 			<my:method name="getEndpointNotUpToDateCount" result="{notUpToDateVal.text = event.result.toString()}"/>
+			<my:method name="truncateEndpointStatus" result="{refresh();}"/>
 		</my:remote>
 		<my:remote id="are" destination="endpointStatusBRS" />
 		<my:remote id="gre" destination="genericBRS" >
@@ -152,6 +154,7 @@
 			<s:Spacer width="5" />
 			<s:Button label="@Resource(key='endpoints.search.button.label', bundle='messages')" click="onSearchClick(event)"/>
 			<s:Button label="@Resource(key='endpoints.reset.button.label', bundle='messages')" click="onResetClick(event)"/>
+			<s:Button label="@Resource(key='endpoints.truncate.button.label', bundle='messages')" click="{re.truncateEndpointStatus();}"/>
 			<s:Spacer width="100%"/>
 			
 			<s:VGroup paddingBottom="0" paddingTop="0" width="90" height="100%">

@@ -22,4 +22,6 @@ public interface EndpointStatusDAO {
 	
 	public Long getEndpointNotUpToDateCount(String searchString);
 	
+	public Boolean truncateEndpointStatus();
+	
 }

@@ -42,6 +42,11 @@ public class EndpointStatusBRSImpl implements EndpointStatusService
 	public Long getEndpointNotUpToDateCount(String searchString) {
 		return endpointStatusDAO.getEndpointNotUpToDateCount(searchString);
 	}
+
+	@Override
+	public Boolean truncateEndpointStatus() {
+		return endpointStatusDAO.truncateEndpointStatus();
+	}
 	
 
 }

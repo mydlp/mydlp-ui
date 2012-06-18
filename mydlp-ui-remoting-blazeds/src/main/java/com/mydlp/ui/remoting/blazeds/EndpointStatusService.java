@@ -20,4 +20,6 @@ public interface EndpointStatusService {
 	
 	public Long getEndpointNotUpToDateCount(String searchString);
 	
+	public Boolean truncateEndpointStatus();
+	
 }
