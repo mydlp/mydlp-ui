@@ -44,6 +44,7 @@
 			protected function loadEachFile(file:FileReference):void
 			{
 				var fileLoad:FileLoadStatus = new FileLoadStatus();
+				fileLoad.databaseId = ddfeInput.databaseId;
 				loadStatusList.addElement(fileLoad);
 				fileLoad.loadFile(file, onFileLoadComplete);
 			}

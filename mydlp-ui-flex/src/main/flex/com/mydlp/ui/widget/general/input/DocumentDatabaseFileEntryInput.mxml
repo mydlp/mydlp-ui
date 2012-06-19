@@ -9,6 +9,7 @@
 			import com.mydlp.ui.domain.DocumentDatabaseFileEntry;
 			import com.mydlp.ui.util.InteractionUtil;
 			
+			public var databaseId:Number;
 			
 			public var deleteList:ListCollectionView = null;
 			

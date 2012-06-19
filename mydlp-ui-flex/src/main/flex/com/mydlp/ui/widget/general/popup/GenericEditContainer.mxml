@@ -15,6 +15,7 @@
 			import com.mydlp.ui.domain.ADDomainItemGroup;
 			import com.mydlp.ui.domain.ADDomainRoot;
 			import com.mydlp.ui.domain.ADDomainUser;
+			import com.mydlp.ui.domain.AbstractEntity;
 			import com.mydlp.ui.domain.AbstractNamedEntity;
 			import com.mydlp.ui.domain.AuthUser;
 			import com.mydlp.ui.domain.DataFormat;
@@ -127,25 +128,7 @@
 				{
 					var inputLabel:InputLabel = null;
 					
-					if (classMember.name == "category" && classMember.type == InventoryCategory)
-					{
-						if (targetObject.id == null || isNaN(targetObject.id) ) // means that this is a new object
-							if (targetObject[classMember.name] != null)
-								continue;
-							else if (FlexGlobals.topLevelApplication.inventoryTree.selectedItem == null)
-								continue;
-							else if (FlexGlobals.topLevelApplication.inventoryTree.selectedItem is InventoryCategory)
-								targetObject[classMember.name] = FlexGlobals.topLevelApplication.inventoryTree.selectedItem;
-							else if (FlexGlobals.topLevelApplication.inventoryTree.selectedItem is InventoryBase)
-								targetObject[classMember.name] = FlexGlobals.topLevelApplication.inventoryTree.selectedItem.category;
-						continue;
-					}
-					else if ( targetObject is USBDevice && classMember.name == "action")
-					{
-						targetObject[classMember.name] = "PASS"; // TODO: will be deleted after implementing edit dialog.
-					}
-					else if 
-						(
+					if (
 							classMember.name == "id" ||
 							classMember.name == "optimisticLockVersion" ||
 							classMember.name == "nameKey" ||
@@ -160,7 +143,6 @@
 							(classMember.name == "coupledInventoryItem" && classMember.type == InventoryItem) ||
 							(classMember.name == "coupledRuleItems" && classMember.type == ListCollectionView) ||
 							(classMember.name == "informationType" && classMember.type == InformationType) ||
-							(targetObject is DocumentDatabase && classMember.name == "rdbmsEntries" && classMember.type == ListCollectionView) ||
 							(classMember.name == "editable" && classMember.type == Boolean) ||
 							(classMember.name == "matcher" && classMember.type == Matcher) ||
 							(classMember.name == "root" && classMember.type == ADDomainRoot) ||
@@ -170,6 +152,33 @@
 						)
 					{
 						continue;
+					}
+					
+					if(targetObject is AbstractEntity &&
+							classMember.type == ListCollectionView &&
+							targetObject[classMember.name] == null)
+						targetObject[classMember.name] = new ArrayCollection();
+					
+					if (classMember.name == "category" && classMember.type == InventoryCategory)
+					{
+						if (targetObject.id == null || isNaN(targetObject.id) ) // means that this is a new object
+							if (targetObject[classMember.name] != null)
+								continue;
+							else if (FlexGlobals.topLevelApplication.inventoryTree.selectedItem == null)
+								continue;
+							else if (FlexGlobals.topLevelApplication.inventoryTree.selectedItem is InventoryCategory)
+								targetObject[classMember.name] = FlexGlobals.topLevelApplication.inventoryTree.selectedItem;
+							else if (FlexGlobals.topLevelApplication.inventoryTree.selectedItem is InventoryBase)
+								targetObject[classMember.name] = FlexGlobals.topLevelApplication.inventoryTree.selectedItem.category;
+						continue;
+					}
+					else if (targetObject is DocumentDatabase && classMember.name == "rdbmsEntries" && classMember.type == ListCollectionView)
+					{
+						continue;
+					}
+					else if ( targetObject is USBDevice && classMember.name == "action")
+					{
+						targetObject[classMember.name] = "PASS"; // TODO: will be deleted after implementing edit dialog.
 					}
 					else if (targetObject is InventoryItem && classMember.name == "item")
 					{
@@ -206,10 +215,7 @@
 							classMember.type == ListCollectionView)
 					{
 						var dfInput:DataFormatInput = new DataFormatInput();
-						if (targetObject[classMember.name] == null)
-							dfInput.dataFormats = new ArrayCollection();
-						else
-							dfInput.dataFormats = targetObject[classMember.name];
+						dfInput.dataFormats = targetObject[classMember.name];
 						BindingUtils.bindProperty(targetObject, classMember.name, dfInput, "dataFormats");
 						inputLabel = new VerticalInputLabel();
 						inputLabel.addElement(dfInput);
@@ -220,12 +226,12 @@
 							classMember.name == "fileEntries" &&
 							classMember.type == ListCollectionView)
 					{
+						if(targetObject["id"] == null || isNaN(targetObject["id"]))
+							continue;
 						var ddInput:DocumentDatabaseFileEntryInput = new DocumentDatabaseFileEntryInput();
 						ddInput.deleteList = this.deleteList;
-						if(targetObject[classMember.name] == null)
-							ddInput.fileEntries = new ArrayCollection();
-						else
-							ddInput.fileEntries = targetObject[classMember.name];
+						ddInput.fileEntries = targetObject[classMember.name];
+						ddInput.databaseId = targetObject["id"];
 						BindingUtils.bindProperty(targetObject, classMember.name, ddInput, "fileEntries");
 						inputLabel = new VerticalInputLabel();
 						inputLabel.addElement(ddInput);
@@ -238,10 +244,7 @@
 					{
 						var regInput:RegularExpressionGroupInput = new RegularExpressionGroupInput();
 						regInput.deleteList = this.deleteList;
-						if(targetObject[classMember.name] == null)
-							regInput.entries = new ArrayCollection();
-						else
-							regInput.entries = targetObject[classMember.name];
+						regInput.entries = targetObject[classMember.name];
 						BindingUtils.bindProperty(targetObject, classMember.name, regInput, "entries");
 						inputLabel = new VerticalInputLabel();
 						inputLabel.addElement(regInput);
@@ -254,10 +257,7 @@
 					{
 						var mtInput:MimeTypeInput = new MimeTypeInput();
 						mtInput.deleteList = this.deleteList;
-						if (targetObject[classMember.name] == null)
-							mtInput.mimeTypes = new ArrayCollection();
-						else
-							mtInput.mimeTypes = targetObject[classMember.name];
+						mtInput.mimeTypes = targetObject[classMember.name];
 						BindingUtils.bindProperty(targetObject, classMember.name, mtInput, "mimeTypes");
 						inputLabel = new VerticalInputLabel();
 						inputLabel.addElement(mtInput);
@@ -267,10 +267,7 @@
 					else if (targetObject is AuthUser && classMember.name == "roles" && classMember.type == ListCollectionView)
 					{
 						var srInput:AuthSecurityRolesInput = new AuthSecurityRolesInput();
-						if (targetObject[classMember.name] == null)
-							srInput.authSecurityRoles = new ArrayCollection();
-						else
-							srInput.authSecurityRoles = targetObject[classMember.name];
+						srInput.authSecurityRoles = targetObject[classMember.name];
 						BindingUtils.bindProperty(targetObject, classMember.name, srInput, "authSecurityRoles");
 						inputLabel = new VerticalInputLabel();
 						inputLabel.addElement(srInput);
@@ -284,10 +281,7 @@
 					{
 						var ifInput:InformationFeatureInput = new InformationFeatureInput();
 						ifInput.deleteList = this.deleteList;
-						if (targetObject[classMember.name] == null)
-							ifInput.informationFeatures = new ArrayCollection();
-						else
-							ifInput.informationFeatures = targetObject[classMember.name];
+						ifInput.informationFeatures = targetObject[classMember.name];
 						BindingUtils.bindProperty(targetObject, classMember.name, ifInput, "informationFeatures");
 						inputLabel = new VerticalInputLabel();
 						inputLabel.addElement(ifInput);
@@ -308,10 +302,7 @@
 						classMember.type == ListCollectionView)
 					{
 						var asaiInput:AuthorityScopeADItemInput = new AuthorityScopeADItemInput();
-						if (targetObject[classMember.name] == null)
-							asaiInput.authorityScopeADItems = new ArrayCollection();
-						else
-							asaiInput.authorityScopeADItems = targetObject[classMember.name];
+						asaiInput.authorityScopeADItems = targetObject[classMember.name];
 						BindingUtils.bindProperty(targetObject, classMember.name, asaiInput, "authorityScopeADItems");
 						inputLabelForEnterprise = new VerticalInputLabel();
 						
@@ -327,10 +318,7 @@
 						classMember.type == ListCollectionView)
 					{
 						var dciInput:DocumentClassifierItemInput = new DocumentClassifierItemInput();
-						if(targetObject[classMember.name] == null)
-							dciInput.documentClassifierItems = new ArrayCollection();
-						else
-							dciInput.documentClassifierItems = targetObject[classMember.name];
+						dciInput.documentClassifierItems = targetObject[classMember.name];
 						BindingUtils.bindProperty(targetObject, classMember.name, dciInput, "documentClassifierItems");
 						inputLabelForClassifier = new VerticalInputLabel();
 						
@@ -346,10 +334,7 @@
 					{
 						var adaiInput:ADDomainAliasInput = new ADDomainAliasInput();
 						adaiInput.deleteList = this.deleteList;
-						if (targetObject[classMember.name] == null)
-							adaiInput.adDomainAliases = new ArrayCollection();
-						else
-							adaiInput.adDomainAliases = targetObject[classMember.name];
+						adaiInput.adDomainAliases = targetObject[classMember.name];
 						BindingUtils.bindProperty(targetObject, classMember.name, adaiInput, "adDomainAliases");
 						inputLabel = new VerticalInputLabel();
 						inputLabel.addElement(adaiInput);
@@ -360,10 +345,7 @@
 						classMember.type == ListCollectionView)
 					{
 						var aduaiInput:ADDomainUserAliasListing = new ADDomainUserAliasListing();
-						if (targetObject[classMember.name] == null)
-							aduaiInput.adDomainUserAliases = new ArrayCollection();
-						else
-							aduaiInput.adDomainUserAliases = targetObject[classMember.name];
+						aduaiInput.adDomainUserAliases = targetObject[classMember.name];
 						inputLabel = new VerticalInputLabel();
 						inputLabel.addElement(aduaiInput);
 						index = 7;
@@ -376,10 +358,7 @@
 								classMember.type == ListCollectionView) )
 					{
 						var adiInput:ADDomainItemListing = new ADDomainItemListing();
-						if (targetObject[classMember.name] == null)
-							adiInput.adDomainItems = new ArrayCollection();
-						else
-							adiInput.adDomainItems = targetObject[classMember.name];
+						adiInput.adDomainItems = targetObject[classMember.name];
 						inputLabel = new VerticalInputLabel();
 						inputLabel.addElement(adiInput);
 						index = 8;
@@ -463,8 +442,10 @@
 						index = 1;
 					}
 						
-					else if (classMember.type == RDBMSInformationTarget)
+					else if (targetObject is AbstractEntity && classMember.type == RDBMSInformationTarget)
 					{
+						if ( targetObject["id"] == null || isNaN(targetObject["id"]) )
+							continue;
 						var rdbmsitInput:RDBMSInformationTargetInput = new RDBMSInformationTargetInput();
 						rdbmsitInput.informationTarget = targetObject[classMember.name];
 						rdbmsitInput.deleteList = this.deleteList;
@@ -692,7 +673,13 @@
 					cButton.enabled = false;
 				} 
 				if (!isNaN(formObject.id) &&
-						(formObject is RegularExpressionGroup || formObject is DocumentDatabase || formObject is ADDomain)
+							(
+								formObject is ADDomain ||
+								(formObject is RegularExpressionGroup && 
+									(formObject as RegularExpressionGroup).rdbmsInformationTarget != null) || 
+								(formObject is DocumentDatabase &&
+									(formObject as DocumentDatabase).rdbmsInformationTarget != null)
+							)
 						) {
 					misc2Button.label = LangUtil.getString("messages", "generic.edit." + getSimpleName() + ".enumButton.label");
 					misc2Button.addEventListener(MouseEvent.CLICK, enumButtonClickHandler);

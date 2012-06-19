@@ -25,7 +25,7 @@ public class EnumMasterServiceImpl implements EnumMasterService {
 		consume();
 	}
 	
-	@Scheduled(fixedDelay=5000)
+	@Scheduled(fixedDelay=3600000)
 	public void consume() {
 		try {
 			synchronized (masterQueue) {

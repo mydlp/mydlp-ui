@@ -15,8 +15,7 @@
 			import mx.collections.ListCollectionView;
 			import mx.rpc.events.ResultEvent;
 			
-			[Bindable]
-			protected var ddfe:DocumentDatabaseFileEntry = null;
+			public var databaseId:Number;
 			
 			[Bindable]
 			protected var filename:String = "";
@@ -40,18 +39,17 @@
 				var data:ByteArray = new ByteArray();
 				fileReference.data.readBytes(data, 0, fileReference.data.length);
 				var md5sum:String = Md5Util.hashBinary(data); 
+				var filename:String = fileReference.name;
 				
-				ddfe = new DocumentDatabaseFileEntry();
-				ddfe.filename = fileReference.name;
-				ddfe.md5Hash = md5sum;
 				
 				currentState = "fingerprint";
-				re.populateFingerprints(ddfe.filename, data);
+				re.generateDocumentDatabaseFileEntry(databaseId, filename, md5sum, data);
 			}
 			
 			
-			protected function populateFingerprintsHandler(event:ResultEvent): void
+			protected function generateDocumentDatabaseFileEntryHandler(event:ResultEvent): void
 			{
+				var ddfe:DocumentDatabaseFileEntry = event.result as DocumentDatabaseFileEntry
 				currentState = "done";
 				completedFunction(ddfe);
 			}
@@ -62,7 +60,7 @@
 	
 	<fx:Declarations>
 		<my:remote id="re" destination="documentDatabaseBRS" >
-			<my:method name="populateFingerprints" result="populateFingerprintsHandler(event)" />
+			<my:method name="generateDocumentDatabaseFileEntry" result="generateDocumentDatabaseFileEntryHandler(event)" />
 		</my:remote>
 	</fx:Declarations>
 	

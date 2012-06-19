@@ -5,7 +5,9 @@ import java.util.List;
 import org.springframework.security.access.annotation.Secured;
 
 import com.mydlp.ui.domain.AuthSecurityRole;
+import com.mydlp.ui.domain.Document;
 import com.mydlp.ui.domain.DocumentDatabase;
+import com.mydlp.ui.domain.DocumentDatabaseFileEntry;
 
 @Secured({AuthSecurityRole.ROLE_ADMIN, AuthSecurityRole.ROLE_CLASSIFIER})
 public interface DocumentDatabaseService {
@@ -14,6 +16,10 @@ public interface DocumentDatabaseService {
 	
 	public DocumentDatabase save(DocumentDatabase d);
 	
-	public void generateFingerprints(Integer documentId, String filename, byte[] data);
+	public DocumentDatabaseFileEntry generateDocumentDatabaseFileEntry(Integer databaseId, String filename, String md5sum, byte[] data);
+	
+	public void remove(DocumentDatabase r);
+	
+	public void removeDocument(Document d);
 
 }

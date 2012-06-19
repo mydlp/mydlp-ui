@@ -13,6 +13,7 @@ import com.mydlp.ui.dao.GenericDAO;
 import com.mydlp.ui.domain.ADDomain;
 import com.mydlp.ui.domain.AbstractEntity;
 import com.mydlp.ui.domain.DashboardItem;
+import com.mydlp.ui.domain.Document;
 import com.mydlp.ui.domain.DocumentDatabase;
 import com.mydlp.ui.domain.InventoryBase;
 import com.mydlp.ui.domain.RDBMSConnection;
@@ -41,6 +42,8 @@ public class GenericBRSImpl implements GenericService
 	
 	@Autowired
 	protected RDBMSConnectionService rdbmsConnectionService;
+	
+	@Autowired
 	protected DocumentDatabaseService documentDatabaseService;
 
 	@Override
@@ -73,6 +76,10 @@ public class GenericBRSImpl implements GenericService
 			dashboardService.remove((DashboardItem) item);
 		else if (item instanceof RDBMSConnection)
 			rdbmsConnectionService.remove(item);
+		else if (item instanceof DocumentDatabase)
+			documentDatabaseService.remove((DocumentDatabase) item);
+		else if (item instanceof Document)
+			documentDatabaseService.removeDocument((Document) item);
 		else
 			genericDAO.remove(item);
 	}
