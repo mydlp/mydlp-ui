@@ -23,6 +23,8 @@ public class MyDLPUIThriftServiceImpl implements MyDLPUIThriftService {
 	protected static final org.apache.commons.pool.impl.GenericObjectPool.Config poolConfig = 
 			new org.apache.commons.pool.impl.GenericObjectPool.Config();
 	
+	protected static final int CONN_RETRY_COUNT = 2;
+	
 	static {
 		poolConfig.lifo=false;
 		poolConfig.maxActive=128;
@@ -61,26 +63,44 @@ public class MyDLPUIThriftServiceImpl implements MyDLPUIThriftService {
 		MyDLPUIThriftConnection conn = null;
 		T result = null;
 		try {
-			conn = mydlpUIConnectionPool.borrowObject();
-			result = thriftCall.execute(conn);
+			int retryCount = CONN_RETRY_COUNT;
+			while (true) {
+				retryCount--;
+				try {
+					conn = mydlpUIConnectionPool.borrowObject();
+					result = thriftCall.execute(conn);
+					break;
+				} catch (Throwable e) {
+					if (retryCount < CONN_RETRY_COUNT - 1)
+						logger.error("Error suppressed " + (CONN_RETRY_COUNT - retryCount) + " times.");
+					if (retryCount == 0) {
+						logger.error("Retry count had hitted zero. Not supressing exception.");
+						throw e;
+					}
+				} finally {
+					try {
+						try {
+							if (conn != null) conn.destroy();
+						} catch (Throwable e) {
+							logger.error("Error occured when destroying pool object", e);
+						}
+						if (conn != null) mydlpUIConnectionPool.returnObject(conn);
+					} catch (Throwable e) {
+						logger.error("Error occured when return object to pool", e);
+					}
+				}
+			}
+			
 		} catch (NullPointerException e) {
 			logger.error("Can not establish thrift service connection.");
 		} catch (TApplicationException e) {
 			logger.error("Thrift execution error. Type code: " + e.getType(), e);
-			if (conn != null) conn.destroy();
 		} catch (TException e) {
 			logger.error("Thrift execution error", e);
-			if (conn != null) conn.destroy();
 		} catch (NoSuchElementException e) {
 			logger.error("Pool has been exhausted", e);
 		} catch (Exception e) {
 			logger.error("Error occured when calling thrift", e);
-		} finally {
-			try {
-				if (conn != null) mydlpUIConnectionPool.returnObject(conn);
-			} catch (Exception e) {
-				logger.error("Error occured when return object to pool", e);
-			}
 		}
 		return result;
 	}
