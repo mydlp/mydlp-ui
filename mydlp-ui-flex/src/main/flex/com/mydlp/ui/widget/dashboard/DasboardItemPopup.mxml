@@ -26,8 +26,7 @@
 				DashboardItem.TOP_5_RULES_1H,
 				DashboardItem.TOP_5_RULES_24H,
 				DashboardItem.RSS_MYDLP_BLOG,
-				DashboardItem.RSS_DATALOSSDB,
-				DashboardItem.ENDPOINT_STATUS
+				DashboardItem.RSS_DATALOSSDB
 			]);
 		]]>
 	</fx:Script>
