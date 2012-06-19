@@ -8,10 +8,14 @@
 					  creationComplete="onCreationComplete(event)">
 	<fx:Script>
 		<![CDATA[
+			import avmplus.FLASH10_FLAGS;
+			
 			import com.mydlp.ui.domain.EndpointStatus;
 			import com.mydlp.ui.util.AsyncListDataProvider;
 			import com.mydlp.ui.util.LangUtil;
 			
+			import mx.controls.Alert;
+			import mx.events.CloseEvent;
 			import mx.events.FlexEvent;
 			import mx.rpc.AsyncToken;
 			import mx.rpc.events.ResultEvent;
@@ -121,6 +125,18 @@
 				re.getEndpointNotUpToDateCount(searchString);
 			}
 			
+			protected function alertListener(event:CloseEvent):void
+			{
+				if(event.detail == Alert.OK)
+					re.truncateEndpointStatus();
+			}
+			
+			protected function onTruncateClick(event:MouseEvent):void
+			{
+				Alert.show(LangUtil.getString('messages','endpoints.truncate.alert.label'),
+							LangUtil.getString('messages','endpoints.truncate.alert.title'), 
+							Alert.OK | Alert.CANCEL, this, alertListener, null, Alert.OK);
+			}
 			
 		]]>
 	</fx:Script>
@@ -154,7 +170,7 @@
 			<s:Spacer width="5" />
 			<s:Button label="@Resource(key='endpoints.search.button.label', bundle='messages')" click="onSearchClick(event)"/>
 			<s:Button label="@Resource(key='endpoints.reset.button.label', bundle='messages')" click="onResetClick(event)"/>
-			<s:Button label="@Resource(key='endpoints.truncate.button.label', bundle='messages')" click="{re.truncateEndpointStatus();}"/>
+			<s:Button label="@Resource(key='endpoints.truncate.button.label', bundle='messages')" click="onTruncateClick(event)"/>
 			<s:Spacer width="100%"/>
 			
 			<s:VGroup paddingBottom="0" paddingTop="0" width="90" height="100%">

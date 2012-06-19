@@ -11,14 +11,9 @@
 		<![CDATA[
 			import com.mydlp.ui.domain.DashboardItem;
 			import com.mydlp.ui.util.InteractionUtil;
-			import com.mydlp.ui.widget.dashboard.DashboardItemBox;
-			import com.mydlp.ui.widget.dashboard.DashboardItemContainer;
-			import com.mydlp.ui.widget.dashboard.HBarChartBox;
-			import com.mydlp.ui.widget.dashboard.PieChartBox;
 			
 			import mx.collections.ArrayCollection;
 			import mx.collections.ListCollectionView;
-			import mx.controls.Alert;
 			import mx.graphics.ImageSnapshot;
 			import mx.graphics.codec.JPEGEncoder;
 			
