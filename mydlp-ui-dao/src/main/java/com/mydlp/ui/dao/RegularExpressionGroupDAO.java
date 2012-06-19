@@ -10,4 +10,6 @@ public interface RegularExpressionGroupDAO {
 	 public List<RegularExpressionGroup> getRegularExpressionGroups();
 	 
 	 public RegularExpressionGroup save(RegularExpressionGroup r);
+	 
+	 public List<RegularExpressionGroup> getRegularExpressionGroupsWithRDBMS();
 }

@@ -10,4 +10,6 @@ public interface DocumentDatabaseDAO {
 	
 	public DocumentDatabase save(DocumentDatabase r);
 	
+	public List<DocumentDatabase> getDocumentDatabasesWithRDBMS();
+	
 }

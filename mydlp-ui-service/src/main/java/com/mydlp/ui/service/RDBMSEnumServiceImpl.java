@@ -15,13 +15,17 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.springframework.transaction.support.TransactionTemplate;
 
+import com.mydlp.ui.dao.DocumentDatabaseDAO;
 import com.mydlp.ui.dao.RDBMSConnectionDAO;
+import com.mydlp.ui.dao.RegularExpressionGroupDAO;
 import com.mydlp.ui.domain.AbstractEntity;
+import com.mydlp.ui.domain.DocumentDatabase;
 import com.mydlp.ui.domain.RDBMSConnection;
 import com.mydlp.ui.domain.RDBMSEnumeratedValue;
 import com.mydlp.ui.domain.RDBMSInformationTarget;
@@ -50,6 +54,12 @@ public class RDBMSEnumServiceImpl implements RDBMSEnumService {
 	@Autowired
 	protected EnumMasterService enumMasterService;
 	
+	@Autowired
+	protected DocumentDatabaseDAO documentDatabaseDAO;
+	
+	@Autowired
+	protected RegularExpressionGroupDAO regularExpressionGroupDAO;
+	
 	public class RDBMSEnumJob extends EnumJob {
 
 		protected RDBMSEnumService rdbmsEnumService;
@@ -68,6 +78,24 @@ public class RDBMSEnumServiceImpl implements RDBMSEnumService {
 			return "RDBMSEnumService_" + rdbmsInformationTargetId + "_" + entity.getClass().getCanonicalName() + "_" + entity.getId();
 		}
 		
+	}
+	
+	@Scheduled(cron="0 0 4 * * ?")
+	public void dailySchedule() {
+		dailyScheduleDocumentDatabases();
+		dailyScheduleRegularExpressionGroups();
+	}
+	
+	protected void dailyScheduleDocumentDatabases() {
+		for (DocumentDatabase dd: documentDatabaseDAO.getDocumentDatabasesWithRDBMS())
+			if (dd.getRdbmsInformationTarget() != null && dd.getRdbmsInformationTarget().getId() != null)
+				schedule(dd.getRdbmsInformationTarget().getId(), dd);
+	}
+	
+	protected void dailyScheduleRegularExpressionGroups() {
+		for (RegularExpressionGroup reg: regularExpressionGroupDAO.getRegularExpressionGroupsWithRDBMS())
+			if (reg.getRdbmsInformationTarget() != null && reg.getRdbmsInformationTarget().getId() != null)
+				schedule(reg.getRdbmsInformationTarget().getId(), reg);
 	}
 	
 	public void schedule(Integer enumRdbmsInformationTargetId, AbstractEntity enumEntity) {

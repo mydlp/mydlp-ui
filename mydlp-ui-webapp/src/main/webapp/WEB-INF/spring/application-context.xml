@@ -28,7 +28,7 @@
   
   <task:annotation-driven executor="taskExecutor" scheduler="taskScheduler"/>
   <task:executor id="taskExecutor" pool-size="2" queue-capacity="24" />
-  <task:scheduler id="taskScheduler" pool-size="1"/>
+  <task:scheduler id="taskScheduler" pool-size="2"/>
   
   <import resource="application-persistence.xml"/>
   <import resource="application-dpHibernate.xml"/>

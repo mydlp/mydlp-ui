@@ -317,20 +317,21 @@
 			<s:HorizontalLayout verticalAlign="middle"/>
 		</s:layout>
 		<s:HGroup width="100%" verticalAlign="middle">
+			<s:Spacer width="5"/>
 			<s:Label text="@Resource(bundle = 'messages', key = 'log.container.search.sourceIp.label')"/>
 			<s:TextInput  id="ipField"/>
-			<s:Spacer width="20"/>
+			<s:Spacer width="5"/>
 			<s:Label text="@Resource(bundle = 'messages', key = 'log.container.search.sourceUser.label')"/>
 			<s:TextInput id="userField"/>
-			<s:Spacer width="20"/>
+			<s:Spacer width="5"/>
 			<s:Label text="@Resource(bundle = 'messages', key = 'log.container.search.destination.label')"/>
 			<s:TextInput id="destinationField"/>
-			<s:Spacer width="20"/>
+			<s:Spacer width="5"/>
 			<s:Label text="@Resource(bundle = 'messages', key = 'log.container.search.actionList.label')"/>
 			<s:DropDownList id="actionList" width="120"
 							contentBackgroundAlpha="1"
 							dataProvider="{actionSearch}"/>
-			<s:Spacer width="20"/>
+			<s:Spacer width="5"/>
 			<s:Label text="@Resource(bundle = 'messages', key = 'log.container.search.channelList.label')"/>
 			<s:DropDownList id="channelList" width="120"
 							contentBackgroundAlpha="1"

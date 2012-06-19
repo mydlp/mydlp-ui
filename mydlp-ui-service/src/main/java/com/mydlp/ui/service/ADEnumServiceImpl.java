@@ -25,6 +25,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.UncategorizedSQLException;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
@@ -71,7 +72,13 @@ public class ADEnumServiceImpl implements ADEnumService {
 		public String toString() {
 			return "ADEnumService_" + domainId;
 		}
-		
+	}
+	
+	@Scheduled(cron="0 0 4 * * ?")
+	public void dailySchedule() {
+		for (ADDomain ad: adDomainDAO.getADDomains())
+			if (ad.getId() != null)
+				schedule(ad.getId());
 	}
 	
 	public void schedule(Integer enumDomainId) {
