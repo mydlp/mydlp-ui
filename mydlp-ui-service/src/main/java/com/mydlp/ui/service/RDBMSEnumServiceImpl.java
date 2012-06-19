@@ -152,15 +152,17 @@ public class RDBMSEnumServiceImpl implements RDBMSEnumService {
 			connection = getSQLConnection(rdbmsInformationTarget.getRdbmsConnection());
 			String identifier = getIdentifier(rdbmsInformationTarget, connection);
 			Boolean incrementalEnum = (identifier != null);
-			if (!incrementalEnum)
+			if (!incrementalEnum) {
 				rdbmsConnectionDAO.deleteValues(rdbmsInformationTarget);
+				enumProxy.truncate(rdbmsInformationTarget, entity);
+			}
 			statement = connection.createStatement();
 			rs = getValues(rdbmsInformationTarget, statement, identifier);
 			while (rs.next ()) {
 				Object obj = rs.getObject(1);
 				String stringValue = obj.toString();
 				
-				Boolean isValid = enumProxy.handle(rdbmsInformationTarget, entity, stringValue);
+				Boolean isValid = enumProxy.isValid(rdbmsInformationTarget, entity, stringValue);
 				if (!isValid)
 					continue;
 				int stringHashCode = stringValue.hashCode();
@@ -183,6 +185,7 @@ public class RDBMSEnumServiceImpl implements RDBMSEnumService {
 				if (valueIsAlreadyStored && ev.getId() != null)
 				{
 					rdbmsConnectionDAO.remove(ev);
+					enumProxy.delete(rdbmsInformationTarget, entity, identifier);
 					continue;
 				}
 				
@@ -196,6 +199,7 @@ public class RDBMSEnumServiceImpl implements RDBMSEnumService {
 				if (enumProxy.shouldStoreValue())
 					ev.setString(stringValue);
 				rdbmsConnectionDAO.save(ev);
+				enumProxy.save(rdbmsInformationTarget, entity, identifier, stringValue);
 			}
 		} catch (ClassNotFoundException e) {
 			logger.error("Probably JDBC driver is not found", e);
@@ -220,6 +224,8 @@ public class RDBMSEnumServiceImpl implements RDBMSEnumService {
 	protected RDBMSObjectEnumProxy getEnumProxy(AbstractEntity entity) {
 		if (entity instanceof RegularExpressionGroup) {
 			return (RDBMSObjectEnumProxy) context.getBean("regularExpressionGroupEnumProxy");
+		} else if (entity instanceof DocumentDatabase) {
+			return (RDBMSObjectEnumProxy) context.getBean("documentDatabaseEnumProxy");
 		}
 		
 		return null;

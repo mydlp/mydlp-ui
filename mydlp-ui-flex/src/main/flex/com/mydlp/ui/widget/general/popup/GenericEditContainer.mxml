@@ -160,6 +160,7 @@
 							(classMember.name == "coupledInventoryItem" && classMember.type == InventoryItem) ||
 							(classMember.name == "coupledRuleItems" && classMember.type == ListCollectionView) ||
 							(classMember.name == "informationType" && classMember.type == InformationType) ||
+							(targetObject is DocumentDatabase && classMember.name == "rdbmsEntries" && classMember.type == ListCollectionView) ||
 							(classMember.name == "editable" && classMember.type == Boolean) ||
 							(classMember.name == "matcher" && classMember.type == Matcher) ||
 							(classMember.name == "root" && classMember.type == ADDomainRoot) ||

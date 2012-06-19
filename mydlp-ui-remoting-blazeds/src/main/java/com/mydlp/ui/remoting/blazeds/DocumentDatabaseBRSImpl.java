@@ -32,8 +32,8 @@ public class DocumentDatabaseBRSImpl implements DocumentDatabaseService {
 	}
 
 	@Override
-	public List<Long> populateFingerprints(String filename, byte[] data) {
-		return thriftService.getFingerprints(filename, ByteBuffer.wrap(data));
+	public void generateFingerprints(Integer documentId, String filename, byte[] data) {
+		thriftService.generateFingerprints(documentId.longValue(), filename, ByteBuffer.wrap(data));
 	}
 	
 }

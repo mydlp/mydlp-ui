@@ -1,7 +1,6 @@
 package com.mydlp.ui.thrift;
 
 import java.nio.ByteBuffer;
-import java.util.List;
 import java.util.NoSuchElementException;
 
 import javax.annotation.PostConstruct;
@@ -99,7 +98,7 @@ public class MyDLPUIThriftServiceImpl implements MyDLPUIThriftService {
 			logger.error("Thrift execution error", e);
 		} catch (NoSuchElementException e) {
 			logger.error("Pool has been exhausted", e);
-		} catch (Exception e) {
+		} catch (Throwable e) {
 			logger.error("Error occured when calling thrift", e);
 		}
 		return result;
@@ -148,11 +147,12 @@ public class MyDLPUIThriftServiceImpl implements MyDLPUIThriftService {
 	}
 
 	@Override
-	public List<Long> getFingerprints(final String filename, final ByteBuffer data) {
-		return call(new ThriftCall<List<Long>>() {
+	public void generateFingerprints(final long documentId, final String filename, final ByteBuffer data) {
+		call(new ThriftCall<Void>() {
 			@Override
-			public List<Long> execute(MyDLPUIThriftConnection thriftConnection) throws TException {
-				return thriftConnection.client.getFingerprints(filename, data);
+			public Void execute(MyDLPUIThriftConnection thriftConnection) throws TException {
+				thriftConnection.client.generateFingerprints(documentId, filename, data);
+				return null;
 			}
 		});
 	}

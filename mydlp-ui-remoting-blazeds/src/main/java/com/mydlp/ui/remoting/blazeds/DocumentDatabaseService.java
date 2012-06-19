@@ -14,6 +14,6 @@ public interface DocumentDatabaseService {
 	
 	public DocumentDatabase save(DocumentDatabase d);
 	
-	public List<Long> populateFingerprints(String filename, byte[] data);
+	public void generateFingerprints(Integer documentId, String filename, byte[] data);
 
 }

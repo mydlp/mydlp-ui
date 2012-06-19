@@ -52,21 +52,6 @@
 			
 			protected function populateFingerprintsHandler(event:ResultEvent): void
 			{
-				if (ddfe.fingerprints == null)
-				{
-					ddfe.fingerprints = new ArrayCollection();
-				}
-				
-				if (event.result != null)
-				{
-					for each (var i:* in event.result as ListCollectionView)
-					{
-						var f:DocumentFingerprint = new DocumentFingerprint();
-						f.fingerprint = i as Number;
-						ddfe.fingerprints.addItem(f);
-					}
-				}
-				
 				currentState = "done";
 				completedFunction(ddfe);
 			}

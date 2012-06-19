@@ -1,27 +1,21 @@
 package com.mydlp.ui.domain;
 
 import java.util.Date;
-import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 @Entity
-public class DocumentDatabaseFileEntry extends AbstractEntity{
-	
+public class DocumentDatabaseFileEntry extends Document {
 	
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 852682231373800353L;
+	private static final long serialVersionUID = -3237890365051128950L;
 	
 	protected String filename; 
 	protected String md5Hash;
-	protected List<DocumentFingerprint> fingerprints;
 	@Temporal(TemporalType.TIMESTAMP)
 	protected Date createdDate;
 	public String getFilename() {
@@ -35,13 +29,6 @@ public class DocumentDatabaseFileEntry extends AbstractEntity{
 	}
 	public void setMd5Hash(String md5Hash) {
 		this.md5Hash = md5Hash;
-	}
-	@OneToMany(cascade={CascadeType.ALL}, fetch=FetchType.LAZY)
-	public List<DocumentFingerprint> getFingerprints() {
-		return fingerprints;
-	}
-	public void setFingerprints(List<DocumentFingerprint> fingerprints) {
-		this.fingerprints = fingerprints;
 	}
 	public Date getCreatedDate() {
 		return createdDate;

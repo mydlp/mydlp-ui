@@ -5,10 +5,14 @@ import com.mydlp.ui.domain.RDBMSInformationTarget;
 
 public interface RDBMSObjectEnumProxy {
 
-	public Boolean handle(	RDBMSInformationTarget rdbmsInformationTarget,
-							AbstractEntity entity,
-							String rowReturnValue);
+	public Boolean isValid(RDBMSInformationTarget rdbmsInformationTarget, AbstractEntity entity, String rowReturnValue);
 	
 	public Boolean shouldStoreValue();
+	
+	public void truncate(RDBMSInformationTarget rdbmsInformationTarget, AbstractEntity entity);
+	
+	public void delete(RDBMSInformationTarget rdbmsInformationTarget, AbstractEntity entity, String identifier);
+	
+	public void save(RDBMSInformationTarget rdbmsInformationTarget, AbstractEntity entity, String identifier, String rowReturnValue);
 
 }

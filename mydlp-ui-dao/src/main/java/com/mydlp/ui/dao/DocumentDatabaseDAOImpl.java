@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.mydlp.ui.domain.DocumentDatabase;
+import com.mydlp.ui.domain.DocumentFingerprint;
 
 
 @Repository("documentDatabaseDAO")
@@ -35,6 +36,12 @@ public class DocumentDatabaseDAOImpl extends AbstractPolicyDAO implements Docume
 				DetachedCriteria.forClass(DocumentDatabase.class)
 				.add(Restrictions.isNotNull("rdbmsInformationTarget"));
 		return getHibernateTemplate().findByCriteria(criteria);
+	}
+
+	@Override
+	public DocumentFingerprint saveFingerprint(DocumentFingerprint f) {
+		getHibernateTemplate().saveOrUpdate(f);
+		return f;
 	}
 
 }

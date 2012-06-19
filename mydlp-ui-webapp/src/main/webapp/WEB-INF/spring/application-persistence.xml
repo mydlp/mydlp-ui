@@ -31,8 +31,10 @@
          <value>com.mydlp.ui.domain.Config</value>
          <value>com.mydlp.ui.domain.DashboardItem</value>
          <value>com.mydlp.ui.domain.DataFormat</value>
+         <value>com.mydlp.ui.domain.Document</value>
          <value>com.mydlp.ui.domain.DocumentDatabase</value>
          <value>com.mydlp.ui.domain.DocumentDatabaseFileEntry</value>
+         <value>com.mydlp.ui.domain.DocumentDatabaseRDBMSEntry</value>
          <value>com.mydlp.ui.domain.DocumentFingerprint</value>
          <value>com.mydlp.ui.domain.EndpointRule</value>
          <value>com.mydlp.ui.domain.InformationDescription</value>

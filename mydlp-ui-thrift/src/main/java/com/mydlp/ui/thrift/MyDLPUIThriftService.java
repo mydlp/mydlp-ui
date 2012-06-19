@@ -1,7 +1,6 @@
 package com.mydlp.ui.thrift;
 
 import java.nio.ByteBuffer;
-import java.util.List;
 
 public interface MyDLPUIThriftService {
 	
@@ -14,7 +13,7 @@ public interface MyDLPUIThriftService {
     public String receiveChunk(String ipAddress, long itemId, 
     			ByteBuffer chunkData, int chunkNum, int chunkNumTotal);
     
-    public List<Long> getFingerprints(String filename, ByteBuffer data);
+    public void generateFingerprints(long documentId, String filename, ByteBuffer data);
     
     public void requeueIncident(Integer incidentId);
     
