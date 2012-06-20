@@ -1,5 +1,6 @@
 package com.mydlp.ui.dao;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.criterion.DetachedCriteria;
@@ -78,6 +79,61 @@ public class DocumentDatabaseDAOImpl extends AbstractPolicyDAO implements Docume
 	public void removeDocument(Document d) {
 		getHibernateTemplate().bulkUpdate("delete from DocumentFingerprint f where f.document.id=?", d.getId());
 		getHibernateTemplate().delete(d);
+	}
+
+	@Override
+	public void truncateRDBMSEntries(DocumentDatabase documentDatabase) {
+		if (documentDatabase == null || documentDatabase.getRdbmsEntries() == null) return;
+		for (DocumentDatabaseRDBMSEntry documentDatabaseRDBMSEntry : documentDatabase.getRdbmsEntries()) {
+			removeDocument(documentDatabaseRDBMSEntry);
+		}
+		documentDatabase.setRdbmsEntries(new ArrayList<DocumentDatabaseRDBMSEntry>());
+		save(documentDatabase);
+	}
+	
+	protected DocumentDatabaseRDBMSEntry getRDBMSEntryWithOrigId(DocumentDatabase documentDatabase, String originalId) {
+		@SuppressWarnings("unchecked")
+		List<DocumentDatabaseRDBMSEntry> l = getHibernateTemplate().find(
+				"select re from DocumentDatabase as dd left join dd.rdbmsEntries as re where dd.id=? and re.originalId=?",
+					documentDatabase.getId(), originalId
+				);
+		return DAOUtil.getSingleResult(l);
+	}
+
+	@Override
+	public void removeRDBMSEntryWithOrigId(DocumentDatabase documentDatabase,
+			String originalId) {
+		if (originalId == null) {
+			logger.error("Can not remove RDBMSEntry without originalId");
+			return;
+		}
+		DocumentDatabaseRDBMSEntry documentDatabaseRDBMSEntry = getRDBMSEntryWithOrigId(documentDatabase, originalId);
+		removeDocument(documentDatabaseRDBMSEntry);
+		documentDatabase.getRdbmsEntries().remove(documentDatabaseRDBMSEntry);
+		getHibernateTemplate().merge(documentDatabase);
+	}
+
+	@Override
+	public Integer putRDBMSEntry(DocumentDatabase documentDatabase,
+			String originalId, String value) {
+		DocumentDatabaseRDBMSEntry documentDatabaseRDBMSEntry = null;
+		if (originalId != null)
+			documentDatabaseRDBMSEntry = getRDBMSEntryWithOrigId(documentDatabase, originalId);
+		
+		if (documentDatabaseRDBMSEntry == null) {
+			documentDatabaseRDBMSEntry = new DocumentDatabaseRDBMSEntry();
+			documentDatabaseRDBMSEntry.setOriginalId(originalId);
+			if (documentDatabase.getRdbmsEntries() == null)
+				documentDatabase.setRdbmsEntries(new ArrayList<DocumentDatabaseRDBMSEntry>());
+			documentDatabase.getRdbmsEntries().add(documentDatabaseRDBMSEntry);
+			getHibernateTemplate().saveOrUpdate(documentDatabaseRDBMSEntry);
+			getHibernateTemplate().merge(documentDatabase);
+		} else {
+			getHibernateTemplate().bulkUpdate("delete from DocumentFingerprint f where f.document.id=?",
+					documentDatabaseRDBMSEntry.getId());
+		}
+		
+		return documentDatabaseRDBMSEntry.getId();
 	}
 
 }

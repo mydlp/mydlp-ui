@@ -22,4 +22,10 @@ public class GenericDAOImpl extends AbstractPolicyDAO implements GenericDAO {
 		getHibernateTemplate().delete(i);
 	}
 
+	@Override
+	public AbstractEntity merge(AbstractEntity entity) {
+		getHibernateTemplate().merge(entity);
+		return entity;
+	}
+
 }

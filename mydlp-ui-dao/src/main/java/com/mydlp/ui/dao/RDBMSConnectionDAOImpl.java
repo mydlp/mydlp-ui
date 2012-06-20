@@ -23,7 +23,7 @@ public class RDBMSConnectionDAOImpl extends AbstractPolicyDAO implements RDBMSCo
 		getHibernateTemplate().saveOrUpdate(entity);
 		return entity;
 	}
-
+	
 	@Override
 	public void remove(AbstractEntity entity) {
 		if (entity instanceof RDBMSInformationTarget)
@@ -97,16 +97,18 @@ public class RDBMSConnectionDAOImpl extends AbstractPolicyDAO implements RDBMSCo
 
 	@Override
 	public void finalizeProcess(Integer rdbmsInformationTargetId) {
-		getHibernateTemplate().bulkUpdate(
-				"update from RDBMSInformationTarget r set r.currentlyEnumerating=false where r.id=?", 
-				rdbmsInformationTargetId);
+		RDBMSInformationTarget rdbmsInformationTarget = 
+				getHibernateTemplate().load(RDBMSInformationTarget.class, rdbmsInformationTargetId);
+		rdbmsInformationTarget.setCurrentlyEnumerating(false);
+		getHibernateTemplate().saveOrUpdate(rdbmsInformationTarget);
 	}
 
 	@Override
 	public void startProcess(Integer rdbmsInformationTargetId) {
-		getHibernateTemplate().bulkUpdate(
-				"update from RDBMSInformationTarget r set r.currentlyEnumerating=true where r.id=?", 
-				rdbmsInformationTargetId);
+		RDBMSInformationTarget rdbmsInformationTarget = 
+				getHibernateTemplate().load(RDBMSInformationTarget.class, rdbmsInformationTargetId);
+		rdbmsInformationTarget.setCurrentlyEnumerating(true);
+		getHibernateTemplate().saveOrUpdate(rdbmsInformationTarget);
 	}
 
 	@Override
