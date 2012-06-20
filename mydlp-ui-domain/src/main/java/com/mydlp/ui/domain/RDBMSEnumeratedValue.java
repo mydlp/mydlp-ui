@@ -32,7 +32,7 @@ public class RDBMSEnumeratedValue extends AbstractEntity {
 	}
 
 	@Column(nullable=false)
-	@Index(name="hasCodeIndex")
+	@Index(name="hashCodeIndex")
 	public int getHashCode() {
 		return hashCode;
 	}

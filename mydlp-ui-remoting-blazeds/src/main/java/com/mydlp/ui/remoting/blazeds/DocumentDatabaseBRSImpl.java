@@ -23,7 +23,8 @@ public class DocumentDatabaseBRSImpl implements DocumentDatabaseService {
 	@Autowired
 	protected DocumentDatabaseDAO documentDatabaseDAO;
 	
-	@Autowired MyDLPUIThriftService thriftService;
+	@Autowired
+	protected MyDLPUIThriftService thriftService;
 	
 	@Override
 	public List<DocumentDatabase> getDocumentDatabases() {

@@ -22,6 +22,7 @@ import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.springframework.transaction.support.TransactionTemplate;
 
 import com.mydlp.ui.dao.DocumentDatabaseDAO;
+import com.mydlp.ui.dao.GenericDAO;
 import com.mydlp.ui.dao.RDBMSConnectionDAO;
 import com.mydlp.ui.dao.RegularExpressionGroupDAO;
 import com.mydlp.ui.domain.AbstractEntity;
@@ -59,6 +60,9 @@ public class RDBMSEnumServiceImpl implements RDBMSEnumService {
 	
 	@Autowired
 	protected RegularExpressionGroupDAO regularExpressionGroupDAO;
+	
+	@Autowired
+	protected GenericDAO genericDAO;
 	
 	public class RDBMSEnumJob extends EnumJob {
 
@@ -147,6 +151,7 @@ public class RDBMSEnumServiceImpl implements RDBMSEnumService {
 		Statement statement = null;
 		ResultSet rs = null;
 		try {
+			genericDAO.merge(entity);
 			rdbmsConnectionDAO.startProcess(rdbmsInformationTargetId);
 			RDBMSInformationTarget rdbmsInformationTarget = rdbmsConnectionDAO.getInformationTargetById(rdbmsInformationTargetId);
 			connection = getSQLConnection(rdbmsInformationTarget.getRdbmsConnection());
@@ -177,12 +182,13 @@ public class RDBMSEnumServiceImpl implements RDBMSEnumService {
 					Object idObj = rs.getObject(2);
 					idValue = idObj.toString();
 					ev = rdbmsConnectionDAO.getValue(rdbmsInformationTarget, idValue);
+					if (ev == null && valueIsAlreadyStored) continue;
 					if (ev != null && ev.getHashCode() == stringHashCode) continue; // we already have this value
 					valueIsAlreadyStored = rdbmsConnectionDAO.hasOtherValue(
 							rdbmsInformationTarget, stringHashCode, idValue);
 				}
 				
-				if (valueIsAlreadyStored && ev.getId() != null)
+				if (valueIsAlreadyStored && ev != null && ev.getId() != null)
 				{
 					rdbmsConnectionDAO.remove(ev);
 					enumProxy.delete(rdbmsInformationTarget, entity, identifier);

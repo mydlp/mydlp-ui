@@ -25,4 +25,11 @@ public interface DocumentDatabaseDAO {
 	
 	public void removeDocument(Document d);
 	
+	public void truncateRDBMSEntries(DocumentDatabase documentDatabase);
+	
+	public void removeRDBMSEntryWithOrigId(DocumentDatabase documentDatabase, String originalId);
+	
+	public Integer putRDBMSEntry(DocumentDatabase documentDatabase, String originalId, String value);
+	
+	
 }
