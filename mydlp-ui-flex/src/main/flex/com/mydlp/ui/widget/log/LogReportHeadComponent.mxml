@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx" width="100%" height="100%">
+	<fx:Script>
+		<![CDATA[
+			import com.mydlp.ui.util.LangUtil;
+			
+			protected function getReportDate():String
+			{
+				var date:Date = new Date();
+				var reportDate:String = new String();
+				reportDate = LangUtil.getString('messages', 'report.headComponent.reportDate.label');
+				reportDate += dateFormatter.format(date);
+				return reportDate;
+			}
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<mx:DateFormatter id="dateFormatter" formatString="DD/MM/YYYY HH:NN:SS"/> 
+	</fx:Declarations>
+	
+	<s:layout>
+		<s:VerticalLayout gap="10" horizontalAlign="center"/>
+	</s:layout>
+	
+	<s:BitmapImage source="@Embed('/assets/images/logo_314x124.png')" scaleX="0.75" scaleY="0.75"/>
+	
+	<s:Label fontSize="18" text="@Resource(bundle = 'messages', key = 'log.report.page.title.label')"/>
+	
+	<s:Label text="{getReportDate()}"/>
+	
+</s:Group>

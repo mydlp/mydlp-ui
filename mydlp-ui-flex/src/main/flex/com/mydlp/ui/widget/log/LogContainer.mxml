@@ -13,6 +13,7 @@
 			import com.mydlp.ui.domain.Rule;
 			import com.mydlp.ui.skin.DetailSearchLabelButton16Skin;
 			import com.mydlp.ui.util.AsyncListDataProvider;
+			import com.mydlp.ui.util.InteractionUtil;
 			import com.mydlp.ui.util.LangUtil;
 			import com.mydlp.ui.util.SessionUtil;
 			import com.mydlp.ui.util.SpecialCharacterUtil;
@@ -265,6 +266,13 @@
 				}
 			}
 			
+			protected function onPrintClick(event:MouseEvent):void
+			{
+				var printableLogContainer:PrintableLogContainer = InteractionUtil.newPopup(PrintableLogContainer) as PrintableLogContainer;
+				printableLogContainer.asyncListDataProvider = logSearchDP;
+				printableLogContainer.populate();
+			}
+			
 		]]>
 	</fx:Script>
 	<fx:Declarations>
@@ -305,6 +313,9 @@
 			<s:Button id="detailSearchButton" skinClass="com.mydlp.ui.skin.DetailSearchLabelButton16Skin"
 					  label="@Resource(bundle = 'messages', key = 'log.container.detailSearch.button.label')"
 					  click="onDetailSearchClickHandler(event)"/>
+			<s:Spacer width="100"/>
+			<s:Button label="@Resource(bundle = 'messages', key = 'log.container.export.button.label')" 
+					  click="onPrintClick(event)"/>
 		</s:HGroup>
 		<s:HGroup width="400" verticalAlign="middle" includeInLayout="{SessionUtil.isEnterprise()}">
 			<s:Button label="@Resource(bundle = 'messages', key = 'log.container.search.fulltext.label')"
@@ -317,21 +328,20 @@
 			<s:HorizontalLayout verticalAlign="middle"/>
 		</s:layout>
 		<s:HGroup width="100%" verticalAlign="middle">
-			<s:Spacer width="5"/>
 			<s:Label text="@Resource(bundle = 'messages', key = 'log.container.search.sourceIp.label')"/>
 			<s:TextInput  id="ipField"/>
-			<s:Spacer width="5"/>
+			<s:Spacer width="20"/>
 			<s:Label text="@Resource(bundle = 'messages', key = 'log.container.search.sourceUser.label')"/>
 			<s:TextInput id="userField"/>
-			<s:Spacer width="5"/>
+			<s:Spacer width="20"/>
 			<s:Label text="@Resource(bundle = 'messages', key = 'log.container.search.destination.label')"/>
 			<s:TextInput id="destinationField"/>
-			<s:Spacer width="5"/>
+			<s:Spacer width="20"/>
 			<s:Label text="@Resource(bundle = 'messages', key = 'log.container.search.actionList.label')"/>
 			<s:DropDownList id="actionList" width="120"
 							contentBackgroundAlpha="1"
 							dataProvider="{actionSearch}"/>
-			<s:Spacer width="5"/>
+			<s:Spacer width="20"/>
 			<s:Label text="@Resource(bundle = 'messages', key = 'log.container.search.channelList.label')"/>
 			<s:DropDownList id="channelList" width="120"
 							contentBackgroundAlpha="1"
