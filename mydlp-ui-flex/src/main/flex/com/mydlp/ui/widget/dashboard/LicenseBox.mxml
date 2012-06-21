@@ -102,7 +102,7 @@
 							  paddingLeft="5" paddingRight="5"/>
 		</s:layout>
 		
-		<s:Label includeIn="default, nolicense" text="{LangUtil.getString('messages','license.getLicense.link.label')}" click="onClickGetLicense(event)"
+		<s:Label includeIn="nolicense" text="{LangUtil.getString('messages','license.getLicense.link.label')}" click="onClickGetLicense(event)"
 				 width="100%" fontSize="18" fontWeight="bold" textAlign="center"/>
 		<s:Label includeIn="default" id="lbl" text="{LangUtil.getString('messages','dashboard.license.licenseType.' + FlexGlobals.topLevelApplication.license.licenseType)}"  
 				 width="100%" fontSize="18" fontWeight="bold" textAlign="center"/>
