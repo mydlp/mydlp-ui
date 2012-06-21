@@ -19,11 +19,7 @@
 			import mx.managers.PopUpManager;
 			import mx.rpc.events.ResultEvent;
 			
-			[Bindable]
-			protected var license:LicenseInformation;
-			
-			//public var licenseKeyEntrancePopup:LicenseKeyEntrancePopup;
-			
+
 			public var timerBlicker:Timer = new Timer(1000*60);
 			
 			protected function onCreationComplete(event:FlexEvent):void
@@ -110,11 +106,23 @@
 				 width="100%" fontSize="18" fontWeight="bold" textAlign="center"/>
 		<s:Label includeIn="default" id="lbl" text="{LangUtil.getString('messages','dashboard.license.licenseType.' + FlexGlobals.topLevelApplication.license.licenseType)}"  
 				 width="100%" fontSize="18" fontWeight="bold" textAlign="center"/>
-		<s:Label includeIn="default" id="expirationDate" text="{LangUtil.getString('messages','dashboard.license.expirationDate') + dateFormatter.format(expirationToDate())}" 
+		<s:Label includeIn="default" id="expirationDate" text="{
+				 LangUtil.getString('messages','dashboard.license.expirationDate') + ( 
+				 	(FlexGlobals.topLevelApplication.license as LicenseInformation).expirationDate == 0 ? 
+						 LangUtil.getString('messages','dashboard.license.unlimited') 
+						 : dateFormatter.format(expirationToDate()) )}" 
 				 fontSize="18" fontWeight="bold" textAlign="center" width="100%"/>
-		<s:Label includeIn="default" id="userCount"  text="{LangUtil.getString('messages','dashboard.license.userCount') + FlexGlobals.topLevelApplication.license.userCount}" 
+		<s:Label includeIn="default" id="userCount"  text="{
+				 LangUtil.getString('messages','dashboard.license.userCount') + (
+				 	(FlexGlobals.topLevelApplication.license as LicenseInformation).userCount == 0 ? 
+					 	LangUtil.getString('messages','dashboard.license.unlimited') 
+					 	: FlexGlobals.topLevelApplication.license.userCount)}" 
 				 fontSize="18" fontWeight="bold" textAlign="center" width="100%"/>
-		<s:Label includeIn="default" id="administrativeUserCount" text="{LangUtil.getString('messages','dashboard.license.administrativeUserCount') + FlexGlobals.topLevelApplication.license.administrativeUserCount}"
+		<s:Label includeIn="default" id="administrativeUserCount" text="{
+				 LangUtil.getString('messages','dashboard.license.administrativeUserCount') + (
+					 (FlexGlobals.topLevelApplication.license as LicenseInformation).administrativeUserCount == 0 ? 
+						 LangUtil.getString('messages','dashboard.license.unlimited')
+						 : FlexGlobals.topLevelApplication.license.administrativeUserCount)}"
 				 fontSize="18" fontWeight="bold" textAlign="center" width="100%"/>
 	</s:Group>
 </s:Group>
