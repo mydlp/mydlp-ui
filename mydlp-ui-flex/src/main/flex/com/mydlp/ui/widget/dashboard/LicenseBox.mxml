@@ -102,8 +102,19 @@
 							  paddingLeft="5" paddingRight="5"/>
 		</s:layout>
 		
-		<s:Label includeIn="nolicense" text="{LangUtil.getString('messages','license.getLicense.link.label')}" click="onClickGetLicense(event)"
-				 width="100%" fontSize="18" fontWeight="bold" textAlign="center"/>
+		<s:RichEditableText id="richText" includeIn="nolicense"
+							editable="false" width="100%" textAlign="center"
+							focusEnabled="false" fontSize="18" fontWeight="bold">
+			
+			<s:textFlow>
+				<s:TextFlow fontSize="18" fontWeight="bold" textAlign="center">
+					<s:p>
+						{LangUtil.getString('messages','license.getLicense.link.label')} <s:a href="https://secure.mydlp.com">secure.mydlp.com</s:a>
+					</s:p>
+				</s:TextFlow>
+			</s:textFlow>
+		</s:RichEditableText>
+		
 		<s:Label includeIn="default" id="lbl" text="{LangUtil.getString('messages','dashboard.license.licenseType.' + FlexGlobals.topLevelApplication.license.licenseType)}"  
 				 width="100%" fontSize="18" fontWeight="bold" textAlign="center"/>
 		<s:Label includeIn="default" id="expirationDate" text="{
