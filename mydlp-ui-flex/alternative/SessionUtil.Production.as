@@ -27,9 +27,10 @@ package com.mydlp.ui.util
 		}
 		
 		public static function isHardLimit():Boolean {
-			if (FlexGlobals.topLevelApplication.license != null &&
-				FlexGlobals.topLevelApplication.license.expirationDate == 0)
+			if (FlexGlobals.topLevelApplication.license == null)
 				return true;
+			if (FlexGlobals.topLevelApplication.license.expirationDate == 0)
+				return false;
 			var nDiffDays:Number = getDayInformation();
 			if(nDiffDays > 30)
 				return true;
@@ -37,9 +38,10 @@ package com.mydlp.ui.util
 		}
 		
 		public static function isSoftLimit():Boolean {
-			if (FlexGlobals.topLevelApplication.license != null &&
-				FlexGlobals.topLevelApplication.license.expirationDate == 0)
+			if (FlexGlobals.topLevelApplication.license == null)
 				return true;
+			if (FlexGlobals.topLevelApplication.license.expirationDate == 0)
+				return false;
 			var nDiffDays:Number = getDayInformation();
 			if(nDiffDays > 0)
 				return true;
@@ -47,8 +49,9 @@ package com.mydlp.ui.util
 		}
 		
 		public static function isExpirationDateNear():Boolean {
-			if (FlexGlobals.topLevelApplication.license != null &&
-				FlexGlobals.topLevelApplication.license.expirationDate == 0)
+			if (FlexGlobals.topLevelApplication.license == null)
+				return false;
+			if (FlexGlobals.topLevelApplication.license.expirationDate == 0)
 				return false;
 			var nDiffDays:Number = getDayInformation();
 			if(nDiffDays < 0 && nDiffDays > -30)
