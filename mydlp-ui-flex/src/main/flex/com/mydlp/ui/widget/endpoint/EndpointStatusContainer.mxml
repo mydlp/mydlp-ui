@@ -36,6 +36,7 @@
 			
 			protected var currentSystemTime:Date = null;
 			protected var currentSyncInterval:Number = Number.NaN;
+			protected var sIndex:Number = -1;
 			
 			protected function onCreationComplete(event:FlexEvent):void
 			{
@@ -138,6 +139,13 @@
 							Alert.OK | Alert.CANCEL, this, alertListener, null, Alert.OK);
 			}
 			
+			protected function onClickEndpointStatus(event:MouseEvent):void
+			{
+				if(sIndex == endpoints.selectedIndex)
+					endpoints.selectedIndex = -1;
+				sIndex = endpoints.selectedIndex;
+			}
+			
 		]]>
 	</fx:Script>
 	<fx:Declarations>
@@ -199,7 +207,7 @@
 		</s:HGroup>
 		
 		<s:DataGrid id="endpoints" dataProvider="{endpointsDP.asyncListView}" width="100%" height="100%"
-					variableRowHeight="true" >
+					variableRowHeight="true" click="onClickEndpointStatus(event)">
 			<s:columns>
 				<s:ArrayList>
 					<s:GridColumn headerText="@Resource(bundle = 'messages', key = 'endpoints.header.ipAddress')"

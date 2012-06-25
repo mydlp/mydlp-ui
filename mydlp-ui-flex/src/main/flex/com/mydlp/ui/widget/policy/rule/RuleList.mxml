@@ -40,14 +40,6 @@
 			
 			protected function onMouseClick(event:MouseEvent):void
 			{
-				/*
-				if (!isItemClicked)
-				{
-					selectedIndex = -1;
-					RuleItemList.regulateSelection();
-				}
-				isItemClicked = false;
-				*/
 				if(!itemClick && !isSelected)
 					FlexGlobals.topLevelApplication.policyContainer.ruleContainer.isSelection = false;
 				else
