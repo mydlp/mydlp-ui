@@ -9,8 +9,6 @@
 		<![CDATA[
 			import com.mydlp.ui.util.InteractionUtil;
 			
-			public var optionContainer:OptionContainer = null;
-			
 			protected function removeNodeClickHandler(event:MouseEvent):void
 			{
 				if (nodeList.selectedIndex != -1)
@@ -48,26 +46,6 @@
 		<domain:Config id="errorAction" />
 		<domain:Config id="autoDistribution" />
 		<domain:Config id="autoDistributionNodes" />
-		<domain:Config id="licenseProxyHost" />
-		<domain:Config id="licenseProxyPort" />
-		
-		
-		<mx:RegExpValidator id="licProxyHostValidator"
-							source="{licenseProxyHost}"
-							required="false"
-							property="text"
-							expression="^[a-zA-Z0-9\.\-]+$"
-							valid="{optionContainer.validInput(event)}"
-							invalid="{optionContainer.invalidInput(event)}"/>
-		
-		<s:NumberValidator id="licProxyPortValidator"
-						   source="{licenseProxyPort}"
-						   property="text"
-						   required="false"
-						   allowNegative="false"
-						   valid="{optionContainer.validInput(event)}"
-						   invalid="{optionContainer.invalidInput(event)}"/>
-		
 	</fx:Declarations>
 	<s:VGroup width="100%" height="100%" gap="10">
 		<s:HGroup width="100%" height="100%">
@@ -119,12 +97,6 @@
 							</mx:ArrayList>
 						</s:dataProvider>						
 					</s:DropDownList>				
-				</s:FormItem>
-				<s:FormItem label="{licenseProxyHost.label}">
-					<s:TextInput id="licenseProxyHostInput" text="@{licenseProxyHost.value}" width="200"/>
-				</s:FormItem>
-				<s:FormItem label="{licenseProxyPort.label}">
-					<s:TextInput id="licenseProxyPortInput" text="@{licenseProxyPort.value}" width="200"/>
 				</s:FormItem>
 			</s:Form>
 			<s:VGroup width="100%" height="100%">	

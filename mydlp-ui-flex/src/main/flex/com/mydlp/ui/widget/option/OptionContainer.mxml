@@ -93,9 +93,6 @@
 						
 					else if (config.key == "auto_distribution") advancedTab.autoDistribution = config;
 					else if (config.key == "auto_distribution_nodes") advancedTab.autoDistributionNodes = config;
-					
-					else if (config.key == "license_proxy_host") advancedTab.licenseProxyHost = config;
-					else if (config.key == "license_proxy_port") advancedTab.licenseProxyPort = config;
 						
 					else if (config.key == "print_monitor") epTab.printMonitor = config;
 					else if (config.key == "log_level") epTab.logLevel = config;
@@ -175,7 +172,7 @@
 					<option:EpTab id="epTab" optionContainer="{this}"/>
 				</s:NavigatorContent>		
 				<s:NavigatorContent label="@Resource(bundle = 'messages', key = 'options.tab.advanced')" width="100%" height="100%">
-					<option:AdvancedTab id="advancedTab" optionContainer="{this}"/>
+					<option:AdvancedTab id="advancedTab"/>
 				</s:NavigatorContent>
 				<s:NavigatorContent label="@Resource(bundle = 'messages', key = 'options.tab.misc')" width="100%" height="100%">
 					<option:MiscTab id="miscTab"/> <!--enabled="{SessionUtil.isEnterprise()}" visible="{SessionUtil.isEnterprise()}"/>-->
