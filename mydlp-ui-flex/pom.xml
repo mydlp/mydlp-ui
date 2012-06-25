@@ -68,6 +68,24 @@
     <sourceDirectory>src/main/flex</sourceDirectory>
     <plugins>
       <plugin>
+	    <artifactId>maven-antrun-plugin</artifactId>
+	    <executions>
+	      <execution>
+	        <id>generate-session-util</id>
+	        <phase>validate</phase>
+	        <goals>
+	          <goal>run</goal>
+            </goals>
+	        <configuration>
+	          <tasks>
+	            <copy file="src/main/flex/com/mydlp/ui/util/SessionUtil.${session_util.key}.as" 
+	            		tofile="src/main/flex/com/mydlp/ui/util/SessionUtil.as" />
+	          </tasks>
+	        </configuration>
+	      </execution>
+	    </executions>
+	  </plugin>
+      <plugin>
         <artifactId>maven-resources-plugin</artifactId>
         <version>2.5</version>
         <executions>

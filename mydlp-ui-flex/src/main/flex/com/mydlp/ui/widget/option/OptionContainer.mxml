@@ -93,12 +93,14 @@
 						
 					else if (config.key == "auto_distribution") advancedTab.autoDistribution = config;
 					else if (config.key == "auto_distribution_nodes") advancedTab.autoDistributionNodes = config;
+					
+					else if (config.key == "license_proxy_host") advancedTab.licenseProxyHost = config;
+					else if (config.key == "license_proxy_port") advancedTab.licenseProxyPort = config;
 						
 					else if (config.key == "print_monitor") epTab.printMonitor = config;
 					else if (config.key == "log_level") epTab.logLevel = config;
 					else if (config.key == "log_limit") epTab.logLimit = config;
 					else if (config.key == "sync_interval") epTab.syncInterval = config;
-					
 					else if (config.key == "discover_fs_interval") epTab.discoverFSInterval = config;
 					else if (config.key == "discover_fs_paths") epTab.discoverFSPaths = config;
 					else if (config.key == "discover_fs_on_startup") epTab.discoverFSOnStartup = config;
@@ -173,7 +175,7 @@
 					<option:EpTab id="epTab" optionContainer="{this}"/>
 				</s:NavigatorContent>		
 				<s:NavigatorContent label="@Resource(bundle = 'messages', key = 'options.tab.advanced')" width="100%" height="100%">
-					<option:AdvancedTab id="advancedTab" />
+					<option:AdvancedTab id="advancedTab" optionContainer="{this}"/>
 				</s:NavigatorContent>
 				<s:NavigatorContent label="@Resource(bundle = 'messages', key = 'options.tab.misc')" width="100%" height="100%">
 					<option:MiscTab id="miscTab"/> <!--enabled="{SessionUtil.isEnterprise()}" visible="{SessionUtil.isEnterprise()}"/>-->

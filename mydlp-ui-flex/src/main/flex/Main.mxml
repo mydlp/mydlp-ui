@@ -218,7 +218,7 @@
 				
 				topToolbar.getCurrentUserHandler();
 				
-				if(SessionUtil.isHardLimit() || license == null)
+				if(SessionUtil.isHardLimit())
 					currentState = "nolicense";
 				else
 					currentState = "user";
@@ -229,15 +229,6 @@
 			protected function getLicenseHandler(event:ResultEvent):void
 			{
 				license = event.result as LicenseInformation;
-				//for development
-				/*var testLicense:LicenseInformation = new LicenseInformation();
-				testLicense.administrativeUserCount = 1;
-				testLicense.licenseType = LicenseInformation.ENTERPRISE_LICENSE;
-				testLicense.expirationDate = 1343836800;
-				//testLicense.expirationDate = 1339344000;
-				testLicense.userCount = 100;
-				license = testLicense;*/
-				////////////////
 				re.getCurrentUser();
 			}
 			
