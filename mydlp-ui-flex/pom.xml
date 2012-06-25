@@ -78,7 +78,7 @@
             </goals>
 	        <configuration>
 	          <tasks>
-	            <copy file="src/main/flex/com/mydlp/ui/util/SessionUtil.${session_util.key}.as" 
+	            <copy file="alternative/SessionUtil.${session_util.key}.as" 
 	            		tofile="src/main/flex/com/mydlp/ui/util/SessionUtil.as" />
 	          </tasks>
 	        </configuration>
