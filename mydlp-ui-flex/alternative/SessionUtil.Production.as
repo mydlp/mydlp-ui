@@ -61,8 +61,6 @@ package com.mydlp.ui.util
 		
 		public static function getDayInformation():Number
 		{
-			if (FlexGlobals.topLevelApplication.license == null)
-				return -60;
 			var license:LicenseInformation = FlexGlobals.topLevelApplication.license as LicenseInformation;
 			if(license == null) 
 				return Number.NaN;
