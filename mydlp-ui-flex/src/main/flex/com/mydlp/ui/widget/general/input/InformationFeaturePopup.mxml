@@ -235,6 +235,7 @@
 			<input:MatcherDefinition data="encrypted_file" />
 			<input:MatcherDefinition data="encrypted_archive" />
 			<input:MatcherDefinition data="pan"/>
+			<input:MatcherDefinition data="cpf"/>
 		</s:ArrayCollection>
 		
 		<s:NumberValidator id="thresholdValidator"
@@ -279,6 +280,8 @@
 		<s:State name="document_pdm"/>
 		<s:State name="encrypted_file"/>
 		<s:State name="encrypted_archive"/>
+		<s:State name="pan"/>
+		<s:State name="cpf"/>
 	</s:states>
 	
 	<s:layout>
