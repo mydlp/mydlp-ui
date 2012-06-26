@@ -234,6 +234,7 @@
 			<input:MatcherDefinition data="document_pdm" />
 			<input:MatcherDefinition data="encrypted_file" />
 			<input:MatcherDefinition data="encrypted_archive" />
+			<input:MatcherDefinition data="pan"/>
 		</s:ArrayCollection>
 		
 		<s:NumberValidator id="thresholdValidator"
