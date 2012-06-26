@@ -12,6 +12,8 @@ package com.mydlp.ui.util
 	{
 		
 		public static function isEnterprise():Boolean {
+			if (FlexGlobals.topLevelApplication.license == null)
+				return false;
 			var license:LicenseInformation = FlexGlobals.topLevelApplication.license as LicenseInformation;
 			if(license.licenseType == LicenseInformation.ENTERPRISE_LICENSE || license.licenseType == LicenseInformation.TRIAL_LICENSE)
 				return true;
@@ -25,8 +27,9 @@ package com.mydlp.ui.util
 		}
 		
 		public static function isHardLimit():Boolean {
-			if (FlexGlobals.topLevelApplication.license != null &&
-				FlexGlobals.topLevelApplication.license.expirationDate == 0)
+			if (FlexGlobals.topLevelApplication.license == null)
+				return true;
+			if (FlexGlobals.topLevelApplication.license.expirationDate == 0)
 				return false;
 			var nDiffDays:Number = getDayInformation();
 			if(nDiffDays > 30)
@@ -35,8 +38,9 @@ package com.mydlp.ui.util
 		}
 		
 		public static function isSoftLimit():Boolean {
-			if (FlexGlobals.topLevelApplication.license != null &&
-				FlexGlobals.topLevelApplication.license.expirationDate == 0)
+			if (FlexGlobals.topLevelApplication.license == null)
+				return true;
+			if (FlexGlobals.topLevelApplication.license.expirationDate == 0)
 				return false;
 			var nDiffDays:Number = getDayInformation();
 			if(nDiffDays > 0)
@@ -45,16 +49,15 @@ package com.mydlp.ui.util
 		}
 		
 		public static function isExpirationDateNear():Boolean {
-			if (FlexGlobals.topLevelApplication.license != null &&
-				FlexGlobals.topLevelApplication.license.expirationDate == 0)
+			if (FlexGlobals.topLevelApplication.license == null)
+				return false;
+			if (FlexGlobals.topLevelApplication.license.expirationDate == 0)
 				return false;
 			var nDiffDays:Number = getDayInformation();
 			if(nDiffDays < 0 && nDiffDays > -30)
 				return true;
 			else return false;
 		}
-		
-		
 		
 		public static function getDayInformation():Number
 		{

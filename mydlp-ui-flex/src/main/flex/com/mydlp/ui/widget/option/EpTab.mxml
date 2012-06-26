@@ -20,6 +20,7 @@
 		<domain:Config id="discoverFSPaths" />
 		<domain:Config id="discoverFSOnStartup" />
 		<domain:Config id="ignoreDiscoverFSMaxSizeExceeded" />
+
 		
 		<s:NumberValidator id="epSyncValidator"
 						   source="{sync}"
@@ -41,6 +42,7 @@
 						   minValue="3599999"
 						   valid="{optionContainer.validInput(event)}"
 						   invalid="{optionContainer.invalidInput(event)}"/>
+		
 	</fx:Declarations>
 	
 	<fx:Script>
@@ -96,6 +98,7 @@
 				<s:CheckBox id="ignoreDiscoverFSMaxSizeExceededCheckBox" selected="{ignoreDiscoverFSMaxSizeExceeded.value == 'true'}" 
 							change="{ignoreDiscoverFSMaxSizeExceeded.value = ignoreDiscoverFSMaxSizeExceededCheckBox.selected ? 'true' : 'false'}"/>			
 			</s:FormItem>
+			
 		</s:Form>	
 		
 	</s:VGroup>

@@ -78,6 +78,8 @@
     <ds.log.url>jdbc:hsqldb:file:hsqldb/MyDLPLog</ds.log.url>
     <ds.log.username>sa</ds.log.username>
     <ds.log.password></ds.log.password>    
+
+    <session_util.key>Devel</session_util.key>
   </properties>
 
   <profiles>
@@ -104,6 +106,7 @@
         <amf.channelType>mx.messaging.channels.SecureAMFChannel</amf.channelType>
         <amf.endpointType>flex.messaging.endpoints.SecureAMFEndpoint</amf.endpointType>
 
+        <session_util.key>Production</session_util.key>
       </properties>
     </profile>
   </profiles>

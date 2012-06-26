@@ -33,8 +33,6 @@
 	</fx:Script>
 	
 	<fx:Declarations>
-		<!--<domain:Config id="archiveMinimumSize" />	
-		<domain:Config id="archiveInbound" />-->	
 		<domain:Config id="maximumObjectSize" />	
 		<domain:Config id="maximumMemoryObject" />	
 		<domain:Config id="maximumChunkSize" />	
@@ -47,7 +45,7 @@
 		<domain:Config id="queryCacheMaximumSize" />
 		<domain:Config id="errorAction" />
 		<domain:Config id="autoDistribution" />
-		<domain:Config id="autoDistributionNodes" />	
+		<domain:Config id="autoDistributionNodes" />
 	</fx:Declarations>
 	<s:VGroup width="100%" height="100%" gap="10">
 		<s:HGroup width="100%" height="100%">
