@@ -236,6 +236,7 @@
 			<input:MatcherDefinition data="encrypted_archive" />
 			<input:MatcherDefinition data="pan"/>
 			<input:MatcherDefinition data="cpf"/>
+			<input:MatcherDefinition data="china_icn"/>
 		</s:ArrayCollection>
 		
 		<s:NumberValidator id="thresholdValidator"
@@ -282,6 +283,7 @@
 		<s:State name="encrypted_archive"/>
 		<s:State name="pan"/>
 		<s:State name="cpf"/>
+		<s:State name="china_icn"/>
 	</s:states>
 	
 	<s:layout>
