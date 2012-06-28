@@ -238,6 +238,7 @@
 			<input:MatcherDefinition data="pan"/>
 			<input:MatcherDefinition data="cpf"/>
 			<input:MatcherDefinition data="china_icn"/>
+			<input:MatcherDefinition data="cc_edate"/>
 		</s:ArrayCollection>
 		
 		<s:NumberValidator id="thresholdValidator"
@@ -286,6 +287,7 @@
 		<s:State name="pan"/>
 		<s:State name="cpf"/>
 		<s:State name="china_icn"/>
+		<s:State name="cc_edate"/>
 	</s:states>
 	
 	<s:layout>
