@@ -220,6 +220,7 @@
 			<input:MatcherDefinition data="cc" />
 			<input:MatcherDefinition data="ssn" />
 			<input:MatcherDefinition data="iban" />
+			<input:MatcherDefinition data="aba" />
 			<input:MatcherDefinition data="trid" />
 			<input:MatcherDefinition data="canada_sin" />
 			<input:MatcherDefinition data="france_insee" />
@@ -234,6 +235,11 @@
 			<input:MatcherDefinition data="document_pdm" />
 			<input:MatcherDefinition data="encrypted_file" />
 			<input:MatcherDefinition data="encrypted_archive" />
+			<input:MatcherDefinition data="pan"/>
+			<input:MatcherDefinition data="cpf"/>
+			<input:MatcherDefinition data="china_icn"/>
+			<input:MatcherDefinition data="cc_edate"/>
+			<input:MatcherDefinition data="birthdate"/>
 		</s:ArrayCollection>
 		
 		<s:NumberValidator id="thresholdValidator"
@@ -264,6 +270,7 @@
 		<s:State name="cc" />
 		<s:State name="ssn" />
 		<s:State name="iban" />
+		<s:State name="aba" />
 		<s:State name="trid" />
 		<s:State name="canada_sin" />
 		<s:State name="france_insee" />
@@ -278,6 +285,11 @@
 		<s:State name="document_pdm"/>
 		<s:State name="encrypted_file"/>
 		<s:State name="encrypted_archive"/>
+		<s:State name="pan"/>
+		<s:State name="cpf"/>
+		<s:State name="china_icn"/>
+		<s:State name="cc_edate"/>
+		<s:State name="birthdate"/>
 	</s:states>
 	
 	<s:layout>
