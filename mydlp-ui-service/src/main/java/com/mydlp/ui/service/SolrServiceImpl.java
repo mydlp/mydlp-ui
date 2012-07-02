@@ -69,7 +69,7 @@ public class SolrServiceImpl implements SolrService {
 	{
 		try {
 			SolrInputDocument doc = new SolrInputDocument();
-			doc.addField("id", id);
+			doc.addField("id", id.toString());
 			doc.addField("category", CATEGORY_ARCHIVE);
 			doc.addField("content", text);
 			getSolrServer().add(doc);
@@ -84,7 +84,7 @@ public class SolrServiceImpl implements SolrService {
 	{
 		try {
 			SolrInputDocument doc = new SolrInputDocument();
-			doc.addField("id", id);
+			doc.addField("id", id.toString());
 			doc.addField("category", CATEGORY_ARCHIVE);
 			doc.addField("content", Charset.forName("UTF-8").decode(buffer));
 			getSolrServer().add(doc);
@@ -138,7 +138,7 @@ public class SolrServiceImpl implements SolrService {
 			SolrDocumentList result = response.getResults();
 			
 			for (SolrDocument solrDocument : result) 
-				returnList.add(((Long) solrDocument.get("id")).intValue());
+				returnList.add(Integer.parseInt((String) solrDocument.get("id")));
 			
 		} catch (NumberFormatException e) {
 			logger.error("Error occurred when formatting number", e);
