@@ -24,6 +24,7 @@ public class EndpointStatus extends AbstractEntity {
 	@Temporal(TemporalType.TIMESTAMP)
 	protected Date lastUpdate;
 	protected String username;
+	protected String computerName;
 	
 	@Index(name="ipAddressIndex")
 	@Column(nullable=false)
@@ -59,5 +60,11 @@ public class EndpointStatus extends AbstractEntity {
 	}
 	public void setUsername(String username) {
 		this.username = username;
+	}
+	public String getComputerName() {
+		return computerName;
+	}
+	public void setComputerName(String computerName) {
+		this.computerName = computerName;
 	}
 }
