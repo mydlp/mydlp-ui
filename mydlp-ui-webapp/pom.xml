@@ -214,6 +214,10 @@
   	    <groupId>org.mortbay.jetty</groupId>
         <artifactId>jetty-maven-plugin</artifactId>
         <version>8.0.0.M2</version>
+        <configuration>
+          <stopKey>pldym</stopKey>
+          <stopPort>9999</stopPort>
+        </configuration>
       </plugin>
       <plugin>
         <artifactId>maven-war-plugin</artifactId>
