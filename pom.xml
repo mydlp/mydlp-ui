@@ -80,6 +80,8 @@
     <ds.log.password></ds.log.password>    
 
     <session_util.key>Devel</session_util.key>
+
+    <jetty.daemon>false</jetty.daemon>
   </properties>
 
   <profiles>
@@ -107,6 +109,12 @@
         <amf.endpointType>flex.messaging.endpoints.SecureAMFEndpoint</amf.endpointType>
 
         <session_util.key>Production</session_util.key>
+      </properties>
+    </profile>
+    <profile>
+      <id>run-daemon</id>
+      <properties>
+        <jetty.daemon>true</jetty.daemon>
       </properties>
     </profile>
   </profiles>

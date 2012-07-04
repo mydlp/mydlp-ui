@@ -217,6 +217,7 @@
         <configuration>
           <stopKey>pldym</stopKey>
           <stopPort>9999</stopPort>
+          <daemon>${jetty.daemon}</daemon>
         </configuration>
       </plugin>
       <plugin>
