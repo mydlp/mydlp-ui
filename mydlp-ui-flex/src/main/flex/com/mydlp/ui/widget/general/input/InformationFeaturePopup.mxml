@@ -240,6 +240,7 @@
 			<input:MatcherDefinition data="china_icn"/>
 			<input:MatcherDefinition data="cc_edate"/>
 			<input:MatcherDefinition data="birthdate"/>
+			<input:MatcherDefinition data="gdate"/>
 		</s:ArrayCollection>
 		
 		<s:NumberValidator id="thresholdValidator"
@@ -290,6 +291,7 @@
 		<s:State name="china_icn"/>
 		<s:State name="cc_edate"/>
 		<s:State name="birthdate"/>
+		<s:State name="gdate"/>
 	</s:states>
 	
 	<s:layout>
