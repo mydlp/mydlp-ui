@@ -243,6 +243,7 @@ public class Mydlp_ui {
     public void saveLicenseKey(String licenseKey) throws org.apache.thrift.TException
     {
       send_saveLicenseKey(licenseKey);
+      recv_saveLicenseKey();
     }
 
     public void send_saveLicenseKey(String licenseKey) throws org.apache.thrift.TException
@@ -250,6 +251,13 @@ public class Mydlp_ui {
       saveLicenseKey_args args = new saveLicenseKey_args();
       args.setLicenseKey(licenseKey);
       sendBase("saveLicenseKey", args);
+    }
+
+    public void recv_saveLicenseKey() throws org.apache.thrift.TException
+    {
+      saveLicenseKey_result result = new saveLicenseKey_result();
+      receiveBase(result, "saveLicenseKey");
+      return;
     }
 
     public LicenseObject getLicense() throws org.apache.thrift.TException
@@ -555,7 +563,7 @@ public class Mydlp_ui {
     public static class saveLicenseKey_call extends org.apache.thrift.async.TAsyncMethodCall {
       private String licenseKey;
       public saveLicenseKey_call(String licenseKey, org.apache.thrift.async.AsyncMethodCallback<saveLicenseKey_call> resultHandler, org.apache.thrift.async.TAsyncClient client, org.apache.thrift.protocol.TProtocolFactory protocolFactory, org.apache.thrift.transport.TNonblockingTransport transport) throws org.apache.thrift.TException {
-        super(client, protocolFactory, transport, resultHandler, true);
+        super(client, protocolFactory, transport, resultHandler, false);
         this.licenseKey = licenseKey;
       }
 
@@ -573,6 +581,7 @@ public class Mydlp_ui {
         }
         org.apache.thrift.transport.TMemoryInputTransport memoryTransport = new org.apache.thrift.transport.TMemoryInputTransport(getFrameBuffer().array());
         org.apache.thrift.protocol.TProtocol prot = client.getProtocolFactory().getProtocol(memoryTransport);
+        (new Client(prot)).recv_saveLicenseKey();
       }
     }
 
@@ -750,9 +759,10 @@ public class Mydlp_ui {
         return new saveLicenseKey_args();
       }
 
-      protected org.apache.thrift.TBase getResult(I iface, saveLicenseKey_args args) throws org.apache.thrift.TException {
+      protected saveLicenseKey_result getResult(I iface, saveLicenseKey_args args) throws org.apache.thrift.TException {
+        saveLicenseKey_result result = new saveLicenseKey_result();
         iface.saveLicenseKey(args.licenseKey);
-        return null;
+        return result;
       }
     }
 
@@ -5634,6 +5644,207 @@ public class Mydlp_ui {
         sb.append(this.licenseKey);
       }
       first = false;
+      sb.append(")");
+      return sb.toString();
+    }
+
+    public void validate() throws org.apache.thrift.TException {
+      // check for required fields
+    }
+
+    private void writeObject(java.io.ObjectOutputStream out) throws java.io.IOException {
+      try {
+        write(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(out)));
+      } catch (org.apache.thrift.TException te) {
+        throw new java.io.IOException(te);
+      }
+    }
+
+    private void readObject(java.io.ObjectInputStream in) throws java.io.IOException, ClassNotFoundException {
+      try {
+        read(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(in)));
+      } catch (org.apache.thrift.TException te) {
+        throw new java.io.IOException(te);
+      }
+    }
+
+  }
+
+  public static class saveLicenseKey_result implements org.apache.thrift.TBase<saveLicenseKey_result, saveLicenseKey_result._Fields>, java.io.Serializable, Cloneable   {
+    private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("saveLicenseKey_result");
+
+
+
+    /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
+    public enum _Fields implements org.apache.thrift.TFieldIdEnum {
+;
+
+      private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+
+      static {
+        for (_Fields field : EnumSet.allOf(_Fields.class)) {
+          byName.put(field.getFieldName(), field);
+        }
+      }
+
+      /**
+       * Find the _Fields constant that matches fieldId, or null if its not found.
+       */
+      public static _Fields findByThriftId(int fieldId) {
+        switch(fieldId) {
+          default:
+            return null;
+        }
+      }
+
+      /**
+       * Find the _Fields constant that matches fieldId, throwing an exception
+       * if it is not found.
+       */
+      public static _Fields findByThriftIdOrThrow(int fieldId) {
+        _Fields fields = findByThriftId(fieldId);
+        if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+        return fields;
+      }
+
+      /**
+       * Find the _Fields constant that matches name, or null if its not found.
+       */
+      public static _Fields findByName(String name) {
+        return byName.get(name);
+      }
+
+      private final short _thriftId;
+      private final String _fieldName;
+
+      _Fields(short thriftId, String fieldName) {
+        _thriftId = thriftId;
+        _fieldName = fieldName;
+      }
+
+      public short getThriftFieldId() {
+        return _thriftId;
+      }
+
+      public String getFieldName() {
+        return _fieldName;
+      }
+    }
+    public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
+    static {
+      Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
+      metaDataMap = Collections.unmodifiableMap(tmpMap);
+      org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(saveLicenseKey_result.class, metaDataMap);
+    }
+
+    public saveLicenseKey_result() {
+    }
+
+    /**
+     * Performs a deep copy on <i>other</i>.
+     */
+    public saveLicenseKey_result(saveLicenseKey_result other) {
+    }
+
+    public saveLicenseKey_result deepCopy() {
+      return new saveLicenseKey_result(this);
+    }
+
+    @Override
+    public void clear() {
+    }
+
+    public void setFieldValue(_Fields field, Object value) {
+      switch (field) {
+      }
+    }
+
+    public Object getFieldValue(_Fields field) {
+      switch (field) {
+      }
+      throw new IllegalStateException();
+    }
+
+    /** Returns true if field corresponding to fieldID is set (has been assigned a value) and false otherwise */
+    public boolean isSet(_Fields field) {
+      if (field == null) {
+        throw new IllegalArgumentException();
+      }
+
+      switch (field) {
+      }
+      throw new IllegalStateException();
+    }
+
+    @Override
+    public boolean equals(Object that) {
+      if (that == null)
+        return false;
+      if (that instanceof saveLicenseKey_result)
+        return this.equals((saveLicenseKey_result)that);
+      return false;
+    }
+
+    public boolean equals(saveLicenseKey_result that) {
+      if (that == null)
+        return false;
+
+      return true;
+    }
+
+    @Override
+    public int hashCode() {
+      return 0;
+    }
+
+    public int compareTo(saveLicenseKey_result other) {
+      if (!getClass().equals(other.getClass())) {
+        return getClass().getName().compareTo(other.getClass().getName());
+      }
+
+      int lastComparison = 0;
+      saveLicenseKey_result typedOther = (saveLicenseKey_result)other;
+
+      return 0;
+    }
+
+    public _Fields fieldForId(int fieldId) {
+      return _Fields.findByThriftId(fieldId);
+    }
+
+    public void read(org.apache.thrift.protocol.TProtocol iprot) throws org.apache.thrift.TException {
+      org.apache.thrift.protocol.TField field;
+      iprot.readStructBegin();
+      while (true)
+      {
+        field = iprot.readFieldBegin();
+        if (field.type == org.apache.thrift.protocol.TType.STOP) { 
+          break;
+        }
+        switch (field.id) {
+          default:
+            org.apache.thrift.protocol.TProtocolUtil.skip(iprot, field.type);
+        }
+        iprot.readFieldEnd();
+      }
+      iprot.readStructEnd();
+
+      // check for required fields of primitive type, which can't be checked in the validate method
+      validate();
+    }
+
+    public void write(org.apache.thrift.protocol.TProtocol oprot) throws org.apache.thrift.TException {
+      oprot.writeStructBegin(STRUCT_DESC);
+
+      oprot.writeFieldStop();
+      oprot.writeStructEnd();
+    }
+
+    @Override
+    public String toString() {
+      StringBuilder sb = new StringBuilder("saveLicenseKey_result(");
+      boolean first = true;
+
       sb.append(")");
       return sb.toString();
     }
