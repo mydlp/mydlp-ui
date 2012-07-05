@@ -19,7 +19,7 @@ public interface MyDLPUIThriftService {
     
     public String registerUserAddress(String ipAddress, String userH, ByteBuffer payload);
     
-    public void saveLicenseKey(String licenseKey);
+    public String saveLicenseKey(String licenseKey);
 
     public LicenseObject getLicense();
 

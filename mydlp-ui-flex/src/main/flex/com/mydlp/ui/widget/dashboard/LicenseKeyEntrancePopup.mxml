@@ -2,7 +2,7 @@
 <s:TitleWindow xmlns:fx="http://ns.adobe.com/mxml/2009" 
 			   xmlns:s="library://ns.adobe.com/flex/spark" 
 			   xmlns:mx="library://ns.adobe.com/flex/mx" 
-			   title="@Resource(bundle = 'messages', key = 'dashboard.license.confirmPopup.title')"
+			   title="@Resource(bundle = 'messages', key = 'dashboard.license.popup.title')"
 			   width="400" >
 	<fx:Script>
 		<![CDATA[
@@ -16,7 +16,12 @@
 						  paddingLeft="10" paddingRight="10"/>
 	</s:layout>
 	
-	<s:Label text="@Resource(bundle = 'messages', key = 'dashboard.license.confirmPopup.valid.label')"/>
-	<s:Label text="@Resource(bundle = 'messages', key = 'dashboard.license.confirmPopup.redirection.label')"/>
+	<s:Label id="messageLabel" text="@Resource(bundle = 'messages', key = 'dashboard.license.popup.message')"/>
+	
+	<s:HGroup width="100%" horizontalAlign="center" >
+		<s:Button id="closeButton" label="@Resource(bundle = 'messages', key = 'dashboard.license.closeButton.label')"
+				  click="{InteractionUtil.closePopup(this);}" visible="false" />
+	</s:HGroup>  
+	
 	
 </s:TitleWindow>
