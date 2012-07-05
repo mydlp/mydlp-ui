@@ -11,6 +11,6 @@ public interface LicenseInformationService {
 	@Secured({AuthSecurityRole.ROLE_ADMIN, AuthSecurityRole.ROLE_AUDITOR, AuthSecurityRole.ROLE_CLASSIFIER})
 	public LicenseInformation getLicense();
 	
-	public Boolean saveLicenseKey(String s);
+	public String saveLicenseKey(String s);
 	
 }

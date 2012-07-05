@@ -5,7 +5,7 @@ import com.mydlp.ui.domain.LicenseInformation;
 
 public interface LicenseService {
 
-	public void enterLicenseKey(String licenseKey);
+	public String enterLicenseKey(String licenseKey);
 	
 	public LicenseInformation getCurrentLicense();
 	

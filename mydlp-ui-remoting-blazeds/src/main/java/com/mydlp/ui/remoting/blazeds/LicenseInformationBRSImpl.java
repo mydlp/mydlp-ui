@@ -24,8 +24,7 @@ public class LicenseInformationBRSImpl implements LicenseInformationService{
 	}
 
 	@Override
-	public Boolean saveLicenseKey(String s) {
-		licenseService.enterLicenseKey(s);
-		return true;
+	public String saveLicenseKey(String s) {
+		return licenseService.enterLicenseKey(s);
 	}
 }

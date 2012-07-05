@@ -96,10 +96,11 @@ public class LicenseServiceImpl implements LicenseService {
 
 
 	@Override
-	public void enterLicenseKey(String licenseKey) {
-		myDLPUIThriftService.saveLicenseKey(licenseKey);
+	public String enterLicenseKey(String licenseKey) {
+		String msg = myDLPUIThriftService.saveLicenseKey(licenseKey);
 		incrementRetryCounter(3);
-		scheduleLicenseCheck(5000);
+		scheduleLicenseCheck(100);
+		return msg;
 	}
 
 	@Override
