@@ -31,7 +31,8 @@
 					return ;
 				}
 				
-				var matchResults:Array =licenseStr.match( /\w{8}-\w{8}-\w{8}-\w{8}-\w{8}-\w{8}-\w{8}-\w{8}/ );
+				var pattern:RegExp = /\w{8}-\w{8}-\w{8}-\w{8}-\w{8}-\w{8}-\w{8}-\w{8}/gi ; 
+				var matchResults:Array = licenseStr.match( pattern );
 				if (matchResults == null || matchResults.length == 0) {
 					showInvalidStringAlert();
 					return ;
