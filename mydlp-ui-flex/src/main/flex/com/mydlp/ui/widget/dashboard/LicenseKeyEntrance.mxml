@@ -15,9 +15,28 @@
 			import mx.rpc.events.ResultEvent;
 			
 			public var licenseKeyEntrancePopup:LicenseKeyEntrancePopup;
+
+			protected function showInvalidStringAlert(): void {
+				Alert.show(LangUtil.getString("messages", "license_code.invalid_string.title"), 
+					LangUtil.getString("messages", "license_code.invalid_string.title"),
+					Alert.OK );
+			}
 			
 			protected function saveLicenceKeyHandler(event:MouseEvent):void
 			{
+				var licenseStr:String = licenseKey.text;
+				licenseStr = licenseStr.replace( /^([\s|\t|\n]+)?(.*)([\s|\t|\n]+)?$/gm, "$2" );
+				if (licenseStr == null || licenseStr.length != 71) {
+					showInvalidStringAlert();
+					return ;
+				}
+				
+				var matchResults:Array =licenseStr.match("/\\d{8}-\\d{8}-\\d{8}-\\d{8}-\\d{8}-\\d{8}-\\d{8}-\\d{8}/");
+				if (matchResults == null || matchResults.length == 0) {
+					showInvalidStringAlert();
+					return ;
+				}
+				
 				re.saveLicenseKey(licenseKey.text);
 				licenseKeyEntrancePopup = InteractionUtil.newPopup(LicenseKeyEntrancePopup) as LicenseKeyEntrancePopup;
 			}
