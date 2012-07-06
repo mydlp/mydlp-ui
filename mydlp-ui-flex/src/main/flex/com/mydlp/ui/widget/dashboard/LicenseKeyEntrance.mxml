@@ -18,7 +18,7 @@
 
 			protected function showInvalidStringAlert(): void {
 				Alert.show(LangUtil.getString("messages", "license_code.invalid_string.title"), 
-					LangUtil.getString("messages", "license_code.invalid_string.title"),
+					LangUtil.getString("messages", "license_code.invalid_string.message"),
 					Alert.OK );
 			}
 			
