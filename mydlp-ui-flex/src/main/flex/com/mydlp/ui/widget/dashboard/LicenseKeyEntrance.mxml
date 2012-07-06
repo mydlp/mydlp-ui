@@ -25,13 +25,13 @@
 			protected function saveLicenceKeyHandler(event:MouseEvent):void
 			{
 				var licenseStr:String = licenseKey.text;
-				licenseStr = licenseStr.replace( /^([\s|\t|\n]+)?(.*)([\s|\t|\n]+)?$/gm, "$2" );
+				licenseStr = licenseStr.replace( /^([\s|\t|\n]+)?(.*)([\s|\t|\n]+)?$/gm , "$2" );
 				if (licenseStr == null || licenseStr.length != 71) {
 					showInvalidStringAlert();
 					return ;
 				}
 				
-				var matchResults:Array =licenseStr.match("/\\d{8}-\\d{8}-\\d{8}-\\d{8}-\\d{8}-\\d{8}-\\d{8}-\\d{8}/");
+				var matchResults:Array =licenseStr.match( /\w{8}-\w{8}-\w{8}-\w{8}-\w{8}-\w{8}-\w{8}-\w{8}/ );
 				if (matchResults == null || matchResults.length == 0) {
 					showInvalidStringAlert();
 					return ;
