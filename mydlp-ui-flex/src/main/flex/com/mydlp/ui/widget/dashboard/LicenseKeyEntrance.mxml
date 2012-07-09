@@ -8,36 +8,57 @@
 	<fx:Script>
 		<![CDATA[
 			import com.mydlp.ui.util.InteractionUtil;
+			import com.mydlp.ui.util.LangUtil;
 			
 			import mx.controls.Alert;
 			import mx.core.FlexGlobals;
 			import mx.rpc.events.ResultEvent;
 			
 			public var licenseKeyEntrancePopup:LicenseKeyEntrancePopup;
+
+			protected function showInvalidStringAlert(): void {
+				Alert.show(LangUtil.getString("messages", "license_code.invalid_string.title"), 
+					LangUtil.getString("messages", "license_code.invalid_string.message"),
+					Alert.OK );
+			}
 			
 			protected function saveLicenceKeyHandler(event:MouseEvent):void
 			{
+				var licenseStr:String = licenseKey.text;
+				licenseStr = licenseStr.replace( /^([\s|\t|\n]+)?(.*)([\s|\t|\n]+)?$/gm , "$2" );
+				if (licenseStr == null || licenseStr.length != 71) {
+					showInvalidStringAlert();
+					return ;
+				}
+				
+				var pattern:RegExp = /\w{8}-\w{8}-\w{8}-\w{8}-\w{8}-\w{8}-\w{8}-\w{8}/gi ; 
+				var matchResults:Array = licenseStr.match( pattern );
+				if (matchResults == null || matchResults.length == 0) {
+					showInvalidStringAlert();
+					return ;
+				}
+				
 				re.saveLicenseKey(licenseKey.text);
+				licenseKeyEntrancePopup = InteractionUtil.newPopup(LicenseKeyEntrancePopup) as LicenseKeyEntrancePopup;
 			}
 			
 			protected function saveLicenseKeyHandler(event:ResultEvent):void
 			{
-				var result:Boolean = event.result as Boolean;
-				if(result)
+				var result:String = event.result as String;
+				if(result == "ok.valid")
 				{
-					licenseKeyEntrancePopup = InteractionUtil.newPopup(LicenseKeyEntrancePopup) as LicenseKeyEntrancePopup;
-					var timer:Timer = new Timer(3000);
-					timer.addEventListener(TimerEvent.TIMER, timerFinishHandler);
-					timer.start();
+					licenseKeyEntrancePopup.messageLabel.text = 
+						LangUtil.getString("messages", "license_check." + result);
+					// may be timer here
+					navigateToURL(new URLRequest ('j_spring_security_logout'), '_self');
 				}
 				else
-					Alert.show("License Key is Invalid");
-			}
-			
-			protected function timerFinishHandler(event:TimerEvent):void
-			{
-				InteractionUtil.closePopup(licenseKeyEntrancePopup);
-				navigateToURL(new URLRequest ('j_spring_security_logout'), '_self');
+				{
+					licenseKeyEntrancePopup.messageLabel.text = 
+						LangUtil.getString("messages", "license_check." + result);
+					licenseKeyEntrancePopup.closeButton.visible = true;	
+				}
+					
 			}
 			
 		]]>

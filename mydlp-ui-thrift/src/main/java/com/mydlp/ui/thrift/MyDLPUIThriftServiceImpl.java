@@ -180,12 +180,11 @@ public class MyDLPUIThriftServiceImpl implements MyDLPUIThriftService {
 	}
 
 	@Override
-	public void saveLicenseKey(final String licenseKey) {
-		call(new ThriftCall<Void>() {
+	public String saveLicenseKey(final String licenseKey) {
+		return call(new ThriftCall<String>() {
 			@Override
-			public Void execute(MyDLPUIThriftConnection thriftConnection) throws TException {
-				thriftConnection.client.saveLicenseKey(licenseKey);
-				return null;
+			public String execute(MyDLPUIThriftConnection thriftConnection) throws TException {
+				return thriftConnection.client.saveLicenseKey(licenseKey);
 			}
 		});
 	}
