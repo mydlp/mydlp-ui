@@ -128,6 +128,7 @@
 				{
 					var inputLabel:InputLabel = null;
 					
+					
 					if (
 							classMember.name == "id" ||
 							classMember.name == "optimisticLockVersion" ||
@@ -138,7 +139,7 @@
 							classMember.name == "priority" ||
 							//todo refine password
 							classMember.name == "password" ||
-							classMember.name == "action" ||
+							classMember.name == "action" && !(targetObject is USBDevice)||
 							(classMember.name == "children" && classMember.type == ListCollectionView)||						
 							(classMember.name == "coupledInventoryItem" && classMember.type == InventoryItem) ||
 							(classMember.name == "coupledRuleItems" && classMember.type == ListCollectionView) ||
