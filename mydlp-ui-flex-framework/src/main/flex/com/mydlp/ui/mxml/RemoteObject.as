@@ -22,6 +22,7 @@ package com.mydlp.ui.mxml
 		{
 			super(destination, operationBufferFactory);
 			//this.bufferProxyLoadRequests = true;
+			this.showBusyCursor=true;
 			this.operationBufferFactory = new LoadDPProxyOperationBufferFactory();
 			addEventListener(FaultEvent.FAULT, defaultFaultHandler);
 		}
