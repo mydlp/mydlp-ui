@@ -45,6 +45,8 @@
 			protected function saveLicenseKeyHandler(event:ResultEvent):void
 			{
 				var result:String = event.result as String;
+				if (result == null)
+					result = "error.default";
 				if(result == "ok.valid")
 				{
 					licenseKeyEntrancePopup.messageLabel.text = 
