@@ -45,7 +45,7 @@
 
   <flex:message-broker>
     <flex:mapping pattern="/spring/*" />
-    <flex:remoting-service default-adapter-id="dpHibernateRemotingAdapter" default-channels="my-amf" />
+    <flex:remoting-service default-channels="my-amf" />
     <flex:secured />
   </flex:message-broker>
   

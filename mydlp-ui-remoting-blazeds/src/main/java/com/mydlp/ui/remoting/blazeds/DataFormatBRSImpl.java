@@ -10,7 +10,7 @@ import com.mydlp.ui.dao.DataFormatDAO;
 import com.mydlp.ui.domain.DataFormat;
 
 @Service("dataFormatBRS")
-@RemotingDestination
+@RemotingDestination(serviceAdapter="dpHibernateRemotingAdapter")
 public class DataFormatBRSImpl implements DataFormatService
 {
 	@Autowired

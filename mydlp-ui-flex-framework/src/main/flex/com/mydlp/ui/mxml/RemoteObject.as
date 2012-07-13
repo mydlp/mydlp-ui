@@ -9,6 +9,7 @@ package com.mydlp.ui.mxml
 	
 	import org.dphibernate.rpc.HibernateRemoteObject;
 	import org.dphibernate.rpc.IOperationBufferFactory;
+	import org.dphibernate.rpc.LoadDPProxyOperationBufferFactory;
 	
 	use namespace flash_proxy;
 	
@@ -20,6 +21,8 @@ package com.mydlp.ui.mxml
 		public function RemoteObject(destination:String=null, operationBufferFactory:IOperationBufferFactory=null)
 		{
 			super(destination, operationBufferFactory);
+			//this.bufferProxyLoadRequests = true;
+			this.operationBufferFactory = new LoadDPProxyOperationBufferFactory();
 			addEventListener(FaultEvent.FAULT, defaultFaultHandler);
 		}
 		

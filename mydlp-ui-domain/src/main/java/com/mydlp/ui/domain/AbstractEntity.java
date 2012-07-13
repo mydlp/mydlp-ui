@@ -5,6 +5,7 @@ import java.io.Serializable;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
+import javax.persistence.Transient;
 
 import org.dphibernate.core.HibernateProxy;
 
@@ -14,8 +15,8 @@ public abstract class AbstractEntity extends HibernateProxy implements Serializa
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -6550878188381550205L;
-
+	private static final long serialVersionUID = -8286001973868935686L;
+	
 	protected Integer id;
 	
 	@Id
@@ -27,6 +28,16 @@ public abstract class AbstractEntity extends HibernateProxy implements Serializa
 	public void setId(Integer id) {
 		this.id = id;
 	}
+	
+	@Transient
+	@Override
+    public Object getProxyKey() {
+        return id;
+    }
+	
+	@Override
+    public void setProxyKey(Object arg0) {
+    }
 
 	@Override
 	public int hashCode() {

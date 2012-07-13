@@ -20,11 +20,12 @@ package com.mydlp.ui.domain {
 		
 		private var _uid:String = null;
 		
-		private var _uid_seed:String = null;
-		
 		private function generate_uid(): void
 		{
-			_uid = getQualifiedClassName(this) + ":" + id.toString();
+			if (!isNaN(id))
+				_uid = getQualifiedClassName(this) + ":" + id.toString();
+			else
+				_uid = getQualifiedClassName(this) + ":" + proxyKey.toString();
 		}
 		
 		public function get uid():String

@@ -19,7 +19,7 @@ import com.mydlp.ui.domain.AuthUser;
 import com.mydlp.ui.domain.DocumentDatabase;
 
 @Service("objectsBRS")
-@RemotingDestination
+@RemotingDestination(serviceAdapter="dpHibernateRemotingAdapter")
 public class ObjectsBRSImpl implements ObjectsService
 {
 	@Autowired
