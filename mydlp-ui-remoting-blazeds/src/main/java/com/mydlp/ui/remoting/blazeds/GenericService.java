@@ -15,6 +15,8 @@ public interface GenericService {
 	
 	public void remove(AbstractEntity item);
 	
+	public void remove(String entityName, Integer id);
+	
 	public void removeAll(List<AbstractEntity> items);
 	
 	public void sync();

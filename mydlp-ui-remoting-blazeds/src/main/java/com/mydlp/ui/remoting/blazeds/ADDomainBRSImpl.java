@@ -51,6 +51,13 @@ public class ADDomainBRSImpl implements ADDomainService
 	public String testConnection(ADDomain adDomain) {
 		return adEnumService.testConnection(adDomain);
 	}
+
+	@Override
+	public void remove(ADDomain domain) {
+		domain = save(domain);
+		if (domain != null)
+			adDomainDAO.remove(domain);
+	}
 	
 
 }
