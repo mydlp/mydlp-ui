@@ -12,7 +12,7 @@ import com.mydlp.ui.domain.ADDomainRoot;
 import com.mydlp.ui.service.ADEnumService;
 
 @Service("adDomainBRS")
-@RemotingDestination
+@RemotingDestination(serviceAdapter="dpHibernateRemotingAdapter")
 public class ADDomainBRSImpl implements ADDomainService
 {
 	
