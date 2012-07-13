@@ -8,7 +8,7 @@ import javax.persistence.ManyToOne;
 
 @Entity
 @Inheritance(strategy=InheritanceType.JOINED)
-public abstract class ADDomainItem extends AbstractEntity {
+public class ADDomainItem extends AbstractEntity {
 	
 	/**
 	 * 
@@ -18,7 +18,7 @@ public abstract class ADDomainItem extends AbstractEntity {
 	protected String distinguishedName;
 	protected ADDomainItemGroup parent;
 	
-	@Column(nullable=false, unique=true, length=767)
+	@Column(nullable=false, unique=true, length=255)
 	public String getDistinguishedName() {
 		return distinguishedName;
 	}
