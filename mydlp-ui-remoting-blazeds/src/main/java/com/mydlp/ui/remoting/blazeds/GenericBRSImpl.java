@@ -74,6 +74,8 @@ public class GenericBRSImpl implements GenericService
 			ruleService.remove((Rule) item);
 		else if (item instanceof DashboardItem)
 			dashboardService.remove((DashboardItem) item);
+		else if (item instanceof ADDomain)
+			adDomainService.remove((ADDomain) item);
 		else if (item instanceof RDBMSConnection)
 			rdbmsConnectionService.remove(item);
 		else if (item instanceof DocumentDatabase)
@@ -102,6 +104,12 @@ public class GenericBRSImpl implements GenericService
 	@Override
 	public Date getSystemTime() {
 		return new Date();
+	}
+
+	@Override
+	public void remove(String entityName, Integer id) {
+		entityName = entityName.replace("::", ".");
+		genericDAO.remove(entityName, id);
 	}
 	
 	

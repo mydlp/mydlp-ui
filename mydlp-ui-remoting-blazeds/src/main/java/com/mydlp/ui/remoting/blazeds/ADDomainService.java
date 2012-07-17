@@ -18,4 +18,6 @@ public interface ADDomainService {
 	
 	public String testConnection(ADDomain adDomain);
 	
+	public void remove(ADDomain adDomain);
+	
 }

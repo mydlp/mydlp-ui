@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 
 import com.mydlp.ui.dao.InventoryDAO;
 import com.mydlp.ui.domain.InventoryBase;
-import com.mydlp.ui.service.SolrService;
 
 @Service("inventoryBRS")
 @RemotingDestination
@@ -17,9 +16,6 @@ public class InventoryBRSImpl implements InventoryService
 	@Autowired
 	protected InventoryDAO inventoryDAO;
 	
-	@Autowired
-	protected SolrService solrService;
-
 	@Override
 	public List<InventoryBase> getInventory() {
 		return inventoryDAO.getInventory();

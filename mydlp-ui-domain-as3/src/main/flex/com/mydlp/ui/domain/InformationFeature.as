@@ -17,6 +17,9 @@ package com.mydlp.ui.domain {
 		
 		public function get label():String
 		{	
+			if (this.matcher == null || this.matcher.functionName == null )
+				return "";
+			
 			var generatedNameKey:String = new String("matchers.");
 			
 			generatedNameKey += this.matcher.functionName + ".label";

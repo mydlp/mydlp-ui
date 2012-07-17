@@ -10,6 +10,7 @@
 	
 	<fx:Script>
 		<![CDATA[
+			import com.mydlp.ui.domain.ADDomain;
 			import com.mydlp.ui.domain.AbstractEntity;
 			import com.mydlp.ui.domain.AbstractNamedEntity;
 			import com.mydlp.ui.domain.AuthUser;
@@ -21,6 +22,9 @@
 			import com.mydlp.ui.util.LangUtil;
 			import com.mydlp.ui.util.ReflectionUtil;
 			
+			import flash.utils.getQualifiedClassName;
+			
+			import mx.collections.ArrayCollection;
 			import mx.controls.Alert;
 			import mx.controls.Spacer;
 			import mx.core.FlexGlobals;
@@ -125,7 +129,15 @@
 			
 			protected function deleteButtonClickHandler(event:Event): void
 			{
-				re.remove(formObject);
+				if (formObject is ADDomain) {
+					var adfo:ADDomain = formObject as ADDomain;
+					re.remove(getQualifiedClassName(adfo), adfo.id);
+				}
+				else
+				{
+					re.remove(formObject);
+				}
+				
 				deleteButton.enabled = false;
 				cancelButton.enabled = false;
 			}

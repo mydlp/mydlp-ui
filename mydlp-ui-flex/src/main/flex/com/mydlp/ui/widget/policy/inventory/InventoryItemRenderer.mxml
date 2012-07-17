@@ -27,6 +27,8 @@
 			
 			public static function isAddEnabled(i:*): Boolean
 			{
+				if (i == null)
+					return false;
 				if (i is InventoryCategory) {
 					var category:InventoryCategory = i as InventoryCategory;
 					if (category.nameKey != null && category.nameKey == USERDEFINED_NAMEKEY)
@@ -38,9 +40,11 @@
 			
 			public static function isEditEnabled(i:*): Boolean
 			{
+				if (i == null)
+					return false;
 				if (i is InventoryCategory)
 					return (i as InventoryCategory).editable;
-				else if (i is InventoryItem)
+				if (i is InventoryItem)
 				{
 					var c:InventoryCategory = (i as InventoryItem).category;
 					if (c == null)
@@ -49,8 +53,7 @@
 						return true;
 					return c.editable;
 				}
-				else
-					throw new Error("Unexpected inventory object");
+				return false;
 			}
 			
 			protected function onToolTipCreate(event:ToolTipEvent):void

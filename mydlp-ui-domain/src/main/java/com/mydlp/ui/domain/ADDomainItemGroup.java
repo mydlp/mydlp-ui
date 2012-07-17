@@ -10,7 +10,7 @@ import javax.persistence.OneToMany;
 
 @Entity
 @Inheritance(strategy=InheritanceType.JOINED)
-public abstract class ADDomainItemGroup extends ADDomainItem {
+public class ADDomainItemGroup extends ADDomainItem {
 
 	/**
 	 * 

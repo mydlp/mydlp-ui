@@ -21,28 +21,31 @@
 
   <!-- Defines the remoting adapter, which intercepts inbound & outbound messages, and routes them thruogh dpHibernate -->
   <bean id="dpHibernateRemotingAdapter" class="org.springframework.flex.core.ManageableComponentFactoryBean">
-    <constructor-arg value="org.dphibernate.adapters.RemotingAdapter" />
+    <constructor-arg value="com.mydlp.ui.framework.adapter.MyDLPRemotingAdapter" />
     <property name="properties">
       <value>
         {"dpHibernate" :
           {
-            "serializerFactory" : "org.dphibernate.serialization.SpringContextSerializerFactory"
+            "serializerFactory" : "com.mydlp.ui.framework.adapter.MyDLPSpringContextSerializerFactory",
+            "pageSize" : "10"
           }
         }
       </value>
     </property>
   </bean>
-  
+  	
   <bean id="dpHibernateMessagingAdapter" class="org.springframework.flex.core.ManageableComponentFactoryBean">
     <constructor-arg value="org.dphibernate.adapters.MessagingAdapter" />
   </bean>
+  
+
   <!--
     Provides a basic service for lazy loading operations through
     dpHibernate. It's also exported as a remoting destination, which makes
     it accessible to flex clients
   -->
   <bean id="dataAccessService" class="org.dphibernate.services.SpringLazyLoadService" autowire="constructor">
-    <flex:remoting-destination />
+    <flex:remoting-destination service-adapter="dpHibernateRemotingAdapter"/>
     <constructor-arg ref="policySessionFactory" />
   </bean>
   <!-- 
@@ -56,14 +59,21 @@
   <bean id="hibernateSessionFilter" class="org.dphibernate.filters.SpringHibernateSessionServletFilter" >
     <property name="sessionFactory" ref="policySessionFactory"/>
   </bean>-->
+  
+  <!-- The cache is used to prevent serializing the same object many times during serialization.  Required -->
+  <!-- 
+  <bean id="dpHibernateCache" class="org.dphibernate.serialization.DPHibernateCache" scope="prototype" />
+   -->
+  
   <!--
     The main serializer. Converts outbound POJO's to ASObjects with
     dpHibernate proxies for lazy loading. Required
   -->
-  <bean id="dpHibernateSerializer" class="org.dphibernate.serialization.HibernateSerializer" scope="prototype">
+  <bean id="dpHibernateSerializer" class="com.mydlp.ui.framework.adapter.MyDLPHibernateSerializer" scope="prototype">
     <property name="pageSize" value="10" />
   </bean>
-  <bean id="dpHibernateDeserializer" class="org.dphibernate.serialization.HibernateDeserializer" scope="prototype" />
+  <bean id="dpHibernateDeserializer" class="com.mydlp.ui.framework.adapter.MyDLPHibernateDeserializer" scope="prototype" >
+  </bean>
 
   <!--  
     Handles entity updates (CRUD).  Required if using entity persistence. 

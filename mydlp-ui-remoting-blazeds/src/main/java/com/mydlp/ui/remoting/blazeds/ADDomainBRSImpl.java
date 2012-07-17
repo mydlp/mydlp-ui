@@ -12,7 +12,7 @@ import com.mydlp.ui.domain.ADDomainRoot;
 import com.mydlp.ui.service.ADEnumService;
 
 @Service("adDomainBRS")
-@RemotingDestination
+@RemotingDestination(serviceAdapter="dpHibernateRemotingAdapter")
 public class ADDomainBRSImpl implements ADDomainService
 {
 	
@@ -50,6 +50,13 @@ public class ADDomainBRSImpl implements ADDomainService
 	@Override
 	public String testConnection(ADDomain adDomain) {
 		return adEnumService.testConnection(adDomain);
+	}
+
+	@Override
+	public void remove(ADDomain domain) {
+		domain = save(domain);
+		if (domain != null)
+			adDomainDAO.remove(domain);
 	}
 	
 

@@ -91,12 +91,12 @@
         <dao.show_sql>false</dao.show_sql>
         <dao.policy.dialect>org.hibernate.dialect.MySQL5InnoDBDialect</dao.policy.dialect>
         <ds.policy.driver>com.mysql.jdbc.Driver</ds.policy.driver>
-        <ds.policy.url>jdbc:mysql://localhost/mydlp</ds.policy.url>
+        <ds.policy.url>jdbc:mysql://localhost/mydlp?characterEncoding=UTF-8</ds.policy.url>
         <ds.policy.username>root</ds.policy.username>
         <ds.policy.password></ds.policy.password>
         <dao.log.dialect>org.hibernate.dialect.MySQL5InnoDBDialect</dao.log.dialect>
         <ds.log.driver>com.mysql.jdbc.Driver</ds.log.driver>
-        <ds.log.url>jdbc:mysql://localhost/mydlp_log</ds.log.url>
+        <ds.log.url>jdbc:mysql://localhost/mydlp_log?characterEncoding=UTF-8</ds.log.url>
         <ds.log.username>root</ds.log.username>
         <ds.log.password></ds.log.password>   
 

@@ -10,4 +10,5 @@ public interface GenericDAO {
 
 	public AbstractEntity merge(AbstractEntity entity);
 	
+	public void remove(String entityName, Integer id);
 }
