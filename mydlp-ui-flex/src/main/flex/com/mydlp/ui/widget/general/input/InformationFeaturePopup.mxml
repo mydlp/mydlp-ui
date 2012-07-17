@@ -5,7 +5,7 @@
 			   xmlns:my="http://www.mydlp.com/flex/my"
 			   xmlns:input="com.mydlp.ui.widget.general.input.*"
 			   close="{close()}"
-			   visible="false"
+			   visible="false" width="475"
 			   title="@Resource(bundle = 'messages', key = 'feature.matcher.title.label')"
 			   >
 	
@@ -44,8 +44,12 @@
 			
 			protected function addNewFeature(event:MouseEvent):void
 			{
-				var validationResult:ValidationResultEvent = thresholdValidator.validate();//Validation Before Saving
-				if(validationResult.results != null) return;
+				if(featureThreshold != null)
+				{
+					var validationResult:ValidationResultEvent = thresholdValidator.validate();//Validation Before Saving
+					if(validationResult.results != null) 
+						return;
+				}
 				
 				
 				closePopup = true;
@@ -144,8 +148,10 @@
 				{
 					m.functionName = matcherCombobox.selectedItem.data ;
 				}
-				
-				informationFeatureObject.threshold = int(featureThreshold.text);
+				if(featureThreshold != null)
+					informationFeatureObject.threshold = int(featureThreshold.text);
+				else
+					informationFeatureObject.threshold = 1;
 				
 				if(!closePopup)
 				{
@@ -209,7 +215,6 @@
 						regexValue.text = r.regex;
 				}
 			}
-			
 		]]>
 	</fx:Script>
 	
@@ -301,12 +306,21 @@
 	</s:layout>
 	<s:Form width="400">
 		<s:FormItem label="@Resource(bundle = 'messages', key = 'matcher.combobox.label')" >
-			<s:ComboBox id="matcherCombobox" dataProvider="{matcherDefinitions}" width="100%"
-						change="{currentState = (matcherCombobox.selectedItem == null ? 'normal' : matcherCombobox.selectedItem.data)}"
-						creationComplete="{currentState = (matcherCombobox.selectedItem == null ? 'normal' : matcherCombobox.selectedItem.data)}"
-						/>
+			<s:Group>
+				<s:layout>
+					<s:HorizontalLayout gap="10"/>
+				</s:layout>
+				<s:ComboBox id="matcherCombobox" dataProvider="{matcherDefinitions}" width="250"
+							change="{currentState = (matcherCombobox.selectedItem == null ? 'normal' : matcherCombobox.selectedItem.data)}"
+							creationComplete="{currentState = (matcherCombobox.selectedItem == null ? 'normal' : matcherCombobox.selectedItem.data)}"
+							/>
+				<s:Image source="@Embed('/assets/icons/16x16/help.png')" 
+						 toolTip="{LangUtil.getString('messages','matchers.combobox.tooltip.'+matcherCombobox.selectedItem.data+'.label')}"/>
+			</s:Group>
 		</s:FormItem>
-		<s:FormItem label="@Resource(bundle = 'messages', key = 'matcher.threshold.label')" >
+		<s:FormItem label="@Resource(bundle = 'messages', key = 'matcher.threshold.label')" 
+					includeIn="aba, birthdate, canada_sin, cc, cc_edate, china_icn, cpf, france_insee,
+								gdate, iban, keyword, pan, regex, ssn, trid, uk_nino, said">
 			<s:TextInput id="featureThreshold"/>
 		</s:FormItem>
 		<s:FormItem includeIn="keyword,regex" 
