@@ -41,7 +41,7 @@ public class AuthUser extends AbstractEntity {
 
 	protected UserSettings settings;
 
-	@Column(unique=true)
+	@Column(unique=true, length=127)
 	public String getUsername() {
 		return username;
 	}

@@ -32,7 +32,7 @@ public class ADDomain extends AbstractEntity {
 	
 	protected List<ADDomainAlias> aliases;
 
-	@Column(nullable=false, unique=true)
+	@Column(nullable=false, unique=true, length=190)
 	public String getDomainName() {
 		return domainName;
 	}
