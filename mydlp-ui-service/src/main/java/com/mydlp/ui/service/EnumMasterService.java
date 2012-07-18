@@ -1,6 +1,7 @@
 package com.mydlp.ui.service;
 
 
+
 public interface EnumMasterService {
 
 	public abstract class EnumJob {
