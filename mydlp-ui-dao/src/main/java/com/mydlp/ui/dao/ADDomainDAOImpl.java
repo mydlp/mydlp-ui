@@ -43,6 +43,8 @@ public class ADDomainDAOImpl extends AbstractPolicyDAO implements ADDomainDAO {
 		DetachedCriteria criteria = 
 				DetachedCriteria.forClass(ADDomainItem.class)
 				.add(Restrictions.eq("distinguishedName", distinguishedName));
+		if (distinguishedName != null)
+			criteria = criteria.add(Restrictions.eq("distinguishedNameHash", new Integer(distinguishedName.hashCode())));
 		@SuppressWarnings("unchecked")
 		List<ADDomainItem> l = getHibernateTemplate().findByCriteria(criteria);
 		return DAOUtil.getSingleResult(l);

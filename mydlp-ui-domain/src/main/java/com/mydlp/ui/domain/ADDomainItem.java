@@ -22,6 +22,17 @@ public class ADDomainItem extends AbstractEntity {
 	public String getDistinguishedName() {
 		return distinguishedName;
 	}
+	
+	@Column(nullable=false, unique=true)
+	public Integer getDistinguishedNameHash() {
+		if (distinguishedName != null)
+			return distinguishedName.hashCode();
+		else
+			return 0;
+	}
+
+	public void setDistinguishedNameHash(Integer distinguishedNameHash) {
+	}
 
 	public void setDistinguishedName(String distinguishedName) {
 		this.distinguishedName = distinguishedName;
