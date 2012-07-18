@@ -314,8 +314,10 @@
 							change="{currentState = (matcherCombobox.selectedItem == null ? 'normal' : matcherCombobox.selectedItem.data)}"
 							creationComplete="{currentState = (matcherCombobox.selectedItem == null ? 'normal' : matcherCombobox.selectedItem.data)}"
 							/>
-				<s:Image source="@Embed('/assets/icons/16x16/help.png')" 
-						 toolTip="{LangUtil.getString('messages','matchers.combobox.tooltip.'+matcherCombobox.selectedItem.data+'.label')}"/>
+				<s:VGroup height="100%" verticalAlign="middle">
+					<s:Image source="@Embed('/assets/icons/16x16/help.png')" 
+							 toolTip="{LangUtil.getString('messages','matchers.combobox.tooltip.'+matcherCombobox.selectedItem.data+'.label')}"/>
+				</s:VGroup>
 			</s:Group>
 		</s:FormItem>
 		<s:FormItem label="@Resource(bundle = 'messages', key = 'matcher.threshold.label')" 
