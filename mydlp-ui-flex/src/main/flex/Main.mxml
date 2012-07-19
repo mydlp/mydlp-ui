@@ -131,9 +131,16 @@
 				licenseRE.getLicense();
 			}
 			
+			public function hasRole(roleName:String): Boolean
+			{
+				if (user == null || ! user is AuthUser)
+					return false;
+				return (user as AuthUser).hasRole(roleName);
+			}
+			
 			protected function regulateVisibilty():void
 			{
-				if(!(user as AuthUser).hasRole(AuthSecurityRole.ROLE_ADMIN))
+				if(!hasRole(AuthSecurityRole.ROLE_ADMIN))
 				{
 					topToolbar.installButton.includeInLayout = false;
 					topToolbar.installButton.visible = false;
@@ -159,7 +166,7 @@
 							dashboardContainer = element;
 						}
 					}
-					else if(i == 1 && user.hasRole(AuthSecurityRole.ROLE_ADMIN))
+					else if(i == 1 && hasRole(AuthSecurityRole.ROLE_ADMIN))
 					{
 						navigatorContent.label = LangUtil.getString("messages", "maintab.policy");
 						element = new PolicyContainer();
@@ -167,31 +174,31 @@
 						ruleContainer = policyContainer.ruleContainer;
 						inventoryTree = policyContainer.inventoryTree;						
 					}
-					else if(i == 2 && ( user.hasRole(AuthSecurityRole.ROLE_ADMIN) || user.hasRole(AuthSecurityRole.ROLE_CLASSIFIER) ) )
+					else if(i == 2 && ( hasRole(AuthSecurityRole.ROLE_ADMIN) || hasRole(AuthSecurityRole.ROLE_CLASSIFIER) ) )
 					{
 						navigatorContent.label = LangUtil.getString("messages", "maintab.objects");
 						element = new ObjectsContainer;
 						objectsContainer = element;
 					}
-					else if(i == 3 && user.hasRole(AuthSecurityRole.ROLE_ADMIN))
+					else if(i == 3 && hasRole(AuthSecurityRole.ROLE_ADMIN))
 					{
 						navigatorContent.label = LangUtil.getString("messages", "maintab.options");
 						element = new OptionContainer();
 						optionContainer = element;
 					}
-					else if(i == 4 && ( user.hasRole(AuthSecurityRole.ROLE_ADMIN) || user.hasRole(AuthSecurityRole.ROLE_AUDITOR) ) )
+					else if(i == 4 && ( hasRole(AuthSecurityRole.ROLE_ADMIN) || hasRole(AuthSecurityRole.ROLE_AUDITOR) ) )
 					{
 						navigatorContent.label = LangUtil.getString("messages", "maintab.logs");
 						element = new LogContainer();
 						logContainer = element;
 					}
-					else if(i == 5 && user.hasRole(AuthSecurityRole.ROLE_ADMIN))
+					else if(i == 5 && hasRole(AuthSecurityRole.ROLE_ADMIN))
 					{
 						navigatorContent.label = LangUtil.getString("messages", "maintab.endpointStatus");
 						element = new EndpointStatusContainer;
 						endpointStatusContainer = element;
 					}
-					else if(i == 6 && user.hasRole(AuthSecurityRole.ROLE_ADMIN))
+					else if(i == 6 && hasRole(AuthSecurityRole.ROLE_ADMIN))
 					{
 						navigatorContent.label = LangUtil.getString("messages", "maintab.revisions");
 						element = new RevisionContainer();

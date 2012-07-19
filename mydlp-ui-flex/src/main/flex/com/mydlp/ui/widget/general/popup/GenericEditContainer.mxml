@@ -17,6 +17,7 @@
 			import com.mydlp.ui.domain.ADDomainUser;
 			import com.mydlp.ui.domain.AbstractEntity;
 			import com.mydlp.ui.domain.AbstractNamedEntity;
+			import com.mydlp.ui.domain.AuthSecurityRole;
 			import com.mydlp.ui.domain.AuthUser;
 			import com.mydlp.ui.domain.DataFormat;
 			import com.mydlp.ui.domain.DocumentDatabase;
@@ -456,7 +457,11 @@
 						inputLabel.addElement(comboBox);
 						index = 1;
 					}
-						
+					else if (targetObject is AbstractEntity && classMember.type == RDBMSInformationTarget 
+						&& ! FlexGlobals.topLevelApplication.hasRole(AuthSecurityRole.ROLE_ADMIN) )
+					{
+						continue;
+					}
 					else if (targetObject is AbstractEntity && classMember.type == RDBMSInformationTarget)
 					{
 						if ( targetObject["id"] == null || isNaN(targetObject["id"]) )
