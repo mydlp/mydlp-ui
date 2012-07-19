@@ -324,12 +324,13 @@
 				{
 					if ( treeItem.item is InformationType )
 						return true;
-					else if ( treeItem.item is Network && (
-								ruleObject is WebRule ||
+					else if ( treeItem.item is Network )
+						if (treeItem.item.nameKey == "informationType.predefined.all")
+							return true;
+						else if(ruleObject is WebRule ||
 								ruleObject is EndpointRule ||
 								ruleObject is PrinterRule ||
-								ruleObject is DiscoveryRule
-							  ))
+								ruleObject is DiscoveryRule)
 						return true;
 					else if ( treeItem.item is RuleUser )
 						return true;
