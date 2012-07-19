@@ -26,8 +26,10 @@
 			import mx.collections.ListCollectionView;
 			import mx.controls.Alert;
 			import mx.events.FlexEvent;
+			import mx.events.ToolTipEvent;
 			import mx.events.ValidationResultEvent;
 			import mx.rpc.events.ResultEvent;
+			import mx.states.State;
 			import mx.validators.ValidationResult;
 			
 			public var informationFeatureInput:InformationFeatureInput = null;
@@ -173,16 +175,17 @@
 			{
 				if (informationFeatureObject != null)
 				{
-					featureThreshold.text = informationFeatureObject.threshold.toString();
-					
 					for (var i:int; i < matcherDefinitions.length; i++)
 					{
-						if ( (matcherDefinitions.getItemAt(i) as MatcherDefinition).data == informationFeatureObject.matcher.functionName )
+						var mdd:String = (matcherDefinitions.getItemAt(i) as MatcherDefinition).data;
+						if ( mdd == informationFeatureObject.matcher.functionName )
 						{
 							matcherCombobox.selectedIndex = i;
+							currentState = mdd;
 							break;
 						}
 					}
+					featureThreshold.text = informationFeatureObject.threshold.toString();
 				}
 				
 				visible = true;
@@ -215,6 +218,43 @@
 						regexValue.text = r.regex;
 				}
 			}
+			
+			protected function onToolTipCreate(event:ToolTipEvent):void
+			{
+				if (isAtState("matcher"))
+				{
+					var iftt:InformationFeatureToolTip = new InformationFeatureToolTip();
+					iftt.matcherName = currentState;
+					iftt.argument = isAtState("argument");
+					iftt.distance = isAtState("distance");
+					iftt.threshold = isAtState("threshold");
+					event.toolTip = iftt;
+				}
+			}
+			
+			protected function isAtState(stateName:String): Boolean
+			{
+				if (currentState == stateName)
+					return true;
+				
+				for (var i:int = 0; i < states.length; i++)
+				{
+					var s:State = states[i];
+					if (s.name == currentState)
+					{
+						for (var j:int = 0; j < s.stateGroups.length; j++)
+						{
+							var g:String = s.stateGroups[j];
+							if (g == stateName)
+								return true;
+						}
+						break;
+					}
+				}
+				
+				return false;
+			}
+			
 		]]>
 	</fx:Script>
 	
@@ -272,31 +312,31 @@
 	
 	<s:states>
 		<s:State name="normal"/>
-		<s:State name="all" />
-		<s:State name="cc" />
-		<s:State name="ssn" />
-		<s:State name="iban" />
-		<s:State name="aba" />
-		<s:State name="trid" />
-		<s:State name="canada_sin" />
-		<s:State name="france_insee" />
-		<s:State name="uk_nino" />
-		<s:State name="said" />
-		<s:State name="keyword" />
-		<s:State name="regex" />
-		<s:State name="scode" />
-		<s:State name="scode_ada" />
-		<s:State name="keyword_group"/>
-		<s:State name="document_hash"/>
-		<s:State name="document_pdm"/>
-		<s:State name="encrypted_file"/>
-		<s:State name="encrypted_archive"/>
-		<s:State name="pan"/>
-		<s:State name="cpf"/>
-		<s:State name="china_icn"/>
-		<s:State name="cc_edate"/>
-		<s:State name="birthdate"/>
-		<s:State name="gdate"/>
+		<s:State name="all" stateGroups="matcher,nodistance,nothreshold,noargument"/>
+		<s:State name="cc" stateGroups="matcher,distance,threshold,noargument"/>
+		<s:State name="ssn" stateGroups="matcher,distance,threshold,noargument"/>
+		<s:State name="iban" stateGroups="matcher,distance,threshold,noargument"/>
+		<s:State name="aba" stateGroups="matcher,distance,threshold,noargument"/>
+		<s:State name="trid" stateGroups="matcher,distance,threshold,noargument"/>
+		<s:State name="canada_sin" stateGroups="matcher,distance,threshold,noargument"/>
+		<s:State name="france_insee" stateGroups="matcher,distance,threshold,noargument"/>
+		<s:State name="uk_nino" stateGroups="matcher,distance,threshold,noargument"/>
+		<s:State name="said" stateGroups="matcher,distance,threshold,noargument"/>
+		<s:State name="pan" stateGroups="matcher,distance,threshold,noargument"/>
+		<s:State name="cpf" stateGroups="matcher,distance,threshold,noargument"/>
+		<s:State name="china_icn" stateGroups="matcher,distance,threshold,noargument"/>
+		<s:State name="cc_edate" stateGroups="matcher,distance,threshold,noargument"/>
+		<s:State name="birthdate" stateGroups="matcher,distance,threshold,noargument"/>
+		<s:State name="gdate" stateGroups="matcher,distance,threshold,noargument"/>
+		<s:State name="keyword" stateGroups="matcher,distance,threshold,argument"/>
+		<s:State name="keyword_group" stateGroups="matcher,distance,threshold,argument"/>
+		<s:State name="regex" stateGroups="matcher,distance,threshold,argument"/>
+		<s:State name="scode" stateGroups="matcher,nodistance,threshold,noargument"/>
+		<s:State name="scode_ada" stateGroups="matcher,nodistance,threshold,noargument"/>
+		<s:State name="document_hash" stateGroups="matcher,nodistance,nothreshold,argument"/>
+		<s:State name="document_pdm" stateGroups="matcher,nodistance,threshold,argument"/>
+		<s:State name="encrypted_file" stateGroups="matcher,nodistance,nothreshold,noargument"/>
+		<s:State name="encrypted_archive" stateGroups="matcher,nodistance,nothreshold,noargument"/>
 	</s:states>
 	
 	<s:layout>
@@ -314,15 +354,15 @@
 							change="{currentState = (matcherCombobox.selectedItem == null ? 'normal' : matcherCombobox.selectedItem.data)}"
 							creationComplete="{currentState = (matcherCombobox.selectedItem == null ? 'normal' : matcherCombobox.selectedItem.data)}"
 							/>
-				<s:VGroup height="100%" verticalAlign="middle">
-					<s:Image source="@Embed('/assets/icons/16x16/help.png')" 
-							 toolTip="{LangUtil.getString('messages','matchers.combobox.tooltip.'+matcherCombobox.selectedItem.data+'.label')}"/>
+				<s:VGroup includeIn="matcher" height="100%" verticalAlign="middle"
+						  toolTip="{matcherCombobox.selectedItem != null ? ' ': null}" 
+						  toolTipCreate="onToolTipCreate(event)">
+					<s:Image source="@Embed('/assets/icons/16x16/help.png')" />
 				</s:VGroup>
 			</s:Group>
 		</s:FormItem>
 		<s:FormItem label="@Resource(bundle = 'messages', key = 'matcher.threshold.label')" 
-					includeIn="aba, birthdate, canada_sin, cc, cc_edate, china_icn, cpf, france_insee,
-								gdate, iban, keyword, pan, regex, ssn, trid, uk_nino, said">
+					includeIn="threshold">
 			<s:TextInput id="featureThreshold"/>
 		</s:FormItem>
 		<s:FormItem includeIn="keyword,regex" 
