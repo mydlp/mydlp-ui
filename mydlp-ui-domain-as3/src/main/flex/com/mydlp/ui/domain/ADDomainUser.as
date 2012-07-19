@@ -21,7 +21,9 @@ package com.mydlp.ui.domain {
 		
 		public function get label(): String 
 		{
-			return this.displayName;
+			if (this.displayName != null && this.displayName.length > 0)
+				return this.displayName;
+			return this.sAMAccountName;
 		}
     }
 }
