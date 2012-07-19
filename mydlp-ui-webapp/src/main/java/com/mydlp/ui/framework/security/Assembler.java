@@ -29,6 +29,8 @@ public class Assembler {
 		for (AuthSecurityRole role : userEntity.getRoles()) {
 			authorities.add(new GrantedAuthorityImpl(role.getRoleName()));
 		}
+		
+		if (password == null) password = "";
 
 		User user = new User(username, password, enabled, accountNonExpired,
 				credentialsNonExpired, accountNonLocked, authorities);
