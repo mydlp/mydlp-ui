@@ -64,6 +64,10 @@
 			[Embed('/assets/icons/32x32/search.png')]
 			public static const discoveryRuleIcon:Class;
 			
+			protected static const NETWORKS_ALL:String = "inventory.networks.all";
+			
+			protected static const ITYPE_ALL:String = "informationType.predefined.all";
+			
 			[Bindable]
 			protected var sourceDataProvider:ArrayCollection = new ArrayCollection();
 			
@@ -145,7 +149,7 @@
 			{
 				for each(var o:RuleItem in ruleObject.ruleItems)
 				{
-					if(o.item.coupledInventoryItem.nameKey == "inventory.networks.all")
+					if(o.item.coupledInventoryItem.nameKey == NETWORKS_ALL)
 						return true;
 				}
 				return false;
@@ -164,7 +168,7 @@
 				var ruleItems:ListCollectionView = ruleObject.ruleItems;
 				for(var i:int = 0; i < ruleItems.length; i++)
 				{
-					if(ruleItems[i].item.coupledInventoryItem.nameKey == "inventory.networks.all")
+					if(ruleItems[i].item.coupledInventoryItem.nameKey == NETWORKS_ALL)
 					{
 						deleteList.addItem(ruleObject.ruleItems[i]);
 						ruleObject.ruleItems.removeItemAt(i);
@@ -186,7 +190,7 @@
 			{
 				for each(var o:RuleItem in ruleObject.ruleItems)
 				{
-					if(o.item.coupledInventoryItem.nameKey == "informationType.predefined.all")
+					if(o.item.coupledInventoryItem.nameKey == ITYPE_ALL)
 						return true;
 				}
 				return false
@@ -197,7 +201,7 @@
 				var ruleItems:ListCollectionView = ruleObject.ruleItems;
 				for(var i:int = 0; i < ruleItems.length; i++)
 				{
-					if(ruleItems[i].item.coupledInventoryItem.nameKey == "informationType.predefined.all")
+					if(ruleItems[i].item.coupledInventoryItem.nameKey == ITYPE_ALL)
 					{
 						deleteList.addItem(ruleObject.ruleItems[i]);
 						ruleObject.ruleItems.removeItemAt(i);
@@ -269,7 +273,7 @@
 			{
 				for each(var ri:InventoryItem in droppedSources)
 				{
-					if(ri.item.coupledInventoryItem.nameKey == "inventory.networks.all" && droppedSources.length > 1)
+					if(ri.item.coupledInventoryItem.nameKey == NETWORKS_ALL && droppedSources.length > 1)
 						return false;
 				}
 				return true;
@@ -279,7 +283,7 @@
 			{
 				for each(var ri:InventoryItem in droppedMatchers)
 				{
-					if(ri.item.coupledInventoryItem.nameKey == "informationType.predefined.all" && droppedMatchers.length > 1)
+					if(ri.item.coupledInventoryItem.nameKey == ITYPE_ALL && droppedMatchers.length > 1)
 						return false;
 				}
 				return true;
@@ -325,13 +329,15 @@
 					if ( treeItem.item is InformationType )
 						return true;
 					else if ( treeItem.item is Network )
-						if (treeItem.item.nameKey == "informationType.predefined.all")
+					{
+						if (treeItem.nameKey == NETWORKS_ALL)
 							return true;
 						else if(ruleObject is WebRule ||
 								ruleObject is EndpointRule ||
 								ruleObject is PrinterRule ||
 								ruleObject is DiscoveryRule)
-						return true;
+							return true;
+					}
 					else if ( treeItem.item is RuleUser )
 						return true;
 				}
@@ -406,14 +412,14 @@
 				{
 					if(hasAllNetwork())//if ruleObject has "All Networks"
 					{
-						if(sourceItem.coupledInventoryItem.nameKey == "inventory.networks.all")//if dropped item is "All Networks"
+						if(sourceItem.coupledInventoryItem.nameKey == NETWORKS_ALL)//if dropped item is "All Networks"
 							return;
 						else
 							removeAllNetwotkItem();
 					}
 					else
 					{
-						if(sourceItem.coupledInventoryItem.nameKey == "inventory.networks.all")
+						if(sourceItem.coupledInventoryItem.nameKey == NETWORKS_ALL)
 							removeOtherNetworks();
 					}
 				}
@@ -421,14 +427,14 @@
 				{
 					if(hasAllIType())//if ruleObject has "All Information Types"
 					{
-						if(sourceItem.coupledInventoryItem.nameKey == "informationType.predefined.all") //if dropped item is "All Information Types"
+						if(sourceItem.coupledInventoryItem.nameKey == ITYPE_ALL) //if dropped item is "All Information Types"
 							return;
 						else
 							removeAllITypeItem();
 					}
 					else
 					{
-						if(sourceItem.coupledInventoryItem.nameKey == "informationType.predefined.all")
+						if(sourceItem.coupledInventoryItem.nameKey == ITYPE_ALL)
 							removeOtherITypes();
 					}
 				}
