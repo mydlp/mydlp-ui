@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<s:SkinnableContainer xmlns:fx="http://ns.adobe.com/mxml/2009" 
-		  xmlns:s="library://ns.adobe.com/flex/spark" 
-		  xmlns:my="http://www.mydlp.com/flex/my"
-		  xmlns:mx="library://ns.adobe.com/flex/mx" 
-		  xmlns:domain="com.mydlp.ui.domain.*" 
-		  xmlns:input="com.mydlp.ui.widget.general.input.*" 
-		  width="{InputLabel.VERTICAL_INPUT_WIDTH}" height="150">
+<s:SkinnableContainer xmlns:fx="http://ns.adobe.com/mxml/2009"
+					  xmlns:s="library://ns.adobe.com/flex/spark"
+					  xmlns:my="http://www.mydlp.com/flex/my"
+					  xmlns:mx="library://ns.adobe.com/flex/mx"
+					  xmlns:domain="com.mydlp.ui.domain.*"
+					  xmlns:input="com.mydlp.ui.widget.general.input.*"
+					  xmlns:popup="com.mydlp.ui.widget.general.popup.*"
+					  width="{InputLabel.VERTICAL_INPUT_WIDTH}" height="150"
+					  creationComplete="{setDistanceInputEnabled()}">
 	
 	<fx:Script>
 		<![CDATA[
@@ -13,15 +15,38 @@
 			import com.mydlp.ui.domain.Matcher;
 			import com.mydlp.ui.domain.RegularExpression;
 			import com.mydlp.ui.util.InteractionUtil;
+			import com.mydlp.ui.util.LangUtil;
 			import com.mydlp.ui.widget.general.popup.GenericEditContainer;
 			import com.mydlp.ui.widget.general.popup.InputLabel;
 			
 			import flash.utils.getQualifiedClassName;
 			
+			import mx.collections.ArrayCollection;
 			import mx.core.FlexGlobals;
 			import mx.core.IVisualElement;
 			
 			public var deleteList:ListCollectionView = null;
+			
+			protected static const distancesMatchers:ListCollectionView = new ArrayCollection(new Array(
+				"cc", 
+				"ssn",
+				"iban",
+				"aba",
+				"trid",
+				"canada_sin",
+				"france_insee",
+				"uk_nino",
+				"said",
+				"pan",
+				"cpf",
+				"china_icn",
+				"cc_edate",
+				"birthdate",
+				"gdate",
+				"keyword",
+				"keyword_group",
+				"regex"
+			));
 			
 			protected function removeClickHandler(event:MouseEvent):void
 			{
@@ -32,12 +57,29 @@
 					informationFeatures.removeItemAt(o as int);		
 				}
 				ifList.validateNow();
+				
+				setDistanceInputEnabled();
 			}
 			
 			public function addInformationFeature(ift:InformationFeature): void
 			{
 				informationFeatures.addItem(ift);
 				ifList.validateNow();
+			}
+			
+			public function setDistanceInputEnabled(): void
+			{
+				distanceInput.enabled = isDistanceInputEnabled();
+			}
+			
+			protected function isDistanceInputEnabled(): Boolean
+			{
+				if (informationFeatures == null || informationFeatures.length < 2)
+					return false;
+				for each (var ift:InformationFeature in informationFeatures)
+					if (!distancesMatchers.contains(ift.matcher.functionName))
+						return false;
+				return true;
 			}
 			
 			protected function addClickHandler(event:MouseEvent):void
@@ -64,26 +106,35 @@
 	
 	<fx:Declarations>
 		<mx:ListCollectionView id="informationFeatures"/>
+		<fx:String id="distance"/>
 	</fx:Declarations>
 
 	<s:layout>
-		<s:HorizontalLayout  verticalAlign="middle"/>
+		<s:VerticalLayout verticalAlign="middle" paddingTop="10"/>
 	</s:layout>
+	
+	<s:HGroup gap="3" verticalAlign="middle">
+		<s:Label width="120" text="@Resource(bundle = 'messages', key = 'generic.edit.InformationDescription.distance.label')"  fontWeight="bold" />
+		<s:TextInput id="distanceInput" width="{InputLabel.HORIZONTAL_INPUT_WIDTH}" text="@{distance}"/>
+	</s:HGroup>
 	
 	<s:Group width="100%" height="100%">
 		<s:layout>
-			<s:HorizontalLayout verticalAlign="middle" gap="2"/>
+			<s:HorizontalLayout gap="2" verticalAlign="middle"/>
 		</s:layout>
-		<s:List id="ifList" dataProvider="{informationFeatures}"  width="87%" height="100%"
-				itemRenderer="com.mydlp.ui.widget.general.input.InformationFeatureRenderer" />
+		<s:List id="ifList" width="87%" height="100%" dataProvider="{informationFeatures}"
+				itemRenderer="com.mydlp.ui.widget.general.input.InformationFeatureRenderer"/>
 		
 		<s:Group width="13%" height="100%">
 			<s:layout>
-				<s:VerticalLayout verticalAlign="middle" horizontalAlign="center" gap="2"/>
+				<s:VerticalLayout gap="2" horizontalAlign="center" verticalAlign="middle"/>
 			</s:layout>
-			<s:Button skinClass="com.mydlp.ui.skin.AddBitmapButton32Skin" click="addClickHandler(event)"/>
-			<s:Button skinClass="com.mydlp.ui.skin.EditBitmapButton32Skin" click="editClickHandler(event)"/>
-			<s:Button skinClass="com.mydlp.ui.skin.RemoveBitmapButton32Skin" click="removeClickHandler(event)"/>
+			<s:Button click="addClickHandler(event)"
+					  skinClass="com.mydlp.ui.skin.AddBitmapButton32Skin"/>
+			<s:Button click="editClickHandler(event)"
+					  skinClass="com.mydlp.ui.skin.EditBitmapButton32Skin"/>
+			<s:Button click="removeClickHandler(event)"
+					  skinClass="com.mydlp.ui.skin.RemoveBitmapButton32Skin"/>
 			
 		</s:Group>
 	</s:Group>

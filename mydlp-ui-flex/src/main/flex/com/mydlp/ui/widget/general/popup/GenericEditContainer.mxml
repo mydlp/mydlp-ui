@@ -140,6 +140,7 @@
 							//todo refine password
 							classMember.name == "password" ||
 							classMember.name == "distinguishedNameHash" ||
+							(classMember.name == "distance" && targetObject is InformationDescription) ||
 							(classMember.name == "action" && !(targetObject is USBDevice)) ||
 							(classMember.name == "children" && classMember.type == ListCollectionView)||						
 							(classMember.name == "coupledInventoryItem" && classMember.type == InventoryItem) ||
@@ -284,9 +285,21 @@
 						var ifInput:InformationFeatureInput = new InformationFeatureInput();
 						ifInput.deleteList = this.deleteList;
 						ifInput.informationFeatures = targetObject[classMember.name];
+						if (isNaN(targetObject["distance"]))
+							targetObject["distance"] = 100;
+						ifInput.distance = targetObject["distance"];
 						BindingUtils.bindProperty(targetObject, classMember.name, ifInput, "informationFeatures");
+						BindingUtils.bindProperty(targetObject, "distance", ifInput, "distance");
 						inputLabel = new VerticalInputLabel();
 						inputLabel.addElement(ifInput);
+						var numberValidator2:NumberValidator = new NumberValidator();
+						numberValidator2.source = ifInput;
+						numberValidator2.property = "distance";
+						numberValidator2.domain = "int";
+						numberValidator2.minValue = "1";
+						numberValidator2.maxValue = "5000";
+						ErrorTipManager.registerValidator(numberValidator2);
+						validators.push(numberValidator2);
 						index = 9;
 					}
 					else if (targetObject is InformationType &&

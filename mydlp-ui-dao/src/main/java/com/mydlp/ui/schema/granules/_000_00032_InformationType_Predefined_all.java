@@ -44,6 +44,7 @@ public class _000_00032_InformationType_Predefined_all extends AbstractGranule {
 		
 		InformationDescription id = new InformationDescription();
 		//ift.setInformationDescription(id);
+		id.setDistance(0);
 		List<InformationFeature> ifts = new ArrayList<InformationFeature>();
 		ifts.add(ift);
 		id.setFeatures(ifts);
