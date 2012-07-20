@@ -45,7 +45,8 @@ public class _000_00013_InformationType_Predefined_IBAN extends AbstractGranule 
 		
 		InformationDescription id = new InformationDescription();
 		//ift.setInformationDescription(id);
-		id.setDistance(0);
+		id.setDistanceEnabled(false);
+		id.setDistance(32);
 		List<InformationFeature> ifts = new ArrayList<InformationFeature>();
 		ifts.add(ift);
 		id.setFeatures(ifts);
