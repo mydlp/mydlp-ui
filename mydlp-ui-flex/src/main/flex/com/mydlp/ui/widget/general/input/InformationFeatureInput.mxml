@@ -69,7 +69,10 @@
 			
 			public function setDistanceInputEnabled(): void
 			{
-				distanceEnabled = distanceGroup.enabled = isDistanceInputEnabled();
+				var distanceApplicable:Boolean = isDistanceInputEnabled();
+				distanceGroup.enabled = distanceApplicable;
+				if (!distanceApplicable)
+					distanceEnabled = false; 
 			}
 			
 			protected function isDistanceInputEnabled(): Boolean

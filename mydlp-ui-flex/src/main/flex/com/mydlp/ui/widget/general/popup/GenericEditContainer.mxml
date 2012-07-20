@@ -297,7 +297,7 @@
 						}
 						else if (targetObject["distance"] < 32)
 						{
-							targetObject["distance"] = 32;
+							targetObject["distance"] = 100;
 							targetObject["distanceEnabled"] = false;
 						}
 						ifInput.distance = targetObject["distance"];
