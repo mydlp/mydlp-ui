@@ -17,6 +17,7 @@ public class InformationDescription extends AbstractEntity {
 	
 	protected List<InformationFeature> features;
 	
+	protected Boolean distanceEnabled;
 	protected Integer distance;
 
 	@OneToMany(cascade={CascadeType.ALL})
@@ -35,6 +36,15 @@ public class InformationDescription extends AbstractEntity {
 
 	public void setDistance(Integer distance) {
 		this.distance = distance;
+	}
+
+	@Column(nullable=false)
+	public Boolean getDistanceEnabled() {
+		return distanceEnabled;
+	}
+
+	public void setDistanceEnabled(Boolean distanceEnabled) {
+		this.distanceEnabled = distanceEnabled;
 	}
 
 }
