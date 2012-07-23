@@ -18,6 +18,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.springframework.transaction.support.TransactionTemplate;
 
@@ -111,12 +112,7 @@ public class RDBMSEnumServiceImpl implements RDBMSEnumService {
 	}
 	
 	public void enumerate(final Integer rdbmsInformationTargetId, final AbstractEntity entity) {
-		transactionTemplate.execute(new TransactionCallbackWithoutResult() {
-			@Override
-			protected void doInTransactionWithoutResult(TransactionStatus arg0) {
-				enumerateFun(rdbmsInformationTargetId, entity);
-			}
-		});
+		enumerateFun(rdbmsInformationTargetId, entity);
 	}
 	
 	protected String getIdentifier(RDBMSInformationTarget rdbmsInformationTarget, Connection connection) 
@@ -143,22 +139,34 @@ public class RDBMSEnumServiceImpl implements RDBMSEnumService {
 		
 	}
 	
-	public void enumerateFun(Integer rdbmsInformationTargetId, AbstractEntity entity) {
-		RDBMSObjectEnumProxy enumProxy = getEnumProxy(entity);
+	public void enumerateFun(final Integer rdbmsInformationTargetId, final AbstractEntity entity) {
+		final RDBMSObjectEnumProxy enumProxy = getEnumProxy(entity);
 		if (enumProxy == null) return ;
 		
 		Connection connection = null;
 		Statement statement = null;
 		ResultSet rs = null;
 		try {
-			genericDAO.merge(entity);
-			rdbmsConnectionDAO.startProcess(rdbmsInformationTargetId);
-			RDBMSInformationTarget rdbmsInformationTarget = rdbmsConnectionDAO.getInformationTargetById(rdbmsInformationTargetId);
+			final RDBMSInformationTarget rdbmsInformationTarget = 
+					transactionTemplate.execute(new TransactionCallback<RDBMSInformationTarget>() {
+						@Override
+						public RDBMSInformationTarget doInTransaction(TransactionStatus arg0) {
+							genericDAO.merge(entity);
+							rdbmsConnectionDAO.startProcess(rdbmsInformationTargetId);
+							return rdbmsConnectionDAO.getInformationTargetById(rdbmsInformationTargetId);
+						}
+					});
+			
 			connection = getSQLConnection(rdbmsInformationTarget.getRdbmsConnection());
-			String identifier = getIdentifier(rdbmsInformationTarget, connection);
+			final String identifier = getIdentifier(rdbmsInformationTarget, connection);
 			Boolean incrementalEnum = (identifier != null);
 			if (!incrementalEnum) {
-				rdbmsConnectionDAO.deleteValues(rdbmsInformationTarget);
+				transactionTemplate.execute(new TransactionCallbackWithoutResult() {
+					@Override
+					protected void doInTransactionWithoutResult(TransactionStatus arg0) {
+						rdbmsConnectionDAO.deleteValues(rdbmsInformationTarget);
+					}
+				});
 				enumProxy.truncate(rdbmsInformationTarget, entity);
 			}
 			statement = connection.createStatement();
@@ -170,9 +178,15 @@ public class RDBMSEnumServiceImpl implements RDBMSEnumService {
 				Boolean isValid = enumProxy.isValid(rdbmsInformationTarget, entity, stringValue);
 				if (!isValid)
 					continue;
-				int stringHashCode = stringValue.hashCode();
+				final int stringHashCode = stringValue.hashCode();
 				
-				Boolean valueIsAlreadyStored = rdbmsConnectionDAO.hasValue(rdbmsInformationTarget, stringHashCode);
+				Boolean valueIsAlreadyStored = 
+						transactionTemplate.execute(new TransactionCallback<Boolean>() {
+							@Override
+							public Boolean doInTransaction(TransactionStatus arg0) {
+								return rdbmsConnectionDAO.hasValue(rdbmsInformationTarget, stringHashCode);
+							}
+						});
 				
 				if (!incrementalEnum && valueIsAlreadyStored) continue;
 				
@@ -181,16 +195,35 @@ public class RDBMSEnumServiceImpl implements RDBMSEnumService {
 				if (incrementalEnum) {
 					Object idObj = rs.getObject(2);
 					idValue = idObj.toString();
-					ev = rdbmsConnectionDAO.getValue(rdbmsInformationTarget, idValue);
+					final String idValueF = idValue;
+					ev = transactionTemplate.execute(new TransactionCallback<RDBMSEnumeratedValue>() {
+						@Override
+						public RDBMSEnumeratedValue doInTransaction(
+								TransactionStatus arg0) {
+							return rdbmsConnectionDAO.getValue(rdbmsInformationTarget, idValueF);
+						}
+					});
+					
 					if (ev == null && valueIsAlreadyStored) continue;
 					if (ev != null && ev.getHashCode() == stringHashCode) continue; // we already have this value
-					valueIsAlreadyStored = rdbmsConnectionDAO.hasOtherValue(
-							rdbmsInformationTarget, stringHashCode, idValue);
+					valueIsAlreadyStored = transactionTemplate.execute(new TransactionCallback<Boolean>() {
+						@Override
+						public Boolean doInTransaction(TransactionStatus arg0) {
+							return rdbmsConnectionDAO.hasOtherValue(
+									rdbmsInformationTarget, stringHashCode, idValueF);
+						}
+					});
 				}
 				
 				if (valueIsAlreadyStored && ev != null && ev.getId() != null)
 				{
-					rdbmsConnectionDAO.remove(ev);
+					final RDBMSEnumeratedValue evF = ev;
+					transactionTemplate.execute(new TransactionCallbackWithoutResult() {
+						@Override
+						protected void doInTransactionWithoutResult(TransactionStatus arg0) {
+							rdbmsConnectionDAO.remove(evF);
+						}
+					});
 					enumProxy.delete(rdbmsInformationTarget, entity, identifier);
 					continue;
 				}
@@ -204,7 +237,15 @@ public class RDBMSEnumServiceImpl implements RDBMSEnumService {
 				ev.setHashCode(stringHashCode);
 				if (enumProxy.shouldStoreValue())
 					ev.setString(stringValue);
-				rdbmsConnectionDAO.save(ev);
+				{
+					final RDBMSEnumeratedValue evF = ev;
+					transactionTemplate.execute(new TransactionCallbackWithoutResult() {
+						@Override
+						protected void doInTransactionWithoutResult(TransactionStatus arg0) {
+							rdbmsConnectionDAO.save(evF);
+						}
+					});
+				}
 				enumProxy.save(rdbmsInformationTarget, entity, identifier, stringValue);
 			}
 		} catch (ClassNotFoundException e) {
@@ -212,7 +253,12 @@ public class RDBMSEnumServiceImpl implements RDBMSEnumService {
 		} catch (SQLException e) {
 			logger.error("An error occured during establishing connection and getting results of query", e);
 		} finally {
-			rdbmsConnectionDAO.finalizeProcess(rdbmsInformationTargetId);
+			transactionTemplate.execute(new TransactionCallbackWithoutResult() {
+				@Override
+				protected void doInTransactionWithoutResult(TransactionStatus arg0) {
+					rdbmsConnectionDAO.finalizeProcess(rdbmsInformationTargetId);
+				}
+			});			
 			try {
 				if (connection != null && ! connection.isClosed() )
 					connection.close();

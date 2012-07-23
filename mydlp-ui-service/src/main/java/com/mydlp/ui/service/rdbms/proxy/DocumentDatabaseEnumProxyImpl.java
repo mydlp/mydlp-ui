@@ -4,7 +4,12 @@ import java.nio.CharBuffer;
 import java.nio.charset.Charset;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.TransactionCallback;
+import org.springframework.transaction.support.TransactionCallbackWithoutResult;
+import org.springframework.transaction.support.TransactionTemplate;
 
 import com.mydlp.ui.dao.DocumentDatabaseDAO;
 import com.mydlp.ui.domain.AbstractEntity;
@@ -23,6 +28,10 @@ public class DocumentDatabaseEnumProxyImpl implements RDBMSObjectEnumProxy {
 	@Autowired
 	protected MyDLPUIThriftService thriftService;
 	
+	@Autowired
+	@Qualifier("policyTransactionTemplate")
+	protected TransactionTemplate transactionTemplate;
+	
 
 	@Override
 	public Boolean isValid(RDBMSInformationTarget rdbmsInformationTarget,
@@ -38,20 +47,35 @@ public class DocumentDatabaseEnumProxyImpl implements RDBMSObjectEnumProxy {
 
 	@Override
 	public void truncate(RDBMSInformationTarget rdbmsInformationTarget,
-			AbstractEntity entity) {
-		documentDatabaseDAO.truncateRDBMSEntries((DocumentDatabase)entity);
+			final AbstractEntity entity) {
+		transactionTemplate.execute(new TransactionCallbackWithoutResult() {
+			@Override
+			protected void doInTransactionWithoutResult(TransactionStatus arg0) {
+				documentDatabaseDAO.truncateRDBMSEntries((DocumentDatabase)entity);
+			}
+		});
 	}
 
 	@Override
 	public void delete(RDBMSInformationTarget rdbmsInformationTarget,
-			AbstractEntity entity, String identifier) {
-		documentDatabaseDAO.removeRDBMSEntryWithOrigId((DocumentDatabase)entity, identifier);
+			final AbstractEntity entity, final String identifier) {
+		transactionTemplate.execute(new TransactionCallbackWithoutResult() {
+			@Override
+			protected void doInTransactionWithoutResult(TransactionStatus arg0) {
+				documentDatabaseDAO.removeRDBMSEntryWithOrigId((DocumentDatabase)entity, identifier);
+			}
+		});
 	}
 
 	@Override
 	public void save(RDBMSInformationTarget rdbmsInformationTarget,
-			AbstractEntity entity, String identifier, String rowReturnValue) {
-		Integer documentId = documentDatabaseDAO.putRDBMSEntry((DocumentDatabase) entity, identifier, rowReturnValue);
+			final AbstractEntity entity, final String identifier, final String rowReturnValue) {
+		Integer documentId = transactionTemplate.execute(new TransactionCallback<Integer>() {
+			@Override
+			public Integer doInTransaction(TransactionStatus arg0) {
+				return documentDatabaseDAO.putRDBMSEntry((DocumentDatabase) entity, identifier, rowReturnValue);
+			}
+		});
 		thriftService.generateFingerprints(documentId.longValue(), FILENAME, Charset.forName("UTF-8").encode(CharBuffer.wrap(rowReturnValue)));
 	}
 	
