@@ -120,6 +120,5 @@ public class RDBMSConnectionDAOImpl extends AbstractPolicyDAO implements RDBMSCo
 		List<RDBMSInformationTarget> l = getHibernateTemplate().findByCriteria(criteria);
 		return DAOUtil.getSingleResult(l);
 	}
-
 		
 }

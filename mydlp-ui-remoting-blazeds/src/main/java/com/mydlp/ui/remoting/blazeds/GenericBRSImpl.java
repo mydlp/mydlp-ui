@@ -17,6 +17,7 @@ import com.mydlp.ui.domain.Document;
 import com.mydlp.ui.domain.DocumentDatabase;
 import com.mydlp.ui.domain.InventoryBase;
 import com.mydlp.ui.domain.RDBMSConnection;
+import com.mydlp.ui.domain.RDBMSInformationTarget;
 import com.mydlp.ui.domain.Rule;
 
 @Service("genericBRS")
@@ -59,6 +60,8 @@ public class GenericBRSImpl implements GenericService
 			return dashboardService.saveDashboardItem((DashboardItem) item);
 		else if (item instanceof RDBMSConnection)
 			return rdbmsConnectionService.save(item);
+		else if (item instanceof RDBMSInformationTarget)
+			return rdbmsConnectionService.save(item);
 		else if (item instanceof DocumentDatabase)
 			return documentDatabaseService.save((DocumentDatabase) item);
 		else
@@ -77,6 +80,8 @@ public class GenericBRSImpl implements GenericService
 		else if (item instanceof ADDomain)
 			adDomainService.remove((ADDomain) item);
 		else if (item instanceof RDBMSConnection)
+			rdbmsConnectionService.remove(item);
+		else if (item instanceof RDBMSInformationTarget)
 			rdbmsConnectionService.remove(item);
 		else if (item instanceof DocumentDatabase)
 			documentDatabaseService.remove((DocumentDatabase) item);
