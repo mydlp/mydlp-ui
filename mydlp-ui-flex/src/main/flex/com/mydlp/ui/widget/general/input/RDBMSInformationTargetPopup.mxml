@@ -68,6 +68,12 @@
 				nextButton.enabled = true;
 			}
 			
+			protected function enterTableState(event:FlexEvent):void
+			{
+				if (informationTarget.tableName != null)
+					searchTextInput.text = informationTarget.tableName;
+			}
+			
 			protected function exitTableState(event:FlexEvent):void
 			{
 				informationTarget.tableName = searchResultsList.selectedItem.name;
@@ -108,6 +114,12 @@
 				return strRet;
 			}
 			
+			protected function enterColumnState(event:FlexEvent):void
+			{
+				if (informationTarget.columnName != null)
+					searchTextInput.text = informationTarget.columnName;
+			}
+			
 			protected function exitColumnState(event:FlexEvent):void
 			{
 				informationTarget.columnName = searchResultsList.selectedItem.name;
@@ -121,28 +133,14 @@
 					connectionsComboBox.selectedItem = informationTarget.rdbmsConnection;
 			}
 			
-			protected function getTableNamesHandler(event:ResultEvent):void
-			{
-				searchResultsList.dataProvider = event.result as ListCollectionView;
-				if (informationTarget.tableName != null)
-					searchTextInput.text = informationTarget.tableName;
-			}
-			
-			protected function getColumnNamesHandler(event:ResultEvent):void
-			{
-				searchResultsList.dataProvider = event.result as ListCollectionView;
-				if (informationTarget.columnName != null)
-					searchTextInput.text = informationTarget.columnName;
-			}
-			
 		]]>
 	</fx:Script>
 	
 	<fx:Declarations>
 		<my:remote id="re" destination="rdbmsConnectionBRS" >
 			<my:method name="getRDBMSConnections" result="getRDBMSConnectionsHandler(event)"/>
-			<my:method name="getTableNames" result="getTableNamesHandler(event)"/>
-			<my:method name="getColumnNames" result="getColumnNamesHandler(event)"/>
+			<my:method name="getTableNames" result="{searchResultsList.dataProvider = event.result as ListCollectionView}"/>
+			<my:method name="getColumnNames" result="{searchResultsList.dataProvider = event.result as ListCollectionView}"/>
 			<my:method name="getSampleValues" result="getSampleValuesHandler(event)"/>
 		</my:remote>
 	</fx:Declarations>
@@ -151,9 +149,11 @@
 		<s:State name="connection" 
 				 enterState="enterConnectionState(event)"
 				 exitState="{informationTarget.rdbmsConnection = connectionsComboBox.selectedItem}"/>
-		<s:State name="table" 
+		<s:State name="table"
+				 enterState="enterTableState(event)"
 				 exitState="exitTableState(event)"/>
-		<s:State name="column" 
+		<s:State name="column"
+				 enterState="enterColumnState(event)"
 				 exitState="exitColumnState(event)"/>
 		<s:State name="final"
 				 enterState="enterFinalState(event)"/>
