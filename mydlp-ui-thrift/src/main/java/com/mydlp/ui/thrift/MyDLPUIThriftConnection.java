@@ -3,6 +3,7 @@ package com.mydlp.ui.thrift;
 import org.apache.thrift.TException;
 import org.apache.thrift.protocol.TBinaryProtocol;
 import org.apache.thrift.protocol.TProtocol;
+import org.apache.thrift.transport.TFramedTransport;
 import org.apache.thrift.transport.TSocket;
 import org.apache.thrift.transport.TTransport;
 import org.slf4j.Logger;
@@ -25,7 +26,7 @@ public class MyDLPUIThriftConnection {
 			destroy();
 		}
 		try {
-			transport = new TSocket(THRIFT_HOST, THRIFT_PORT);
+			transport = new TFramedTransport(new TSocket(THRIFT_HOST, THRIFT_PORT));
 			transport.open();
 
 			TProtocol protocol = new TBinaryProtocol(transport);
