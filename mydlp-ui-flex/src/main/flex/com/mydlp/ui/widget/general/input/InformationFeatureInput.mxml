@@ -7,7 +7,7 @@
 					  xmlns:input="com.mydlp.ui.widget.general.input.*"
 					  xmlns:popup="com.mydlp.ui.widget.general.popup.*"
 					  width="{InputLabel.VERTICAL_INPUT_WIDTH}" height="150"
-					  creationComplete="{setDistanceInputEnabled()}">
+					  creationComplete="{setDistanceInputEnabled()}" xmlns:util="com.mydlp.ui.util.*">
 	
 	<fx:Script>
 		<![CDATA[
@@ -67,7 +67,13 @@
 				ifList.validateNow();
 			}
 			
-			public function setDistanceInputEnabled(): void
+			public function refreshDisplay(): void
+			{
+				setDistanceInputEnabled();
+				ifList.invalidateList();
+			}
+			
+			protected function setDistanceInputEnabled(): void
 			{
 				var distanceApplicable:Boolean = isDistanceInputEnabled();
 				distanceGroup.enabled = distanceApplicable;
@@ -129,7 +135,7 @@
 		<s:layout>
 			<s:HorizontalLayout gap="2" verticalAlign="middle"/>
 		</s:layout>
-		<s:List id="ifList" width="87%" height="100%" dataProvider="{informationFeatures}"
+		<util:MyList id="ifList" width="87%" height="100%" dataProvider="{informationFeatures}"
 				itemRenderer="com.mydlp.ui.widget.general.input.InformationFeatureRenderer"/>
 		
 		<s:Group width="13%" height="100%">

@@ -32,6 +32,7 @@ package com.mydlp.ui.domain {
 			else 
 				return resourceVal + " - " + this.threshold.toString();
 		}
+		
 		public static function removeEscapeCharacter(string:String):String
 		{
 			var resultString:String = new String;

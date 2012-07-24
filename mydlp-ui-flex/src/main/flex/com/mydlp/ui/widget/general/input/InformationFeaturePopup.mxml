@@ -12,13 +12,11 @@
 	<fx:Script>
 		<![CDATA[
 			import com.mydlp.ui.domain.Argument;
-			import com.mydlp.ui.domain.DocumentDatabase;
 			import com.mydlp.ui.domain.InformationFeature;
 			import com.mydlp.ui.domain.Matcher;
 			import com.mydlp.ui.domain.MatcherArgument;
 			import com.mydlp.ui.domain.NonCascadingArgument;
 			import com.mydlp.ui.domain.RegularExpression;
-			import com.mydlp.ui.domain.RegularExpressionGroup;
 			import com.mydlp.ui.util.InteractionUtil;
 			import com.mydlp.ui.util.LangUtil;
 			import com.mydlp.ui.util.SpecialCharacterUtil;
@@ -26,11 +24,10 @@
 			import mx.collections.ListCollectionView;
 			import mx.controls.Alert;
 			import mx.events.FlexEvent;
+			import mx.events.PropertyChangeEvent;
 			import mx.events.ToolTipEvent;
 			import mx.events.ValidationResultEvent;
-			import mx.rpc.events.ResultEvent;
 			import mx.states.State;
-			import mx.validators.ValidationResult;
 			
 			public var informationFeatureInput:InformationFeatureInput = null;
 			
@@ -46,7 +43,7 @@
 			
 			protected function addNewFeature(event:MouseEvent):void
 			{
-				if(featureThreshold != null)
+				if(featureThresholdInput != null)
 				{
 					var validationResult:ValidationResultEvent = thresholdValidator.validate();//Validation Before Saving
 					if(validationResult.results != null) 
@@ -62,21 +59,27 @@
 				else 
 					isEdit = true;
 				
-				var m:Matcher = null;
-				if (informationFeatureObject.matcher == null)
+				var m:Matcher = informationFeatureObject.matcher;
+				
+				if (m != null &&
+					m.functionName != null &&
+					matcherCombobox.selectedItem != null &&
+					(m.functionName != matcherCombobox.selectedItem.data) )  // if there is a matcher and it is changed 
+				{
+					informationFeatureInput.deleteList.addItem(m);
+					m = null;
+				}
+				
+				if (m == null)
 				{
 					m = new Matcher();
 					informationFeatureObject.matcher = m;
 				}
-				else
-				{
-					m = informationFeatureObject.matcher;
-				}
 				
+				m.functionName = matcherCombobox.selectedItem.data;
 				
 				if (matcherCombobox.selectedItem.data == "keyword" || matcherCombobox.selectedItem.data == "regex")
 				{
-					m.functionName = matcherCombobox.selectedItem.data;
 					var r:RegularExpression = null;
 					if (m.matcherArguments == null || m.matcherArguments.length == 0)
 					{
@@ -106,7 +109,6 @@
 				else if(matcherCombobox.selectedItem.data == "document_hash" ||
 						matcherCombobox.selectedItem.data == "document_pdm")
 				{
-					m.functionName = matcherCombobox.selectedItem.data;
 					var nca:NonCascadingArgument = null;
 					if(m.matcherArguments == null || m.matcherArguments.length == 0)
 					{
@@ -128,7 +130,6 @@
 				}
 				else if(matcherCombobox.selectedItem.data == "keyword_group")
 				{
-					m.functionName = "keyword_group";
 					var ncar:NonCascadingArgument = null;
 					if(m.matcherArguments == null || m.matcherArguments.length == 0)
 					{
@@ -146,14 +147,15 @@
 					else
 						ncar.argument = keywordGroupComboBox.selectedItem;
 				}
+				
+				if (isAtState("threshold"))
+				{
+					informationFeatureObject.threshold = int(featureThreshold);
+				}
 				else
 				{
-					m.functionName = matcherCombobox.selectedItem.data ;
-				}
-				if(featureThreshold != null)
-					informationFeatureObject.threshold = int(featureThreshold.text);
-				else
 					informationFeatureObject.threshold = 1;
+				}
 				
 				if(!closePopup)
 				{
@@ -168,7 +170,7 @@
 					informationFeatureInput.addInformationFeature(informationFeatureObject);
 				}
 				
-				informationFeatureInput.setDistanceInputEnabled();
+				informationFeatureInput.refreshDisplay();
 				
 				close();
 			}
@@ -187,7 +189,7 @@
 							break;
 						}
 					}
-					featureThreshold.text = informationFeatureObject.threshold.toString();
+					featureThreshold = informationFeatureObject.threshold.toString();
 				}
 				
 				visible = true;
@@ -195,14 +197,21 @@
 			
 			protected function getNCArgument(): Argument
 			{
-				if (informationFeatureObject != null)
-						return informationFeatureObject.matcher.matcherArguments.getItemAt(0).coupledArgument.argument;
+				if (informationFeatureObject != null && 
+						informationFeatureObject.matcher != null &&
+						informationFeatureObject.matcher.matcherArguments != null &&
+						informationFeatureObject.matcher.matcherArguments.length > 0)
+					return informationFeatureObject.matcher.matcherArguments.getItemAt(0).coupledArgument.argument;
 				return null;
 			}
 			
 			protected function getArgument(): Argument
 			{
-				if (informationFeatureObject != null)
+				
+				if (informationFeatureObject != null && 
+						informationFeatureObject.matcher != null &&
+						informationFeatureObject.matcher.matcherArguments != null &&
+						informationFeatureObject.matcher.matcherArguments.length > 0)
 					return informationFeatureObject.matcher.matcherArguments.getItemAt(0).coupledArgument;
 				return null;
 			}
@@ -291,7 +300,7 @@
 		</s:ArrayCollection>
 		
 		<s:NumberValidator id="thresholdValidator"
-						   source="{featureThreshold}"
+						   source="{featureThresholdInput}"
 						   property="text"
 						   minValue="1"
 						   valid="{saveButton.enabled = true}"
@@ -310,6 +319,7 @@
 					   }"/>
 		</my:remote>
 		
+		<fx:String id="featureThreshold" />
 	</fx:Declarations>
 	
 	<s:states>
@@ -365,7 +375,7 @@
 		</s:FormItem>
 		<s:FormItem label="@Resource(bundle = 'messages', key = 'matcher.threshold.label')" 
 					includeIn="threshold">
-			<s:TextInput id="featureThreshold"/>
+			<s:TextInput id="featureThresholdInput" text="@{featureThreshold}"/>
 		</s:FormItem>
 		<s:FormItem includeIn="keyword,regex" 
 					label.keyword="@Resource(bundle = 'messages', key = 'matcher.keyword.keywordValue.label')"

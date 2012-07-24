@@ -754,7 +754,7 @@
 					{
 						(formObject as ADDomain).root = null; // to prevent sending whole tree
 					}
-					re.save(formObject);
+					re.persistChange(formObject, deleteList);
 					cButton.enabled = false;
 				}
 			}
@@ -812,26 +812,12 @@
 				}
 			}
 			
-			protected function saveHandler(event:Event): void
-			{
-				FlexGlobals.topLevelApplication.topToolbar.policyInstallationState = false;
-				
-				if (deleteList.length == 0)
-				{
-					InteractionUtil.closeCurrentPopup();
-					FlexGlobals.topLevelApplication.refresh();
-				}
-				else
-				{
-					re.removeAll(deleteList);
-				}
-			}
-			
-			protected function removeAllHandler(event:Event): void
+			protected function persistChangeHandler(event:Event): void
 			{
 				FlexGlobals.topLevelApplication.topToolbar.policyInstallationState = false;
 				InteractionUtil.closeCurrentPopup();
 				FlexGlobals.topLevelApplication.refresh();
+				
 			}
 			
 			protected function itemClickHandler(event:ItemClickEvent):void
@@ -883,8 +869,7 @@
 	
 	<fx:Declarations>
 		<my:remote id="re" destination="genericBRS" >
-			<my:method name="save" result="saveHandler(event)" />
-			<my:method name="removeAll" result="removeAllHandler(event)" />
+			<my:method name="persistChange" result="persistChangeHandler(event)" />
 		</my:remote>
 		<my:remote id="read" destination="adDomainBRS" >
 			<my:method name="testConnection" result="testConnectionHandler(event)"/>

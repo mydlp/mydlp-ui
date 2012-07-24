@@ -93,6 +93,8 @@ public class GenericBRSImpl implements GenericService
 
 	@Override
 	public void removeAll(List<AbstractEntity> items) {
+		if (items == null)
+			return;
 		for (AbstractEntity abstractEntity : items) {
 			if (abstractEntity.getId() != null)
 				remove(abstractEntity);
@@ -115,6 +117,13 @@ public class GenericBRSImpl implements GenericService
 	public void remove(String entityName, Integer id) {
 		entityName = entityName.replace("::", ".");
 		genericDAO.remove(entityName, id);
+	}
+
+	@Override
+	public void persistChange(AbstractEntity itemToSave,
+			List<AbstractEntity> itemsToRemove) {
+		save(itemToSave);
+		removeAll(itemsToRemove);
 	}
 	
 	
