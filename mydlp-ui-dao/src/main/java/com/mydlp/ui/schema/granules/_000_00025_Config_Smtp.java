@@ -24,15 +24,10 @@ public class _000_00025_Config_Smtp extends AbstractGranule {
 		smtpBypassOnFail.setKey("smtp_bypass_on_fail");
 		smtpBypassOnFail.setValue("true");
 
-		Config smtpEnableForAll	= new Config(); 
-		smtpEnableForAll.setKey("smtp_enable_for_all");
-		smtpEnableForAll.setValue("true");
-
 		getHibernateTemplate().saveOrUpdate(smtpHeloName);
 		getHibernateTemplate().saveOrUpdate(smtpNextHopHost);
 		getHibernateTemplate().saveOrUpdate(smtpNextHopPort);
 		getHibernateTemplate().saveOrUpdate(smtpBypassOnFail);
-		getHibernateTemplate().saveOrUpdate(smtpEnableForAll);
 
 	}
 

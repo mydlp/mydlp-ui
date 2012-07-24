@@ -69,7 +69,6 @@
 					else if (config.key == "smtp_next_hop_host") protocolsTab.smtpNextHopHost = config;
 					else if (config.key == "smtp_next_hop_port") protocolsTab.smtpNextHopPort = config;
 					else if (config.key == "smtp_bypass_on_fail") protocolsTab.smtpBypassOnFail = config;
-					else if (config.key == "smtp_enable_for_all") protocolsTab.smtpEnableForAll = config;
 						
 					else if (config.key == "icap_reqmod_path") protocolsTab.icapReqModPath = config;
 					else if (config.key == "icap_respmod_path") protocolsTab.icapRespModPath = config;

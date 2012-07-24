@@ -16,7 +16,6 @@
 		<domain:Config id="smtpNextHopHost" />
 		<domain:Config id="smtpNextHopPort" />
 		<domain:Config id="smtpBypassOnFail" />
-		<domain:Config id="smtpEnableForAll" />
 		<domain:Config id="icapReqModPath" />
 		<domain:Config id="icapRespModPath" />
 		<domain:Config id="icapMaxConnections" />	
@@ -62,10 +61,6 @@
 				<s:CheckBox id="smtpBypassOnFailCheckBox" selected="{smtpBypassOnFail.value == 'true'}" 
 							change="{smtpBypassOnFail.value = smtpBypassOnFailCheckBox.selected ? 'true' : 'false'}"/>
 			</s:FormItem>
-			<s:FormItem label="{smtpEnableForAll.label}">
-				<s:CheckBox id="smtpEnableForAllCheckBox" selected="{smtpEnableForAll.value} == 'true'}" 
-							change="{smtpEnableForAll.value = smtpEnableForAllCheckBox.selected ? 'true' : 'false'}"/>
-			</s:FormItem>		
 		</s:Form>
 		
 		<s:Form>		
