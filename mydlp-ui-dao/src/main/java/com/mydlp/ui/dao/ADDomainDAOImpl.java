@@ -1,10 +1,8 @@
 package com.mydlp.ui.dao;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.criterion.DetachedCriteria;
-import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -52,22 +50,11 @@ public class ADDomainDAOImpl extends AbstractPolicyDAO implements ADDomainDAO {
 		return DAOUtil.getSingleResult(l);
 	}
 
-	
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<ADDomain> getADDomains() {
-		DetachedCriteria criteria = 
-				DetachedCriteria.forClass(ADDomain.class)
-				.setProjection(Projections.property("id"));
-		@SuppressWarnings("unchecked")
-		List<Integer> idList = getHibernateTemplate().findByCriteria(criteria);
-		List<ADDomain> domainList = new ArrayList<ADDomain>();
-		for (Integer id : idList) {
-			ADDomain domain = getHibernateTemplate().load(ADDomain.class, id);
-			if (domain.getCurrentlyEnumerating())
-				domain.setRoot(null);
-			domainList.add(domain);
-		}
-		return domainList;
+		DetachedCriteria criteria = DetachedCriteria.forClass(ADDomain.class);
+		return getHibernateTemplate().findByCriteria(criteria);
 	}
 
 	@SuppressWarnings("unchecked")

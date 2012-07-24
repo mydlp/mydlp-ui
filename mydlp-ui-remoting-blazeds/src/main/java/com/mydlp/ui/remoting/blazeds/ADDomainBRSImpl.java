@@ -24,7 +24,7 @@ public class ADDomainBRSImpl implements ADDomainService
 
 	@Override
 	public void schedule(Integer domainId) {
-		adEnumService.enumerate(domainId);
+		adEnumService.schedule(domainId);
 	}
 
 	@Override
