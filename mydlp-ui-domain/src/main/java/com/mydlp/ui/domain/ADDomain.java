@@ -5,6 +5,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
@@ -76,7 +77,7 @@ public class ADDomain extends AbstractEntity {
 		this.loginPassword = loginPassword;
 	}
 
-	@OneToOne(mappedBy="domain", cascade={CascadeType.ALL})
+	@OneToOne(mappedBy="domain", cascade={CascadeType.ALL}, fetch=FetchType.LAZY)
 	public ADDomainRoot getRoot() {
 		return root;
 	}
