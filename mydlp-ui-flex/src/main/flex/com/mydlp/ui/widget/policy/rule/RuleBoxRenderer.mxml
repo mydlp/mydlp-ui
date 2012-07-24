@@ -64,7 +64,7 @@
 			[Embed('/assets/icons/32x32/search.png')]
 			public static const discoveryRuleIcon:Class;
 			
-			protected static const NETWORKS_ALL:String = "inventory.networks.all";
+			protected static const SOURCES_ALL:String = "inventory.networks.all";
 			
 			protected static const ITYPE_ALL:String = "informationType.predefined.all";
 			
@@ -141,6 +141,8 @@
 			{
 				if(item is Network)
 					return true;
+				else if(item is RuleUser)
+					return true;
 				else
 					return false;
 			}
@@ -149,7 +151,7 @@
 			{
 				for each(var o:RuleItem in ruleObject.ruleItems)
 				{
-					if(o.item.coupledInventoryItem.nameKey == NETWORKS_ALL)
+					if(o.item.coupledInventoryItem.nameKey == SOURCES_ALL)
 						return true;
 				}
 				return false;
@@ -163,12 +165,12 @@
 					return false;
 			}
 			
-			protected function removeAllNetwotkItem():void //called when "All Network" is in rule and dropped network is a specific network.
+			protected function removeAllSourcesItem():void //called when "All Network" is in rule and dropped network is a specific network.
 			{
 				var ruleItems:ListCollectionView = ruleObject.ruleItems;
 				for(var i:int = 0; i < ruleItems.length; i++)
 				{
-					if(ruleItems[i].item.coupledInventoryItem.nameKey == NETWORKS_ALL)
+					if(ruleItems[i].item.coupledInventoryItem.nameKey == SOURCES_ALL)
 					{
 						deleteList.addItem(ruleObject.ruleItems[i]);
 						ruleObject.ruleItems.removeItemAt(i);
@@ -176,13 +178,16 @@
 				}
 			}
 			
-			protected function removeOtherNetworks():void // called when specific networks are in rule and dropped network is "All Network"
+			protected function removeOtherSources():void // called when specific networks are in rule and dropped network is "All Network"
 			{
 				var ruleItems:ListCollectionView = ruleObject.ruleItems;
 				for(var i:int = 0; i < ruleItems.length; i++)
 				{
-					if(ruleItems[i].item is Network)
+					if(isSourceRuleItem(ruleItems[i].item))
+					{
 						deleteList.addItem(ruleObject.ruleItems[i]);
+						ruleItems.removeItemAt(i);
+					}
 				}
 			}
 			
@@ -215,7 +220,10 @@
 				for(var i:int = 0; i < ruleItems.length; i++)
 				{
 					if(ruleItems[i].item is InformationType)
+					{
 						deleteList.addItem(ruleObject.ruleItems[i]);
+						ruleItems.removeItemAt(i);
+					}
 				}
 			}
 			
@@ -273,7 +281,7 @@
 			{
 				for each(var ri:InventoryItem in droppedSources)
 				{
-					if(ri.item.coupledInventoryItem.nameKey == NETWORKS_ALL && droppedSources.length > 1)
+					if(ri.item.coupledInventoryItem.nameKey == SOURCES_ALL && droppedSources.length > 1)
 						return false;
 				}
 				return true;
@@ -299,10 +307,12 @@
 			{
 				if(droppedItem is InventoryItem)
 				{
-					if(droppedItem.item is Network)
+					if(isSourceRuleItem(droppedItem.item))
 						droppedSources.addItem(droppedItem);
 					else if(droppedItem.item is InformationType)
 						droppedMatchers.addItem(droppedItem);
+					else
+						throw new Error("unexpected type of item dropped");
 				}
 				else if(droppedItem is InventoryCategory)
 				{
@@ -330,7 +340,7 @@
 						return true;
 					else if ( treeItem.item is Network )
 					{
-						if (treeItem.nameKey == NETWORKS_ALL)
+						if (treeItem.nameKey == SOURCES_ALL)
 							return true;
 						else if(ruleObject is WebRule ||
 								ruleObject is EndpointRule ||
@@ -412,15 +422,15 @@
 				{
 					if(hasAllNetwork())//if ruleObject has "All Networks"
 					{
-						if(sourceItem.coupledInventoryItem.nameKey == NETWORKS_ALL)//if dropped item is "All Networks"
+						if(sourceItem.coupledInventoryItem.nameKey == SOURCES_ALL)//if dropped item is "All Networks"
 							return;
 						else
-							removeAllNetwotkItem();
+							removeAllSourcesItem();
 					}
 					else
 					{
-						if(sourceItem.coupledInventoryItem.nameKey == NETWORKS_ALL)
-							removeOtherNetworks();
+						if(sourceItem.coupledInventoryItem.nameKey == SOURCES_ALL)
+							removeOtherSources();
 					}
 				}
 				else if(isITypeRuleItem(sourceItem))
