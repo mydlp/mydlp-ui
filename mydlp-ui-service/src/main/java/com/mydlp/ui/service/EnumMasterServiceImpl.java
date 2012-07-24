@@ -1,10 +1,12 @@
 package com.mydlp.ui.service;
 
+import java.util.Date;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.scheduling.annotation.Async;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.TaskScheduler;
 import org.springframework.stereotype.Service;
 
 @Service("enumMasterService")
@@ -12,18 +14,28 @@ public class EnumMasterServiceImpl implements EnumMasterService {
 	
 	private static Logger logger = LoggerFactory.getLogger(EnumMasterServiceImpl.class);
 	
+	@Autowired
+	protected TaskScheduler taskScheduler;
+	
 	protected ConcurrentLinkedQueue<EnumJob> masterQueue = new ConcurrentLinkedQueue<EnumJob>();
 	
 	protected Boolean isRunning = false;
 	
-	@Async
 	@Override
 	public void schedule(final EnumJob enumJob) {
 		synchronized (masterQueue) {
 			if (masterQueue.contains(enumJob)) return;
 			masterQueue.add(enumJob);
 		}
-		consume();
+		
+		Runnable task = new Runnable() {
+			@Override
+			public void run() {
+				consume();
+			}
+		};
+		
+		taskScheduler.schedule(task, new Date());
 	}
 	
 	public void consume() {
