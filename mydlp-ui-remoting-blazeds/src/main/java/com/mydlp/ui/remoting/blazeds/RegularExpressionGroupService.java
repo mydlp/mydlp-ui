@@ -13,5 +13,7 @@ public interface RegularExpressionGroupService {
 	public List<RegularExpressionGroup> getRegularExpressions();
 	
 	public RegularExpressionGroup save(RegularExpressionGroup r);
+	
+	public void remove(RegularExpressionGroup r);
 
 }

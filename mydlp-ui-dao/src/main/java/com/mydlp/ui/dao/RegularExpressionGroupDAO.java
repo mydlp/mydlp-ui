@@ -14,4 +14,6 @@ public interface RegularExpressionGroupDAO {
 	 public List<RegularExpressionGroup> getRegularExpressionGroupsWithRDBMS();
 	 
 	 public RegularExpressionGroup getRegularExpressionGroupById(Integer id);
+	 
+	 public void remove(RegularExpressionGroup r);
 }

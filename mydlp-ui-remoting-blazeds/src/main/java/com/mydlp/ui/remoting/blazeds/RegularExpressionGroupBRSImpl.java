@@ -26,5 +26,10 @@ public class RegularExpressionGroupBRSImpl implements RegularExpressionGroupServ
 	public RegularExpressionGroup save(RegularExpressionGroup r) {
 		return regularExpressionGroupDAO.save(r);
 	}
+
+	@Override
+	public void remove(RegularExpressionGroup r) {
+		regularExpressionGroupDAO.remove(r);
+	}
 	
 }

@@ -18,6 +18,7 @@ import com.mydlp.ui.domain.DocumentDatabase;
 import com.mydlp.ui.domain.InventoryBase;
 import com.mydlp.ui.domain.RDBMSConnection;
 import com.mydlp.ui.domain.RDBMSInformationTarget;
+import com.mydlp.ui.domain.RegularExpressionGroup;
 import com.mydlp.ui.domain.Rule;
 
 @Service("genericBRS")
@@ -46,6 +47,9 @@ public class GenericBRSImpl implements GenericService
 	
 	@Autowired
 	protected DocumentDatabaseService documentDatabaseService;
+	
+	@Autowired
+	protected RegularExpressionGroupService regularExpressionGroupService;
 
 	@Override
 	public AbstractEntity save(AbstractEntity item) {
@@ -87,6 +91,8 @@ public class GenericBRSImpl implements GenericService
 			documentDatabaseService.remove((DocumentDatabase) item);
 		else if (item instanceof Document)
 			documentDatabaseService.removeDocument((Document) item);
+		else if (item instanceof RegularExpressionGroup)
+			regularExpressionGroupService.remove((RegularExpressionGroup) item);
 		else
 			genericDAO.remove(item);
 	}

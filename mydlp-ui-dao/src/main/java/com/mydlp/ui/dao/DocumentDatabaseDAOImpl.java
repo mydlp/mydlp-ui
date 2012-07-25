@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Restrictions;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,6 +19,9 @@ import com.mydlp.ui.domain.DocumentFingerprint;
 @Repository("documentDatabaseDAO")
 @Transactional
 public class DocumentDatabaseDAOImpl extends AbstractPolicyDAO implements DocumentDatabaseDAO {
+	
+	@Autowired
+	protected RDBMSConnectionDAO rdbmsConnectionDAO;
 
 	@SuppressWarnings("unchecked")
 	public List<DocumentDatabase> getDocumentDatabases() {
@@ -74,6 +78,9 @@ public class DocumentDatabaseDAOImpl extends AbstractPolicyDAO implements Docume
 
 	@Override
 	public void remove(DocumentDatabase r) {
+		if (r.getRdbmsInformationTarget() != null)
+			rdbmsConnectionDAO.remove(r);
+		
 		if (r.getFileEntries() != null)
 			for (DocumentDatabaseFileEntry fe: r.getFileEntries())
 				removeDocument(fe);
