@@ -224,7 +224,7 @@ public class RDBMSEnumServiceImpl implements RDBMSEnumService {
 							rdbmsConnectionDAO.remove(evF);
 						}
 					});
-					enumProxy.delete(rdbmsInformationTarget, entity, identifier);
+					enumProxy.delete(rdbmsInformationTarget, entity, idValue);
 					continue;
 				}
 				
@@ -246,7 +246,7 @@ public class RDBMSEnumServiceImpl implements RDBMSEnumService {
 						}
 					});
 				}
-				enumProxy.save(rdbmsInformationTarget, entity, identifier, stringValue);
+				enumProxy.save(rdbmsInformationTarget, entity, idValue, stringValue);
 			}
 		} catch (ClassNotFoundException e) {
 			logger.error("Probably JDBC driver is not found", e);
