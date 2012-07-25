@@ -49,8 +49,6 @@
 			import spark.components.TitleWindow;
 			
 			public var currentPopup:TitleWindow = null;
-
-			public static const removeError:String = "org.springframework.jdbc.UncategorizedSQLException";
 			
 			private var activityTimeout:uint;
 			
@@ -245,12 +243,8 @@
 				var splittedArray:Array = errorMessage.split(":");
 				var len:int = splittedArray[0].length;
 				var errorString:String = (splittedArray[0] as String).substring(0, len-1);
-				if(errorString == removeError)
-					Alert.show(LangUtil.getString("messages", "inventory.delete.error." + errorString + ".message"),
-						LangUtil.getString("messages", "inventory.delete.error." + errorString + ".title"));
-				else
-					Alert.show(LangUtil.getString("messages", "inventory.delete.error.unexpected.message"),
-						LangUtil.getString("messages", "inventory.delete.error.unexpected.title"));
+				Alert.show(LangUtil.getString("messages", "inventory.delete.error." + errorString + ".message"),
+					LangUtil.getString("messages", "inventory.delete.error." + errorString + ".title"));
 			}
 			
 			public function refresh(): void
