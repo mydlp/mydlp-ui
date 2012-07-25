@@ -74,12 +74,14 @@ public class DocumentDatabaseDAOImpl extends AbstractPolicyDAO implements Docume
 
 	@Override
 	public void remove(DocumentDatabase r) {
-		for (DocumentDatabaseFileEntry fe: r.getFileEntries()) {
-			removeDocument(fe);
-		}
-		for (DocumentDatabaseRDBMSEntry re: r.getRdbmsEntries()) {
-			removeDocument(re);
-		}
+		if (r.getFileEntries() != null)
+			for (DocumentDatabaseFileEntry fe: r.getFileEntries())
+				removeDocument(fe);
+		
+		if (r.getRdbmsEntries() != null)
+			for (DocumentDatabaseRDBMSEntry re: r.getRdbmsEntries())
+				removeDocument(re);
+			
 		getHibernateTemplate().delete(r);
 	}
 
@@ -92,9 +94,10 @@ public class DocumentDatabaseDAOImpl extends AbstractPolicyDAO implements Docume
 	@Override
 	public void truncateRDBMSEntries(DocumentDatabase documentDatabase) {
 		if (documentDatabase == null || documentDatabase.getRdbmsEntries() == null) return;
-		for (DocumentDatabaseRDBMSEntry documentDatabaseRDBMSEntry : documentDatabase.getRdbmsEntries()) {
+		
+		for (DocumentDatabaseRDBMSEntry documentDatabaseRDBMSEntry : documentDatabase.getRdbmsEntries())
 			removeDocument(documentDatabaseRDBMSEntry);
-		}
+		
 		documentDatabase.setRdbmsEntries(new ArrayList<DocumentDatabaseRDBMSEntry>());
 		save(documentDatabase);
 	}

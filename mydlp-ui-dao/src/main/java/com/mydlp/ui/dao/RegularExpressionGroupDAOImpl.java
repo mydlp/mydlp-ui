@@ -37,4 +37,14 @@ public class RegularExpressionGroupDAOImpl extends AbstractPolicyDAO implements 
 		return getHibernateTemplate().findByCriteria(criteria);
 	}
 
+	@Override
+	public RegularExpressionGroup getRegularExpressionGroupById(Integer id) {
+		DetachedCriteria criteria = 
+				DetachedCriteria.forClass(RegularExpressionGroup.class)
+				.add(Restrictions.eq("id", id));
+		@SuppressWarnings("unchecked")
+		List<RegularExpressionGroup> l = getHibernateTemplate().findByCriteria(criteria);
+		return DAOUtil.getSingleResult(l);
+	}
+
 }

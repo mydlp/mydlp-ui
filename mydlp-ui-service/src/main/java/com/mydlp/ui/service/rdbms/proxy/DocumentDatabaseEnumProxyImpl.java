@@ -78,5 +78,16 @@ public class DocumentDatabaseEnumProxyImpl implements RDBMSObjectEnumProxy {
 		});
 		thriftService.generateFingerprints(documentId.longValue(), FILENAME, Charset.forName("UTF-8").encode(CharBuffer.wrap(rowReturnValue)));
 	}
+
+	@Override
+	public AbstractEntity refresh(
+			RDBMSInformationTarget rdbmsInformationTarget, final AbstractEntity entity) {
+		return transactionTemplate.execute(new TransactionCallback<DocumentDatabase>() {
+			@Override
+			public DocumentDatabase doInTransaction(TransactionStatus arg0) {
+				return documentDatabaseDAO.getDocumentDatabaseById(entity.getId());
+			}
+		});
+	}
 	
 }

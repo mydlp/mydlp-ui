@@ -12,4 +12,6 @@ public interface RegularExpressionGroupDAO {
 	 public RegularExpressionGroup save(RegularExpressionGroup r);
 	 
 	 public List<RegularExpressionGroup> getRegularExpressionGroupsWithRDBMS();
+	 
+	 public RegularExpressionGroup getRegularExpressionGroupById(Integer id);
 }

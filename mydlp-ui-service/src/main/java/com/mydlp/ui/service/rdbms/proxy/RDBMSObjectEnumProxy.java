@@ -14,5 +14,7 @@ public interface RDBMSObjectEnumProxy {
 	public void delete(RDBMSInformationTarget rdbmsInformationTarget, AbstractEntity entity, String identifier);
 	
 	public void save(RDBMSInformationTarget rdbmsInformationTarget, AbstractEntity entity, String identifier, String rowReturnValue);
+	
+	public AbstractEntity refresh(RDBMSInformationTarget rdbmsInformationTarget, AbstractEntity entity);
 
 }
