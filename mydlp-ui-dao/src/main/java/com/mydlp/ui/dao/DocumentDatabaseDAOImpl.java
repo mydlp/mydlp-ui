@@ -78,6 +78,7 @@ public class DocumentDatabaseDAOImpl extends AbstractPolicyDAO implements Docume
 
 	@Override
 	public void remove(DocumentDatabase r) {
+		r = getDocumentDatabaseById(r.getId());
 		if (r.getRdbmsInformationTarget() != null) {
 			rdbmsConnectionDAO.remove(r.getRdbmsInformationTarget());
 			r.setRdbmsInformationTarget(null);
