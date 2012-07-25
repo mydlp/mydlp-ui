@@ -64,14 +64,18 @@
 			
 			protected function getSampleValuesHandler(event:ResultEvent):void
 			{
-				sampleValuesList.dataProvider = event.result as ListCollectionView;
+				var sampleList:ListCollectionView = event.result as ListCollectionView;
+				sampleValuesList.dataProvider = sampleList;
 				nextButton.enabled = true;
 			}
 			
 			protected function enterTableState(event:FlexEvent):void
 			{
 				if (informationTarget.tableName != null)
+				{
 					searchTextInput.text = informationTarget.tableName;
+					searchInputChangeHandler(null);
+				}
 			}
 			
 			protected function exitTableState(event:FlexEvent):void
@@ -117,7 +121,10 @@
 			protected function enterColumnState(event:FlexEvent):void
 			{
 				if (informationTarget.columnName != null)
+				{
 					searchTextInput.text = informationTarget.columnName;
+					searchInputChangeHandler(null);
+				}
 			}
 			
 			protected function exitColumnState(event:FlexEvent):void
@@ -133,14 +140,45 @@
 					connectionsComboBox.selectedItem = informationTarget.rdbmsConnection;
 			}
 			
+			protected function getSearchResultsHandler(event:ResultEvent):void
+			{
+				var searchList:ListCollectionView = event.result as ListCollectionView; 
+				searchResultsList.dataProvider = searchList;
+				
+				if (currentState == "table" && informationTarget.tableName != null)
+				{
+					for each (var i:* in searchList)
+					{
+						if (i != null && i.name == informationTarget.tableName &&
+							i.catalog == informationTarget.catalogName &&
+							i.schema == informationTarget.schemaName)
+						{
+							searchResultsList.selectedItem = i;
+							break;
+						}
+					}
+				} 
+				else if (currentState == "column" && informationTarget.columnName != null)
+				{
+					for each (var j:* in searchList)
+					{
+						if (j != null && j.name == informationTarget.columnName )
+						{
+							searchResultsList.selectedItem = j;
+							break;
+						}
+					}
+				}
+			}
+			
 		]]>
 	</fx:Script>
 	
 	<fx:Declarations>
 		<my:remote id="re" destination="rdbmsConnectionBRS" >
 			<my:method name="getRDBMSConnections" result="getRDBMSConnectionsHandler(event)"/>
-			<my:method name="getTableNames" result="{searchResultsList.dataProvider = event.result as ListCollectionView}"/>
-			<my:method name="getColumnNames" result="{searchResultsList.dataProvider = event.result as ListCollectionView}"/>
+			<my:method name="getTableNames" result="getSearchResultsHandler(event)"/>
+			<my:method name="getColumnNames" result="getSearchResultsHandler(event)"/>
 			<my:method name="getSampleValues" result="getSampleValuesHandler(event)"/>
 		</my:remote>
 	</fx:Declarations>
