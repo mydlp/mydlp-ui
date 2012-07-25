@@ -118,7 +118,6 @@
 
   <bean id="policyTransactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
     <property name="sessionFactory"><ref local="policySessionFactory"/></property>
-    <property name="hibernateManagedSession" value="true"/>
   </bean>
   
   <bean id="logTransactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">

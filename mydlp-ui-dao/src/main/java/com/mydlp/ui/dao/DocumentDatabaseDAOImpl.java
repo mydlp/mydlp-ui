@@ -93,6 +93,9 @@ public class DocumentDatabaseDAOImpl extends AbstractPolicyDAO implements Docume
 
 	@Override
 	public void truncateRDBMSEntries(DocumentDatabase documentDatabase) {
+		if (documentDatabase == null) return;
+		documentDatabase = getHibernateTemplate().merge(documentDatabase);
+		
 		if (documentDatabase == null || documentDatabase.getRdbmsEntries() == null) return;
 		
 		for (DocumentDatabaseRDBMSEntry documentDatabaseRDBMSEntry : documentDatabase.getRdbmsEntries())
@@ -103,6 +106,7 @@ public class DocumentDatabaseDAOImpl extends AbstractPolicyDAO implements Docume
 	}
 	
 	protected DocumentDatabaseRDBMSEntry getRDBMSEntryWithOrigId(DocumentDatabase documentDatabase, String originalId) {
+		documentDatabase = getHibernateTemplate().merge(documentDatabase);
 		@SuppressWarnings("unchecked")
 		List<DocumentDatabaseRDBMSEntry> l = getHibernateTemplate().find(
 				"select re from DocumentDatabase as dd left join dd.rdbmsEntries as re where dd.id=? and re.originalId=?",
@@ -118,6 +122,7 @@ public class DocumentDatabaseDAOImpl extends AbstractPolicyDAO implements Docume
 			logger.error("Can not remove RDBMSEntry without originalId");
 			return;
 		}
+		documentDatabase = getHibernateTemplate().merge(documentDatabase);
 		DocumentDatabaseRDBMSEntry documentDatabaseRDBMSEntry = getRDBMSEntryWithOrigId(documentDatabase, originalId);
 		removeDocument(documentDatabaseRDBMSEntry);
 		documentDatabase.getRdbmsEntries().remove(documentDatabaseRDBMSEntry);
@@ -127,6 +132,7 @@ public class DocumentDatabaseDAOImpl extends AbstractPolicyDAO implements Docume
 	@Override
 	public Integer putRDBMSEntry(DocumentDatabase documentDatabase,
 			String originalId, String value) {
+		documentDatabase = getHibernateTemplate().merge(documentDatabase);
 		DocumentDatabaseRDBMSEntry documentDatabaseRDBMSEntry = null;
 		if (originalId != null)
 			documentDatabaseRDBMSEntry = getRDBMSEntryWithOrigId(documentDatabase, originalId);
