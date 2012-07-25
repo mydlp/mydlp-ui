@@ -28,9 +28,17 @@ public class DocumentDatabaseDAOImpl extends AbstractPolicyDAO implements Docume
 
 	@Override
 	@Transactional(readOnly=false)
-	public DocumentDatabase save(DocumentDatabase r) {
-		getHibernateTemplate().saveOrUpdate(r);
-		return r;
+	public DocumentDatabase save(DocumentDatabase d) {
+		if (d.getRdbmsInformationTarget() == null && 
+				d.getRdbmsEntries() != null &&
+				! d.getRdbmsEntries().isEmpty() ) {
+			for (DocumentDatabaseRDBMSEntry entry : d.getRdbmsEntries()) {
+				removeDocument(entry);
+			}
+			d.setRdbmsEntries(new ArrayList<DocumentDatabaseRDBMSEntry>());
+		}
+		getHibernateTemplate().saveOrUpdate(d);
+		return d;
 	}
 
 	@SuppressWarnings("unchecked")
