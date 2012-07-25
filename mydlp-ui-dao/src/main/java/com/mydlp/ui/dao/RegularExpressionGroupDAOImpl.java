@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.mydlp.ui.domain.DocumentDatabaseFileEntry;
 import com.mydlp.ui.domain.RegularExpressionGroup;
 import com.mydlp.ui.domain.RegularExpressionGroupEntry;
 
@@ -66,6 +65,8 @@ public class RegularExpressionGroupDAOImpl extends AbstractPolicyDAO implements 
 				getHibernateTemplate().delete(entry);
 			r.setEntries(new ArrayList<RegularExpressionGroupEntry>());
 		}
+		
+		getHibernateTemplate().saveOrUpdate(r);
 		
 		getHibernateTemplate().delete(r);
 	}

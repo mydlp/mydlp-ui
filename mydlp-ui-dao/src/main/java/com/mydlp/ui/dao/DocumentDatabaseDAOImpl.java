@@ -94,6 +94,8 @@ public class DocumentDatabaseDAOImpl extends AbstractPolicyDAO implements Docume
 				removeDocument(re);
 			r.setRdbmsEntries(new ArrayList<DocumentDatabaseRDBMSEntry>());
 		}
+		
+		getHibernateTemplate().saveOrUpdate(r);
 			
 		getHibernateTemplate().delete(r);
 	}
