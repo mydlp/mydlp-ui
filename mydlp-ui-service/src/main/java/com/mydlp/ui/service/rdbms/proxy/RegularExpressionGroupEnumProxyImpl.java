@@ -7,13 +7,10 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionTemplate;
 
-import com.mydlp.ui.dao.DocumentDatabaseDAO;
 import com.mydlp.ui.dao.RegularExpressionGroupDAO;
 import com.mydlp.ui.domain.AbstractEntity;
-import com.mydlp.ui.domain.DocumentDatabase;
 import com.mydlp.ui.domain.RDBMSInformationTarget;
 import com.mydlp.ui.domain.RegularExpressionGroup;
-import com.mydlp.ui.thrift.MyDLPUIThriftService;
 
 @Service("regularExpressionGroupEnumProxy")
 public class RegularExpressionGroupEnumProxyImpl implements RDBMSObjectEnumProxy {

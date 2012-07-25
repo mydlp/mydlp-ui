@@ -139,7 +139,7 @@ public class RDBMSEnumServiceImpl implements RDBMSEnumService {
 		
 	}
 	
-	public void enumerateFun(final Integer rdbmsInformationTargetId, final AbstractEntity entity) {
+	public void enumerateFun(final Integer rdbmsInformationTargetId, AbstractEntity entity) {
 		final RDBMSObjectEnumProxy enumProxy = getEnumProxy(entity);
 		if (enumProxy == null) return ;
 		
@@ -151,11 +151,11 @@ public class RDBMSEnumServiceImpl implements RDBMSEnumService {
 					transactionTemplate.execute(new TransactionCallback<RDBMSInformationTarget>() {
 						@Override
 						public RDBMSInformationTarget doInTransaction(TransactionStatus arg0) {
-							genericDAO.merge(entity);
 							rdbmsConnectionDAO.startProcess(rdbmsInformationTargetId);
 							return rdbmsConnectionDAO.getInformationTargetById(rdbmsInformationTargetId);
 						}
 					});
+			entity = enumProxy.refresh(rdbmsInformationTarget, entity);
 			
 			connection = getSQLConnection(rdbmsInformationTarget.getRdbmsConnection());
 			final String identifier = getIdentifier(rdbmsInformationTarget, connection);
