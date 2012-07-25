@@ -56,7 +56,7 @@ public class RegularExpressionGroupDAOImpl extends AbstractPolicyDAO implements 
 	@Override
 	public void remove(RegularExpressionGroup r) {
 		if (r.getRdbmsInformationTarget() != null) {
-			rdbmsConnectionDAO.remove(r);
+			rdbmsConnectionDAO.remove(r.getRdbmsInformationTarget());
 			r.setRdbmsInformationTarget(null);
 		}
 		

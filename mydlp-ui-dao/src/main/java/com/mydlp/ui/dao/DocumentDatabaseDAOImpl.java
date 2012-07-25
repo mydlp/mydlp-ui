@@ -79,8 +79,7 @@ public class DocumentDatabaseDAOImpl extends AbstractPolicyDAO implements Docume
 	@Override
 	public void remove(DocumentDatabase r) {
 		if (r.getRdbmsInformationTarget() != null) {
-			rdbmsConnectionDAO.remove(r);
-			getHibernateTemplate().flush();
+			rdbmsConnectionDAO.remove(r.getRdbmsInformationTarget());
 			r.setRdbmsInformationTarget(null);
 		}
 		
@@ -96,7 +95,7 @@ public class DocumentDatabaseDAOImpl extends AbstractPolicyDAO implements Docume
 			r.setRdbmsEntries(new ArrayList<DocumentDatabaseRDBMSEntry>());
 		}
 		getHibernateTemplate().saveOrUpdate(r);
-			
+		
 		getHibernateTemplate().delete(r);
 	}
 
