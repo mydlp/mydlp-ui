@@ -83,15 +83,23 @@ public class DocumentDatabaseDAOImpl extends AbstractPolicyDAO implements Docume
 			rdbmsConnectionDAO.deleteValues(r.getRdbmsInformationTarget());
 		}
 		
+		List<Document> deleteList = new ArrayList<Document>();
+		
 		if (r.getFileEntries() != null)
-			for (Document d: r.getFileEntries())
-				removeDocument(d);
+			deleteList.addAll(r.getFileEntries());
 		
 		if (r.getRdbmsEntries() != null)
-			for (Document d: r.getRdbmsEntries())
-				removeDocument(d);
+			deleteList.addAll(r.getRdbmsEntries());
 		
+		r.setFileEntries(new ArrayList<DocumentDatabaseFileEntry>());
+		r.setRdbmsEntries(new ArrayList<DocumentDatabaseRDBMSEntry>());
+		
+		getHibernateTemplate().save(r);
 		getHibernateTemplate().delete(r);
+		
+		for (Document document : deleteList) {
+			removeDocument(document);
+		}
 	}
 
 	@Override
