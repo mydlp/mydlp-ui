@@ -78,24 +78,9 @@ public class DocumentDatabaseDAOImpl extends AbstractPolicyDAO implements Docume
 
 	@Override
 	public void remove(DocumentDatabase r) {
-		r = getDocumentDatabaseById(r.getId());
 		if (r.getRdbmsInformationTarget() != null) {
-			rdbmsConnectionDAO.remove(r.getRdbmsInformationTarget());
-			r.setRdbmsInformationTarget(null);
+			rdbmsConnectionDAO.deleteValues(r.getRdbmsInformationTarget());
 		}
-		
-		if (r.getFileEntries() != null) {
-			for (DocumentDatabaseFileEntry fe: r.getFileEntries())
-				removeDocument(fe);
-			r.setFileEntries(new ArrayList<DocumentDatabaseFileEntry>());
-		}
-		
-		if (r.getRdbmsEntries() != null) {
-			for (DocumentDatabaseRDBMSEntry re: r.getRdbmsEntries())
-				removeDocument(re);
-			r.setRdbmsEntries(new ArrayList<DocumentDatabaseRDBMSEntry>());
-		}
-		getHibernateTemplate().saveOrUpdate(r);
 		
 		getHibernateTemplate().delete(r);
 	}
