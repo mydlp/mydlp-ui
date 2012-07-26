@@ -1,6 +1,5 @@
 package com.mydlp.ui.dao;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.criterion.DetachedCriteria;
@@ -10,7 +9,6 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.mydlp.ui.domain.RegularExpressionGroup;
-import com.mydlp.ui.domain.RegularExpressionGroupEntry;
 
 
 @Repository("regularExpressionGroupDAO")
@@ -55,10 +53,10 @@ public class RegularExpressionGroupDAOImpl extends AbstractPolicyDAO implements 
 
 	@Override
 	public void remove(RegularExpressionGroup r) {
+		r = getRegularExpressionGroupById(r.getId());
 		if (r.getRdbmsInformationTarget() != null) {
 			rdbmsConnectionDAO.deleteValues(r.getRdbmsInformationTarget());
 		}
-			
 		getHibernateTemplate().delete(r);
 	}
 
