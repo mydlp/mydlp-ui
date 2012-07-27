@@ -18,6 +18,7 @@
 			import com.mydlp.ui.domain.RegularExpression;
 			import com.mydlp.ui.util.InteractionUtil;
 			import com.mydlp.ui.util.LangUtil;
+			import com.mydlp.ui.util.SessionUtil;
 			import com.mydlp.ui.widget.general.popup.GenericEditContainer;
 			import com.mydlp.ui.widget.general.popup.InputLabel;
 			
@@ -201,11 +202,14 @@
 	</s:layout>
 	
 	<s:HGroup id="distanceGroup" gap="3" verticalAlign="middle">
-		<s:CheckBox id="distanceEnabledInput" selected="@{distanceEnabled}" width="15"/>
+		<s:CheckBox id="distanceEnabledInput" selected="@{distanceEnabled}" width="15"
+					includeInLayout="{SessionUtil.isEnterprise()}"/>
 		<s:Label width="120" text="@Resource(bundle = 'messages', key = 'generic.edit.InformationDescription.distance.label')"  
-				 fontWeight="bold" />
+				 fontWeight="bold" 
+				 includeInLayout="{SessionUtil.isEnterprise()}"/>
 		<s:TextInput id="distanceValueInput" width="{InputLabel.HORIZONTAL_INPUT_WIDTH - 18}" text="@{distance}" 
-					 enabled="{distanceEnabledInput.selected}"/>
+					 enabled="{distanceEnabledInput.selected}"
+					 includeInLayout="{SessionUtil.isEnterprise()}"/>
 	</s:HGroup>
 	
 	<s:Group width="100%" height="100%">

@@ -300,6 +300,10 @@
 							targetObject["distance"] = 100;
 							targetObject["distanceEnabled"] = false;
 						}
+						if (!SessionUtil.isEnterprise())
+						{
+							targetObject["distanceEnabled"] = false;
+						}
 						ifInput.distance = targetObject["distance"];
 						ifInput.distanceEnabled = targetObject["distanceEnabled"];
 						BindingUtils.bindProperty(targetObject, classMember.name, ifInput, "informationFeatures");
