@@ -7,7 +7,8 @@
 					  xmlns:input="com.mydlp.ui.widget.general.input.*"
 					  xmlns:popup="com.mydlp.ui.widget.general.popup.*"
 					  width="{InputLabel.VERTICAL_INPUT_WIDTH}" height="150"
-					  creationComplete="{setDistanceInputEnabled()}" xmlns:util="com.mydlp.ui.util.*">
+					  creationComplete="{refreshDisplay()}" 
+					  xmlns:util="com.mydlp.ui.util.*">
 	
 	<fx:Script>
 		<![CDATA[
@@ -22,6 +23,7 @@
 			import flash.utils.getQualifiedClassName;
 			
 			import mx.collections.ArrayCollection;
+			import mx.controls.Alert;
 			import mx.core.FlexGlobals;
 			import mx.core.IVisualElement;
 			
@@ -48,6 +50,16 @@
 				"regex"
 			));
 			
+			protected static const exclusiveMatchers:ListCollectionView = new ArrayCollection(new Array(
+				"all", 
+				"encrypted_file",
+				"encrypted_archive",
+				"document_hash",
+				"document_pdm",
+				"scode",
+				"scode_ada"
+			));
+			
 			protected function removeClickHandler(event:MouseEvent):void
 			{
 				ifList.dataGroup.invalidateDisplayList();
@@ -56,19 +68,59 @@
 					deleteList.addItem(informationFeatures.getItemAt(o as int));
 					informationFeatures.removeItemAt(o as int);		
 				}
-				ifList.validateNow();
 				
-				setDistanceInputEnabled();
+				refreshDisplay();
+			}
+			
+			public function validateAddFor(matcherName:String): String
+			{
+				if (isExclusive())
+				{
+					return "error.anExclusiveMatcherIsPresent";
+				}
+				
+				if (exclusiveMatchers.contains(matcherName))
+				{
+					if (informationFeatures.length == 0 )
+					{
+						return "ok";
+					}
+					else
+					{
+						return "error.exclusiveCanOnlyBeenAddToEmptyList";
+					}
+				}
+				else if (distancesMatchers.contains(matcherName))
+				{
+					for each (var i:InformationFeature in informationFeatures)
+					{
+						if (! distancesMatchers.contains(i.matcher.functionName))
+						{
+							// currently non distance means exclusive, please change this message if behaviour changes.
+							return "error.anExclusiveMatcherIsPresent";
+						}
+					}
+					return "ok";
+				}
+				else 
+					throw new Error ("Unexpected matcher");
+			}
+			
+			public function isExclusive(): Boolean
+			{
+				return 	informationFeatures.length == 1 &&
+						exclusiveMatchers.contains(informationFeatures.getItemAt(0).matcher.functionName);
 			}
 			
 			public function addInformationFeature(ift:InformationFeature): void
 			{
 				informationFeatures.addItem(ift);
-				ifList.validateNow();
+				refreshDisplay();
 			}
 			
 			public function refreshDisplay(): void
 			{
+				addButton.enabled=(! isExclusive());
 				setDistanceInputEnabled();
 				ifList.invalidateList();
 			}
@@ -142,11 +194,14 @@
 			<s:layout>
 				<s:VerticalLayout gap="2" horizontalAlign="center" verticalAlign="middle"/>
 			</s:layout>
-			<s:Button click="addClickHandler(event)"
+			<s:Button id="addButton" 
+					  click="addClickHandler(event)"
 					  skinClass="com.mydlp.ui.skin.AddBitmapButton32Skin"/>
 			<s:Button click="editClickHandler(event)"
+					  enabled="{ifList.selectedItem != null}"
 					  skinClass="com.mydlp.ui.skin.EditBitmapButton32Skin"/>
 			<s:Button click="removeClickHandler(event)"
+					  enabled="{ifList.selectedItem != null}"
 					  skinClass="com.mydlp.ui.skin.RemoveBitmapButton32Skin"/>
 			
 		</s:Group>

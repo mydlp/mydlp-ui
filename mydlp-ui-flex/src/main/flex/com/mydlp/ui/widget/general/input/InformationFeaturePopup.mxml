@@ -29,6 +29,8 @@
 			import mx.events.ValidationResultEvent;
 			import mx.states.State;
 			
+			import spark.events.IndexChangeEvent;
+			
 			public var informationFeatureInput:InformationFeatureInput = null;
 			
 			[Bindable]
@@ -49,7 +51,6 @@
 					if(validationResult.results != null) 
 						return;
 				}
-				
 				
 				closePopup = true;
 				
@@ -177,6 +178,8 @@
 			
 			public function populate():void
 			{
+				matcherDefinitions.refresh();
+				
 				if (informationFeatureObject != null)
 				{
 					for (var i:int; i < matcherDefinitions.length; i++)
@@ -266,12 +269,35 @@
 				return false;
 			}
 			
+			protected function matcherComboboxChangeHandler(event:IndexChangeEvent):void
+			{
+				if (informationFeatureObject != null && informationFeatureInput.isExclusive())
+				{
+					saveButton.enabled = true;
+				}
+				else 
+				{
+					var ret:String = informationFeatureInput.validateAddFor(matcherCombobox.selectedItem.data);
+					if (ret == "ok")
+					{
+						saveButton.enabled = true;
+					}
+					else
+					{
+						saveButton.enabled = false;
+						msgLabel.text = LangUtil.getString("messages", "informationFeature.popup.add." + ret + ".message");
+					}
+				}
+				
+				currentState = (matcherCombobox.selectedItem == null ? 'normal' : matcherCombobox.selectedItem.data);
+			}
+			
 		]]>
 	</fx:Script>
 	
 	
 	<fx:Declarations>
-		<s:ArrayCollection id="matcherDefinitions">
+		<s:ArrayCollection id="matcherDefinitions" sort="{labelSort}">
 			<input:MatcherDefinition data="all" />
 			<input:MatcherDefinition data="cc" />
 			<input:MatcherDefinition data="ssn" />
@@ -298,6 +324,11 @@
 			<input:MatcherDefinition data="birthdate"/>
 			<input:MatcherDefinition data="gdate"/>
 		</s:ArrayCollection>
+		
+		<s:Sort id="labelSort">
+			<s:SortField name="label" numeric="false"/>
+		</s:Sort>
+		
 		
 		<s:NumberValidator id="thresholdValidator"
 						   source="{featureThresholdInput}"
@@ -363,7 +394,7 @@
 					<s:HorizontalLayout gap="10"/>
 				</s:layout>
 				<s:ComboBox id="matcherCombobox" dataProvider="{matcherDefinitions}" width="250"
-							change="{currentState = (matcherCombobox.selectedItem == null ? 'normal' : matcherCombobox.selectedItem.data)}"
+							change="matcherComboboxChangeHandler(event)"
 							creationComplete="{currentState = (matcherCombobox.selectedItem == null ? 'normal' : matcherCombobox.selectedItem.data)}"
 							/>
 				<s:VGroup includeIn="matcher" height="100%" verticalAlign="middle"
@@ -392,11 +423,18 @@
 		</s:FormItem>
 	</s:Form>			
 	
-	<s:Group>
-		<s:layout>
-			<s:HorizontalLayout horizontalAlign="right" verticalAlign="middle" gap="10"/>
-		</s:layout>
-		<s:Button id="saveButton" label="@Resource(bundle = 'messages', key = 'matcher.button.save.label')" click="addNewFeature(event)"/>
-		<s:Button label="@Resource(bundle = 'messages', key = 'matcher.button.cancel.label')" click="{close()}"/>
-	</s:Group>
+	<s:VGroup width="100%" gap="5" horizontalAlign="center" paddingBottom="10" paddingTop="5">
+		<s:HGroup width="100%" paddingLeft="5" paddingRight="5" gap="5" visible="{!saveButton.enabled}" verticalAlign="middle" horizontalAlign="left">
+			<s:BitmapImage source="@Embed('/assets/icons/16x16/warning.png')" width="16" height="16"/>
+			<s:Label id="msgLabel" width="100%" text=""/>
+		</s:HGroup> 
+		<s:Group>
+			<s:layout>
+				<s:HorizontalLayout horizontalAlign="right" verticalAlign="middle" gap="10"/>
+			</s:layout>
+			<s:Button id="saveButton" label="@Resource(bundle = 'messages', key = 'matcher.button.save.label')" click="addNewFeature(event)"/>
+			<s:Button label="@Resource(bundle = 'messages', key = 'matcher.button.cancel.label')" click="{close()}"/>
+		</s:Group>
+	</s:VGroup>
+	
 </s:TitleWindow>
