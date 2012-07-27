@@ -107,6 +107,12 @@ package com.mydlp.ui.util
 					{
 						continue;
 					}
+					else if (	sourceObject is Item && 
+								classMember.name == "coupledRuleItems" && 
+								classMember.type == ListCollectionView)
+					{
+						continue;
+					}
 					else if (classMember.name == "category" && classMember.type == InventoryCategory)
 					{
 						var c:InventoryCategory = sourceObject[classMember.name];
