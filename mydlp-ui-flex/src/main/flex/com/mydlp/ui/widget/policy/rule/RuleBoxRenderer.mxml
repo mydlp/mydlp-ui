@@ -168,12 +168,19 @@
 			protected function removeAllSourcesItem():void //called when "All Network" is in rule and dropped network is a specific network.
 			{
 				var ruleItems:ListCollectionView = ruleObject.ruleItems;
-				for(var i:int = 0; i < ruleItems.length; i++)
+				var loop:Boolean = true;
+				while (loop)
 				{
-					if(ruleItems[i].item.coupledInventoryItem.nameKey == SOURCES_ALL)
+					loop = false;
+					for(var i:int = 0; i < ruleItems.length; i++)
 					{
-						deleteList.addItem(ruleObject.ruleItems[i]);
-						ruleObject.ruleItems.removeItemAt(i);
+						if(ruleItems[i].item.coupledInventoryItem.nameKey == SOURCES_ALL)
+						{
+							deleteList.addItem(ruleObject.ruleItems[i]);
+							ruleObject.ruleItems.removeItemAt(i);
+							loop = true;
+							break;
+						}
 					}
 				}
 			}
@@ -181,13 +188,20 @@
 			protected function removeOtherSources():void // called when specific networks are in rule and dropped network is "All Network"
 			{
 				var ruleItems:ListCollectionView = ruleObject.ruleItems;
-				for(var i:int = 0; i < ruleItems.length; i++)
+				var loop:Boolean = true;
+				while (loop)
 				{
-					if(isSourceRuleItem(ruleItems[i].item))
+					loop = false;
+					for(var i:int = 0; i < ruleItems.length; i++)
 					{
-						deleteList.addItem(ruleObject.ruleItems[i]);
-						ruleItems.removeItemAt(i);
-					}
+						if(isSourceRuleItem(ruleItems[i].item))
+						{
+							deleteList.addItem(ruleObject.ruleItems[i]);
+							ruleItems.removeItemAt(i);
+							loop = true;
+							break;
+						}
+					}	
 				}
 			}
 			
@@ -204,12 +218,19 @@
 			protected function removeAllITypeItem():void //called when "All Information Type" is in rule and dropped network is a specific network.
 			{
 				var ruleItems:ListCollectionView = ruleObject.ruleItems;
-				for(var i:int = 0; i < ruleItems.length; i++)
+				var loop:Boolean = true;
+				while (loop)
 				{
-					if(ruleItems[i].item.coupledInventoryItem.nameKey == ITYPE_ALL)
+					loop = false;
+					for(var i:int = 0; i < ruleItems.length; i++)
 					{
-						deleteList.addItem(ruleObject.ruleItems[i]);
-						ruleObject.ruleItems.removeItemAt(i);
+						if(ruleItems[i].item.coupledInventoryItem.nameKey == ITYPE_ALL)
+						{
+							deleteList.addItem(ruleItems[i]);
+							ruleItems.removeItemAt(i);
+							loop = true;
+							break;
+						}
 					}
 				}
 			}
@@ -217,16 +238,22 @@
 			protected function removeOtherITypes():void // called when specific networks are in rule and dropped network is "All Information Types"
 			{
 				var ruleItems:ListCollectionView = ruleObject.ruleItems;
-				for(var i:int = 0; i < ruleItems.length; i++)
+				var loop:Boolean = true;
+				while (loop)
 				{
-					if(ruleItems[i].item is InformationType)
+					loop = false;
+					for(var i:int = 0; i < ruleItems.length; i++)
 					{
-						deleteList.addItem(ruleObject.ruleItems[i]);
-						ruleItems.removeItemAt(i);
+						if(ruleItems[i].item is InformationType)
+						{
+							deleteList.addItem(ruleItems[i]);
+							ruleItems.removeItemAt(i);
+							loop = true;
+							break;
+						}
 					}
 				}
 			}
-			
 			
 			protected function acceptDrop(): void
 			{
