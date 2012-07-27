@@ -14,6 +14,7 @@
 		<![CDATA[
 			import com.mydlp.ui.domain.InformationFeature;
 			import com.mydlp.ui.domain.Matcher;
+			import com.mydlp.ui.domain.NonCascadingArgument;
 			import com.mydlp.ui.domain.RegularExpression;
 			import com.mydlp.ui.util.InteractionUtil;
 			import com.mydlp.ui.util.LangUtil;
@@ -72,7 +73,27 @@
 				refreshDisplay();
 			}
 			
-			public function validateAddFor(matcherName:String): String
+			protected function isDuplicateIft(ift:InformationFeature, id:Number, matcherName:String, arg:* = null): Boolean
+			{
+				if (!isNaN(id) && ift.id == id) return true;
+				
+				if (ift.matcher.functionName == matcherName)
+				{
+					if (matcherName == "keyword" || matcherName == "regex") 
+					{
+						return (ift.matcher.matcherArguments.getItemAt(0).coupledArgument as RegularExpression).regex == arg
+					}
+					else if (matcherName == "document_hash" || matcherName == "document_pdm" || matcherName == "keyword_group" )
+					{
+						return (ift.matcher.matcherArguments.getItemAt(0).coupledArgument as NonCascadingArgument).argument.uid == arg.uid;
+					}
+					
+					return true;
+				}
+				return false;
+			}
+			
+			public function validateAddFor(matcherName:String, id:Number = Number.NaN, arg:* = null): String
 			{
 				if (isExclusive())
 				{
@@ -94,6 +115,10 @@
 				{
 					for each (var i:InformationFeature in informationFeatures)
 					{
+						if (isDuplicateIft(i, id, matcherName, arg))
+						{
+							return "error.duplicateExists";
+						}
 						if (! distancesMatchers.contains(i.matcher.functionName))
 						{
 							// currently non distance means exclusive, please change this message if behaviour changes.

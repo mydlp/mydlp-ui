@@ -269,7 +269,31 @@
 				return false;
 			}
 			
-			protected function matcherComboboxChangeHandler(event:IndexChangeEvent):void
+			protected function getNPArgument(): *
+			{
+				if (currentState == "regex")
+				{
+					return regexValue.text;
+				}
+				else if (currentState == "keyword")
+				{
+					return SpecialCharacterUtil.escapeSpecialCharacters(regexValue.text, SpecialCharacterUtil.regex);
+				}
+				else if (currentState == "document_hash" || currentState == "document_pdm")
+				{
+					return documentDatabaseComboBox.selectedItem;
+				}
+				else if (currentState == "keyword_group")
+				{
+					return keywordGroupComboBox.selectedItem;
+				}
+				else
+				{
+					return null;
+				}
+			}
+			
+			protected function refreshButtonState(): void
 			{
 				if (informationFeatureObject != null && informationFeatureInput.isExclusive())
 				{
@@ -277,7 +301,13 @@
 				}
 				else 
 				{
-					var ret:String = informationFeatureInput.validateAddFor(matcherCombobox.selectedItem.data);
+					var id:Number = Number.NaN;
+					if (informationFeatureObject != null)
+						id = informationFeatureObject.id;
+					
+					var arg:* = getNPArgument();
+					
+					var ret:String = informationFeatureInput.validateAddFor(matcherCombobox.selectedItem.data, id, arg);
 					if (ret == "ok")
 					{
 						saveButton.enabled = true;
@@ -288,7 +318,11 @@
 						msgLabel.text = LangUtil.getString("messages", "informationFeature.popup.add." + ret + ".message");
 					}
 				}
-				
+			}
+			
+			protected function matcherComboboxChangeHandler(event:IndexChangeEvent): void
+			{
+				refreshButtonState();
 				currentState = (matcherCombobox.selectedItem == null ? 'normal' : matcherCombobox.selectedItem.data);
 			}
 			
@@ -411,15 +445,15 @@
 		<s:FormItem includeIn="keyword,regex" 
 					label.keyword="@Resource(bundle = 'messages', key = 'matcher.keyword.keywordValue.label')"
 					label.regex="@Resource(bundle = 'messages', key = 'matcher.regex.regexValue.label')">
-			<s:TextInput id="regexValue" creationComplete="regexValueCreationCompleteHandler(event)"/>
+			<s:TextInput id="regexValue" creationComplete="regexValueCreationCompleteHandler(event)" change="{refreshButtonState();}"/>
 		</s:FormItem>
 		<s:FormItem includeIn="document_hash,document_pdm" label="@Resource(bundle = 'messages', key = 'matcher.documentDatabase.label')">
 			<s:ComboBox id="documentDatabaseComboBox" labelField="label" width="100%"
-						creationComplete="{re.getDocumentDatabases()}"/>
+						creationComplete="{re.getDocumentDatabases()}" change="{refreshButtonState();}"/>
 		</s:FormItem>
 		<s:FormItem includeIn="keyword_group" label="@Resource(bundle = 'messages', key = 'matcher.keywordGroup.label')">
 			<s:ComboBox id="keywordGroupComboBox" labelField="label" width="100%"
-						creationComplete="{rek.getRegularExpressions()}"/>
+						creationComplete="{rek.getRegularExpressions()}" change="refreshButtonState();"/>
 		</s:FormItem>
 	</s:Form>			
 	
