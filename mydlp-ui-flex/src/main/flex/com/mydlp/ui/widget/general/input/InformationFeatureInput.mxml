@@ -201,15 +201,13 @@
 		<s:VerticalLayout verticalAlign="middle" paddingTop="10"/>
 	</s:layout>
 	
-	<s:HGroup id="distanceGroup" gap="3" verticalAlign="middle">
-		<s:CheckBox id="distanceEnabledInput" selected="@{distanceEnabled}" width="15"
-					includeInLayout="{SessionUtil.isEnterprise()}"/>
+	<s:HGroup id="distanceGroup" gap="3" verticalAlign="middle" 
+			  includeInLayout="{SessionUtil.isEnterprise()}" visible="{SessionUtil.isEnterprise()}">
+		<s:CheckBox id="distanceEnabledInput" selected="@{distanceEnabled}" width="15" />
 		<s:Label width="120" text="@Resource(bundle = 'messages', key = 'generic.edit.InformationDescription.distance.label')"  
-				 fontWeight="bold" 
-				 includeInLayout="{SessionUtil.isEnterprise()}"/>
+				 fontWeight="bold" />
 		<s:TextInput id="distanceValueInput" width="{InputLabel.HORIZONTAL_INPUT_WIDTH - 18}" text="@{distance}" 
-					 enabled="{distanceEnabledInput.selected}"
-					 includeInLayout="{SessionUtil.isEnterprise()}"/>
+					 enabled="{distanceEnabledInput.selected}" />
 	</s:HGroup>
 	
 	<s:Group width="100%" height="100%">
