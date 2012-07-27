@@ -73,7 +73,8 @@
 			
 			protected function onFileLoadComplete(ddfe:DocumentDatabaseFileEntry):void
 			{
-				ddfeInput.addEntry(ddfe);
+				if (ddfe != null)
+					ddfeInput.addEntry(ddfe);
 				remaining --;
 				if (remaining == 0)
 				{

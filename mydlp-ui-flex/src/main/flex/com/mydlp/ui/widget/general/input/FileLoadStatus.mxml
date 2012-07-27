@@ -9,6 +9,7 @@
 		<![CDATA[
 			import com.mydlp.ui.domain.DocumentDatabaseFileEntry;
 			import com.mydlp.ui.domain.DocumentFingerprint;
+			import com.mydlp.ui.util.LangUtil;
 			import com.mydlp.ui.util.Md5Util;
 			
 			import mx.collections.ArrayCollection;
@@ -28,8 +29,15 @@
 				currentState = "loading";
 				filename = fileReference.name;
 				completedFunction = valueFunction;
+				if (fileReference.size > 10*1024*1024)
+				{
+					error("moreThanMaximumSize");
+				}
+				else
+				{
 				fileReference.addEventListener(Event.COMPLETE, onFileComplete);
 				fileReference.load();
+				}
 			}
 			
 			protected function onFileComplete(event:Event):void
@@ -54,6 +62,13 @@
 				completedFunction(ddfe);
 			}
 			
+			public function error(key:String): void
+			{
+				errorKey = key;
+				currentState = "error";
+				completedFunction(null);
+			}
+			
 		]]>
 	</fx:Script>
 	
@@ -62,6 +77,7 @@
 		<my:remote id="re" destination="documentDatabaseBRS" >
 			<my:method name="generateDocumentDatabaseFileEntry" result="generateDocumentDatabaseFileEntryHandler(event)" />
 		</my:remote>
+		<fx:String id="errorKey" />
 	</fx:Declarations>
 	
 	<s:layout>
@@ -73,6 +89,7 @@
 		<s:State name="hash" stateGroups="normal"/>
 		<s:State name="fingerprint" stateGroups="normal"/>
 		<s:State name="done" stateGroups="normal"/>
+		<s:State name="error" stateGroups="normal"/>
 		<s:State name="invisible" />
 	</s:states>
 	
@@ -85,6 +102,8 @@
 			 text.hash="@Resource(bundle = 'messages', key = 'fileLoad.status.hash')"
 			 text.fingerprint="@Resource(bundle = 'messages', key = 'fileLoad.status.fingerprint')"
 			 text.done="@Resource(bundle = 'messages', key = 'fileLoad.status.done')"
+			 text.error="{LangUtil.getString('messages', 'fileLoad.error.' + errorKey)}"
+			 color.error="red"
 			 />
 	
 </s:Group>
