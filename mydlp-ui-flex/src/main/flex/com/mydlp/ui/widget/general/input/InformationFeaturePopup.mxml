@@ -143,10 +143,7 @@
 					
 					ncar = m.matcherArguments.getItemAt(0).coupledArgument as NonCascadingArgument;
 					
-					if(keywordGroupComboBox.selectedItem == null)
-						closePopup = false;
-					else
-						ncar.argument = keywordGroupComboBox.selectedItem;
+					ncar.argument = keywordGroupComboBox.selectedItem;
 				}
 				
 				if (isAtState("threshold"))
@@ -156,14 +153,6 @@
 				else
 				{
 					informationFeatureObject.threshold = 1;
-				}
-				
-				if(!closePopup)
-				{
-					if(!isEdit)
-						informationFeatureObject = null;
-					Alert.show(LangUtil.getString('messages', 'informationFeature.selectedItem.' + matcherCombobox.selectedItem.data + '.label'));
-					return;
 				}
 				
 				if (!isEdit)
@@ -231,6 +220,7 @@
 					else
 						regexValue.text = r.regex;
 				}
+				refreshButtonState();
 			}
 			
 			protected function onToolTipCreate(event:ToolTipEvent):void
@@ -370,10 +360,12 @@
 						   minValue="1"
 						   valid="{saveButton.enabled = true}"
 						   invalid="{saveButton.enabled = false}"/>
+		
 		<my:remote id="re" destination="documentDatabaseBRS">
 			<my:method name="getDocumentDatabases" result="{
 					   documentDatabaseComboBox.dataProvider = event.result as ListCollectionView;
 					   documentDatabaseComboBox.selectedItem = getNCArgument();
+					   refreshButtonState();
 					   }"/>
 		</my:remote>
 		
@@ -381,6 +373,7 @@
 			<my:method name="getRegularExpressions" result="{
 					   keywordGroupComboBox.dataProvider = event.result as ListCollectionView;
 					   keywordGroupComboBox.selectedItem = getNCArgument();
+					   refreshButtonState();
 					   }"/>
 		</my:remote>
 		
@@ -458,7 +451,8 @@
 	</s:Form>			
 	
 	<s:VGroup width="100%" gap="5" horizontalAlign="center" paddingBottom="10" paddingTop="5">
-		<s:HGroup width="100%" paddingLeft="5" paddingRight="5" gap="5" visible="{!saveButton.enabled}" verticalAlign="middle" horizontalAlign="left">
+		<s:HGroup width="100%" paddingLeft="5" paddingRight="5" gap="5" verticalAlign="middle" horizontalAlign="left"
+				  includeInLayout="{!saveButton.enabled}" visible="{!saveButton.enabled}">
 			<s:BitmapImage source="@Embed('/assets/icons/16x16/warning.png')" width="16" height="16"/>
 			<s:Label id="msgLabel" width="100%" text=""/>
 		</s:HGroup> 

@@ -76,7 +76,7 @@
 			
 			protected function isDuplicateIft(ift:InformationFeature, id:Number, matcherName:String, arg:* = null): Boolean
 			{
-				if (!isNaN(id) && ift.id == id) return true;
+				if (!isNaN(id) && ift.id == id) return false;
 				
 				if (ift.matcher.functionName == matcherName)
 				{
@@ -105,7 +105,7 @@
 				{
 					if (informationFeatures.length == 0 )
 					{
-						return "ok";
+						return isMatcherSane(matcherName, arg);
 					}
 					else
 					{
@@ -126,10 +126,52 @@
 							return "error.anExclusiveMatcherIsPresent";
 						}
 					}
-					return "ok";
+					
+					return isMatcherSane(matcherName, arg);
 				}
 				else 
 					throw new Error ("Unexpected matcher");
+			}
+			
+			protected function isMatcherSane(matcherName:String, arg:* = null): String
+			{
+				if (matcherName == "document_hash" || matcherName == "document_pdm")
+				{
+					if (arg == null)
+					{
+						return "error.shouldSelectADocumentDatabase";
+					}
+				}
+				else if (matcherName == "keyword_group")
+				{
+					if (arg == null)
+					{
+						return "error.shouldSelectAKeywordGroup";
+					}
+				}
+				else if (matcherName == "keyword" || matcherName == "regex")
+				{
+					if (arg == null || ! arg is String || (arg as String).length == 0)
+					{
+						return "error.shouldEnter." + matcherName;
+					}
+					var regexStrArg:String = arg as String;
+					regexStrArg = regexStrArg.replace( /^\s+/ , '');
+					regexStrArg = regexStrArg.replace( /\s+$/ , '');
+					
+					if ( regexStrArg.length == 0 || regexStrArg.match( /\s+/ ) )
+					{
+						return "error.enteredTextOnlyConsistsOfWhiteSpaces";
+					}
+					
+					if ((matcherName == "keyword" && regexStrArg.length < 3) ||
+						(matcherName == "regex" && regexStrArg.length < 8) )
+					{
+						return "error.enteredTextIsTooShort." + matcherName;
+					}
+				}
+				
+				return "ok";
 			}
 			
 			public function isExclusive(): Boolean
