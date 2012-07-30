@@ -74,10 +74,8 @@
 				refreshDisplay();
 			}
 			
-			protected function isDuplicateIft(ift:InformationFeature, id:Number, matcherName:String, arg:* = null): Boolean
-			{
-				if (!isNaN(id) && ift.id == id) return false;
-				
+			protected function isDuplicateIft(ift:InformationFeature, matcherName:String, arg:* = null): Boolean
+			{	
 				if (ift.matcher.functionName == matcherName)
 				{
 					if (matcherName == "keyword" || matcherName == "regex") 
@@ -94,7 +92,7 @@
 				return false;
 			}
 			
-			public function validateAddFor(matcherName:String, id:Number = Number.NaN, arg:* = null): String
+			public function validateAddFor(matcherName:String, isEdit:Boolean = false, arg:* = null): String
 			{
 				if (isExclusive())
 				{
@@ -116,7 +114,7 @@
 				{
 					for each (var i:InformationFeature in informationFeatures)
 					{
-						if (isDuplicateIft(i, id, matcherName, arg))
+						if (!isEdit && isDuplicateIft(i, matcherName, arg))
 						{
 							return "error.duplicateExists";
 						}
@@ -159,7 +157,7 @@
 					regexStrArg = regexStrArg.replace( /^\s+/ , '');
 					regexStrArg = regexStrArg.replace( /\s+$/ , '');
 					
-					if ( regexStrArg.length == 0 || regexStrArg.match( /\s+/ ) )
+					if ( regexStrArg.length == 0 || regexStrArg.match( /^\s+$/ ) )
 					{
 						return "error.enteredTextOnlyConsistsOfWhiteSpaces";
 					}
@@ -215,6 +213,7 @@
 			{
 				var ifp:InformationFeaturePopup = InteractionUtil.newPopup(InformationFeaturePopup) as InformationFeaturePopup;
 				ifp.informationFeatureInput = this;
+				ifp.isEdit = false;
 				ifp.populate();
 			}
 			
@@ -226,6 +225,7 @@
 				var ifp:InformationFeaturePopup = InteractionUtil.newPopup(InformationFeaturePopup) as InformationFeaturePopup;
 				ifp.informationFeatureInput = this;
 				ifp.informationFeatureObject = ifList.selectedItem;
+				ifp.isEdit = true;
 				ifp.populate();
 				ifList.validateDisplayList();
 			}

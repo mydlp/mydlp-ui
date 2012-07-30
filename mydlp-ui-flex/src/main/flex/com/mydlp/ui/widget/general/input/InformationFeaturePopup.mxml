@@ -36,6 +36,8 @@
 			[Bindable]
 			public var informationFeatureObject:InformationFeature = null;
 			
+			public var isEdit:Boolean = false;
+			
 			protected var closePopup:Boolean;
 			
 			protected function close(): void
@@ -54,11 +56,8 @@
 				
 				closePopup = true;
 				
-				var isEdit:Boolean = false;
 				if (informationFeatureObject == null)
 					informationFeatureObject = new InformationFeature();
-				else 
-					isEdit = true;
 				
 				var m:Matcher = informationFeatureObject.matcher;
 				
@@ -291,13 +290,8 @@
 				}
 				else 
 				{
-					var id:Number = Number.NaN;
-					if (informationFeatureObject != null)
-						id = informationFeatureObject.id;
-					
 					var arg:* = getNPArgument();
-					
-					var ret:String = informationFeatureInput.validateAddFor(matcherCombobox.selectedItem.data, id, arg);
+					var ret:String = informationFeatureInput.validateAddFor(matcherCombobox.selectedItem.data, isEdit, arg);
 					if (ret == "ok")
 					{
 						saveButton.enabled = true;
