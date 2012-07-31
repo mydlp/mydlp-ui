@@ -42,6 +42,8 @@ public class Mydlp_ui {
 
     public LicenseObject getLicense() throws org.apache.thrift.TException;
 
+    public String apiQuery(String Ipaddress, String Filename, ByteBuffer Data) throws org.apache.thrift.TException;
+
   }
 
   public interface AsyncIface {
@@ -63,6 +65,8 @@ public class Mydlp_ui {
     public void saveLicenseKey(String licenseKey, org.apache.thrift.async.AsyncMethodCallback<AsyncClient.saveLicenseKey_call> resultHandler) throws org.apache.thrift.TException;
 
     public void getLicense(org.apache.thrift.async.AsyncMethodCallback<AsyncClient.getLicense_call> resultHandler) throws org.apache.thrift.TException;
+
+    public void apiQuery(String Ipaddress, String Filename, ByteBuffer Data, org.apache.thrift.async.AsyncMethodCallback<AsyncClient.apiQuery_call> resultHandler) throws org.apache.thrift.TException;
 
   }
 
@@ -283,6 +287,31 @@ public class Mydlp_ui {
         return result.success;
       }
       throw new org.apache.thrift.TApplicationException(org.apache.thrift.TApplicationException.MISSING_RESULT, "getLicense failed: unknown result");
+    }
+
+    public String apiQuery(String Ipaddress, String Filename, ByteBuffer Data) throws org.apache.thrift.TException
+    {
+      send_apiQuery(Ipaddress, Filename, Data);
+      return recv_apiQuery();
+    }
+
+    public void send_apiQuery(String Ipaddress, String Filename, ByteBuffer Data) throws org.apache.thrift.TException
+    {
+      apiQuery_args args = new apiQuery_args();
+      args.setIpaddress(Ipaddress);
+      args.setFilename(Filename);
+      args.setData(Data);
+      sendBase("apiQuery", args);
+    }
+
+    public String recv_apiQuery() throws org.apache.thrift.TException
+    {
+      apiQuery_result result = new apiQuery_result();
+      receiveBase(result, "apiQuery");
+      if (result.isSetSuccess()) {
+        return result.success;
+      }
+      throw new org.apache.thrift.TApplicationException(org.apache.thrift.TApplicationException.MISSING_RESULT, "apiQuery failed: unknown result");
     }
 
   }
@@ -617,6 +646,44 @@ public class Mydlp_ui {
       }
     }
 
+    public void apiQuery(String Ipaddress, String Filename, ByteBuffer Data, org.apache.thrift.async.AsyncMethodCallback<apiQuery_call> resultHandler) throws org.apache.thrift.TException {
+      checkReady();
+      apiQuery_call method_call = new apiQuery_call(Ipaddress, Filename, Data, resultHandler, this, ___protocolFactory, ___transport);
+      this.___currentMethod = method_call;
+      ___manager.call(method_call);
+    }
+
+    public static class apiQuery_call extends org.apache.thrift.async.TAsyncMethodCall {
+      private String Ipaddress;
+      private String Filename;
+      private ByteBuffer Data;
+      public apiQuery_call(String Ipaddress, String Filename, ByteBuffer Data, org.apache.thrift.async.AsyncMethodCallback<apiQuery_call> resultHandler, org.apache.thrift.async.TAsyncClient client, org.apache.thrift.protocol.TProtocolFactory protocolFactory, org.apache.thrift.transport.TNonblockingTransport transport) throws org.apache.thrift.TException {
+        super(client, protocolFactory, transport, resultHandler, false);
+        this.Ipaddress = Ipaddress;
+        this.Filename = Filename;
+        this.Data = Data;
+      }
+
+      public void write_args(org.apache.thrift.protocol.TProtocol prot) throws org.apache.thrift.TException {
+        prot.writeMessageBegin(new org.apache.thrift.protocol.TMessage("apiQuery", org.apache.thrift.protocol.TMessageType.CALL, 0));
+        apiQuery_args args = new apiQuery_args();
+        args.setIpaddress(Ipaddress);
+        args.setFilename(Filename);
+        args.setData(Data);
+        args.write(prot);
+        prot.writeMessageEnd();
+      }
+
+      public String getResult() throws org.apache.thrift.TException {
+        if (getState() != org.apache.thrift.async.TAsyncMethodCall.State.RESPONSE_READ) {
+          throw new IllegalStateException("Method call not finished!");
+        }
+        org.apache.thrift.transport.TMemoryInputTransport memoryTransport = new org.apache.thrift.transport.TMemoryInputTransport(getFrameBuffer().array());
+        org.apache.thrift.protocol.TProtocol prot = client.getProtocolFactory().getProtocol(memoryTransport);
+        return (new Client(prot)).recv_apiQuery();
+      }
+    }
+
   }
 
   public static class Processor<I extends Iface> extends org.apache.thrift.TBaseProcessor implements org.apache.thrift.TProcessor {
@@ -639,6 +706,7 @@ public class Mydlp_ui {
       processMap.put("registerUserAddress", new registerUserAddress());
       processMap.put("saveLicenseKey", new saveLicenseKey());
       processMap.put("getLicense", new getLicense());
+      processMap.put("apiQuery", new apiQuery());
       return processMap;
     }
 
@@ -781,6 +849,22 @@ public class Mydlp_ui {
       protected getLicense_result getResult(I iface, getLicense_args args) throws org.apache.thrift.TException {
         getLicense_result result = new getLicense_result();
         result.success = iface.getLicense();
+        return result;
+      }
+    }
+
+    private static class apiQuery<I extends Iface> extends org.apache.thrift.ProcessFunction<I, apiQuery_args> {
+      public apiQuery() {
+        super("apiQuery");
+      }
+
+      protected apiQuery_args getEmptyArgsInstance() {
+        return new apiQuery_args();
+      }
+
+      protected apiQuery_result getResult(I iface, apiQuery_args args) throws org.apache.thrift.TException {
+        apiQuery_result result = new apiQuery_result();
+        result.success = iface.apiQuery(args.Ipaddress, args.Filename, args.Data);
         return result;
       }
     }
@@ -6433,6 +6517,788 @@ public class Mydlp_ui {
     @Override
     public String toString() {
       StringBuilder sb = new StringBuilder("getLicense_result(");
+      boolean first = true;
+
+      sb.append("success:");
+      if (this.success == null) {
+        sb.append("null");
+      } else {
+        sb.append(this.success);
+      }
+      first = false;
+      sb.append(")");
+      return sb.toString();
+    }
+
+    public void validate() throws org.apache.thrift.TException {
+      // check for required fields
+    }
+
+    private void writeObject(java.io.ObjectOutputStream out) throws java.io.IOException {
+      try {
+        write(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(out)));
+      } catch (org.apache.thrift.TException te) {
+        throw new java.io.IOException(te);
+      }
+    }
+
+    private void readObject(java.io.ObjectInputStream in) throws java.io.IOException, ClassNotFoundException {
+      try {
+        read(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(in)));
+      } catch (org.apache.thrift.TException te) {
+        throw new java.io.IOException(te);
+      }
+    }
+
+  }
+
+  public static class apiQuery_args implements org.apache.thrift.TBase<apiQuery_args, apiQuery_args._Fields>, java.io.Serializable, Cloneable   {
+    private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("apiQuery_args");
+
+    private static final org.apache.thrift.protocol.TField IPADDRESS_FIELD_DESC = new org.apache.thrift.protocol.TField("Ipaddress", org.apache.thrift.protocol.TType.STRING, (short)1);
+    private static final org.apache.thrift.protocol.TField FILENAME_FIELD_DESC = new org.apache.thrift.protocol.TField("Filename", org.apache.thrift.protocol.TType.STRING, (short)2);
+    private static final org.apache.thrift.protocol.TField DATA_FIELD_DESC = new org.apache.thrift.protocol.TField("Data", org.apache.thrift.protocol.TType.STRING, (short)3);
+
+    public String Ipaddress; // required
+    public String Filename; // required
+    public ByteBuffer Data; // required
+
+    /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
+    public enum _Fields implements org.apache.thrift.TFieldIdEnum {
+      IPADDRESS((short)1, "Ipaddress"),
+      FILENAME((short)2, "Filename"),
+      DATA((short)3, "Data");
+
+      private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+
+      static {
+        for (_Fields field : EnumSet.allOf(_Fields.class)) {
+          byName.put(field.getFieldName(), field);
+        }
+      }
+
+      /**
+       * Find the _Fields constant that matches fieldId, or null if its not found.
+       */
+      public static _Fields findByThriftId(int fieldId) {
+        switch(fieldId) {
+          case 1: // IPADDRESS
+            return IPADDRESS;
+          case 2: // FILENAME
+            return FILENAME;
+          case 3: // DATA
+            return DATA;
+          default:
+            return null;
+        }
+      }
+
+      /**
+       * Find the _Fields constant that matches fieldId, throwing an exception
+       * if it is not found.
+       */
+      public static _Fields findByThriftIdOrThrow(int fieldId) {
+        _Fields fields = findByThriftId(fieldId);
+        if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+        return fields;
+      }
+
+      /**
+       * Find the _Fields constant that matches name, or null if its not found.
+       */
+      public static _Fields findByName(String name) {
+        return byName.get(name);
+      }
+
+      private final short _thriftId;
+      private final String _fieldName;
+
+      _Fields(short thriftId, String fieldName) {
+        _thriftId = thriftId;
+        _fieldName = fieldName;
+      }
+
+      public short getThriftFieldId() {
+        return _thriftId;
+      }
+
+      public String getFieldName() {
+        return _fieldName;
+      }
+    }
+
+    // isset id assignments
+
+    public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
+    static {
+      Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
+      tmpMap.put(_Fields.IPADDRESS, new org.apache.thrift.meta_data.FieldMetaData("Ipaddress", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+          new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
+      tmpMap.put(_Fields.FILENAME, new org.apache.thrift.meta_data.FieldMetaData("Filename", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+          new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
+      tmpMap.put(_Fields.DATA, new org.apache.thrift.meta_data.FieldMetaData("Data", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+          new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING          , true)));
+      metaDataMap = Collections.unmodifiableMap(tmpMap);
+      org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(apiQuery_args.class, metaDataMap);
+    }
+
+    public apiQuery_args() {
+    }
+
+    public apiQuery_args(
+      String Ipaddress,
+      String Filename,
+      ByteBuffer Data)
+    {
+      this();
+      this.Ipaddress = Ipaddress;
+      this.Filename = Filename;
+      this.Data = Data;
+    }
+
+    /**
+     * Performs a deep copy on <i>other</i>.
+     */
+    public apiQuery_args(apiQuery_args other) {
+      if (other.isSetIpaddress()) {
+        this.Ipaddress = other.Ipaddress;
+      }
+      if (other.isSetFilename()) {
+        this.Filename = other.Filename;
+      }
+      if (other.isSetData()) {
+        this.Data = org.apache.thrift.TBaseHelper.copyBinary(other.Data);
+;
+      }
+    }
+
+    public apiQuery_args deepCopy() {
+      return new apiQuery_args(this);
+    }
+
+    @Override
+    public void clear() {
+      this.Ipaddress = null;
+      this.Filename = null;
+      this.Data = null;
+    }
+
+    public String getIpaddress() {
+      return this.Ipaddress;
+    }
+
+    public apiQuery_args setIpaddress(String Ipaddress) {
+      this.Ipaddress = Ipaddress;
+      return this;
+    }
+
+    public void unsetIpaddress() {
+      this.Ipaddress = null;
+    }
+
+    /** Returns true if field Ipaddress is set (has been assigned a value) and false otherwise */
+    public boolean isSetIpaddress() {
+      return this.Ipaddress != null;
+    }
+
+    public void setIpaddressIsSet(boolean value) {
+      if (!value) {
+        this.Ipaddress = null;
+      }
+    }
+
+    public String getFilename() {
+      return this.Filename;
+    }
+
+    public apiQuery_args setFilename(String Filename) {
+      this.Filename = Filename;
+      return this;
+    }
+
+    public void unsetFilename() {
+      this.Filename = null;
+    }
+
+    /** Returns true if field Filename is set (has been assigned a value) and false otherwise */
+    public boolean isSetFilename() {
+      return this.Filename != null;
+    }
+
+    public void setFilenameIsSet(boolean value) {
+      if (!value) {
+        this.Filename = null;
+      }
+    }
+
+    public byte[] getData() {
+      setData(org.apache.thrift.TBaseHelper.rightSize(Data));
+      return Data == null ? null : Data.array();
+    }
+
+    public ByteBuffer bufferForData() {
+      return Data;
+    }
+
+    public apiQuery_args setData(byte[] Data) {
+      setData(Data == null ? (ByteBuffer)null : ByteBuffer.wrap(Data));
+      return this;
+    }
+
+    public apiQuery_args setData(ByteBuffer Data) {
+      this.Data = Data;
+      return this;
+    }
+
+    public void unsetData() {
+      this.Data = null;
+    }
+
+    /** Returns true if field Data is set (has been assigned a value) and false otherwise */
+    public boolean isSetData() {
+      return this.Data != null;
+    }
+
+    public void setDataIsSet(boolean value) {
+      if (!value) {
+        this.Data = null;
+      }
+    }
+
+    public void setFieldValue(_Fields field, Object value) {
+      switch (field) {
+      case IPADDRESS:
+        if (value == null) {
+          unsetIpaddress();
+        } else {
+          setIpaddress((String)value);
+        }
+        break;
+
+      case FILENAME:
+        if (value == null) {
+          unsetFilename();
+        } else {
+          setFilename((String)value);
+        }
+        break;
+
+      case DATA:
+        if (value == null) {
+          unsetData();
+        } else {
+          setData((ByteBuffer)value);
+        }
+        break;
+
+      }
+    }
+
+    public Object getFieldValue(_Fields field) {
+      switch (field) {
+      case IPADDRESS:
+        return getIpaddress();
+
+      case FILENAME:
+        return getFilename();
+
+      case DATA:
+        return getData();
+
+      }
+      throw new IllegalStateException();
+    }
+
+    /** Returns true if field corresponding to fieldID is set (has been assigned a value) and false otherwise */
+    public boolean isSet(_Fields field) {
+      if (field == null) {
+        throw new IllegalArgumentException();
+      }
+
+      switch (field) {
+      case IPADDRESS:
+        return isSetIpaddress();
+      case FILENAME:
+        return isSetFilename();
+      case DATA:
+        return isSetData();
+      }
+      throw new IllegalStateException();
+    }
+
+    @Override
+    public boolean equals(Object that) {
+      if (that == null)
+        return false;
+      if (that instanceof apiQuery_args)
+        return this.equals((apiQuery_args)that);
+      return false;
+    }
+
+    public boolean equals(apiQuery_args that) {
+      if (that == null)
+        return false;
+
+      boolean this_present_Ipaddress = true && this.isSetIpaddress();
+      boolean that_present_Ipaddress = true && that.isSetIpaddress();
+      if (this_present_Ipaddress || that_present_Ipaddress) {
+        if (!(this_present_Ipaddress && that_present_Ipaddress))
+          return false;
+        if (!this.Ipaddress.equals(that.Ipaddress))
+          return false;
+      }
+
+      boolean this_present_Filename = true && this.isSetFilename();
+      boolean that_present_Filename = true && that.isSetFilename();
+      if (this_present_Filename || that_present_Filename) {
+        if (!(this_present_Filename && that_present_Filename))
+          return false;
+        if (!this.Filename.equals(that.Filename))
+          return false;
+      }
+
+      boolean this_present_Data = true && this.isSetData();
+      boolean that_present_Data = true && that.isSetData();
+      if (this_present_Data || that_present_Data) {
+        if (!(this_present_Data && that_present_Data))
+          return false;
+        if (!this.Data.equals(that.Data))
+          return false;
+      }
+
+      return true;
+    }
+
+    @Override
+    public int hashCode() {
+      return 0;
+    }
+
+    public int compareTo(apiQuery_args other) {
+      if (!getClass().equals(other.getClass())) {
+        return getClass().getName().compareTo(other.getClass().getName());
+      }
+
+      int lastComparison = 0;
+      apiQuery_args typedOther = (apiQuery_args)other;
+
+      lastComparison = Boolean.valueOf(isSetIpaddress()).compareTo(typedOther.isSetIpaddress());
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+      if (isSetIpaddress()) {
+        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.Ipaddress, typedOther.Ipaddress);
+        if (lastComparison != 0) {
+          return lastComparison;
+        }
+      }
+      lastComparison = Boolean.valueOf(isSetFilename()).compareTo(typedOther.isSetFilename());
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+      if (isSetFilename()) {
+        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.Filename, typedOther.Filename);
+        if (lastComparison != 0) {
+          return lastComparison;
+        }
+      }
+      lastComparison = Boolean.valueOf(isSetData()).compareTo(typedOther.isSetData());
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+      if (isSetData()) {
+        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.Data, typedOther.Data);
+        if (lastComparison != 0) {
+          return lastComparison;
+        }
+      }
+      return 0;
+    }
+
+    public _Fields fieldForId(int fieldId) {
+      return _Fields.findByThriftId(fieldId);
+    }
+
+    public void read(org.apache.thrift.protocol.TProtocol iprot) throws org.apache.thrift.TException {
+      org.apache.thrift.protocol.TField field;
+      iprot.readStructBegin();
+      while (true)
+      {
+        field = iprot.readFieldBegin();
+        if (field.type == org.apache.thrift.protocol.TType.STOP) { 
+          break;
+        }
+        switch (field.id) {
+          case 1: // IPADDRESS
+            if (field.type == org.apache.thrift.protocol.TType.STRING) {
+              this.Ipaddress = iprot.readString();
+            } else { 
+              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, field.type);
+            }
+            break;
+          case 2: // FILENAME
+            if (field.type == org.apache.thrift.protocol.TType.STRING) {
+              this.Filename = iprot.readString();
+            } else { 
+              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, field.type);
+            }
+            break;
+          case 3: // DATA
+            if (field.type == org.apache.thrift.protocol.TType.STRING) {
+              this.Data = iprot.readBinary();
+            } else { 
+              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, field.type);
+            }
+            break;
+          default:
+            org.apache.thrift.protocol.TProtocolUtil.skip(iprot, field.type);
+        }
+        iprot.readFieldEnd();
+      }
+      iprot.readStructEnd();
+
+      // check for required fields of primitive type, which can't be checked in the validate method
+      validate();
+    }
+
+    public void write(org.apache.thrift.protocol.TProtocol oprot) throws org.apache.thrift.TException {
+      validate();
+
+      oprot.writeStructBegin(STRUCT_DESC);
+      if (this.Ipaddress != null) {
+        oprot.writeFieldBegin(IPADDRESS_FIELD_DESC);
+        oprot.writeString(this.Ipaddress);
+        oprot.writeFieldEnd();
+      }
+      if (this.Filename != null) {
+        oprot.writeFieldBegin(FILENAME_FIELD_DESC);
+        oprot.writeString(this.Filename);
+        oprot.writeFieldEnd();
+      }
+      if (this.Data != null) {
+        oprot.writeFieldBegin(DATA_FIELD_DESC);
+        oprot.writeBinary(this.Data);
+        oprot.writeFieldEnd();
+      }
+      oprot.writeFieldStop();
+      oprot.writeStructEnd();
+    }
+
+    @Override
+    public String toString() {
+      StringBuilder sb = new StringBuilder("apiQuery_args(");
+      boolean first = true;
+
+      sb.append("Ipaddress:");
+      if (this.Ipaddress == null) {
+        sb.append("null");
+      } else {
+        sb.append(this.Ipaddress);
+      }
+      first = false;
+      if (!first) sb.append(", ");
+      sb.append("Filename:");
+      if (this.Filename == null) {
+        sb.append("null");
+      } else {
+        sb.append(this.Filename);
+      }
+      first = false;
+      if (!first) sb.append(", ");
+      sb.append("Data:");
+      if (this.Data == null) {
+        sb.append("null");
+      } else {
+        org.apache.thrift.TBaseHelper.toString(this.Data, sb);
+      }
+      first = false;
+      sb.append(")");
+      return sb.toString();
+    }
+
+    public void validate() throws org.apache.thrift.TException {
+      // check for required fields
+    }
+
+    private void writeObject(java.io.ObjectOutputStream out) throws java.io.IOException {
+      try {
+        write(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(out)));
+      } catch (org.apache.thrift.TException te) {
+        throw new java.io.IOException(te);
+      }
+    }
+
+    private void readObject(java.io.ObjectInputStream in) throws java.io.IOException, ClassNotFoundException {
+      try {
+        read(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(in)));
+      } catch (org.apache.thrift.TException te) {
+        throw new java.io.IOException(te);
+      }
+    }
+
+  }
+
+  public static class apiQuery_result implements org.apache.thrift.TBase<apiQuery_result, apiQuery_result._Fields>, java.io.Serializable, Cloneable   {
+    private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("apiQuery_result");
+
+    private static final org.apache.thrift.protocol.TField SUCCESS_FIELD_DESC = new org.apache.thrift.protocol.TField("success", org.apache.thrift.protocol.TType.STRING, (short)0);
+
+    public String success; // required
+
+    /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
+    public enum _Fields implements org.apache.thrift.TFieldIdEnum {
+      SUCCESS((short)0, "success");
+
+      private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+
+      static {
+        for (_Fields field : EnumSet.allOf(_Fields.class)) {
+          byName.put(field.getFieldName(), field);
+        }
+      }
+
+      /**
+       * Find the _Fields constant that matches fieldId, or null if its not found.
+       */
+      public static _Fields findByThriftId(int fieldId) {
+        switch(fieldId) {
+          case 0: // SUCCESS
+            return SUCCESS;
+          default:
+            return null;
+        }
+      }
+
+      /**
+       * Find the _Fields constant that matches fieldId, throwing an exception
+       * if it is not found.
+       */
+      public static _Fields findByThriftIdOrThrow(int fieldId) {
+        _Fields fields = findByThriftId(fieldId);
+        if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+        return fields;
+      }
+
+      /**
+       * Find the _Fields constant that matches name, or null if its not found.
+       */
+      public static _Fields findByName(String name) {
+        return byName.get(name);
+      }
+
+      private final short _thriftId;
+      private final String _fieldName;
+
+      _Fields(short thriftId, String fieldName) {
+        _thriftId = thriftId;
+        _fieldName = fieldName;
+      }
+
+      public short getThriftFieldId() {
+        return _thriftId;
+      }
+
+      public String getFieldName() {
+        return _fieldName;
+      }
+    }
+
+    // isset id assignments
+
+    public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
+    static {
+      Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
+      tmpMap.put(_Fields.SUCCESS, new org.apache.thrift.meta_data.FieldMetaData("success", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+          new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
+      metaDataMap = Collections.unmodifiableMap(tmpMap);
+      org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(apiQuery_result.class, metaDataMap);
+    }
+
+    public apiQuery_result() {
+    }
+
+    public apiQuery_result(
+      String success)
+    {
+      this();
+      this.success = success;
+    }
+
+    /**
+     * Performs a deep copy on <i>other</i>.
+     */
+    public apiQuery_result(apiQuery_result other) {
+      if (other.isSetSuccess()) {
+        this.success = other.success;
+      }
+    }
+
+    public apiQuery_result deepCopy() {
+      return new apiQuery_result(this);
+    }
+
+    @Override
+    public void clear() {
+      this.success = null;
+    }
+
+    public String getSuccess() {
+      return this.success;
+    }
+
+    public apiQuery_result setSuccess(String success) {
+      this.success = success;
+      return this;
+    }
+
+    public void unsetSuccess() {
+      this.success = null;
+    }
+
+    /** Returns true if field success is set (has been assigned a value) and false otherwise */
+    public boolean isSetSuccess() {
+      return this.success != null;
+    }
+
+    public void setSuccessIsSet(boolean value) {
+      if (!value) {
+        this.success = null;
+      }
+    }
+
+    public void setFieldValue(_Fields field, Object value) {
+      switch (field) {
+      case SUCCESS:
+        if (value == null) {
+          unsetSuccess();
+        } else {
+          setSuccess((String)value);
+        }
+        break;
+
+      }
+    }
+
+    public Object getFieldValue(_Fields field) {
+      switch (field) {
+      case SUCCESS:
+        return getSuccess();
+
+      }
+      throw new IllegalStateException();
+    }
+
+    /** Returns true if field corresponding to fieldID is set (has been assigned a value) and false otherwise */
+    public boolean isSet(_Fields field) {
+      if (field == null) {
+        throw new IllegalArgumentException();
+      }
+
+      switch (field) {
+      case SUCCESS:
+        return isSetSuccess();
+      }
+      throw new IllegalStateException();
+    }
+
+    @Override
+    public boolean equals(Object that) {
+      if (that == null)
+        return false;
+      if (that instanceof apiQuery_result)
+        return this.equals((apiQuery_result)that);
+      return false;
+    }
+
+    public boolean equals(apiQuery_result that) {
+      if (that == null)
+        return false;
+
+      boolean this_present_success = true && this.isSetSuccess();
+      boolean that_present_success = true && that.isSetSuccess();
+      if (this_present_success || that_present_success) {
+        if (!(this_present_success && that_present_success))
+          return false;
+        if (!this.success.equals(that.success))
+          return false;
+      }
+
+      return true;
+    }
+
+    @Override
+    public int hashCode() {
+      return 0;
+    }
+
+    public int compareTo(apiQuery_result other) {
+      if (!getClass().equals(other.getClass())) {
+        return getClass().getName().compareTo(other.getClass().getName());
+      }
+
+      int lastComparison = 0;
+      apiQuery_result typedOther = (apiQuery_result)other;
+
+      lastComparison = Boolean.valueOf(isSetSuccess()).compareTo(typedOther.isSetSuccess());
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+      if (isSetSuccess()) {
+        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.success, typedOther.success);
+        if (lastComparison != 0) {
+          return lastComparison;
+        }
+      }
+      return 0;
+    }
+
+    public _Fields fieldForId(int fieldId) {
+      return _Fields.findByThriftId(fieldId);
+    }
+
+    public void read(org.apache.thrift.protocol.TProtocol iprot) throws org.apache.thrift.TException {
+      org.apache.thrift.protocol.TField field;
+      iprot.readStructBegin();
+      while (true)
+      {
+        field = iprot.readFieldBegin();
+        if (field.type == org.apache.thrift.protocol.TType.STOP) { 
+          break;
+        }
+        switch (field.id) {
+          case 0: // SUCCESS
+            if (field.type == org.apache.thrift.protocol.TType.STRING) {
+              this.success = iprot.readString();
+            } else { 
+              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, field.type);
+            }
+            break;
+          default:
+            org.apache.thrift.protocol.TProtocolUtil.skip(iprot, field.type);
+        }
+        iprot.readFieldEnd();
+      }
+      iprot.readStructEnd();
+
+      // check for required fields of primitive type, which can't be checked in the validate method
+      validate();
+    }
+
+    public void write(org.apache.thrift.protocol.TProtocol oprot) throws org.apache.thrift.TException {
+      oprot.writeStructBegin(STRUCT_DESC);
+
+      if (this.isSetSuccess()) {
+        oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
+        oprot.writeString(this.success);
+        oprot.writeFieldEnd();
+      }
+      oprot.writeFieldStop();
+      oprot.writeStructEnd();
+    }
+
+    @Override
+    public String toString() {
+      StringBuilder sb = new StringBuilder("apiQuery_result(");
       boolean first = true;
 
       sb.append("success:");
