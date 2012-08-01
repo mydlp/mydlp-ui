@@ -37,6 +37,10 @@ public class ApiQueryServlet implements HttpRequestHandler {
 		String returnStr = ERROR;
 		try {
 			String filename= req.getParameter("filename");
+			if (filename == null)
+			{
+				filename = "api-noname";
+			}
 			String ipAddress = req.getRemoteAddr();
 			
 			if (req.getContentLength() < MAX_CONTENT_LENGTH)
@@ -51,13 +55,20 @@ public class ApiQueryServlet implements HttpRequestHandler {
 				
 				returnStr = thriftService.apiQuery(ipAddress, filename, data);
 			}
+			else
+			{
+				logger.error("Content-Length is bigger than 10MB ; " + req.getContentLength());
+			}
 		} catch (IOException e) {
 			logger.error("IOError occurred", e);
 		} catch (RuntimeException e) {
 			logger.error("Runtime error occured", e);
 		}
 		if (returnStr == null || returnStr.length() == 0)
+		{
+			logger.error("Returned empty or null value from thrift call");
 			returnStr = ERROR;
+		}
 		PrintWriter out = resp.getWriter();
 		out.print(returnStr);
 		out.flush();
