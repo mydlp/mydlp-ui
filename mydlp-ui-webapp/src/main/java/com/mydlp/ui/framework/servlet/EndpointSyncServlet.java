@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.channels.Channels;
-import java.nio.channels.ReadableByteChannel;
 import java.nio.channels.WritableByteChannel;
 import java.nio.charset.Charset;
 
@@ -19,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.HttpRequestHandler;
 
 import com.mydlp.ui.dao.EndpointStatusDAO;
+import com.mydlp.ui.framework.util.NIOUtil;
 import com.mydlp.ui.service.EndpointSyncService;
 import com.mydlp.ui.thrift.MyDLPUIThriftService;
 
@@ -50,12 +50,7 @@ public class EndpointSyncServlet implements HttpRequestHandler {
 			String ipAddress = req.getRemoteAddr();
 			
 			try {
-				ByteBuffer payload = ByteBuffer.allocate(EndpointReceiveServlet.READ_BLOCK);
-				ReadableByteChannel channel = Channels.newChannel(req.getInputStream());
-				while (channel.read(payload) != -1)  
-					payload = EndpointReceiveServlet.resizeBuffer(payload);
-				payload.position(0);
-				channel.close();
+				ByteBuffer payload = NIOUtil.getWholeData(req.getInputStream());
 				endpointSyncService.asyncRegisterEndpointMeta(ipAddress, userH, payload);
 			} catch (Throwable e) {
 				logger.error("Runtime error occured when reading payload", e);

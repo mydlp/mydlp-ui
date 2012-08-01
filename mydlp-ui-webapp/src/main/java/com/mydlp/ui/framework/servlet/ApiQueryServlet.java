@@ -3,8 +3,6 @@ package com.mydlp.ui.framework.servlet;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.ByteBuffer;
-import java.nio.channels.Channels;
-import java.nio.channels.ReadableByteChannel;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -16,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.HttpRequestHandler;
 
+import com.mydlp.ui.framework.util.NIOUtil;
 import com.mydlp.ui.thrift.MyDLPUIThriftService;
 
 @Service("apiQueryServlet")
@@ -45,14 +44,7 @@ public class ApiQueryServlet implements HttpRequestHandler {
 			
 			if (req.getContentLength() < MAX_CONTENT_LENGTH)
 			{
-				ByteBuffer data = ByteBuffer.allocate(EndpointReceiveServlet.READ_BLOCK);
-				ReadableByteChannel channel = Channels.newChannel(req.getInputStream());
-				
-				while (channel.read(data) != -1)  
-					data = EndpointReceiveServlet.resizeBuffer(data);
-				data.position(0);
-				channel.close();
-				
+				ByteBuffer data = NIOUtil.getWholeData(req.getInputStream());
 				returnStr = thriftService.apiQuery(ipAddress, filename, data);
 			}
 			else
