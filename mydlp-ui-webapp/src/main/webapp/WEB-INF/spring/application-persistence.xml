@@ -25,6 +25,7 @@
          <value>com.mydlp.ui.domain.ADDomainRoot</value>
          <value>com.mydlp.ui.domain.ADDomainUser</value>
          <value>com.mydlp.ui.domain.ADDomainUserAlias</value>
+         <value>com.mydlp.ui.domain.ApiRule</value>
          <value>com.mydlp.ui.domain.Argument</value>
          <value>com.mydlp.ui.domain.AuthSecurityRole</value>
          <value>com.mydlp.ui.domain.AuthUser</value>

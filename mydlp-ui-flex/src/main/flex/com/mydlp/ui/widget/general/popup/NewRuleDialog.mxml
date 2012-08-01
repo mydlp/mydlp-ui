@@ -14,7 +14,9 @@
 			import com.mydlp.ui.domain.PrinterRule;
 			import com.mydlp.ui.domain.Rule;
 			import com.mydlp.ui.domain.WebRule;
+			import com.mydlp.ui.domain.ApiRule;
 			import com.mydlp.ui.util.InteractionUtil;
+			import com.mydlp.ui.util.SessionUtil;
 			
 			import mx.collections.ArrayCollection;
 			import mx.core.FlexGlobals;
@@ -60,6 +62,11 @@
 				ruleHandler(new DiscoveryRule());
 			}
 			
+			protected function apiRuleHandler():void
+			{
+				ruleHandler(new ApiRule());
+			}
+			
 			protected function onCreationComplete(event:FlexEvent):void
 			{
 				if (FlexGlobals.topLevelApplication.policyContainer.ruleContainer.ruleList.dataProvider.length > 0)
@@ -68,7 +75,6 @@
 					recommendedPriority = rule.priority + 100;
 				}
 			}
-			
 			
 		]]>
 	</fx:Script>
@@ -87,6 +93,8 @@
 		<s:Button skinClass="com.mydlp.ui.skin.EndpointRuleBitmapLabelButton16Skin" label="@Resource(bundle = 'messages', key = 'inventory.newdialog.endpointrule')" click="endpointRuleHandler()"/>
 		<s:Button skinClass="com.mydlp.ui.skin.PrinterRuleBitmapLabelButton16Skin" label="@Resource(bundle = 'messages', key = 'inventory.newdialog.printerrule')" click="printerRuleHandler()"/>
 		<s:Button skinClass="com.mydlp.ui.skin.DiscoveryRuleBitmapLabelButton16Skin" label="@Resource(bundle = 'messages', key = 'inventory.newdialog.discoveryrule')" click="discoveryRuleHandler()"/>
+		<s:Button skinClass="com.mydlp.ui.skin.ApiRuleBitmapLabelButton16Skin" label="@Resource(bundle = 'messages', key = 'inventory.newdialog.apirule')" click="apiRuleHandler()"
+				  includeInLayout="{SessionUtil.isEnterprise()}" visible="{SessionUtil.isEnterprise()}" />
 	</s:Group>
 	
 </popup:ClosableTitleWindow>

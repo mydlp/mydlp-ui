@@ -11,23 +11,39 @@
 			
 		]]>
 	</fx:Script>
+	
+	<fx:Declarations>
+		<fx:String id="noneMessage" />
+		
+	</fx:Declarations>
+	
 	<s:states>
 		<s:State name="normal" />
 		<s:State name="noitem" />
 	</s:states>
 	
-	<s:layout>
-		<s:VerticalLayout horizontalAlign="center" verticalAlign="middle" 
-						  paddingBottom="4" paddingTop="4"/>
-	</s:layout>
 	
-	<s:Label includeIn="noitem" text="NONE" />
+	<s:Group left="0" right="0" top="0" bottom="0" includeIn="noitem">
+		<s:layout>
+			<s:VerticalLayout horizontalAlign="center" verticalAlign="middle" 
+							  paddingBottom="4" paddingTop="4" />
+		</s:layout>
+		
+		<s:Label text="{noneMessage}" width="100%" alpha="0.4"/>
 	
-	<rule:RuleItemList	includeIn="normal" 
-				width="{this.width - 4}"
-				height="100%"
-				dataProvider="{listDataProvider}"
-				itemRenderer="com.mydlp.ui.widget.policy.rule.RuleItemRenderer"
-				/>
+	</s:Group>
+	
+	<s:Group left="0" right="0" top="0" bottom="0" includeIn="normal">
+		<s:layout>
+			<s:VerticalLayout horizontalAlign="center" verticalAlign="middle" 
+							  paddingBottom="4" paddingTop="4"/>
+		</s:layout>
+		
+		<rule:RuleItemList	width="{this.width - 4}"
+							height="100%"
+							dataProvider="{listDataProvider}"
+							itemRenderer="com.mydlp.ui.widget.policy.rule.RuleItemRenderer"
+							/>
+	</s:Group>
 	
 </s:Group>

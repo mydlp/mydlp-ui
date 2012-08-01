@@ -111,6 +111,11 @@
     <servlet-class>org.springframework.web.context.support.HttpRequestHandlerServlet</servlet-class>
   </servlet>
   
+  <servlet>
+    <servlet-name>apiQueryServlet</servlet-name>
+    <servlet-class>org.springframework.web.context.support.HttpRequestHandlerServlet</servlet-class>
+  </servlet>
+  
   <!-- Spring Flex Integration 1.0  -->
   <!-- Map all /messagbroker requests to the DispatcherServlet for handling -->
   <servlet-mapping>
@@ -141,6 +146,11 @@
   <servlet-mapping>
     <servlet-name>htmlPreviewServlet</servlet-name>
     <url-pattern>/htmlPreview</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
+    <servlet-name>apiQueryServlet</servlet-name>
+    <url-pattern>/api/query</url-pattern>
   </servlet-mapping>
 
 </web-app>

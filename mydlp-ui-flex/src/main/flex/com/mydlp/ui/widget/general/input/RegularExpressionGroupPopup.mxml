@@ -46,13 +46,15 @@
 				else 
 					isEdit = true;
 				
-				var temp:ArrayCollection = selectedKeyworsFromFile;
-				if(temp.length != 0)
+				if(selectedKeyworsFromFile.length != 0)
 				{
-					for (var i:int = 0; i < temp.length; i++)
+					for (var i:int = 0; i < selectedKeyworsFromFile.length; i++)
 					{
+						var escapedRegex:String = SpecialCharacterUtil.escapeSpecialCharacters(
+								selectedKeyworsFromFile.getItemAt(i) as String, 
+								SpecialCharacterUtil.regex);
 						var newregex:RegularExpressionGroupEntry = new RegularExpressionGroupEntry;
-						newregex.regex = SpecialCharacterUtil.escapeSpecialCharacters(temp[i], SpecialCharacterUtil.regex);
+						newregex.regex = escapedRegex;
 						regularExpressionGroupInput.addEntry(newregex);
 					}
 				}

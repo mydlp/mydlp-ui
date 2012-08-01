@@ -22,5 +22,7 @@ public interface MyDLPUIThriftService {
     public String saveLicenseKey(String licenseKey);
 
     public LicenseObject getLicense();
+    
+    public String apiQuery(String ipAddress, String filename, ByteBuffer data);
 
 }

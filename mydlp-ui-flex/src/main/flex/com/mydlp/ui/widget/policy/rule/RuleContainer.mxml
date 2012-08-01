@@ -10,6 +10,7 @@
 		 >
 	<fx:Script>
 		<![CDATA[
+			import com.mydlp.ui.domain.ApiRule;
 			import com.mydlp.ui.domain.DiscoveryRule;
 			import com.mydlp.ui.domain.EndpointRule;
 			import com.mydlp.ui.domain.MailRule;
@@ -114,6 +115,10 @@
 					else if (rule is DiscoveryRule)
 					{
 						rule = rule as DiscoveryRule;
+					}
+					else if (rule is ApiRule)
+					{
+						rule = rule as ApiRule;
 					}
 					else
 						throw new Error("Unknown rule type;");

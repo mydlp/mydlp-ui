@@ -15,6 +15,7 @@
 				>
 	<fx:Script>
 		<![CDATA[
+			import com.mydlp.ui.domain.ApiRule;
 			import com.mydlp.ui.domain.DiscoveryRule;
 			import com.mydlp.ui.domain.EndpointRule;
 			import com.mydlp.ui.domain.InformationType;
@@ -64,6 +65,9 @@
 			[Embed('/assets/icons/32x32/search.png')]
 			public static const discoveryRuleIcon:Class;
 			
+			[Embed('/assets/icons/32x32/puzzle.png')]
+			public static const apiRuleIcon:Class;
+			
 			protected static const SOURCES_ALL:String = "inventory.networks.all";
 			
 			protected static const ITYPE_ALL:String = "informationType.predefined.all";
@@ -103,6 +107,10 @@
 				else if (data is DiscoveryRule)
 				{
 					ruleTypeImage.source = discoveryRuleIcon;
+				}
+				else if (data is ApiRule)
+				{
+					ruleTypeImage.source = apiRuleIcon;
 				}
 				else
 					throw new Error("Unknown rule type;");
@@ -372,7 +380,8 @@
 						else if(ruleObject is WebRule ||
 								ruleObject is EndpointRule ||
 								ruleObject is PrinterRule ||
-								ruleObject is DiscoveryRule)
+								ruleObject is DiscoveryRule ||
+								ruleObject is ApiRule)
 							return true;
 					}
 					else if ( treeItem.item is RuleUser )
@@ -615,12 +624,14 @@
 		
 		<rule:RuleItemBox width="260"
 						  listDataProvider="{sourceDataProvider}"
+						  noneMessage="@Resource(bundle = 'messages', key = 'rulebox.ruleitembox.sources.label')"
 						  currentState="{sourceDataProvider.length == 0 ? 'noitem' : 'normal'}" />
 		
 		<rule:RSpacer />
 		
 		<rule:RuleItemBox width="260"
 						  listDataProvider="{matcherDataProvider}"
+						  noneMessage="@Resource(bundle = 'messages', key = 'rulebox.ruleitembox.itypes.label')"
 						  currentState="{matcherDataProvider.length == 0 ? 'noitem' : 'normal'}" />
 		
 		<rule:RSpacer />
