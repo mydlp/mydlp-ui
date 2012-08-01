@@ -35,16 +35,15 @@ public class ApiQueryServlet implements HttpRequestHandler {
 			throws ServletException, IOException {
 		String returnStr = ERROR;
 		try {
-			String filename= req.getParameter("filename");
-			if (filename == null)
-			{
-				filename = "api-noname";
-			}
-			String ipAddress = req.getRemoteAddr();
-			
 			if (req.getContentLength() < MAX_CONTENT_LENGTH)
 			{
 				ByteBuffer data = NIOUtil.getWholeData(req.getInputStream());
+				String filename= req.getParameter("filename");
+				if (filename == null)
+				{
+					filename = "api-noname";
+				}
+				String ipAddress = req.getRemoteAddr();
 				returnStr = thriftService.apiQuery(ipAddress, filename, data);
 			}
 			else
