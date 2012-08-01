@@ -30,6 +30,8 @@ public class EndpointSyncServlet implements HttpRequestHandler {
 	private static final String UP_TO_DATE = "up-to-date";
 	
 	private static final ByteBuffer errorResponse = Charset.forName("ISO-8859-1").encode(CharBuffer.wrap(UP_TO_DATE));
+	
+	protected static final int MAX_CONTENT_LENGTH = 10*1024*1024;
 
 	@Autowired
 	protected MyDLPUIThriftService thriftService;
@@ -45,17 +47,24 @@ public class EndpointSyncServlet implements HttpRequestHandler {
 			throws ServletException, IOException {
 		ByteBuffer responseBuffer = null;
 		try {
-			String urlKey = req.getParameter("rid");
-			String userH = req.getParameter("uh");
-			String ipAddress = req.getRemoteAddr();
-			
-			try {
-				ByteBuffer payload = NIOUtil.getWholeData(req.getInputStream());
-				endpointSyncService.asyncRegisterEndpointMeta(ipAddress, userH, payload);
-			} catch (Throwable e) {
-				logger.error("Runtime error occured when reading payload", e);
+			if (req.getContentLength() < MAX_CONTENT_LENGTH)
+			{
+				ByteBuffer payload = NIOUtil.toByteBuffer(req.getInputStream());
+				String urlKey = req.getParameter("rid");
+				String userH = req.getParameter("uh");
+				String ipAddress = req.getRemoteAddr();
+				
+				try {
+					endpointSyncService.asyncRegisterEndpointMeta(ipAddress, userH, payload);
+				} catch (Throwable e) {
+					logger.error("Runtime error occured when reading payload", e);
+				}
+				responseBuffer = thriftService.getRuletable(ipAddress, userH, urlKey);
 			}
-			responseBuffer = thriftService.getRuletable(ipAddress, userH, urlKey);
+			else 
+			{
+				logger.error("Content-Length is bigger than 10MB ; " + req.getContentLength());
+			}
 		} catch (Throwable e) {
 			logger.error("Runtime error occured", e);
 		}

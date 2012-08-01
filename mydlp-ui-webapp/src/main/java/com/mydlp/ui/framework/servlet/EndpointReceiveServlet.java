@@ -24,6 +24,8 @@ public class EndpointReceiveServlet implements HttpRequestHandler {
 			.getLogger(EndpointReceiveServlet.class);
 
 	private static final String ERROR = "error";
+	
+	protected static final int MAX_CONTENT_LENGTH = 10*1024*1024;
 
 	@Autowired
 	protected MyDLPUIThriftService thriftService;
@@ -33,16 +35,23 @@ public class EndpointReceiveServlet implements HttpRequestHandler {
 			throws ServletException, IOException {
 		String returnStr = ERROR;
 		try {
-			String operation = req.getParameter("o");
-			String ipAddress = req.getRemoteAddr();
-			if (operation.equals("begin")) {
-				returnStr = thriftService.receiveBegin(ipAddress);
-			} else if (operation.equals("push")) {
-				Long itemId = Long.parseLong(req.getParameter("i"));
-				Integer chunkNum = Integer.parseInt(req.getParameter("c"));
-				Integer chunkNumTotal = Integer.parseInt(req.getParameter("t"));
-				ByteBuffer chunkData = NIOUtil.getWholeData(req.getInputStream());
-				returnStr = thriftService.receiveChunk(ipAddress, itemId, chunkData, chunkNum, chunkNumTotal);
+			if (req.getContentLength() < MAX_CONTENT_LENGTH)
+			{
+				ByteBuffer chunkData = NIOUtil.toByteBuffer(req.getInputStream());
+				String operation = req.getParameter("o");
+				String ipAddress = req.getRemoteAddr();
+				if (operation.equals("begin")) {
+					returnStr = thriftService.receiveBegin(ipAddress);
+				} else if (operation.equals("push")) {
+					Long itemId = Long.parseLong(req.getParameter("i"));
+					Integer chunkNum = Integer.parseInt(req.getParameter("c"));
+					Integer chunkNumTotal = Integer.parseInt(req.getParameter("t"));
+					returnStr = thriftService.receiveChunk(ipAddress, itemId, chunkData, chunkNum, chunkNumTotal);
+				}
+			}
+			else 
+			{
+				logger.error("Content-Length is bigger than 10MB ; " + req.getContentLength());
 			}
 		} catch (IOException e) {
 			logger.error("IOError occurred", e);

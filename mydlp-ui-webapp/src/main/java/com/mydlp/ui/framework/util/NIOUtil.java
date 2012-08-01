@@ -8,7 +8,7 @@ import org.apache.commons.io.IOUtils;
 
 public class NIOUtil {
 	
-	public static ByteBuffer getWholeData(InputStream is) throws IOException {
+	public static ByteBuffer toByteBuffer(InputStream is) throws IOException {
 		return ByteBuffer.wrap(IOUtils.toByteArray(is));
 	}
 

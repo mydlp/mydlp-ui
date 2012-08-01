@@ -37,7 +37,8 @@ public class ApiQueryServlet implements HttpRequestHandler {
 		try {
 			if (req.getContentLength() < MAX_CONTENT_LENGTH)
 			{
-				ByteBuffer data = NIOUtil.getWholeData(req.getInputStream());
+				ByteBuffer data = NIOUtil.toByteBuffer(req.getInputStream());
+				
 				String filename= req.getParameter("filename");
 				if (filename == null)
 				{
