@@ -113,11 +113,13 @@
 				this.currentState = licenseState;
 				var licenseDayInformation:LicenseDayInformation = new LicenseDayInformation();
 				licenseGroup.addElement(licenseDayInformation);
+				/*
 				if(isAdmin())
 				{
 					var licenseKeyEntrance:LicenseKeyEntrance = new LicenseKeyEntrance();
 					licenseGroup.addElement(licenseKeyEntrance);
 				}
+				*/
 			}
 			
 			protected function isAdmin():Boolean
