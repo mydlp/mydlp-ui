@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:ItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009" 
+				xmlns:s="library://ns.adobe.com/flex/spark" 
+				xmlns:mx="library://ns.adobe.com/flex/mx" 
+				autoDrawBackground="true" xmlns:rule="com.mydlp.ui.widget.policy.rule.*">
+	
+	<rule:ActionBoxElement ruleType="generic" action="{data}"/>
+	
+</s:ItemRenderer>

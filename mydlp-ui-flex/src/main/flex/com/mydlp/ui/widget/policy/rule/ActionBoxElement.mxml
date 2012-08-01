@@ -7,6 +7,7 @@
 	 <fx:Script>
 		<![CDATA[
 			import com.mydlp.ui.domain.Rule;
+			import com.mydlp.ui.util.LangUtil;
 			
 			import mx.controls.Alert;
 			import mx.events.FlexEvent;
@@ -48,7 +49,7 @@
 		]]>
 	</fx:Script>
 	<fx:Declarations>
-		<!-- Place non-visual elements (e.g., services, value objects) here -->
+		<fx:String id="ruleType"/>
 	</fx:Declarations>
 	
 	<s:layout>
@@ -59,7 +60,7 @@
 	
 	<s:BitmapImage id="actionIcon" source="{getIcon(action)}"/>
 	
-	<s:Label text="{action}"/>
+	<s:Label text="{LangUtil.getString('messages','rule.action.'+ruleType+'.'+action+'.label')}"/>
 	
 	
 </s:Group>

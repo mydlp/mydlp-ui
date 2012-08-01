@@ -6,11 +6,14 @@
 					>
 	<fx:Script>
 		<![CDATA[
+			import com.mydlp.ui.domain.DiscoveryRule;
 			import com.mydlp.ui.domain.Rule;
+			import com.mydlp.ui.util.LangUtil;
 			import com.mydlp.ui.util.SessionUtil;
 			
 			import mx.collections.ArrayCollection;
 			import mx.collections.ListCollectionView;
+			import mx.controls.Alert;
 			import mx.core.FlexGlobals;
 			import mx.events.FlexEvent;
 			
@@ -43,6 +46,36 @@
 						Rule.ACTION_BLOCK
 					)
 				);
+			
+			protected function actionListChangeHandler(event:IndexChangeEvent):void
+			{
+				if (ruleObject is DiscoveryRule && (
+					actionList.selectedItem == Rule.ACTION_BLOCK ||
+					actionList.selectedItem == Rule.ACTION_QUARANTINE ))
+					{
+						Alert.show(LangUtil.getString("messages", "rule.discovery.deleteaction.warning"),
+							LangUtil.getString("messages", "rule.discovery.deleteaction.warning.title"));
+					}
+				ruleObject.save();
+			}
+			
+			protected function actionListItemRendererFunction(item:Object):ClassFactory {
+				if (ruleObject is DiscoveryRule)
+				{
+					return new ClassFactory(DiscoveryActionListItemRenderer);	
+				}
+				else
+				{
+					return new ClassFactory(GenericActionListItemRenderer);
+				}
+			}
+			
+			public function getActionLabel(action:String): String {
+				var ruleType:String = "generic";
+				if (ruleObject is DiscoveryRule)
+					ruleType = "discovery";
+				return LangUtil.getString('messages','rule.action.'+ruleType+'.'+action+'.label');
+			}
 			
 		]]>
 	</fx:Script>
@@ -77,8 +110,8 @@
 							contentBackgroundAlpha="1"
 							dataProvider="{SessionUtil.isEnterprise()? actions:actionsForCommunity}" 
 							selectedItem="@{ruleObject.action}"
-							change="{ruleObject.save();}" 
-							itemRenderer="com.mydlp.ui.widget.policy.rule.ActionDropDownListItemRenderer"/>
+							change="actionListChangeHandler(event)" 
+							itemRendererFunction="actionListItemRendererFunction"/>
 		</s:Group>
 		<s:Spacer height="19" />
 	</s:Group>
