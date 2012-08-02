@@ -19,8 +19,8 @@
 			
 			import spark.events.IndexChangeEvent;
 			
-			[Bindable]
-			public var action:String = Rule.ACTION_PASS;
+			//[Bindable]
+			//public var action:String = Rule.ACTION_PASS;
 
 			[Bindable]
 			public var ruleObject:Rule;
@@ -70,11 +70,15 @@
 				}
 			}
 			
-			public function getActionLabel(action:String): String {
+			protected function getRuleType(rule:Rule): String {
 				var ruleType:String = "generic";
-				if (ruleObject is DiscoveryRule)
+				if (rule is DiscoveryRule)
 					ruleType = "discovery";
-				return LangUtil.getString('messages','rule.action.'+ruleType+'.'+action+'.label');
+				return ruleType;
+			}
+			
+			protected function getActionLabel(action:String): String {
+				return LangUtil.getString("messages","rule.action." + getRuleType(ruleObject) + "." + action + ".label");
 			}
 			
 		]]>
@@ -94,7 +98,7 @@
 	-->
 	<s:Group includeIn="normal, hovered" >
 		<s:Spacer width="20" />
-		<rule:ActionBoxElement action="{ruleObject.action}"/>
+		<rule:ActionBoxElement ruleType="{getRuleType(ruleObject)}" action="{ruleObject.action}"/>
 	</s:Group>
 	
 	<s:Group includeIn="selected" >
@@ -111,6 +115,7 @@
 							dataProvider="{SessionUtil.isEnterprise()? actions:actionsForCommunity}" 
 							selectedItem="@{ruleObject.action}"
 							change="actionListChangeHandler(event)" 
+							labelFunction="getActionLabel"
 							itemRendererFunction="actionListItemRendererFunction"/>
 		</s:Group>
 		<s:Spacer height="19" />
