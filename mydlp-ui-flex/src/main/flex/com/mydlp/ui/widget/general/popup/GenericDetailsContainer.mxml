@@ -21,6 +21,7 @@
 			import com.mydlp.ui.util.ClassMember;
 			import com.mydlp.ui.util.LangUtil;
 			import com.mydlp.ui.util.ReflectionUtil;
+			import com.mydlp.ui.util.SessionUtil;
 			import com.mydlp.ui.widget.general.input.IpAddressInput;
 			
 			import mx.collections.ArrayCollection;
@@ -67,7 +68,8 @@
 							(classMember.name == "coupledRuleItems" && classMember.type == ListCollectionView) ||
 							(classMember.name == "informationType" && classMember.type == InformationType) ||
 							(classMember.name == "editable" && classMember.type == Boolean) ||
-							(classMember.name == "matcher" && classMember.type == Matcher)
+							(classMember.name == "matcher" && classMember.type == Matcher) ||
+							(classMember.name == "distanceEnabled" && classMember.type == Boolean)
 						)
 					{
 						continue;
@@ -89,6 +91,21 @@
 							index = 1;
 						else
 							index = 2;
+					}
+					else if (targetObject is InformationDescription &&
+								classMember.name == "distance" 
+								&& classMember.type == String)
+					{
+						if (!SessionUtil.isEnterprise())
+							continue;
+						if (targetObject["distanceEnabled"] as Boolean)
+						{
+							valueString = targetObject["distance"];
+						}
+						else
+						{
+							valueString = LangUtil.getString("messages", "informationDescriptopn.distance.disable.message");
+						}
 					}
 					else if (targetObject is InformationType && 
 							classMember.name == "dataFormats" && 
