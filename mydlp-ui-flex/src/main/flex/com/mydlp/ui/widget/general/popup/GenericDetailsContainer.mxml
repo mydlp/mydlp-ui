@@ -94,7 +94,7 @@
 					}
 					else if (targetObject is InformationDescription &&
 								classMember.name == "distance" 
-								&& classMember.type == String)
+								&& classMember.type == Number)
 					{
 						if (!SessionUtil.isEnterprise())
 							continue;
