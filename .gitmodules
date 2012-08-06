@@ -1,0 +1,3 @@
+[submodule "external-lib/tika-xps"]
+	path = external-lib/tika-xps
+	url = https://github.com/hkerem/tika-xps.git
