@@ -32,8 +32,9 @@ apachesitesdir = $(sysconfdir)/apache2/sites-available
 solrlibdir = $(datadir)/solr/WEB-INF/lib
 
 solrlib_DATA = \
-	target/apache-solr-cell.jar \
-	target/tika-xps.jar
+	target/apache-solr-cell.jar
+
+backenddir = $(datadir)/mydlp/backend
 
 mydlp-ui-webapp/target/mydlp-ui-webapp.war: pom.xml
 	@bash bootstrap.sh
@@ -43,20 +44,15 @@ target/apache-solr-cell.jar: pom.xml
 	@mkdir -p target
 	@$(MVN) dependency:get -DrepoUrl=http://repo1.maven.apache.org/maven2 -Dartifact=org.apache.solr:solr-cell:1.4.1
 	@cp -af $(HOME)/.m2/repository/org/apache/solr/solr-cell/1.4.1/solr-cell-1.4.1.jar target/apache-solr-cell.jar
-	@$(MVN) dependency:get -DrepoUrl=http://repo1.maven.apache.org/maven2 -Dartifact=org.apache.tika:tika-bundle:1.2
-	@cp -af $(HOME)/.m2/repository/org/apache/tika/tika-bundle/1.2/tika-bundle-1.2.jar target/tika-bundle.jar
-
-target/tika-xps.jar: pom.xml
-	(cd external-lib/tika-xps; $(MVN) install)
-	@cp -af $(HOME)/.m2/repository/tika-xps/tika-xps/1.0.0/tika-xps-1.0.0.jar target/tika-xps.jar
 
 clean-local:
 	@$(MVN) -Pproduction clean
-	(cd external-lib/tika-xps; $(MVN) clean)
 
 install-data-hook:
 	mkdir -p $(DESTDIR)$(apachesitesdir) && \
 		cp -af conf/mydlp.apache-site $(DESTDIR)$(apachesitesdir)/mydlp
 	mkdir -p $(DESTDIR)$(solrlibdir) && \
-		unzip target/tika-bundle.jar -x 'META-INF/*' -d $(DESTDIR)$(solrlibdir)
+		ln -s $(backenddir)/mydlp-backend.jar $(DESTDIR)$(solrlibdir)/mydlp-backend.jar
+	mkdir -p $(DESTDIR)$(solrlibdir) && \
+		ln -s $(backenddir)/tika-xps.jar $(DESTDIR)$(solrlibdir)/tika-xps.jar
 
