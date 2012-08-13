@@ -11,6 +11,7 @@
 			import com.mydlp.ui.widget.policy.rule.RuleContainer;
 			
 			import mx.collections.ArrayCollection;
+			import mx.collections.ListCollectionView;
 			import mx.core.FlexGlobals;
 			
 			import spark.formatters.NumberFormatter;
@@ -33,10 +34,42 @@
 					return "Itype: " + (value as Number).toString();
 				return 	LangUtil.getString("messages", "dashboardItem." + itemKey + "." + value.toString());
 			}
+			
+			override protected function postDataLoad(): void {
+				if (isItemDPEmpty())
+					showNoDataMessage();
+				else
+					showChart();
+			} 
+			
+			protected function isItemDPEmpty(): Boolean {
+				if (itemDP == null) return true;
+				if (!itemDP is ListCollectionView) return true;
+				if ((itemDP as ListCollectionView).length > 0) return false;
+				return true;
+			} 
+			
+			protected function showNoDataMessage(): void {
+				barChart.includeInLayout=false;
+				barChart.visible=false;
+				messageLabel.text = LangUtil.getString("messages", "dashboardItem.hbar.nodata.message");
+				messageLabel.includeInLayout=true;
+				messageLabel.visible=true;
+			}
+			
+			protected function showChart(): void {
+				barChart.includeInLayout=true;
+				barChart.visible=true;
+				messageLabel.text = "";
+				messageLabel.includeInLayout=false;
+				messageLabel.visible=false;
+			}
+			
 		]]>
 	</fx:Script>
 
-	<mx:BarChart id="barChart" width="100%" height="100%" 
+	<mx:BarChart id="barChart" width="100%" height="100%"
+				 includeInLayout="false" visible="false" 
 				 dataProvider="{itemDP}">
 		<mx:verticalAxis>
 			<mx:CategoryAxis
@@ -52,4 +85,8 @@
 		</mx:series>
 	</mx:BarChart>
 	
+	<s:Label id="messageLabel" width="100%" height="100%"
+			 includeInLayout="false" visible="false" />
+	
 </dashboard:DashboardQueryItemBox>
+

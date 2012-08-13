@@ -25,6 +25,8 @@
 					re.get(itemKey);
 			}
 			
+			protected function postDataLoad(): void {}
+			
 			protected function getHandler(event:ResultEvent): void
 			{
 				itemDP = event.result;
@@ -35,6 +37,7 @@
 					if (this is HBarChartBox && itemDP is ArrayCollection){
 						(itemDP as ArrayCollection).source.reverse();
 					}
+					postDataLoad();
 					invalidateDisplayList();
 				}
 			}

@@ -8,6 +8,7 @@
 			import com.mydlp.ui.util.LangUtil;
 			
 			import mx.collections.ArrayCollection;
+			import mx.collections.ListCollectionView;
 			
 			import spark.formatters.NumberFormatter;
 			
@@ -23,10 +24,41 @@
 				return 	LangUtil.getString("messages", "dashboardItem." + itemKey + "." + data.labelKey) +
 						"\n " + data.value + " (" + round(percentValue,2) + "%)";
 			}
+			
+			override protected function postDataLoad(): void {
+				if (isItemDPEmpty())
+					showNoDataMessage();
+				else
+					showChart();
+			} 
+			
+			protected function isItemDPEmpty(): Boolean {
+				if (itemDP == null) return true;
+				if (!itemDP is ListCollectionView) return true;
+				if ((itemDP as ListCollectionView).length > 0) return false;
+				return true;
+			} 
+			
+			protected function showNoDataMessage(): void {
+				pieChart.includeInLayout=false;
+				pieChart.visible=false;
+				messageLabel.text = LangUtil.getString("messages", "dashboardItem.pie.nodata.message");
+				messageLabel.includeInLayout=true;
+				messageLabel.visible=true;
+			}
+			
+			protected function showChart(): void {
+				pieChart.includeInLayout=true;
+				pieChart.visible=true;
+				messageLabel.text = "";
+				messageLabel.includeInLayout=false;
+				messageLabel.visible=false;
+			}
 		]]>
 	</fx:Script>
 	
 	<mx:PieChart id="pieChart" width="100%" height="100%"
+				 includeInLayout="false" visible="false" 
 				 dataProvider="{itemDP}"
 				 innerRadius=".3">
 		
@@ -39,5 +71,8 @@
 		</mx:series>
 		
 	</mx:PieChart>
+	
+	<s:Label id="messageLabel" width="100%" height="100%"
+			 includeInLayout="false" visible="false" />
 	
 </dashboard:DashboardQueryItemBox>
