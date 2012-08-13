@@ -23,11 +23,11 @@ public class _000_00017_Network_10_0_0_0_8 extends AbstractGranule {
 		InventoryCategory networks = DAOUtil.getSingleResult(list);
 		
 		Network n1 = new Network();
-		n1.setIpBase(new Long(3232235520L));
+		n1.setIpBase(new Long(167772160));
 		n1.setIpMask(new Long(4278190080L));
 		
 		InventoryItem n1item = new InventoryItem();
-		n1item.setName("192.168.0.0/8");
+		n1item.setName("10.0.0.0/8");
 		n1item.setItem(n1);
 		
 		n1item.setCategory(networks);

@@ -11,7 +11,7 @@ import com.mydlp.ui.domain.InventoryItem;
 import com.mydlp.ui.domain.Network;
 import com.mydlp.ui.schema.AbstractGranule;
 
-public class _000_00018_Network_192_168_0_0_24 extends AbstractGranule {
+public class _000_00018_Network_192_168_0_0_16 extends AbstractGranule {
 
 	@Override
 	protected void callback() {
@@ -23,11 +23,11 @@ public class _000_00018_Network_192_168_0_0_24 extends AbstractGranule {
 		InventoryCategory networks = DAOUtil.getSingleResult(list);
 		
 		Network n1 = new Network();
-		n1.setIpBase(new Long(167772160));
-		n1.setIpMask(new Long(4294967040L));
+		n1.setIpBase(new Long(3232235520L));
+		n1.setIpMask(new Long(4294901760L));
 		
 		InventoryItem n1item = new InventoryItem();
-		n1item.setName("10.0.0.0/24");
+		n1item.setName("192.168.0.0/16");
 		n1item.setItem(n1);
 		
 		n1item.setCategory(networks);
