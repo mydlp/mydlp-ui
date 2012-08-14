@@ -61,7 +61,8 @@
 						"Mail",
 						"Endpoint",
 						"Printer",
-						"Discovery"
+						"Discovery",
+						"API"
 					)
 				);
 			
@@ -180,6 +181,7 @@
 						case "Mail": channelValue = "M"; break;
 						case "Printer": channelValue = "P"; break;
 						case "Discovery": channelValue = "D"; break;
+						case "API": channelValue = "A"; break;
 						default: break;
 					}
 					var criteria7:ListCollectionView = new ArrayCollection();
