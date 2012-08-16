@@ -2,6 +2,7 @@ package com.mydlp.ui.domain;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Lob;
 
 @Entity
 public class Config extends AbstractNamedEntity{
@@ -24,6 +25,7 @@ public class Config extends AbstractNamedEntity{
 		this.key = key;
 	}
 
+	@Lob
 	public String getValue() {
 		return value;
 	}
