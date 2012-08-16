@@ -13,6 +13,14 @@
 			
 			public var deleteList:ListCollectionView = null;
 			
+			public function hasRegex(k:String): Boolean
+			{
+				for each (var rge:RegularExpressionGroupEntry in entries)
+					if (rge.regex.toLowerCase() == k.toLowerCase())
+						return true;
+				return false;
+			}
+			
 			public function addEntry(rge:RegularExpressionGroupEntry): void
 			{
 				entries.addItem(rge);

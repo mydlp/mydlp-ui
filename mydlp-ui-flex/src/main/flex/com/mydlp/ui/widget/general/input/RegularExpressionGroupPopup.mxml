@@ -4,8 +4,8 @@
 			   xmlns:mx="library://ns.adobe.com/flex/mx"
 			   xmlns:input="com.mydlp.ui.widget.general.input.*"
 			   close="{close()}"
-			   visible="false" width="100%" height="100%"
-			   title="@Resource(bundle = 'messages', key = 'regularExpression.title.label')"
+			   visible="false" width="400" height="100%"
+			   title="@Resource(bundle = 'messages', key = 'regularExpression.title.label')" xmlns:util="com.mydlp.ui.util.*"
 			   >
 	
 	<fx:Script>
@@ -14,11 +14,17 @@
 			import com.mydlp.ui.domain.RegularExpressionGroupEntry;
 			import com.mydlp.ui.util.FileUtil;
 			import com.mydlp.ui.util.InteractionUtil;
+			import com.mydlp.ui.util.LangUtil;
 			import com.mydlp.ui.util.SpecialCharacterUtil;
 			
 			import mx.collections.ArrayCollection;
+			import mx.collections.ListCollectionView;
 			import mx.controls.Alert;
+			import mx.events.FlexEvent;
 			import mx.events.ItemClickEvent;
+			import mx.messaging.messages.ISmallMessage;
+			
+			import spark.events.TextOperationEvent;
 			
 			public var regularExpressionGroupInput:RegularExpressionGroupInput = null;
 			
@@ -28,9 +34,9 @@
 			public var fileReference:FileReference = null;
 			
 			[Bindable]
-			public var keywordsFromFileDP:ArrayCollection = new ArrayCollection;
+			public var keywordsFromFileDP:ArrayCollection = new ArrayCollection();
 			
-			public static var selectedKeyworsFromFile:ArrayCollection = new ArrayCollection;
+			public static var selectedKeywordsFromFile:ArrayCollection = new ArrayCollection();
 			
 			
 			protected function close(): void
@@ -46,12 +52,12 @@
 				else 
 					isEdit = true;
 				
-				if(selectedKeyworsFromFile.length != 0)
+				if(selectedKeywordsFromFile.length != 0)
 				{
-					for (var i:int = 0; i < selectedKeyworsFromFile.length; i++)
+					for (var i:int = 0; i < selectedKeywordsFromFile.length; i++)
 					{
 						var escapedRegex:String = SpecialCharacterUtil.escapeSpecialCharacters(
-								selectedKeyworsFromFile.getItemAt(i) as String, 
+								selectedKeywordsFromFile.getItemAt(i) as String, 
 								SpecialCharacterUtil.regex);
 						var newregex:RegularExpressionGroupEntry = new RegularExpressionGroupEntry;
 						newregex.regex = escapedRegex;
@@ -66,7 +72,7 @@
 						regularExpressionGroupInput.addEntry(regexEntry);
 				}
 				
-				selectedKeyworsFromFile.removeAll();
+				selectedKeywordsFromFile.removeAll();
 				close();
 			}
 			
@@ -80,14 +86,32 @@
 				visible = true;
 			}
 			
+			protected function addToKeywordList(i:*): void
+			{
+				if (keywordsFromFileDP == null)
+					keywordsFromFileDP = new ArrayCollection();
+				keywordsFromFileDP.addItem(i);
+				if (selectedKeywordsFromFile == null)
+					selectedKeywordsFromFile = new ArrayCollection();
+				selectedKeywordsFromFile.addItem(i);
+			}
+			
 			protected function onUploadCompleteHandler(event:Event):void
 			{
 				var data:ByteArray = new ByteArray();
 				fileReference.data.readBytes(data, 0, fileReference.data.length);
 				var fileData:String = data.readUTFBytes(data.length);
-				keywordsFromFileDP = FileUtil.splitString(fileData);
-				selectedKeyworsFromFile = FileUtil.splitString(fileData);
-				if(selectedKeyworsFromFile.length < 10)
+				var extractedKeywords:ListCollectionView = FileUtil.splitString(fileData);
+				for each (var i:* in extractedKeywords)
+					if (isKeywordSane(i) == "ok")
+						addToKeywordList(i);
+				
+				if (selectedKeywordsFromFile.length > 0)
+				{
+					selectFromFileButton.enabled = false;
+					saveButton.enabled = true;
+				}
+				if(selectedKeywordsFromFile.length < 10)
 					fileKeywordList.height = 150;
 				else
 					fileKeywordList.height = 200;
@@ -109,17 +133,92 @@
 			
 			protected function onSelectionHandler(event:ItemClickEvent):void
 			{
-				selectedKeyworsFromFile.removeAll();
 				if(event.currentTarget.selectedValue == "file")
 				{
 					this.currentState = "file";
-					saveButton.enabled = false;
-					keywordsFromFileDP.removeAll();
 				}
 				else
 				{
-					saveButton.enabled = true;
 					this.currentState = "text";
+				}
+				clearInputs();
+			}
+			
+			protected function hasKeyword(k:String): Boolean
+			{
+				for each (var s:String in keywordsFromFileDP)
+					if (s.toLowerCase() == k.toLowerCase())
+						return true;
+				return false;
+			}
+			
+			protected function isKeywordSane(arg:* = null): String
+			{
+				if (arg == null || ! arg is String || (arg as String).length == 0) 
+				{
+					return "error.keywordFromFile.isNull";
+				}
+				var regexStrArg:String = arg as String;
+				regexStrArg = regexStrArg.replace( /^\s+/ , '');
+				regexStrArg = regexStrArg.replace( /\s+$/ , '');
+				
+				if ( regexStrArg.length == 0 || regexStrArg.match( /^\s+$/ ) )
+				{
+					return "error.keywordFromFile.isOnlyConsistsOfWhiteSpaces";
+				}
+				
+				if (regexStrArg.length < 3)
+				{
+					return "error.keywordFromFile.isTooShort";
+				}
+				
+				if (hasKeyword(regexStrArg))
+				{
+					return "error.keywordFromFile.alreadyAdded";
+				}
+				
+				if (regularExpressionGroupInput.hasRegex(
+					SpecialCharacterUtil.escapeSpecialCharacters(
+							regexStrArg, 
+							SpecialCharacterUtil.regex)))
+				{
+					return "error.keywordFromFile.alreadyIncluded";
+				}
+				
+				return "ok";
+			}
+			
+			protected function clearInputs():void
+			{
+				keywordsFromFileDP = new ArrayCollection();
+				selectedKeywordsFromFile = new ArrayCollection();
+				fileReference = null;
+				if (keyword != null)
+					keyword.text = "";
+				if (saveButton != null)
+					saveButton.enabled = false;
+				if (selectFromFileButton != null)
+					selectFromFileButton.enabled = true;
+				if (fileKeywordList != null)
+					fileKeywordList.invalidateList();
+			}
+			
+			protected function keywordInputChangeHandler(event:TextOperationEvent):void
+			{
+				var saneRes:String = isKeywordSane(keyword.text);
+				if (saneRes == "ok")
+				{
+					saveButton.enabled = true;
+					msgLabel.text = "";
+					msgGroup.includeInLayout = false;
+					msgGroup.visible = false;
+				}
+				else
+				{
+					saveButton.enabled = false;
+					msgLabel.text = LangUtil.getString("messages", "regexGroupEntryFeature.popup.add." + saneRes + ".message");
+					msgGroup.includeInLayout = true;
+					msgGroup.visible = true;
 				}
 			}
 			
@@ -133,8 +232,8 @@
 	
 	<s:states>
 		<s:State name="default"/>
-		<s:State name="file"/>
-		<s:State name="text"/>
+		<s:State name="file" enterState="clearInputs()"/>
+		<s:State name="text" enterState="clearInputs()"/>
 		<s:State name="edit"/>
 	</s:states>
 	
@@ -157,60 +256,33 @@
 	
 	<s:Form id="form" includeIn="text, edit"  >
 		<s:FormItem label="@Resource(bundle = 'messages', key = 'regularExpression.name.label')" >
-			<s:TextInput id="keyword" includeIn="text, edit" itemCreationPolicy="immediate"/>
+			<s:TextInput id="keyword" includeIn="text, edit" itemCreationPolicy="immediate"
+						 change="keywordInputChangeHandler(event)"/>
 		</s:FormItem>
 	</s:Form>
 	
 	<s:Button id="selectFromFileButton" label="@Resource(bundle = 'messages', key = 'regularExpression.selectFile.button.label')"
 			  includeIn="file" click="selectButtonHandler(event)"/>
-	<s:Group>
-		<s:List dataProvider="{keywordsFromFileDP}" id="fileKeywordList" includeIn="file" borderVisible="false" width="300" horizontalScrollPolicy="auto">
-			<s:layout>
-				<s:VerticalLayout horizontalAlign="left" gap="4" paddingLeft="10"/>
-			</s:layout>
-			<s:itemRenderer>
-				<fx:Component>
-					
-					<s:ItemRenderer >
-						<fx:Script>
-							<![CDATA[
-								import mx.collections.ArrayCollection;
-								import mx.controls.Alert;
-								import mx.core.FlexGlobals;
-								import mx.events.FlexEvent;
-								protected function selectionChangeHandler(event:Event):void
-								{
-									if(event.currentTarget.selected == true)
-									{
-										RegularExpressionGroupPopup.selectedKeyworsFromFile.addItem(data as String);	
-									}
-									else
-									{
-										var temp:ArrayCollection = RegularExpressionGroupPopup.selectedKeyworsFromFile;
-										for(var i:int = 0; i < temp.length; i++)
-										{
-											if(temp[i] == data)
-											{
-												RegularExpressionGroupPopup.selectedKeyworsFromFile.removeItemAt(i);
-												break;
-											}
-										}
-									}
-								}							
-							]]>
-						</fx:Script>
-						<s:CheckBox label="{data as String}" selected="true" change="selectionChangeHandler(event)"/>
-					</s:ItemRenderer>
-				</fx:Component>
-			</s:itemRenderer>
-		</s:List>
+	<s:Group width="100%" height="100%">
+		<util:MyList dataProvider="{keywordsFromFileDP}" id="fileKeywordList" includeIn="file" 
+					 borderVisible="false" width="100%" horizontalScrollPolicy="auto"
+					 itemRenderer="com.mydlp.ui.widget.general.input.RegularExpressionGroupPopupListRenderer"/>
 	</s:Group>
 	
-	<s:Group>
-		<s:layout>
-			<s:HorizontalLayout horizontalAlign="right" verticalAlign="middle" gap="10"/>
-		</s:layout>
-		<s:Button id="saveButton" label="@Resource(bundle = 'messages', key = 'regularExpression.button.save.label')" click="addNewFeature(event)"/>
-		<s:Button label="@Resource(bundle = 'messages', key = 'regularExpression.button.cancel.label')" click="{close()}"/>
-	</s:Group>
+	<s:VGroup width="100%" gap="5" horizontalAlign="center" paddingBottom="10" paddingTop="5">
+		<s:HGroup id="msgGroup" width="100%" includeInLayout="false" visible="false" 
+				  paddingLeft="5" paddingRight="5" gap="5"
+				  verticalAlign="middle" horizontalAlign="left">
+			<s:BitmapImage source="@Embed('/assets/icons/16x16/warning.png')" width="16" height="16"/>
+			<s:Label id="msgLabel" width="100%" text=""/>
+		</s:HGroup> 
+		<s:Group>
+			<s:layout>
+				<s:HorizontalLayout horizontalAlign="right" verticalAlign="middle" gap="10"/>
+			</s:layout>
+			<s:Button id="saveButton" label="@Resource(bundle = 'messages', key = 'regularExpression.button.save.label')" 
+					  click="addNewFeature(event)" enabled="false" />
+			<s:Button label="@Resource(bundle = 'messages', key = 'regularExpression.button.cancel.label')" click="{close()}"/>
+		</s:Group>
+	</s:VGroup>
 </s:TitleWindow>
