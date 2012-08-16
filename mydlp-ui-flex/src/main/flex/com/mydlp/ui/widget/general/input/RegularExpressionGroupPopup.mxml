@@ -193,6 +193,9 @@
 				keywordsFromFileDP = new ArrayCollection();
 				selectedKeywordsFromFile = new ArrayCollection();
 				fileReference = null;
+				msgLabel.text = "";
+				msgGroup.includeInLayout = false;
+				msgGroup.visible = false;
 				if (keyword != null)
 					keyword.text = "";
 				if (saveButton != null)
@@ -200,8 +203,7 @@
 				if (selectFromFileButton != null)
 					selectFromFileButton.enabled = true;
 				if (fileKeywordList != null)
-					fileKeywordList.invalidateList();
-			}
+					fileKeywordList.invalidateList();			}
 			
 			protected function keywordInputChangeHandler(event:TextOperationEvent):void
 			{
