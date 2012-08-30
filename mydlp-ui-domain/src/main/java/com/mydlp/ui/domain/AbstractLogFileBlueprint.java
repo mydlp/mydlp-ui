@@ -2,6 +2,8 @@ package com.mydlp.ui.domain;
 
 import javax.persistence.MappedSuperclass;
 
+import org.hibernate.annotations.Index;
+
 @MappedSuperclass
 public abstract class AbstractLogFileBlueprint extends AbstractEntity {
 	
@@ -26,6 +28,8 @@ public abstract class AbstractLogFileBlueprint extends AbstractEntity {
 	public void setSize(Long size) {
 		this.size = size;
 	}
+
+	@Index(name="hashIndex")
 	public String getMd5Hash() {
 		return md5Hash;
 	}
