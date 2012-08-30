@@ -7,6 +7,7 @@
 	
 	<fx:Script>
 		<![CDATA[
+			import com.mydlp.ui.util.RegexUtil;
 			public var optionContainer:OptionContainer = null;
 		]]>
 	</fx:Script>
@@ -23,10 +24,32 @@
 		<domain:Config id="icapLogPass" />
 		<domain:Config id="icapLogPassLowerLimit" />
 		
+		<mx:RegExpValidator id="smtpHeloNameValidator"
+							source="{smtpHeloNameInput}"
+							property="text"
+							expression="{RegexUtil.domainOrIpRegex()}"
+							valid="{optionContainer.validInput(event)}"
+							invalid="{optionContainer.invalidInput(event)}"/>
+		
+		<mx:RegExpValidator id="smtpNextHopHostValidator"
+							source="{smtpNextHopHostInput}"
+							property="text"
+							expression="{RegexUtil.domainOrIpRegex()}"
+							valid="{optionContainer.validInput(event)}"
+							invalid="{optionContainer.invalidInput(event)}"/>
+		
+		<s:NumberValidator id="smtpNextHopPortValidator"
+						   source="{smtpNextHopPortInput}"
+						   property="text"
+						   minValue="0"
+						   maxValue="65535"
+						   valid="{optionContainer.validInput(event)}"
+						   invalid="{optionContainer.invalidInput(event)}"/>
+		
 		<mx:RegExpValidator id="icapRegExValidator"
 							source="{icapRMP}"
 							property="text"
-							expression="^icap:\/\/([^\s:.]+\.)*([^\s:.]+):\d+\/\S+"
+							expression="{RegexUtil.urlRegex()}"
 							valid="{optionContainer.validInput(event)}"
 							invalid="{optionContainer.invalidInput(event)}"/>
 		
@@ -49,13 +72,13 @@
 		
 		<s:Form>
 			<s:FormItem label="{smtpHeloName.label}">
-				<s:TextInput text="@{smtpHeloName.value}" width="200"/>
+				<s:TextInput id="smtpHeloNameInput" text="@{smtpHeloName.value}" width="200"/>
 			</s:FormItem>
 			<s:FormItem label="{smtpNextHopHost.label}">
-				<s:TextInput text="@{smtpNextHopHost.value}" width="200"/>
+				<s:TextInput id="smtpNextHopHostInput" text="@{smtpNextHopHost.value}" width="200"/>
 			</s:FormItem>
 			<s:FormItem label="{smtpNextHopPort.label}">
-				<s:TextInput text="@{smtpNextHopPort.value}" width="200"/>
+				<s:TextInput id="smtpNextHopPortInput" text="@{smtpNextHopPort.value}" width="200"/>
 			</s:FormItem>
 			<s:FormItem label="{smtpBypassOnFail.label}">
 				<s:CheckBox id="smtpBypassOnFailCheckBox" selected="{smtpBypassOnFail.value == 'true'}" 

@@ -36,6 +36,9 @@
 				validators.push(protocolsTab.icapConValidator);
 				validators.push(enterpriseTab.icapLogPassValidator);
 				validators.push(protocolsTab.icapTTLValidator);
+				validators.push(protocolsTab.smtpHeloNameValidator);
+				validators.push(protocolsTab.smtpNextHopHostValidator);
+				validators.push(protocolsTab.smtpNextHopPortValidator);
 				validators.push(epTab.epLogValidator);
 				validators.push(epTab.epSyncValidator);
 				validators.push(epTab.discSyncValidator);
@@ -103,6 +106,16 @@
 					else if (config.key == "ignore_discover_max_size_exceeded") epTab.ignoreDiscoverFSMaxSizeExceeded = config;
 					
 					else if (config.key == "usb_serial_access_control") miscTab.usbSerialAccessControl = config;
+					
+					else if (config.key == "syslog_acl_host") enterpriseTab.syslogAclHost = config;
+					else if (config.key == "syslog_acl_port") enterpriseTab.syslogAclPort = config;
+					else if (config.key == "syslog_acl_facility") enterpriseTab.syslogAclFacility = config;
+					else if (config.key == "syslog_diag_host") enterpriseTab.syslogDiagHost = config;
+					else if (config.key == "syslog_diag_port") enterpriseTab.syslogDiagPort = config;
+					else if (config.key == "syslog_diag_facility") enterpriseTab.syslogDiagFacility = config;
+					else if (config.key == "syslog_report_host") enterpriseTab.syslogReportHost = config;
+					else if (config.key == "syslog_report_port") enterpriseTab.syslogReportPort = config;
+					else if (config.key == "syslog_report_facility") enterpriseTab.syslogReportFacility = config;
 					
 					visible = true;
 				}
