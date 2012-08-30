@@ -26,7 +26,7 @@
 		<mx:RegExpValidator id="icapRegExValidator"
 							source="{icapRMP}"
 							property="text"
-							expression="^[a-zA-Z\-\/\ ]+$"
+							expression="^icap:\/\/([^\s:.]+\.)*([^\s:.]+):\d+\/\S+"
 							valid="{optionContainer.validInput(event)}"
 							invalid="{optionContainer.invalidInput(event)}"/>
 		
