@@ -22,7 +22,7 @@
 		]]>
 	</fx:Script>
 	
-	<s:Group width="100%" height="100%">
+	<s:Group width="100%" height="100%" toolTip=" " toolTipCreate="createCustomToolTip(event)" >
 		<s:layout>
 			<s:HorizontalLayout verticalAlign="middle"
 								paddingLeft="4" paddingRight="4" gap="2"/>
@@ -30,8 +30,7 @@
 		<s:HGroup width="20" height="20 " verticalAlign="middle">
 			<s:Button skinClass="com.mydlp.ui.skin.DownloadBitmapButton16Skin"
 					  click="{navigateToURL(new URLRequest ('download?id=' + data.id), '_blank')}"
-					  visible="{data.content != null}" toolTip=" "
-					  toolTipCreate="createCustomToolTip(event)"/>	
+					  visible="{data.content != null}" />	
 		</s:HGroup>
 		<s:Label text="{data.filename}" width="100%"/>
 	</s:Group>

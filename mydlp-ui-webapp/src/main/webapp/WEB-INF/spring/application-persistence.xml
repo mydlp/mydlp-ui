@@ -88,6 +88,7 @@
          <value>com.mydlp.ui.domain.EndpointStatus</value>
          <value>com.mydlp.ui.domain.IncidentLog</value>
          <value>com.mydlp.ui.domain.IncidentLogFile</value>
+         <value>com.mydlp.ui.domain.IncidentLogFileBlueprint</value>
          <value>com.mydlp.ui.domain.IncidentLogFileContent</value>
          <value>com.mydlp.ui.domain.IncidentLogRequeueStatus</value>
          <value>com.mydlp.ui.domain.OperationLog</value>

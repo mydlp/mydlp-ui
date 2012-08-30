@@ -3,23 +3,17 @@ package com.mydlp.ui.domain;
 import javax.persistence.MappedSuperclass;
 
 @MappedSuperclass
-public abstract class AbstractLogFileContent extends AbstractEntity {
-
+public abstract class AbstractLogFileBlueprint extends AbstractEntity {
+	
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -8140915893363344335L;
+	private static final long serialVersionUID = -8865569417665841765L;
 	
-	protected String localPath;
+	protected String md5Hash;
 	protected String mimeType;
 	protected Long size;
 
-	public String getLocalPath() {
-		return localPath;
-	}
-	public void setLocalPath(String localPath) {
-		this.localPath = localPath;
-	}
 	public String getMimeType() {
 		return mimeType;
 	}
@@ -32,4 +26,11 @@ public abstract class AbstractLogFileContent extends AbstractEntity {
 	public void setSize(Long size) {
 		this.size = size;
 	}
+	public String getMd5Hash() {
+		return md5Hash;
+	}
+	public void setMd5Hash(String md5Hash) {
+		this.md5Hash = md5Hash;
+	}
+	
 }

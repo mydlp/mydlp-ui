@@ -8,6 +8,7 @@
 	
 	<fx:Script>
 		<![CDATA[
+			import com.mydlp.ui.domain.AbstractLogFileBlueprint;
 			import com.mydlp.ui.domain.IncidentLogFile;
 			import com.mydlp.ui.util.FileUtil;
 			import com.mydlp.ui.util.LangUtil;
@@ -21,7 +22,35 @@
 				 return _text;
 			}
 			public function set text(value:String):void {
-			} 
+			}
+			
+			public function getMasterBlueprint(l:IncidentLogFile): AbstractLogFileBlueprint {
+				if (l == null) return null;
+				if (l.content != null) return l.content;
+				if (l.blueprint != null) return l.blueprint;
+				return null;
+			}
+			
+			protected function hasFilename(l:IncidentLogFile): Boolean {
+				return l != null && l.filename != null && l.filename.length > 0;
+			}
+			
+			protected function hasFileType(l:IncidentLogFile): Boolean {
+				var master:AbstractLogFileBlueprint = getMasterBlueprint(l);
+				return master != null && master.mimeType != null && master.mimeType.length > 0;
+			}
+			
+			protected function hasSize(l:IncidentLogFile): Boolean {
+				var master:AbstractLogFileBlueprint = getMasterBlueprint(l);
+				return master != null && !isNaN(master.size) && master.size > 0;
+			}
+			
+			protected function hasHash(l:IncidentLogFile): Boolean {
+				var master:AbstractLogFileBlueprint = getMasterBlueprint(l);
+				return master != null && master.md5Hash != null && master.md5Hash.length > 0;
+			}
+			
+			
 		]]>
 	</fx:Script>
 	
@@ -49,9 +78,14 @@
 		</s:layout>
 		
 		<s:Label fontWeight="bold" text="@Resource(bundle = 'messages', key = 'log.container.content.download.label')"/>
-		<s:Label text="{LangUtil.getString('messages', 'log.container.content.filename.label') + ': ' + logFile.filename}"/>
-		<s:Label text="{LangUtil.getString('messages', 'log.container.content.size.label') + ': ' + FileUtil.getHumanReadableSize(logFile.content.size)}"/>
-		<s:Label text="{LangUtil.getString('messages', 'log.container.content.type.label') + ': ' + logFile.content.mimeType}"/>
+		<s:Label includeInLayout="{hasFilename(logFile)}" visible="{hasFilename(logFile)}"
+			text="{LangUtil.getString('messages', 'log.container.content.filename.label') + ': ' + logFile.filename}"/>
+		<s:Label includeInLayout="{hasSize(logFile)}" visible="{hasSize(logFile)}" 
+			text="{LangUtil.getString('messages', 'log.container.content.size.label') + ': ' + FileUtil.getHumanReadableSize(getMasterBlueprint(logFile).size)}"/>
+		<s:Label includeInLayout="{hasFileType(logFile)}" visible="{hasFileType(logFile)}"  
+			text="{LangUtil.getString('messages', 'log.container.content.type.label') + ': ' + getMasterBlueprint(logFile).mimeType}"/>
+		<s:Label includeInLayout="{hasHash(logFile)}" visible="{hasHash(logFile)}"  
+			text="{LangUtil.getString('messages', 'log.container.content.md5hash.label') + ': ' + getMasterBlueprint(logFile).md5Hash}"/>
 	
 	</s:Group>
 
