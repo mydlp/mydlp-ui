@@ -32,7 +32,10 @@
 			public var deleteList:ListCollectionView = null;
 			
 			protected static const distancesMatchers:ListCollectionView = new ArrayCollection(new Array(
-				"cc", 
+				"cc",
+				"cc_track1",
+				"cc_track2",
+				"cc_track3",
 				"ssn",
 				"iban",
 				"aba",

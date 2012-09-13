@@ -341,6 +341,9 @@
 			<input:MatcherDefinition data="cc_edate"/>
 			<input:MatcherDefinition data="birthdate"/>
 			<input:MatcherDefinition data="gdate"/>
+			<input:MatcherDefinition data="cc_track1"/>
+			<input:MatcherDefinition data="cc_track2"/>
+			<input:MatcherDefinition data="cc_track3"/>
 		</s:ArrayCollection>
 		
 		<s:Sort id="labelSort">
@@ -378,6 +381,9 @@
 		<s:State name="normal"/>
 		<s:State name="all" stateGroups="matcher,nodistance,nothreshold,noargument"/>
 		<s:State name="cc" stateGroups="matcher,distance,threshold,noargument"/>
+		<s:State name="cc_track1" stateGroups="matcher,distance,threshold,noargument"/>
+		<s:State name="cc_track2" stateGroups="matcher,distance,threshold,noargument"/>
+		<s:State name="cc_track3" stateGroups="matcher,distance,threshold,noargument"/>
 		<s:State name="ssn" stateGroups="matcher,distance,threshold,noargument"/>
 		<s:State name="iban" stateGroups="matcher,distance,threshold,noargument"/>
 		<s:State name="aba" stateGroups="matcher,distance,threshold,noargument"/>
