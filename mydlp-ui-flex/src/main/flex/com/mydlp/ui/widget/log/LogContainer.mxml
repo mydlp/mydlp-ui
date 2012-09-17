@@ -23,6 +23,7 @@
 			import mx.collections.ListCollectionView;
 			import mx.events.FlexEvent;
 			import mx.rpc.AsyncToken;
+			import mx.rpc.events.ResultEvent;
 			
 			import spark.events.GridEvent;
 			
@@ -268,17 +269,27 @@
 				}
 			}
 			
-			protected function onPrintClick(event:MouseEvent):void
+			protected function onExportClick(event:MouseEvent):void
 			{
-				var printableLogContainer:PrintableLogContainer = InteractionUtil.newPopup(PrintableLogContainer) as PrintableLogContainer;
-				printableLogContainer.asyncListDataProvider = logSearchDP;
-				printableLogContainer.populate();
+				exportButton.enabled=false;
+				generateCriteriaList();
+				re.exportExcel(criteriaList);
+			}
+			
+			protected function exportHandler(event:ResultEvent): void
+			{
+				var exportId:String = event.result as String;
+				if (exportId != null)
+					navigateToURL(new URLRequest("export?id="+exportId), '_blank');
+				exportButton.enabled=true;
 			}
 			
 		]]>
 	</fx:Script>
 	<fx:Declarations>
-		<my:remote id="re" destination="logBRS" />
+		<my:remote id="re" destination="logBRS" >
+			<my:method name="exportExcel" result="exportHandler(event)" />
+		</my:remote>
 	</fx:Declarations>
 	
 	<s:states>
@@ -317,7 +328,8 @@
 					  click="onDetailSearchClickHandler(event)"/>
 			<s:Spacer width="100"/>
 			<s:Button label="@Resource(bundle = 'messages', key = 'log.container.export.button.label')" 
-					  click="onPrintClick(event)"/>
+					  id="exportButton"
+					  click="onExportClick(event)"/>
 		</s:HGroup>
 		<s:HGroup width="400" verticalAlign="middle" includeInLayout="{SessionUtil.isEnterprise()}">
 			<s:Button label="@Resource(bundle = 'messages', key = 'log.container.search.fulltext.label')"

@@ -11,6 +11,7 @@ import com.mydlp.ui.dao.IncidentLogDAO;
 import com.mydlp.ui.domain.AuthUser;
 import com.mydlp.ui.domain.IncidentLog;
 import com.mydlp.ui.domain.IncidentLogFileContent;
+import com.mydlp.ui.service.LogExportService;
 import com.mydlp.ui.service.SolrService;
 import com.mydlp.ui.thrift.MyDLPUIThriftService;
 
@@ -29,6 +30,9 @@ public class LogBRSImpl implements LogService
 	
 	@Autowired
 	protected MyDLPUIThriftService myDLPUIThriftService;
+	
+	@Autowired
+	protected LogExportService logExportService;
 
 	@Override
 	public List<IncidentLog> getLogs(List<List<Object>> criteriaList, Integer offset, Integer count) {
@@ -70,6 +74,12 @@ public class LogBRSImpl implements LogService
 	@Override
 	public void requeueIncident(IncidentLog log) {
 		myDLPUIThriftService.requeueIncident(log.getId());
+	}
+
+	@Override
+	public String exportExcel(List<List<Object>> criteriaList) {
+		AuthUser currentUser = userService.getCurrentUser();
+		return logExportService.exportExcel(currentUser, criteriaList);
 	}
 
 }

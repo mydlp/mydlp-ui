@@ -23,4 +23,6 @@ public interface LogService {
 	
 	public void requeueIncident(IncidentLog log);
 	
+	public String exportExcel(List<List<Object>> criteriaList);
+	
 }

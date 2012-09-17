@@ -33,6 +33,7 @@
   <import resource="application-persistence.xml"/>
   <import resource="application-dpHibernate.xml"/>
   <import resource="application-security.xml"/>
+  <import resource="application-messages.xml"/>
   
   <!-- Dispatches requests mapped to a MessageBroker -->
   <bean class="org.springframework.flex.servlet.MessageBrokerHandlerAdapter"/>
