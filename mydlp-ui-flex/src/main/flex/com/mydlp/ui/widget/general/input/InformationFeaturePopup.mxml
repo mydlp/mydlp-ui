@@ -344,6 +344,8 @@
 			<input:MatcherDefinition data="cc_track1"/>
 			<input:MatcherDefinition data="cc_track2"/>
 			<input:MatcherDefinition data="cc_track3"/>
+			<input:MatcherDefinition data="spain_dni"/>
+			<input:MatcherDefinition data="italy_fc"/>
 		</s:ArrayCollection>
 		
 		<s:Sort id="labelSort">
@@ -391,6 +393,8 @@
 		<s:State name="canada_sin" stateGroups="matcher,distance,threshold,noargument"/>
 		<s:State name="france_insee" stateGroups="matcher,distance,threshold,noargument"/>
 		<s:State name="uk_nino" stateGroups="matcher,distance,threshold,noargument"/>
+		<s:State name="spain_dni" stateGroups="matcher,distance,threshold,noargument"/>
+		<s:State name="italy_fc" stateGroups="matcher,distance,threshold,noargument"/>
 		<s:State name="said" stateGroups="matcher,distance,threshold,noargument"/>
 		<s:State name="pan" stateGroups="matcher,distance,threshold,noargument"/>
 		<s:State name="cpf" stateGroups="matcher,distance,threshold,noargument"/>

@@ -52,7 +52,9 @@
 				"gdate",
 				"keyword",
 				"keyword_group",
-				"regex"
+				"regex",
+				"spain_dni",
+				"italy_fc"
 			));
 			
 			protected static const exclusiveMatchers:ListCollectionView = new ArrayCollection(new Array(
