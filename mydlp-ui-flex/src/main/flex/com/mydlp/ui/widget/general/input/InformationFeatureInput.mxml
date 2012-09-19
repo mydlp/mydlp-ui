@@ -54,7 +54,8 @@
 				"keyword_group",
 				"regex",
 				"spain_dni",
-				"italy_fc"
+				"italy_fc",
+				"dna"
 			));
 			
 			protected static const exclusiveMatchers:ListCollectionView = new ArrayCollection(new Array(

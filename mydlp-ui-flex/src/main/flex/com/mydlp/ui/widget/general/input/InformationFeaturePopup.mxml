@@ -346,6 +346,7 @@
 			<input:MatcherDefinition data="cc_track3"/>
 			<input:MatcherDefinition data="spain_dni"/>
 			<input:MatcherDefinition data="italy_fc"/>
+			<input:MatcherDefinition data="dna"/>
 		</s:ArrayCollection>
 		
 		<s:Sort id="labelSort">
@@ -387,6 +388,7 @@
 		<s:State name="cc_track2" stateGroups="matcher,distance,threshold,noargument"/>
 		<s:State name="cc_track3" stateGroups="matcher,distance,threshold,noargument"/>
 		<s:State name="ssn" stateGroups="matcher,distance,threshold,noargument"/>
+		<s:State name="dna" stateGroups="matcher,distance,threshold,noargument"/>
 		<s:State name="iban" stateGroups="matcher,distance,threshold,noargument"/>
 		<s:State name="aba" stateGroups="matcher,distance,threshold,noargument"/>
 		<s:State name="trid" stateGroups="matcher,distance,threshold,noargument"/>
