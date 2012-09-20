@@ -347,6 +347,9 @@
 			<input:MatcherDefinition data="spain_dni"/>
 			<input:MatcherDefinition data="italy_fc"/>
 			<input:MatcherDefinition data="dna"/>
+			<input:MatcherDefinition data="ten_digit"/>
+			<input:MatcherDefinition data="nine_digit"/>
+			<input:MatcherDefinition data="fe_digit"/>
 		</s:ArrayCollection>
 		
 		<s:Sort id="labelSort">
@@ -388,6 +391,9 @@
 		<s:State name="cc_track2" stateGroups="matcher,distance,threshold,noargument"/>
 		<s:State name="cc_track3" stateGroups="matcher,distance,threshold,noargument"/>
 		<s:State name="ssn" stateGroups="matcher,distance,threshold,noargument"/>
+		<s:State name="ten_digit" stateGroups="matcher,distance,threshold,noargument"/>
+		<s:State name="nine_digit" stateGroups="matcher,distance,threshold,noargument"/>
+		<s:State name="fe_digit" stateGroups="matcher,distance,threshold,noargument"/>
 		<s:State name="dna" stateGroups="matcher,distance,threshold,noargument"/>
 		<s:State name="iban" stateGroups="matcher,distance,threshold,noargument"/>
 		<s:State name="aba" stateGroups="matcher,distance,threshold,noargument"/>

@@ -55,7 +55,10 @@
 				"regex",
 				"spain_dni",
 				"italy_fc",
-				"dna"
+				"dna",
+				"ten_digit",
+				"nine_digit",
+				"fe_digit"
 			));
 			
 			protected static const exclusiveMatchers:ListCollectionView = new ArrayCollection(new Array(
