@@ -58,7 +58,9 @@
 				"dna",
 				"ten_digit",
 				"nine_digit",
-				"fe_digit"
+				"fe_digit",
+				"ip",
+				"mac"
 			));
 			
 			protected static const exclusiveMatchers:ListCollectionView = new ArrayCollection(new Array(

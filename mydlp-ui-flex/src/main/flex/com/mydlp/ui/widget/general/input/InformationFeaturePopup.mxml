@@ -350,6 +350,8 @@
 			<input:MatcherDefinition data="ten_digit"/>
 			<input:MatcherDefinition data="nine_digit"/>
 			<input:MatcherDefinition data="fe_digit"/>
+			<input:MatcherDefinition data="ip"/>
+			<input:MatcherDefinition data="mac"/>
 		</s:ArrayCollection>
 		
 		<s:Sort id="labelSort">
@@ -394,6 +396,8 @@
 		<s:State name="ten_digit" stateGroups="matcher,distance,threshold,noargument"/>
 		<s:State name="nine_digit" stateGroups="matcher,distance,threshold,noargument"/>
 		<s:State name="fe_digit" stateGroups="matcher,distance,threshold,noargument"/>
+		<s:State name="ip" stateGroups="matcher,distance,threshold,noargument"/>
+		<s:State name="mac" stateGroups="matcher,distance,threshold,noargument"/>
 		<s:State name="dna" stateGroups="matcher,distance,threshold,noargument"/>
 		<s:State name="iban" stateGroups="matcher,distance,threshold,noargument"/>
 		<s:State name="aba" stateGroups="matcher,distance,threshold,noargument"/>
