@@ -80,8 +80,6 @@
     <ds.log.username>sa</ds.log.username>
     <ds.log.password></ds.log.password>    
 
-    <webapp.messages>locale/messages</webapp.messages>
-
     <session_util.key>Devel</session_util.key>
 
     <jetty.daemon>false</jetty.daemon>
@@ -102,7 +100,6 @@
         <ds.log.url>jdbc:mysql://localhost/mydlp_log?characterEncoding=UTF-8</ds.log.url>
         <ds.log.username>root</ds.log.username>
         <ds.log.password></ds.log.password>   
-	<webapp.messages>WEB-INF/classes/locale/messages</webapp.messages>
 
         <flex.debug>false</flex.debug>
         <flex.optimize>true</flex.optimize>

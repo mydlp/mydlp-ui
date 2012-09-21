@@ -124,9 +124,12 @@ public class LogExportServiceImpl implements LogExportService {
 				cell.setCellStyle(styles.get("cell_normal"));
 				if (log.getSourceIp() != null)
 				{
-					byte[] bytes = BigInteger.valueOf(log.getSourceIp()).toByteArray();
-					InetAddress address = InetAddress.getByAddress(bytes);
-					cell.setCellValue(address.getHostAddress());
+					long l = log.getSourceIp().longValue();
+				    String ipStr = ((l >> 24) & 0xFF) + "." + 
+				                ((l >> 16) & 0xFF) + "." + 
+				                ((l >> 8) & 0xFF) + "." + 
+				                (l & 0xFF); 
+					cell.setCellValue(ipStr);
 				}
 
 				cell = row.createCell(2);
