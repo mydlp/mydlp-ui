@@ -7,8 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.flex.remoting.RemotingDestination;
 import org.springframework.stereotype.Service;
 
-import com.mydlp.ui.dao.ADDomainDAO;
-import com.mydlp.ui.dao.DataFormatDAO;
 import com.mydlp.ui.dao.DocumentDatabaseDAO;
 import com.mydlp.ui.dao.InventoryDAO;
 import com.mydlp.ui.dao.RDBMSConnectionDAO;
@@ -19,23 +17,17 @@ import com.mydlp.ui.domain.AuthUser;
 import com.mydlp.ui.domain.DocumentDatabase;
 
 @Service("objectsBRS")
-@RemotingDestination(serviceAdapter="dpHibernateRemotingAdapter")
+@RemotingDestination
 public class ObjectsBRSImpl implements ObjectsService
 {
 	@Autowired
 	protected InventoryDAO inventoryDAO;
 	
 	@Autowired
-	protected DataFormatDAO dataFormatDAO;
-	
-	@Autowired
 	protected RegularExpressionGroupDAO regexDAO;
 	
 	@Autowired
 	protected DocumentDatabaseDAO documentDatabaseDAO;
-	
-	@Autowired
-	protected ADDomainDAO adDomainDAO;
 	
 	@Autowired
 	protected RDBMSConnectionDAO rdbmsConnectionDAO;
@@ -51,9 +43,7 @@ public class ObjectsBRSImpl implements ObjectsService
 		
 		if(authUser.hasRole(AuthSecurityRole.ROLE_ADMIN))
 		{
-			objects.addAll(dataFormatDAO.getDataFormats());
 			objects.addAll(regexDAO.getRegularExpressionGroups());
-			objects.addAll(adDomainDAO.getADDomains());
 			objects.addAll(rdbmsConnectionDAO.getRDBMSConnections());
 		}
 		if(authUser.hasRole(AuthSecurityRole.ROLE_ADMIN) || authUser.hasRole(AuthSecurityRole.ROLE_CLASSIFIER))
