@@ -8,7 +8,7 @@
   
   <bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
     <property name="basename">
-      <value>${webapp.messages}</value>
+      <value>locale.messages</value>
     </property>
   </bean>
   <bean id="localeResolver" class="org.springframework.web.servlet.i18n.CookieLocaleResolver">

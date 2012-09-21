@@ -232,7 +232,6 @@
 	          <targetPath>WEB-INF</targetPath>
 	          <includes>
 	            <include>spring/application-persistence.xml</include>
-	            <include>spring/application-messages.xml</include>
 	            <include>flex/services-config.xml</include>
 	          </includes>
 	        </resource>
