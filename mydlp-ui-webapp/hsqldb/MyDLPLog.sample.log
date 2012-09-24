@@ -37,7 +37,7 @@ INSERT INTO INCIDENTLOG VALUES(15,'2012-08-13 12:12:12.000000007','',-1,'archive
 INSERT INTO INCIDENTLOG VALUES(16,'2012-08-13 12:12:12.000000007','',-1,'archive_inbound',1,'A','E',167772191,'test@mydlphq.local',TRUE)
 INSERT INTO INCIDENTLOG VALUES(17,'2012-08-13 12:12:12.000000007','www.mydlp.com',1,'score=5',2,'B','P',167772191,'test@mydlphq.local',TRUE)
 INSERT INTO INCIDENTLOG VALUES(18,'2012-08-13 12:12:12.000000007','www.mydlp.com',2,'score=4',4,'B','P',167772191,'demo@mydlphq.local',TRUE)
-INSERT INTO INCIDENTLOG VALUES(19,'2012-08-13 12:12:12.000000007','www.mydlp.com',3,'score=5',3,'Q','P',167772191,'test@mydlphq.local',TRUE)
+INSERT INTO INCIDENTLOG VALUES(19,'2012-08-13 12:12:12.000000007','http://www.mydlp.com/very-very-very-very-very-very-very-very-very-very-very-very-loooooooooooooooooooooooooooong-url',3,'score=5',3,'Q','W',167772191,'test@mydlphq.local',TRUE)
 INSERT INTO INCIDENTLOG VALUES(20,'2012-08-13 12:12:12.000000007','www.mydlp.com',-1,'max_size_exceeded',1,'L','P',167772191,'test@mydlphq.local',TRUE)
 INSERT INTO INCIDENTLOGFILECONTENT VALUES(1,'/var/lib/mydlp/quarantine/hede.txt','text/plain', NULL)
 INSERT INTO INCIDENTLOGFILECONTENT VALUES(2,'/var/lib/mydlp/quarantine/hedo.txt','text/plain',123534)
