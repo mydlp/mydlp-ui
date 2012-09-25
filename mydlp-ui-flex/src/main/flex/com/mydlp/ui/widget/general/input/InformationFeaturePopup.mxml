@@ -220,6 +220,7 @@
 			<input:MatcherDefinition data="cc" />
 			<input:MatcherDefinition data="ssn" />
 			<input:MatcherDefinition data="iban" />
+			<input:MatcherDefinition data="aba" />
 			<input:MatcherDefinition data="trid" />
 			<input:MatcherDefinition data="canada_sin" />
 			<input:MatcherDefinition data="france_insee" />
@@ -267,6 +268,7 @@
 		<s:State name="cc" />
 		<s:State name="ssn" />
 		<s:State name="iban" />
+		<s:State name="aba" />
 		<s:State name="trid" />
 		<s:State name="canada_sin" />
 		<s:State name="france_insee" />
