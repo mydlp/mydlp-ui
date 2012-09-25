@@ -10,9 +10,7 @@ public interface EndpointStatusDAO {
 	
 	public Long getEndpointStatusCount(String searchString);
 	
-	public void upToDateEndpoint(String ipAddress);
-	
-	public void upToDateEndpoint(String ipAddress, String username);
+	public void upToDateEndpoint(String ipAddress, String version, String username);
 	
 	public void outOfDateAllEndpoints();
 	
