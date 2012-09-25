@@ -1,6 +1,7 @@
 package com.mydlp.ui.thrift;
 
 import java.nio.ByteBuffer;
+import java.util.Map;
 import java.util.NoSuchElementException;
 
 import javax.annotation.PostConstruct;
@@ -169,11 +170,11 @@ public class MyDLPUIThriftServiceImpl implements MyDLPUIThriftService {
 	}
 
 	@Override
-	public String registerUserAddress(final String ipAddress, final String userH,
+	public Map<String,String> registerUserAddress(final String ipAddress, final String userH,
 			final ByteBuffer payload) {
-		return call(new ThriftCall<String>() {
+		return call(new ThriftCall< Map<String,String> >() {
 			@Override
-			public String execute(MyDLPUIThriftConnection thriftConnection) throws TException {
+			public Map<String,String> execute(MyDLPUIThriftConnection thriftConnection) throws TException {
 				return thriftConnection.client.registerUserAddress(ipAddress, userH, payload);
 			}
 		});
