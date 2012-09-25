@@ -36,7 +36,7 @@ public class Mydlp_ui {
 
     public void requeueIncident(long Incidentid) throws org.apache.thrift.TException;
 
-    public String registerUserAddress(String Ipaddress, String Userh, ByteBuffer Payload) throws org.apache.thrift.TException;
+    public Map<String,String> registerUserAddress(String Ipaddress, String Userh, ByteBuffer Payload) throws org.apache.thrift.TException;
 
     public String saveLicenseKey(String licenseKey) throws org.apache.thrift.TException;
 
@@ -219,7 +219,7 @@ public class Mydlp_ui {
       sendBase("requeueIncident", args);
     }
 
-    public String registerUserAddress(String Ipaddress, String Userh, ByteBuffer Payload) throws org.apache.thrift.TException
+    public Map<String,String> registerUserAddress(String Ipaddress, String Userh, ByteBuffer Payload) throws org.apache.thrift.TException
     {
       send_registerUserAddress(Ipaddress, Userh, Payload);
       return recv_registerUserAddress();
@@ -234,7 +234,7 @@ public class Mydlp_ui {
       sendBase("registerUserAddress", args);
     }
 
-    public String recv_registerUserAddress() throws org.apache.thrift.TException
+    public Map<String,String> recv_registerUserAddress() throws org.apache.thrift.TException
     {
       registerUserAddress_result result = new registerUserAddress_result();
       receiveBase(result, "registerUserAddress");
@@ -575,7 +575,7 @@ public class Mydlp_ui {
         prot.writeMessageEnd();
       }
 
-      public String getResult() throws org.apache.thrift.TException {
+      public Map<String,String> getResult() throws org.apache.thrift.TException {
         if (getState() != org.apache.thrift.async.TAsyncMethodCall.State.RESPONSE_READ) {
           throw new IllegalStateException("Method call not finished!");
         }
@@ -5167,9 +5167,9 @@ public class Mydlp_ui {
   public static class registerUserAddress_result implements org.apache.thrift.TBase<registerUserAddress_result, registerUserAddress_result._Fields>, java.io.Serializable, Cloneable   {
     private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("registerUserAddress_result");
 
-    private static final org.apache.thrift.protocol.TField SUCCESS_FIELD_DESC = new org.apache.thrift.protocol.TField("success", org.apache.thrift.protocol.TType.STRING, (short)0);
+    private static final org.apache.thrift.protocol.TField SUCCESS_FIELD_DESC = new org.apache.thrift.protocol.TField("success", org.apache.thrift.protocol.TType.MAP, (short)0);
 
-    public String success; // required
+    public Map<String,String> success; // required
 
     /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
     public enum _Fields implements org.apache.thrift.TFieldIdEnum {
@@ -5235,7 +5235,9 @@ public class Mydlp_ui {
     static {
       Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
       tmpMap.put(_Fields.SUCCESS, new org.apache.thrift.meta_data.FieldMetaData("success", org.apache.thrift.TFieldRequirementType.DEFAULT, 
-          new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
+          new org.apache.thrift.meta_data.MapMetaData(org.apache.thrift.protocol.TType.MAP, 
+              new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING), 
+              new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING))));
       metaDataMap = Collections.unmodifiableMap(tmpMap);
       org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(registerUserAddress_result.class, metaDataMap);
     }
@@ -5244,7 +5246,7 @@ public class Mydlp_ui {
     }
 
     public registerUserAddress_result(
-      String success)
+      Map<String,String> success)
     {
       this();
       this.success = success;
@@ -5255,7 +5257,19 @@ public class Mydlp_ui {
      */
     public registerUserAddress_result(registerUserAddress_result other) {
       if (other.isSetSuccess()) {
-        this.success = other.success;
+        Map<String,String> __this__success = new HashMap<String,String>();
+        for (Map.Entry<String, String> other_element : other.success.entrySet()) {
+
+          String other_element_key = other_element.getKey();
+          String other_element_value = other_element.getValue();
+
+          String __this__success_copy_key = other_element_key;
+
+          String __this__success_copy_value = other_element_value;
+
+          __this__success.put(__this__success_copy_key, __this__success_copy_value);
+        }
+        this.success = __this__success;
       }
     }
 
@@ -5268,11 +5282,22 @@ public class Mydlp_ui {
       this.success = null;
     }
 
-    public String getSuccess() {
+    public int getSuccessSize() {
+      return (this.success == null) ? 0 : this.success.size();
+    }
+
+    public void putToSuccess(String key, String val) {
+      if (this.success == null) {
+        this.success = new HashMap<String,String>();
+      }
+      this.success.put(key, val);
+    }
+
+    public Map<String,String> getSuccess() {
       return this.success;
     }
 
-    public registerUserAddress_result setSuccess(String success) {
+    public registerUserAddress_result setSuccess(Map<String,String> success) {
       this.success = success;
       return this;
     }
@@ -5298,7 +5323,7 @@ public class Mydlp_ui {
         if (value == null) {
           unsetSuccess();
         } else {
-          setSuccess((String)value);
+          setSuccess((Map<String,String>)value);
         }
         break;
 
@@ -5393,8 +5418,20 @@ public class Mydlp_ui {
         }
         switch (field.id) {
           case 0: // SUCCESS
-            if (field.type == org.apache.thrift.protocol.TType.STRING) {
-              this.success = iprot.readString();
+            if (field.type == org.apache.thrift.protocol.TType.MAP) {
+              {
+                org.apache.thrift.protocol.TMap _map0 = iprot.readMapBegin();
+                this.success = new HashMap<String,String>(2*_map0.size);
+                for (int _i1 = 0; _i1 < _map0.size; ++_i1)
+                {
+                  String _key2; // required
+                  String _val3; // required
+                  _key2 = iprot.readString();
+                  _val3 = iprot.readString();
+                  this.success.put(_key2, _val3);
+                }
+                iprot.readMapEnd();
+              }
             } else { 
               org.apache.thrift.protocol.TProtocolUtil.skip(iprot, field.type);
             }
@@ -5415,7 +5452,15 @@ public class Mydlp_ui {
 
       if (this.isSetSuccess()) {
         oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
-        oprot.writeString(this.success);
+        {
+          oprot.writeMapBegin(new org.apache.thrift.protocol.TMap(org.apache.thrift.protocol.TType.STRING, org.apache.thrift.protocol.TType.STRING, this.success.size()));
+          for (Map.Entry<String, String> _iter4 : this.success.entrySet())
+          {
+            oprot.writeString(_iter4.getKey());
+            oprot.writeString(_iter4.getValue());
+          }
+          oprot.writeMapEnd();
+        }
         oprot.writeFieldEnd();
       }
       oprot.writeFieldStop();

@@ -352,6 +352,7 @@
 			<input:MatcherDefinition data="fe_digit"/>
 			<input:MatcherDefinition data="ip"/>
 			<input:MatcherDefinition data="mac"/>
+			<input:MatcherDefinition data="icd10"/>
 		</s:ArrayCollection>
 		
 		<s:Sort id="labelSort">
@@ -398,6 +399,7 @@
 		<s:State name="fe_digit" stateGroups="matcher,distance,threshold,noargument"/>
 		<s:State name="ip" stateGroups="matcher,distance,threshold,noargument"/>
 		<s:State name="mac" stateGroups="matcher,distance,threshold,noargument"/>
+		<s:State name="icd10" stateGroups="matcher,distance,threshold,noargument"/>
 		<s:State name="dna" stateGroups="matcher,distance,threshold,noargument"/>
 		<s:State name="iban" stateGroups="matcher,distance,threshold,noargument"/>
 		<s:State name="aba" stateGroups="matcher,distance,threshold,noargument"/>

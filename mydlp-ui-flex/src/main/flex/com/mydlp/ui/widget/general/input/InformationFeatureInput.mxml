@@ -60,7 +60,8 @@
 				"nine_digit",
 				"fe_digit",
 				"ip",
-				"mac"
+				"mac",
+				"icd10"
 			));
 			
 			protected static const exclusiveMatchers:ListCollectionView = new ArrayCollection(new Array(
