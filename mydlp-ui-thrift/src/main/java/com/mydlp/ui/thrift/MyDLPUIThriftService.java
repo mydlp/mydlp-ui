@@ -1,6 +1,7 @@
 package com.mydlp.ui.thrift;
 
 import java.nio.ByteBuffer;
+import java.util.Map;
 
 public interface MyDLPUIThriftService {
 	
@@ -17,7 +18,7 @@ public interface MyDLPUIThriftService {
     
     public void requeueIncident(Integer incidentId);
     
-    public String registerUserAddress(String ipAddress, String userH, ByteBuffer payload);
+    public Map<String,String> registerUserAddress(String ipAddress, String userH, ByteBuffer payload);
     
     public String saveLicenseKey(String licenseKey);
 

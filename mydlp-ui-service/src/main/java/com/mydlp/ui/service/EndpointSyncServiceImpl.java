@@ -1,6 +1,7 @@
 package com.mydlp.ui.service;
 
 import java.nio.ByteBuffer;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,9 +46,12 @@ public class EndpointSyncServiceImpl implements EndpointSyncService {
 	public void asyncRegisterEndpointMetaFun(String ipAddress,
 			String usernameHash, ByteBuffer payload) {
 		try {
-			String endpointUsername = null;
-			endpointUsername = thriftService.registerUserAddress(ipAddress, usernameHash, payload);
-			endpointStatusDAO.upToDateEndpoint(ipAddress, endpointUsername);
+			Map<String,String> endpointMeta = thriftService.registerUserAddress(ipAddress, usernameHash, payload);
+			
+			String endpointUsername = endpointMeta.get("user");
+			String endpointVersion = endpointMeta.get("version");
+			
+			endpointStatusDAO.upToDateEndpoint(ipAddress, endpointVersion, endpointUsername);
 		} catch (Throwable e) {
 			logger.error("Runtime error occured when registering endpoint meta", e);
 		}
