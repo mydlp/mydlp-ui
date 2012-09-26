@@ -19,7 +19,6 @@
 			import com.mydlp.ui.domain.RegularExpression;
 			import com.mydlp.ui.util.InteractionUtil;
 			import com.mydlp.ui.util.LangUtil;
-			import com.mydlp.ui.util.SpecialCharacterUtil;
 			
 			import mx.collections.ListCollectionView;
 			import mx.controls.Alert;
@@ -98,13 +97,8 @@
 					// TODO: there should be regex validation. escaping special characters.
 					if(regexValue.text == "")
 						closePopup = false;
-					else
-					{
-						if(matcherCombobox.selectedItem.data == "keyword")
-							r.regex = SpecialCharacterUtil.escapeSpecialCharacters(regexValue.text, SpecialCharacterUtil.regex);
-						else
-							r.regex = regexValue.text;
-					}
+					
+					r.regex = regexValue.text;
 				}
 				else if(matcherCombobox.selectedItem.data == "document_hash" ||
 						matcherCombobox.selectedItem.data == "document_pdm")
@@ -266,7 +260,7 @@
 				}
 				else if (currentState == "keyword")
 				{
-					return SpecialCharacterUtil.escapeSpecialCharacters(regexValue.text, SpecialCharacterUtil.regex);
+					return regexValue.text;
 				}
 				else if (currentState == "document_hash" || currentState == "document_pdm")
 				{
