@@ -26,6 +26,7 @@
 			import mx.events.PropertyChangeEvent;
 			import mx.events.ToolTipEvent;
 			import mx.events.ValidationResultEvent;
+			import mx.messaging.AbstractConsumer;
 			import mx.states.State;
 			
 			import spark.events.IndexChangeEvent;
@@ -34,6 +35,9 @@
 			
 			[Bindable]
 			public var informationFeatureObject:InformationFeature = null;
+			
+			[Bindable]
+			protected var keywordGroupComboboxDP:ListCollectionView = new ArrayCollection();
 			
 			public var isEdit:Boolean = false;
 			
@@ -371,7 +375,14 @@
 		
 		<my:remote id="rek" destination="regularExpressionGroupBRS">
 			<my:method name="getRegularExpressions" result="{
-					   keywordGroupComboBox.dataProvider = event.result as ListCollectionView;
+					   keywordGroupComboboxDP.addAll(event.result as ListCollectionView);
+					   reb.getBundledKeywordGroups();
+					   }"/>
+		</my:remote>
+		
+		<my:remote id="reb" destination="bundledKeywordGroupBRS">
+			<my:method name="getBundledKeywordGroups" result="{
+					   keywordGroupComboboxDP.addAll(event.result as ListCollectionView);
 					   keywordGroupComboBox.selectedItem = getNCArgument();
 					   refreshButtonState();
 					   }"/>
@@ -457,7 +468,7 @@
 						creationComplete="{re.getDocumentDatabases()}" change="{refreshButtonState();}"/>
 		</s:FormItem>
 		<s:FormItem includeIn="keyword_group" label="@Resource(bundle = 'messages', key = 'matcher.keywordGroup.label')">
-			<s:ComboBox id="keywordGroupComboBox" labelField="label" width="100%"
+			<s:ComboBox id="keywordGroupComboBox" labelField="label" width="100%" dataProvider="{keywordGroupComboboxDP}"
 						creationComplete="{rek.getRegularExpressions()}" change="refreshButtonState();"/>
 		</s:FormItem>
 	</s:Form>			

@@ -69,6 +69,7 @@
          <value>com.mydlp.ui.domain.WebRule</value>
          <value>com.mydlp.ui.domain.DiscoveryRule</value>
          <value>com.mydlp.ui.domain.LicenseInformation</value>
+         <value>com.mydlp.ui.domain.BundledKeywordGroup</value>
        </list>
      </property>
      <property name="hibernateProperties">
