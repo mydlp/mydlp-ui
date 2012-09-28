@@ -33,10 +33,22 @@ public class _000_00034_Bundled_KeywordList extends AbstractGranule {
 		bcg4.setDescriptionKey("sensitive.diseases.descriptionKey");
 		bcg4.setName("Sensitive Disease Names");
 		
+		BundledKeywordGroup bcg5 = new BundledKeywordGroup();
+		bcg5.setFilename("sensitiveDrugs/filepath");
+		bcg5.setDescriptionKey("sensitive.drugs.descriptionKey");
+		bcg5.setName("Sensitive Drug Names");
+		
+		BundledKeywordGroup bcg6 = new BundledKeywordGroup();
+		bcg6.setFilename("names/filepath");
+		bcg6.setDescriptionKey("names.descriptionKey");
+		bcg6.setName("Names");
+		
 		getHibernateTemplate().saveOrUpdate(bcg);
 		getHibernateTemplate().saveOrUpdate(bcg1);
 		getHibernateTemplate().saveOrUpdate(bcg2);
 		getHibernateTemplate().saveOrUpdate(bcg3);
 		getHibernateTemplate().saveOrUpdate(bcg4);
+		getHibernateTemplate().saveOrUpdate(bcg5);
+		getHibernateTemplate().saveOrUpdate(bcg6);
 	}
 }
