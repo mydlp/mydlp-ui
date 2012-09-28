@@ -12,11 +12,13 @@
 	<fx:Script>
 		<![CDATA[
 			import com.mydlp.ui.domain.Argument;
+			import com.mydlp.ui.domain.BundledKeywordGroup;
 			import com.mydlp.ui.domain.InformationFeature;
 			import com.mydlp.ui.domain.Matcher;
 			import com.mydlp.ui.domain.MatcherArgument;
 			import com.mydlp.ui.domain.NonCascadingArgument;
 			import com.mydlp.ui.domain.RegularExpression;
+			import com.mydlp.ui.util.CastListUtil;
 			import com.mydlp.ui.util.InteractionUtil;
 			import com.mydlp.ui.util.LangUtil;
 			
@@ -382,7 +384,7 @@
 		
 		<my:remote id="reb" destination="bundledKeywordGroupBRS">
 			<my:method name="getBundledKeywordGroups" result="{
-					   keywordGroupComboboxDP.addAll(event.result as ListCollectionView);
+					   keywordGroupComboboxDP.addAll(CastListUtil.castMembersOfList(event.result as ListCollectionView, BundledKeywordGroup));
 					   keywordGroupComboBox.selectedItem = getNCArgument();
 					   refreshButtonState();
 					   }"/>
