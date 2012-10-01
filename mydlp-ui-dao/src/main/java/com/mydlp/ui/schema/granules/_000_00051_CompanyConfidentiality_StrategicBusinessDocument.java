@@ -20,7 +20,7 @@ import com.mydlp.ui.domain.MatcherArgument;
 import com.mydlp.ui.domain.NonCascadingArgument;
 import com.mydlp.ui.schema.AbstractGranule;
 
-public class _000_00051_StrategicBusinessDocument_Keyword extends AbstractGranule {
+public class _000_00051_CompanyConfidentiality_StrategicBusinessDocument extends AbstractGranule {
 
 	@Override
 	protected void callback() {
@@ -44,14 +44,19 @@ public class _000_00051_StrategicBusinessDocument_Keyword extends AbstractGranul
 					.add(Restrictions.eq("descriptionKey", "strategic.business.document.descriptionKey"));
 		@SuppressWarnings("unchecked")
 		List<BundledKeywordGroup> list3 = getHibernateTemplate().findByCriteria(criteria3);
-		BundledKeywordGroup names = DAOUtil.getSingleResult(list3);
+		BundledKeywordGroup sbdKeyword = DAOUtil.getSingleResult(list3);
+		
+		InventoryCategory sbd = new InventoryCategory();
+		sbd.setNameKey("inventory.compliance.company_confidentiality.strategicBusinessDocument.predefined");
+		sbd.setEditable(false);
+		sbd.setCategory(company);
 	
 		Matcher matcherSBD = new Matcher();
 		matcherSBD.setFunctionName("keyword_group");
 		
 		NonCascadingArgument nonCascadingArgumentSBD = new NonCascadingArgument(); 	
 		MatcherArgument matcherArgument = new MatcherArgument();
-		nonCascadingArgumentSBD.setArgument(names);
+		nonCascadingArgumentSBD.setArgument(sbdKeyword);
 		matcherArgument.setCoupledMatcher(matcherSBD);
 		matcherArgument.setCoupledArgument(nonCascadingArgumentSBD);
 		List<MatcherArgument> matcherArguments = new ArrayList<MatcherArgument>();
@@ -81,12 +86,13 @@ public class _000_00051_StrategicBusinessDocument_Keyword extends AbstractGranul
 		inventoryItem.setItem(informationType);
 		informationType.setCoupledInventoryItem(inventoryItem);
 
-		inventoryItem.setCategory(company);
+		inventoryItem.setCategory(sbd);
 		List<InventoryBase> dtc = new ArrayList<InventoryBase>();
 		dtc.add(inventoryItem);
-		company.setChildren(dtc);
+		sbd.setChildren(dtc);
 		
 		getHibernateTemplate().saveOrUpdate(company);
+		getHibernateTemplate().saveOrUpdate(sbd);
 		getHibernateTemplate().saveOrUpdate(inventoryItem);
 	}
 }
