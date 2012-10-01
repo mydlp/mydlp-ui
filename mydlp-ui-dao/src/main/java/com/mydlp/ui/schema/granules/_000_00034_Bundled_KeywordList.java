@@ -68,6 +68,11 @@ public class _000_00034_Bundled_KeywordList extends AbstractGranule {
 		bcg11.setDescriptionKey("resume.for.hr.cv.descriptionKey");
 		bcg11.setName("Curriculum Vitae Keywords");
 		
+		BundledKeywordGroup bcg12 = new BundledKeywordGroup();
+		bcg12.setFilename("networkPatterns/filepath");
+		bcg12.setDescriptionKey("network.patterns.descriptionKey");
+		bcg12.setName("Network Patterns Keywords");
+		
 		getHibernateTemplate().saveOrUpdate(bcg);
 		getHibernateTemplate().saveOrUpdate(bcg1);
 		getHibernateTemplate().saveOrUpdate(bcg2);
@@ -80,5 +85,6 @@ public class _000_00034_Bundled_KeywordList extends AbstractGranule {
 		getHibernateTemplate().saveOrUpdate(bcg9);
 		getHibernateTemplate().saveOrUpdate(bcg10);
 		getHibernateTemplate().saveOrUpdate(bcg11);
+		getHibernateTemplate().saveOrUpdate(bcg12);
 	}
 }

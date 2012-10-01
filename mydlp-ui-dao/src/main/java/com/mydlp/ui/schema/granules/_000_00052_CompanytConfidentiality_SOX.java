@@ -83,12 +83,12 @@ public class _000_00052_CompanytConfidentiality_SOX extends AbstractGranule {
 		matcher10K.setMatcherArguments(matcherArguments1);
 		
 		InformationFeature informationFeature = new InformationFeature();
-		informationFeature.setThreshold(new Long(1));
+		informationFeature.setThreshold(new Long(1));//must be revised according to the 10K keyword list
 		informationFeature.setMatcher(matcher10K);
 		matcher10K.setCoupledInformationFeature(informationFeature);
 		
 		InformationFeature informationFeature1 = new InformationFeature();
-		informationFeature1.setThreshold(new Long(1));
+		informationFeature1.setThreshold(new Long(1));//must be revised according to the 10K keyword list
 		informationFeature1.setMatcher(matcher10Q);
 		matcher10Q.setCoupledInformationFeature(informationFeature);
 		
@@ -113,13 +113,13 @@ public class _000_00052_CompanytConfidentiality_SOX extends AbstractGranule {
 		InformationDescription informationDescription1 = new InformationDescription();
 		List<InformationFeature> ifts1 = new ArrayList<InformationFeature>();
 		informationDescription1.setDistanceEnabled(false);
-		informationDescription1.setDistance(75);
+		informationDescription1.setDistance(75);//must be revised according to the 10K keyword list
 		ifts1.add(informationFeature1);
 		informationDescription1.setFeatures(ifts1);
 		
 		InformationType informationType1 = new InformationType();
 		informationType1.setInformationDescription(informationDescription1);
-		informationType1.setDataFormats(dfs);
+		informationType1.setDataFormats(dfs);//must be revised according to the 10K keyword list
 		
 		InventoryItem inventoryItem1 = new InventoryItem();
 		inventoryItem1.setNameKey("informationType.compliance.company_confidentiality.sox.10q");

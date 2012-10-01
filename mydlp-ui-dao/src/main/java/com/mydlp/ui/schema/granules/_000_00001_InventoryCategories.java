@@ -48,6 +48,12 @@ public class _000_00001_InventoryCategories extends AbstractGranule {
 		complianceCompanyConfidentiality.setCategory(compliance);
 		getHibernateTemplate().saveOrUpdate(complianceCompanyConfidentiality);
 		
+		InventoryCategory networkSecurity = new InventoryCategory();
+		networkSecurity.setNameKey("inventory.compliance.network_security.predefined");
+		networkSecurity.setEditable(false);
+		networkSecurity.setCategory(compliance);
+		getHibernateTemplate().saveOrUpdate(networkSecurity);
+		
 		InventoryCategory userDefined = new InventoryCategory();
 		userDefined.setNameKey("inventory.userDefined");
 		userDefined.setEditable(false);
