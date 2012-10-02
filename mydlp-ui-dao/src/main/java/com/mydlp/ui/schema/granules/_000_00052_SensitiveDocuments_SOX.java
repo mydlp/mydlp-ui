@@ -20,17 +20,17 @@ import com.mydlp.ui.domain.MatcherArgument;
 import com.mydlp.ui.domain.NonCascadingArgument;
 import com.mydlp.ui.schema.AbstractGranule;
 
-public class _000_00052_CompanytConfidentiality_SOX extends AbstractGranule {
+public class _000_00052_SensitiveDocuments_SOX extends AbstractGranule {
 
 	@Override
 	protected void callback() {
 			
 		DetachedCriteria criteria = 
 				DetachedCriteria.forClass(InventoryCategory.class)
-					.add(Restrictions.eq("nameKey", "inventory.compliance.company_confidentiality.predefined"));
+					.add(Restrictions.eq("nameKey", "inventory.compliance.finance.predefined"));
 		@SuppressWarnings("unchecked")
 		List<InventoryCategory> list = getHibernateTemplate().findByCriteria(criteria);
-		InventoryCategory company = DAOUtil.getSingleResult(list);
+		InventoryCategory finance = DAOUtil.getSingleResult(list);
 		
 		DetachedCriteria criteria2 = 
 				DetachedCriteria.forClass(DataFormat.class)
@@ -56,7 +56,7 @@ public class _000_00052_CompanytConfidentiality_SOX extends AbstractGranule {
 		InventoryCategory sox = new InventoryCategory();
 		sox.setNameKey("inventory.compliance.company_confidentiality.sox.predefined");
 		sox.setEditable(false);
-		sox.setCategory(company);
+		sox.setCategory(finance);
 	
 		Matcher matcher10K = new Matcher();
 		matcher10K.setFunctionName("keyword_group");
@@ -94,7 +94,7 @@ public class _000_00052_CompanytConfidentiality_SOX extends AbstractGranule {
 		
 		InformationDescription informationDescription = new InformationDescription();
 		List<InformationFeature> ifts = new ArrayList<InformationFeature>();
-		informationDescription.setDistanceEnabled(false);
+		informationDescription.setDistanceEnabled(true);
 		informationDescription.setDistance(75);
 		ifts.add(informationFeature);
 		informationDescription.setFeatures(ifts);
@@ -112,7 +112,7 @@ public class _000_00052_CompanytConfidentiality_SOX extends AbstractGranule {
 		
 		InformationDescription informationDescription1 = new InformationDescription();
 		List<InformationFeature> ifts1 = new ArrayList<InformationFeature>();
-		informationDescription1.setDistanceEnabled(false);
+		informationDescription1.setDistanceEnabled(true);
 		informationDescription1.setDistance(75);//must be revised according to the 10K keyword list
 		ifts1.add(informationFeature1);
 		informationDescription1.setFeatures(ifts1);
@@ -133,7 +133,7 @@ public class _000_00052_CompanytConfidentiality_SOX extends AbstractGranule {
 		dtc.add(inventoryItem1);
 		sox.setChildren(dtc);
 		
-		getHibernateTemplate().saveOrUpdate(company);
+		getHibernateTemplate().saveOrUpdate(finance);
 		getHibernateTemplate().saveOrUpdate(sox);
 		getHibernateTemplate().saveOrUpdate(inventoryItem);
 		getHibernateTemplate().saveOrUpdate(inventoryItem1);

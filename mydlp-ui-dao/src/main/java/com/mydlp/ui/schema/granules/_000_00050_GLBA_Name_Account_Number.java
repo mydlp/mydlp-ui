@@ -53,8 +53,8 @@ public class _000_00050_GLBA_Name_Account_Number extends AbstractGranule {
 		
 		InformationDescription informationDescription = new InformationDescription();
 		List<InformationFeature> ifts = new ArrayList<InformationFeature>();
-		informationDescription.setDistanceEnabled(false);
-		informationDescription.setDistance(75);
+		informationDescription.setDistanceEnabled(true);
+		informationDescription.setDistance(100);
 		ifts.add(informationFeatureName);
 		ifts.add(informationFeature10);
 		informationDescription.setFeatures(ifts);

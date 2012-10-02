@@ -20,17 +20,17 @@ import com.mydlp.ui.domain.MatcherArgument;
 import com.mydlp.ui.domain.NonCascadingArgument;
 import com.mydlp.ui.schema.AbstractGranule;
 
-public class _000_00053_CompanytConfidentiality_Resume_For_HR extends AbstractGranule {
+public class _000_00058_Finance_India_Documents extends AbstractGranule {
 
 	@Override
 	protected void callback() {
 			
 		DetachedCriteria criteria = 
 				DetachedCriteria.forClass(InventoryCategory.class)
-					.add(Restrictions.eq("nameKey", "inventory.compliance.company_confidentiality.predefined"));
+					.add(Restrictions.eq("nameKey", "inventory.compliance.finance.predefined"));
 		@SuppressWarnings("unchecked")
 		List<InventoryCategory> list = getHibernateTemplate().findByCriteria(criteria);
-		InventoryCategory company = DAOUtil.getSingleResult(list);
+		InventoryCategory finance = DAOUtil.getSingleResult(list);
 		
 		DetachedCriteria criteria2 = 
 				DetachedCriteria.forClass(DataFormat.class)
@@ -41,22 +41,22 @@ public class _000_00053_CompanytConfidentiality_Resume_For_HR extends AbstractGr
 		
 		DetachedCriteria criteria3 = 
 				DetachedCriteria.forClass(BundledKeywordGroup.class)
-					.add(Restrictions.eq("descriptionKey", "resume.for.hr.cv.descriptionKey"));
+					.add(Restrictions.eq("descriptionKey", "finance.indiaDocuments.form16.descriptionKey"));
 		@SuppressWarnings("unchecked")
 		List<BundledKeywordGroup> list3 = getHibernateTemplate().findByCriteria(criteria3);
-		BundledKeywordGroup resumeForHR = DAOUtil.getSingleResult(list3);
+		BundledKeywordGroup personalFinanceTerms = DAOUtil.getSingleResult(list3);
 		
-		InventoryCategory hr = new InventoryCategory();
-		hr.setNameKey("inventory.compliance.company_confidentiality.resumeForHR.predefined");
-		hr.setEditable(false);
-		hr.setCategory(company);
+		InventoryCategory indiaDocuments = new InventoryCategory();
+		indiaDocuments.setNameKey("inventory.compliance.finance.india_documents.predefined");
+		indiaDocuments.setEditable(false);
+		indiaDocuments.setCategory(finance);
 	
 		Matcher matcher = new Matcher();
 		matcher.setFunctionName("keyword_group");
 		
 		NonCascadingArgument nonCascadingArgument = new NonCascadingArgument(); 	
 		MatcherArgument matcherArgument = new MatcherArgument();
-		nonCascadingArgument.setArgument(resumeForHR);
+		nonCascadingArgument.setArgument(personalFinanceTerms);
 		matcherArgument.setCoupledMatcher(matcher);
 		matcherArgument.setCoupledArgument(nonCascadingArgument);
 		List<MatcherArgument> matcherArguments = new ArrayList<MatcherArgument>();
@@ -64,14 +64,14 @@ public class _000_00053_CompanytConfidentiality_Resume_For_HR extends AbstractGr
 		matcher.setMatcherArguments(matcherArguments);
 		
 		InformationFeature informationFeature = new InformationFeature();
-		informationFeature.setThreshold(new Long(1));
+		informationFeature.setThreshold(new Long(10));
 		informationFeature.setMatcher(matcher);
 		matcher.setCoupledInformationFeature(informationFeature);
 		
 		InformationDescription informationDescription = new InformationDescription();
 		List<InformationFeature> ifts = new ArrayList<InformationFeature>();
-		informationDescription.setDistanceEnabled(false);
-		informationDescription.setDistance(75);
+		informationDescription.setDistanceEnabled(true);
+		informationDescription.setDistance(2500);
 		ifts.add(informationFeature);
 		informationDescription.setFeatures(ifts);
 		
@@ -82,17 +82,17 @@ public class _000_00053_CompanytConfidentiality_Resume_For_HR extends AbstractGr
 		informationType.setDataFormats(dfs);
 		
 		InventoryItem inventoryItem = new InventoryItem();
-		inventoryItem.setNameKey("informationType.compliance.company_confidentiality.resumeForHR.CV");
+		inventoryItem.setNameKey("informationType.compliance.finance.indiaDocuments.form16");
 		inventoryItem.setItem(informationType);
 		informationType.setCoupledInventoryItem(inventoryItem);
-		
-		inventoryItem.setCategory(hr);
+
+		inventoryItem.setCategory(indiaDocuments);
 		List<InventoryBase> dtc = new ArrayList<InventoryBase>();
 		dtc.add(inventoryItem);
-		hr.setChildren(dtc);
+		indiaDocuments.setChildren(dtc);
 		
-		getHibernateTemplate().saveOrUpdate(company);
-		getHibernateTemplate().saveOrUpdate(hr);
+		getHibernateTemplate().saveOrUpdate(finance);
+		getHibernateTemplate().saveOrUpdate(indiaDocuments);
 		getHibernateTemplate().saveOrUpdate(inventoryItem);
 	}
 }

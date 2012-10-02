@@ -89,8 +89,8 @@ public class _000_00040_HIPAA_Names_Common_Diseases extends AbstractGranule {
 		
 		InformationDescription informationDescription = new InformationDescription();
 		List<InformationFeature> ifts = new ArrayList<InformationFeature>();
-		informationDescription.setDistanceEnabled(false);
-		informationDescription.setDistance(75);
+		informationDescription.setDistanceEnabled(true);
+		informationDescription.setDistance(1);
 		ifts.add(informationFeatureCD);
 		ifts.add(informationFeatureNames);
 		informationDescription.setFeatures(ifts);

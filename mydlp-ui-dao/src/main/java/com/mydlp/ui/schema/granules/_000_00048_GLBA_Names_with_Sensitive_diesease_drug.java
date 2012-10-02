@@ -135,8 +135,8 @@ public class _000_00048_GLBA_Names_with_Sensitive_diesease_drug extends Abstract
 		
 		InformationDescription informationDescription = new InformationDescription();
 		List<InformationFeature> ifts = new ArrayList<InformationFeature>();
-		informationDescription.setDistanceEnabled(false);
-		informationDescription.setDistance(75);
+		informationDescription.setDistanceEnabled(true);
+		informationDescription.setDistance(100);
 		ifts.add(informationFeatureNames);
 		ifts.add(informationFeatureDrug);
 		informationDescription.setFeatures(ifts);
@@ -154,8 +154,8 @@ public class _000_00048_GLBA_Names_with_Sensitive_diesease_drug extends Abstract
 		
 		InformationDescription informationDescription1 = new InformationDescription();
 		List<InformationFeature> ifts1 = new ArrayList<InformationFeature>();
-		informationDescription1.setDistanceEnabled(false);
-		informationDescription1.setDistance(75);	
+		informationDescription1.setDistanceEnabled(true);
+		informationDescription1.setDistance(100);	
 		ifts1.add(informationFeatureNames1);
 		ifts1.add(informationFeatureDisease);
 		informationDescription1.setFeatures(ifts1);

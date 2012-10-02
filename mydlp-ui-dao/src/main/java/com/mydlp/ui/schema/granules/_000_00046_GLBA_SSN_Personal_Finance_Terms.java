@@ -73,8 +73,8 @@ public class _000_00046_GLBA_SSN_Personal_Finance_Terms extends AbstractGranule 
 		
 		InformationDescription informationDescription = new InformationDescription();
 		List<InformationFeature> ifts = new ArrayList<InformationFeature>();
-		informationDescription.setDistanceEnabled(false);
-		informationDescription.setDistance(75);
+		informationDescription.setDistanceEnabled(true);
+		informationDescription.setDistance(100);
 		ifts.add(informationFeatureSSN);
 		ifts.add(informationFeaturePFT);
 		informationDescription.setFeatures(ifts);

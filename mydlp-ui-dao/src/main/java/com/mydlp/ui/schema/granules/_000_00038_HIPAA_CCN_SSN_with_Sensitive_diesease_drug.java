@@ -75,8 +75,8 @@ public class _000_00038_HIPAA_CCN_SSN_with_Sensitive_diesease_drug extends Abstr
 		
 		InformationDescription informationDescription = new InformationDescription();
 		List<InformationFeature> ifts = new ArrayList<InformationFeature>();
-		informationDescription.setDistanceEnabled(false);
-		informationDescription.setDistance(75);
+		informationDescription.setDistanceEnabled(true);
+		informationDescription.setDistance(100);
 		ifts.add(informationFeatureCC);
 		ifts.add(informationFeatureDisease);
 		informationDescription.setFeatures(ifts);
@@ -122,8 +122,8 @@ public class _000_00038_HIPAA_CCN_SSN_with_Sensitive_diesease_drug extends Abstr
 		
 		InformationDescription informationDescriptionSSN = new InformationDescription();
 		List<InformationFeature> iftsSSN = new ArrayList<InformationFeature>();
-		informationDescriptionSSN.setDistanceEnabled(false);
-		informationDescriptionSSN.setDistance(75);
+		informationDescriptionSSN.setDistanceEnabled(true);
+		informationDescriptionSSN.setDistance(100);
 		iftsSSN.add(informationFeatureSSN);
 		iftsSSN.add(informationFeatureDiseaseSSN);
 		informationDescriptionSSN.setFeatures(iftsSSN);

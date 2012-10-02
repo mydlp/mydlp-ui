@@ -20,17 +20,17 @@ import com.mydlp.ui.domain.MatcherArgument;
 import com.mydlp.ui.domain.NonCascadingArgument;
 import com.mydlp.ui.schema.AbstractGranule;
 
-public class _000_00051_CompanyConfidentiality_StrategicBusinessDocument extends AbstractGranule {
+public class _000_00059_Finance_Investment_Related_Information extends AbstractGranule {
 
 	@Override
 	protected void callback() {
 			
 		DetachedCriteria criteria = 
 				DetachedCriteria.forClass(InventoryCategory.class)
-					.add(Restrictions.eq("nameKey", "inventory.compliance.company_confidentiality.predefined"));
+					.add(Restrictions.eq("nameKey", "inventory.compliance.finance.predefined"));
 		@SuppressWarnings("unchecked")
 		List<InventoryCategory> list = getHibernateTemplate().findByCriteria(criteria);
-		InventoryCategory company = DAOUtil.getSingleResult(list);
+		InventoryCategory finance = DAOUtil.getSingleResult(list);
 		
 		DetachedCriteria criteria2 = 
 				DetachedCriteria.forClass(DataFormat.class)
@@ -41,37 +41,37 @@ public class _000_00051_CompanyConfidentiality_StrategicBusinessDocument extends
 		
 		DetachedCriteria criteria3 = 
 				DetachedCriteria.forClass(BundledKeywordGroup.class)
-					.add(Restrictions.eq("descriptionKey", "strategic.business.document.descriptionKey"));
+					.add(Restrictions.eq("descriptionKey", "finance.investment.related.information.descriptionKey"));
 		@SuppressWarnings("unchecked")
 		List<BundledKeywordGroup> list3 = getHibernateTemplate().findByCriteria(criteria3);
-		BundledKeywordGroup sbdKeyword = DAOUtil.getSingleResult(list3);
+		BundledKeywordGroup investment = DAOUtil.getSingleResult(list3);
 		
-		InventoryCategory sbd = new InventoryCategory();
-		sbd.setNameKey("inventory.compliance.company_confidentiality.strategicBusinessDocument.predefined");
-		sbd.setEditable(false);
-		sbd.setCategory(company);
+		InventoryCategory investmentDocuments = new InventoryCategory();
+		investmentDocuments.setNameKey("inventory.compliance.finance.investmentInformations.predefined");
+		investmentDocuments.setEditable(false);
+		investmentDocuments.setCategory(finance);
 	
-		Matcher matcherSBD = new Matcher();
-		matcherSBD.setFunctionName("keyword_group");
+		Matcher matcher = new Matcher();
+		matcher.setFunctionName("keyword_group");
 		
-		NonCascadingArgument nonCascadingArgumentSBD = new NonCascadingArgument(); 	
+		NonCascadingArgument nonCascadingArgument = new NonCascadingArgument(); 	
 		MatcherArgument matcherArgument = new MatcherArgument();
-		nonCascadingArgumentSBD.setArgument(sbdKeyword);
-		matcherArgument.setCoupledMatcher(matcherSBD);
-		matcherArgument.setCoupledArgument(nonCascadingArgumentSBD);
+		nonCascadingArgument.setArgument(investment);
+		matcherArgument.setCoupledMatcher(matcher);
+		matcherArgument.setCoupledArgument(nonCascadingArgument);
 		List<MatcherArgument> matcherArguments = new ArrayList<MatcherArgument>();
 		matcherArguments.add(matcherArgument);
-		matcherSBD.setMatcherArguments(matcherArguments);
+		matcher.setMatcherArguments(matcherArguments);
 		
 		InformationFeature informationFeature = new InformationFeature();
-		informationFeature.setThreshold(new Long(1));
-		informationFeature.setMatcher(matcherSBD);
-		matcherSBD.setCoupledInformationFeature(informationFeature);
+		informationFeature.setThreshold(new Long(5));
+		informationFeature.setMatcher(matcher);
+		matcher.setCoupledInformationFeature(informationFeature);
 		
 		InformationDescription informationDescription = new InformationDescription();
 		List<InformationFeature> ifts = new ArrayList<InformationFeature>();
-		informationDescription.setDistanceEnabled(false);
-		informationDescription.setDistance(75);
+		informationDescription.setDistanceEnabled(true);
+		informationDescription.setDistance(1000);
 		ifts.add(informationFeature);
 		informationDescription.setFeatures(ifts);
 		
@@ -82,17 +82,17 @@ public class _000_00051_CompanyConfidentiality_StrategicBusinessDocument extends
 		informationType.setDataFormats(dfs);
 		
 		InventoryItem inventoryItem = new InventoryItem();
-		inventoryItem.setNameKey("informationType.compliance.company_confidentiality.strategicBusinessDocuments");
+		inventoryItem.setNameKey("informationType.compliance.finance.invenstmentInformations.relatedDocuments");
 		inventoryItem.setItem(informationType);
 		informationType.setCoupledInventoryItem(inventoryItem);
 
-		inventoryItem.setCategory(sbd);
+		inventoryItem.setCategory(investmentDocuments);
 		List<InventoryBase> dtc = new ArrayList<InventoryBase>();
 		dtc.add(inventoryItem);
-		sbd.setChildren(dtc);
+		investmentDocuments.setChildren(dtc);
 		
-		getHibernateTemplate().saveOrUpdate(company);
-		getHibernateTemplate().saveOrUpdate(sbd);
+		getHibernateTemplate().saveOrUpdate(finance);
+		getHibernateTemplate().saveOrUpdate(investmentDocuments);
 		getHibernateTemplate().saveOrUpdate(inventoryItem);
 	}
 }
