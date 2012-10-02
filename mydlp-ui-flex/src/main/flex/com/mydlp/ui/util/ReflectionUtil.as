@@ -3,6 +3,7 @@ package com.mydlp.ui.util
 	import avmplus.getQualifiedClassName;
 	
 	import com.mydlp.ui.domain.AbstractEntity;
+	import com.mydlp.ui.domain.Argument;
 	import com.mydlp.ui.domain.DocumentDatabase;
 	import com.mydlp.ui.domain.InformationFeature;
 	import com.mydlp.ui.domain.InformationType;
@@ -11,6 +12,7 @@ package com.mydlp.ui.util
 	import com.mydlp.ui.domain.Item;
 	import com.mydlp.ui.domain.Matcher;
 	import com.mydlp.ui.domain.MatcherArgument;
+	import com.mydlp.ui.domain.NonCascadingArgument;
 	import com.mydlp.ui.domain.RegularExpressionGroup;
 	import com.mydlp.ui.domain.Rule;
 	import com.mydlp.ui.domain.RuleItem;
@@ -171,6 +173,11 @@ package com.mydlp.ui.util
 					else if (	sourceObject is InformationType && 
 						classMember.name == "dataFormats" && 
 						classMember.type == ListCollectionView)
+					{
+						targetObject[classMember.name] = sourceObject[classMember.name];
+					}
+					else if (	sourceObject is NonCascadingArgument && 
+						classMember.name == "argument" )
 					{
 						targetObject[classMember.name] = sourceObject[classMember.name];
 					}

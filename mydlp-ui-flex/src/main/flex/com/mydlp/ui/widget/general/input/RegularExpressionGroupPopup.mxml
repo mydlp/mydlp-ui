@@ -15,7 +15,6 @@
 			import com.mydlp.ui.util.FileUtil;
 			import com.mydlp.ui.util.InteractionUtil;
 			import com.mydlp.ui.util.LangUtil;
-			import com.mydlp.ui.util.SpecialCharacterUtil;
 			
 			import mx.collections.ArrayCollection;
 			import mx.collections.ListCollectionView;
@@ -56,9 +55,7 @@
 				{
 					for (var i:int = 0; i < selectedKeywordsFromFile.length; i++)
 					{
-						var escapedRegex:String = SpecialCharacterUtil.escapeSpecialCharacters(
-								selectedKeywordsFromFile.getItemAt(i) as String, 
-								SpecialCharacterUtil.regex);
+						var escapedRegex:String = selectedKeywordsFromFile.getItemAt(i) as String;
 						var newregex:RegularExpressionGroupEntry = new RegularExpressionGroupEntry;
 						newregex.regex = escapedRegex;
 						regularExpressionGroupInput.addEntry(newregex);
@@ -66,7 +63,7 @@
 				}
 				else
 				{
-					regexEntry.regex = SpecialCharacterUtil.escapeSpecialCharacters(keyword.text, SpecialCharacterUtil.regex);
+					regexEntry.regex = keyword.text;
 				
 					if (!isEdit)
 						regularExpressionGroupInput.addEntry(regexEntry);
@@ -177,10 +174,7 @@
 					return "error.keywordFromFile.alreadyAdded";
 				}
 				
-				if (regularExpressionGroupInput.hasRegex(
-					SpecialCharacterUtil.escapeSpecialCharacters(
-							regexStrArg, 
-							SpecialCharacterUtil.regex)))
+				if (regularExpressionGroupInput.hasRegex(regexStrArg))
 				{
 					return "error.keywordFromFile.alreadyIncluded";
 				}
