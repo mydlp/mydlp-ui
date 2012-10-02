@@ -73,8 +73,8 @@ public class _000_00039_HIPAA_DOB_with_Names_drug extends AbstractGranule {
 		
 		InformationDescription informationDescription = new InformationDescription();
 		List<InformationFeature> ifts = new ArrayList<InformationFeature>();
-		informationDescription.setDistanceEnabled(false);
-		informationDescription.setDistance(75);
+		informationDescription.setDistanceEnabled(true);
+		informationDescription.setDistance(100);
 		ifts.add(informationFeatureDOB);
 		ifts.add(informationFeatureNames);
 		informationDescription.setFeatures(ifts);

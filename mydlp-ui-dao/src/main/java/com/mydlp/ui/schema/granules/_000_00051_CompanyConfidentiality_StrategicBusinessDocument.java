@@ -64,14 +64,14 @@ public class _000_00051_CompanyConfidentiality_StrategicBusinessDocument extends
 		matcherSBD.setMatcherArguments(matcherArguments);
 		
 		InformationFeature informationFeature = new InformationFeature();
-		informationFeature.setThreshold(new Long(1));
+		informationFeature.setThreshold(new Long(10));
 		informationFeature.setMatcher(matcherSBD);
 		matcherSBD.setCoupledInformationFeature(informationFeature);
 		
 		InformationDescription informationDescription = new InformationDescription();
 		List<InformationFeature> ifts = new ArrayList<InformationFeature>();
-		informationDescription.setDistanceEnabled(false);
-		informationDescription.setDistance(75);
+		informationDescription.setDistanceEnabled(true);
+		informationDescription.setDistance(2000);
 		ifts.add(informationFeature);
 		informationDescription.setFeatures(ifts);
 		

@@ -78,8 +78,8 @@ public class _000_00054_Network_Security_Patterns_IP extends AbstractGranule {
 		
 		InformationDescription informationDescription = new InformationDescription();
 		List<InformationFeature> ifts = new ArrayList<InformationFeature>();
-		informationDescription.setDistanceEnabled(false);
-		informationDescription.setDistance(150);//must be revised according to the keyword list
+		informationDescription.setDistanceEnabled(true);
+		informationDescription.setDistance(200);//must be revised according to the keyword list
 		ifts.add(informationFeatureIP);
 		ifts.add(informationFeaturePattern);
 		informationDescription.setFeatures(ifts);

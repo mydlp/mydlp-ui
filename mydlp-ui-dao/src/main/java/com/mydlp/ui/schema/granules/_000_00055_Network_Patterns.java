@@ -70,7 +70,7 @@ public class _000_00055_Network_Patterns extends AbstractGranule {
 		
 		InformationDescription informationDescription = new InformationDescription();
 		List<InformationFeature> ifts = new ArrayList<InformationFeature>();
-		informationDescription.setDistanceEnabled(false);
+		informationDescription.setDistanceEnabled(true);
 		informationDescription.setDistance(150);//must be revised according to the keyword list
 		ifts.add(informationFeaturePattern);
 		informationDescription.setFeatures(ifts);

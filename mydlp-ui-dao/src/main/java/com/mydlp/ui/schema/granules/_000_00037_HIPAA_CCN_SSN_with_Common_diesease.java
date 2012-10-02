@@ -117,8 +117,8 @@ public class _000_00037_HIPAA_CCN_SSN_with_Common_diesease extends AbstractGranu
 		
 		InformationDescription informationDescription = new InformationDescription();
 		List<InformationFeature> ifts = new ArrayList<InformationFeature>();
-		informationDescription.setDistanceEnabled(false);
-		informationDescription.setDistance(75);
+		informationDescription.setDistanceEnabled(true);
+		informationDescription.setDistance(100);
 		ifts.add(informationFeatureCC);
 		ifts.add(informationFeatureDrug);
 		informationDescription.setFeatures(ifts);
@@ -136,8 +136,8 @@ public class _000_00037_HIPAA_CCN_SSN_with_Common_diesease extends AbstractGranu
 		
 		InformationDescription informationDescription1 = new InformationDescription();
 		List<InformationFeature> ifts1 = new ArrayList<InformationFeature>();
-		informationDescription1.setDistanceEnabled(false);
-		informationDescription1.setDistance(75);	
+		informationDescription1.setDistanceEnabled(true);
+		informationDescription1.setDistance(100);	
 		ifts1.add(informationFeatureCC1);
 		ifts1.add(informationFeatureDisease);
 		informationDescription1.setFeatures(ifts1);
@@ -219,8 +219,8 @@ public class _000_00037_HIPAA_CCN_SSN_with_Common_diesease extends AbstractGranu
 		
 		InformationDescription informationDescriptionSSN = new InformationDescription();
 		List<InformationFeature> iftsSSN = new ArrayList<InformationFeature>();
-		informationDescriptionSSN.setDistanceEnabled(false);
-		informationDescriptionSSN.setDistance(75);
+		informationDescriptionSSN.setDistanceEnabled(true);
+		informationDescriptionSSN.setDistance(100);
 		iftsSSN.add(informationFeatureSSN);
 		iftsSSN.add(informationFeatureDrugSSN);
 		informationDescriptionSSN.setFeatures(iftsSSN);
@@ -236,8 +236,8 @@ public class _000_00037_HIPAA_CCN_SSN_with_Common_diesease extends AbstractGranu
 		
 		InformationDescription informationDescriptionSSN1 = new InformationDescription();
 		List<InformationFeature> iftsSSN1 = new ArrayList<InformationFeature>();
-		informationDescriptionSSN1.setDistanceEnabled(false);
-		informationDescriptionSSN1.setDistance(75);	
+		informationDescriptionSSN1.setDistanceEnabled(true);
+		informationDescriptionSSN1.setDistance(100);	
 		iftsSSN1.add(informationFeatureSSN1);
 		iftsSSN1.add(informationFeatureDiseaseSSN);
 		informationDescriptionSSN1.setFeatures(iftsSSN1);

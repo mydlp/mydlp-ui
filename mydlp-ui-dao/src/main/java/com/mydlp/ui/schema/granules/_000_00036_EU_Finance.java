@@ -113,8 +113,8 @@ public class _000_00036_EU_Finance extends AbstractGranule {
 		
 		InformationDescription id = new InformationDescription();
 		List<InformationFeature> ifts = new ArrayList<InformationFeature>();
-		id.setDistanceEnabled(false);
-		id.setDistance(75);
+		id.setDistanceEnabled(true);
+		id.setDistance(100);
 		ifts.add(ift);
 		ifts.add(ift1);
 		id.setFeatures(ifts);
@@ -132,8 +132,8 @@ public class _000_00036_EU_Finance extends AbstractGranule {
 		
 		InformationDescription id1 = new InformationDescription();
 		List<InformationFeature> ifts1 = new ArrayList<InformationFeature>();
-		id1.setDistanceEnabled(false);
-		id1.setDistance(75);
+		id1.setDistanceEnabled(true);
+		id1.setDistance(100);
 		ifts1.add(ift3);
 		ifts1.add(ift2);
 		id1.setFeatures(ifts1);
@@ -149,8 +149,8 @@ public class _000_00036_EU_Finance extends AbstractGranule {
 		
 		InformationDescription id2 = new InformationDescription();
 		List<InformationFeature> ifts2 = new ArrayList<InformationFeature>();
-		id2.setDistanceEnabled(false);
-		id2.setDistance(75);
+		id2.setDistanceEnabled(true);
+		id2.setDistance(100);
 		ifts2.add(ift4);
 		ifts2.add(ift5);
 		id2.setFeatures(ifts2);
@@ -166,8 +166,8 @@ public class _000_00036_EU_Finance extends AbstractGranule {
 		
 		InformationDescription id3 = new InformationDescription();
 		List<InformationFeature> ifts3 = new ArrayList<InformationFeature>();
-		id3.setDistanceEnabled(false);
-		id3.setDistance(75);
+		id3.setDistanceEnabled(true);
+		id3.setDistance(100);
 		ifts3.add(ift6);
 		ifts3.add(ift7);
 		id3.setFeatures(ifts3);
