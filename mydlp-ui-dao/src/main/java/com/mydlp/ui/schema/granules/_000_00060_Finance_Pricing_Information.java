@@ -20,7 +20,7 @@ import com.mydlp.ui.domain.MatcherArgument;
 import com.mydlp.ui.domain.NonCascadingArgument;
 import com.mydlp.ui.schema.AbstractGranule;
 
-public class _000_00059_Finance_Investment_Related_Information extends AbstractGranule {
+public class _000_00060_Finance_Pricing_Information extends AbstractGranule {
 
 	@Override
 	protected void callback() {
@@ -41,22 +41,22 @@ public class _000_00059_Finance_Investment_Related_Information extends AbstractG
 		
 		DetachedCriteria criteria3 = 
 				DetachedCriteria.forClass(BundledKeywordGroup.class)
-					.add(Restrictions.eq("descriptionKey", "finance.investment.related.information.descriptionKey"));
+					.add(Restrictions.eq("descriptionKey", "finance.pricing.information.descriptionKey"));
 		@SuppressWarnings("unchecked")
 		List<BundledKeywordGroup> list3 = getHibernateTemplate().findByCriteria(criteria3);
-		BundledKeywordGroup investment = DAOUtil.getSingleResult(list3);
+		BundledKeywordGroup pricingInformation = DAOUtil.getSingleResult(list3);
 		
-		InventoryCategory investmentDocuments = new InventoryCategory();
-		investmentDocuments.setNameKey("inventory.compliance.finance.investmentInformations.predefined");
-		investmentDocuments.setEditable(false);
-		investmentDocuments.setCategory(finance);
+		InventoryCategory pricing = new InventoryCategory();
+		pricing.setNameKey("inventory.compliance.finance.pricing.predefined");
+		pricing.setEditable(false);
+		pricing.setCategory(finance);
 	
 		Matcher matcher = new Matcher();
 		matcher.setFunctionName("keyword_group");
 		
 		NonCascadingArgument nonCascadingArgument = new NonCascadingArgument(); 	
 		MatcherArgument matcherArgument = new MatcherArgument();
-		nonCascadingArgument.setArgument(investment);
+		nonCascadingArgument.setArgument(pricingInformation);
 		matcherArgument.setCoupledMatcher(matcher);
 		matcherArgument.setCoupledArgument(nonCascadingArgument);
 		List<MatcherArgument> matcherArguments = new ArrayList<MatcherArgument>();
@@ -82,17 +82,17 @@ public class _000_00059_Finance_Investment_Related_Information extends AbstractG
 		informationType.setDataFormats(dfs);
 		
 		InventoryItem inventoryItem = new InventoryItem();
-		inventoryItem.setNameKey("informationType.compliance.finance.invenstmentInformations.relatedDocuments");
+		inventoryItem.setNameKey("informationType.compliance.finance.pricing.pricingInformation");
 		inventoryItem.setItem(informationType);
 		informationType.setCoupledInventoryItem(inventoryItem);
 
-		inventoryItem.setCategory(investmentDocuments);
+		inventoryItem.setCategory(pricing);
 		List<InventoryBase> dtc = new ArrayList<InventoryBase>();
 		dtc.add(inventoryItem);
-		investmentDocuments.setChildren(dtc);
+		pricing.setChildren(dtc);
 		
 		getHibernateTemplate().saveOrUpdate(finance);
-		getHibernateTemplate().saveOrUpdate(investmentDocuments);
+		getHibernateTemplate().saveOrUpdate(pricing);
 		getHibernateTemplate().saveOrUpdate(inventoryItem);
 	}
 }

@@ -83,6 +83,11 @@ public class _000_00034_Bundled_KeywordList extends AbstractGranule {
 		bcg14.setDescriptionKey("finance.investment.related.information.descriptionKey");
 		bcg14.setName("Investment Informations");
 		
+		BundledKeywordGroup bcg15 = new BundledKeywordGroup();
+		bcg15.setFilename("investmentRelatedKeywords/filepath");
+		bcg15.setDescriptionKey("finance.pricing.information.descriptionKey");
+		bcg15.setName("Pricing Informations");
+		
 		getHibernateTemplate().saveOrUpdate(bcg);
 		getHibernateTemplate().saveOrUpdate(bcg1);
 		getHibernateTemplate().saveOrUpdate(bcg2);
@@ -98,5 +103,6 @@ public class _000_00034_Bundled_KeywordList extends AbstractGranule {
 		getHibernateTemplate().saveOrUpdate(bcg12);
 		getHibernateTemplate().saveOrUpdate(bcg13);
 		getHibernateTemplate().saveOrUpdate(bcg14);
+		getHibernateTemplate().saveOrUpdate(bcg15);
 	}
 }
