@@ -20,7 +20,7 @@ import com.mydlp.ui.domain.MatcherArgument;
 import com.mydlp.ui.domain.NonCascadingArgument;
 import com.mydlp.ui.schema.AbstractGranule;
 
-public class _000_00052_CompanytConfidentiality_SOX extends AbstractGranule {
+public class _000_00052_SensitiveDocuments_SOX extends AbstractGranule {
 
 	@Override
 	protected void callback() {
