@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<popup:ClosableTitleWindow xmlns:fx="http://ns.adobe.com/mxml/2009" 
+				xmlns:s="library://ns.adobe.com/flex/spark" 
+				xmlns:mx="library://ns.adobe.com/flex/mx" 
+				xmlns:general="com.mydlp.ui.widget.general.*"
+				title="@Resource(bundle = 'messages', key = 'inventory.newdialog.title')" 
+				xmlns:popup="com.mydlp.ui.widget.general.popup.*" 
+				xmlns:my="http://www.mydlp.com/flex/my"
+				visible="false" 
+				width="300"
+				>
+	<fx:Script>
+		<![CDATA[
+			import com.mydlp.ui.domain.CustomAction;
+			import com.mydlp.ui.domain.CustomActionDescription;
+			import com.mydlp.ui.domain.CustomActionDescriptionSeclore;
+			import com.mydlp.ui.util.InteractionUtil;
+			import com.mydlp.ui.util.LangUtil;
+			
+			import mx.collections.ArrayCollection;
+			import mx.collections.ListCollectionView;
+			
+			public static var secloreEnabled:Boolean = false;
+			
+			[Bindable]
+			protected var irmIntegrationTypes:ListCollectionView = new ArrayCollection();
+			
+			protected function close():void
+			{
+				InteractionUtil.closeCurrentPopup();
+			}
+			
+			public function populate():void
+			{
+				var newTypeList:ListCollectionView = new ArrayCollection(); 
+				if (secloreEnabled)
+					newTypeList.addItem("seclore");
+				irmIntegrationTypes = newTypeList;
+				if (irmIntegrationTypes.length == 0)
+				{
+					noIRMWarningLabel.includeInLayout = true;
+					noIRMWarningLabel.visible = true;
+				}
+				else
+				{
+					typeComboBox.includeInLayout = true;
+					typeComboBox.visible = true;
+				}
+				visible=true;
+			}
+			
+			protected function comboBoxLabelFunction(item:Object):String
+			{
+				if (item == null) return "";
+				if (!item is String) return "";
+				var typeKey:String = item as String;
+				if (typeKey.length < 1) return "";
+				return LangUtil.getString("messages", "options.irm.typeKey." + typeKey );
+			}
+			
+			protected function newCustomAction(): void
+			{
+				if (typeComboBox.selectedItem == null) return;
+				if (!typeComboBox.selectedItem is String) return; 
+				var typeKey:String = typeComboBox.selectedItem as String;
+				if (typeKey.length < 1) return;
+				var cad:CustomActionDescription = null;
+				if (typeKey == "seclore")
+				{
+					cad = new CustomActionDescriptionSeclore();
+				}
+				if (cad == null) return;
+				var ca:CustomAction = new CustomAction();
+				ca.customActionDescription = cad;
+				ca.typeKey = typeKey;
+				cad.coupledCustomAction = ca;
+				close();
+				InteractionUtil.newEditDialog(ca);
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<s:VGroup width="100%" height="100%"
+			  horizontalAlign="center"  verticalAlign="middle"
+			  paddingBottom="10" paddingLeft="10" paddingRight="10" paddingTop="10">
+		<s:Label id="noIRMWarningLabel" includeInLayout="false" visible="false" maxWidth="250"
+				 text="@Resource(bundle = 'messages', key = 'options.irm.newCustomAction.noIRMWarning.label')" />
+		<s:ComboBox id="typeComboBox" includeInLayout="false" visible="false" 
+					dataProvider="{irmIntegrationTypes}" labelFunction="comboBoxLabelFunction"/>
+		<s:Spacer height="50" />
+		<s:Button label="@Resource(bundle = 'messages', key = 'options.irm.newCustomAction.nextButton.label')"
+				  enabled="{typeComboBox.selectedIndex != -1}"
+				  click="{newCustomAction();}"/>
+	</s:VGroup>
+	
+</popup:ClosableTitleWindow>

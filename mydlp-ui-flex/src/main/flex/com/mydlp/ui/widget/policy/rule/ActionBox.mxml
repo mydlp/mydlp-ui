@@ -6,6 +6,7 @@
 					>
 	<fx:Script>
 		<![CDATA[
+			import com.mydlp.ui.domain.CustomAction;
 			import com.mydlp.ui.domain.DiscoveryRule;
 			import com.mydlp.ui.domain.Rule;
 			import com.mydlp.ui.util.LangUtil;
@@ -21,29 +22,45 @@
 			
 			//[Bindable]
 			//public var action:String = Rule.ACTION_PASS;
+			
+			public static function generateCustomActions(customActionsList:ListCollectionView): void
+			{
+				var newActionsList:ListCollectionView = new ArrayCollection();
+				newActionsList.addAll(actionsDefault);
+				for each (var ca:CustomAction in customActionsList)
+				{
+					newActionsList.addItem(new ActionObject(Rule.ACTION_CUSTOM, ca));
+				}
+				actionsCustom = newActionsList;
+			}
 
 			[Bindable]
 			public var ruleObject:Rule;
 			
-			[Bindable]
-			protected var actions:ListCollectionView = 
+			protected static var actionsDefault:ListCollectionView = 
 				new ArrayCollection(
 					new Array(
-						Rule.ACTION_PASS,
-						Rule.ACTION_BLOCK,
-						Rule.ACTION_LOG,
-						Rule.ACTION_QUARANTINE,
-						Rule.ACTION_ARCHIVE
+						new ActionObject(Rule.ACTION_PASS),
+						new ActionObject(Rule.ACTION_BLOCK),
+						new ActionObject(Rule.ACTION_LOG),
+						new ActionObject(Rule.ACTION_QUARANTINE),
+						new ActionObject(Rule.ACTION_ARCHIVE)
 					)
 				);
 			
 			[Bindable]
-			protected var actionsForCommunity:ListCollectionView = 
+			protected static var actions:ListCollectionView = actionsDefault;
+			
+			[Bindable]
+			protected static var actionsCustom:ListCollectionView = new ArrayCollection();
+			
+			[Bindable]
+			protected static var actionsCommunity:ListCollectionView = 
 				new ArrayCollection(
 					new Array(
-						Rule.ACTION_PASS,
-						Rule.ACTION_LOG,
-						Rule.ACTION_BLOCK
+						new ActionObject(Rule.ACTION_PASS),
+						new ActionObject(Rule.ACTION_LOG),
+						new ActionObject(Rule.ACTION_BLOCK)
 					)
 				);
 			
@@ -56,6 +73,9 @@
 						Alert.show(LangUtil.getString("messages", "rule.discovery.deleteaction.warning"),
 							LangUtil.getString("messages", "rule.discovery.deleteaction.warning.title"));
 					}
+				var ao:ActionObject = actionList.selectedItem;
+				ruleObject.action = ao.actionKey;
+				ruleObject.customAction = ao.customAction;
 				ruleObject.save();
 			}
 			
@@ -77,8 +97,63 @@
 				return ruleType;
 			}
 			
-			protected function getActionLabel(action:String): String {
-				return LangUtil.getString("messages","rule.action." + getRuleType(ruleObject) + "." + action + ".label");
+			protected function actionLabelFunction(item:Object): String {
+				if (item == null) return "";
+				if (!item is ActionObject) return "";
+				var ao:ActionObject = item as ActionObject;
+				return getActionLabel(ao.actionKey, ao.customAction);
+			}
+			
+			protected function getActionLabel(actionKey:String, customAction:CustomAction): String {
+				if (actionKey == Rule.ACTION_CUSTOM)
+				{
+					return LangUtil.getString("messages","rule.action.customPrefix.label") + customAction.label;
+				}
+				else
+				{
+					return LangUtil.getString("messages","rule.action." + getRuleType(ruleObject) + "." + actionKey + ".label");
+				}
+			}
+			
+			protected function getComboBoxDataProvider(rule:Rule): ListCollectionView
+			{
+				if (SessionUtil.isEnterprise())
+				{
+					if (rule is DiscoveryRule)
+						return actionsCustom;
+					else
+						return actions;
+				}
+				else
+				{
+					return actionsCommunity;
+				}
+			}
+			
+			protected function actionListCreationCompleteHandler(event:FlexEvent):void
+			{
+				actionList.selectedItem = getCurrentActionObject();
+			}
+			
+			protected function getCurrentActionObject(): ActionObject
+			{
+				for each (var ao:ActionObject in getComboBoxDataProvider(ruleObject))
+				{
+					if (ruleObject.action == Rule.ACTION_CUSTOM)
+					{
+						if (ruleObject.customAction == null)
+							throw new Error("customaction object can not be null for custom action key");
+						if (ao.actionKey == Rule.ACTION_CUSTOM && 
+							ao.customAction.id == ruleObject.customAction.id)
+						return ao;
+					}
+					else 
+					{
+						if (ruleObject.action == ao.actionKey)
+							return ao;
+					}
+				}
+				return null;
 			}
 			
 		]]>
@@ -98,7 +173,8 @@
 	-->
 	<s:Group includeIn="normal, hovered" >
 		<s:Spacer width="20" />
-		<rule:ActionBoxElement ruleType="{getRuleType(ruleObject)}" action="{ruleObject.action}"/>
+		<rule:ActionBoxElement ruleType="{getRuleType(ruleObject)}" 
+							   action="{ruleObject.action}" customAction="{ruleObject.customAction}"/>
 	</s:Group>
 	
 	<s:Group includeIn="selected" >
@@ -112,11 +188,11 @@
 			<s:Spacer width="13" />
 			<s:DropDownList id="actionList" width="120"
 							contentBackgroundAlpha="1"
-							dataProvider="{SessionUtil.isEnterprise()? actions:actionsForCommunity}" 
-							selectedItem="@{ruleObject.action}"
+							dataProvider="{getComboBoxDataProvider(ruleObject)}" 
 							change="actionListChangeHandler(event)" 
-							labelFunction="getActionLabel"
-							itemRendererFunction="actionListItemRendererFunction"/>
+							labelFunction="actionLabelFunction"
+							creationComplete="actionListCreationCompleteHandler(event)"
+							/>
 		</s:Group>
 		<s:Spacer height="19" />
 	</s:Group>

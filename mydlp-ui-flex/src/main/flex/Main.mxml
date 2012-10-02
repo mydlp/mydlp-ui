@@ -255,10 +255,13 @@
 					policyContainer.ruleContainer.refreshRules();
 				if (optionContainer != null)
 				{
+					optionContainer.refresh();
 					if (optionContainer.userManagerTab != null)
 						optionContainer.userManagerTab.refreshUsers();
-					
-					optionContainer.miscTab.usbDeviceCrudGrid.refresh();
+					if (optionContainer.usbAclTab != null)
+						optionContainer.usbAclTab.usbDeviceCrudGrid.refresh();
+					if (optionContainer.irmTab != null)
+						optionContainer.irmTab.refresh();
 				}
 				if (objectsContainer != null)
 					objectsContainer.refreshObjects();

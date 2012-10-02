@@ -145,7 +145,7 @@
 				validateNow();
 			}
 			
-			protected function isSourceRuleItem(item:Item):Boolean
+			public static function isSourceRuleItem(item:Item):Boolean
 			{
 				if(item is Network)
 					return true;
@@ -165,7 +165,7 @@
 				return false;
 			}
 			
-			protected function isITypeRuleItem(item:Item):Boolean
+			public static function isITypeRuleItem(item:Item):Boolean
 			{
 				if(item is InformationType)
 					return true;
@@ -624,14 +624,14 @@
 		
 		<rule:RuleItemBox width="260"
 						  listDataProvider="{sourceDataProvider}"
-						  noneMessage="@Resource(bundle = 'messages', key = 'rulebox.ruleitembox.sources.label')"
+						  noneMessage="@Resource(bundle = 'messages', key = 'rulebox.ruleitembox.sources.nonemessage')"
 						  currentState="{sourceDataProvider.length == 0 ? 'noitem' : 'normal'}" />
 		
 		<rule:RSpacer />
 		
 		<rule:RuleItemBox width="260"
 						  listDataProvider="{matcherDataProvider}"
-						  noneMessage="@Resource(bundle = 'messages', key = 'rulebox.ruleitembox.itypes.label')"
+						  noneMessage="@Resource(bundle = 'messages', key = 'rulebox.ruleitembox.itypes.nonemessage')"
 						  currentState="{matcherDataProvider.length == 0 ? 'noitem' : 'normal'}" />
 		
 		<rule:RSpacer />

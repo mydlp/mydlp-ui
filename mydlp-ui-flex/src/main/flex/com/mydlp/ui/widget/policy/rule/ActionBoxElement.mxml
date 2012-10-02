@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
 		 xmlns:s="library://ns.adobe.com/flex/spark" 
-		 xmlns:mx="library://ns.adobe.com/flex/mx" width="100%" height="24"
+		 xmlns:mx="library://ns.adobe.com/flex/mx" width="100%" height="24" 
 		 >
 	
 	 <fx:Script>
 		<![CDATA[
+			import com.mydlp.ui.domain.CustomAction;
 			import com.mydlp.ui.domain.Rule;
 			import com.mydlp.ui.util.LangUtil;
 			
@@ -13,7 +14,7 @@
 			import mx.events.FlexEvent;
 			
 			[Bindable]
-			public var action:String;
+			public var customAction:CustomAction;
 			
 			[Embed('/assets/icons/16x16/accept.png')]
 			public static const passIcon:Class;
@@ -30,6 +31,9 @@
 			[Embed('/assets/icons/16x16/briefcase.png')]
 			public static const archieveIcon:Class;
 			
+			[Embed('/assets/icons/16x16/record.png')]
+			public static const customIcon:Class;
+			
 			protected static function getIcon(actionValue:String): Class
 			{
 				if(actionValue == Rule.ACTION_PASS)
@@ -42,14 +46,29 @@
 					return quarantineIcon;
 				else if(actionValue == Rule.ACTION_ARCHIVE)
 					return archieveIcon;
+				else if (actionValue == Rule.ACTION_CUSTOM)
+					return customIcon;
 				
 				return logIcon;
+			}
+			
+			protected function getLabel(_ruleType:String, _action:String, _customAction:CustomAction): String
+			{
+				if (_action == Rule.ACTION_CUSTOM)
+				{
+					return LangUtil.getString("messages","rule.action.customPrefix.label") + customAction.label;
+				}
+				else
+				{
+					return LangUtil.getString("messages","rule.action." + _ruleType + "." + _action + ".label");
+				}
 			}
 			
 		]]>
 	</fx:Script>
 	<fx:Declarations>
 		<fx:String id="ruleType"/>
+		<fx:String id="action"/>
 	</fx:Declarations>
 	
 	<s:layout>
@@ -60,7 +79,7 @@
 	
 	<s:BitmapImage id="actionIcon" source="{getIcon(action)}"/>
 	
-	<s:Label text="{LangUtil.getString('messages','rule.action.'+ruleType+'.'+action+'.label')}"/>
+	<s:Label text="{getLabel(ruleType, action, customAction)}"/>
 	
 	
 </s:Group>

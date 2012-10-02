@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="utf-8"?>
+<option:ConfigTabBox xmlns:fx="http://ns.adobe.com/mxml/2009" 
+					 xmlns:s="library://ns.adobe.com/flex/spark" 
+					 xmlns:mx="library://ns.adobe.com/flex/mx" 
+					 xmlns:my="http://www.mydlp.com/flex/my"
+					 xmlns:option="com.mydlp.ui.widget.option.*"
+					 xmlns:domain="com.mydlp.ui.domain.*"
+					 creationComplete="reset()">
+	
+	<fx:Script>
+		<![CDATA[
+			import com.mydlp.ui.domain.CustomAction;
+			import com.mydlp.ui.domain.CustomActionDescriptionSeclore;
+			import com.mydlp.ui.util.InteractionUtil;
+			import com.mydlp.ui.util.LangUtil;
+			import com.mydlp.ui.util.RegexUtil;
+			import com.mydlp.ui.util.SessionUtil;
+			
+			import mx.collections.ArrayCollection;
+			import mx.collections.ListCollectionView;
+			import mx.events.FlexEvent;
+			import mx.rpc.events.ResultEvent;
+			
+			public var optionContainer:OptionContainer = null;
+			
+			[Bindable]
+			protected var customActions:ListCollectionView = new ArrayCollection();
+			
+			protected var searchString:String = null;
+			
+			private function customActionLabelFunction(item:Object, column:GridColumn):String{
+				if (item == null) return "";
+				if (!item is CustomAction) return "";
+				var ca:CustomAction = item as CustomAction;
+				if (column.dataField == "type")
+				{
+					return LangUtil.getString("messages", "options.irm.typeKey." + ca.typeKey);
+				}
+				else if (column.dataField == "description")
+				{
+					if (ca.customActionDescription is CustomActionDescriptionSeclore)
+					{
+						var cas:CustomActionDescriptionSeclore = ca.customActionDescription as CustomActionDescriptionSeclore;
+						return "[HotFolder Id: " + cas.hotFolderId + "] " + cas.activityComment;
+					}
+				}
+				return "";
+			}
+			
+			protected function getCustomActionsHandler(event:ResultEvent): void
+			{
+				customActions = event.result as ListCollectionView;
+			}
+			
+			protected function search(): void 
+			{
+				if (searchStrTextInput.text == null || searchStrTextInput.text == "")
+				{
+					searchString = null;
+				}
+				else
+				{
+					searchString = searchStrTextInput.text;
+				}
+				re.getCustomActions(searchString);
+			}
+			
+			protected function reset(): void 
+			{
+				searchStrTextInput.text = "";
+				searchString = null;
+				search();
+			}
+			
+			public function refresh(): void
+			{
+				search();
+			}
+			
+			protected function populateCustomActionDialog(): void
+			{
+				var popup:IRMCustomActionPopup = 
+					InteractionUtil.newPopup(IRMCustomActionPopup) as IRMCustomActionPopup;
+				popup.populate();
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<fx:Declarations>
+		<domain:Config id="secloreFSEnable" />
+		<domain:Config id="secloreFSAddress" />
+		<domain:Config id="secloreFSPort" />
+		<domain:Config id="secloreFSAppName" />
+		<domain:Config id="secloreFSHotFolderCabinetId" />	
+		<domain:Config id="secloreFSHotFolderCabinetPassphrase" />
+		<domain:Config id="secloreFSServerPoolSize" />
+		<domain:Config id="secloreFSEndpointPoolSize" />
+		
+		<s:NumberValidator id="secloreFSPortValidator"
+						   source="{secloreFSPortInput}"
+						   property="text"
+						   minValue="1"
+						   maxValue="65535"
+						   valid="{optionContainer.validInput(event)}"
+						   invalid="{optionContainer.invalidInput(event)}"/>
+		
+		<mx:RegExpValidator id="secloreFSAddressValidator"
+							source="{secloreFSAddressInput}"
+							property="text"
+							expression="{RegexUtil.domainOrIpRegex()}"
+							valid="{optionContainer.validInput(event)}"
+							invalid="{optionContainer.invalidInput(event)}"/>
+		
+		<s:NumberValidator id="secloreFSHotFolderCabinetIdValidator"
+						   source="{secloreFSHotFolderCabinetIdInput}"
+						   property="text"
+						   minValue="1"
+						   valid="{optionContainer.validInput(event)}"
+						   invalid="{optionContainer.invalidInput(event)}"/>
+		
+		<mx:RegExpValidator id="secloreFSAppNameValidator"
+							source="{secloreFSAppNameInput}"
+							property="text"
+							expression="{RegexUtil.domainOrIpRegex()}"
+							valid="{optionContainer.validInput(event)}"
+							invalid="{optionContainer.invalidInput(event)}"/>
+		
+		<s:NumberValidator id="secloreFSServerPoolSizeValidator"
+						   source="{secloreFSServerPoolSizeInput}"
+						   property="text"
+						   minValue="1"
+						   maxValue="128"
+						   valid="{optionContainer.validInput(event)}"
+						   invalid="{optionContainer.invalidInput(event)}"/>
+		
+		<s:NumberValidator id="secloreFSEndpointPoolSizeValidator"
+						   source="{secloreFSEndpointPoolSize}"
+						   property="text"
+						   minValue="1"
+						   maxValue="8"
+						   valid="{optionContainer.validInput(event)}"
+						   invalid="{optionContainer.invalidInput(event)}"/>
+		
+	
+		<my:remote id="re" destination="customActionBRS">
+			<my:method name="getCustomActions" result="getCustomActionsHandler(event)" />
+		</my:remote>
+			
+	</fx:Declarations>
+	
+	<s:VGroup width="100%" height="100%">
+		<s:HGroup width="100%" height="100%" paddingTop="10">
+			<s:VGroup width="40%" height="100%">
+				<s:Label text="@Resource(bundle = 'messages', key = 'options.irm.seclore.title')" 
+						 paddingTop="15" paddingLeft="15" fontWeight="bold" fontSize="14"/>
+				<s:Form width="100%" height="100%">
+					<s:FormItem label="{secloreFSEnable.label}">
+						<s:CheckBox id="secloreFSEnableCheckBox" selected="{secloreFSEnable.value == 'true'}" 
+									change="{secloreFSEnable.value = secloreFSEnableCheckBox.selected ? 'true' : 'false'}"/>			
+					</s:FormItem>
+					<s:FormItem label="{secloreFSAddress.label}">
+						<s:TextInput id="secloreFSAddressInput" text="@{secloreFSAddress.value}" width="200" 
+									 enabled="{secloreFSEnableCheckBox.selected}"/>
+					</s:FormItem>
+					<s:FormItem label="{secloreFSPort.label}">
+						<s:TextInput id="secloreFSPortInput" text="@{secloreFSPort.value}" width="200" 
+									 enabled="{secloreFSEnableCheckBox.selected}"/>
+					</s:FormItem>
+					<s:FormItem label="{secloreFSAppName.label}">
+						<s:TextInput id="secloreFSAppNameInput" text="@{secloreFSAppName.value}" width="200" 
+									 enabled="{secloreFSEnableCheckBox.selected}"/>
+					</s:FormItem>
+					<s:FormItem label="{secloreFSHotFolderCabinetId.label}">
+						<s:TextInput id="secloreFSHotFolderCabinetIdInput" text="@{secloreFSHotFolderCabinetId.value}" width="200" 
+									 enabled="{secloreFSEnableCheckBox.selected}"/>
+					</s:FormItem>
+					<s:FormItem label="{secloreFSHotFolderCabinetPassphrase.label}">
+						<s:TextInput id="secloreFSHotFolderCabinetPassphraseInput" text="@{secloreFSHotFolderCabinetPassphrase.value}"
+									 displayAsPassword="true"
+									 focusIn="secloreFSHotFolderCabinetPassphraseInput.displayAsPassword = false;"
+									 focusOut="secloreFSHotFolderCabinetPassphraseInput.displayAsPassword = true;"
+									 width="200" enabled="{secloreFSEnableCheckBox.selected}"/>
+					</s:FormItem>
+					<s:FormItem label="{secloreFSServerPoolSize.label}">
+						<s:TextInput id="secloreFSServerPoolSizeInput" text="@{secloreFSServerPoolSize.value}" width="200" 
+									 enabled="{secloreFSEnableCheckBox.selected}"/>
+					</s:FormItem>
+					<s:FormItem label="{secloreFSEndpointPoolSize.label}">
+						<s:TextInput id="secloreFSEndpointPoolSizeInput" text="@{secloreFSEndpointPoolSize.value}" width="200" 
+									 enabled="{secloreFSEnableCheckBox.selected}"/>
+					</s:FormItem>
+				</s:Form>
+			</s:VGroup>
+			<s:VGroup width="60%" height="100%">
+				<s:HGroup width="100%">
+					<s:HGroup horizontalAlign="left" width="50%" >
+						<s:Button skinClass="com.mydlp.ui.skin.AddBitmapLabelButton16Skin"
+								  label="@Resource(key='options.customAction.add.label', bundle='messages')"
+								  click="{populateCustomActionDialog();}"/>
+					</s:HGroup>
+					<s:HGroup horizontalAlign="right" width="50%" >
+						<s:TextInput id="searchStrTextInput" width="150"/>
+						<s:Spacer width="5" />
+						<s:Button label="@Resource(key='options.customAction.search.button.label', bundle='messages')" click="search()"/>
+						<s:Button label="@Resource(key='options.customAction.reset.button.label', bundle='messages')" click="reset()"/>
+					</s:HGroup>
+				</s:HGroup>
+				<s:DataGrid id="customActionsDataGrid" dataProvider="{customActions}" width="100%" height="100%"
+							variableRowHeight="true">
+					<s:columns>
+						<s:ArrayList>
+							<s:GridColumn headerText="@Resource(bundle = 'messages', key = 'options.irm.id')"
+										  dataField="id" width="60"/>
+							<s:GridColumn headerText="@Resource(bundle = 'messages', key = 'options.irm.type')"
+										  dataField="type" labelFunction="customActionLabelFunction"/>
+							<s:GridColumn headerText="@Resource(bundle = 'messages', key = 'options.irm.label')"
+										  dataField="label"/>
+							<s:GridColumn headerText="@Resource(bundle = 'messages', key = 'options.irm.details')"
+										  dataField="description" labelFunction="customActionLabelFunction"/>
+							<s:GridColumn width="60">
+								<s:itemRenderer>
+									<fx:Component>
+										<s:GridItemRenderer>
+											<fx:Script>
+												<![CDATA[
+													import com.mydlp.ui.util.InteractionUtil;
+												]]>
+											</fx:Script>
+											<s:states>
+												<s:State name="normal" />
+												<s:State name="hovered" />
+												<s:State name="selected" />
+											</s:states>
+											<s:HGroup includeIn="selected" width="100%" height="100%"
+													  horizontalAlign="center" verticalAlign="middle" gap="8">
+												<s:Button styleName="editButtonStyle" 
+														  click="{InteractionUtil.newEditDialog(data)}" />
+												<s:Button styleName="removeButtonStyle" 
+														  click="{InteractionUtil.newDeleteDialog(data)}"/>
+											</s:HGroup>
+										</s:GridItemRenderer>
+									</fx:Component>
+								</s:itemRenderer>
+							</s:GridColumn>
+						</s:ArrayList>
+					</s:columns>
+				</s:DataGrid>
+			</s:VGroup>
+		</s:HGroup>
+	</s:VGroup>
+	
+</option:ConfigTabBox>

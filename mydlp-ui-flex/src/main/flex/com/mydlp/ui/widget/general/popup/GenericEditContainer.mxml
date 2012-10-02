@@ -19,6 +19,8 @@
 			import com.mydlp.ui.domain.AbstractNamedEntity;
 			import com.mydlp.ui.domain.AuthSecurityRole;
 			import com.mydlp.ui.domain.AuthUser;
+			import com.mydlp.ui.domain.CustomAction;
+			import com.mydlp.ui.domain.CustomActionDescription;
 			import com.mydlp.ui.domain.DataFormat;
 			import com.mydlp.ui.domain.DocumentDatabase;
 			import com.mydlp.ui.domain.InformationDescription;
@@ -136,6 +138,7 @@
 							classMember.name == "nameKey" ||
 							classMember.name == "icon" ||
 							(classMember.name == "ruleItems" && classMember.type == ListCollectionView) ||
+							(targetObject is Rule && classMember.name == "customAction" && classMember.type == CustomAction) ||
 							classMember.name == "enabled" ||
 							classMember.name == "priority" ||
 							//todo refine password
@@ -146,6 +149,7 @@
 							(classMember.name == "action" && !(targetObject is USBDevice)) ||
 							(classMember.name == "children" && classMember.type == ListCollectionView)||						
 							(classMember.name == "coupledInventoryItem" && classMember.type == InventoryItem) ||
+							(classMember.name == "coupledCustomAction" && classMember.type == CustomAction) ||
 							(classMember.name == "coupledRuleItems" && classMember.type == ListCollectionView) ||
 							(classMember.name == "informationType" && classMember.type == InformationType) ||
 							(classMember.name == "editable" && classMember.type == Boolean) ||
@@ -153,7 +157,8 @@
 							(classMember.name == "root" && classMember.type == ADDomainRoot) ||
 							(classMember.name == "parent" && classMember.type == ADDomainItemGroup) ||
 							(classMember.name == "isDeleted" && classMember.type == Boolean) ||
-							(classMember.name == "settings" && classMember.type == UserSettings)
+							(classMember.name == "settings" && classMember.type == UserSettings) ||
+							(targetObject is CustomAction && classMember.name == "typeKey" && classMember.type == String)
 						)
 					{
 						continue;
@@ -190,6 +195,13 @@
 						if (targetObject.item != null && targetObject.item is Item)
 							(targetObject.item as Item).coupledInventoryItem = targetObject as InventoryItem;
 						populateClassMembers(targetObject.item);
+						continue;
+					}
+					else if (targetObject is CustomAction && classMember.name == "customActionDescription")
+					{
+						if (targetObject.customActionDescription != null && targetObject.customActionDescription is CustomActionDescription)
+							(targetObject.customActionDescription as CustomActionDescription).coupledCustomAction = targetObject as CustomAction;
+						populateClassMembers(targetObject.customActionDescription);
 						continue;
 					}
 					else if (
@@ -628,8 +640,23 @@
 							ErrorTipManager.registerValidator(numberValidator);
 							validators.push(numberValidator);
 						}
+						else if(classMember.name == "hotFolderId"){
+							if(isNaN(targetObject[classMember.name]))
+								textInput.text = new String("");
+							index = 3;
+							var numberValidator3:NumberValidator = new NumberValidator();
+							numberValidator3.source = textInput;
+							numberValidator3.property = "text";
+							numberValidator3.domain = "int";
+							numberValidator3.minValue = "1";
+							ErrorTipManager.registerValidator(numberValidator3);
+							validators.push(numberValidator3);
+						}
+						else if(classMember.name == "activityComment"){
+							index = 6;
+						}
 					}
-					
+					/// TODO: below may be refined
 					if (inputLabel != null)
 					{
 						inputLabel.label = LangUtil.getString("messages", "generic.edit." + getObjectName(targetObject) + "." + classMember.name + ".label");

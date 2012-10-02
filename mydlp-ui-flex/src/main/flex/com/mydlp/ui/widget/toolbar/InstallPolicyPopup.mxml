@@ -2,13 +2,20 @@
 <s:TitleWindow xmlns:fx="http://ns.adobe.com/mxml/2009" 
 			   xmlns:s="library://ns.adobe.com/flex/spark" 
 			   xmlns:mx="library://ns.adobe.com/flex/mx" 
-			   close="{InteractionUtil.closePopup(this)}"
+			   close="{close();}"
 			   title="@Resource(bundle = 'messages', key = 'toptoolbar.install.title')"
 			   width="400" >
 	<fx:Script>
 		<![CDATA[
 			import com.mydlp.ui.util.InteractionUtil;
 
+			protected function close(): void
+			{
+				if (currentState == "completed" ||
+					currentState == "error")
+				InteractionUtil.closePopup(this);
+			}
+			
 		]]>
 	</fx:Script>
 	<s:states>
@@ -17,6 +24,7 @@
 		<s:State name="reload" />
 		<s:State name="logout"/>
 		<s:State name="completed" />
+		<s:State name="error" />
 	</s:states>
 	<s:layout>
 		<s:VerticalLayout verticalAlign="middle" horizontalAlign="center" 
@@ -24,17 +32,21 @@
 							paddingLeft="10" paddingRight="10"/>
 	</s:layout>
 	
-	<s:Label id="installationStatus" 
-			 text.progress="@Resource(bundle = 'messages', key = 'toptoolbar.install.progress.message')"
-			 text.revision="@Resource(bundle = 'messages', key = 'toptoolbar.install.revision.message')"
-			 text.reload="@Resource(bundle = 'messages', key = 'toptoolbar.install.reload.message')"
-			 text.logout="@Resource(bundle = 'messages', key = 'toptoolbar.install.logout.message')"
-			 text.completed="@Resource(bundle = 'messages', key = 'toptoolbar.install.completed.message')"/>
+	<s:HGroup width="100%" horizontalAlign="center" verticalAlign="middle">
+		<s:BitmapImage includeIn="error" source="@Embed('/assets/icons/32x32/warning.png')" />
+		<s:Spacer includeIn="error" width="20" />
+		<s:Label id="installationStatus" maxWidth="350" maxWidth.error="300" 
+				 text.progress="@Resource(bundle = 'messages', key = 'toptoolbar.install.progress.message')"
+				 text.revision="@Resource(bundle = 'messages', key = 'toptoolbar.install.revision.message')"
+				 text.reload="@Resource(bundle = 'messages', key = 'toptoolbar.install.reload.message')"
+				 text.logout="@Resource(bundle = 'messages', key = 'toptoolbar.install.logout.message')"
+				 text.completed="@Resource(bundle = 'messages', key = 'toptoolbar.install.completed.message')"/>
+	</s:HGroup>
 	
 	<s:Spacer height="4" />
 	
-	<s:Button includeIn="completed" label="@Resource(bundle = 'messages', key = 'toptoolbar.install.closeButton.label')"
-			  click="{InteractionUtil.closePopup(this)}" />
+	<s:Button includeIn="completed,error" label="@Resource(bundle = 'messages', key = 'toptoolbar.install.closeButton.label')"
+			  click="{close();}" />
 	
 	
 	

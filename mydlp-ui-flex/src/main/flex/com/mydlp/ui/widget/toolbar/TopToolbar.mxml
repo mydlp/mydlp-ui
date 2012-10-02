@@ -12,6 +12,7 @@
 			import com.mydlp.ui.domain.AuthUser;
 			import com.mydlp.ui.util.InteractionUtil;
 			import com.mydlp.ui.util.LangUtil;
+			import com.mydlp.ui.widget.policy.rule.RuleContainer;
 			
 			import flash.net.navigateToURL;
 			
@@ -107,7 +108,17 @@
 			protected function installPolicyFunc(): void
 			{
 				installPopup = InteractionUtil.newPopup(InstallPolicyPopup) as InstallPolicyPopup;
-				pe.compilePolicy(1);
+				var sanityReturn:String = FlexGlobals.topLevelApplication.ruleContainer.sanityCheck();
+				if (sanityReturn == "ok")
+				{
+					pe.compilePolicy(1);
+				}
+				else
+				{
+					installPopup.currentState = "error";
+					installPopup.installationStatus.text = 
+						LangUtil.getString("messages", "installPolicy.sanityCheck." + sanityReturn);
+				}
 			}
 			
 			public function installPolicyAndReload(): void

@@ -29,7 +29,7 @@
 							  paddingBottom="4" paddingTop="4" />
 		</s:layout>
 		
-		<s:Label text="{noneMessage}" width="100%" alpha="0.4"/>
+		<s:Label text="{noneMessage}" fontStyle="italic"/>
 	
 	</s:Group>
 	

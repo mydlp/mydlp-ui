@@ -12,6 +12,7 @@
 			import com.mydlp.ui.util.SessionUtil;
 			
 			import mx.collections.ListCollectionView;
+			import mx.core.FlexGlobals;
 			import mx.core.UIComponent;
 			import mx.events.ValidationResultEvent;
 			import mx.rpc.events.ResultEvent;
@@ -30,7 +31,7 @@
 				populate();
 			}
 			
-			protected function init():void
+			protected function initValidators(): void
 			{
 				validators.push(protocolsTab.icapRegExValidator);
 				validators.push(protocolsTab.icapConValidator);
@@ -42,7 +43,10 @@
 				validators.push(epTab.epLogValidator);
 				validators.push(epTab.epSyncValidator);
 				validators.push(epTab.discSyncValidator);
-				refresh();
+			}
+			
+			protected function initEnterprise(): void
+			{
 				var tempMiscTab:UIComponent = tabbar.dataGroup.getElementAt(4) as UIComponent;
 				tempMiscTab.visible = SessionUtil.isEnterprise();
 				tempMiscTab.enabled = SessionUtil.isEnterprise();
@@ -51,13 +55,23 @@
 				tempEnterpriseTab.visible = SessionUtil.isEnterprise();
 				tempEnterpriseTab.enabled = SessionUtil.isEnterprise();
 				tempEnterpriseTab.includeInLayout = SessionUtil.isEnterprise();
+				var tempIRMTab:UIComponent = tabbar.dataGroup.getElementAt(6) as UIComponent;
+				tempIRMTab.visible = SessionUtil.isEnterprise();
+				tempIRMTab.enabled = SessionUtil.isEnterprise();
+				tempIRMTab.includeInLayout = SessionUtil.isEnterprise();
+			}
+			
+			protected function init():void
+			{
+				initValidators();
+				refresh();
+				initEnterprise();
 			}
 			
 			public function refresh(): void
 			{
 				re.getConfigs();
 			}
-			
 			
 			protected function populate():void
 			{
@@ -105,7 +119,7 @@
 					else if (config.key == "discover_fs_on_startup") epTab.discoverFSOnStartup = config;
 					else if (config.key == "ignore_discover_max_size_exceeded") epTab.ignoreDiscoverFSMaxSizeExceeded = config;
 					
-					else if (config.key == "usb_serial_access_control") miscTab.usbSerialAccessControl = config;
+					else if (config.key == "usb_serial_access_control") usbAclTab.usbSerialAccessControl = config;
 					
 					else if (config.key == "syslog_acl_host") enterpriseTab.syslogAclHost = config;
 					else if (config.key == "syslog_acl_port") enterpriseTab.syslogAclPort = config;
@@ -116,6 +130,19 @@
 					else if (config.key == "syslog_report_host") enterpriseTab.syslogReportHost = config;
 					else if (config.key == "syslog_report_port") enterpriseTab.syslogReportPort = config;
 					else if (config.key == "syslog_report_facility") enterpriseTab.syslogReportFacility = config;
+					
+					else if (config.key == "seclore_fs_enable")
+					{
+						irmTab.secloreFSEnable = config;
+						IRMCustomActionPopup.secloreEnabled = (config.value == "true");
+					}
+					else if (config.key == "seclore_fs_address") irmTab.secloreFSAddress = config;
+					else if (config.key == "seclore_fs_port") irmTab.secloreFSPort = config;
+					else if (config.key == "seclore_fs_app_name") irmTab.secloreFSAppName = config;
+					else if (config.key == "seclore_fs_hot_folder_cabinet_id") irmTab.secloreFSHotFolderCabinetId = config;
+					else if (config.key == "seclore_fs_hot_folder_cabinet_passphrase") irmTab.secloreFSHotFolderCabinetPassphrase = config;
+					else if (config.key == "seclore_fs_server_pool_size") irmTab.secloreFSServerPoolSize = config;
+					else if (config.key == "seclore_fs_endpoint_pool_size") irmTab.secloreFSEndpointPoolSize= config;
 					
 					visible = true;
 				}
@@ -134,6 +161,8 @@
 			protected function saveAllHandler(event:ResultEvent):void
 			{
 				saveButton.enabled = true;
+				// TODO: may be a local refresh
+				FlexGlobals.topLevelApplication.refresh();
 			}
 			
 			public function invalidInput(event:ValidationResultEvent):void
@@ -187,10 +216,13 @@
 					<option:AdvancedTab id="advancedTab"/>
 				</s:NavigatorContent>
 				<s:NavigatorContent label="@Resource(bundle = 'messages', key = 'options.tab.misc')" width="100%" height="100%">
-					<option:MiscTab id="miscTab"/> <!--enabled="{SessionUtil.isEnterprise()}" visible="{SessionUtil.isEnterprise()}"/>-->
+					<option:USBDeviceTab id="usbAclTab"/> <!--enabled="{SessionUtil.isEnterprise()}" visible="{SessionUtil.isEnterprise()}"/>-->
 				</s:NavigatorContent>
 				<s:NavigatorContent label="@Resource(bundle = 'messages', key = 'options.tab.enterprise')" width="100%" height="100%">
 					<option:EnterpriseTab id="enterpriseTab" optionContainer="{this}"/>
+				</s:NavigatorContent>
+				<s:NavigatorContent label="@Resource(bundle = 'messages', key = 'options.tab.irm')" width="100%" height="100%">
+					<option:IRMTab id="irmTab" optionContainer="{this}"/>
 				</s:NavigatorContent>
 			</mx:ViewStack>
 		</s:VGroup>		

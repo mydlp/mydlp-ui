@@ -90,8 +90,7 @@
 			
 			protected function goToRuleButtonClickHandler(event:MouseEvent):void
 			{
-				FlexGlobals.topLevelApplication.policyContainer.ruleContainer.ruleList.selectedItem = selectedRule;
-				FlexGlobals.topLevelApplication.tapBar.selectedIndex = 1; // index of policy tab
+				FlexGlobals.topLevelApplication.policyContainer.ruleContainer.gotoRule(selectedRule);
 			}
 			
 			protected function requeueButtonClickHandler(event:MouseEvent):void

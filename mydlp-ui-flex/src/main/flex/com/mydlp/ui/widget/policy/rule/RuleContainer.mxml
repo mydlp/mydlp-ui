@@ -11,15 +11,18 @@
 	<fx:Script>
 		<![CDATA[
 			import com.mydlp.ui.domain.ApiRule;
+			import com.mydlp.ui.domain.CustomActionDescriptionSeclore;
 			import com.mydlp.ui.domain.DiscoveryRule;
 			import com.mydlp.ui.domain.EndpointRule;
 			import com.mydlp.ui.domain.MailRule;
 			import com.mydlp.ui.domain.PrinterRule;
 			import com.mydlp.ui.domain.Rule;
+			import com.mydlp.ui.domain.RuleItem;
 			import com.mydlp.ui.domain.WebRule;
 			import com.mydlp.ui.util.InteractionUtil;
 			import com.mydlp.ui.util.LangUtil;
 			import com.mydlp.ui.widget.general.popup.NewRuleDialog;
+			import com.mydlp.ui.widget.option.IRMCustomActionPopup;
 			
 			import mx.collections.ArrayCollection;
 			import mx.collections.ListCollectionView;
@@ -81,7 +84,7 @@
 				//TODO: maintain scrool position
 				//ruleList.invalidateDisplayList();
 				//ruleList.dataGroup.invalidateDisplayList();
-				re.getRules();
+				rec.getCustomActions();
 			}
 			
 			protected function acceptDrop(dragEvent:DragEvent):void
@@ -143,11 +146,78 @@
 				refreshRules();
 			}
 			
+			protected function getCustomActionsHandler(event:ResultEvent): void
+			{
+				var customActions:ListCollectionView = null;
+				if (event.result == null) 
+					customActions = new ArrayCollection();
+				customActions = event.result as ListCollectionView;
+				ActionBox.generateCustomActions(customActions);
+				re.getRules();
+			}
+				
+			public function sanityCheck(): String
+			{
+				var retStr:String = "ok";
+				ruleLoop: for each (var r:Rule in ruleDP)
+				{
+					var hasSource:Boolean = false;
+					var hasIType:Boolean = false;
+					ruleItemLoop: for each (var ri:RuleItem in r.ruleItems)
+					{
+						if (hasSource == false && RuleBoxRenderer.isSourceRuleItem(ri.item))
+							hasSource = true;
+						if (hasIType == false && RuleBoxRenderer.isITypeRuleItem(ri.item))
+							hasIType = true;
+						if (hasSource && hasIType)
+							break ruleItemLoop;
+					}
+					if (!hasSource)
+					{
+						retStr = "error.ruleHasNoMatchers";
+						gotoRule(r);
+						break ruleLoop;
+					}
+					if (!hasIType)
+					{
+						retStr = "error.ruleHasNoITypes";
+						gotoRule(r);
+						break ruleLoop;
+					}
+					
+					if (r is DiscoveryRule)
+					{
+						if (r.customAction != null)
+						{
+							if (r.customAction.customActionDescription is CustomActionDescriptionSeclore &&
+								IRMCustomActionPopup.secloreEnabled == false)
+							{
+								retStr = "error.secloreIntegrationDisabledButUsed";
+								gotoRule(r);
+								break ruleLoop;
+							}
+						}
+					}
+					
+				}
+				
+				return retStr;
+			}
+			
+			public function gotoRule(r:Rule): void 
+			{
+				ruleList.selectedItem = r;
+				FlexGlobals.topLevelApplication.tapBar.selectedIndex = 1; // index of policy tab
+			}
+			
 		]]>
 	</fx:Script>
 	<fx:Declarations>
 		<my:remote id="re" destination="ruleBRS">
 			<my:method name="getRules" result="getRulesHandler(event)" />
+		</my:remote>
+		<my:remote id="rec" destination="customActionBRS">
+			<my:method name="getCustomActions" result="getCustomActionsHandler(event)" />
 		</my:remote>
 	</fx:Declarations>
 	

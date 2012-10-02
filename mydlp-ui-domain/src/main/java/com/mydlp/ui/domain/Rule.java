@@ -6,6 +6,8 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Inheritance;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 @Entity
@@ -22,6 +24,7 @@ public abstract class Rule extends AbstractNamedEntity {
 	public static final String ACTION_LOG = "LOG";
 	public static final String ACTION_QUARANTINE = "QUARANTINE";
 	public static final String ACTION_ARCHIVE = "ARCHIVE";
+	public static final String ACTION_CUSTOM = "CUSTOM";
 	
 	protected Long priority;
 	
@@ -30,6 +33,8 @@ public abstract class Rule extends AbstractNamedEntity {
 	protected String description;
 	
 	protected String action = Rule.ACTION_PASS;
+	
+	protected CustomAction customAction;
 	
 	protected List<RuleItem> ruleItems;
 	
@@ -77,6 +82,16 @@ public abstract class Rule extends AbstractNamedEntity {
 
 	public void setRuleItems(List<RuleItem> ruleItems) {
 		this.ruleItems = ruleItems;
+	}
+
+	@ManyToOne(cascade={})
+	@JoinColumn(nullable=true)
+	public CustomAction getCustomAction() {
+		return customAction;
+	}
+
+	public void setCustomAction(CustomAction customAction) {
+		this.customAction = customAction;
 	}
 
 }
