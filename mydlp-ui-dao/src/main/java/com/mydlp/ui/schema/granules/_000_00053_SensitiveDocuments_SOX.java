@@ -22,6 +22,53 @@ import com.mydlp.ui.schema.AbstractGranule;
 
 public class _000_00053_SensitiveDocuments_SOX extends AbstractGranule {
 
+	protected InventoryItem generateInventoryItem(String queryString, String message, DataFormat df, Long threshold, int distance)
+	{
+		DetachedCriteria criteria = 
+				DetachedCriteria.forClass(BundledKeywordGroup.class)
+					.add(Restrictions.eq("descriptionKey", queryString));
+		@SuppressWarnings("unchecked")
+		List<BundledKeywordGroup> list = getHibernateTemplate().findByCriteria(criteria);
+		BundledKeywordGroup keywordGroup = DAOUtil.getSingleResult(list);
+		
+		Matcher matcher = new Matcher();
+		matcher.setFunctionName("keyword_group");
+		
+		NonCascadingArgument nonCascadingArgument10K = new NonCascadingArgument(); 	
+		MatcherArgument matcherArgument = new MatcherArgument();
+		nonCascadingArgument10K.setArgument(keywordGroup);
+		matcherArgument.setCoupledMatcher(matcher);
+		matcherArgument.setCoupledArgument(nonCascadingArgument10K);
+		List<MatcherArgument> matcherArguments = new ArrayList<MatcherArgument>();
+		matcherArguments.add(matcherArgument);
+		matcher.setMatcherArguments(matcherArguments);
+		
+		InformationFeature informationFeature = new InformationFeature();
+		informationFeature.setThreshold(threshold);
+		informationFeature.setMatcher(matcher);
+		matcher.setCoupledInformationFeature(informationFeature);
+		
+		InformationDescription informationDescription = new InformationDescription();
+		List<InformationFeature> ifts = new ArrayList<InformationFeature>();
+		informationDescription.setDistanceEnabled(true);
+		informationDescription.setDistance(distance);
+		ifts.add(informationFeature);
+		informationDescription.setFeatures(ifts);
+		
+		InformationType informationType = new InformationType();
+		informationType.setInformationDescription(informationDescription);
+		List<DataFormat> dfs = new ArrayList<DataFormat>();
+		dfs.add(df);
+		informationType.setDataFormats(dfs);
+		
+		InventoryItem inventoryItem = new InventoryItem();
+		inventoryItem.setNameKey(message);
+		inventoryItem.setItem(informationType);
+		informationType.setCoupledInventoryItem(inventoryItem);
+		
+		return inventoryItem;
+	}
+	
 	@Override
 	protected void callback() {
 			
@@ -39,103 +86,77 @@ public class _000_00053_SensitiveDocuments_SOX extends AbstractGranule {
 		List<DataFormat> list2 = getHibernateTemplate().findByCriteria(criteria2);
 		DataFormat df = DAOUtil.getSingleResult(list2);
 		
-		DetachedCriteria criteria3 = 
-				DetachedCriteria.forClass(BundledKeywordGroup.class)
-					.add(Restrictions.eq("descriptionKey", "sox.10k.descriptionKey"));
-		@SuppressWarnings("unchecked")
-		List<BundledKeywordGroup> list3 = getHibernateTemplate().findByCriteria(criteria3);
-		BundledKeywordGroup sox10k = DAOUtil.getSingleResult(list3);
-		
-		DetachedCriteria criteria4 = 
-				DetachedCriteria.forClass(BundledKeywordGroup.class)
-					.add(Restrictions.eq("descriptionKey", "sox.10q.descriptionKey"));
-		@SuppressWarnings("unchecked")
-		List<BundledKeywordGroup> list4 = getHibernateTemplate().findByCriteria(criteria4);
-		BundledKeywordGroup sox10q = DAOUtil.getSingleResult(list4);
-		
 		InventoryCategory sox = new InventoryCategory();
 		sox.setNameKey("inventory.compliance.company_confidentiality.sox.predefined");
 		sox.setEditable(false);
 		sox.setCategory(finance);
-	
-		Matcher matcher10K = new Matcher();
-		matcher10K.setFunctionName("keyword_group");
 		
-		Matcher matcher10Q = new Matcher();
-		matcher10Q.setFunctionName("keyword_group");
+		InventoryCategory category10k = new InventoryCategory();
+		category10k.setNameKey("inventory.compliance.company_confidentiality.sox.10k.predefined");
+		category10k.setEditable(false);
+		category10k.setCategory(sox);
 		
-		NonCascadingArgument nonCascadingArgument10Q = new NonCascadingArgument(); 	
-		MatcherArgument matcherArgument = new MatcherArgument();
-		nonCascadingArgument10Q.setArgument(sox10q);
-		matcherArgument.setCoupledMatcher(matcher10Q);
-		matcherArgument.setCoupledArgument(nonCascadingArgument10Q);
-		List<MatcherArgument> matcherArguments = new ArrayList<MatcherArgument>();
-		matcherArguments.add(matcherArgument);
-		matcher10Q.setMatcherArguments(matcherArguments);
+		InventoryCategory category10q = new InventoryCategory();
+		category10q.setNameKey("inventory.compliance.company_confidentiality.sox.10q.predefined");
+		category10q.setEditable(false);
+		category10q.setCategory(sox);
 		
-		NonCascadingArgument nonCascadingArgument10K = new NonCascadingArgument(); 	
-		MatcherArgument matcherArgument1 = new MatcherArgument();
-		nonCascadingArgument10K.setArgument(sox10k);
-		matcherArgument1.setCoupledMatcher(matcher10K);
-		matcherArgument1.setCoupledArgument(nonCascadingArgument10K);
-		List<MatcherArgument> matcherArguments1 = new ArrayList<MatcherArgument>();
-		matcherArguments1.add(matcherArgument1);
-		matcher10K.setMatcherArguments(matcherArguments1);
+		InventoryItem inventoryItem = generateInventoryItem("sox.10k.coverPage.descriptionKey", 
+										"informationType.compliance.finance.sox.coverPage.10k", df, new Long(6), 1500);
+		InventoryItem inventoryItem1 = generateInventoryItem("sox.10k.contentPage.descriptionKey", 
+										"informationType.compliance.finance.sox.contentPage.10k", df, new Long(15), 2000);
+		InventoryItem inventoryItem2 = generateInventoryItem("sox.10k.performanceGraph.descriptionKey", 
+										"informationType.compliance.finance.sox.performanceGraph.10k", df, new Long(2), 200);
+		InventoryItem inventoryItem3 = generateInventoryItem("sox.10k.statementPage.descriptionKey", 
+										"informationType.compliance.finance.sox.statement.10k", df, new Long(3), 250);
+		InventoryItem inventoryItem4 = generateInventoryItem("sox.10k.dataPage.descriptionKey", 
+										"informationType.compliance.finance.sox.data.10k", df, new Long(3), 500);
 		
-		InformationFeature informationFeature = new InformationFeature();
-		informationFeature.setThreshold(new Long(1));//must be revised according to the 10K keyword list
-		informationFeature.setMatcher(matcher10K);
-		matcher10K.setCoupledInformationFeature(informationFeature);
+		InventoryItem inventoryItemq = generateInventoryItem("sox.10q.coverPage.descriptionKey", 
+										"informationType.compliance.finance.sox.coverPage.10q", df, new Long(5), 1500);
+		InventoryItem inventoryItemq1 = generateInventoryItem("sox.10q.contentPage.descriptionKey", 
+										"informationType.compliance.finance.sox.contentPage.10q", df, new Long(9), 200);
+		InventoryItem inventoryItemq2 = generateInventoryItem("sox.10q.balancePage.descriptionKey", 
+										"informationType.compliance.finance.sox.balance.10q", df, new Long(6), 1500);
+		InventoryItem inventoryItemq3 = generateInventoryItem("sox.10q.information.descriptionKey", 
+										"informationType.compliance.finance.sox.information.10q", df, new Long(4), 2000);
 		
-		InformationFeature informationFeature1 = new InformationFeature();
-		informationFeature1.setThreshold(new Long(1));//must be revised according to the 10K keyword list
-		informationFeature1.setMatcher(matcher10Q);
-		matcher10Q.setCoupledInformationFeature(informationFeature);
-		
-		InformationDescription informationDescription = new InformationDescription();
-		List<InformationFeature> ifts = new ArrayList<InformationFeature>();
-		informationDescription.setDistanceEnabled(true);
-		informationDescription.setDistance(75);
-		ifts.add(informationFeature);
-		informationDescription.setFeatures(ifts);
-		
-		InformationType informationType = new InformationType();
-		informationType.setInformationDescription(informationDescription);
-		List<DataFormat> dfs = new ArrayList<DataFormat>();
-		dfs.add(df);
-		informationType.setDataFormats(dfs);
-		
-		InventoryItem inventoryItem = new InventoryItem();
-		inventoryItem.setNameKey("informationType.compliance.company_confidentiality.sox.10k");
-		inventoryItem.setItem(informationType);
-		informationType.setCoupledInventoryItem(inventoryItem);
-		
-		InformationDescription informationDescription1 = new InformationDescription();
-		List<InformationFeature> ifts1 = new ArrayList<InformationFeature>();
-		informationDescription1.setDistanceEnabled(true);
-		informationDescription1.setDistance(75);//must be revised according to the 10K keyword list
-		ifts1.add(informationFeature1);
-		informationDescription1.setFeatures(ifts1);
-		
-		InformationType informationType1 = new InformationType();
-		informationType1.setInformationDescription(informationDescription1);
-		informationType1.setDataFormats(dfs);//must be revised according to the 10K keyword list
-		
-		InventoryItem inventoryItem1 = new InventoryItem();
-		inventoryItem1.setNameKey("informationType.compliance.company_confidentiality.sox.10q");
-		inventoryItem1.setItem(informationType1);
-		informationType1.setCoupledInventoryItem(inventoryItem1);
-		
-		inventoryItem.setCategory(sox);
-		inventoryItem1.setCategory(sox);
+		inventoryItem.setCategory(category10k);
+		inventoryItem1.setCategory(category10k);
+		inventoryItem2.setCategory(category10k);
+		inventoryItem3.setCategory(category10k);
+		inventoryItem4.setCategory(category10k);
 		List<InventoryBase> dtc = new ArrayList<InventoryBase>();
 		dtc.add(inventoryItem);
 		dtc.add(inventoryItem1);
-		sox.setChildren(dtc);
+		dtc.add(inventoryItem2);
+		dtc.add(inventoryItem3);
+		dtc.add(inventoryItem4);
+		category10k.setChildren(dtc);
+		
+		inventoryItemq.setCategory(category10q);
+		inventoryItemq1.setCategory(category10q);
+		inventoryItemq2.setCategory(category10q);
+		inventoryItemq3.setCategory(category10q);
+		List<InventoryBase> dtc1 = new ArrayList<InventoryBase>();
+		dtc1.add(inventoryItemq);
+		dtc1.add(inventoryItemq1);
+		dtc1.add(inventoryItemq2);
+		dtc1.add(inventoryItemq3);
+		category10q.setChildren(dtc1);
 		
 		getHibernateTemplate().saveOrUpdate(finance);
 		getHibernateTemplate().saveOrUpdate(sox);
+		getHibernateTemplate().saveOrUpdate(category10k);
+		getHibernateTemplate().saveOrUpdate(category10q);
 		getHibernateTemplate().saveOrUpdate(inventoryItem);
 		getHibernateTemplate().saveOrUpdate(inventoryItem1);
+		getHibernateTemplate().saveOrUpdate(inventoryItem2);
+		getHibernateTemplate().saveOrUpdate(inventoryItem3);
+		getHibernateTemplate().saveOrUpdate(inventoryItem4);
+		getHibernateTemplate().saveOrUpdate(inventoryItemq);
+		getHibernateTemplate().saveOrUpdate(inventoryItemq1);
+		getHibernateTemplate().saveOrUpdate(inventoryItemq2);
+		getHibernateTemplate().saveOrUpdate(inventoryItemq3);
 	}
 }

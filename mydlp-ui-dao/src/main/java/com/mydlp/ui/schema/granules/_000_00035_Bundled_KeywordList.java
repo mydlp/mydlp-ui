@@ -55,13 +55,48 @@ public class _000_00035_Bundled_KeywordList extends AbstractGranule {
 		
 		BundledKeywordGroup bcg9 = new BundledKeywordGroup();
 		bcg9.setFilename("10kKeywords/filepath");
-		bcg9.setDescriptionKey("sox.10k.descriptionKey");
-		bcg9.setName("10K Form Keywords");
+		bcg9.setDescriptionKey("sox.10k.coverPage.descriptionKey");
+		bcg9.setName("10K Form Cover Page Keywords");
+		
+		BundledKeywordGroup bcg91 = new BundledKeywordGroup();
+		bcg91.setFilename("10kKeywords/filepath");
+		bcg91.setDescriptionKey("sox.10k.contentPage.descriptionKey");
+		bcg91.setName("10K Form Table of Contents Keywords");
+		
+		BundledKeywordGroup bcg92 = new BundledKeywordGroup();
+		bcg92.setFilename("10kKeywords/filepath");
+		bcg92.setDescriptionKey("sox.10k.performanceGraph.descriptionKey");
+		bcg92.setName("10K Form Performance Graph Keywords");
+		
+		BundledKeywordGroup bcg93 = new BundledKeywordGroup();
+		bcg93.setFilename("10kKeywords/filepath");
+		bcg93.setDescriptionKey("sox.10k.dataPage.descriptionKey");
+		bcg93.setName("10K Form Financial Data Keywords");
+		
+		BundledKeywordGroup bcg94 = new BundledKeywordGroup();
+		bcg94.setFilename("10kKeywords/filepath");
+		bcg94.setDescriptionKey("sox.10k.statementPage.descriptionKey");
+		bcg94.setName("10K Form Financial Statement Keywords");
 		
 		BundledKeywordGroup bcg10 = new BundledKeywordGroup();
 		bcg10.setFilename("10qKeywords/filepath");
-		bcg10.setDescriptionKey("sox.10q.descriptionKey");
-		bcg10.setName("10Q Keywords");
+		bcg10.setDescriptionKey("sox.10q.coverPage.descriptionKey");
+		bcg10.setName("10Q Form Cover Page Keywords");
+		
+		BundledKeywordGroup bcg101 = new BundledKeywordGroup();
+		bcg101.setFilename("10qKeywords/filepath");
+		bcg101.setDescriptionKey("sox.10q.contentPage.descriptionKey");
+		bcg101.setName("10Q Form Table of Contents Keywords");
+		
+		BundledKeywordGroup bcg102 = new BundledKeywordGroup();
+		bcg102.setFilename("10qKeywords/filepath");
+		bcg102.setDescriptionKey("sox.10q.balancePage.descriptionKey");
+		bcg102.setName("10Q Form Consolidated Balance Sheets Keywords");
+		
+		BundledKeywordGroup bcg103 = new BundledKeywordGroup();
+		bcg103.setFilename("10qKeywords/filepath");
+		bcg103.setDescriptionKey("sox.10q.information.descriptionKey");
+		bcg103.setName("10Q Form Other Information Keywords");
 		
 		BundledKeywordGroup bcg11 = new BundledKeywordGroup();
 		bcg11.setFilename("resumeForHrCV/filepath");
@@ -98,7 +133,14 @@ public class _000_00035_Bundled_KeywordList extends AbstractGranule {
 		getHibernateTemplate().saveOrUpdate(bcg7);
 		getHibernateTemplate().saveOrUpdate(bcg8);
 		getHibernateTemplate().saveOrUpdate(bcg9);
+		getHibernateTemplate().saveOrUpdate(bcg91);
+		getHibernateTemplate().saveOrUpdate(bcg92);
+		getHibernateTemplate().saveOrUpdate(bcg93);
+		getHibernateTemplate().saveOrUpdate(bcg94);
 		getHibernateTemplate().saveOrUpdate(bcg10);
+		getHibernateTemplate().saveOrUpdate(bcg101);
+		getHibernateTemplate().saveOrUpdate(bcg102);
+		getHibernateTemplate().saveOrUpdate(bcg103);
 		getHibernateTemplate().saveOrUpdate(bcg11);
 		getHibernateTemplate().saveOrUpdate(bcg12);
 		getHibernateTemplate().saveOrUpdate(bcg13);
