@@ -17,7 +17,7 @@ import com.mydlp.ui.domain.InventoryItem;
 import com.mydlp.ui.domain.Matcher;
 import com.mydlp.ui.schema.AbstractGranule;
 
-public class _000_00056_Network_Mac_Addresses extends AbstractGranule {
+public class _000_00057_Network_Mac_Addresses extends AbstractGranule {
 
 	@Override
 	protected void callback() {

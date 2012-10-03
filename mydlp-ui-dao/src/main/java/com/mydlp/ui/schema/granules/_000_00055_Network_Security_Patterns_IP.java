@@ -20,7 +20,7 @@ import com.mydlp.ui.domain.MatcherArgument;
 import com.mydlp.ui.domain.NonCascadingArgument;
 import com.mydlp.ui.schema.AbstractGranule;
 
-public class _000_00054_Network_Security_Patterns_IP extends AbstractGranule {
+public class _000_00055_Network_Security_Patterns_IP extends AbstractGranule {
 
 	@Override
 	protected void callback() {

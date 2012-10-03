@@ -20,7 +20,7 @@ import com.mydlp.ui.domain.MatcherArgument;
 import com.mydlp.ui.domain.NonCascadingArgument;
 import com.mydlp.ui.schema.AbstractGranule;
 
-public class _000_00055_Network_Patterns extends AbstractGranule {
+public class _000_00056_Network_Patterns extends AbstractGranule {
 
 	@Override
 	protected void callback() {

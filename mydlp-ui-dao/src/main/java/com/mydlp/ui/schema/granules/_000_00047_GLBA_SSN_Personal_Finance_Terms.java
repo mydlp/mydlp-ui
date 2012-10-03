@@ -20,7 +20,7 @@ import com.mydlp.ui.domain.MatcherArgument;
 import com.mydlp.ui.domain.NonCascadingArgument;
 import com.mydlp.ui.schema.AbstractGranule;
 
-public class _000_00046_GLBA_SSN_Personal_Finance_Terms extends AbstractGranule {
+public class _000_00047_GLBA_SSN_Personal_Finance_Terms extends AbstractGranule {
 
 	@Override
 	protected void callback() {

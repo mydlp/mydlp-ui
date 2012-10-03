@@ -20,7 +20,7 @@ import com.mydlp.ui.domain.MatcherArgument;
 import com.mydlp.ui.domain.NonCascadingArgument;
 import com.mydlp.ui.schema.AbstractGranule;
 
-public class _000_00053_SensitiveDocuments_Resume_For_HR extends AbstractGranule {
+public class _000_00054_SensitiveDocuments_Resume_For_HR extends AbstractGranule {
 
 	@Override
 	protected void callback() {

@@ -3,7 +3,7 @@ package com.mydlp.ui.schema.granules;
 import com.mydlp.ui.domain.Config;
 import com.mydlp.ui.schema.AbstractGranule;
 
-public class _000_00057_Config_Seclore extends AbstractGranule {
+public class _000_00058_Config_Seclore extends AbstractGranule {
 
 	@Override
 	protected void callback() {

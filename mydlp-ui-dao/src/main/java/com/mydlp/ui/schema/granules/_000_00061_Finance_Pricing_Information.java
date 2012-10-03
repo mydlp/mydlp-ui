@@ -20,7 +20,7 @@ import com.mydlp.ui.domain.MatcherArgument;
 import com.mydlp.ui.domain.NonCascadingArgument;
 import com.mydlp.ui.schema.AbstractGranule;
 
-public class _000_00060_Finance_Pricing_Information extends AbstractGranule {
+public class _000_00061_Finance_Pricing_Information extends AbstractGranule {
 
 	@Override
 	protected void callback() {

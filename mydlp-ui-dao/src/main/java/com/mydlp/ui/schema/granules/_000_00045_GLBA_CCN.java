@@ -17,7 +17,7 @@ import com.mydlp.ui.domain.InventoryItem;
 import com.mydlp.ui.domain.Matcher;
 import com.mydlp.ui.schema.AbstractGranule;
 
-public class _000_00044_GLBA_CCN extends AbstractGranule {
+public class _000_00045_GLBA_CCN extends AbstractGranule {
 
 	@Override
 	protected void callback() {

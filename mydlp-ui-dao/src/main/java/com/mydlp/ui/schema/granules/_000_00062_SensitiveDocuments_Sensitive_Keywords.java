@@ -19,7 +19,7 @@ import com.mydlp.ui.domain.MatcherArgument;
 import com.mydlp.ui.domain.RegularExpression;
 import com.mydlp.ui.schema.AbstractGranule;
 
-public class _000_00061_SensitiveDocuments_Sensitive_Keywords extends AbstractGranule {
+public class _000_00062_SensitiveDocuments_Sensitive_Keywords extends AbstractGranule {
 
 	@Override
 	protected void callback() {

@@ -20,7 +20,7 @@ import com.mydlp.ui.domain.MatcherArgument;
 import com.mydlp.ui.domain.NonCascadingArgument;
 import com.mydlp.ui.schema.AbstractGranule;
 
-public class _000_00050_GLBA_Name_Account_Number extends AbstractGranule {
+public class _000_00051_GLBA_Name_Account_Number extends AbstractGranule {
 
 	
 	protected InventoryItem generateNameWithAccountNumbers(DataFormat df, BundledKeywordGroup names, String account)

@@ -20,7 +20,7 @@ import com.mydlp.ui.domain.MatcherArgument;
 import com.mydlp.ui.domain.NonCascadingArgument;
 import com.mydlp.ui.schema.AbstractGranule;
 
-public class _000_00037_HIPAA_CCN_SSN_with_Common_diesease extends AbstractGranule {
+public class _000_00038_HIPAA_CCN_SSN_with_Common_diesease extends AbstractGranule {
 
 	@Override
 	protected void callback() {

@@ -20,7 +20,7 @@ import com.mydlp.ui.domain.MatcherArgument;
 import com.mydlp.ui.domain.NonCascadingArgument;
 import com.mydlp.ui.schema.AbstractGranule;
 
-public class _000_00045_GLBA_Names_SSN extends AbstractGranule {
+public class _000_00046_GLBA_Names_SSN extends AbstractGranule {
 
 	@Override
 	protected void callback() {

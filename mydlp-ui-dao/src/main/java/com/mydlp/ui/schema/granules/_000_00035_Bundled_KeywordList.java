@@ -3,7 +3,7 @@ package com.mydlp.ui.schema.granules;
 import com.mydlp.ui.domain.BundledKeywordGroup;
 import com.mydlp.ui.schema.AbstractGranule;
 
-public class _000_00034_Bundled_KeywordList extends AbstractGranule {
+public class _000_00035_Bundled_KeywordList extends AbstractGranule {
 
 	@Override
 	protected void callback() {
