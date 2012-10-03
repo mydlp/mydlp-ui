@@ -18,7 +18,6 @@
 			
 			protected function getPolicyText(value:*):String {
 				if (value == null) return "";
-				
 				var log:IncidentLog = value as IncidentLog;
 				var labelText:String = "";
 				
@@ -32,25 +31,30 @@
 						labelText += informationType.coupledInventoryItem.label;
 					else
 						labelText += "id(" + log.informationTypeId + ")";
-					
+				}
+				
+				if (log.matcherMessage != null && log.matcherMessage.length > 0 )
+				{
+					if (labelText != "")
+						labelText += "\n";
 					if (log.matcherMessage.substr(0,5) == "score" )
 					{
 						labelText += "\n" + LangUtil.getString("messages","log.container.column.details.score") + ": ";
 						labelText += log.matcherMessage.substr(6);
 					}
-				} else
-				{
-					if (log.matcherMessage != null && log.matcherMessage.length > 0 )
+					else
 					{
 						var sIndex:int = log.matcherMessage.indexOf(" ");
 						var appendix:String = "";
+						var keyAppendix:String = log.matcherMessage;
 						if (sIndex != -1)
 						{
 							appendix = " " + log.matcherMessage.substr(sIndex + 1);
+							keyAppendix = log.matcherMessage.substr(0, sIndex);
 						}
 						
 						labelText += LangUtil.getString("messages","log.container.column.details.reason") + ": ";
-						labelText += LangUtil.getString("messages","log.container.column.details.reason." + log.matcherMessage);
+						labelText += LangUtil.getString("messages","log.container.column.details.reason." + keyAppendix);
 						labelText += appendix;
 					}
 				}
@@ -77,6 +81,6 @@
 		<s:VerticalLayout paddingBottom="4" paddingTop="4" paddingLeft="4"/>
 	</s:layout>
 	
-	<s:Label id="lblData" text="{getPolicyText(data)}"/>
+	<s:Label id="lblData" text="{getPolicyText(data)}" width="100%"/>
 	
 </s:GridItemRenderer>
