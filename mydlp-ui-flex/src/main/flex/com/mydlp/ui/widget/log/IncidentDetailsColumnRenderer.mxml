@@ -40,16 +40,18 @@
 					}
 				} else
 				{
-					if (log.matcherMessage != null && (
-						log.matcherMessage == "archive_inbound" ||
-						log.matcherMessage == "max_size_exceeded" ||
-						log.matcherMessage == "timeout" ||
-						log.matcherMessage == "usb_device_id_unknown" ||
-						log.matcherMessage == "usb_device_rejected"
-						))
+					if (log.matcherMessage != null && log.matcherMessage.length > 0 )
 					{
+						var sIndex:int = log.matcherMessage.indexOf(" ");
+						var appendix:String = "";
+						if (sIndex != -1)
+						{
+							appendix = " " + log.matcherMessage.substr(sIndex + 1);
+						}
+						
 						labelText += LangUtil.getString("messages","log.container.column.details.reason") + ": ";
 						labelText += LangUtil.getString("messages","log.container.column.details.reason." + log.matcherMessage);
+						labelText += appendix;
 					}
 				}
 				
