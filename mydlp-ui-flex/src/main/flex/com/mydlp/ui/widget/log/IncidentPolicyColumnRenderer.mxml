@@ -60,7 +60,28 @@
 					case "L": labelText += LangUtil.getString("messages","log.container.column.policy.action.log"); break;
 					case "Q": labelText += LangUtil.getString("messages","log.container.column.policy.action.quarantine"); break;
 					case "A": labelText += LangUtil.getString("messages","log.container.column.policy.action.archive"); break;
-					default: labelText += log.action; break;
+					default:
+						if (log.action.substr(0,4) == "CIS ")
+						{
+							labelText += LangUtil.getString("messages","log.container.column.policy.action.custom.irm.seclore");
+							var restStr:String = log.action.substr(4);
+							var hotFolderId:String = "";
+							var customActionName:String = "";
+							var sIndex:int = -1;
+							sIndex = restStr.indexOf(" ");
+							if (sIndex != -1)
+							{
+								hotFolderId = restStr.substr(0, sIndex);
+								customActionName = restStr.substr(sIndex + 1);
+								labelText += " [" + LangUtil.getString("messages","log.container.column.policy.action.custom.irm.seclore.hotFolderId");
+								labelText += ": " + hotFolderId +"] " + customActionName;  
+							}
+						}
+						else
+						{
+							labelText += log.action;
+						}
+						break;
 				}
 				
 				labelText += "\n" + LangUtil.getString("messages","log.container.column.policy.channel") + ": ";

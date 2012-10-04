@@ -88,7 +88,7 @@
 				 text="@Resource(bundle = 'messages', key = 'options.irm.newCustomAction.noIRMWarning.label')" />
 		<s:ComboBox id="typeComboBox" includeInLayout="false" visible="false" 
 					dataProvider="{irmIntegrationTypes}" labelFunction="comboBoxLabelFunction"/>
-		<s:Spacer height="50" />
+		<s:Spacer height="20" />
 		<s:Button label="@Resource(bundle = 'messages', key = 'options.irm.newCustomAction.nextButton.label')"
 				  enabled="{typeComboBox.selectedIndex != -1}"
 				  click="{newCustomAction();}"/>
