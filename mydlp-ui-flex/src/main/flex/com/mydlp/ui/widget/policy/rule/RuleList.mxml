@@ -11,8 +11,6 @@
 		>
 	<fx:Script>
 		<![CDATA[
-			import mx.controls.Alert;
-			import mx.controls.listClasses.IListItemRenderer;
 			import mx.core.FlexGlobals;
 			import mx.events.FlexEvent;
 			import mx.events.ItemClickEvent;

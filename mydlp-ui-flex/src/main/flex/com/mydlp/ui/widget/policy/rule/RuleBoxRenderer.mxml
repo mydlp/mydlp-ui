@@ -32,11 +32,9 @@
 			import com.mydlp.ui.domain.WebRule;
 			import com.mydlp.ui.util.InteractionUtil;
 			import com.mydlp.ui.util.ReflectionUtil;
-			import com.mydlp.ui.util.SessionUtil;
 			
 			import mx.collections.ArrayCollection;
 			import mx.collections.ListCollectionView;
-			import mx.controls.Alert;
 			import mx.core.FlexGlobals;
 			import mx.core.IUIComponent;
 			import mx.events.DragEvent;
@@ -85,6 +83,15 @@
 			
 			protected var droppedSources:ListCollectionView;//Array for dropped Sources items from inventory tree to rule container.
 			protected var droppedMatchers:ListCollectionView;//Array for dropped Matchers items from inventory tree to rule container.
+			
+			public override function set data(value:Object):void
+			{
+				super.data = value;
+				if(value == null)
+					return;
+				var e:FlexEvent = new FlexEvent("e");
+				onCreationComplete(e);
+			}
 			
 			protected function onCreationComplete(event:FlexEvent):void
 			{
