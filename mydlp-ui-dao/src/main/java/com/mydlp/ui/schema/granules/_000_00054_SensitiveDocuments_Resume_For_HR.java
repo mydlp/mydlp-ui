@@ -41,7 +41,7 @@ public class _000_00054_SensitiveDocuments_Resume_For_HR extends AbstractGranule
 		
 		DetachedCriteria criteria3 = 
 				DetachedCriteria.forClass(BundledKeywordGroup.class)
-					.add(Restrictions.eq("descriptionKey", "resume.for.hr.cv.descriptionKey"));
+					.add(Restrictions.eq("nameKey", "resume.for.hr.cv.keywordList"));
 		@SuppressWarnings("unchecked")
 		List<BundledKeywordGroup> list3 = getHibernateTemplate().findByCriteria(criteria3);
 		BundledKeywordGroup resumeForHR = DAOUtil.getSingleResult(list3);

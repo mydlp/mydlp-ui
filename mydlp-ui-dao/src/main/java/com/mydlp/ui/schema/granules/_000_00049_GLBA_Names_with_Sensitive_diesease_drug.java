@@ -41,21 +41,21 @@ public class _000_00049_GLBA_Names_with_Sensitive_diesease_drug extends Abstract
 		
 		DetachedCriteria criteria3 = 
 				DetachedCriteria.forClass(BundledKeywordGroup.class)
-					.add(Restrictions.eq("descriptionKey", "sensitive.drugs.descriptionKey"));
+					.add(Restrictions.eq("nameKey", "sensitive.drugs.keywordList"));
 		@SuppressWarnings("unchecked")
 		List<BundledKeywordGroup> list3 = getHibernateTemplate().findByCriteria(criteria3);
 		BundledKeywordGroup keywordGroupDrugNames = DAOUtil.getSingleResult(list3);
 		
 		DetachedCriteria criteria4 = 
 				DetachedCriteria.forClass(BundledKeywordGroup.class)
-					.add(Restrictions.eq("descriptionKey", "sensitive.diseases.descriptionKey"));
+					.add(Restrictions.eq("nameKey", "sensitive.diseases.keywordList"));
 		@SuppressWarnings("unchecked")
 		List<BundledKeywordGroup> list4 = getHibernateTemplate().findByCriteria(criteria4);
 		BundledKeywordGroup keywordGroupDiseaseNames = DAOUtil.getSingleResult(list4);
 		
 		DetachedCriteria criteria5 = 
 				DetachedCriteria.forClass(BundledKeywordGroup.class)
-					.add(Restrictions.eq("descriptionKey", "names.descriptionKey"));
+					.add(Restrictions.eq("nameKey", "names.keywordList"));
 		@SuppressWarnings("unchecked")
 		List<BundledKeywordGroup> list5 = getHibernateTemplate().findByCriteria(criteria5);
 		BundledKeywordGroup names = DAOUtil.getSingleResult(list5);

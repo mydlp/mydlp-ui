@@ -41,7 +41,7 @@ public class _000_00061_Finance_Pricing_Information extends AbstractGranule {
 		
 		DetachedCriteria criteria3 = 
 				DetachedCriteria.forClass(BundledKeywordGroup.class)
-					.add(Restrictions.eq("descriptionKey", "finance.pricing.information.descriptionKey"));
+					.add(Restrictions.eq("nameKey", "finance.pricing.information.keywordList"));
 		@SuppressWarnings("unchecked")
 		List<BundledKeywordGroup> list3 = getHibernateTemplate().findByCriteria(criteria3);
 		BundledKeywordGroup pricingInformation = DAOUtil.getSingleResult(list3);

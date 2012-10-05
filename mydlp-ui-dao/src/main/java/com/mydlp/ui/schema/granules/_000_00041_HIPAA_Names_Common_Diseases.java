@@ -41,14 +41,14 @@ public class _000_00041_HIPAA_Names_Common_Diseases extends AbstractGranule {
 		
 		DetachedCriteria criteria3 = 
 				DetachedCriteria.forClass(BundledKeywordGroup.class)
-					.add(Restrictions.eq("descriptionKey", "names.descriptionKey"));
+					.add(Restrictions.eq("nameKey", "names.keywordList"));
 		@SuppressWarnings("unchecked")
 		List<BundledKeywordGroup> list3 = getHibernateTemplate().findByCriteria(criteria3);
 		BundledKeywordGroup names = DAOUtil.getSingleResult(list3);
 		
 		DetachedCriteria criteria4 = 
 				DetachedCriteria.forClass(BundledKeywordGroup.class)
-					.add(Restrictions.eq("descriptionKey", "common.diseases.descriptionKey"));
+					.add(Restrictions.eq("nameKey", "common.diseases.keywordList"));
 		@SuppressWarnings("unchecked")
 		List<BundledKeywordGroup> list4 = getHibernateTemplate().findByCriteria(criteria4);
 		BundledKeywordGroup commonDiseases = DAOUtil.getSingleResult(list4);

@@ -41,7 +41,7 @@ public class _000_00056_Network_Patterns extends AbstractGranule {
 		
 		DetachedCriteria criteria3 = 
 				DetachedCriteria.forClass(BundledKeywordGroup.class)
-					.add(Restrictions.eq("descriptionKey", "network.patterns.descriptionKey"));
+					.add(Restrictions.eq("nameKey", "network.patterns.keywordList"));
 		@SuppressWarnings("unchecked")
 		List<BundledKeywordGroup> list3 = getHibernateTemplate().findByCriteria(criteria3);
 		BundledKeywordGroup personalFinanceTerms = DAOUtil.getSingleResult(list3);

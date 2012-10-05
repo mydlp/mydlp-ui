@@ -41,7 +41,7 @@ public class _000_00040_HIPAA_DOB_with_Names_drug extends AbstractGranule {
 		
 		DetachedCriteria criteria3 = 
 				DetachedCriteria.forClass(BundledKeywordGroup.class)
-					.add(Restrictions.eq("descriptionKey", "names.descriptionKey"));
+					.add(Restrictions.eq("nameKey", "names.keywordList"));
 		@SuppressWarnings("unchecked")
 		List<BundledKeywordGroup> list3 = getHibernateTemplate().findByCriteria(criteria3);
 		BundledKeywordGroup names = DAOUtil.getSingleResult(list3);

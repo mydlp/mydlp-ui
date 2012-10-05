@@ -41,14 +41,14 @@ public class _000_00038_HIPAA_CCN_SSN_with_Common_diesease extends AbstractGranu
 		
 		DetachedCriteria criteria3 = 
 				DetachedCriteria.forClass(BundledKeywordGroup.class)
-					.add(Restrictions.eq("descriptionKey", "sensitive.drugs.descriptionKey"));
+					.add(Restrictions.eq("nameKey", "sensitive.drugs.keywordList"));
 		@SuppressWarnings("unchecked")
 		List<BundledKeywordGroup> list3 = getHibernateTemplate().findByCriteria(criteria3);
 		BundledKeywordGroup keywordGroupDrugNames = DAOUtil.getSingleResult(list3);
 		
 		DetachedCriteria criteria4 = 
 				DetachedCriteria.forClass(BundledKeywordGroup.class)
-					.add(Restrictions.eq("descriptionKey", "sensitive.diseases.descriptionKey"));
+					.add(Restrictions.eq("nameKey", "sensitive.diseases.keywordList"));
 		@SuppressWarnings("unchecked")
 		List<BundledKeywordGroup> list4 = getHibernateTemplate().findByCriteria(criteria4);
 		BundledKeywordGroup keywordGroupDiseaseNames = DAOUtil.getSingleResult(list4);

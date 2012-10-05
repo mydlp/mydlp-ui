@@ -41,7 +41,7 @@ public class _000_00052_SensitiveDocuments_StrategicBusinessDocument extends Abs
 		
 		DetachedCriteria criteria3 = 
 				DetachedCriteria.forClass(BundledKeywordGroup.class)
-					.add(Restrictions.eq("descriptionKey", "strategic.business.document.descriptionKey"));
+					.add(Restrictions.eq("nameKey", "strategic.business.document.keywordList"));
 		@SuppressWarnings("unchecked")
 		List<BundledKeywordGroup> list3 = getHibernateTemplate().findByCriteria(criteria3);
 		BundledKeywordGroup sbdKeyword = DAOUtil.getSingleResult(list3);

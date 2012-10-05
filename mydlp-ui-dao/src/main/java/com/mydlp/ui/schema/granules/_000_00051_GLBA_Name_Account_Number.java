@@ -94,7 +94,7 @@ public class _000_00051_GLBA_Name_Account_Number extends AbstractGranule {
 		
 		DetachedCriteria criteria4 = 
 				DetachedCriteria.forClass(BundledKeywordGroup.class)
-					.add(Restrictions.eq("descriptionKey", "names.descriptionKey"));
+					.add(Restrictions.eq("nameKey", "names.keywordList"));
 		@SuppressWarnings("unchecked")
 		List<BundledKeywordGroup> list4 = getHibernateTemplate().findByCriteria(criteria4);
 		BundledKeywordGroup names = DAOUtil.getSingleResult(list4);

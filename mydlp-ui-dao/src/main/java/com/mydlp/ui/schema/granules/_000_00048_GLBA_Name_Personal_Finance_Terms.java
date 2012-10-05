@@ -41,14 +41,14 @@ public class _000_00048_GLBA_Name_Personal_Finance_Terms extends AbstractGranule
 		
 		DetachedCriteria criteria3 = 
 				DetachedCriteria.forClass(BundledKeywordGroup.class)
-					.add(Restrictions.eq("descriptionKey", "personal.finance.terms.descriptionKey"));
+					.add(Restrictions.eq("nameKey", "personal.finance.terms.keywordList"));
 		@SuppressWarnings("unchecked")
 		List<BundledKeywordGroup> list3 = getHibernateTemplate().findByCriteria(criteria3);
 		BundledKeywordGroup personalFinanceTerms = DAOUtil.getSingleResult(list3);
 		
 		DetachedCriteria criteria4 = 
 				DetachedCriteria.forClass(BundledKeywordGroup.class)
-					.add(Restrictions.eq("descriptionKey", "names.descriptionKey"));
+					.add(Restrictions.eq("nameKey", "names.keywordList"));
 		@SuppressWarnings("unchecked")
 		List<BundledKeywordGroup> list4 = getHibernateTemplate().findByCriteria(criteria4);
 		BundledKeywordGroup names = DAOUtil.getSingleResult(list4);

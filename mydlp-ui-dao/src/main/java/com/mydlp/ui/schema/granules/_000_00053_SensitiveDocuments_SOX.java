@@ -26,7 +26,7 @@ public class _000_00053_SensitiveDocuments_SOX extends AbstractGranule {
 	{
 		DetachedCriteria criteria = 
 				DetachedCriteria.forClass(BundledKeywordGroup.class)
-					.add(Restrictions.eq("descriptionKey", queryString));
+					.add(Restrictions.eq("nameKey", queryString));
 		@SuppressWarnings("unchecked")
 		List<BundledKeywordGroup> list = getHibernateTemplate().findByCriteria(criteria);
 		BundledKeywordGroup keywordGroup = DAOUtil.getSingleResult(list);
@@ -101,24 +101,24 @@ public class _000_00053_SensitiveDocuments_SOX extends AbstractGranule {
 		category10q.setEditable(false);
 		category10q.setCategory(sox);
 		
-		InventoryItem inventoryItem = generateInventoryItem("sox.10k.coverPage.descriptionKey", 
+		InventoryItem inventoryItem = generateInventoryItem("sox.10k.coverPage.keywordList", 
 										"informationType.compliance.finance.sox.coverPage.10k", df, new Long(6), 1500);
-		InventoryItem inventoryItem1 = generateInventoryItem("sox.10k.contentPage.descriptionKey", 
+		InventoryItem inventoryItem1 = generateInventoryItem("sox.10k.contentPage.keywordList", 
 										"informationType.compliance.finance.sox.contentPage.10k", df, new Long(15), 2000);
-		InventoryItem inventoryItem2 = generateInventoryItem("sox.10k.performanceGraph.descriptionKey", 
+		InventoryItem inventoryItem2 = generateInventoryItem("sox.10k.performanceGraph.keywordList", 
 										"informationType.compliance.finance.sox.performanceGraph.10k", df, new Long(2), 200);
-		InventoryItem inventoryItem3 = generateInventoryItem("sox.10k.statementPage.descriptionKey", 
+		InventoryItem inventoryItem3 = generateInventoryItem("sox.10k.statementPage.keywordList", 
 										"informationType.compliance.finance.sox.statement.10k", df, new Long(3), 250);
-		InventoryItem inventoryItem4 = generateInventoryItem("sox.10k.dataPage.descriptionKey", 
+		InventoryItem inventoryItem4 = generateInventoryItem("sox.10k.dataPage.keywordList", 
 										"informationType.compliance.finance.sox.data.10k", df, new Long(3), 500);
 		
-		InventoryItem inventoryItemq = generateInventoryItem("sox.10q.coverPage.descriptionKey", 
+		InventoryItem inventoryItemq = generateInventoryItem("sox.10q.coverPage.keywordList", 
 										"informationType.compliance.finance.sox.coverPage.10q", df, new Long(5), 1500);
-		InventoryItem inventoryItemq1 = generateInventoryItem("sox.10q.contentPage.descriptionKey", 
+		InventoryItem inventoryItemq1 = generateInventoryItem("sox.10q.contentPage.keywordList", 
 										"informationType.compliance.finance.sox.contentPage.10q", df, new Long(9), 200);
-		InventoryItem inventoryItemq2 = generateInventoryItem("sox.10q.balancePage.descriptionKey", 
+		InventoryItem inventoryItemq2 = generateInventoryItem("sox.10q.balancePage.keywordList", 
 										"informationType.compliance.finance.sox.balance.10q", df, new Long(6), 1500);
-		InventoryItem inventoryItemq3 = generateInventoryItem("sox.10q.information.descriptionKey", 
+		InventoryItem inventoryItemq3 = generateInventoryItem("sox.10q.information.keywordList", 
 										"informationType.compliance.finance.sox.information.10q", df, new Long(4), 2000);
 		
 		inventoryItem.setCategory(category10k);

@@ -41,7 +41,7 @@ public class _000_00044_HIPAA_NDC extends AbstractGranule {
 		
 		DetachedCriteria criteria3 = 
 				DetachedCriteria.forClass(BundledKeywordGroup.class)
-					.add(Restrictions.eq("descriptionKey", "ndc.descriptionKey"));
+					.add(Restrictions.eq("nameKey", "ndc.keywordList"));
 		@SuppressWarnings("unchecked")
 		List<BundledKeywordGroup> list3 = getHibernateTemplate().findByCriteria(criteria3);
 		BundledKeywordGroup ndc = DAOUtil.getSingleResult(list3);

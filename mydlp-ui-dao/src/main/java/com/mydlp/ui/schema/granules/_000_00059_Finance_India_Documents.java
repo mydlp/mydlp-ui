@@ -41,14 +41,14 @@ public class _000_00059_Finance_India_Documents extends AbstractGranule {
 		
 		DetachedCriteria criteria3 = 
 				DetachedCriteria.forClass(BundledKeywordGroup.class)
-					.add(Restrictions.eq("descriptionKey", "finance.indiaDocuments.form16.descriptionKey"));
+					.add(Restrictions.eq("nameKey", "finance.indiaDocuments.form16.keywordList"));
 		@SuppressWarnings("unchecked")
 		List<BundledKeywordGroup> list3 = getHibernateTemplate().findByCriteria(criteria3);
 		BundledKeywordGroup form16 = DAOUtil.getSingleResult(list3);
 		
 		DetachedCriteria criteria4 = 
 				DetachedCriteria.forClass(BundledKeywordGroup.class)
-					.add(Restrictions.eq("descriptionKey", "finance.indiaDocuments.form16A.descriptionKey"));
+					.add(Restrictions.eq("nameKey", "finance.indiaDocuments.form16A.keywordList"));
 		@SuppressWarnings("unchecked")
 		List<BundledKeywordGroup> list4 = getHibernateTemplate().findByCriteria(criteria4);
 		BundledKeywordGroup form16A = DAOUtil.getSingleResult(list4);

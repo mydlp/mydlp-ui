@@ -41,7 +41,7 @@ public class _000_00039_HIPAA_CCN_SSN_with_Sensitive_diesease_drug extends Abstr
 		
 		DetachedCriteria criteria4 = 
 				DetachedCriteria.forClass(BundledKeywordGroup.class)
-					.add(Restrictions.eq("descriptionKey", "common.diseases.descriptionKey"));
+					.add(Restrictions.eq("nameKey", "common.diseases.keywordList"));
 		@SuppressWarnings("unchecked")
 		List<BundledKeywordGroup> list4 = getHibernateTemplate().findByCriteria(criteria4);
 		BundledKeywordGroup keywordGroupDiseaseNames = DAOUtil.getSingleResult(list4);

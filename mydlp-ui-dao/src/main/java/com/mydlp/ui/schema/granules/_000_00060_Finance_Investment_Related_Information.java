@@ -41,7 +41,7 @@ public class _000_00060_Finance_Investment_Related_Information extends AbstractG
 		
 		DetachedCriteria criteria3 = 
 				DetachedCriteria.forClass(BundledKeywordGroup.class)
-					.add(Restrictions.eq("descriptionKey", "finance.investment.related.information.descriptionKey"));
+					.add(Restrictions.eq("nameKey", "finance.investment.related.information.keywordList"));
 		@SuppressWarnings("unchecked")
 		List<BundledKeywordGroup> list3 = getHibernateTemplate().findByCriteria(criteria3);
 		BundledKeywordGroup investment = DAOUtil.getSingleResult(list3);
