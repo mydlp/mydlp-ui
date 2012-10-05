@@ -118,7 +118,7 @@ public class _000_00059_Finance_India_Documents extends AbstractGranule {
 		informationDescriptionA.setDistanceEnabled(true);
 		informationDescriptionA.setDistance(2500);
 		iftsA.add(informationFeatureA);
-		informationDescription.setFeatures(iftsA);
+		informationDescriptionA.setFeatures(iftsA);
 		
 		InformationType informationTypeA = new InformationType();
 		informationTypeA.setInformationDescription(informationDescriptionA);
@@ -126,7 +126,7 @@ public class _000_00059_Finance_India_Documents extends AbstractGranule {
 		
 		InventoryItem inventoryItemA = new InventoryItem();
 		inventoryItemA.setNameKey("informationType.compliance.finance.indiaDocuments.form16A");
-		inventoryItemA.setItem(informationType);
+		inventoryItemA.setItem(informationTypeA);
 		informationTypeA.setCoupledInventoryItem(inventoryItemA);
 		
 
