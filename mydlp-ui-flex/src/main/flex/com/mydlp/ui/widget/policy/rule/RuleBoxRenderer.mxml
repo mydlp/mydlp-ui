@@ -5,7 +5,6 @@
 				xmlns:rule="com.mydlp.ui.widget.policy.rule.*"
 				xmlns:my="http://www.mydlp.com/flex/my" 
 				autoDrawBackground="false"
-				creationComplete="onCreationComplete(event)" 
 				xmlns:util="com.mydlp.ui.util.*" 
 				dragEnter="onDragEnter(event)"
 				dragOver="onDragOver(event)"
@@ -87,13 +86,11 @@
 			public override function set data(value:Object):void
 			{
 				super.data = value;
-				if(value == null)
-					return;
-				var e:FlexEvent = new FlexEvent("e");
-				onCreationComplete(e);
+				if(value == null) return;
+				populate();
 			}
 			
-			protected function onCreationComplete(event:FlexEvent):void
+			protected function populate():void
 			{
 				if (data is WebRule)
 				{
