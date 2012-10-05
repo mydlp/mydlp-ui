@@ -336,6 +336,7 @@
 			<input:MatcherDefinition data="encrypted_file" />
 			<input:MatcherDefinition data="encrypted_archive" />
 			<input:MatcherDefinition data="pan"/>
+			<input:MatcherDefinition data="tan"/>
 			<input:MatcherDefinition data="cpf"/>
 			<input:MatcherDefinition data="china_icn"/>
 			<input:MatcherDefinition data="cc_edate"/>
@@ -418,6 +419,7 @@
 		<s:State name="italy_fc" stateGroups="matcher,distance,threshold,noargument"/>
 		<s:State name="said" stateGroups="matcher,distance,threshold,noargument"/>
 		<s:State name="pan" stateGroups="matcher,distance,threshold,noargument"/>
+		<s:State name="tan" stateGroups="matcher,distance,threshold,noargument"/>
 		<s:State name="cpf" stateGroups="matcher,distance,threshold,noargument"/>
 		<s:State name="china_icn" stateGroups="matcher,distance,threshold,noargument"/>
 		<s:State name="cc_edate" stateGroups="matcher,distance,threshold,noargument"/>
