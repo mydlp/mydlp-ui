@@ -44,19 +44,28 @@ public class _000_00059_Finance_India_Documents extends AbstractGranule {
 					.add(Restrictions.eq("descriptionKey", "finance.indiaDocuments.form16.descriptionKey"));
 		@SuppressWarnings("unchecked")
 		List<BundledKeywordGroup> list3 = getHibernateTemplate().findByCriteria(criteria3);
-		BundledKeywordGroup personalFinanceTerms = DAOUtil.getSingleResult(list3);
+		BundledKeywordGroup form16 = DAOUtil.getSingleResult(list3);
+		
+		DetachedCriteria criteria4 = 
+				DetachedCriteria.forClass(BundledKeywordGroup.class)
+					.add(Restrictions.eq("descriptionKey", "finance.indiaDocuments.form16A.descriptionKey"));
+		@SuppressWarnings("unchecked")
+		List<BundledKeywordGroup> list4 = getHibernateTemplate().findByCriteria(criteria4);
+		BundledKeywordGroup form16A = DAOUtil.getSingleResult(list4);
 		
 		InventoryCategory indiaDocuments = new InventoryCategory();
 		indiaDocuments.setNameKey("inventory.compliance.finance.india_documents.predefined");
 		indiaDocuments.setEditable(false);
 		indiaDocuments.setCategory(finance);
 	
+		/*India Form 16*/
+		
 		Matcher matcher = new Matcher();
 		matcher.setFunctionName("keyword_group");
 		
 		NonCascadingArgument nonCascadingArgument = new NonCascadingArgument(); 	
 		MatcherArgument matcherArgument = new MatcherArgument();
-		nonCascadingArgument.setArgument(personalFinanceTerms);
+		nonCascadingArgument.setArgument(form16);
 		matcherArgument.setCoupledMatcher(matcher);
 		matcherArgument.setCoupledArgument(nonCascadingArgument);
 		List<MatcherArgument> matcherArguments = new ArrayList<MatcherArgument>();
@@ -85,14 +94,52 @@ public class _000_00059_Finance_India_Documents extends AbstractGranule {
 		inventoryItem.setNameKey("informationType.compliance.finance.indiaDocuments.form16");
 		inventoryItem.setItem(informationType);
 		informationType.setCoupledInventoryItem(inventoryItem);
+		
+		/*India Form 16-A*/
+		Matcher matcherA = new Matcher();
+		matcherA.setFunctionName("keyword_group");
+		
+		NonCascadingArgument nonCascadingArgumentA = new NonCascadingArgument(); 	
+		MatcherArgument matcherArgumentA = new MatcherArgument();
+		nonCascadingArgumentA.setArgument(form16A);
+		matcherArgumentA.setCoupledMatcher(matcherA);
+		matcherArgumentA.setCoupledArgument(nonCascadingArgumentA);
+		List<MatcherArgument> matcherArgumentsA = new ArrayList<MatcherArgument>();
+		matcherArgumentsA.add(matcherArgumentA);
+		matcherA.setMatcherArguments(matcherArgumentsA);
+		
+		InformationFeature informationFeatureA = new InformationFeature();
+		informationFeatureA.setThreshold(new Long(10));
+		informationFeatureA.setMatcher(matcherA);
+		matcherA.setCoupledInformationFeature(informationFeatureA);
+		
+		InformationDescription informationDescriptionA = new InformationDescription();
+		List<InformationFeature> iftsA = new ArrayList<InformationFeature>();
+		informationDescriptionA.setDistanceEnabled(true);
+		informationDescriptionA.setDistance(2500);
+		iftsA.add(informationFeatureA);
+		informationDescription.setFeatures(iftsA);
+		
+		InformationType informationTypeA = new InformationType();
+		informationTypeA.setInformationDescription(informationDescriptionA);
+		informationTypeA.setDataFormats(dfs);
+		
+		InventoryItem inventoryItemA = new InventoryItem();
+		inventoryItemA.setNameKey("informationType.compliance.finance.indiaDocuments.form16A");
+		inventoryItemA.setItem(informationType);
+		informationTypeA.setCoupledInventoryItem(inventoryItemA);
+		
 
 		inventoryItem.setCategory(indiaDocuments);
+		inventoryItemA.setCategory(indiaDocuments);
 		List<InventoryBase> dtc = new ArrayList<InventoryBase>();
 		dtc.add(inventoryItem);
+		dtc.add(inventoryItemA);
 		indiaDocuments.setChildren(dtc);
 		
 		getHibernateTemplate().saveOrUpdate(finance);
 		getHibernateTemplate().saveOrUpdate(indiaDocuments);
 		getHibernateTemplate().saveOrUpdate(inventoryItem);
+		getHibernateTemplate().saveOrUpdate(inventoryItemA);
 	}
 }
