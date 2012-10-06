@@ -55,6 +55,12 @@
 							import mx.controls.CheckBox;
 							import mx.core.FlexGlobals;
 							
+							public override function set data(value:Object):void
+							{
+								super.data = value;
+								if (data == null) return;
+							}
+							
 							protected function isDashboardItemSelected(data:*):Boolean
 							{
 								var userSettings:UserSettings = FlexGlobals.topLevelApplication.dashboardContainer.userSettings;

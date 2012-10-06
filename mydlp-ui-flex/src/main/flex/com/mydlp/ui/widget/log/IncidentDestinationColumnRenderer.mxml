@@ -12,7 +12,7 @@
 			import mx.collections.ArrayCollection;
 			import mx.events.ToolTipEvent;
 			
-			protected var toolTipText:String;
+			protected var toolTipText:String = "";
 			
 			public static function startsWith( string:String, pattern:String):Boolean
 			{
@@ -24,6 +24,7 @@
 			
 			protected function getDestText(value:*):String {
 				var log:IncidentLog = value as IncidentLog;
+				if (log == null) return "";
 				var labelText:String = "";
 				if (log.destination == null || log.channel == "E")
 					labelText = LangUtil.getString("messages","log.container.column.destination.removableStorage");
@@ -94,6 +95,14 @@
 				return labelText;
 			}
 			
+			public override function set data(value:Object):void
+			{
+				super.data = value;
+				if (value == null) return; 
+				if (!value is IncidentLog) return;
+				lblData.text = getDestText(value);
+			}
+			
 			protected function createCustomToolTip(event:ToolTipEvent):void
 			{
 				var toolTip:IncidentLogCustomToolTip = new IncidentLogCustomToolTip();
@@ -110,7 +119,7 @@
 	
 	<s:Group id="destinationGroup" width="100%" height="100%" 
 			 toolTip="" toolTipCreate="createCustomToolTip(event)">
-		<s:Label id="lblData" text='{getDestText(data)}'/>
+		<s:Label id="lblData" />
 	</s:Group>
 	
 </s:GridItemRenderer>

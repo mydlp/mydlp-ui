@@ -72,6 +72,12 @@
 						<fx:Script>
 							<![CDATA[
 								import com.mydlp.ui.domain.ADDomainAlias;
+								
+								public override function set data(value:Object):void
+								{
+									super.data = value;
+									if (data == null) return;
+								}
 							]]>
 						</fx:Script>
 						<s:layout>

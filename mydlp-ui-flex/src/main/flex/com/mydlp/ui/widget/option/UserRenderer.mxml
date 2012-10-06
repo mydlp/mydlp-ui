@@ -2,12 +2,21 @@
 <s:ItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009" 
 				xmlns:s="library://ns.adobe.com/flex/spark" 
 				xmlns:mx="library://ns.adobe.com/flex/mx" 
-				autoDrawBackground="true"
-				creationComplete="{data = data as AuthUser}">
+				autoDrawBackground="true">
 	<fx:Script>
 		<![CDATA[
 			import com.mydlp.ui.domain.AuthUser;
 			import com.mydlp.ui.util.InteractionUtil;
+			
+			public override function set data(value:Object):void
+			{
+				if (value == null)
+				{
+					super.data = null;
+					return;
+				}
+				data = data as AuthUser;
+			}
 		]]>
 	</fx:Script>
 	

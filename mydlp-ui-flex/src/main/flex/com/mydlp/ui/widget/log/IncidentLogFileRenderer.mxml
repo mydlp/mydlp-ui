@@ -2,8 +2,7 @@
 <s:ItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009" 
 				xmlns:s="library://ns.adobe.com/flex/spark" 
 				xmlns:mx="library://ns.adobe.com/flex/mx" 
-				autoDrawBackground="false" 
-				creationComplete="{data = data as IncidentLogFile}">
+				autoDrawBackground="false" >
 	<fx:Script>
 		<![CDATA[
 			import com.mydlp.ui.domain.IncidentLogFile;
@@ -11,6 +10,16 @@
 			
 			import mx.controls.Alert;
 			import mx.events.ToolTipEvent;
+			
+			public override function set data(value:Object):void
+			{
+				if (value == null)
+				{
+					super.data = null;
+					return;
+				}
+				data = data as IncidentLogFile;
+			}
 			
 			protected function createCustomToolTip(event:ToolTipEvent):void
 			{
