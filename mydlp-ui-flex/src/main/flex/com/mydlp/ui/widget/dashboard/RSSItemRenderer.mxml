@@ -2,19 +2,12 @@
 <s:ItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009" 
 				xmlns:s="library://ns.adobe.com/flex/spark" 
 				xmlns:mx="library://ns.adobe.com/flex/mx" 
-				autoDrawBackground="false">
+				autoDrawBackground="false" creationComplete="onCreationComplete(event)">
 	<fx:Script>
 		<![CDATA[
 			import mx.events.FlexEvent;
 			
-			public override function set data(value:Object):void
-			{
-				super.data = value;
-				if (data == null) return;
-				populate();
-			}
-			
-			protected function populate():void
+			protected function onCreationComplete(event:FlexEvent):void
 			{
 				lbl.text = data.title;
 				lbl.addEventListener(MouseEvent.CLICK, 

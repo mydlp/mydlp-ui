@@ -3,15 +3,6 @@
 				xmlns:s="library://ns.adobe.com/flex/spark" 
 				xmlns:mx="library://ns.adobe.com/flex/mx" 
 				autoDrawBackground="false" >
-	<fx:Script>
-		<![CDATA[
-			public override function set data(value:Object):void
-			{
-				super.data = value;
-				if (data == null) return;
-			}
-		]]>
-	</fx:Script>
 	<s:layout>
 		<s:HorizontalLayout verticalAlign="middle" horizontalAlign="center"
 							paddingTop="5" paddingBottom="5" 

@@ -3,20 +3,11 @@
 				xmlns:s="library://ns.adobe.com/flex/spark" 
 				xmlns:mx="library://ns.adobe.com/flex/mx" 
 				autoDrawBackground="true" 
+				creationComplete="{data = data as DataFormat;}"
 				height="20">
 	<fx:Script>
 		<![CDATA[
 			import com.mydlp.ui.domain.DataFormat;
-			
-			public override function set data(value:Object):void
-			{
-				if (value == null)
-				{
-					super.data = null;
-					return;
-				}
-				data = data as DataFormat;
-			}
 		]]>
 	</fx:Script>
 	
