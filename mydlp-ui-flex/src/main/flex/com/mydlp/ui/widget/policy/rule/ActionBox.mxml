@@ -8,6 +8,7 @@
 		<![CDATA[
 			import com.mydlp.ui.domain.CustomAction;
 			import com.mydlp.ui.domain.DiscoveryRule;
+			import com.mydlp.ui.domain.MailRule;
 			import com.mydlp.ui.domain.Rule;
 			import com.mydlp.ui.util.LangUtil;
 			import com.mydlp.ui.util.SessionUtil;
@@ -120,6 +121,8 @@
 				if (SessionUtil.isEnterprise())
 				{
 					if (rule is DiscoveryRule)
+						return actionsCustom;
+					else if (rule is MailRule)
 						return actionsCustom;
 					else
 						return actions;

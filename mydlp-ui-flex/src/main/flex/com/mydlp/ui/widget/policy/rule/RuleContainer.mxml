@@ -183,20 +183,16 @@
 						break ruleLoop;
 					}
 					
-					if (r is DiscoveryRule)
+					if (r.customAction != null)
 					{
-						if (r.customAction != null)
+						if (r.customAction.customActionDescription is CustomActionDescriptionSeclore &&
+							IRMCustomActionPopup.secloreEnabled == false)
 						{
-							if (r.customAction.customActionDescription is CustomActionDescriptionSeclore &&
-								IRMCustomActionPopup.secloreEnabled == false)
-							{
-								retStr = "error.secloreIntegrationDisabledButUsed";
-								gotoRule(r);
-								break ruleLoop;
-							}
+							retStr = "error.secloreIntegrationDisabledButUsed";
+							gotoRule(r);
+							break ruleLoop;
 						}
 					}
-					
 				}
 				
 				return retStr;
