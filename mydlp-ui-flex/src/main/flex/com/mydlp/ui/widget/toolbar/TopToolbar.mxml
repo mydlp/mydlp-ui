@@ -176,6 +176,7 @@
 					installPopup.installationStatus.text = 
 						LangUtil.getString("messages", "installPolicy.sanityCheck." + sanityReturn);
 				}
+				fetchCompileStatus();
 			}
 			
 			public function installPolicyAndReload(): void
