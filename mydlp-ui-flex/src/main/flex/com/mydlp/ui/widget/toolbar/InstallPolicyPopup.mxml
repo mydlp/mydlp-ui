@@ -12,6 +12,8 @@
 			protected function close(): void
 			{
 				if (currentState == "completed" ||
+					currentState == "post_compile" ||
+					currentState == "revision" ||
 					currentState == "error")
 				InteractionUtil.closePopup(this);
 			}
