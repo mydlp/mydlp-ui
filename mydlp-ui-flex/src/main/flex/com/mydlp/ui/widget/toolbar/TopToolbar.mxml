@@ -33,6 +33,13 @@
 			
 			public var policyInstallationState:Boolean = true;
 			
+			[Bindable]
+			protected var compileProgress:String = "post_compile"; // done, compile, post_compile
+			
+			protected var timerInterval:uint = 3000;
+			
+			protected var compileStatusTimer:Timer = null;
+			
 			protected function onCreationComplete(event:FlexEvent):void
 			{
 				getCurrentUserHandler();
@@ -50,6 +57,50 @@
 			}
 			
 			protected function compilePolicyHandler(event:ResultEvent): void
+			{
+				pe.getCompileStatus();
+			}
+			
+			protected function scheduleCompileStatusTimer(): void
+			{
+				if (compileStatusTimer != null)
+				{
+					compileStatusTimer.stop();
+					compileStatusTimer == null;
+				}
+				compileStatusTimer = new Timer(timerInterval);
+				compileStatusTimer.addEventListener(TimerEvent.TIMER_COMPLETE, onCompileStatusTimerComplete);
+				compileStatusTimer.start();
+			}
+			
+			public function onCompileStatusTimerComplete(event:TimerEvent):void
+			{
+				pe.getCompileStatus();
+			}
+			
+			protected function getCompileStatusHandler(event:ResultEvent): void
+			{
+				compileProgress = event.result as String;
+				if (compileProgress == "done")
+				{
+					timerInterval = 60000;
+				}
+				else
+				{
+					timerInterval = 3000;
+					if (compileProgress == "compile")
+					{
+						installPopup.currentState = "compile";
+					}
+					else if (compileProgress == "post_compile")
+					{
+						installPopup.currentState = "post_compile";
+					} 
+				}
+				scheduleCompileStatusTimer();
+			}
+			
+			protected function compileCompletedHandler(): void
 			{
 				policyInstallationState = true;
 				if (installPopup != null)
@@ -164,6 +215,7 @@
 	<fx:Declarations>
 		<my:remote id="pe" destination="policyBRS" >
 			<my:method name="compilePolicy" result="compilePolicyHandler(event)" />
+			<my:method name="getCompileStatus" result="getCompileStatusHandler(event)" />
 		</my:remote>
 		<my:remote id="rev" destination="revisionBRS" >
 			<my:method name="save" result="saveRevisionHandler(event)" />
@@ -179,9 +231,19 @@
 		<s:HorizontalLayout verticalAlign="middle" horizontalAlign="right"/>
 	</s:layout>
 	
-	<s:Button id="installButton" skinClass="com.mydlp.ui.skin.InstallBitmapLabelButton24Skin" 
-			  label="@Resource(bundle = 'messages', key = 'toptoolbar.installPolicy')"
-			  styleName="fontSize24Style" click="{installPolicy()}" includeIn="default"/>
+	<s:Group includeIn="default">
+		<s:Button id="installButton" skinClass="com.mydlp.ui.skin.InstallBitmapLabelButton24Skin" 
+				  label="@Resource(bundle = 'messages', key = 'toptoolbar.installPolicy')"
+				  styleName="fontSize24Style" click="{installPolicy()}" 
+				  includeInLayout="{compileProgress == 'done'}" visible="{compileProgress == 'done'}"/>
+		<s:HGroup verticalAlign="middle"
+				  includeInLayout="{compileProgress != 'done'}" visible="{compileProgress != 'done'}">
+			<s:Label text="@Resource(bundle = 'messages', key = 'toptoolbar.compiling.message')" />
+			<mx:ProgressBar indeterminate="true" width="100" height="10"
+							labelPlacement="center" label="" labelWidth="0"/>
+		</s:HGroup>
+	</s:Group>
+	
 	<s:Spacer width="6" />
 	<s:Label id="userLabel" />
 	<s:Spacer width="4" />

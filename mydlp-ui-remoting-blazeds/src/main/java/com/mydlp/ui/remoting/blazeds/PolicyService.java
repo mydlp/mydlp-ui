@@ -8,5 +8,7 @@ import com.mydlp.ui.domain.AuthSecurityRole;
 public interface PolicyService {
 
 	public void compilePolicy(Integer policyId);
+	
+	public String getCompileStatus();
 
 }

@@ -26,4 +26,9 @@ public class PolicyBRSImpl implements PolicyService
 		thriftService.compileFilter(policyId);
 	}
 
+	@Override
+	public String getCompileStatus() {
+		return thriftService.getCompileStatus();
+	}
+
 }

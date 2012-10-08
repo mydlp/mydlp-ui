@@ -19,7 +19,8 @@
 		]]>
 	</fx:Script>
 	<s:states>
-		<s:State name="progress" />
+		<s:State name="compile" />
+		<s:State name="post_compile" />
 		<s:State name="revision" />
 		<s:State name="reload" />
 		<s:State name="logout"/>
@@ -36,7 +37,8 @@
 		<s:BitmapImage includeIn="error" source="@Embed('/assets/icons/32x32/warning.png')" />
 		<s:Spacer includeIn="error" width="20" />
 		<s:Label id="installationStatus" maxWidth="350" maxWidth.error="300" 
-				 text.progress="@Resource(bundle = 'messages', key = 'toptoolbar.install.progress.message')"
+				 text.compile="@Resource(bundle = 'messages', key = 'toptoolbar.install.compile.message')"
+				 text.post_compile="@Resource(bundle = 'messages', key = 'toptoolbar.install.post_compile.message')"
 				 text.revision="@Resource(bundle = 'messages', key = 'toptoolbar.install.revision.message')"
 				 text.reload="@Resource(bundle = 'messages', key = 'toptoolbar.install.reload.message')"
 				 text.logout="@Resource(bundle = 'messages', key = 'toptoolbar.install.logout.message')"
@@ -45,7 +47,7 @@
 	
 	<s:Spacer height="4" />
 	
-	<s:Button includeIn="completed,error" label="@Resource(bundle = 'messages', key = 'toptoolbar.install.closeButton.label')"
+	<s:Button includeIn="completed,error,post_compile,revision" label="@Resource(bundle = 'messages', key = 'toptoolbar.install.closeButton.label')"
 			  click="{close();}" />
 	
 	
