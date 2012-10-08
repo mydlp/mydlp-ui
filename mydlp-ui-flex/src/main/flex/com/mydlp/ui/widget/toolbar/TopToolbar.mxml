@@ -43,6 +43,7 @@
 			protected function onCreationComplete(event:FlexEvent):void
 			{
 				getCurrentUserHandler();
+				fetchCompileStatus();
 			}
 			
 			public function getCurrentUserHandler(): void
@@ -58,7 +59,12 @@
 			
 			protected function compilePolicyHandler(event:ResultEvent): void
 			{
-				pe.getCompileStatus();
+				fetchCompileStatus();
+			}
+			
+			protected function fetchCompileStatus(): void
+			{
+				pe.getCompileStatus();	
 			}
 			
 			protected function scheduleCompileStatusTimer(): void
@@ -75,7 +81,7 @@
 			
 			public function onCompileStatusTimerComplete(event:TimerEvent):void
 			{
-				pe.getCompileStatus();
+				fetchCompileStatus();
 			}
 			
 			protected function getCompileStatusHandler(event:ResultEvent): void
