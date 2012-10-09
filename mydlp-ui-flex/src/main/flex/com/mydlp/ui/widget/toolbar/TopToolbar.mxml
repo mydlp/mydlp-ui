@@ -36,7 +36,7 @@
 			[Bindable]
 			protected var compileProgress:String = "post_compile"; // done, compile, post_compile
 			
-			protected var timerInterval:uint = 3000;
+			protected var timerInterval:uint = 5000;
 			
 			protected var compileStatusTimer:Timer = null;
 			
@@ -90,6 +90,7 @@
 				if (compileProgress == "done")
 				{
 					timerInterval = 60000;
+					installPopup.currentState = "completed";
 				}
 				else
 				{
