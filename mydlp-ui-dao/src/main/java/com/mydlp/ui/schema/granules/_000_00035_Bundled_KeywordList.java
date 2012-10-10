@@ -39,7 +39,7 @@ public class _000_00035_Bundled_KeywordList extends AbstractGranule {
 		bcg5.setDescriptionKey("SensitiveDrugNames");
 		
 		BundledKeywordGroup bcg6 = new BundledKeywordGroup();
-		bcg6.setFilename("names_wl.txt");
+		bcg6.setFilename("names.txt");
 		bcg6.setNameKey("names.keywordList");
 		bcg6.setDescriptionKey("Names");
 		
@@ -128,6 +128,16 @@ public class _000_00035_Bundled_KeywordList extends AbstractGranule {
 		bcg16.setNameKey("finance.indiaDocuments.form16A.keywordList");
 		bcg16.setDescriptionKey("IndiaFormNo.16A");
 		
+		BundledKeywordGroup bcg17 = new BundledKeywordGroup();
+		bcg17.setFilename("surnames.txt");
+		bcg17.setNameKey("surnames.keywordList");
+		bcg17.setDescriptionKey("surnames");
+		
+		BundledKeywordGroup bcg18 = new BundledKeywordGroup();
+		bcg18.setFilename("names_indian.txt");
+		bcg18.setNameKey("IndianNames.keywordList");
+		bcg18.setDescriptionKey("indian.names");
+		
 		getHibernateTemplate().saveOrUpdate(bcg);
 		getHibernateTemplate().saveOrUpdate(bcg1);
 		getHibernateTemplate().saveOrUpdate(bcg2);
@@ -152,5 +162,7 @@ public class _000_00035_Bundled_KeywordList extends AbstractGranule {
 		getHibernateTemplate().saveOrUpdate(bcg14);
 		getHibernateTemplate().saveOrUpdate(bcg15);
 		getHibernateTemplate().saveOrUpdate(bcg16);
+		getHibernateTemplate().saveOrUpdate(bcg17);
+		getHibernateTemplate().saveOrUpdate(bcg18);
 	}
 }
