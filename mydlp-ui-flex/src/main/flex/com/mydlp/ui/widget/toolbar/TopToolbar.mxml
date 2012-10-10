@@ -170,6 +170,7 @@
 				if (sanityReturn == "ok")
 				{
 					pe.compilePolicy(1);
+					fetchCompileStatus();
 				}
 				else
 				{
@@ -177,7 +178,6 @@
 					installPopup.installationStatus.text = 
 						LangUtil.getString("messages", "installPolicy.sanityCheck." + sanityReturn);
 				}
-				fetchCompileStatus();
 			}
 			
 			public function installPolicyAndReload(): void
