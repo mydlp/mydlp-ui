@@ -66,8 +66,9 @@
 						dashboardItem.dasboardItemKey == DashboardItem.TOP_5_ITYPES_24H )
 					{
 						dashboardItemBox = new HBarChartBox();
-					} else if (dashboardItem.dasboardItemKey == DashboardItem.RSS_MYDLP_BLOG ||
-						dashboardItem.dasboardItemKey == DashboardItem.RSS_DATALOSSDB ) {
+					} else if (dashboardItem.dasboardItemKey == DashboardItem.RSS_MYDLP_BLOG) 
+						//dashboardItem.dasboardItemKey == DashboardItem.RSS_DATALOSSDB )
+					{
 						dashboardItemBox = new RSSFeedBox();
 					} 
 					

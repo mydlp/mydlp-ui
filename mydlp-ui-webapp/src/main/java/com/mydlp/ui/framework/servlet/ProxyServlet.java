@@ -33,7 +33,7 @@ public class ProxyServlet extends HttpServlet {
 	
 	static {
 		urlMap = new TreeMap<String,String>(); 
-		urlMap.put("blogrss", "http://blog.mydlp.com/feeds/posts/default?alt=rss");
+		urlMap.put("blogrss", "http://www.mydlp.com/feed/");
 		urlMap.put("datalossdbrss", "http://datalossdb.org/latest_incidents.rss");
 		
 		typeMap = new TreeMap<String,String>(); 
