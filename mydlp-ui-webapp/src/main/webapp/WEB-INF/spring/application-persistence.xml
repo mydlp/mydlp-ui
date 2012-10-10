@@ -29,12 +29,14 @@
          <value>com.mydlp.ui.domain.Argument</value>
          <value>com.mydlp.ui.domain.AuthSecurityRole</value>
          <value>com.mydlp.ui.domain.AuthUser</value>
+         <value>com.mydlp.ui.domain.BundledKeywordGroup</value>
          <value>com.mydlp.ui.domain.Config</value>
          <value>com.mydlp.ui.domain.CustomAction</value>
          <value>com.mydlp.ui.domain.CustomActionDescription</value>
          <value>com.mydlp.ui.domain.CustomActionDescriptionSeclore</value>
          <value>com.mydlp.ui.domain.DashboardItem</value>
          <value>com.mydlp.ui.domain.DataFormat</value>
+         <value>com.mydlp.ui.domain.DiscoveryRule</value>
          <value>com.mydlp.ui.domain.Document</value>
          <value>com.mydlp.ui.domain.DocumentDatabase</value>
          <value>com.mydlp.ui.domain.DocumentDatabaseFileEntry</value>
@@ -48,6 +50,7 @@
          <value>com.mydlp.ui.domain.InventoryCategory</value>
          <value>com.mydlp.ui.domain.InventoryItem</value>
          <value>com.mydlp.ui.domain.Item</value>
+         <value>com.mydlp.ui.domain.LicenseInformation</value>
          <value>com.mydlp.ui.domain.NonCascadingArgument</value>
          <value>com.mydlp.ui.domain.MailRule</value>
          <value>com.mydlp.ui.domain.Matcher</value>
@@ -70,9 +73,6 @@
          <value>com.mydlp.ui.domain.USBDevice</value>
          <value>com.mydlp.ui.domain.UserSettings</value>
          <value>com.mydlp.ui.domain.WebRule</value>
-         <value>com.mydlp.ui.domain.DiscoveryRule</value>
-         <value>com.mydlp.ui.domain.LicenseInformation</value>
-         <value>com.mydlp.ui.domain.BundledKeywordGroup</value>
        </list>
      </property>
      <property name="hibernateProperties">

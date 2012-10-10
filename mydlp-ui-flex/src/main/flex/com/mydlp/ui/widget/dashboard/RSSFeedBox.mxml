@@ -16,7 +16,9 @@
 			
 			private function parseRSS( e:ResultEvent ):void
 			{
+				if (e == null || e.result == null) return;
 				var xml:XML = (e.result as XML);
+				if (xml == null || xml.channel == null || xml.channel.item == null) return;
 				rssResults = new XMLListCollection(XMLList(xml.channel.item));
 			}
 			
