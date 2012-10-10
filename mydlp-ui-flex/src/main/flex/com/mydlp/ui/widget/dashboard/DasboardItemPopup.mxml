@@ -24,8 +24,8 @@
 				DashboardItem.TOP_5_USERS_1H,
 				DashboardItem.TOP_5_USERS_24H,
 				DashboardItem.TOP_5_RULES_1H,
-				DashboardItem.TOP_5_RULES_24H,
-				DashboardItem.RSS_MYDLP_BLOG
+				DashboardItem.TOP_5_RULES_24H
+				//DashboardItem.RSS_MYDLP_BLOG
 				//DashboardItem.RSS_DATALOSSDB
 			]);
 		]]>
