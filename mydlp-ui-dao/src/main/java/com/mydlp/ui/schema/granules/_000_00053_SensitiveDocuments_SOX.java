@@ -104,7 +104,7 @@ public class _000_00053_SensitiveDocuments_SOX extends AbstractGranule {
 		InventoryItem inventoryItem = generateInventoryItem("sox.10k.coverPage.keywordList", 
 										"informationType.compliance.finance.sox.coverPage.10k", df, new Long(6), 1500);
 		InventoryItem inventoryItem1 = generateInventoryItem("sox.10k.contentPage.keywordList", 
-										"informationType.compliance.finance.sox.contentPage.10k", df, new Long(15), 2000);
+										"informationType.compliance.finance.sox.contentPage.10k", df, new Long(12), 3500);
 		InventoryItem inventoryItem2 = generateInventoryItem("sox.10k.performanceGraph.keywordList", 
 										"informationType.compliance.finance.sox.performanceGraph.10k", df, new Long(2), 200);
 		InventoryItem inventoryItem3 = generateInventoryItem("sox.10k.statementPage.keywordList", 
@@ -115,7 +115,7 @@ public class _000_00053_SensitiveDocuments_SOX extends AbstractGranule {
 		InventoryItem inventoryItemq = generateInventoryItem("sox.10q.coverPage.keywordList", 
 										"informationType.compliance.finance.sox.coverPage.10q", df, new Long(5), 1500);
 		InventoryItem inventoryItemq1 = generateInventoryItem("sox.10q.contentPage.keywordList", 
-										"informationType.compliance.finance.sox.contentPage.10q", df, new Long(9), 200);
+										"informationType.compliance.finance.sox.contentPage.10q", df, new Long(5), 3000);
 		InventoryItem inventoryItemq2 = generateInventoryItem("sox.10q.balancePage.keywordList", 
 										"informationType.compliance.finance.sox.balance.10q", df, new Long(6), 1500);
 		InventoryItem inventoryItemq3 = generateInventoryItem("sox.10q.information.keywordList", 

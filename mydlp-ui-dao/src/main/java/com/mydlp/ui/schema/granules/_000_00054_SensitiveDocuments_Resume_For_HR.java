@@ -64,7 +64,7 @@ public class _000_00054_SensitiveDocuments_Resume_For_HR extends AbstractGranule
 		matcher.setMatcherArguments(matcherArguments);
 		
 		InformationFeature informationFeature = new InformationFeature();
-		informationFeature.setThreshold(new Long(10));
+		informationFeature.setThreshold(new Long(8));
 		informationFeature.setMatcher(matcher);
 		matcher.setCoupledInformationFeature(informationFeature);
 		
