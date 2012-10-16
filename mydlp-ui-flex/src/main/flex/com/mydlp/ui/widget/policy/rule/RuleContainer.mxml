@@ -234,6 +234,7 @@
 		
 		<s:Label text="@Resource(key='rules.sources.label', bundle='messages')" styleName="fontSize24Style" visible="{ruleDP.length != 0}"/>
 		<s:Label text="@Resource(key='rules.informationTypes.label', bundle='messages')" styleName="fontSize24Style" visible="{ruleDP.length != 0}"/>
+		<s:Label text="@Resource(key='rules.destinations.label', bundle='messages')" styleName="fontSize24Style" visible="{ruleDP.length != 0}"/>
 	</s:Group>
 	
 	<rule:RuleList id="ruleList" dataProvider="{ruleDP}" 

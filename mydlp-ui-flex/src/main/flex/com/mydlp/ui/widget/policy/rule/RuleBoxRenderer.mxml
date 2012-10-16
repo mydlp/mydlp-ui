@@ -15,6 +15,7 @@
 	<fx:Script>
 		<![CDATA[
 			import com.mydlp.ui.domain.ApiRule;
+			import com.mydlp.ui.domain.Destination;
 			import com.mydlp.ui.domain.DiscoveryRule;
 			import com.mydlp.ui.domain.EndpointRule;
 			import com.mydlp.ui.domain.InformationType;
@@ -69,11 +70,16 @@
 			
 			protected static const ITYPE_ALL:String = "informationType.predefined.all";
 			
+			protected static const DESTINATION_ALL:String = "inventory.destination.all";
+			
 			[Bindable]
 			protected var sourceDataProvider:ArrayCollection = new ArrayCollection();
 			
 			[Bindable]
 			protected var matcherDataProvider:ArrayCollection = new ArrayCollection();
+			
+			[Bindable]
+			protected var destinationDataProvider:ArrayCollection = new ArrayCollection();
 			
 			[Bindable]
 			protected var ruleList:List = FlexGlobals.topLevelApplication.policyContainer.ruleContainer.ruleList;
@@ -82,6 +88,7 @@
 			
 			protected var droppedSources:ListCollectionView;//Array for dropped Sources items from inventory tree to rule container.
 			protected var droppedMatchers:ListCollectionView;//Array for dropped Matchers items from inventory tree to rule container.
+			protected var droppedDestinations:ListCollectionView;//Array for dropped Destination items from inventory tree to rule container.
 			
 			public override function set data(value:Object):void
 			{
@@ -127,6 +134,7 @@
 			{
 				var sourceDataProvider1:ArrayCollection = new ArrayCollection();
 				var matcherDataProvider1:ArrayCollection = new ArrayCollection();
+				var destinationDataProvider1:ArrayCollection = new ArrayCollection();
 				
 				var ruleItems:ListCollectionView = ruleObject.ruleItems;
 				for each (var ruleItem:* in ruleItems)
@@ -136,9 +144,12 @@
 						sourceDataProvider1.addItem(ruleItem);
 					else if (ruleItem.item is InformationType)
 						matcherDataProvider1.addItem(ruleItem);
+					else if (ruleItem.item is Destination)
+						destinationDataProvider1.addItem(ruleItem);
 				}
 				sourceDataProvider = sourceDataProvider1;
 				matcherDataProvider = matcherDataProvider1;
+				destinationDataProvider = destinationDataProvider1;
 			}
 			
 			public function refresh():void
@@ -169,6 +180,16 @@
 				return false;
 			}
 			
+			protected function hasAllDestination():Boolean //Checks whether rule has "All Destination" or not.
+			{
+				for each(var o:RuleItem in ruleObject.ruleItems)
+				{
+					if(o.item.coupledInventoryItem.nameKey == DESTINATION_ALL)
+						return true;
+				}
+				return false;
+			}
+			
 			public static function isITypeRuleItem(item:Item):Boolean
 			{
 				if(item is InformationType)
@@ -177,6 +198,14 @@
 					return false;
 			}
 			
+			public static function isDestinationRuleItem(item:Item):Boolean
+			{
+				if(item is Destination)
+					return true;
+				else
+					return false;
+			}
+						
 			protected function removeAllSourcesItem():void //called when "All Network" is in rule and dropped network is a specific network.
 			{
 				var ruleItems:ListCollectionView = ruleObject.ruleItems;
@@ -207,6 +236,46 @@
 					for(var i:int = 0; i < ruleItems.length; i++)
 					{
 						if(isSourceRuleItem(ruleItems[i].item))
+						{
+							deleteList.addItem(ruleObject.ruleItems[i]);
+							ruleItems.removeItemAt(i);
+							loop = true;
+							break;
+						}
+					}	
+				}
+			}
+			
+			protected function removeAllDestinationItem():void //called when "All Destination" is in rule and dropped network is a specific network.
+			{
+				var ruleItems:ListCollectionView = ruleObject.ruleItems;
+				var loop:Boolean = true;
+				while (loop)
+				{
+					loop = false;
+					for(var i:int = 0; i < ruleItems.length; i++)
+					{
+						if(ruleItems[i].item.coupledInventoryItem.nameKey == DESTINATION_ALL)
+						{
+							deleteList.addItem(ruleObject.ruleItems[i]);
+							ruleObject.ruleItems.removeItemAt(i);
+							loop = true;
+							break;
+						}
+					}
+				}
+			}
+			
+			protected function removeOtherDestinations():void // called when specific destinations are in rule and dropped network is "All Destination"
+			{
+				var ruleItems:ListCollectionView = ruleObject.ruleItems;
+				var loop:Boolean = true;
+				while (loop)
+				{
+					loop = false;
+					for(var i:int = 0; i < ruleItems.length; i++)
+					{
+						if(ruleItems[i].item is Destination)
 						{
 							deleteList.addItem(ruleObject.ruleItems[i]);
 							ruleItems.removeItemAt(i);
@@ -300,6 +369,7 @@
 			{
 				droppedMatchers = new ArrayCollection();
 				droppedSources = new ArrayCollection();
+				droppedDestinations = new ArrayCollection();
 				var treeItems:* = FlexGlobals.topLevelApplication.policyContainer.inventoryTree.selectedItems;
 				if (isAllDroppable(treeItems) && checkConsistency(treeItems))
 					acceptDrop();
@@ -310,10 +380,20 @@
 			protected function checkConsistency(treeItems:*):Boolean //Controls whether dropped items consist both "All Network" and specific network
 			{														// or both "All Information Types" and specific information types.
 				groupDroppedItems(treeItems);
-				if(isConsistentForSources() && isConsistentForMatchers())
+				if(isConsistentForSources() && isConsistentForMatchers() && isConsistentForDestinations())
 					return true;
 				return false;
 				
+			}
+			
+			protected function isConsistentForDestinations():Boolean // Controls whether dropped items consist both "All Network" and specific network
+			{
+				for each(var ri:InventoryItem in droppedSources)
+				{
+					if(ri.item.coupledInventoryItem.nameKey == DESTINATION_ALL && droppedDestinations.length > 1)
+						return false;
+				}
+				return true;
 			}
 			
 			protected function isConsistentForSources():Boolean // Controls whether dropped items consist both "All Network" and specific network
@@ -350,6 +430,8 @@
 						droppedSources.addItem(droppedItem);
 					else if(droppedItem.item is InformationType)
 						droppedMatchers.addItem(droppedItem);
+					else if(droppedItem.item is Destination)
+						droppedDestinations.addItem(droppedItem);
 					else
 						throw new Error("unexpected type of item dropped");
 				}
@@ -388,6 +470,8 @@
 								ruleObject is ApiRule)
 							return true;
 					}
+					else if (treeItem.item is Destination)
+						return true;
 					else if ( treeItem.item is RuleUser )
 						return true;
 				}
@@ -486,6 +570,21 @@
 					{
 						if(sourceItem.coupledInventoryItem.nameKey == ITYPE_ALL)
 							removeOtherITypes();
+					}
+				}
+				else if(isDestinationRuleItem(sourceItem))
+				{
+					if(hasAllDestination())//if ruleObject has "All Destinations"
+					{
+						if(sourceItem.coupledInventoryItem.nameKey == DESTINATION_ALL)//if dropped item is "All Destinations"
+							return;
+						else
+							removeAllDestinationItem();
+					}
+					else
+					{
+						if(sourceItem.coupledInventoryItem.nameKey == DESTINATION_ALL)
+							removeOtherDestinations();
 					}
 				}
 				
@@ -637,6 +736,13 @@
 						  listDataProvider="{matcherDataProvider}"
 						  noneMessage="@Resource(bundle = 'messages', key = 'rulebox.ruleitembox.itypes.nonemessage')"
 						  currentState="{matcherDataProvider.length == 0 ? 'noitem' : 'normal'}" />
+		
+		<rule:RSpacer />
+		
+		<rule:RuleItemBox width="260"
+						  listDataProvider="{destinationDataProvider}"
+						  noneMessage="@Resource(bundle = 'messages', key = 'rulebox.ruleitembox.destinations.nonemessage')"
+						  currentState="{destinationDataProvider.length == 0 ? 'noitem' : 'normal'}" />
 		
 		<rule:RSpacer />
 		

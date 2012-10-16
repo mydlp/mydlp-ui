@@ -8,6 +8,7 @@
 				>
 	<fx:Script>
 		<![CDATA[
+			import com.mydlp.ui.domain.Destination;
 			import com.mydlp.ui.domain.InformationDescription;
 			import com.mydlp.ui.domain.InformationType;
 			import com.mydlp.ui.domain.InventoryCategory;
@@ -49,6 +50,13 @@
 				i.item = new InformationType();
 				InteractionUtil.newEditDialog(i);	
 			}
+			protected function destinationHandler():void
+			{
+				close();
+				var i:InventoryItem = new InventoryItem();
+				i.item = new Destination();
+				InteractionUtil.newEditDialog(i);	
+			}
 		]]>
 	</fx:Script>
 	<fx:Declarations>
@@ -70,6 +78,9 @@
 		<s:Button skinClass="com.mydlp.ui.skin.InformationTypeBitmapLabelButton16Skin" 
 				  label="@Resource(bundle = 'messages', key = 'inventory.newdialog.informationType')" 
 				  click="informationTypeHandler()"/>
+		<s:Button skinClass="com.mydlp.ui.skin.DestinationBitmapLabelButton16Skin" 
+				  label="@Resource(bundle = 'messages', key = 'inventory.newdialog.destination')" 
+				  click="destinationHandler()"/>
 		<s:Button skinClass="com.mydlp.ui.skin.UserBitmapLabelButton16Skin" 
 				  label="@Resource(bundle = 'messages', key = 'inventory.newdialog.userObject')" 
 				  click="{close(); InteractionUtil.newPopup(NewInventoryUserDialog);}"/>
