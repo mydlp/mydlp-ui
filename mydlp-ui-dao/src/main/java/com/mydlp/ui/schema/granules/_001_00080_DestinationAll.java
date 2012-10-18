@@ -23,7 +23,7 @@ public class _001_00080_DestinationAll extends AbstractGranule {
 		InventoryCategory destinations = DAOUtil.getSingleResult(list);
 		
 		Destination d1 = new Destination();
-		d1.setDestinationString("C:/;D:/");
+		d1.setDestinationString("all");
 		
 		InventoryItem n1item = new InventoryItem();
 		n1item.setNameKey("inventory.destination.all");
