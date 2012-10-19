@@ -23,7 +23,7 @@ public class _001_00090_C_Users_Documents extends AbstractGranule {
 		InventoryCategory destinations = DAOUtil.getSingleResult(list);
 		
 		FileSystemDirectory d1 = new FileSystemDirectory();
-		d1.setDestinationString("C:/");
+		d1.setDestinationString("all");
 		
 		InventoryItem n1item = new InventoryItem();
 		n1item.setNameKey("inventory.fileSystemDirectory.all");
