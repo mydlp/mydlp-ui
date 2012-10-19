@@ -23,6 +23,9 @@ package com.mydlp.ui.domain {
 		[Embed("../../../../../../../../mydlp-ui-flex/src/main/flex/assets/icons/16x16/user_static.png")]
 		public static const ICON_RULE_USER_STATIC:Class;
 		
+		[Embed("../../../../../../../../mydlp-ui-flex/src/main/flex/assets/icons/16x16/arrow_right.png")]
+		public static const DIRECTORY_DESTINATION:Class;
+		
 		private var _icon:Object = null;
 		
 		public function get icon(): Object
@@ -37,8 +40,10 @@ package com.mydlp.ui.domain {
 						_icon = ICON_INFORMATION_TYPE;
 					else if (iitem is Network)
 						_icon = ICON_NETWORK;
-					else if (iitem is Destination)
+					else if (iitem is Domain)
 						_icon = ICON_DESTINATION;
+					else if (iitem is FileSystemDirectory)
+						_icon = DIRECTORY_DESTINATION;
 					else if (iitem is RuleUserStatic)
 						_icon = ICON_RULE_USER_STATIC;
 					else if (iitem is RuleUserAD) {

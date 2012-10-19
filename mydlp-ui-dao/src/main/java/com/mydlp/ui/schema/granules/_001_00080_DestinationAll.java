@@ -6,7 +6,7 @@ import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Restrictions;
 
 import com.mydlp.ui.dao.DAOUtil;
-import com.mydlp.ui.domain.Destination;
+import com.mydlp.ui.domain.Domain;
 import com.mydlp.ui.domain.InventoryCategory;
 import com.mydlp.ui.domain.InventoryItem;
 import com.mydlp.ui.schema.AbstractGranule;
@@ -22,11 +22,11 @@ public class _001_00080_DestinationAll extends AbstractGranule {
 		List<InventoryCategory> list = getHibernateTemplate().findByCriteria(criteria);
 		InventoryCategory destinations = DAOUtil.getSingleResult(list);
 		
-		Destination d1 = new Destination();
+		Domain d1 = new Domain();
 		d1.setDestinationString("all");
 		
 		InventoryItem n1item = new InventoryItem();
-		n1item.setNameKey("inventory.destination.all");
+		n1item.setNameKey("inventory.domain.all");
 		n1item.setItem(d1);
 		
 		n1item.setCategory(destinations);

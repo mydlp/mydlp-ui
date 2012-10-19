@@ -4,7 +4,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 
 @Entity
-public class Destination extends Item {
+public class FileSystemDirectory extends Item {
 
 	/**
 	 * 

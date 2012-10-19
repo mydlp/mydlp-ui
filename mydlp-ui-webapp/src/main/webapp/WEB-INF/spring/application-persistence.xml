@@ -42,7 +42,9 @@
          <value>com.mydlp.ui.domain.DocumentDatabaseFileEntry</value>
          <value>com.mydlp.ui.domain.DocumentDatabaseRDBMSEntry</value>
          <value>com.mydlp.ui.domain.DocumentFingerprint</value>
+         <value>com.mydlp.ui.domain.Domain</value>
          <value>com.mydlp.ui.domain.EndpointRule</value>
+         <value>com.mydlp.ui.domain.FileSystemDirectory</value>
          <value>com.mydlp.ui.domain.InformationDescription</value>
          <value>com.mydlp.ui.domain.InformationFeature</value>
          <value>com.mydlp.ui.domain.InformationType</value>
@@ -73,7 +75,6 @@
          <value>com.mydlp.ui.domain.USBDevice</value>
          <value>com.mydlp.ui.domain.UserSettings</value>
          <value>com.mydlp.ui.domain.WebRule</value>
-         <value>com.mydlp.ui.domain.Destination</value>
        </list>
      </property>
      <property name="hibernateProperties">

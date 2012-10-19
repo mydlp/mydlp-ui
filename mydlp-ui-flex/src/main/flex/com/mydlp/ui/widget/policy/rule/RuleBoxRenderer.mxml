@@ -15,9 +15,10 @@
 	<fx:Script>
 		<![CDATA[
 			import com.mydlp.ui.domain.ApiRule;
-			import com.mydlp.ui.domain.Destination;
 			import com.mydlp.ui.domain.DiscoveryRule;
+			import com.mydlp.ui.domain.Domain;
 			import com.mydlp.ui.domain.EndpointRule;
+			import com.mydlp.ui.domain.FileSystemDirectory;
 			import com.mydlp.ui.domain.InformationType;
 			import com.mydlp.ui.domain.InventoryBase;
 			import com.mydlp.ui.domain.InventoryCategory;
@@ -38,7 +39,6 @@
 			import mx.core.FlexGlobals;
 			import mx.core.IUIComponent;
 			import mx.events.DragEvent;
-			import mx.events.FlexEvent;
 			import mx.events.ItemClickEvent;
 			import mx.managers.DragManager;
 			import mx.rpc.events.ResultEvent;
@@ -70,7 +70,9 @@
 			
 			protected static const ITYPE_ALL:String = "informationType.predefined.all";
 			
-			protected static const DESTINATION_ALL:String = "inventory.destination.all";
+			protected static const DOMAIN_ALL:String = "inventory.domain.all";
+			
+			protected static const DIRECTORY_ALL:String = "inventory.fileSystemDirectory.all";
 			
 			[Bindable]
 			protected var sourceDataProvider:ArrayCollection = new ArrayCollection();
@@ -144,7 +146,8 @@
 						sourceDataProvider1.addItem(ruleItem);
 					else if (ruleItem.item is InformationType)
 						matcherDataProvider1.addItem(ruleItem);
-					else if (ruleItem.item is Destination)
+					else if (ruleItem.item is Domain ||
+						ruleItem.item is FileSystemDirectory)
 						destinationDataProvider1.addItem(ruleItem);
 				}
 				sourceDataProvider = sourceDataProvider1;
@@ -184,7 +187,7 @@
 			{
 				for each(var o:RuleItem in ruleObject.ruleItems)
 				{
-					if(o.item.coupledInventoryItem.nameKey == DESTINATION_ALL)
+					if(o.item.coupledInventoryItem.nameKey == DOMAIN_ALL || o.item.coupledInventoryItem.nameKey == DIRECTORY_ALL)
 						return true;
 				}
 				return false;
@@ -200,7 +203,7 @@
 			
 			public static function isDestinationRuleItem(item:Item):Boolean
 			{
-				if(item is Destination)
+				if(item is Domain || item is FileSystemDirectory)
 					return true;
 				else
 					return false;
@@ -255,7 +258,8 @@
 					loop = false;
 					for(var i:int = 0; i < ruleItems.length; i++)
 					{
-						if(ruleItems[i].item.coupledInventoryItem.nameKey == DESTINATION_ALL)
+						if(ruleItems[i].item.coupledInventoryItem.nameKey == DOMAIN_ALL ||
+							ruleItems[i].item.coupledInventoryItem.nameKey == DIRECTORY_ALL)
 						{
 							deleteList.addItem(ruleObject.ruleItems[i]);
 							ruleObject.ruleItems.removeItemAt(i);
@@ -275,7 +279,7 @@
 					loop = false;
 					for(var i:int = 0; i < ruleItems.length; i++)
 					{
-						if(ruleItems[i].item is Destination)
+						if(ruleItems[i].item is Domain)
 						{
 							deleteList.addItem(ruleObject.ruleItems[i]);
 							ruleItems.removeItemAt(i);
@@ -390,7 +394,8 @@
 			{
 				for each(var ri:InventoryItem in droppedSources)
 				{
-					if(ri.item.coupledInventoryItem.nameKey == DESTINATION_ALL && droppedDestinations.length > 1)
+					if((ri.item.coupledInventoryItem.nameKey == DOMAIN_ALL || ri.item.coupledInventoryItem.nameKey == DIRECTORY_ALL)
+						&& droppedDestinations.length > 1)
 						return false;
 				}
 				return true;
@@ -430,7 +435,7 @@
 						droppedSources.addItem(droppedItem);
 					else if(droppedItem.item is InformationType)
 						droppedMatchers.addItem(droppedItem);
-					else if(droppedItem.item is Destination)
+					else if(droppedItem.item is Domain || droppedItem.item is FileSystemDirectory)
 						droppedDestinations.addItem(droppedItem);
 					else
 						throw new Error("unexpected type of item dropped");
@@ -470,8 +475,16 @@
 								ruleObject is ApiRule)
 							return true;
 					}
-					else if (treeItem.item is Destination)
-						return true;
+					else if (treeItem.item is Domain)
+					{
+						if(ruleObject is WebRule || ruleObject is MailRule)
+							return true;
+					}
+					else if (treeItem.item is FileSystemDirectory)
+					{
+						if(ruleObject is DiscoveryRule)
+							return true;
+					}
 					else if ( treeItem.item is RuleUser )
 						return true;
 				}
@@ -576,14 +589,16 @@
 				{
 					if(hasAllDestination())//if ruleObject has "All Destinations"
 					{
-						if(sourceItem.coupledInventoryItem.nameKey == DESTINATION_ALL)//if dropped item is "All Destinations"
+						if(sourceItem.coupledInventoryItem.nameKey == DOMAIN_ALL ||
+							sourceItem.coupledInventoryItem.nameKey == DIRECTORY_ALL)//if dropped item is "All Destinations"
 							return;
 						else
 							removeAllDestinationItem();
 					}
 					else
 					{
-						if(sourceItem.coupledInventoryItem.nameKey == DESTINATION_ALL)
+						if(sourceItem.coupledInventoryItem.nameKey == DOMAIN_ALL ||
+							sourceItem.coupledInventoryItem.nameKey == DIRECTORY_ALL)
 							removeOtherDestinations();
 					}
 				}
@@ -733,17 +748,17 @@
 		<rule:RSpacer />
 		
 		<rule:RuleItemBox width="260"
-						  listDataProvider="{matcherDataProvider}"
-						  noneMessage="@Resource(bundle = 'messages', key = 'rulebox.ruleitembox.itypes.nonemessage')"
-						  currentState="{matcherDataProvider.length == 0 ? 'noitem' : 'normal'}" />
-		
-		<rule:RSpacer />
-		
-		<rule:RuleItemBox width="260"
 						  listDataProvider="{destinationDataProvider}"
 						  noneMessage="@Resource(bundle = 'messages', key = 'rulebox.ruleitembox.destinations.nonemessage')"
 						  currentState="{destinationDataProvider.length == 0 ? 'noitem' : 'normal'}" />
 		
+		<rule:RSpacer />
+		
+		<rule:RuleItemBox width="260"
+						  listDataProvider="{matcherDataProvider}"
+						  noneMessage="@Resource(bundle = 'messages', key = 'rulebox.ruleitembox.itypes.nonemessage')"
+						  currentState="{matcherDataProvider.length == 0 ? 'noitem' : 'normal'}" />
+				
 		<rule:RSpacer />
 		
 		<rule:ActionBox id="actionBox" width="150" 
