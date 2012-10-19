@@ -11,7 +11,7 @@ import com.mydlp.ui.domain.InventoryCategory;
 import com.mydlp.ui.domain.InventoryItem;
 import com.mydlp.ui.schema.AbstractGranule;
 
-public class _001_00090_C_Users_Documents extends AbstractGranule {
+public class _001_00090_DirectoryAll extends AbstractGranule {
 
 	@Override
 	protected void callback() {
