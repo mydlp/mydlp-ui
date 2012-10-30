@@ -279,7 +279,7 @@
 					loop = false;
 					for(var i:int = 0; i < ruleItems.length; i++)
 					{
-						if(ruleItems[i].item is Domain)
+						if(ruleItems[i].item is Domain || ruleItems[i].item is FileSystemDirectory)
 						{
 							deleteList.addItem(ruleObject.ruleItems[i]);
 							ruleItems.removeItemAt(i);
