@@ -70,5 +70,9 @@ package com.mydlp.ui.util
 			var nDiffDays:int = Math.floor((currentDate.getTime() - (license.expirationDate*1000))/86400000);
 			return nDiffDays;
 		}
+		
+		public static function isDevelopment():Boolean {
+			return false;
+		}
 	}
 }

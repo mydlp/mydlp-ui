@@ -35,5 +35,9 @@ package com.mydlp.ui.util
 		{
 			return 60;
 		}
+		
+		public static function isDevelopment():Boolean {
+			return true;
+		}
 	}
 }
