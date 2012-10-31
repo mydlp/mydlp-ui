@@ -23,7 +23,7 @@ package com.mydlp.ui.domain {
 		[Embed("../../../../../../../../mydlp-ui-flex/src/main/flex/assets/icons/16x16/user_static.png")]
 		public static const ICON_RULE_USER_STATIC:Class;
 		
-		[Embed("../../../../../../../../mydlp-ui-flex/src/main/flex/assets/icons/16x16/arrow_right.png")]
+		[Embed("../../../../../../../../mydlp-ui-flex/src/main/flex/assets/icons/16x16/folder_fs.png")]
 		public static const DIRECTORY_DESTINATION:Class;
 		
 		private var _icon:Object = null;

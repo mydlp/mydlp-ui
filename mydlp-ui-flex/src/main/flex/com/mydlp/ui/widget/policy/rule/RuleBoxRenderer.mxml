@@ -32,6 +32,7 @@
 			import com.mydlp.ui.domain.RuleUser;
 			import com.mydlp.ui.domain.WebRule;
 			import com.mydlp.ui.util.InteractionUtil;
+			import com.mydlp.ui.util.LangUtil;
 			import com.mydlp.ui.util.ReflectionUtil;
 			
 			import mx.collections.ArrayCollection;
@@ -647,6 +648,14 @@
 				dispatchEvent(e);
 			}
 			
+			protected function getMessageText():String
+			{
+				if(ruleObject is WebRule || ruleObject is MailRule || ruleObject is DiscoveryRule)
+					return LangUtil.getString('messages','rulebox.ruleitembox.destinations.nonemessage');
+				else 
+					return LangUtil.getString('messages','rulebox.ruleitembox.destinations.notapplicable');
+			}
+			
 		]]>
 	</fx:Script>
 	
@@ -749,7 +758,7 @@
 		
 		<rule:RuleItemBox width="260"
 						  listDataProvider="{destinationDataProvider}"
-						  noneMessage="@Resource(bundle = 'messages', key = 'rulebox.ruleitembox.destinations.nonemessage')"
+						  noneMessage="{getMessageText()}"
 						  currentState="{destinationDataProvider.length == 0 ? 'noitem' : 'normal'}" />
 		
 		<rule:RSpacer />

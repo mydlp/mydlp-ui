@@ -153,6 +153,13 @@
 				ActionBox.generateCustomActions(customActions);
 				re.getRules();
 			}
+			
+			public function ruleIsApplicable(r:*): Boolean
+			{
+				if(r is WebRule || r is DiscoveryRule || r is MailRule)
+					return true;
+				else return false;
+			}
 				
 			public function sanityCheck(): String
 			{
@@ -185,7 +192,7 @@
 						gotoRule(r);
 						break ruleLoop;
 					}
-					if (!hasDestination)
+					if (!hasDestination && ruleIsApplicable(r))
 					{
 						retStr = "error.ruleHasNoDestination";
 						gotoRule(r);
