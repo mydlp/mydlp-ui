@@ -8,20 +8,13 @@
 				>
 	<fx:Script>
 		<![CDATA[
-			import com.mydlp.ui.domain.InformationDescription;
+			import com.mydlp.ui.domain.Domain;
+			import com.mydlp.ui.domain.FileSystemDirectory;
 			import com.mydlp.ui.domain.InformationType;
 			import com.mydlp.ui.domain.InventoryCategory;
 			import com.mydlp.ui.domain.InventoryItem;
 			import com.mydlp.ui.domain.Network;
-			import com.mydlp.ui.util.ClassMember;
 			import com.mydlp.ui.util.InteractionUtil;
-			import com.mydlp.ui.util.ReflectionUtil;
-			
-			import flash.utils.describeType;
-			
-			import mx.controls.Alert;
-			import mx.events.CloseEvent;
-			import mx.managers.PopUpManager;
 			
 			protected function close():void
 			{
@@ -49,6 +42,22 @@
 				i.item = new InformationType();
 				InteractionUtil.newEditDialog(i);	
 			}
+			protected function domainHandler():void
+			{
+				close();
+				var i:InventoryItem = new InventoryItem();
+				i.item = new Domain();
+				InteractionUtil.newEditDialog(i);	
+			}
+			
+			protected function fileSystemDirectoryHandler():void
+			{
+				close();
+				var i:InventoryItem = new InventoryItem();
+				i.item = new FileSystemDirectory();
+				InteractionUtil.newEditDialog(i);
+			}
+			
 		]]>
 	</fx:Script>
 	<fx:Declarations>
@@ -70,6 +79,12 @@
 		<s:Button skinClass="com.mydlp.ui.skin.InformationTypeBitmapLabelButton16Skin" 
 				  label="@Resource(bundle = 'messages', key = 'inventory.newdialog.informationType')" 
 				  click="informationTypeHandler()"/>
+		<s:Button skinClass="com.mydlp.ui.skin.DomainBitmapLabelButton16Skin" 
+				  label="@Resource(bundle = 'messages', key = 'inventory.newdialog.domain')" 
+				  click="domainHandler()"/>
+		<s:Button skinClass="com.mydlp.ui.skin.FileSystemDirectoryBitmapLabelButton16Skin" 
+				  label="@Resource(bundle = 'messages', key = 'inventory.newdialog.fileSystemDirectory')" 
+				  click="fileSystemDirectoryHandler()"/>
 		<s:Button skinClass="com.mydlp.ui.skin.UserBitmapLabelButton16Skin" 
 				  label="@Resource(bundle = 'messages', key = 'inventory.newdialog.userObject')" 
 				  click="{close(); InteractionUtil.newPopup(NewInventoryUserDialog);}"/>

@@ -16,7 +16,9 @@
 		<![CDATA[
 			import com.mydlp.ui.domain.ApiRule;
 			import com.mydlp.ui.domain.DiscoveryRule;
+			import com.mydlp.ui.domain.Domain;
 			import com.mydlp.ui.domain.EndpointRule;
+			import com.mydlp.ui.domain.FileSystemDirectory;
 			import com.mydlp.ui.domain.InformationType;
 			import com.mydlp.ui.domain.InventoryBase;
 			import com.mydlp.ui.domain.InventoryCategory;
@@ -37,7 +39,6 @@
 			import mx.core.FlexGlobals;
 			import mx.core.IUIComponent;
 			import mx.events.DragEvent;
-			import mx.events.FlexEvent;
 			import mx.events.ItemClickEvent;
 			import mx.managers.DragManager;
 			import mx.rpc.events.ResultEvent;
@@ -69,11 +70,18 @@
 			
 			protected static const ITYPE_ALL:String = "informationType.predefined.all";
 			
+			protected static const DOMAIN_ALL:String = "inventory.domain.all";
+			
+			protected static const DIRECTORY_ALL:String = "inventory.fileSystemDirectory.all";
+			
 			[Bindable]
 			protected var sourceDataProvider:ArrayCollection = new ArrayCollection();
 			
 			[Bindable]
 			protected var matcherDataProvider:ArrayCollection = new ArrayCollection();
+			
+			[Bindable]
+			protected var destinationDataProvider:ArrayCollection = new ArrayCollection();
 			
 			[Bindable]
 			protected var ruleList:List = FlexGlobals.topLevelApplication.policyContainer.ruleContainer.ruleList;
@@ -82,6 +90,7 @@
 			
 			protected var droppedSources:ListCollectionView;//Array for dropped Sources items from inventory tree to rule container.
 			protected var droppedMatchers:ListCollectionView;//Array for dropped Matchers items from inventory tree to rule container.
+			protected var droppedDestinations:ListCollectionView;//Array for dropped Destination items from inventory tree to rule container.
 			
 			public override function set data(value:Object):void
 			{
@@ -127,6 +136,7 @@
 			{
 				var sourceDataProvider1:ArrayCollection = new ArrayCollection();
 				var matcherDataProvider1:ArrayCollection = new ArrayCollection();
+				var destinationDataProvider1:ArrayCollection = new ArrayCollection();
 				
 				var ruleItems:ListCollectionView = ruleObject.ruleItems;
 				for each (var ruleItem:* in ruleItems)
@@ -136,9 +146,13 @@
 						sourceDataProvider1.addItem(ruleItem);
 					else if (ruleItem.item is InformationType)
 						matcherDataProvider1.addItem(ruleItem);
+					else if (ruleItem.item is Domain ||
+						ruleItem.item is FileSystemDirectory)
+						destinationDataProvider1.addItem(ruleItem);
 				}
 				sourceDataProvider = sourceDataProvider1;
 				matcherDataProvider = matcherDataProvider1;
+				destinationDataProvider = destinationDataProvider1;
 			}
 			
 			public function refresh():void
@@ -169,6 +183,16 @@
 				return false;
 			}
 			
+			protected function hasAllDestination():Boolean //Checks whether rule has "All Destination" or not.
+			{
+				for each(var o:RuleItem in ruleObject.ruleItems)
+				{
+					if(o.item.coupledInventoryItem.nameKey == DOMAIN_ALL || o.item.coupledInventoryItem.nameKey == DIRECTORY_ALL)
+						return true;
+				}
+				return false;
+			}
+			
 			public static function isITypeRuleItem(item:Item):Boolean
 			{
 				if(item is InformationType)
@@ -177,6 +201,14 @@
 					return false;
 			}
 			
+			public static function isDestinationRuleItem(item:Item):Boolean
+			{
+				if(item is Domain || item is FileSystemDirectory)
+					return true;
+				else
+					return false;
+			}
+						
 			protected function removeAllSourcesItem():void //called when "All Network" is in rule and dropped network is a specific network.
 			{
 				var ruleItems:ListCollectionView = ruleObject.ruleItems;
@@ -207,6 +239,47 @@
 					for(var i:int = 0; i < ruleItems.length; i++)
 					{
 						if(isSourceRuleItem(ruleItems[i].item))
+						{
+							deleteList.addItem(ruleObject.ruleItems[i]);
+							ruleItems.removeItemAt(i);
+							loop = true;
+							break;
+						}
+					}	
+				}
+			}
+			
+			protected function removeAllDestinationItem():void //called when "All Destination" is in rule and dropped network is a specific network.
+			{
+				var ruleItems:ListCollectionView = ruleObject.ruleItems;
+				var loop:Boolean = true;
+				while (loop)
+				{
+					loop = false;
+					for(var i:int = 0; i < ruleItems.length; i++)
+					{
+						if(ruleItems[i].item.coupledInventoryItem.nameKey == DOMAIN_ALL ||
+							ruleItems[i].item.coupledInventoryItem.nameKey == DIRECTORY_ALL)
+						{
+							deleteList.addItem(ruleObject.ruleItems[i]);
+							ruleObject.ruleItems.removeItemAt(i);
+							loop = true;
+							break;
+						}
+					}
+				}
+			}
+			
+			protected function removeOtherDestinations():void // called when specific destinations are in rule and dropped network is "All Destination"
+			{
+				var ruleItems:ListCollectionView = ruleObject.ruleItems;
+				var loop:Boolean = true;
+				while (loop)
+				{
+					loop = false;
+					for(var i:int = 0; i < ruleItems.length; i++)
+					{
+						if(ruleItems[i].item is Domain || ruleItems[i].item is FileSystemDirectory)
 						{
 							deleteList.addItem(ruleObject.ruleItems[i]);
 							ruleItems.removeItemAt(i);
@@ -300,6 +373,7 @@
 			{
 				droppedMatchers = new ArrayCollection();
 				droppedSources = new ArrayCollection();
+				droppedDestinations = new ArrayCollection();
 				var treeItems:* = FlexGlobals.topLevelApplication.policyContainer.inventoryTree.selectedItems;
 				if (isAllDroppable(treeItems) && checkConsistency(treeItems))
 					acceptDrop();
@@ -310,10 +384,21 @@
 			protected function checkConsistency(treeItems:*):Boolean //Controls whether dropped items consist both "All Network" and specific network
 			{														// or both "All Information Types" and specific information types.
 				groupDroppedItems(treeItems);
-				if(isConsistentForSources() && isConsistentForMatchers())
+				if(isConsistentForSources() && isConsistentForMatchers() && isConsistentForDestinations())
 					return true;
 				return false;
 				
+			}
+			
+			protected function isConsistentForDestinations():Boolean // Controls whether dropped items consist both "All Network" and specific network
+			{
+				for each(var ri:InventoryItem in droppedSources)
+				{
+					if((ri.item.coupledInventoryItem.nameKey == DOMAIN_ALL || ri.item.coupledInventoryItem.nameKey == DIRECTORY_ALL)
+						&& droppedDestinations.length > 1)
+						return false;
+				}
+				return true;
 			}
 			
 			protected function isConsistentForSources():Boolean // Controls whether dropped items consist both "All Network" and specific network
@@ -350,6 +435,8 @@
 						droppedSources.addItem(droppedItem);
 					else if(droppedItem.item is InformationType)
 						droppedMatchers.addItem(droppedItem);
+					else if(droppedItem.item is Domain || droppedItem.item is FileSystemDirectory)
+						droppedDestinations.addItem(droppedItem);
 					else
 						throw new Error("unexpected type of item dropped");
 				}
@@ -386,6 +473,16 @@
 								ruleObject is PrinterRule ||
 								ruleObject is DiscoveryRule ||
 								ruleObject is ApiRule)
+							return true;
+					}
+					else if (treeItem.item is Domain)
+					{
+						if(ruleObject is WebRule || ruleObject is MailRule)
+							return true;
+					}
+					else if (treeItem.item is FileSystemDirectory)
+					{
+						if(ruleObject is DiscoveryRule)
 							return true;
 					}
 					else if ( treeItem.item is RuleUser )
@@ -486,6 +583,23 @@
 					{
 						if(sourceItem.coupledInventoryItem.nameKey == ITYPE_ALL)
 							removeOtherITypes();
+					}
+				}
+				else if(isDestinationRuleItem(sourceItem))
+				{
+					if(hasAllDestination())//if ruleObject has "All Destinations"
+					{
+						if(sourceItem.coupledInventoryItem.nameKey == DOMAIN_ALL ||
+							sourceItem.coupledInventoryItem.nameKey == DIRECTORY_ALL)//if dropped item is "All Destinations"
+							return;
+						else
+							removeAllDestinationItem();
+					}
+					else
+					{
+						if(sourceItem.coupledInventoryItem.nameKey == DOMAIN_ALL ||
+							sourceItem.coupledInventoryItem.nameKey == DIRECTORY_ALL)
+							removeOtherDestinations();
 					}
 				}
 				
@@ -634,10 +748,17 @@
 		<rule:RSpacer />
 		
 		<rule:RuleItemBox width="260"
+						  listDataProvider="{destinationDataProvider}"
+						  noneMessage="@Resource(bundle = 'messages', key = 'rulebox.ruleitembox.destinations.nonemessage')"
+						  currentState="{destinationDataProvider.length == 0 ? 'noitem' : 'normal'}" />
+		
+		<rule:RSpacer />
+		
+		<rule:RuleItemBox width="260"
 						  listDataProvider="{matcherDataProvider}"
 						  noneMessage="@Resource(bundle = 'messages', key = 'rulebox.ruleitembox.itypes.nonemessage')"
 						  currentState="{matcherDataProvider.length == 0 ? 'noitem' : 'normal'}" />
-		
+				
 		<rule:RSpacer />
 		
 		<rule:ActionBox id="actionBox" width="150" 
