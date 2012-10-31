@@ -154,13 +154,6 @@
 				re.getRules();
 			}
 			
-			public function ruleIsApplicable(r:*): Boolean
-			{
-				if(r is WebRule || r is DiscoveryRule || r is MailRule)
-					return true;
-				else return false;
-			}
-				
 			public function sanityCheck(): String
 			{
 				var retStr:String = "ok";
@@ -192,9 +185,9 @@
 						gotoRule(r);
 						break ruleLoop;
 					}
-					if (!hasDestination && ruleIsApplicable(r))
+					if (!hasDestination && RuleBoxRenderer.isDestinationApplicable(r))
 					{
-						retStr = "error.ruleHasNoDestination";
+						retStr = "error.ruleHasNoDestinations";
 						gotoRule(r);
 						break ruleLoop;
 					}

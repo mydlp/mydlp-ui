@@ -498,6 +498,13 @@
 				return false;
 			}
 			
+			public static function isDestinationApplicable(r:*): Boolean
+			{
+				if(r is WebRule || r is DiscoveryRule || r is MailRule)
+					return true;
+				else return false;
+			}
+			
 			protected function onDragExit(event:DragEvent):void
 			{
 				rejectDrop();    		
@@ -648,14 +655,6 @@
 				dispatchEvent(e);
 			}
 			
-			protected function getMessageText():String
-			{
-				if(ruleObject is WebRule || ruleObject is MailRule || ruleObject is DiscoveryRule)
-					return LangUtil.getString('messages','rulebox.ruleitembox.destinations.nonemessage');
-				else 
-					return LangUtil.getString('messages','rulebox.ruleitembox.destinations.notapplicable');
-			}
-			
 		]]>
 	</fx:Script>
 	
@@ -754,15 +753,34 @@
 						  noneMessage="@Resource(bundle = 'messages', key = 'rulebox.ruleitembox.sources.nonemessage')"
 						  currentState="{sourceDataProvider.length == 0 ? 'noitem' : 'normal'}" />
 		
-		<rule:RSpacer />
 		
-		<rule:RuleItemBox width="260"
-						  listDataProvider="{destinationDataProvider}"
-						  noneMessage="{getMessageText()}"
-						  currentState="{destinationDataProvider.length == 0 ? 'noitem' : 'normal'}" />
+		<s:Group width="280" height="100%" 
+				 visible="{!isDestinationApplicable(ruleObject)}" 
+				 includeInLayout="{!isDestinationApplicable(ruleObject)}">
+			<s:Rect left="0" right="0" top="0" bottom="0" >
+				<s:fill>
+					<s:SolidColor color="0xAEBBCF" alpha="0.3"  />
+				</s:fill>
+			</s:Rect>
+		</s:Group>
 		
-		<rule:RSpacer />
 		
+		<s:Group height="100%"
+				 visible="{isDestinationApplicable(ruleObject)}" 
+				 includeInLayout="{isDestinationApplicable(ruleObject)}">
+			<s:layout>
+				<s:HorizontalLayout verticalAlign="middle"/>
+			</s:layout>
+			<rule:RSpacer />
+			
+			<rule:RuleItemBox width="260"
+							  listDataProvider="{destinationDataProvider}"
+							  noneMessage="@Resource(bundle = 'messages', key = 'rulebox.ruleitembox.destinations.nonemessage')"
+							  currentState="{destinationDataProvider.length == 0 ? 'noitem' : 'normal'}" />
+			
+			<rule:RSpacer />
+		</s:Group> 
+			
 		<rule:RuleItemBox width="260"
 						  listDataProvider="{matcherDataProvider}"
 						  noneMessage="@Resource(bundle = 'messages', key = 'rulebox.ruleitembox.itypes.nonemessage')"
