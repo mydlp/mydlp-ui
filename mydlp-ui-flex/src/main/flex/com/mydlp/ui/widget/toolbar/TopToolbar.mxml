@@ -65,8 +65,15 @@
 			
 			protected function fetchCompileStatus(): void
 			{
-				if (!SessionUtil.isDevelopment())
-					pe.getCompileStatus();	
+				if (SessionUtil.isDevelopment())
+				{
+					var e:ResultEvent = new ResultEvent(ResultEvent.RESULT, false, true, "done");
+					getCompileStatusHandler(e);
+				}
+				else
+				{
+					pe.getCompileStatus();
+				}
 			}
 			
 			protected function scheduleCompileStatusTimer(): void
@@ -92,18 +99,27 @@
 				if (compileProgress == "done")
 				{
 					timerInterval = 60000;
-					installPopup.currentState = "completed";
+					if (installPopup != null)
+					{
+						installPopup.currentState = "completed";
+					}
 				}
 				else
 				{
 					timerInterval = 3000;
 					if (compileProgress == "compile")
 					{
-						installPopup.currentState = "compile";
+						if (installPopup != null)
+						{
+							installPopup.currentState = "compile";
+						}
 					}
 					else if (compileProgress == "post_compile")
 					{
-						installPopup.currentState = "post_compile";
+						if (installPopup != null)
+						{
+							installPopup.currentState = "post_compile";
+						}
 					} 
 				}
 				scheduleCompileStatusTimer();
