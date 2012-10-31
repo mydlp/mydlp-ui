@@ -42,7 +42,9 @@
          <value>com.mydlp.ui.domain.DocumentDatabaseFileEntry</value>
          <value>com.mydlp.ui.domain.DocumentDatabaseRDBMSEntry</value>
          <value>com.mydlp.ui.domain.DocumentFingerprint</value>
+         <value>com.mydlp.ui.domain.Domain</value>
          <value>com.mydlp.ui.domain.EndpointRule</value>
+         <value>com.mydlp.ui.domain.FileSystemDirectory</value>
          <value>com.mydlp.ui.domain.InformationDescription</value>
          <value>com.mydlp.ui.domain.InformationFeature</value>
          <value>com.mydlp.ui.domain.InformationType</value>

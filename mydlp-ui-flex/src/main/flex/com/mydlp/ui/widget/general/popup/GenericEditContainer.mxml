@@ -593,6 +593,9 @@
 							ErrorTipManager.registerValidator(regExpValidator5);
 							validators.push(regExpValidator5);
 						}
+						else if(classMember.name == "destinationString") {
+							index = 1;
+						}
 						else if(classMember.name == "loginUsername") {
 							index = 3;
 						}

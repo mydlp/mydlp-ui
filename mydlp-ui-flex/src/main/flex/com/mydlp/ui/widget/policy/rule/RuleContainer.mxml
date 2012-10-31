@@ -161,13 +161,16 @@
 				{
 					var hasSource:Boolean = false;
 					var hasIType:Boolean = false;
+					var hasDestination:Boolean = false;
 					ruleItemLoop: for each (var ri:RuleItem in r.ruleItems)
 					{
 						if (hasSource == false && RuleBoxRenderer.isSourceRuleItem(ri.item))
 							hasSource = true;
 						if (hasIType == false && RuleBoxRenderer.isITypeRuleItem(ri.item))
 							hasIType = true;
-						if (hasSource && hasIType)
+						if (hasDestination == false && RuleBoxRenderer.isDestinationRuleItem(ri.item))
+							hasDestination = true;
+						if (hasSource && hasIType && hasDestination)
 							break ruleItemLoop;
 					}
 					if (!hasSource)
@@ -179,6 +182,12 @@
 					if (!hasIType)
 					{
 						retStr = "error.ruleHasNoITypes";
+						gotoRule(r);
+						break ruleLoop;
+					}
+					if (!hasDestination)
+					{
+						retStr = "error.ruleHasNoDestination";
 						gotoRule(r);
 						break ruleLoop;
 					}
@@ -233,6 +242,7 @@
 		</s:layout>
 		
 		<s:Label text="@Resource(key='rules.sources.label', bundle='messages')" styleName="fontSize24Style" visible="{ruleDP.length != 0}"/>
+		<s:Label text="@Resource(key='rules.destinations.label', bundle='messages')" styleName="fontSize24Style" visible="{ruleDP.length != 0}"/>
 		<s:Label text="@Resource(key='rules.informationTypes.label', bundle='messages')" styleName="fontSize24Style" visible="{ruleDP.length != 0}"/>
 	</s:Group>
 	
