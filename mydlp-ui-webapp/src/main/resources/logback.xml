@@ -6,7 +6,15 @@
       </Pattern>
     </layout>
   </appender>
+  <appender name="SYSLOG" class="ch.qos.logback.classic.net.SyslogAppender">
+    <syslogHost>127.0.0.1</syslogHost>
+    <facility>LOCAL6</facility>
+    <suffixPattern>[%thread]: [MyDLP Audit] %msg</suffixPattern>
+  </appender>
   <root level="error">
     <appender-ref ref="STDOUT"/>
   </root>
+  <logger name="AUDIT" level="debug">
+	<appender-ref ref="SYSLOG"/>  
+  </logger>
 </configuration>

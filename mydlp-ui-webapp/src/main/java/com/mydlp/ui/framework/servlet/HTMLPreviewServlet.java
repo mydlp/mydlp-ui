@@ -7,13 +7,19 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.HttpRequestHandler;
+
+import com.mydlp.ui.service.AuditTrailService;
 
 
 @Service("htmlPreviewServlet")
 public class HTMLPreviewServlet implements HttpRequestHandler{
 
+	@Autowired
+	protected AuditTrailService auditTrailService;
+	
 	@Override
 	public void handleRequest(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -25,6 +31,7 @@ public class HTMLPreviewServlet implements HttpRequestHandler{
 		writer.println(htmlText);
 		
 		writer.close();
+		auditTrailService.audit(getClass(), "preview", new Object[]{});
 	}
 
 }

@@ -15,12 +15,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.HttpRequestHandler;
 
+import com.mydlp.ui.service.AuditTrailService;
 import com.mydlp.ui.service.LogExportService;
 
 @Service("exportServlet")
 public class ExportServlet implements HttpRequestHandler {
 
 	private static Logger logger = LoggerFactory.getLogger(ExportServlet.class);
+
+	@Autowired
+	protected AuditTrailService auditTrailService;
 	
 	@Autowired
 	protected LogExportService logExportService;
@@ -56,7 +60,8 @@ public class ExportServlet implements HttpRequestHandler {
 	        op.write(exportContent);
 	        op.flush();
 	        op.close();
-			
+	        
+	        auditTrailService.audit(getClass(), "excelExport", new Object[]{urlId});
 		} catch (NumberFormatException e) {
 			logger.error("Cannot format ", urlId , e);
 		} catch (IOException e) {

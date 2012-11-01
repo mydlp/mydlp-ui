@@ -20,6 +20,7 @@ import org.springframework.web.HttpRequestHandler;
 import com.mydlp.ui.dao.IncidentLogDAO;
 import com.mydlp.ui.domain.IncidentLogFile;
 import com.mydlp.ui.domain.IncidentLogFileContent;
+import com.mydlp.ui.service.AuditTrailService;
 
 @Service("downloadServlet")
 public class DownloadServlet implements HttpRequestHandler {
@@ -30,6 +31,9 @@ public class DownloadServlet implements HttpRequestHandler {
 
 	@Autowired
 	protected IncidentLogDAO incidentLogDAO;
+	
+	@Autowired
+	protected AuditTrailService auditTrailService;
 	
 	@Override
 	public void handleRequest(HttpServletRequest req, HttpServletResponse resp)
@@ -84,6 +88,7 @@ public class DownloadServlet implements HttpRequestHandler {
 	        op.flush();
 	        op.close();
 			
+	        auditTrailService.audit(getClass(), "download", new Object[]{urlKey, urlId});
 		} catch (NumberFormatException e) {
 			logger.error("Cannot format ", urlId , e);
 		} catch (FileNotFoundException e) {

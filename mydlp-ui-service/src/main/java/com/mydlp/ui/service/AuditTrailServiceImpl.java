@@ -37,7 +37,7 @@ public class AuditTrailServiceImpl implements AuditTrailService {
             return pjp.proceed();
         } finally {
             time = System.currentTimeMillis() - time;
-            logger.info(
+            logger.debug(
             		"Procedure " +
             		prettifyClassName(pjp.getTarget().getClass()) + "." +
             		pjp.getSignature().getName() +
@@ -48,8 +48,20 @@ public class AuditTrailServiceImpl implements AuditTrailService {
             		"and completed in " + time.toString() + "ms."
             	);
         }
-        
     }
+	
+	@Override
+	public void audit(Class<?> clazz, String method, Object[] args) {
+		logger.debug(
+				"Procedure " +
+        		prettifyClassName(clazz) + "." +
+        		method +
+        		argsToAuditString(args) +
+        		" has been called by " +
+        		"'" + request.getRemoteUser() + "' " +
+        		"from " + request.getRemoteAddr() + "."
+        	);
+	}
 	
 	protected static String argsToAuditString(Object [] args) {
 		List<String> auditStrList = new ArrayList<String>();
@@ -64,6 +76,8 @@ public class AuditTrailServiceImpl implements AuditTrailService {
 	
 	private static final String MYDLP_UI_DOMAIN_PACKAGE = "com.mydlp.ui.domain.";
 	
+	private static final String MYDLP_UI_PACKAGE = "com.mydlp.ui.";
+	
 	private static final String JAVA_LANG_PACKAGE = "java.lang.";
 	
 	protected static <T> String prettifyClassName(Class<T> c) {
@@ -76,6 +90,8 @@ public class AuditTrailServiceImpl implements AuditTrailService {
 			className = className.substring(MYDLP_UI_REMOTING_PACKAGE.length());
 		else if (className.startsWith(MYDLP_UI_DOMAIN_PACKAGE))
 			className = className.substring(MYDLP_UI_DOMAIN_PACKAGE.length());
+		else if (className.startsWith(MYDLP_UI_PACKAGE))
+			className = className.substring(MYDLP_UI_PACKAGE.length());
 		else if (className.startsWith(JAVA_LANG_PACKAGE))
 			className = className.substring(JAVA_LANG_PACKAGE.length());
 		return className;
@@ -103,6 +119,10 @@ public class AuditTrailServiceImpl implements AuditTrailService {
 					auditStr += "[nameKey:" + objectNameKey + "]";
 			}
 			return auditStr;
+		}
+		
+		if (o instanceof String) {
+			return "\"" + o.toString() + "\"";
 		}
 		
 		return o.toString();
