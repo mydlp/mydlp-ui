@@ -174,28 +174,29 @@
 	<!--
 		should align using padding prop.
 	-->
-	<s:Group includeIn="normal, hovered" >
+	<s:Group includeIn="normal, hovered" width="100%">
 		<s:Spacer width="20" />
 		<rule:ActionBoxElement ruleType="{getRuleType(ruleObject)}" 
 							   action="{ruleObject.action}" customAction="{ruleObject.customAction}"/>
 	</s:Group>
 	
-	<s:Group includeIn="selected" >
+	<s:Group includeIn="selected" width="100%">
 		<s:layout>
 			<s:VerticalLayout/>
 		</s:layout>
-		<s:Group>
+		<s:Group width="100%">
 			<s:layout>
 				<s:HorizontalLayout />
 			</s:layout>
 			<s:Spacer width="13" />
-			<s:DropDownList id="actionList" width="120"
+			<s:DropDownList id="actionList" width="100%"
 							contentBackgroundAlpha="1"
 							dataProvider="{getComboBoxDataProvider(ruleObject)}" 
 							change="actionListChangeHandler(event)" 
 							labelFunction="actionLabelFunction"
 							creationComplete="actionListCreationCompleteHandler(event)"
 							/>
+			<s:Spacer width="13" />
 		</s:Group>
 		<s:Spacer height="19" />
 	</s:Group>

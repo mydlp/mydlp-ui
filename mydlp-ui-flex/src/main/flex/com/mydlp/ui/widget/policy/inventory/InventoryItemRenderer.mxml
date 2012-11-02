@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:MXTreeItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009" 
 					  xmlns:s="library://ns.adobe.com/flex/spark" 
-					  xmlns:mx="library://ns.adobe.com/flex/mx">
+					  xmlns:mx="library://ns.adobe.com/flex/mx"
+					  height="100%">
 	<fx:Script>
 		<![CDATA[
 			import avmplus.getQualifiedClassName;
@@ -86,35 +87,49 @@
 				  toolTipCreate="onToolTipCreate(event)" width="100%">
 			<s:BitmapImage source="{treeListData.icon}" />
 			<s:Label id="labelField" text="{treeListData.label}" paddingTop="2" width="100%"/>
-			<s:Spacer width="10" />
 		</s:HGroup>
-		<s:HGroup width="85" height="20" verticalAlign="middle" >
-			<s:HGroup id="actions" includeIn="selected" gap="1">
-				<s:Button styleName="addButtonStyle"
-						  click="{
-						  InteractionUtil.newPopup(NewInventoryItemDialog);
-						  event.stopPropagation();
-						  }" 
-						  visible="{isAddEnabled(treeListData.item)}"/>
-				<s:Button styleName="copyButtonStyle"
-						  click="{
-						  InteractionUtil.newEditDialog(ReflectionUtil.cloneDomainObject(treeListData.item));
-						  event.stopPropagation();
-						  }" 
-						  visible="{treeListData.item is InventoryItem}" toolTip="@Resource(key='inventoryItem.copyButton.tooltip.label', bundle='messages')"/>
-				<s:Button styleName="editButtonStyle" 
-						  click="{
-						  InteractionUtil.newEditDialog(treeListData.item);
-						  event.stopPropagation();
-						  }" 
-						  visible="{isEditEnabled(treeListData.item)}" toolTip="@Resource(key='inventoryItem.editButton.tooltip.label', bundle='messages')"/>
-				<s:Button styleName="removeButtonStyle" 
-						  click="{InteractionUtil.newDeleteDialog(treeListData.item);
-						  		event.stopPropagation();}"
-						  visible="{isEditEnabled(treeListData.item)}" toolTip="@Resource(key='inventoryItem.removeButton.tooltip.label', bundle='messages')"/>
-			</s:HGroup>
-		</s:HGroup>
-		
-		
 	</s:HGroup>
+	
+	<s:HGroup includeIn="selected" left="0" right="0" top="0" bottom="0"
+			  horizontalAlign="right" verticalAlign="middle">
+		<s:SkinnableContainer backgroundAlpha="1" backgroundColor="0xA8C6EE">
+			<s:layout>
+				<s:HorizontalLayout horizontalAlign="right"
+									verticalAlign="middle"
+									paddingLeft="2" paddingRight="2"
+									gap="1"/>
+			</s:layout>
+			
+			<s:Button styleName="addButtonStyle"
+					  click="{
+					  InteractionUtil.newPopup(NewInventoryItemDialog);
+					  event.stopPropagation();
+					  }"
+					  includeInLayout="{isAddEnabled(treeListData.item)}"
+					  visible="{isAddEnabled(treeListData.item)}"/>
+			<s:Button styleName="copyButtonStyle"
+					  click="{
+					  InteractionUtil.newEditDialog(ReflectionUtil.cloneDomainObject(treeListData.item));
+					  event.stopPropagation();
+					  }"
+					  includeInLayout="{treeListData.item is InventoryItem}"
+					  visible="{treeListData.item is InventoryItem}" 
+					  toolTip="@Resource(key='inventoryItem.copyButton.tooltip.label', bundle='messages')"/>
+			<s:Button styleName="editButtonStyle" 
+					  click="{
+					  InteractionUtil.newEditDialog(treeListData.item);
+					  event.stopPropagation();
+					  }" 
+					  includeInLayout="{isEditEnabled(treeListData.item)}"
+					  visible="{isEditEnabled(treeListData.item)}" 
+					  toolTip="@Resource(key='inventoryItem.editButton.tooltip.label', bundle='messages')"/>
+			<s:Button styleName="removeButtonStyle" 
+					  click="{InteractionUtil.newDeleteDialog(treeListData.item);
+					  event.stopPropagation();}"
+					  includeInLayout="{isEditEnabled(treeListData.item)}"
+					  visible="{isEditEnabled(treeListData.item)}" 
+					  toolTip="@Resource(key='inventoryItem.removeButton.tooltip.label', bundle='messages')"/>
+		</s:SkinnableContainer>
+	</s:HGroup>
+	
 </s:MXTreeItemRenderer>

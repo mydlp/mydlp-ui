@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:MXTreeItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009" 
 					  xmlns:s="library://ns.adobe.com/flex/spark" 
-					  xmlns:mx="library://ns.adobe.com/flex/mx">
+					  xmlns:mx="library://ns.adobe.com/flex/mx"
+					  height="100%">
 	<fx:Script>
 		<![CDATA[
 			import com.mydlp.ui.domain.ADDomainItem;
@@ -64,16 +65,24 @@
 		</s:Group>
 		<s:BitmapImage source="{treeListData.item.hasOwnProperty('icon') ? treeListData.item.icon : treeListData.icon}" />
 		<s:Label id="labelField" text="{treeListData.label}" paddingTop="2" width="100%"/>
-		<s:Spacer width="10"/>
-		<s:HGroup width="45" height="20" verticalAlign="middle">
+	</s:HGroup>
+	<s:HGroup includeIn="selected" left="0" right="0" top="0" bottom="0"
+			  horizontalAlign="right" verticalAlign="middle">
+		<s:SkinnableContainer backgroundAlpha="1" backgroundColor="0xA8C6EE">
+			<s:layout>
+				<s:HorizontalLayout horizontalAlign="right"
+									verticalAlign="middle"
+									paddingLeft="2" paddingRight="2"
+									gap="1"/>
+			</s:layout>
 			<s:Button includeIn="selected" styleName="addButtonStyle"
 					  click="clickAddButton(event)"
 					  visible="{hasAddButton(treeListData.item)}"
-					  includeInLayout="{isAdmin()}"/>
+					  includeInLayout="{isAdmin() &amp;&amp; hasAddButton(treeListData.item)}"/>
 			<s:Button includeIn="selected" styleName="removeButtonStyle"
 					  click="{InteractionUtil.newDeleteDialog(treeListData.item)}"
 					  visible="{hasRemoveButton(treeListData.item)}"
-					  includeInLayout="{isAdmin()}"/>
-		</s:HGroup>
+					  includeInLayout="{isAdmin() &amp;&amp; hasRemoveButton(treeListData.item)}"/>
+		</s:SkinnableContainer>
 	</s:HGroup>
 </s:MXTreeItemRenderer>

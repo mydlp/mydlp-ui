@@ -39,10 +39,12 @@
 							  paddingBottom="4" paddingTop="4"/>
 		</s:layout>
 		
-		<rule:RuleItemList	width="{this.width - 4}"
+		<rule:RuleItemList	width="100%"
 							height="100%"
 							dataProvider="{listDataProvider}"
 							itemRenderer="com.mydlp.ui.widget.policy.rule.RuleItemRenderer"
+							verticalScrollPolicy="off"
+							horizontalScrollPolicy="off"
 							/>
 	</s:Group>
 	

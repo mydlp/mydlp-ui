@@ -238,7 +238,7 @@
 	
 	<s:Group>
 		<s:layout>
-			<s:HorizontalLayout gap="150" paddingLeft="300"/>
+			<s:HorizontalLayout gap="60" paddingLeft="250"/>
 		</s:layout>
 		
 		<s:Label text="@Resource(key='rules.sources.label', bundle='messages')" styleName="fontSize24Style" visible="{ruleDP.length != 0}"/>

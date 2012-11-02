@@ -748,13 +748,13 @@
 		
 		<rule:RSpacer />
 		
-		<rule:RuleItemBox width="260"
+		<rule:RuleItemBox width="160"
 						  listDataProvider="{sourceDataProvider}"
 						  noneMessage="@Resource(bundle = 'messages', key = 'rulebox.ruleitembox.sources.nonemessage')"
 						  currentState="{sourceDataProvider.length == 0 ? 'noitem' : 'normal'}" />
 		
 		
-		<s:Group width="280" height="100%" 
+		<s:Group width="190" height="100%" 
 				 visible="{!isDestinationApplicable(ruleObject)}" 
 				 includeInLayout="{!isDestinationApplicable(ruleObject)}">
 			<s:Rect left="0" right="0" top="0" bottom="0" >
@@ -773,7 +773,7 @@
 			</s:layout>
 			<rule:RSpacer />
 			
-			<rule:RuleItemBox width="260"
+			<rule:RuleItemBox width="170"
 							  listDataProvider="{destinationDataProvider}"
 							  noneMessage="@Resource(bundle = 'messages', key = 'rulebox.ruleitembox.destinations.nonemessage')"
 							  currentState="{destinationDataProvider.length == 0 ? 'noitem' : 'normal'}" />
@@ -781,14 +781,14 @@
 			<rule:RSpacer />
 		</s:Group> 
 			
-		<rule:RuleItemBox width="260"
+		<rule:RuleItemBox width="200"
 						  listDataProvider="{matcherDataProvider}"
 						  noneMessage="@Resource(bundle = 'messages', key = 'rulebox.ruleitembox.itypes.nonemessage')"
 						  currentState="{matcherDataProvider.length == 0 ? 'noitem' : 'normal'}" />
 				
 		<rule:RSpacer />
 		
-		<rule:ActionBox id="actionBox" width="150" 
+		<rule:ActionBox id="actionBox" width="160" 
 						ruleObject="@{ruleObject}" 
 						currentState="{this.currentState}"/>
 		

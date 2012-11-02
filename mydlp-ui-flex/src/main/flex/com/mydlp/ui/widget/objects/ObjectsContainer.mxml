@@ -48,10 +48,10 @@
 	</fx:Script>
 	
 	<s:layout>
-		<s:HorizontalLayout paddingTop="10"/>
+		<s:HorizontalLayout paddingTop="10" gap="10"/>
 	</s:layout>
 	
-	<objects:ObjectsTree id="objectsTree" height="100%" width="400" change="onSelectedItemChange(event)"/>
+	<objects:ObjectsTree id="objectsTree" change="onSelectedItemChange(event)"/>
 	
 	<rule:RSpacer />
 	
