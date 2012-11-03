@@ -18,7 +18,8 @@
     <security:intercept-url pattern="/receive" filters="none"/>
     <security:intercept-url pattern="/sync" filters="none"/>
     <security:intercept-url pattern="/api/query" filters="none"/>
-    <security:intercept-url pattern="/**" access="ROLE_ADMIN,ROLE_AUDITOR,ROLE_CLASSIFIER"/>
+    <security:intercept-url pattern="/download" access="ROLE_SUPER_ADMIN"/>
+    <security:intercept-url pattern="/**" access="ROLE_ADMIN,ROLE_AUDITOR,ROLE_CLASSIFIER, ROLE_SUPER_ADMIN"/>
     <security:form-login 	login-page="/login.jsp" authentication-failure-url="/login.jsp?authfailed=true" 
     						always-use-default-target="true" default-target-url="/" />
     <security:logout logout-success-url="/login.jsp"/>

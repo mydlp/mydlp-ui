@@ -7,7 +7,7 @@ import org.springframework.security.access.annotation.Secured;
 import com.mydlp.ui.domain.AuthSecurityRole;
 import com.mydlp.ui.domain.Revision;
 
-@Secured({AuthSecurityRole.ROLE_ADMIN, AuthSecurityRole.ROLE_CLASSIFIER})
+@Secured({AuthSecurityRole.ROLE_ADMIN, AuthSecurityRole.ROLE_SUPER_ADMIN, AuthSecurityRole.ROLE_CLASSIFIER})
 public interface RevisionService {
 
 	public List<Revision> getRevisions(Integer offset, Integer limit);

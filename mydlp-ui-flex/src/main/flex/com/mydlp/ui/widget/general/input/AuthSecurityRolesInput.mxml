@@ -55,6 +55,17 @@
 			protected function getRolesHandler(event:ResultEvent): void
 			{
 				allAuthSecurity = event.result as ListCollectionView;
+				if(!FlexGlobals.topLevelApplication.hasRole(AuthSecurityRole.ROLE_SUPER_ADMIN))
+				{
+					for(var k:int =0 ; k < allAuthSecurity.length; k++)
+					{
+						if(allAuthSecurity[k].roleName == "ROLE_SUPER_ADMIN")
+						{
+							allAuthSecurity.removeItemAt(k);
+							break;
+						}
+					}
+				}
 				var tempAuthSecurityRoles:ListCollectionView = new ArrayCollection();
 				if(!SessionUtil.isEnterprise())
 				{

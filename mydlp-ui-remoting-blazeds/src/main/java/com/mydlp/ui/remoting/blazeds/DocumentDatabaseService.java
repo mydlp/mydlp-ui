@@ -9,7 +9,7 @@ import com.mydlp.ui.domain.Document;
 import com.mydlp.ui.domain.DocumentDatabase;
 import com.mydlp.ui.domain.DocumentDatabaseFileEntry;
 
-@Secured({AuthSecurityRole.ROLE_ADMIN, AuthSecurityRole.ROLE_CLASSIFIER})
+@Secured({AuthSecurityRole.ROLE_ADMIN, AuthSecurityRole.ROLE_SUPER_ADMIN, AuthSecurityRole.ROLE_CLASSIFIER})
 public interface DocumentDatabaseService {
 
 	public List<DocumentDatabase> getDocumentDatabases();

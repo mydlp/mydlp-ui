@@ -8,7 +8,7 @@ import com.mydlp.ui.domain.AuthSecurityRole;
 import com.mydlp.ui.domain.IncidentLog;
 import com.mydlp.ui.domain.IncidentLogFileContent;
 
-@Secured({AuthSecurityRole.ROLE_ADMIN, AuthSecurityRole.ROLE_AUDITOR})
+@Secured({AuthSecurityRole.ROLE_ADMIN, AuthSecurityRole.ROLE_SUPER_ADMIN,AuthSecurityRole.ROLE_AUDITOR})
 public interface LogService {
 
 	public List<IncidentLog> getLogs(List<List<Object>> criteriaList, Integer offset, Integer count);

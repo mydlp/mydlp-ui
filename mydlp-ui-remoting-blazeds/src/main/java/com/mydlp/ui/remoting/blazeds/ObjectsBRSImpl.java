@@ -41,12 +41,12 @@ public class ObjectsBRSImpl implements ObjectsService
 		
 		AuthUser authUser = userService.getCurrentUser();
 		
-		if(authUser.hasRole(AuthSecurityRole.ROLE_ADMIN))
+		if(authUser.hasRole(AuthSecurityRole.ROLE_ADMIN) || authUser.hasRole(AuthSecurityRole.ROLE_SUPER_ADMIN))
 		{
 			objects.addAll(regexDAO.getRegularExpressionGroups());
 			objects.addAll(rdbmsConnectionDAO.getRDBMSConnections());
 		}
-		if(authUser.hasRole(AuthSecurityRole.ROLE_ADMIN) || authUser.hasRole(AuthSecurityRole.ROLE_CLASSIFIER))
+		if(authUser.hasRole(AuthSecurityRole.ROLE_ADMIN) || authUser.hasRole(AuthSecurityRole.ROLE_CLASSIFIER) || authUser.hasRole(AuthSecurityRole.ROLE_SUPER_ADMIN))
 			objects.addAll(documentDatabaseDAO.getDocumentDatabases());
 		
 		return objects;
@@ -56,7 +56,7 @@ public class ObjectsBRSImpl implements ObjectsService
 	{
 		List<DocumentDatabase> documentDatabases = new ArrayList<DocumentDatabase>();
 		AuthUser authUser = userService.getCurrentUser();
-		if(authUser.hasRole(AuthSecurityRole.ROLE_ADMIN) || authUser.hasRole(AuthSecurityRole.ROLE_CLASSIFIER))
+		if(authUser.hasRole(AuthSecurityRole.ROLE_ADMIN) || authUser.hasRole(AuthSecurityRole.ROLE_CLASSIFIER) || authUser.hasRole(AuthSecurityRole.ROLE_SUPER_ADMIN))
 			documentDatabases.addAll(documentDatabaseDAO.getDocumentDatabases());
 		return documentDatabases;
 	}

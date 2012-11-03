@@ -10,7 +10,7 @@ import com.mydlp.ui.domain.AuthSecurityRole;
 import com.mydlp.ui.domain.RDBMSConnection;
 import com.mydlp.ui.domain.RDBMSInformationTarget;
 
-@Secured(AuthSecurityRole.ROLE_ADMIN)
+@Secured({AuthSecurityRole.ROLE_ADMIN, AuthSecurityRole.ROLE_SUPER_ADMIN})
 public interface RDBMSConnectionService {
 
 	public List<RDBMSConnection> getRDBMSConnections();

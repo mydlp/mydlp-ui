@@ -8,7 +8,7 @@ import com.mydlp.ui.domain.AuthSecurityRole;
 import com.mydlp.ui.domain.Rule;
 import com.mydlp.ui.domain.RuleItem;
 
-@Secured(AuthSecurityRole.ROLE_ADMIN)
+@Secured({AuthSecurityRole.ROLE_ADMIN, AuthSecurityRole.ROLE_SUPER_ADMIN})
 public interface RuleService {
 
 	public List<Rule> getRules();

@@ -6,12 +6,14 @@
 		 creationComplete="onCreationComplete(event)">
 	<fx:Script>
 		<![CDATA[
+			import com.mydlp.ui.domain.AuthSecurityRole;
 			import com.mydlp.ui.domain.AuthUser;
 			import com.mydlp.ui.util.InteractionUtil;
 			import com.mydlp.ui.util.LangUtil;
 			
 			import mx.collections.ArrayCollection;
 			import mx.collections.ListCollectionView;
+			import mx.core.FlexGlobals;
 			import mx.rpc.events.ResultEvent;
 			
 			[Bindable]
@@ -26,11 +28,34 @@
 				deleteUser.enabled = false;
 			}
 			
+			protected function hasSuperAdminRole(user:AuthUser):Boolean
+			{
+				for(var i:int = 0; i < user.roles.length; i++)
+				{
+					if(user.roles[i].roleName == AuthSecurityRole.ROLE_SUPER_ADMIN)
+						return true;
+				}
+				return false;
+			}
+			
 			protected function getUsersHandler(event:ResultEvent):void
 			{
 				var users:ArrayCollection = event.result as ArrayCollection;
-				for each(var user:* in users)
-				userDP.addItem(user);
+				var tempUsers:ArrayCollection = new ArrayCollection;
+				{
+					if(!FlexGlobals.topLevelApplication.hasRole(AuthSecurityRole.ROLE_SUPER_ADMIN))
+					{
+						for(var i:int; i < users.length; i++)
+						{
+							if(!hasSuperAdminRole(users[i]))
+								tempUsers.addItem(users[i]);
+						}
+					}
+					else
+						tempUsers.addAll(users);
+				}
+				for each(var user:* in tempUsers)
+					userDP.addItem(user);
 				userList.validateNow();
 			}
 			protected function onCreationComplete(event:Event):void
