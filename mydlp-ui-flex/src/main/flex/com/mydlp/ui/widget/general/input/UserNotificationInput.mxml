@@ -133,7 +133,7 @@
 				<s:Button id="addButton" 
 						  click="addClickHandler(event)"
 						  skinClass="com.mydlp.ui.skin.AddBitmapButton32Skin"/>
-				<s:Button click="editClickHandler(event)"
+				<s:Button click="editClickHandler(event)" includeInLayout="false" visible="false"
 						  enabled="{nList.selectedItem != null}"
 						  skinClass="com.mydlp.ui.skin.EditBitmapButton32Skin"/>
 				<s:Button click="removeClickHandler(event)"
