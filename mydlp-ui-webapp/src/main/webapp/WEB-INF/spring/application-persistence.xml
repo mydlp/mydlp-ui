@@ -43,6 +43,7 @@
          <value>com.mydlp.ui.domain.DocumentDatabaseRDBMSEntry</value>
          <value>com.mydlp.ui.domain.DocumentFingerprint</value>
          <value>com.mydlp.ui.domain.Domain</value>
+         <value>com.mydlp.ui.domain.EmailNotificationItem</value>
          <value>com.mydlp.ui.domain.EndpointRule</value>
          <value>com.mydlp.ui.domain.FileSystemDirectory</value>
          <value>com.mydlp.ui.domain.InformationDescription</value>
@@ -59,6 +60,7 @@
          <value>com.mydlp.ui.domain.MatcherArgument</value>
          <value>com.mydlp.ui.domain.MIMEType</value>
          <value>com.mydlp.ui.domain.Network</value>
+         <value>com.mydlp.ui.domain.NotificationItem</value>
          <value>com.mydlp.ui.domain.PrinterRule</value>
          <value>com.mydlp.ui.domain.RDBMSConnection</value>
          <value>com.mydlp.ui.domain.RDBMSEnumeratedValue</value>

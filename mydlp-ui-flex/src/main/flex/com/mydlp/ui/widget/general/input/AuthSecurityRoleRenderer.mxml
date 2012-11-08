@@ -49,7 +49,7 @@
 				var roles:ArrayCollection = FlexGlobals.topLevelApplication.userRoles;
 				if(event.currentTarget.selected == true)
 				{
-					if(this.data.roleName == "ROLE_ADMIN")
+					if(this.data.roleName == "ROLE_ADMIN" || this.data.roleName == "ROLE_SUPER_ADMIN")
 						FlexGlobals.topLevelApplication.userRoles.removeAll();
 					else
 					{

@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:TitleWindow xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			   xmlns:s="library://ns.adobe.com/flex/spark" 
+			   xmlns:mx="library://ns.adobe.com/flex/mx"
+			   xmlns:my="http://www.mydlp.com/flex/my"
+			   xmlns:input="com.mydlp.ui.widget.general.input.*"
+			   close="{close()}"
+			   visible="false" width="475"
+			   title="@Resource(bundle = 'messages', key = 'userNotification.title.label')"
+			   creationComplete="onCreationComplete(event)"
+			   >
+
+	<fx:Script>
+		<![CDATA[
+			import com.mydlp.ui.domain.AuthUser;
+			import com.mydlp.ui.domain.EmailNotificationItem;
+			import com.mydlp.ui.domain.Rule;
+			import com.mydlp.ui.util.InteractionUtil;
+			
+			import mx.collections.ArrayCollection;
+			import mx.controls.Alert;
+			import mx.core.FlexGlobals;
+			import mx.events.FlexEvent;
+			import mx.events.ItemClickEvent;
+			import mx.rpc.events.ResultEvent;
+			
+			[Bindable]
+			protected var users:ArrayCollection = new ArrayCollection;
+			
+			public var typeString:String;
+			public var rule:Rule = null;
+			public var userNotificationInput:UserNotificationInput = null;
+			
+			protected function close(): void
+			{
+				InteractionUtil.closePopup(this);
+			}
+			
+			protected function nextButtonClick(event:MouseEvent):void
+			{
+				typeGroup.includeInLayout = false;
+				typeGroup.visible = false;
+				this.currentState = "selectUser";
+				userGroup.includeInLayout = true;
+				userGroup.visible = true;
+			}
+			
+			protected function okButtonClick(event:MouseEvent):void//for each new notification item, addition must be handled.
+			{
+				var notifiedUsers:ArrayCollection = FlexGlobals.topLevelApplication.notifiedUsers; 
+				if(typeString == "email")
+				{
+					for each(var index:int in notifiedUsers)
+					{
+						var emailNotification:EmailNotificationItem = new EmailNotificationItem;
+						emailNotification.authUser = users.getItemAt(index) as AuthUser;
+						emailNotification.rule = rule;
+						userNotificationInput.addNewNotificationItem(emailNotification);
+					}
+				}
+				else
+					return;
+				close();
+			}
+			
+			protected function getUsersResultHandler(event:ResultEvent):void
+			{
+				users = event.result as ArrayCollection;
+				nextButton.enabled = true;
+			}
+			
+			protected function onCreationComplete(event:FlexEvent):void
+			{
+				nextButton.enabled = false;
+				re.getUsers();
+			}
+			
+			protected function onSelectionHandler(event:ItemClickEvent):void//handling must be added for each new notification.
+			{
+				if(event.currentTarget.selectedValue == "email")
+					typeString = "email";
+				else
+					typeString = "none";
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<fx:Declarations>
+		<s:RadioButtonGroup id="userSelection" itemClick="onSelectionHandler(event)"/>
+		<my:remote id="re" destination="userBRS">
+			<my:method name="getUsers" result="getUsersResultHandler(event)" />
+		</my:remote>
+	</fx:Declarations>
+	
+	<s:states>
+		<s:State name="selectType"/>
+		<s:State name="selectUser"/>
+	</s:states>
+	
+	<s:Group>
+		<s:layout>
+			<s:VerticalLayout gap="15" paddingRight="2" paddingLeft="8" paddingTop="5" paddingBottom="5"/>
+		</s:layout>
+		
+		<s:Group id="typeGroup" includeIn="selectType">
+			<s:layout>
+				<s:VerticalLayout gap="5"/>
+			</s:layout>
+			
+			<s:RadioButton groupName="userSelection" selected="true" value="email" label="@Resource(bundle = 'messages', key = 'userNotification.email.label')"/>
+			<s:RadioButton groupName="userSelection" value="sms" label="@Resource(bundle = 'messages', key = 'userNotification.sms.label')"/>
+			<!--radio button should be added when notification type increases-->
+		</s:Group>
+		
+		<s:Group id="userGroup" includeIn="selectUser" includeInLayout="false" visible="false" width="100%">
+			<s:List id="userList" dataProvider="{users}" width="100%" itemRenderer="com.mydlp.ui.widget.general.input.UserNotificationRenderer"/>
+		</s:Group>
+		
+		<s:Group>
+			<s:layout>
+				<s:HorizontalLayout gap="10" horizontalAlign="center"/>
+			</s:layout>
+			<s:Button id="nextButton" includeIn="selectType"
+					  label="@Resource(bundle = 'messages', key = 'userNotification.nextButton.label')"
+					  click="nextButtonClick(event)"/>
+			<s:Button id="okButton" includeIn="selectUser"
+					  label="@Resource(bundle = 'messages', key = 'userNotification.okButton.label')"
+					  click="okButtonClick(event)"/>
+			<s:Button id="cancelButton" label="@Resource(bundle = 'messages', key = 'userNotification.cancelButton.label')"
+					  click="close()"/>
+		</s:Group>
+	</s:Group>
+	
+	
+	
+</s:TitleWindow>

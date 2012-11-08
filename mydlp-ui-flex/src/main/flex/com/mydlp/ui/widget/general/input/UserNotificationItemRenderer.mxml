@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:ItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009" 
+				xmlns:s="library://ns.adobe.com/flex/spark" 
+				xmlns:mx="library://ns.adobe.com/flex/mx" 
+				width="100%"
+				height="24"
+				autoDrawBackground="true">
+	<fx:Script>
+		<![CDATA[
+			import com.mydlp.ui.domain.EmailNotificationItem;
+			
+			public override function set data(value:Object):void
+			{
+				super.data = value;
+				if(value == null) return;
+				labelOfNotificationItem()
+			}
+			
+			protected function labelOfNotificationItem():void
+			{
+				var isEmail:Boolean = false;
+				if(data is EmailNotificationItem)
+					isEmail = true;
+				else 
+					isEmail = false;
+				if(isEmail)
+					lbl.text = "email - " + (data as EmailNotificationItem).authUser.email;
+				else
+					lbl.text = "none";
+			}
+		]]>
+	</fx:Script>
+	
+	<s:states>
+		<s:State name="normal" />
+		<s:State name="hovered" />
+		<s:State name="selected" />
+	</s:states>
+	
+	<s:layout>
+		<s:HorizontalLayout verticalAlign="middle" 
+							paddingLeft="3" paddingRight="3"/>
+	</s:layout>
+	<s:Label id="lbl"/>
+	<mx:Spacer includeIn="selected" width="100%"/>
+</s:ItemRenderer>

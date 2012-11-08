@@ -58,6 +58,8 @@
 			
 			public var userRoles:ArrayCollection = new ArrayCollection;
 			
+			public var notifiedUsers:ArrayCollection = new ArrayCollection;
+			
 			[Bindable]
 			public var dashboardContainer:DashboardContainer = null;
 			[Bindale]

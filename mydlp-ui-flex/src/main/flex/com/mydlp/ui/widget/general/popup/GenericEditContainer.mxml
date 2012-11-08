@@ -58,6 +58,7 @@
 			import com.mydlp.ui.widget.general.input.MimeTypeInput;
 			import com.mydlp.ui.widget.general.input.RDBMSInformationTargetInput;
 			import com.mydlp.ui.widget.general.input.RegularExpressionGroupInput;
+			import com.mydlp.ui.widget.general.input.UserNotificationInput;
 			import com.mydlp.ui.widget.general.validator.NullValidator;
 			
 			import mx.binding.utils.BindingUtils;
@@ -146,6 +147,7 @@
 							classMember.name == "distinguishedNameHash" ||
 							(classMember.name == "distance" && targetObject is InformationDescription) ||
 							(classMember.name == "distanceEnabled" && targetObject is InformationDescription) ||
+							(classMember.name == "notificationEnabled" && targetObject is Rule) ||
 							(classMember.name == "action" && !(targetObject is USBDevice)) ||
 							(classMember.name == "children" && classMember.type == ListCollectionView)||						
 							(classMember.name == "coupledInventoryItem" && classMember.type == InventoryItem) ||
@@ -203,6 +205,21 @@
 							(targetObject.customActionDescription as CustomActionDescription).coupledCustomAction = targetObject as CustomAction;
 						populateClassMembers(targetObject.customActionDescription);
 						continue;
+					}
+					
+					else if (targetObject is Rule && classMember.name == "notificationItems")
+					{	var nInput:UserNotificationInput = new UserNotificationInput();
+						nInput.deleteList = this.deleteList
+						nInput.notificationList = targetObject[classMember.name];
+						nInput.notificationEnabled = targetObject["notificationEnabled"];
+						nInput.rule = targetObject as Rule;
+						BindingUtils.bindProperty(targetObject, classMember.name, nInput, "notificationList");
+						BindingUtils.bindProperty(targetObject, "notificationEnabled", nInput, "notificationEnabled");
+						inputLabel = new VerticalInputLabel();
+						inputLabel.includeInLayout = SessionUtil.isEnterprise();
+						inputLabel.visible = SessionUtil.isEnterprise();
+						inputLabel.addElement(nInput);
+						index = 14;
 					}
 					else if (
 							( classMember.name == "ipBase" || classMember.name == "ipMask" )
@@ -507,20 +524,20 @@
 					
 					else if(classMember.type == Boolean)
 					{
-						var checkBox:CheckBox = new CheckBox();
-						checkBox.selected = targetObject[classMember.name];
-						BindingUtils.bindProperty(targetObject, classMember.name, checkBox, "selected");
+						var checkBox1:CheckBox = new CheckBox();
+						checkBox1.selected = targetObject[classMember.name];
+						BindingUtils.bindProperty(targetObject, classMember.name, checkBox1, "selected");
 
 						if (classMember.name == "isActive")
 						{
 							inputLabel = new HorizontalInputLabel();
-							inputLabel.addElement(checkBox);
+							inputLabel.addElement(checkBox1);
 							index = 4;
 						}
 						else 
 						{
 							inputLabelForEnterprise2 = new HorizontalInputLabel();
-							inputLabelForEnterprise2.addElement(checkBox);
+							inputLabelForEnterprise2.addElement(checkBox1);
 							if(!SessionUtil.isEnterprise())
 							{
 								inputLabelForEnterprise2.includeInLayout = true;

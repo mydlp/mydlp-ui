@@ -19,7 +19,7 @@ public class _001_00100_Users2 extends AbstractGranule {
 		
 		AuthUser user = new AuthUser();
 		user.setUsername("super");
-		user.setEmail("user@mydlp.com");
+		user.setEmail("super@mydlp.com");
 		user.setPassword("8947320cee61087e89fa734c2a3baf64cf46083d"); // sha1 for 'mydlp'
 		user.setIsActive(true);
 		user.setHasAuthorityScope(false);
