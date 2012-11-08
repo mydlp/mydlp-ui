@@ -15,6 +15,7 @@
 			import com.mydlp.ui.domain.InventoryItem;
 			import com.mydlp.ui.domain.Network;
 			import com.mydlp.ui.util.InteractionUtil;
+			import com.mydlp.ui.util.SessionUtil;
 			
 			protected function close():void
 			{
@@ -64,30 +65,33 @@
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
 	</fx:Declarations>
 	
-	<s:Group>
-		<s:layout>
-			<s:VerticalLayout horizontalAlign="center" 
-							  paddingBottom="10" paddingLeft="10" paddingRight="10" paddingTop="10"/>
-		</s:layout>
+	<s:VGroup paddingBottom="10" paddingLeft="10" paddingRight="10" paddingTop="10"
+			  horizontalAlign="center">
 		<s:Label text="@Resource(bundle = 'messages', key = 'inventory.newdialog.message')"/>
-		<s:Button skinClass="com.mydlp.ui.skin.FolderBitmapLabelButton16Skin" 
-				  label="@Resource(bundle = 'messages', key = 'inventory.newdialog.category')" 
-				  click="categoryHandler()"/>
-		<s:Button skinClass="com.mydlp.ui.skin.NetworkBitmapLabelButton16Skin" 
-				  label="@Resource(bundle = 'messages', key = 'inventory.newdialog.network')" 
-				  click="networkHandler()"/>
-		<s:Button skinClass="com.mydlp.ui.skin.InformationTypeBitmapLabelButton16Skin" 
-				  label="@Resource(bundle = 'messages', key = 'inventory.newdialog.informationType')" 
-				  click="informationTypeHandler()"/>
-		<s:Button skinClass="com.mydlp.ui.skin.DomainBitmapLabelButton16Skin" 
-				  label="@Resource(bundle = 'messages', key = 'inventory.newdialog.domain')" 
-				  click="domainHandler()"/>
-		<s:Button skinClass="com.mydlp.ui.skin.FileSystemDirectoryBitmapLabelButton16Skin" 
-				  label="@Resource(bundle = 'messages', key = 'inventory.newdialog.fileSystemDirectory')" 
-				  click="fileSystemDirectoryHandler()"/>
-		<s:Button skinClass="com.mydlp.ui.skin.UserBitmapLabelButton16Skin" 
-				  label="@Resource(bundle = 'messages', key = 'inventory.newdialog.userObject')" 
-				  click="{close(); InteractionUtil.newPopup(NewInventoryUserDialog);}"/>
-	</s:Group>
+		<s:VGroup horizontalAlign="left" >
+			<s:Button skinClass="com.mydlp.ui.skin.FolderBitmapLabelButton16Skin" 
+					  label="@Resource(bundle = 'messages', key = 'inventory.newdialog.category')" 
+					  click="categoryHandler()"/>
+			<s:Button skinClass="com.mydlp.ui.skin.NetworkBitmapLabelButton16Skin" 
+					  label="@Resource(bundle = 'messages', key = 'inventory.newdialog.network')" 
+					  click="networkHandler()"/>
+			<s:Button skinClass="com.mydlp.ui.skin.InformationTypeBitmapLabelButton16Skin" 
+					  label="@Resource(bundle = 'messages', key = 'inventory.newdialog.informationType')" 
+					  click="informationTypeHandler()"/>
+			<s:Button skinClass="com.mydlp.ui.skin.DomainBitmapLabelButton16Skin" 
+					  label="@Resource(bundle = 'messages', key = 'inventory.newdialog.domain')"
+					  includeInLayout="{SessionUtil.isEnterprise()}"
+					  visible="{SessionUtil.isEnterprise()}"
+					  click="domainHandler()"/>
+			<s:Button skinClass="com.mydlp.ui.skin.FileSystemDirectoryBitmapLabelButton16Skin" 
+					  label="@Resource(bundle = 'messages', key = 'inventory.newdialog.fileSystemDirectory')" 
+					  includeInLayout="{SessionUtil.isEnterprise()}"
+					  visible="{SessionUtil.isEnterprise()}"
+					  click="fileSystemDirectoryHandler()"/>
+			<s:Button skinClass="com.mydlp.ui.skin.UserBitmapLabelButton16Skin" 
+					  label="@Resource(bundle = 'messages', key = 'inventory.newdialog.userObject')" 
+					  click="{close(); InteractionUtil.newPopup(NewInventoryUserDialog);}"/>
+		</s:VGroup>
+	</s:VGroup>
 	
 </popup:ClosableTitleWindow>

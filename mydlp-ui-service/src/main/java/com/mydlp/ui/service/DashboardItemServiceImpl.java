@@ -11,9 +11,13 @@ import javax.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.TransactionCallback;
+import org.springframework.transaction.support.TransactionTemplate;
 
 import com.mydlp.ui.dao.IncidentLogDAO;
 import com.mydlp.ui.dao.UserSettingsDAO;
@@ -32,6 +36,10 @@ public class DashboardItemServiceImpl implements DashboardItemService {
 	protected Map<String, Date> itemAge = null;
 	
 	protected BlockingQueue<String> generationRequests = null;
+	
+	@Autowired
+	@Qualifier("logTransactionTemplate")
+	protected TransactionTemplate transactionTemplate;
 	
 	@PostConstruct
 	protected void init() {
@@ -88,7 +96,13 @@ public class DashboardItemServiceImpl implements DashboardItemService {
 		while((itemKey = generationRequests.poll()) != null)
 		{
 			if (!itemCache.containsKey(itemKey) || isItemOld(itemKey)) {
-				Object result = generate(itemKey);
+				final String finalItemKey = itemKey;
+				Object result = transactionTemplate.execute(new TransactionCallback<Object>() {
+					@Override
+					public Object doInTransaction(TransactionStatus arg0) {
+						return generate(finalItemKey);
+					}
+				});
 				if (result != null)
 				{
 					itemCache.put(itemKey, result);
