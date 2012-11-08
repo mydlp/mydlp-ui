@@ -79,7 +79,9 @@
 					  label="@Resource(bundle = 'messages', key = 'inventory.newdialog.informationType')" 
 					  click="informationTypeHandler()"/>
 			<s:Button skinClass="com.mydlp.ui.skin.DomainBitmapLabelButton16Skin" 
-					  label="@Resource(bundle = 'messages', key = 'inventory.newdialog.domain')" 
+					  label="@Resource(bundle = 'messages', key = 'inventory.newdialog.domain')"
+					  includeInLayout="{SessionUtil.isEnterprise()}"
+					  visible="{SessionUtil.isEnterprise()}"
 					  click="domainHandler()"/>
 			<s:Button skinClass="com.mydlp.ui.skin.FileSystemDirectoryBitmapLabelButton16Skin" 
 					  label="@Resource(bundle = 'messages', key = 'inventory.newdialog.fileSystemDirectory')" 
@@ -88,8 +90,6 @@
 					  click="fileSystemDirectoryHandler()"/>
 			<s:Button skinClass="com.mydlp.ui.skin.UserBitmapLabelButton16Skin" 
 					  label="@Resource(bundle = 'messages', key = 'inventory.newdialog.userObject')" 
-					  includeInLayout="{SessionUtil.isEnterprise()}"
-					  visible="{SessionUtil.isEnterprise()}"
 					  click="{close(); InteractionUtil.newPopup(NewInventoryUserDialog);}"/>
 		</s:VGroup>
 	</s:VGroup>
