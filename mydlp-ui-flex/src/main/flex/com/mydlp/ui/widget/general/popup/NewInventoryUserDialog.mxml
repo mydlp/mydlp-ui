@@ -38,18 +38,17 @@
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
 	</fx:Declarations>
 	
-	<s:Group>
-		<s:layout>
-			<s:VerticalLayout horizontalAlign="center" 
-							  paddingBottom="10" paddingLeft="10" paddingRight="10" paddingTop="10"/>
-		</s:layout>
+	<s:VGroup paddingBottom="10" paddingLeft="10" paddingRight="10" paddingTop="10"
+			  horizontalAlign="center">
 		<s:Label text="@Resource(bundle = 'messages', key = 'inventory.newuserdialog.message')"/>
-		<s:Button skinClass="com.mydlp.ui.skin.UserStaticBitmapLabelButton16Skin" 
-				  label="@Resource(bundle = 'messages', key = 'inventory.newuserdialog.static')" 
-				  click="userStaticHandler()"/>
-		<s:Button skinClass="com.mydlp.ui.skin.UserDirectoryBitmapLabelButton16Skin" 
-				  label="@Resource(bundle = 'messages', key = 'inventory.newuserdialog.ad')" 
-				  click="userADHandler()"/>
-	</s:Group>
+		<s:VGroup horizontalAlign="left" >
+			<s:Button skinClass="com.mydlp.ui.skin.UserStaticBitmapLabelButton16Skin" 
+					  label="@Resource(bundle = 'messages', key = 'inventory.newuserdialog.static')" 
+					  click="userStaticHandler()"/>
+			<s:Button skinClass="com.mydlp.ui.skin.UserDirectoryBitmapLabelButton16Skin" 
+					  label="@Resource(bundle = 'messages', key = 'inventory.newuserdialog.ad')" 
+					  click="userADHandler()"/>
+		</s:VGroup>
+	</s:VGroup>
 	
 </popup:ClosableTitleWindow>
