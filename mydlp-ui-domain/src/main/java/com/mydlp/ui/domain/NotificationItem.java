@@ -8,7 +8,7 @@ import javax.persistence.ManyToOne;
 
 @Entity
 @Inheritance(strategy=InheritanceType.JOINED)
-public class NotificationItem extends AbstractEntity{
+public abstract class NotificationItem extends AbstractEntity {
 	
 	/**
 	 * 
