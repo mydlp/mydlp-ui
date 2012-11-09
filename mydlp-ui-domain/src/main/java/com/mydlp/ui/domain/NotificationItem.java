@@ -1,10 +1,13 @@
 package com.mydlp.ui.domain;
 
 import javax.persistence.Entity;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 @Entity
+@Inheritance(strategy=InheritanceType.JOINED)
 public class NotificationItem extends AbstractEntity{
 	
 	/**
