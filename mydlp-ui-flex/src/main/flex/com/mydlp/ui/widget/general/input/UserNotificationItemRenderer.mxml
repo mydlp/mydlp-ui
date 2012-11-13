@@ -24,7 +24,7 @@
 				else 
 					isEmail = false;
 				if(isEmail)
-					lbl.text = "email - " + (data as EmailNotificationItem).authUser.email;
+					lbl.text = "email - " + (data as EmailNotificationItem).authUser.username + " <" + (data as EmailNotificationItem).authUser.email + ">";
 				else
 					lbl.text = "none";
 			}
