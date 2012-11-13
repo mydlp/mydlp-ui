@@ -21,7 +21,8 @@
 			
 			protected function reget(): void
 			{
-				if((FlexGlobals.topLevelApplication.user as AuthUser).hasRole(AuthSecurityRole.ROLE_ADMIN))
+				if((FlexGlobals.topLevelApplication.user as AuthUser).hasRole(AuthSecurityRole.ROLE_ADMIN) ||
+					(FlexGlobals.topLevelApplication.user as AuthUser).hasRole(AuthSecurityRole.ROLE_SUPER_ADMIN))
 					re.get(itemKey);
 			}
 			
