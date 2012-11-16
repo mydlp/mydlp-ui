@@ -126,7 +126,7 @@
 			protected function isAdmin():Boolean
 			{
 				var currentUser:AuthUser = FlexGlobals.topLevelApplication.user;
-				if(currentUser.hasRole(AuthSecurityRole.ROLE_ADMIN))
+				if(currentUser.hasRole(AuthSecurityRole.ROLE_ADMIN) || currentUser.hasRole(AuthSecurityRole.ROLE_SUPER_ADMIN))
 					return true;
 				else return false;
 			}

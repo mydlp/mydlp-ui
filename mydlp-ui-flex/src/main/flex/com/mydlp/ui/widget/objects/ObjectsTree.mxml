@@ -89,7 +89,7 @@
 						regularExpressionGroups.addItem(item);
 					else if(item is DocumentDatabase)
 					{
-						if(!currentUser.hasRole(AuthSecurityRole.ROLE_ADMIN))
+						if(!(currentUser.hasRole(AuthSecurityRole.ROLE_ADMIN) || currentUser.hasRole(AuthSecurityRole.ROLE_SUPER_ADMIN)))
 						{
 							var ddOfUser:ListCollectionView = currentUser.documentDatabases;
 							for(var i:int = 0; i < ddOfUser.length; i++)
@@ -147,7 +147,7 @@
 					
 					var currentUser:AuthUser = FlexGlobals.topLevelApplication.user as AuthUser;
 					
-					if(currentUser.hasRole(AuthSecurityRole.ROLE_ADMIN))
+					if(currentUser.hasRole(AuthSecurityRole.ROLE_ADMIN) || currentUser.hasRole(AuthSecurityRole.ROLE_SUPER_ADMIN))
 					{
 						var parentDataFormats:ObjectGroup = new ObjectGroup();
 						parentDataFormats.label = LangUtil.getString("messages", "objects.dataFormats.label");
@@ -161,7 +161,7 @@
 						parentRegularExpressionGroups.children = regularExpressionGroups;
 						objects.addItem(parentRegularExpressionGroups);
 					}
-					if(currentUser.hasRole(AuthSecurityRole.ROLE_ADMIN) || currentUser.hasRole(AuthSecurityRole.ROLE_CLASSIFIER))
+					if(currentUser.hasRole(AuthSecurityRole.ROLE_ADMIN) || currentUser.hasRole(AuthSecurityRole.ROLE_CLASSIFIER)  || currentUser.hasRole(AuthSecurityRole.ROLE_SUPER_ADMIN))
 					{
 						var parentDocumentDatabases:ObjectGroup = new ObjectGroup();
 						parentDocumentDatabases.label = LangUtil.getString("messages", "objects.documentDatabases.label");
@@ -169,7 +169,7 @@
 						parentDocumentDatabases.children = documentDatabases;
 						objects.addItem(parentDocumentDatabases);
 					}
-					if(currentUser.hasRole(AuthSecurityRole.ROLE_ADMIN))
+					if(currentUser.hasRole(AuthSecurityRole.ROLE_ADMIN) || currentUser.hasRole(AuthSecurityRole.ROLE_SUPER_ADMIN))
 					{
 						var parentADDomains:ObjectGroup = new ObjectGroup();
 						parentADDomains.label = LangUtil.getString("messages", "objects.adDomains.label");

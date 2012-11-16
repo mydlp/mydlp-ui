@@ -12,6 +12,8 @@ public class _000_00003_Users extends AbstractGranule {
 
 	@Override
 	protected void callback() {
+		AuthSecurityRole roleSuperAdmin = new AuthSecurityRole();
+		roleSuperAdmin.setRoleName(AuthSecurityRole.ROLE_SUPER_ADMIN);
 		AuthSecurityRole roleAdmin = new AuthSecurityRole();
 		roleAdmin.setRoleName(AuthSecurityRole.ROLE_ADMIN);
 		AuthSecurityRole roleAuditor = new AuthSecurityRole();
@@ -22,6 +24,7 @@ public class _000_00003_Users extends AbstractGranule {
 		getHibernateTemplate().saveOrUpdate(roleAdmin);
 		getHibernateTemplate().saveOrUpdate(roleAuditor);
 		getHibernateTemplate().saveOrUpdate(roleClassifier);
+		getHibernateTemplate().saveOrUpdate(roleSuperAdmin);
 		
 		AuthUser user = new AuthUser();
 		user.setUsername("mydlp");
@@ -30,29 +33,15 @@ public class _000_00003_Users extends AbstractGranule {
 		user.setIsActive(true);
 		user.setHasAuthorityScope(false);
 		List<AuthSecurityRole> roles = new ArrayList<AuthSecurityRole>();
-		roles.add(roleAdmin);
+		roles.add(roleSuperAdmin);
 		user.setRoles(roles);
 		
-		AuthUser user2 = new AuthUser();
-		user2.setUsername("user2");
-		user2.setEmail("user@mydlp.com");
-		user2.setPassword("a94a8fe5ccb19ba61c4c0873d391e987982fbbd3"); // sha1 for 'test'
-		user2.setIsActive(true);
-		user2.setHasAuthorityScope(false);
-		List<AuthSecurityRole> roles2 = new ArrayList<AuthSecurityRole>();
-		roles2.add(roleClassifier);
-		user2.setRoles(roles2);
-		
 		getHibernateTemplate().saveOrUpdate(user);
-		getHibernateTemplate().saveOrUpdate(user2);
-		
+	
 		UserSettings settings = new UserSettings();
 		settings.setUser(user);
 		getHibernateTemplate().saveOrUpdate(settings);
 		
-		UserSettings settings2 = new UserSettings();
-		settings2.setUser(user2);
-		getHibernateTemplate().saveOrUpdate(settings2);
 	}
 
 }
