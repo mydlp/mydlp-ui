@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:SkinnableContainer xmlns:fx="http://ns.adobe.com/mxml/2009"
+					  xmlns:s="library://ns.adobe.com/flex/spark"
+					  xmlns:my="http://www.mydlp.com/flex/my"
+					  xmlns:mx="library://ns.adobe.com/flex/mx"
+					  xmlns:domain="com.mydlp.ui.domain.*"
+					  xmlns:input="com.mydlp.ui.widget.general.input.*"
+					  xmlns:popup="com.mydlp.ui.widget.general.popup.*"
+					  width="{InputLabel.VERTICAL_INPUT_WIDTH}" height="150"
+					  creationComplete="onCreationComplete(event)" 
+					  xmlns:util="com.mydlp.ui.util.*">
+	
+	<fx:Script>
+		<![CDATA[
+			import com.mydlp.ui.domain.InformationFeature;
+			import com.mydlp.ui.domain.NonCascadingArgument;
+			import com.mydlp.ui.domain.NotificationItem;
+			import com.mydlp.ui.domain.RegularExpression;
+			import com.mydlp.ui.domain.Rule;
+			import com.mydlp.ui.util.InteractionUtil;
+			import com.mydlp.ui.widget.general.popup.InputLabel;
+			
+			import mx.events.FlexEvent;
+			
+			public var deleteList:ListCollectionView = null;
+			public var rule:Rule = null;		
+			
+			protected function removeClickHandler(event:MouseEvent):void
+			{
+				nList.dataGroup.invalidateDisplayList();
+				for each (var o:Object in nList.selectedIndices)
+				{
+					deleteList.addItem(notificationList.getItemAt(o as int));
+					notificationList.removeItemAt(o as int);		
+				}
+				
+				refreshDisplay();
+			}
+			
+			
+			
+			public function addInformationFeature(ni:NotificationItem): void
+			{
+				notificationList.addItem(ni);
+				refreshDisplay();
+			}
+			
+			public function refreshDisplay(): void
+			{
+				nList.invalidateList();
+			}
+			
+			protected function isDistanceInputEnabled(): Boolean
+			{
+				if (notificationList == null || notificationList.length < 1)
+					return false;
+				else return true;
+			}
+			
+			protected function addClickHandler(event:MouseEvent):void
+			{
+				var unp:UserNotificationPopup = InteractionUtil.newPopup(UserNotificationPopup) as UserNotificationPopup;
+				unp.typeString = "email";
+				unp.rule = rule;
+				unp.userNotificationInput = this;
+				unp.currentState = "selectType";
+				unp.visible = true;
+			}
+			
+			public function addNewNotificationItem(item:NotificationItem):void
+			{
+				notificationList.addItem(item);
+				nList.invalidateList();
+			}
+			
+			protected function editClickHandler(event:MouseEvent):void
+			{
+			}
+			
+			protected function changeHandler(event:Event):void
+			{
+				if(nCheckBox.selected == true)
+				{
+					notificationEnabled = true;
+					notificationItemsGroup.includeInLayout = true;
+					notificationItemsGroup.visible = true;
+				}
+				else
+				{
+					notificationEnabled = false;
+					notificationItemsGroup.includeInLayout = false;
+					notificationItemsGroup.visible = false;
+				}
+			}
+			
+			protected function onCreationComplete(event:FlexEvent):void
+			{
+				notificationItemsGroup.includeInLayout = notificationEnabled;
+				notificationItemsGroup.visible = notificationEnabled;
+				refreshDisplay();
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<fx:Declarations>
+		<mx:ListCollectionView id="notificationList"/>
+		<fx:Boolean id="notificationEnabled"/>
+	</fx:Declarations>
+	
+	<s:layout>
+		<s:VerticalLayout verticalAlign="middle" paddingTop="10"/>
+	</s:layout>
+	
+	
+	<s:Group width="100%" height="100%">
+		<s:layout>
+			<s:VerticalLayout gap="15"/>
+		</s:layout>
+		<s:CheckBox id="nCheckBox" label="@Resource(bundle = 'messages', key = 'userNotification.notificationEnabled.checkbox.label')"
+					selected="{notificationEnabled}" change="changeHandler(event)"/>
+		<s:Group id="notificationItemsGroup" width="100%">
+			<s:layout>
+				<s:HorizontalLayout gap="2" verticalAlign="middle"/>
+			</s:layout>
+			<util:MyList id="nList" width="87%" height="100%" dataProvider="{notificationList}"
+						 itemRenderer="com.mydlp.ui.widget.general.input.UserNotificationItemRenderer"/>
+			
+			<s:Group width="13%" height="100%">
+				<s:layout>
+					<s:VerticalLayout gap="2" horizontalAlign="center" verticalAlign="middle"/>
+				</s:layout>
+				<s:Button id="addButton" 
+						  click="addClickHandler(event)"
+						  skinClass="com.mydlp.ui.skin.AddBitmapButton32Skin"/>
+				<s:Button click="editClickHandler(event)" includeInLayout="false" visible="false"
+						  enabled="{nList.selectedItem != null}"
+						  skinClass="com.mydlp.ui.skin.EditBitmapButton32Skin"/>
+				<s:Button click="removeClickHandler(event)"
+						  enabled="{nList.selectedItem != null}"
+						  skinClass="com.mydlp.ui.skin.RemoveBitmapButton32Skin"/>
+				
+			</s:Group>
+		</s:Group>
+	</s:Group>
+	
+</s:SkinnableContainer>

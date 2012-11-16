@@ -38,6 +38,27 @@ public abstract class Rule extends AbstractNamedEntity {
 	
 	protected List<RuleItem> ruleItems;
 	
+	protected List<NotificationItem> notificationItems;
+	
+	protected Boolean notificationEnabled;
+	
+	@OneToMany(mappedBy="rule", cascade={CascadeType.ALL})
+	public List<NotificationItem> getNotificationItems() {
+		return notificationItems;
+	}
+
+	public void setNotificationItems(List<NotificationItem> notificationItems) {
+		this.notificationItems = notificationItems;
+	}
+
+	public Boolean getNotificationEnabled() {
+		return notificationEnabled;
+	}
+
+	public void setNotificationEnabled(Boolean notificationEnabled) {
+		this.notificationEnabled = notificationEnabled;
+	}
+
 	@Column(nullable=false)
 	public Long getPriority() {
 		return priority;

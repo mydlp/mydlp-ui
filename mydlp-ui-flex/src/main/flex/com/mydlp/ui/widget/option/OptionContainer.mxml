@@ -93,6 +93,7 @@
 					else if (config.key == "icap_options_ttl") protocolsTab.icapOptionsTTL = config;
 					else if (config.key == "icap_log_pass") enterpriseTab.icapLogPass = config;
 					else if (config.key == "icap_log_pass_lower_limit") enterpriseTab.icapLogPassLowerLimit = config;
+					else if (config.key == "email_notification_message") enterpriseTab.notificationMessage = config;
 						
 					else if (config.key == "archive_inbound") enterpriseTab.archiveInbound = config;
 					else if (config.key == "archive_minimum_size") enterpriseTab.archiveMinimumSize = config;

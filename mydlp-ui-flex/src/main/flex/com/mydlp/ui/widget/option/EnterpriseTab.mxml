@@ -47,6 +47,7 @@
 		<domain:Config id="syslogReportHost" />
 		<domain:Config id="syslogReportPort" />
 		<domain:Config id="syslogReportFacility" />
+		<domain:Config id="notificationMessage"/>
 		
 		<s:NumberValidator id="icapLogPassValidator"
 						   source="{logPass}"
@@ -158,18 +159,30 @@
 									change="syslogReportFacility.value = syslogReportFacilityInput.selectedItem"
 									dataProvider="{syslogFacilities}" />
 				</s:FormItem>
-
+				
 			</s:Form>
 		</s:HGroup>
 		
 		<s:Group>
 			<s:layout>
-				<s:HorizontalLayout paddingLeft="25" gap="30" verticalAlign="middle"/>
+				<s:VerticalLayout paddingLeft="25"/>
 			</s:layout>
-			<s:Label text="@Resource(bundle = 'messages', key = 'options.tab.general.editDeniedPage.label')"/>
-			<s:Button label="@Resource(bundle = 'messages', key = 'options.tab.general.editDeniedPageButton.label')" click="openHTML(event)" />
+			<s:Group>
+				<s:layout>
+					<s:HorizontalLayout gap="75" verticalAlign="middle"/>
+				</s:layout>
+				<s:Label text="@Resource(bundle = 'messages', key = 'options.tab.general.editDeniedPage.label')"/>
+				<s:Button label="@Resource(bundle = 'messages', key = 'options.tab.general.editDeniedPageButton.label')" click="openHTML(event)" />
+			</s:Group>
+			<s:Group>
+				<s:layout>
+					<s:HorizontalLayout gap="20" verticalAlign="middle"/>
+				</s:layout>
+				<s:Label text="@Resource(bundle = 'messages', key = 'options.tab.general.editEmailNotification.label')"/>
+				<s:TextArea height="50" width="200" text="@{notificationMessage.value}"/>
+			</s:Group>
 		</s:Group>
-			
+		
 		
 	</s:VGroup>
 	
