@@ -63,7 +63,104 @@ public class _000_00027_Config_General_Advanced extends AbstractGranule {
 		
 		Config deniedPage = new Config();	
 		deniedPage.setKey("denied_page_html");
-		deniedPage.setValue("<!DOCTYPE html PUBLIC \"-//IETF//DTD HTML 2.0//EN\">");
+		deniedPage.setValue(
+				"<!DOCTYPE HTML>\r\n" + 
+				"<html xmlns=\"http://www.w3.org/1999/xhtml\" dir=\"ltr\" lang=\"en-US\">\r\n" + 
+				"<head>\r\n" + 
+				"<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />\r\n" + 
+				"<title>Access Denied by MyDLP</title>\r\n" + 
+				"<style type=\"text/css\">\r\n" + 
+				"body\r\n" + 
+				"{\r\n" + 
+				"	font-family: verdana,arial, 'Trebuchet MS';\r\n" + 
+				"}\r\n" + 
+				"\r\n" + 
+				".main-frame\r\n" + 
+				"{\r\n" + 
+				"	position: relative;\r\n" + 
+				"	margin-right: auto;\r\n" + 
+				"	margin-left: auto;\r\n" + 
+				"	margin-top: 100px;\r\n" + 
+				"	padding-top: 10px;\r\n" + 
+				"	padding-bottom: 10px;\r\n" + 
+				"	width: 600px;\r\n" + 
+				"	height: 300px;\r\n" + 
+				"	border:1px solid black;\r\n" + 
+				"	background-color: #ffffff; \r\n" + 
+				"	-moz-border-radius: 8px;\r\n" + 
+				"	-webkit-border-radius: 8px;\r\n" + 
+				"	border-radius: 8px;\r\n" + 
+				"}\r\n" + 
+				"\r\n" + 
+				".img-td\r\n" + 
+				"{\r\n" + 
+				"	margin-left:auto;\r\n" + 
+				"	margin-right:auto;\r\n" + 
+				"	margin-top:auto;\r\n" + 
+				"	margin-bottom:auto;\r\n" + 
+				"	text-align: center;\r\n" + 
+				"}\r\n" + 
+				"\r\n" + 
+				".img-td img\r\n" + 
+				"{\r\n" + 
+				"	margin-top: 10px;\r\n" + 
+				"	margin-bottom: 10px;\r\n" + 
+				"	margin-left:auto;\r\n" + 
+				"	margin-right:auto;\r\n" + 
+				"	border:0px;\r\n" + 
+				"} \r\n" + 
+				"\r\n" + 
+				".reason-td {\r\n" + 
+				"	font-size: 0.85em;\r\n" + 
+				"}\r\n" + 
+				"\r\n" + 
+				".header-td {\r\n" + 
+				"	vertical-align: bottom;\r\n" + 
+				"}\r\n" + 
+				"\r\n" + 
+				"h3 {\r\n" + 
+				"	color:#992212;\r\n" + 
+				"	font-size: 1.5em;\r\n" + 
+				"	vertical-align: bottom;\r\n" + 
+				"}\r\n" + 
+				"\r\n" + 
+				"a {\r\n" + 
+				"	text-decoration: none;\r\n" + 
+				"}\r\n" + 
+				"</style>\r\n" + 
+				"</head>\r\n" + 
+				"\r\n" + 
+				"<body bgcolor=\"#dfdfdf\">\r\n" + 
+				"<center>\r\n" + 
+				"<div class=\"main-frame\">\r\n" + 
+				"<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"95%\">\r\n" + 
+				"	<tr>\r\n" + 
+				"		<td class=\"img-td\"><a href=\"http://www.mydlp.com\">\r\n" + 
+				"			<img src=\"http://www.mydlp.com/wp-content/uploads/mydlp_tiny.png\" alt=\"MyDLP Logo\">\r\n" + 
+				"		</a></td>\r\n" + 
+				"	</tr>\r\n" + 
+				"\r\n" + 
+				"	<tr>\r\n" + 
+				"	<tr>\r\n" + 
+				"		<td><hr /></td>\r\n" + 
+				"	</tr>\r\n" + 
+				"	<tr>\r\n" + 
+				"		<td class=\"reason-td\">\r\n" + 
+				"			<br />Your request has been <u>blocked</u> by <a href=\"http://www.mydlp.com\">MyDLP</a>\r\n" + 
+				"		</td>\r\n" + 
+				"	</tr>\r\n" + 
+				"	<tr>\r\n" + 
+				"		<td class=\"reason-td\">\r\n" + 
+				"			<br />This action has been taken according your corporate information security policies. Please contact your system administration if you have any questions.\r\n" + 
+				"		</td>\r\n" + 
+				"	</tr>\r\n" + 
+				"</table>\r\n" + 
+				"</div>\r\n" + 
+				"</center>\r\n" + 
+				"</body>\r\n" + 
+				"\r\n" + 
+				"</html>\r\n" + 
+				"");
 
 		getHibernateTemplate().saveOrUpdate(mailArchive);
 		getHibernateTemplate().saveOrUpdate(archiveMinimumSize);
