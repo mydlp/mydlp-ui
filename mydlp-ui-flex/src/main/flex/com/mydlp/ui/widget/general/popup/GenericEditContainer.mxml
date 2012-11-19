@@ -505,7 +505,8 @@
 						index = 1;
 					}
 					else if (targetObject is AbstractEntity && classMember.type == RDBMSInformationTarget 
-						&& ! FlexGlobals.topLevelApplication.hasRole(AuthSecurityRole.ROLE_ADMIN) )
+						&& ! FlexGlobals.topLevelApplication.hasRole(AuthSecurityRole.ROLE_ADMIN)
+						&& ! FlexGlobals.topLevelApplication.hasRole(AuthSecurityRole.ROLE_SUPER_ADMIN))
 					{
 						continue;
 					}
@@ -873,7 +874,7 @@
 			
 			protected function itemClickHandler(event:ItemClickEvent):void
 			{
-				if(event.item.roleName == "ROLE_ADMIN" && event.index != -1)
+				if((event.item.roleName == "ROLE_ADMIN" || event.item.roleName == "ROLE_SUPER_ADMIN") && event.index != -1)
 				{
 					inputLabelForEnterprise.includeInLayout = false;
 					inputLabelForEnterprise.visible = false;

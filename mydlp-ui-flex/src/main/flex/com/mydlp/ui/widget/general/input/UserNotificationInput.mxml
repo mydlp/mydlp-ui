@@ -79,24 +79,13 @@
 			
 			protected function changeHandler(event:Event):void
 			{
-				if(nCheckBox.selected == true)
-				{
-					notificationEnabled = true;
-					notificationItemsGroup.includeInLayout = true;
-					notificationItemsGroup.visible = true;
-				}
-				else
-				{
-					notificationEnabled = false;
-					notificationItemsGroup.includeInLayout = false;
-					notificationItemsGroup.visible = false;
-				}
+				addButton.enabled = nCheckBox.selected;
+				notificationEnabled = nCheckBox.selected;
 			}
 			
 			protected function onCreationComplete(event:FlexEvent):void
 			{
-				notificationItemsGroup.includeInLayout = notificationEnabled;
-				notificationItemsGroup.visible = notificationEnabled;
+				addButton.enabled = notificationEnabled;
 				refreshDisplay();
 			}
 			
@@ -133,9 +122,6 @@
 				<s:Button id="addButton" 
 						  click="addClickHandler(event)"
 						  skinClass="com.mydlp.ui.skin.AddBitmapButton32Skin"/>
-				<s:Button click="editClickHandler(event)" includeInLayout="false" visible="false"
-						  enabled="{nList.selectedItem != null}"
-						  skinClass="com.mydlp.ui.skin.EditBitmapButton32Skin"/>
 				<s:Button click="removeClickHandler(event)"
 						  enabled="{nList.selectedItem != null}"
 						  skinClass="com.mydlp.ui.skin.RemoveBitmapButton32Skin"/>
