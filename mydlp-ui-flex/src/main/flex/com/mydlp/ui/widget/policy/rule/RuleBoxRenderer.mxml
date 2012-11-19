@@ -55,7 +55,7 @@
 			[Embed('/assets/icons/32x32/mail.png')]
 			public static const mailRuleIcon:Class;
 			
-			[Embed('/assets/icons/32x32/computer.png')]
+			[Embed('/assets/icons/32x32/save.png')]
 			public static const removableStorageRuleIcon:Class;
 			
 			[Embed('/assets/icons/32x32/print.png')]

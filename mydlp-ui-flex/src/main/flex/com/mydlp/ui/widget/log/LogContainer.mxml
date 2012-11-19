@@ -60,7 +60,7 @@
 					new Array(
 						"Web",
 						"Mail",
-						"Endpoint",
+						"Removable Storage",
 						"Printer",
 						"Discovery",
 						"API"
@@ -178,7 +178,7 @@
 					switch(channelSearch.getItemAt(channelList.selectedIndex))
 					{
 						case "Web": channelValue = "W"; break;
-						case "Endpoint": channelValue = "E"; break;
+						case "Removable Storage": channelValue = "R"; break;
 						case "Mail": channelValue = "M"; break;
 						case "Printer": channelValue = "P"; break;
 						case "Discovery": channelValue = "D"; break;
