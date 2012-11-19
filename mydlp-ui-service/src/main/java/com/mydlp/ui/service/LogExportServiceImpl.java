@@ -26,6 +26,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.context.NoSuchMessageException;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.stereotype.Service;
 
@@ -161,7 +162,13 @@ public class LogExportServiceImpl implements LogExportService {
 				
 				if (log.getAction() != null)
 				{
-					cell.setCellValue(messageSource.getMessage("export.excel.action." + log.getAction(), null, Locale.US));
+					String m = null;
+					try {
+						m = messageSource.getMessage("export.excel.action." + log.getAction(), null, Locale.US);
+					} catch (NoSuchMessageException e) {
+						m = log.getAction();
+					}
+					cell.setCellValue(m);
 				}
 
 				cell = row.createCell(6);
@@ -169,7 +176,13 @@ public class LogExportServiceImpl implements LogExportService {
 				
 				if (log.getChannel() != null)
 				{
-					cell.setCellValue(messageSource.getMessage("export.excel.channel." + log.getChannel(), null, Locale.US));
+					String m = null;
+					try {
+						m = messageSource.getMessage("export.excel.channel." + log.getChannel(), null, Locale.US);
+					} catch (NoSuchMessageException e) {
+						m = log.getChannel();
+					}
+					cell.setCellValue(m);
 				}
 
 				cell = row.createCell(7);
