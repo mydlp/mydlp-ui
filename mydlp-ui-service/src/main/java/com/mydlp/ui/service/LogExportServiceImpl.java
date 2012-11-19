@@ -54,7 +54,7 @@ public class LogExportServiceImpl implements LogExportService {
 
 	private SecureRandom random = new SecureRandom();
 
-	private static final String[] titles = { "date", "src_addr", "src_user", "destination"
+	private static final String[] titles = { "date", "src_addr", "src_user", "destination",
 			"ruleId", "action", "channel", "file_name", "file_size",
 			"file_type", "file_hash" };
 	
