@@ -89,7 +89,7 @@
 				switch (log.channel)
 				{
 					case "W": labelText += LangUtil.getString("messages","log.container.column.policy.channel.web"); break;
-					case "E": labelText += LangUtil.getString("messages","log.container.column.policy.channel.endpoint"); break;
+					case "E": labelText += LangUtil.getString("messages","log.container.column.policy.channel.removableStorage"); break;
 					case "M": labelText += LangUtil.getString("messages","log.container.column.policy.channel.mail"); break;
 					case "P": labelText += LangUtil.getString("messages","log.container.column.policy.channel.printer"); break;
 					case "D": labelText += LangUtil.getString("messages","log.container.column.policy.channel.discovery"); break;
