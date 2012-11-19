@@ -3,7 +3,7 @@ package com.mydlp.ui.domain;
 import javax.persistence.Entity;
 
 @Entity
-public class EndpointRule extends Rule {
+public class RemovableStorageRule extends Rule {
 
 	/**
 	 * 

@@ -9,7 +9,7 @@
 	<fx:Script>
 		<![CDATA[
 			import com.mydlp.ui.domain.DiscoveryRule;
-			import com.mydlp.ui.domain.EndpointRule;
+			import com.mydlp.ui.domain.RemovableStorageRule;
 			import com.mydlp.ui.domain.MailRule;
 			import com.mydlp.ui.domain.PrinterRule;
 			import com.mydlp.ui.domain.Rule;
@@ -49,7 +49,7 @@
 			}
 			protected function removableStorageRuleHandler():void
 			{
-				ruleHandler(new EndpointRule());
+				ruleHandler(new RemovableStorageRule());
 			}
 			
 			protected function printerRuleHandler():void
@@ -88,7 +88,7 @@
 		<s:VGroup horizontalAlign="left" >
 			<s:Button skinClass="com.mydlp.ui.skin.WebRuleBitmapLabelButton16Skin" label="@Resource(bundle = 'messages', key = 'inventory.newdialog.webrule')" click="webRuleHandler()"/>
 			<s:Button skinClass="com.mydlp.ui.skin.MailRuleBitmapLabelButton16Skin" label="@Resource(bundle = 'messages', key = 'inventory.newdialog.mailrule')" click="mailRuleHandler()"/>
-			<s:Button skinClass="com.mydlp.ui.skin.EndpointRuleBitmapLabelButton16Skin" label="@Resource(bundle = 'messages', key = 'inventory.newdialog.removableStoragerule')" click="removableStorageRuleHandler()"/>
+			<s:Button skinClass="com.mydlp.ui.skin.RemovableStorageRuleBitmapLabelButton16Skin" label="@Resource(bundle = 'messages', key = 'inventory.newdialog.removableStoragerule')" click="removableStorageRuleHandler()"/>
 			<s:Button skinClass="com.mydlp.ui.skin.PrinterRuleBitmapLabelButton16Skin" label="@Resource(bundle = 'messages', key = 'inventory.newdialog.printerrule')" click="printerRuleHandler()"/>
 			<s:Button skinClass="com.mydlp.ui.skin.DiscoveryRuleBitmapLabelButton16Skin" label="@Resource(bundle = 'messages', key = 'inventory.newdialog.discoveryrule')" click="discoveryRuleHandler()"/>
 			<s:Button skinClass="com.mydlp.ui.skin.ApiRuleBitmapLabelButton16Skin" label="@Resource(bundle = 'messages', key = 'inventory.newdialog.apirule')" click="apiRuleHandler()"

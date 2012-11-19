@@ -13,7 +13,7 @@
 			import com.mydlp.ui.domain.ApiRule;
 			import com.mydlp.ui.domain.CustomActionDescriptionSeclore;
 			import com.mydlp.ui.domain.DiscoveryRule;
-			import com.mydlp.ui.domain.EndpointRule;
+			import com.mydlp.ui.domain.RemovableStorageRule;
 			import com.mydlp.ui.domain.MailRule;
 			import com.mydlp.ui.domain.PrinterRule;
 			import com.mydlp.ui.domain.Rule;
@@ -105,9 +105,9 @@
 					{
 						rule = rule as MailRule;
 					}
-					else if (rule is EndpointRule)
+					else if (rule is RemovableStorageRule)
 					{
-						rule = rule as EndpointRule;
+						rule = rule as RemovableStorageRule;
 					}
 					else if (rule is PrinterRule)
 					{

@@ -17,7 +17,7 @@
 			import com.mydlp.ui.domain.ApiRule;
 			import com.mydlp.ui.domain.DiscoveryRule;
 			import com.mydlp.ui.domain.Domain;
-			import com.mydlp.ui.domain.EndpointRule;
+			import com.mydlp.ui.domain.RemovableStorageRule;
 			import com.mydlp.ui.domain.FileSystemDirectory;
 			import com.mydlp.ui.domain.InformationType;
 			import com.mydlp.ui.domain.InventoryBase;
@@ -110,7 +110,7 @@
 				{
 					ruleTypeImage.source = mailRuleIcon;
 				}
-				else if (data is EndpointRule)
+				else if (data is RemovableStorageRule)
 				{
 					ruleTypeImage.source = removableStorageRuleIcon;
 				}
@@ -470,7 +470,7 @@
 						if (treeItem.nameKey == SOURCES_ALL)
 							return true;
 						else if(ruleObject is WebRule ||
-								ruleObject is EndpointRule ||
+								ruleObject is RemovableStorageRule ||
 								ruleObject is PrinterRule ||
 								ruleObject is DiscoveryRule ||
 								ruleObject is ApiRule)
