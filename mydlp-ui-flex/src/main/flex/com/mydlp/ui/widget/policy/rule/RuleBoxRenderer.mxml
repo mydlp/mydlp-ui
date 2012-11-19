@@ -15,9 +15,9 @@
 	<fx:Script>
 		<![CDATA[
 			import com.mydlp.ui.domain.ApiRule;
+			import com.mydlp.ui.domain.ApplicationName;
 			import com.mydlp.ui.domain.DiscoveryRule;
 			import com.mydlp.ui.domain.Domain;
-			import com.mydlp.ui.domain.RemovableStorageRule;
 			import com.mydlp.ui.domain.FileSystemDirectory;
 			import com.mydlp.ui.domain.InformationType;
 			import com.mydlp.ui.domain.InventoryBase;
@@ -27,12 +27,14 @@
 			import com.mydlp.ui.domain.MailRule;
 			import com.mydlp.ui.domain.Network;
 			import com.mydlp.ui.domain.PrinterRule;
+			import com.mydlp.ui.domain.RemovableStorageInboundRule;
+			import com.mydlp.ui.domain.RemovableStorageRule;
 			import com.mydlp.ui.domain.Rule;
 			import com.mydlp.ui.domain.RuleItem;
 			import com.mydlp.ui.domain.RuleUser;
+			import com.mydlp.ui.domain.ScreenshotRule;
 			import com.mydlp.ui.domain.WebRule;
 			import com.mydlp.ui.util.InteractionUtil;
-			import com.mydlp.ui.util.LangUtil;
 			import com.mydlp.ui.util.ReflectionUtil;
 			
 			import mx.collections.ArrayCollection;
@@ -66,6 +68,12 @@
 			
 			[Embed('/assets/icons/32x32/puzzle.png')]
 			public static const apiRuleIcon:Class;
+			
+			[Embed('/assets/icons/32x32/inbound32.png')]
+			public static const removableStorageInboundRuleIcon:Class;
+			
+			[Embed('/assets/icons/32x32/computer.png')]
+			public static const screenshotRuleIcon:Class;
 			
 			protected static const SOURCES_ALL:String = "inventory.networks.all";
 			
@@ -126,6 +134,15 @@
 				{
 					ruleTypeImage.source = apiRuleIcon;
 				}
+				else if (data is RemovableStorageInboundRule)
+				{
+					ruleTypeImage.source = removableStorageInboundRuleIcon;
+				}
+				else if (data is ScreenshotRule)
+				{
+					ruleTypeImage.source = screenshotRuleIcon;
+				}
+					
 				else
 					throw new Error("Unknown rule type;");
 				
@@ -209,7 +226,7 @@
 				else
 					return false;
 			}
-						
+			
 			protected function removeAllSourcesItem():void //called when "All Network" is in rule and dropped network is a specific network.
 			{
 				var ruleItems:ListCollectionView = ruleObject.ruleItems;
@@ -425,7 +442,7 @@
 			protected function groupDroppedItems(droppedItems:*):void // Group dropped items as Sources and matchers with the help of
 			{															// "groupDroppedItem" function.
 				for each(var item:* in droppedItems)
-					groupDroppedItem(item);
+				groupDroppedItem(item);
 			}
 			
 			protected function groupDroppedItem(droppedItem:*):void
@@ -464,16 +481,26 @@
 				if(treeItem is InventoryItem)
 				{
 					if ( treeItem.item is InformationType )
-						return true;
+					{
+						if(ruleObject is RemovableStorageRule ||
+							ruleObject is WebRule ||
+							ruleObject is MailRule ||
+							ruleObject is ApiRule ||
+							ruleObject is PrinterRule ||
+							ruleObject is DiscoveryRule)
+							return true;
+					}
 					else if ( treeItem.item is Network )
 					{
 						if (treeItem.nameKey == SOURCES_ALL)
 							return true;
 						else if(ruleObject is WebRule ||
-								ruleObject is RemovableStorageRule ||
-								ruleObject is PrinterRule ||
-								ruleObject is DiscoveryRule ||
-								ruleObject is ApiRule)
+							ruleObject is RemovableStorageRule ||
+							ruleObject is PrinterRule ||
+							ruleObject is DiscoveryRule ||
+							ruleObject is ApiRule ||
+							ruleObject is RemovableStorageInboundRule ||
+							ruleObject is ScreenshotRule)
 							return true;
 					}
 					else if (treeItem.item is Domain)
@@ -484,6 +511,11 @@
 					else if (treeItem.item is FileSystemDirectory)
 					{
 						if(ruleObject is DiscoveryRule)
+							return true;
+					}
+					else if (treeItem.item is ApplicationName)
+					{
+						if(ruleObject is ScreenshotRule)
 							return true;
 					}
 					else if ( treeItem.item is RuleUser )
@@ -500,7 +532,13 @@
 			
 			public static function isDestinationApplicable(r:*): Boolean
 			{
-				if(r is WebRule || r is DiscoveryRule || r is MailRule)
+				if(r is WebRule || r is DiscoveryRule || r is MailRule || r is ScreenshotRule)
+					return true;
+				else return false;
+			}
+			public static function isMatcherApplicable(r:*):Boolean
+			{
+				if(r is WebRule || r is DiscoveryRule || r is MailRule || r is RemovableStorageRule || r is ApiRule || r is PrinterRule)
 					return true;
 				else return false;
 			}
@@ -515,7 +553,7 @@
 				deleteList = new ArrayCollection();
 				var inventoryObjects:* = FlexGlobals.topLevelApplication.policyContainer.inventoryTree.selectedItems;
 				for each (var o:* in inventoryObjects)
-					addDroppedObject(o as InventoryBase);
+				addDroppedObject(o as InventoryBase);
 				
 				invalidateProperties();
 				refresh();
@@ -613,8 +651,8 @@
 				
 				
 				for each (var ri:RuleItem in ruleObject.ruleItems)
-					if (ri.item.id == sourceItem.id)
-						return;
+				if (ri.item.id == sourceItem.id)
+					return;
 				
 				var newItem:RuleItem = new RuleItem();
 				newItem.item = sourceItem;
@@ -675,7 +713,7 @@
 	</s:states>
 	
 	<s:Rect includeIn="hovered, selected"
-		left="0" right="0" top="0" bottom="0" >
+			left="0" right="0" top="0" bottom="0" >
 		<s:fill>
 			<s:SolidColor color.selected="0xCEDBEF"
 						  color.hovered="0xDEEBFF" 
@@ -700,7 +738,7 @@
 	
 	<s:Group top="3" bottom="3" left="3" right="3">
 		<s:layout>
-			<s:HorizontalLayout verticalAlign="middle"/>
+			<s:HorizontalLayout verticalAlign="middle" gap="0"/>
 		</s:layout>
 		
 		<s:Group id="labelBox" width="160" toolTip="{ruleObject.description}">
@@ -754,7 +792,7 @@
 						  currentState="{sourceDataProvider.length == 0 ? 'noitem' : 'normal'}" />
 		
 		
-		<s:Group width="190" height="100%" 
+		<s:Group width="180" height="100%" 
 				 visible="{!isDestinationApplicable(ruleObject)}" 
 				 includeInLayout="{!isDestinationApplicable(ruleObject)}">
 			<s:Rect left="0" right="0" top="0" bottom="0" >
@@ -778,15 +816,32 @@
 							  noneMessage="@Resource(bundle = 'messages', key = 'rulebox.ruleitembox.destinations.nonemessage')"
 							  currentState="{destinationDataProvider.length == 0 ? 'noitem' : 'normal'}" />
 			
-			<rule:RSpacer />
 		</s:Group> 
-			
-		<rule:RuleItemBox width="200"
-						  listDataProvider="{matcherDataProvider}"
-						  noneMessage="@Resource(bundle = 'messages', key = 'rulebox.ruleitembox.itypes.nonemessage')"
-						  currentState="{matcherDataProvider.length == 0 ? 'noitem' : 'normal'}" />
-				
-		<rule:RSpacer />
+		
+		<s:Group width="220" height="100%" 
+				 visible="{!isMatcherApplicable(ruleObject)}" 
+				 includeInLayout="{!isMatcherApplicable(ruleObject)}">
+			<s:Rect left="0" right="0" top="0" bottom="0" >
+				<s:fill>
+					<s:SolidColor color="0xAEBBCF" alpha="0.3"  />
+				</s:fill>
+			</s:Rect>
+		</s:Group>
+		
+		
+		<s:Group height="100%"
+				 visible="{isMatcherApplicable(ruleObject)}" 
+				 includeInLayout="{isMatcherApplicable(ruleObject)}">
+			<s:layout>
+				<s:HorizontalLayout verticalAlign="middle"/>
+			</s:layout>
+			<rule:RSpacer />	
+			<rule:RuleItemBox width="200"
+							  listDataProvider="{matcherDataProvider}"
+							  noneMessage="@Resource(bundle = 'messages', key = 'rulebox.ruleitembox.itypes.nonemessage')"
+							  currentState="{matcherDataProvider.length == 0 ? 'noitem' : 'normal'}" />
+			<rule:RSpacer />
+		</s:Group>
 		
 		<rule:ActionBox id="actionBox" width="160" 
 						ruleObject="@{ruleObject}" 

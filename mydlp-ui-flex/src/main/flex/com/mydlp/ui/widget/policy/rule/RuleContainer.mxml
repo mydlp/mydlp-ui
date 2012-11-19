@@ -13,11 +13,13 @@
 			import com.mydlp.ui.domain.ApiRule;
 			import com.mydlp.ui.domain.CustomActionDescriptionSeclore;
 			import com.mydlp.ui.domain.DiscoveryRule;
-			import com.mydlp.ui.domain.RemovableStorageRule;
 			import com.mydlp.ui.domain.MailRule;
 			import com.mydlp.ui.domain.PrinterRule;
+			import com.mydlp.ui.domain.RemovableStorageInboundRule;
+			import com.mydlp.ui.domain.RemovableStorageRule;
 			import com.mydlp.ui.domain.Rule;
 			import com.mydlp.ui.domain.RuleItem;
+			import com.mydlp.ui.domain.ScreenshotRule;
 			import com.mydlp.ui.domain.WebRule;
 			import com.mydlp.ui.util.InteractionUtil;
 			import com.mydlp.ui.util.LangUtil;
@@ -120,6 +122,14 @@
 					else if (rule is ApiRule)
 					{
 						rule = rule as ApiRule;
+					}
+					else if (rule is RemovableStorageInboundRule)
+					{
+						rule = rule as RemovableStorageInboundRule;
+					}
+					else if (rule is ScreenshotRule)
+					{
+						rule = rule as ScreenshotRule;
 					}
 					else
 						throw new Error("Unknown rule type;");

@@ -8,13 +8,15 @@
 				>
 	<fx:Script>
 		<![CDATA[
+			import com.mydlp.ui.domain.ApiRule;
 			import com.mydlp.ui.domain.DiscoveryRule;
-			import com.mydlp.ui.domain.RemovableStorageRule;
 			import com.mydlp.ui.domain.MailRule;
 			import com.mydlp.ui.domain.PrinterRule;
+			import com.mydlp.ui.domain.RemovableStorageInboundRule;
+			import com.mydlp.ui.domain.RemovableStorageRule;
 			import com.mydlp.ui.domain.Rule;
+			import com.mydlp.ui.domain.ScreenshotRule;
 			import com.mydlp.ui.domain.WebRule;
-			import com.mydlp.ui.domain.ApiRule;
 			import com.mydlp.ui.util.InteractionUtil;
 			import com.mydlp.ui.util.SessionUtil;
 			
@@ -50,6 +52,16 @@
 			protected function removableStorageRuleHandler():void
 			{
 				ruleHandler(new RemovableStorageRule());
+			}
+			
+			protected function removableStorageInboundRuleHandler():void
+			{
+				ruleHandler(new RemovableStorageInboundRule());
+			}
+			
+			protected function screenshotRuleHandler():void
+			{
+				ruleHandler(new ScreenshotRule());
 			}
 			
 			protected function printerRuleHandler():void
@@ -89,6 +101,8 @@
 			<s:Button skinClass="com.mydlp.ui.skin.WebRuleBitmapLabelButton16Skin" label="@Resource(bundle = 'messages', key = 'inventory.newdialog.webrule')" click="webRuleHandler()"/>
 			<s:Button skinClass="com.mydlp.ui.skin.MailRuleBitmapLabelButton16Skin" label="@Resource(bundle = 'messages', key = 'inventory.newdialog.mailrule')" click="mailRuleHandler()"/>
 			<s:Button skinClass="com.mydlp.ui.skin.RemovableStorageRuleBitmapLabelButton16Skin" label="@Resource(bundle = 'messages', key = 'inventory.newdialog.removableStoragerule')" click="removableStorageRuleHandler()"/>
+			<s:Button skinClass="com.mydlp.ui.skin.RemovableStorageInboundRuleBitmapLabelButton16Skin" label="@Resource(bundle = 'messages', key = 'inventory.newdialog.removableStorageInboundrule')" click="removableStorageInboundRuleHandler()"/>
+			<s:Button skinClass="com.mydlp.ui.skin.ScreenshotRuleBitmapLabelButton16Skin" label="@Resource(bundle = 'messages', key = 'inventory.newdialog.screenshotrule')" click="screenshotRuleHandler()"/>
 			<s:Button skinClass="com.mydlp.ui.skin.PrinterRuleBitmapLabelButton16Skin" label="@Resource(bundle = 'messages', key = 'inventory.newdialog.printerrule')" click="printerRuleHandler()"/>
 			<s:Button skinClass="com.mydlp.ui.skin.DiscoveryRuleBitmapLabelButton16Skin" label="@Resource(bundle = 'messages', key = 'inventory.newdialog.discoveryrule')" click="discoveryRuleHandler()"/>
 			<s:Button skinClass="com.mydlp.ui.skin.ApiRuleBitmapLabelButton16Skin" label="@Resource(bundle = 'messages', key = 'inventory.newdialog.apirule')" click="apiRuleHandler()"
