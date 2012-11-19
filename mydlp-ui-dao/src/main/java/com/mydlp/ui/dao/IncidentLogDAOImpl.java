@@ -202,6 +202,7 @@ public class IncidentLogDAOImpl extends AbstractLogDAO implements IncidentLogDAO
 		criteria = applyUserCriteria(criteria, user);
 		criteria = applyCriteriaList(criteria, criteriaList);
 		return criteria.getExecutableCriteria(getSession())
+			.addOrder(Order.desc("date"))
 			.setFirstResult(offset)
 			.setMaxResults(limit)
 			.list();

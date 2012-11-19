@@ -26,6 +26,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.context.NoSuchMessageException;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.stereotype.Service;
 
@@ -54,7 +55,7 @@ public class LogExportServiceImpl implements LogExportService {
 
 	private SecureRandom random = new SecureRandom();
 
-	private static final String[] titles = { "date", "src_addr", "src_user",
+	private static final String[] titles = { "date", "src_addr", "src_user", "destination",
 			"ruleId", "action", "channel", "file_name", "file_size",
 			"file_type", "file_hash" };
 	
@@ -94,13 +95,14 @@ public class LogExportServiceImpl implements LogExportService {
 		sheet.setColumnWidth(0, 256 * 30);
 		sheet.setColumnWidth(1, 256 * 16);
 		sheet.setColumnWidth(2, 256 * 24);
-		sheet.setColumnWidth(3, 256 * 8);
-		sheet.setColumnWidth(4, 256 * 12);
+		sheet.setColumnWidth(3, 256 * 30);
+		sheet.setColumnWidth(4, 256 * 8);
 		sheet.setColumnWidth(5, 256 * 12);
-		sheet.setColumnWidth(6, 256 * 18);
-		sheet.setColumnWidth(7, 256 * 12);
-		sheet.setColumnWidth(8, 256 * 16);
-		sheet.setColumnWidth(9, 256 * 32);
+		sheet.setColumnWidth(6, 256 * 12);
+		sheet.setColumnWidth(7, 256 * 18);
+		sheet.setColumnWidth(8, 256 * 12);
+		sheet.setColumnWidth(9, 256 * 16);
+		sheet.setColumnWidth(10, 256 * 40);
 
 		// freeze the first row
 		sheet.createFreezePane(0, 1);
@@ -138,8 +140,16 @@ public class LogExportServiceImpl implements LogExportService {
 				{
 					cell.setCellValue(log.getSourceUser());
 				}
-
+				
 				cell = row.createCell(3);
+				cell.setCellStyle(styles.get("cell_normal"));
+				
+				if (log.getSourceUser() != null)
+				{
+					cell.setCellValue(log.getDestination());
+				}
+
+				cell = row.createCell(4);
 				cell.setCellStyle(styles.get("cell_normal"));
 				
 				if (log.getRuleId() != null)
@@ -147,23 +157,35 @@ public class LogExportServiceImpl implements LogExportService {
 					cell.setCellValue(log.getRuleId().toString());
 				}
 
-				cell = row.createCell(4);
+				cell = row.createCell(5);
 				cell.setCellStyle(styles.get("cell_normal"));
 				
 				if (log.getAction() != null)
 				{
-					cell.setCellValue(messageSource.getMessage("export.excel.action." + log.getAction(), null, Locale.US));
+					String m = null;
+					try {
+						m = messageSource.getMessage("export.excel.action." + log.getAction(), null, Locale.US);
+					} catch (NoSuchMessageException e) {
+						m = log.getAction();
+					}
+					cell.setCellValue(m);
 				}
 
-				cell = row.createCell(5);
+				cell = row.createCell(6);
 				cell.setCellStyle(styles.get("cell_normal"));
 				
 				if (log.getChannel() != null)
 				{
-					cell.setCellValue(messageSource.getMessage("export.excel.channel." + log.getChannel(), null, Locale.US));
+					String m = null;
+					try {
+						m = messageSource.getMessage("export.excel.channel." + log.getChannel(), null, Locale.US);
+					} catch (NoSuchMessageException e) {
+						m = log.getChannel();
+					}
+					cell.setCellValue(m);
 				}
 
-				cell = row.createCell(6);
+				cell = row.createCell(7);
 				cell.setCellStyle(styles.get("cell_normal"));
 				
 				if (file.getFilename() != null)
@@ -177,7 +199,7 @@ public class LogExportServiceImpl implements LogExportService {
 				else if (file.getBlueprint() != null)
 					bp = file.getBlueprint();
 				
-				cell = row.createCell(7);
+				cell = row.createCell(8);
 				cell.setCellStyle(styles.get("cell_normal"));
 				
 				if (bp != null && bp.getSize() != null)
@@ -185,7 +207,7 @@ public class LogExportServiceImpl implements LogExportService {
 					cell.setCellValue(FileSizeUtil.humanReadableByteCount(bp.getSize()));
 				}
 				
-				cell = row.createCell(8);
+				cell = row.createCell(9);
 				cell.setCellStyle(styles.get("cell_normal"));
 				
 				if (bp != null && bp.getMimeType() != null)
@@ -193,7 +215,7 @@ public class LogExportServiceImpl implements LogExportService {
 					cell.setCellValue(bp.getMimeType());
 				}
 
-				cell = row.createCell(9);
+				cell = row.createCell(10);
 				cell.setCellStyle(styles.get("cell_normal"));
 				
 				if (bp != null && bp.getMd5Hash() != null)

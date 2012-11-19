@@ -51,7 +51,7 @@
 				else 
 					isEdit = true;
 				
-				if(selectedKeywordsFromFile.length != 0)
+				if(currentState == "file" && selectedKeywordsFromFile.length != 0)
 				{
 					for (var i:int = 0; i < selectedKeywordsFromFile.length; i++)
 					{
@@ -61,7 +61,7 @@
 						regularExpressionGroupInput.addEntry(newregex);
 					}
 				}
-				else
+				else if (currentState == "text")
 				{
 					regexEntry.regex = keyword.text;
 				
