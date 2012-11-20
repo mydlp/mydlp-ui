@@ -74,7 +74,7 @@
 			[Embed('/assets/icons/32x32/inbound32.png')]
 			public static const removableStorageInboundRuleIcon:Class;
 			
-			[Embed('/assets/icons/32x32/computer.png')]
+			[Embed('/assets/icons/32x32/photo_camera.png')]
 			public static const screenshotRuleIcon:Class;
 			
 			protected static const SOURCES_ALL:String = "inventory.networks.all";
