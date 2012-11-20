@@ -205,6 +205,11 @@
       <artifactId>mydlp-ui-service</artifactId>
       <version>${mydlp-ui.version}</version>
     </dependency>
+    <dependency>
+      <groupId>com.mydlp.ui</groupId>
+      <artifactId>mydlp-ui-util</artifactId>
+      <version>${mydlp-ui.version}</version>
+    </dependency>
   </dependencies>
   
   <build>

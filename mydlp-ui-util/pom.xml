@@ -1,0 +1,40 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <artifactId>mydlp-ui</artifactId>
+    <groupId>com.mydlp.ui</groupId>
+    <version>1.0.0-SNAPSHOT</version>
+  </parent>
+  
+  <groupId>com.mydlp.ui</groupId>
+  <artifactId>mydlp-ui-util</artifactId>
+  <packaging>jar</packaging>
+  <name>MyDLP UI Utils</name>
+  <url>http://www.mydlp.com</url>
+  
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+  
+  <dependencies>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+      <version>1.6.4</version>
+    </dependency>
+    <dependency>
+    <groupId>org.apache.commons</groupId>
+	  <artifactId>commons-io</artifactId>
+	  <version>1.3.2</version>
+	</dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>3.8.1</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+  
+</project>

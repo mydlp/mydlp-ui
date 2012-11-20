@@ -121,6 +121,7 @@
   </profiles>
 
   <modules>
+    <module>mydlp-ui-util</module>
     <module>mydlp-ui-domain</module>
     <module>mydlp-ui-domain-as3</module>
     <module>mydlp-ui-flex-framework</module>

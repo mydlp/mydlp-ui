@@ -9,6 +9,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import com.mydlp.ui.framework.util.ProcessUtil;
+
 @Service("versionService")
 public class VersionServiceImpl implements VersionService {
 
@@ -18,23 +20,6 @@ public class VersionServiceImpl implements VersionService {
 	protected static final String MYDLP_VERSION = "/usr/sbin/mydlp-version";
 
 	protected String version = null;
-
-	protected void executeCommand(String[] command) {
-		if (command == null || command.length == 0)
-			return;
-		File executable = new File(command[0]);
-		if (!executable.canExecute())
-			return;
-
-		try {
-			Process process = Runtime.getRuntime().exec(command);
-			process.waitFor();
-		} catch (IOException e) {
-			logger.error("Error occured when executing command", command, e);
-		} catch (InterruptedException e) {
-			logger.error("Executed process hasd been interrupted", command, e);
-		}
-	}
 
 	@Override
 	public String getVersion() {
@@ -63,7 +48,7 @@ public class VersionServiceImpl implements VersionService {
 			}
 		}
 
-		executeCommand(new String[] { MYDLP_VERSION, filename });
+		ProcessUtil.executeCommand(new String[] { MYDLP_VERSION, filename });
 
 		try {
 			String fileContent = FileUtils.readFileToString(tmpFile);

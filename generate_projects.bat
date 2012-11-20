@@ -4,6 +4,8 @@ cmd /c "mvn clean"
 
 cmd /c "mvn install"
 
+cmd /c "cd mydlp-ui-util && mvn eclipse:eclipse"
+
 cmd /c "cd mydlp-ui-domain && mvn eclipse:eclipse"
 
 cmd /c "cd mydlp-ui-dao && mvn eclipse:eclipse"
