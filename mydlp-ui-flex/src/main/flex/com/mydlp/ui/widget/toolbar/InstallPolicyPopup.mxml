@@ -49,7 +49,8 @@
 	
 	<s:Spacer height="4" />
 	
-	<s:Button includeIn="completed,error,post_compile,revision" label="@Resource(bundle = 'messages', key = 'toptoolbar.install.closeButton.label')"
+	<s:Button includeIn="completed,error,post_compile,revision" 
+			  label="@Resource(bundle = 'messages', key = 'toptoolbar.install.closeButton.label')"
 			  click="{close();}" />
 	
 	
