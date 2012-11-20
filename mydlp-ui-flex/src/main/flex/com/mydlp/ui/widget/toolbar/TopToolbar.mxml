@@ -26,6 +26,8 @@
 			
 			protected var currentUser:AuthUser = null;
 			
+			protected var compileInProgress:Boolean = false;
+			
 			protected var installPopup:InstallPolicyPopup = null;
 			
 			protected var reloadFlag:Boolean = false;
@@ -102,6 +104,11 @@
 					if (installPopup != null)
 					{
 						installPopup.currentState = "completed";
+					}
+					if (compileInProgress)
+					{
+						compileInProgress = false;
+						compileCompletedHandler();
 					}
 				}
 				else
@@ -183,6 +190,7 @@
 			
 			protected function installPolicyFunc(): void
 			{
+				compileInProgress = true;
 				installPopup = InteractionUtil.newPopup(InstallPolicyPopup) as InstallPolicyPopup;
 				var sanityReturn:String = FlexGlobals.topLevelApplication.ruleContainer.sanityCheck();
 				if (sanityReturn == "ok")
@@ -201,11 +209,13 @@
 			public function installPolicyAndReload(): void
 			{
 				reloadFlag = true;
+				logoutFlag = false;
 				installPolicyFunc();
 			}
 			
 			public function installPolicyAndLogout():void
 			{
+				reloadFlag = false;
 				logoutFlag = true;
 				installPolicyFunc();
 			}
