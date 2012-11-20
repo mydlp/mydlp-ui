@@ -226,10 +226,12 @@
 					var ipwp:InstallPolicyWarningPopup = InteractionUtil.newPopup(InstallPolicyWarningPopup) as InstallPolicyWarningPopup;
 			}
 			
-			protected function isAdmin():Boolean
+			protected function canInstall():Boolean
 			{
-				var currentUser:AuthUser = FlexGlobals.topLevelApplication.user as AuthUser;
-				if(currentUser.hasRole(AuthSecurityRole.ROLE_ADMIN) || currentUser.hasRole(AuthSecurityRole.ROLE_SUPER_ADMIN))
+				if(	SessionUtil.hasRole(AuthSecurityRole.ROLE_ADMIN) ||
+					SessionUtil.hasRole(AuthSecurityRole.ROLE_SUPER_ADMIN) ||
+					SessionUtil.hasRole(AuthSecurityRole.ROLE_CLASSIFIER)
+				)
 					return true;
 				else return false;
 			}
@@ -249,15 +251,15 @@
 	</fx:Declarations>
 	
 	<s:states>
-		<s:State name="default"/>
 		<s:State name="nolicense"/>
+		<s:State name="default"/>
 	</s:states>
 	
 	<s:layout>
 		<s:HorizontalLayout verticalAlign="middle" horizontalAlign="right"/>
 	</s:layout>
 	
-	<s:Group includeIn="default">
+	<s:Group includeIn="default" includeInLayout="{canInstall()}" visible="{canInstall()}">
 		<s:Button id="installButton" skinClass="com.mydlp.ui.skin.InstallBitmapLabelButton24Skin" 
 				  label="@Resource(bundle = 'messages', key = 'toptoolbar.installPolicy')"
 				  styleName="fontSize24Style" click="{installPolicy()}" 

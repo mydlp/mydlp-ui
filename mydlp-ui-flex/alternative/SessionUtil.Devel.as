@@ -39,5 +39,9 @@ package com.mydlp.ui.util
 		public static function isDevelopment():Boolean {
 			return true;
 		}
+		
+		public static function hasRole(roleName:String):Boolean {
+			return FlexGlobals.topLevelApplication.hasRole(roleName);
+		}
 	}
 }
