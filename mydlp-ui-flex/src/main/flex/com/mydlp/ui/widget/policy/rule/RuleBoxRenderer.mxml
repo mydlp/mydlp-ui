@@ -46,6 +46,8 @@
 			import mx.managers.DragManager;
 			import mx.rpc.events.ResultEvent;
 			
+			import org.alivepdf.events.ProcessingEvent;
+			
 			import spark.components.List;
 			
 			[Bindable]
@@ -82,6 +84,8 @@
 			protected static const DOMAIN_ALL:String = "inventory.domain.all";
 			
 			protected static const DIRECTORY_ALL:String = "inventory.fileSystemDirectory.all";
+			
+			protected static const APPLICATION_ALL:String = "inventory.applicationName.all";
 			
 			[Bindable]
 			protected var sourceDataProvider:ArrayCollection = new ArrayCollection();
@@ -165,7 +169,8 @@
 					else if (ruleItem.item is InformationType)
 						matcherDataProvider1.addItem(ruleItem);
 					else if (ruleItem.item is Domain ||
-						ruleItem.item is FileSystemDirectory)
+						ruleItem.item is FileSystemDirectory ||
+						ruleItem.item is ApplicationName)
 						destinationDataProvider1.addItem(ruleItem);
 				}
 				sourceDataProvider = sourceDataProvider1;
@@ -205,7 +210,9 @@
 			{
 				for each(var o:RuleItem in ruleObject.ruleItems)
 				{
-					if(o.item.coupledInventoryItem.nameKey == DOMAIN_ALL || o.item.coupledInventoryItem.nameKey == DIRECTORY_ALL)
+					if(o.item.coupledInventoryItem.nameKey == DOMAIN_ALL || 
+						o.item.coupledInventoryItem.nameKey == DIRECTORY_ALL ||
+						o.item.coupledInventoryItem.nameKey == APPLICATION_ALL)
 						return true;
 				}
 				return false;
@@ -221,7 +228,7 @@
 			
 			public static function isDestinationRuleItem(item:Item):Boolean
 			{
-				if(item is Domain || item is FileSystemDirectory)
+				if(item is Domain || item is FileSystemDirectory || item is ApplicationName)
 					return true;
 				else
 					return false;
@@ -277,7 +284,8 @@
 					for(var i:int = 0; i < ruleItems.length; i++)
 					{
 						if(ruleItems[i].item.coupledInventoryItem.nameKey == DOMAIN_ALL ||
-							ruleItems[i].item.coupledInventoryItem.nameKey == DIRECTORY_ALL)
+							ruleItems[i].item.coupledInventoryItem.nameKey == DIRECTORY_ALL ||
+							ruleItems[i].item.coupledInventoryItem.nameKey == APPLICATION_ALL)
 						{
 							deleteList.addItem(ruleObject.ruleItems[i]);
 							ruleObject.ruleItems.removeItemAt(i);
@@ -297,7 +305,9 @@
 					loop = false;
 					for(var i:int = 0; i < ruleItems.length; i++)
 					{
-						if(ruleItems[i].item is Domain || ruleItems[i].item is FileSystemDirectory)
+						if(ruleItems[i].item is Domain || 
+							ruleItems[i].item is FileSystemDirectory ||
+							ruleItems[i].item is ApplicationName)
 						{
 							deleteList.addItem(ruleObject.ruleItems[i]);
 							ruleItems.removeItemAt(i);
@@ -412,7 +422,7 @@
 			{
 				for each(var ri:InventoryItem in droppedSources)
 				{
-					if((ri.item.coupledInventoryItem.nameKey == DOMAIN_ALL || ri.item.coupledInventoryItem.nameKey == DIRECTORY_ALL)
+					if((ri.item.coupledInventoryItem.nameKey == DOMAIN_ALL || ri.item.coupledInventoryItem.nameKey == DIRECTORY_ALL || ri.item.coupledInventoryItem.nameKey == APPLICATION_ALL)
 						&& droppedDestinations.length > 1)
 						return false;
 				}
@@ -453,7 +463,7 @@
 						droppedSources.addItem(droppedItem);
 					else if(droppedItem.item is InformationType)
 						droppedMatchers.addItem(droppedItem);
-					else if(droppedItem.item is Domain || droppedItem.item is FileSystemDirectory)
+					else if(droppedItem.item is Domain || droppedItem.item is FileSystemDirectory || droppedItem.item is ApplicationName)
 						droppedDestinations.addItem(droppedItem);
 					else
 						throw new Error("unexpected type of item dropped");
@@ -636,7 +646,8 @@
 					if(hasAllDestination())//if ruleObject has "All Destinations"
 					{
 						if(sourceItem.coupledInventoryItem.nameKey == DOMAIN_ALL ||
-							sourceItem.coupledInventoryItem.nameKey == DIRECTORY_ALL)//if dropped item is "All Destinations"
+							sourceItem.coupledInventoryItem.nameKey == DIRECTORY_ALL ||
+							sourceItem.coupledInventoryItem.nameKey == APPLICATION_ALL)//if dropped item is "All Destinations"
 							return;
 						else
 							removeAllDestinationItem();
@@ -644,7 +655,8 @@
 					else
 					{
 						if(sourceItem.coupledInventoryItem.nameKey == DOMAIN_ALL ||
-							sourceItem.coupledInventoryItem.nameKey == DIRECTORY_ALL)
+							sourceItem.coupledInventoryItem.nameKey == DIRECTORY_ALL ||
+							sourceItem.coupledInventoryItem.nameKey == APPLICATION_ALL)
 							removeOtherDestinations();
 					}
 				}

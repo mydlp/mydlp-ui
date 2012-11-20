@@ -8,6 +8,7 @@
 				>
 	<fx:Script>
 		<![CDATA[
+			import com.mydlp.ui.domain.ApplicationName;
 			import com.mydlp.ui.domain.Domain;
 			import com.mydlp.ui.domain.FileSystemDirectory;
 			import com.mydlp.ui.domain.InformationType;
@@ -59,6 +60,14 @@
 				InteractionUtil.newEditDialog(i);
 			}
 			
+			protected function applicationNameHandler():void
+			{
+				close();
+				var i:InventoryItem = new InventoryItem();
+				i.item = new ApplicationName();
+				InteractionUtil.newEditDialog(i);
+			}
+			
 		]]>
 	</fx:Script>
 	<fx:Declarations>
@@ -88,6 +97,11 @@
 					  includeInLayout="{SessionUtil.isEnterprise()}"
 					  visible="{SessionUtil.isEnterprise()}"
 					  click="fileSystemDirectoryHandler()"/>
+			<s:Button skinClass="com.mydlp.ui.skin.ApplicationNameBitmapLabelButton16Skin" 
+					  label="@Resource(bundle = 'messages', key = 'inventory.newdialog.applicationName')" 
+					  includeInLayout="{SessionUtil.isEnterprise()}"
+					  visible="{SessionUtil.isEnterprise()}"
+					  click="applicationNameHandler()"/>
 			<s:Button skinClass="com.mydlp.ui.skin.UserBitmapLabelButton16Skin" 
 					  label="@Resource(bundle = 'messages', key = 'inventory.newdialog.userObject')" 
 					  click="{close(); InteractionUtil.newPopup(NewInventoryUserDialog);}"/>

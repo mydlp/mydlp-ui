@@ -26,6 +26,9 @@ package com.mydlp.ui.domain {
 		[Embed("../../../../../../../../mydlp-ui-flex/src/main/flex/assets/icons/16x16/folder_fs.png")]
 		public static const ICON_DESTINATION_FILESYSTEM_DIRECTORY:Class;
 		
+		[Embed("../../../../../../../../mydlp-ui-flex/src/main/flex/assets/icons/16x16/process.png")]
+		public static const ICON_APPLICATION_NAME:Class;
+		
 		private var _icon:Object = null;
 		
 		public function get icon(): Object
@@ -44,6 +47,8 @@ package com.mydlp.ui.domain {
 						_icon = ICON_DESTINATION_DOMAIN;
 					else if (iitem is FileSystemDirectory)
 						_icon = ICON_DESTINATION_FILESYSTEM_DIRECTORY;
+					else if (iitem is ApplicationName)
+						_icon = ICON_APPLICATION_NAME; 
 					else if (iitem is RuleUserStatic)
 						_icon = ICON_RULE_USER_STATIC;
 					else if (iitem is RuleUserAD) {
