@@ -32,10 +32,6 @@ public class _000_00029_Config_End_Point extends AbstractGranule {
 		discoverFSInterval.setKey("discover_fs_interval");
 		discoverFSInterval.setValue("7200000");
 		
-		Config discoverFSPaths = new Config();
-		discoverFSPaths.setKey("discover_fs_paths");
-		discoverFSPaths.setValue("C:/Users;C:/Documents and Settings");
-		
 		Config discoverFSOnStartup = new Config();
 		discoverFSOnStartup.setKey("discover_fs_on_startup");
 		discoverFSOnStartup.setValue("false");
@@ -50,7 +46,6 @@ public class _000_00029_Config_End_Point extends AbstractGranule {
 		getHibernateTemplate().saveOrUpdate(logLimit);	
 		getHibernateTemplate().saveOrUpdate(syncInterval);
 		getHibernateTemplate().saveOrUpdate(discoverFSInterval);
-		getHibernateTemplate().saveOrUpdate(discoverFSPaths);
 		getHibernateTemplate().saveOrUpdate(discoverFSOnStartup);
 		getHibernateTemplate().saveOrUpdate(ignoreDiscoverMaxSizeExceeded);
 	}

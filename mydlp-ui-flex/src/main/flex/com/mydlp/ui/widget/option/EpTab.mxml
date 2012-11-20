@@ -17,9 +17,10 @@
 		<domain:Config id="logLimit" />
 		<domain:Config id="syncInterval" />
 		<domain:Config id="discoverFSInterval" />
-		<domain:Config id="discoverFSPaths" />
 		<domain:Config id="discoverFSOnStartup" />
 		<domain:Config id="ignoreDiscoverFSMaxSizeExceeded" />
+		<domain:Config id="spoolSoftLimit" />
+		<domain:Config id="spoolHardLimit" />
 
 		
 		<s:NumberValidator id="epSyncValidator"
@@ -40,6 +41,22 @@
 						   source="{discoverFSIntervalInput}"
 						   property="text"
 						   minValue="3599999"
+						   valid="{optionContainer.validInput(event)}"
+						   invalid="{optionContainer.invalidInput(event)}"/>
+		
+		<s:NumberValidator id="spoolSoftLimitValidator"
+						   source="{spoolSoftLimitInput}"
+						   property="text"
+						   minValue="26214400"
+						   maxValue="52428799"
+						   valid="{optionContainer.validInput(event)}"
+						   invalid="{optionContainer.invalidInput(event)}"/>
+		
+		<s:NumberValidator id="spoolHardLimitValidator"
+						   source="{spoolHardLimitInput}"
+						   property="text"
+						   minValue="52428800"
+						   maxValue="104857600"
 						   valid="{optionContainer.validInput(event)}"
 						   invalid="{optionContainer.invalidInput(event)}"/>
 		
@@ -87,9 +104,6 @@
 			<s:FormItem label="{discoverFSInterval.label}">
 				<s:TextInput id="discoverFSIntervalInput" text="@{discoverFSInterval.value}" width="200"/>
 			</s:FormItem>
-			<s:FormItem label="{discoverFSPaths.label}">
-				<s:TextInput id="discoverFSPathsInput" text="@{discoverFSPaths.value}" width="200"/>
-			</s:FormItem>
 			<s:FormItem label="{discoverFSOnStartup.label}">
 				<s:CheckBox id="discoverFSOnStartupCheckBox" selected="{discoverFSOnStartup.value == 'true'}" 
 							change="{discoverFSOnStartup.value = discoverFSOnStartupCheckBox.selected ? 'true' : 'false'}"/>			
@@ -97,6 +111,12 @@
 			<s:FormItem label="{ignoreDiscoverFSMaxSizeExceeded.label}">
 				<s:CheckBox id="ignoreDiscoverFSMaxSizeExceededCheckBox" selected="{ignoreDiscoverFSMaxSizeExceeded.value == 'true'}" 
 							change="{ignoreDiscoverFSMaxSizeExceeded.value = ignoreDiscoverFSMaxSizeExceededCheckBox.selected ? 'true' : 'false'}"/>			
+			</s:FormItem>
+			<s:FormItem label="{spoolSoftLimit.label}">
+				<s:TextInput id="spoolSoftLimitInput" text="@{spoolSoftLimit.value}" width="200"/>
+			</s:FormItem>
+			<s:FormItem label="{spoolHardLimit.label}">
+				<s:TextInput id="spoolHardLimitInput" text="@{spoolHardLimit.value}" width="200"/>
 			</s:FormItem>
 			
 		</s:Form>	

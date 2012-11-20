@@ -116,9 +116,9 @@
 					else if (config.key == "log_limit") epTab.logLimit = config;
 					else if (config.key == "sync_interval") epTab.syncInterval = config;
 					else if (config.key == "discover_fs_interval") epTab.discoverFSInterval = config;
-					else if (config.key == "discover_fs_paths") epTab.discoverFSPaths = config;
 					else if (config.key == "discover_fs_on_startup") epTab.discoverFSOnStartup = config;
-					else if (config.key == "ignore_discover_max_size_exceeded") epTab.ignoreDiscoverFSMaxSizeExceeded = config;
+					else if (config.key == "endpoint_spool_soft_limit") epTab.spoolSoftLimit = config;
+					else if (config.key == "endpoint_spool_hard_limit") epTab.spoolHardLimit = config;
 					
 					else if (config.key == "usb_serial_access_control") usbAclTab.usbSerialAccessControl = config;
 					

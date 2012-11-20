@@ -47,6 +47,7 @@
 			{
 				getCurrentUserHandler();
 				fetchCompileStatus();
+				rg.getVersion();
 			}
 			
 			public function getCurrentUserHandler(): void
@@ -258,6 +259,9 @@
 		<my:remote id="rev" destination="revisionBRS" >
 			<my:method name="save" result="saveRevisionHandler(event)" />
 		</my:remote>
+		<my:remote id="rg" destination="genericBRS" >
+			<my:method name="getVersion" result="{mydlpVersion.text = event.result as String}" />
+		</my:remote>
 	</fx:Declarations>
 	
 	<s:states>
@@ -283,7 +287,14 @@
 	</s:Group>
 	
 	<s:Spacer width="6" />
-	<s:Label id="userLabel" />
+	<s:VGroup horizontalAlign="left" verticalAlign="middle">
+		<s:Label id="userLabel" />
+		<s:HGroup gap="5">
+			<s:Label text="@Resource(bundle='messages', key='toptoolbar.version.label')" />
+			<s:Label id="mydlpVersion" />
+		</s:HGroup>
+	</s:VGroup>
+	
 	<s:Spacer width="4" />
 	<s:Button skinClass="com.mydlp.ui.skin.SettingsBitmapButton16Skin" 
 			  toolTip="@Resource(bundle = 'messages', key = 'toptoolbar.settings')"

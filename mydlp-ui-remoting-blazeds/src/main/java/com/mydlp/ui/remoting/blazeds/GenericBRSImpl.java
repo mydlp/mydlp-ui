@@ -20,6 +20,7 @@ import com.mydlp.ui.domain.RDBMSConnection;
 import com.mydlp.ui.domain.RDBMSInformationTarget;
 import com.mydlp.ui.domain.RegularExpressionGroup;
 import com.mydlp.ui.domain.Rule;
+import com.mydlp.ui.service.VersionService;
 
 @Service("genericBRS")
 @RemotingDestination
@@ -50,6 +51,9 @@ public class GenericBRSImpl implements GenericService
 	
 	@Autowired
 	protected RegularExpressionGroupService regularExpressionGroupService;
+	
+	@Autowired
+	protected VersionService versionService;
 
 	@Override
 	public AbstractEntity save(AbstractEntity item) {
@@ -130,6 +134,11 @@ public class GenericBRSImpl implements GenericService
 			List<AbstractEntity> itemsToRemove) {
 		save(itemToSave);
 		removeAll(itemsToRemove);
+	}
+
+	@Override
+	public String getVersion() {
+		return versionService.getVersion();
 	}
 	
 	
