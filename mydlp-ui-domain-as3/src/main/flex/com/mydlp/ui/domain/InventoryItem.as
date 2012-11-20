@@ -26,7 +26,7 @@ package com.mydlp.ui.domain {
 		[Embed("../../../../../../../../mydlp-ui-flex/src/main/flex/assets/icons/16x16/folder_fs.png")]
 		public static const ICON_DESTINATION_FILESYSTEM_DIRECTORY:Class;
 		
-		[Embed("../../../../../../../../mydlp-ui-flex/src/main/flex/assets/icons/16x16/process.png")]
+		[Embed("../../../../../../../../mydlp-ui-flex/src/main/flex/assets/icons/16x16/computer.png")]
 		public static const ICON_APPLICATION_NAME:Class;
 		
 		private var _icon:Object = null;
