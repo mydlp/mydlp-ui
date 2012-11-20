@@ -26,11 +26,13 @@ public class VersionServiceImpl implements VersionService {
 		if (!executable.canExecute())
 			return;
 
-		Runtime rt = Runtime.getRuntime();
 		try {
-			rt.exec(command);
+			Process process = Runtime.getRuntime().exec(command);
+			process.waitFor();
 		} catch (IOException e) {
 			logger.error("Error occured when executing command", command, e);
+		} catch (InterruptedException e) {
+			logger.error("Executed process hasd been interrupted", command, e);
 		}
 	}
 
@@ -65,7 +67,7 @@ public class VersionServiceImpl implements VersionService {
 
 		try {
 			String fileContent = FileUtils.readFileToString(tmpFile);
-			if (fileContent != null)
+			if (fileContent != null && fileContent.length() > 0)
 				version = fileContent.trim();
 		} catch (FileNotFoundException e) {
 			logger.error("Can not find temp file", e);
