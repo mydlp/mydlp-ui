@@ -10,6 +10,7 @@
 			import com.mydlp.ui.domain.AuthSecurityRole;
 			import com.mydlp.ui.domain.AuthUser;
 			import com.mydlp.ui.util.InteractionUtil;
+			import com.mydlp.ui.util.SessionUtil;
 			
 			import mx.core.FlexGlobals;
 			
@@ -39,8 +40,8 @@
 			
 			protected function isAdmin():Boolean
 			{
-				var currentUser:AuthUser = FlexGlobals.topLevelApplication.user as AuthUser;
-				if(currentUser.hasRole(AuthSecurityRole.ROLE_ADMIN) || currentUser.hasRole(AuthSecurityRole.ROLE_SUPER_ADMIN))
+				if(SessionUtil.hasRole(AuthSecurityRole.ROLE_ADMIN) || 
+					SessionUtil.hasRole(AuthSecurityRole.ROLE_SUPER_ADMIN))
 					return true;
 				else return false; 
 			}
