@@ -1,13 +1,10 @@
 package com.mydlp.ui.service;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 
-import javax.annotation.PostConstruct;
-
+import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -44,34 +41,32 @@ public class VersionServiceImpl implements VersionService {
 
 		return version;
 	}
-	
+
 	protected void generateVersion() {
 		File tmpFile = null;
 		String filename = null;
 		try {
-			tmpFile = File.createTempFile("mydlp-version", null);
+			tmpFile = File.createTempFile("mydlp-version-", null);
 			filename = tmpFile.getCanonicalPath();
 		} catch (IOException e) {
-			logger.error("Error occurred when creating a temp file to store mydlp version",	e);
+			logger.error(
+					"Error occurred when creating a temp file to store mydlp version",
+					e);
 		} finally {
-			if (filename == null)
-			{
-				if (tmpFile != null && tmpFile.exists())
-				{
+			if (filename == null) {
+				if (tmpFile != null && tmpFile.exists()) {
 					tmpFile.delete();
 				}
-				return ;
+				return;
 			}
 		}
-		
+
 		executeCommand(new String[] { MYDLP_VERSION, filename });
 
 		try {
-			BufferedReader br = new BufferedReader(new FileReader(tmpFile));
-			String line = br.readLine();
-			if (line != null)
-				version = line.trim();
-			br.close();
+			String fileContent = FileUtils.readFileToString(tmpFile);
+			if (fileContent != null)
+				version = fileContent.trim();
 		} catch (FileNotFoundException e) {
 			logger.error("Can not find temp file", e);
 		} catch (IOException e) {
