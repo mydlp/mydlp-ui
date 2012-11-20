@@ -189,7 +189,7 @@
 						gotoRule(r);
 						break ruleLoop;
 					}
-					if (!hasIType)
+					if (!hasIType && RuleBoxRenderer.isMatcherApplicable(r))
 					{
 						retStr = "error.ruleHasNoITypes";
 						gotoRule(r);
