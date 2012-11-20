@@ -69,7 +69,8 @@ public class VersionServiceImpl implements VersionService {
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(tmpFile));
 			String line = br.readLine();
-			version = line.trim();
+			if (line != null)
+				version = line.trim();
 			br.close();
 		} catch (FileNotFoundException e) {
 			logger.error("Can not find temp file", e);
