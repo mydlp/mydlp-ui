@@ -53,13 +53,13 @@
 			[Bindable]
 			public var ruleObject:* = null;
 			
-			[Embed('/assets/icons/32x32/wireless.png')]
+			[Embed('/assets/icons/32x32/www.png')]
 			public static const webRuleIcon:Class;
 			
 			[Embed('/assets/icons/32x32/mail.png')]
 			public static const mailRuleIcon:Class;
 			
-			[Embed('/assets/icons/32x32/save.png')]
+			[Embed('/assets/icons/32x32/usbicon.png')]
 			public static const removableStorageRuleIcon:Class;
 			
 			[Embed('/assets/icons/32x32/print.png')]
@@ -71,7 +71,7 @@
 			[Embed('/assets/icons/32x32/puzzle.png')]
 			public static const apiRuleIcon:Class;
 			
-			[Embed('/assets/icons/32x32/inbound32.png')]
+			[Embed('/assets/icons/32x32/usbiconinbound.png')]
 			public static const removableStorageInboundRuleIcon:Class;
 			
 			[Embed('/assets/icons/32x32/photo_camera.png')]
