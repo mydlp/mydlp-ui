@@ -196,9 +196,14 @@
 					return false;
 			}
 			
-			protected function hasAllNetwork():Boolean // Checks whether rule has "All Network" or not. 
+			protected function hasAllSources():Boolean // Checks whether rule has "All Network" or not.
 			{
-				for each(var o:RuleItem in ruleObject.ruleItems)
+				return ruleHasAllSources(ruleObject);
+			}
+				
+			public static function ruleHasAllSources(r:Rule):Boolean
+			{
+				for each(var o:RuleItem in r.ruleItems)
 				{
 					if(o.item.coupledInventoryItem.nameKey == SOURCES_ALL)
 						return true;
@@ -208,7 +213,12 @@
 			
 			protected function hasAllDestination():Boolean //Checks whether rule has "All Destination" or not.
 			{
-				for each(var o:RuleItem in ruleObject.ruleItems)
+				return ruleHasAllDestination(ruleObject);
+			}
+				
+			public static function ruleHasAllDestination(r:Rule):Boolean
+			{
+				for each(var o:RuleItem in r.ruleItems)
 				{
 					if(o.item.coupledInventoryItem.nameKey == DOMAIN_ALL || 
 						o.item.coupledInventoryItem.nameKey == DIRECTORY_ALL ||
@@ -320,7 +330,12 @@
 			
 			protected function hasAllIType():Boolean // Checks whether rule has "All Information Types" or not.
 			{
-				for each(var o:RuleItem in ruleObject.ruleItems)
+				return ruleHasAllIType(ruleObject);
+			}
+				
+			public static function ruleHasAllIType(r:Rule):Boolean 
+			{
+				for each(var o:RuleItem in r.ruleItems)
 				{
 					if(o.item.coupledInventoryItem.nameKey == ITYPE_ALL)
 						return true;
@@ -613,7 +628,7 @@
 				
 				if(isSourceRuleItem(sourceItem))
 				{
-					if(hasAllNetwork())//if ruleObject has "All Networks"
+					if(hasAllSources())//if ruleObject has "All Networks"
 					{
 						if(sourceItem.coupledInventoryItem.nameKey == SOURCES_ALL)//if dropped item is "All Networks"
 							return;

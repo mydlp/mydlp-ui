@@ -879,8 +879,6 @@
 						LangUtil.getString("messages", "generic.edit.create." + returnCode + ".title"));
 					cButton.enabled = true;
 				}
-				
-				
 			}
 			
 			protected function itemClickHandler(event:ItemClickEvent):void
