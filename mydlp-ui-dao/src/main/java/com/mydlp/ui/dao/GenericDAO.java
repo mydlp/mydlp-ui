@@ -1,6 +1,7 @@
 package com.mydlp.ui.dao;
 
 import com.mydlp.ui.domain.AbstractEntity;
+import com.mydlp.ui.domain.AbstractNamedEntity;
 
 public interface GenericDAO {
 
@@ -12,5 +13,5 @@ public interface GenericDAO {
 	
 	public void remove(String entityName, Integer id);
 	
-	public Boolean isObjectWithNameExists(Class<?> clazz, String name);
+	public Boolean isObjectWithNameExists(AbstractNamedEntity namedEntity);
 }

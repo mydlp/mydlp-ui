@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.mydlp.ui.domain.AbstractEntity;
+import com.mydlp.ui.domain.AbstractNamedEntity;
 
 @Repository("genericDAO")
 @Transactional
@@ -41,11 +42,12 @@ public class GenericDAOImpl extends AbstractPolicyDAO implements GenericDAO {
 	}
 
 	@Override
-	public Boolean isObjectWithNameExists(Class<?> clazz, String name) {
+	public Boolean isObjectWithNameExists(AbstractNamedEntity namedEntity) {
 		DetachedCriteria criteria = 
-				DetachedCriteria.forClass(clazz)
+				DetachedCriteria.forClass(namedEntity.getClass())
 					.setProjection(Projections.rowCount())
-					.add(Restrictions.eq("name", name));
+					.add(Restrictions.ne("id", namedEntity.getId()))
+					.add(Restrictions.eq("name", namedEntity.getName()));
 		
 		@SuppressWarnings("unchecked")
 		List<Long> returnList = getHibernateTemplate().findByCriteria(criteria);

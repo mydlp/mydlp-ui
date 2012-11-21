@@ -149,7 +149,7 @@ public class GenericBRSImpl implements GenericService
 		
 		if (itemToSave instanceof AbstractNamedEntity) {
 			AbstractNamedEntity namedEntity = (AbstractNamedEntity) itemToSave;
-			Boolean isObjectWithNameExists = genericDAO.isObjectWithNameExists(itemToSave.getClass(), namedEntity.getName());
+			Boolean isObjectWithNameExists = genericDAO.isObjectWithNameExists(namedEntity);
 			if (isObjectWithNameExists)
 				return "error.anObjectWithSameNameIsPresent"; 
 		}
