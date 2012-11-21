@@ -96,6 +96,7 @@
 			{
 				var ao:ActionObject = actionList.selectedItem;
 				
+				/* TODO: wierd thing
 				if (ruleObject is DiscoveryRule && (
 					ao.actionKey == Rule.ACTION_BLOCK ||
 					ao.actionKey == Rule.ACTION_QUARANTINE ))
@@ -103,6 +104,7 @@
 					Alert.show(LangUtil.getString("messages", "rule.discovery.deleteaction.warning"),
 						LangUtil.getString("messages", "rule.discovery.deleteaction.warning.title"));
 				}
+				*/
 				
 				ruleObject.action = ao.actionKey;
 				ruleObject.customAction = ao.customAction;
