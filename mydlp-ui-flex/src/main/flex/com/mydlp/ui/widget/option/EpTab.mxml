@@ -48,14 +48,14 @@
 						   source="{spoolSoftLimitInput}"
 						   property="text"
 						   minValue="26214400"
-						   maxValue="52428799"
+						   maxValue="52428800"
 						   valid="{optionContainer.validInput(event)}"
 						   invalid="{optionContainer.invalidInput(event)}"/>
 		
 		<s:NumberValidator id="spoolHardLimitValidator"
 						   source="{spoolHardLimitInput}"
 						   property="text"
-						   minValue="52428800"
+						   minValue="52428801"
 						   maxValue="104857600"
 						   valid="{optionContainer.validInput(event)}"
 						   invalid="{optionContainer.invalidInput(event)}"/>
