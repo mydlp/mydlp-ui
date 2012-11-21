@@ -5,7 +5,7 @@
 				xmlns:general="com.mydlp.ui.widget.general.*"
 				xmlns:my="http://www.mydlp.com/flex/my" 
 				xmlns:popup="com.mydlp.ui.widget.general.popup.*"
-				width="400"
+				width="250"
 				>
 	
 	<fx:Script>
@@ -51,13 +51,10 @@
 				var buttonGroup:HGroup = new HGroup();
 				buttonGroup.percentHeight = 100;
 				buttonGroup.percentWidth = 100;
-				var spacer1:Spacer = new Spacer();
-				spacer1.percentWidth = 100;
-				var spacer2:Spacer = new Spacer();
-				spacer2.width = 10;
-				buttonGroup.addElement(spacer1);
+				buttonGroup.gap = 30;
+				buttonGroup.verticalAlign = "middle";
+				buttonGroup.horizontalAlign = "center";
 				buttonGroup.addElement(deleteButton);
-				buttonGroup.addElement(spacer2);
 				buttonGroup.addElement(cancelButton);
 				deleteForm.addElement(buttonGroup);
 			}
@@ -171,9 +168,10 @@
 	
 	<s:Group id="deleteForm" width="100%" height="100%">
 		<s:layout>
-			<s:VerticalLayout horizontalAlign="center" gap="3"
-							  paddingTop="6" paddingBottom="6"
-							  paddingLeft="10" paddingRight="10"/>
+			<s:VerticalLayout horizontalAlign="center"
+							  paddingTop="20" paddingBottom="15"
+							  paddingLeft="10" paddingRight="10"
+							  gap="15" />
 		</s:layout>
 	</s:Group>
 </popup:GenericCRUDContainer>

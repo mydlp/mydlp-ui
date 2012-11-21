@@ -1,5 +1,10 @@
 package com.mydlp.ui.dao;
 
+import java.util.List;
+
+import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,5 +38,22 @@ public class GenericDAOImpl extends AbstractPolicyDAO implements GenericDAO {
 	public void remove(String entityName, Integer id) {
 		AbstractEntity i = (AbstractEntity) getHibernateTemplate().load(entityName, id);
 		getHibernateTemplate().delete(i);
+	}
+
+	@Override
+	public Boolean isObjectWithNameExists(Class<?> clazz, String name) {
+		DetachedCriteria criteria = 
+				DetachedCriteria.forClass(clazz)
+					.setProjection(Projections.rowCount())
+					.add(Restrictions.eq("name", name));
+		
+		@SuppressWarnings("unchecked")
+		List<Long> returnList = getHibernateTemplate().findByCriteria(criteria);
+		Long count = DAOUtil.getSingleResult(returnList);
+		
+		if (count == 0 ) 
+			return false;
+		else 
+			return true;
 	}
 }
