@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import com.mydlp.ui.dao.GenericDAO;
 import com.mydlp.ui.domain.ADDomain;
 import com.mydlp.ui.domain.AbstractEntity;
+import com.mydlp.ui.domain.AbstractNamedEntity;
 import com.mydlp.ui.domain.DashboardItem;
 import com.mydlp.ui.domain.Document;
 import com.mydlp.ui.domain.DocumentDatabase;
@@ -130,10 +131,33 @@ public class GenericBRSImpl implements GenericService
 	}
 
 	@Override
-	public void persistChange(AbstractEntity itemToSave,
+	public String persistChange(AbstractEntity itemToSave,
 			List<AbstractEntity> itemsToRemove) {
+		
+		if (itemToSave instanceof AbstractNamedEntity) {
+			AbstractNamedEntity namedEntity = (AbstractNamedEntity) itemToSave;
+			String enteredName = namedEntity.getName();
+			if (enteredName == null)
+				return "error.nameIsNull";
+			String trimmedName = enteredName.trim();
+			if (trimmedName.length() == 0)
+				return "error.nameIsEmpty";
+			if (trimmedName.length() < 3)
+				return "error.nameIsTooShort";
+			namedEntity.setName(trimmedName);
+		}
+		
+		if (itemToSave instanceof AbstractNamedEntity) {
+			AbstractNamedEntity namedEntity = (AbstractNamedEntity) itemToSave;
+			Boolean isObjectWithNameExists = genericDAO.isObjectWithNameExists(itemToSave.getClass(), namedEntity.getName());
+			if (isObjectWithNameExists)
+				return "error.anObjectWithSameNameIsPresent"; 
+		}
+		
 		save(itemToSave);
 		removeAll(itemsToRemove);
+		
+		return "ok";
 	}
 
 	@Override

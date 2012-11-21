@@ -95,8 +95,6 @@
 			
 			protected var validators:Array = new Array();
 			
-			protected var regExpValidator2:RegExpValidator = new RegExpValidator();
-			
 			protected var inputLabelForEnterprise:InputLabel = null;
 			protected var inputLabelForEnterprise2:InputLabel = null;
 			protected var inputLabelForClassifier:InputLabel = null;
@@ -562,9 +560,11 @@
 						inputLabel.addElement(textInput);
 						if(classMember.name == "name"){
 							index = 0;
+							var regExpValidator2:RegExpValidator = new RegExpValidator();
 							regExpValidator2.source = textInput;
 							regExpValidator2.property = "text";
 							regExpValidator2.expression = "^[a-zA-Z0-9_/\.\ ]+$";
+							regExpValidator2.required = true;
 							ErrorTipManager.registerValidator(regExpValidator2);
 							validators.push(regExpValidator2);
 						}
@@ -864,11 +864,22 @@
 				}
 			}
 			
-			protected function persistChangeHandler(event:Event): void
+			protected function persistChangeHandler(event:ResultEvent): void
 			{
-				FlexGlobals.topLevelApplication.topToolbar.policyInstallationState = false;
-				InteractionUtil.closeCurrentPopup();
-				FlexGlobals.topLevelApplication.refresh();
+				var returnCode:String = event.result as String;
+				if (returnCode == "ok")
+				{
+					FlexGlobals.topLevelApplication.topToolbar.policyInstallationState = false;
+					InteractionUtil.closeCurrentPopup();
+					FlexGlobals.topLevelApplication.refresh();
+				}
+				else if (returnCode.substring(0,6) == "error.")
+				{
+					Alert.show(	LangUtil.getString("messages", "generic.edit.create." + returnCode + ".message"),
+						LangUtil.getString("messages", "generic.edit.create." + returnCode + ".title"));
+					cButton.enabled = true;
+				}
+				
 				
 			}
 			

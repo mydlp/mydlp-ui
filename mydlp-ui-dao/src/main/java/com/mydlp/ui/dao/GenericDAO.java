@@ -11,4 +11,6 @@ public interface GenericDAO {
 	public AbstractEntity merge(AbstractEntity entity);
 	
 	public void remove(String entityName, Integer id);
+	
+	public Boolean isObjectWithNameExists(Class<?> clazz, String name);
 }

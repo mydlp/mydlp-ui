@@ -23,7 +23,7 @@ public interface GenericService {
 	
 	public Date getSystemTime();
 	
-	public void persistChange(AbstractEntity itemToSave, List<AbstractEntity> itemsToRemove);
+	public String persistChange(AbstractEntity itemToSave, List<AbstractEntity> itemsToRemove);
 	
 	public String getVersion();
 
