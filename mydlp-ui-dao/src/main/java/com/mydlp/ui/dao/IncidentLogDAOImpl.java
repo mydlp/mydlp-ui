@@ -272,6 +272,7 @@ public class IncidentLogDAOImpl extends AbstractLogDAO implements IncidentLogDAO
 		Query query = getSession().createQuery(
 				"select count(l), l.sourceIp from IncidentLog l " +
 				"where l.date between :startDate and :endDate " +
+				"and l.sourceIp is not null and l.sourceIp != 0 " +
 				"group by l.sourceIp order by 1 desc");
 		query.setTimestamp("startDate", startDate);
 		query.setTimestamp("endDate", now);
