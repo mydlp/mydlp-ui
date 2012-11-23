@@ -25,7 +25,7 @@
 			protected function getDestText(value:*):String {
 				var log:IncidentLog = value as IncidentLog;
 				var labelText:String = "";
-				if (log.channel == "E")
+				if (log.channel == "R")
 					labelText = LangUtil.getString("messages","log.container.column.destination.removableStorage");
 				else if (log.channel == "M")
 				{
@@ -81,7 +81,7 @@
 				else
 					labelText = log.destination;
 				
-				if (log.channel == 'W' || log.channel == 'D' || log.channel == 'E')
+				if (log.channel == 'W' || log.channel == 'D' || log.channel == 'I')
 				{
 					if (labelText.length > 50)
 					{
