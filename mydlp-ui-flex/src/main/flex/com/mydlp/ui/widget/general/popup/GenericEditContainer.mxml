@@ -60,6 +60,7 @@
 			import com.mydlp.ui.widget.general.input.RegularExpressionGroupInput;
 			import com.mydlp.ui.widget.general.input.UserNotificationInput;
 			import com.mydlp.ui.widget.general.validator.NullValidator;
+			import com.mydlp.ui.widget.policy.rule.RuleContainer;
 			
 			import mx.binding.utils.BindingUtils;
 			import mx.collections.ArrayCollection;
@@ -805,6 +806,10 @@
 					if (formObject is ADDomain)
 					{
 						(formObject as ADDomain).root = null; // to prevent sending whole tree
+					} 
+					else if (formObject is Rule)
+					{
+						FlexGlobals.topLevelApplication.ruleContainer.addRuleButton.enabled = false;
 					}
 					re.persistChange(formObject, deleteList);
 					cButton.enabled = false;
@@ -866,6 +871,11 @@
 			
 			protected function persistChangeHandler(event:ResultEvent): void
 			{
+				if (formObject is Rule)
+				{
+					FlexGlobals.topLevelApplication.ruleContainer.addRuleButton.enabled = true;
+				}
+				
 				var returnCode:String = event.result as String;
 				if (returnCode == "ok")
 				{
