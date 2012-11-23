@@ -202,6 +202,16 @@
 						break ruleLoop;
 					}
 					
+					if (r is DiscoveryRule && 
+						RuleBoxRenderer.ruleHasAllDestination(r) && 
+						RuleBoxRenderer.ruleHasAllIType(r) &&
+						( r.action == Rule.ACTION_BLOCK || r.action == Rule.ACTION_QUARANTINE ) )
+					{
+						retStr = "error.discoveryRuleHasAllDestinationsAllMatcherDelete";
+						gotoRule(r);
+						break ruleLoop;
+					}
+					
 					if (r.customAction != null)
 					{
 						if (r.customAction.customActionDescription is CustomActionDescriptionSeclore &&
@@ -242,7 +252,7 @@
 		<s:layout>
 			<s:HorizontalLayout paddingTop="10" paddingBottom="5"/>
 		</s:layout>
-		<s:Button skinClass="com.mydlp.ui.skin.AddBitmapLabelButton24Skin" label="@Resource(key='rules.addrule', bundle='messages')"
+		<s:Button id="addRuleButton" skinClass="com.mydlp.ui.skin.AddBitmapLabelButton24Skin" label="@Resource(key='rules.addrule', bundle='messages')"
 				  click="{InteractionUtil.newPopup(NewRuleDialog)}" styleName="fontSize24Style" toolTip="@Resource(key='rules.addrule.tooltip.label', bundle='messages')"/>
 	</s:Group>
 	

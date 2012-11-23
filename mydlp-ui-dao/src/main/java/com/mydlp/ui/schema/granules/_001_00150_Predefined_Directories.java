@@ -6,7 +6,6 @@ import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Restrictions;
 
 import com.mydlp.ui.dao.DAOUtil;
-import com.mydlp.ui.domain.Domain;
 import com.mydlp.ui.domain.FileSystemDirectory;
 import com.mydlp.ui.domain.InventoryCategory;
 import com.mydlp.ui.domain.InventoryItem;
