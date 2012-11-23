@@ -42,6 +42,7 @@
 			import mx.core.FlexGlobals;
 			import mx.core.IUIComponent;
 			import mx.events.DragEvent;
+			import mx.events.FlexEvent;
 			import mx.events.ItemClickEvent;
 			import mx.managers.DragManager;
 			import mx.rpc.events.ResultEvent;
@@ -110,6 +111,7 @@
 				super.data = value;
 				if(value == null) return;
 				populate();
+				dispatchEvent(new FlexEvent(FlexEvent.DATA_CHANGE));
 			}
 			
 			protected function populate():void

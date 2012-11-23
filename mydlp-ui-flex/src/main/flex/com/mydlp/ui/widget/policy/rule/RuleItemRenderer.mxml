@@ -9,9 +9,12 @@
 		<![CDATA[
 			import com.mydlp.ui.domain.RuleItem;
 			
+			import mx.events.FlexEvent;
+			
 			public override function set data(value:Object):void
 			{
 				super.data = value as RuleItem;
+				dispatchEvent(new FlexEvent(FlexEvent.DATA_CHANGE));
 			}
 		]]>
 	</fx:Script>

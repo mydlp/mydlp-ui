@@ -9,11 +9,14 @@
 		<![CDATA[
 			import com.mydlp.ui.domain.EmailNotificationItem;
 			
+			import mx.events.FlexEvent;
+			
 			public override function set data(value:Object):void
 			{
 				super.data = value;
 				if(value == null) return;
-				labelOfNotificationItem()
+				labelOfNotificationItem();
+				dispatchEvent(new FlexEvent(FlexEvent.DATA_CHANGE));
 			}
 			
 			protected function labelOfNotificationItem():void
