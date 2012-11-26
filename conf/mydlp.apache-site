@@ -1,6 +1,4 @@
-<IfDefine !ServerName>
-	ServerName mydlp
-</IfDefine>
+ServerName mydlp
 
 <IfModule mod_ssl.c>
 <VirtualHost *:443>
