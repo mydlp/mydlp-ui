@@ -1,3 +1,7 @@
+<IfDefine !ServerName>
+	ServerName mydlp
+</IfDefine>
+
 <IfModule mod_ssl.c>
 <VirtualHost *:443>
 	ServerAdmin mydlp@mydlp.com
