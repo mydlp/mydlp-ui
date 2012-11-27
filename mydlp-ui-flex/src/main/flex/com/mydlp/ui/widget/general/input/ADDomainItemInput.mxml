@@ -11,10 +11,12 @@
 			import com.mydlp.ui.domain.ADDomainOU;
 			import com.mydlp.ui.domain.ADDomainRoot;
 			import com.mydlp.ui.domain.ADDomainUser;
+			import com.mydlp.ui.util.LangUtil;
 			import com.mydlp.ui.widget.general.popup.InputLabel;
 			
 			import mx.collections.ArrayCollection;
 			import mx.collections.ListCollectionView;
+			import mx.controls.Alert;
 			import mx.events.ListEvent;
 			import mx.rpc.events.ResultEvent;
 			
@@ -26,14 +28,44 @@
 			[Bindable]
 			protected var domainItemIdx:int = -1;
 			
-			protected function getADDomainsHandler(event:ResultEvent): void
+			protected function getFilteredADDomainsHandler(event:ResultEvent): void
 			{
 				adDomains.removeAll();
 				adDomains = event.result as ListCollectionView;
+				if(adDomains.length > 75)
+					Alert.show(LangUtil.getString("messages", "inventory.adDomainItem.maxWarningMessage"),
+								LangUtil.getString("messages", "inventory.adDomainItem.warning"));
+			}
+			
+			protected function getADDomainsHandler(event:ResultEvent):void
+			{
+				var domains:ListCollectionView = new ArrayCollection;
+				domains = event.result as ListCollectionView;
+				if(domains == null || domains.length == 0)
+				{
+					filteredADUsers.includeInLayout = false;
+					filteredADUsers.visible = false;
+					searchGroup.includeInLayout = false;
+					searchGroup.visible = false;
+					
+					warningMessage.includeInLayout = true;
+					warningMessage.visible = true;
+				}
+				else
+				{
+					filteredADUsers.includeInLayout = true;
+					filteredADUsers.visible = true;
+					searchGroup.includeInLayout = true;
+					searchGroup.visible = true;
+					
+					warningMessage.includeInLayout = false;
+					warningMessage.visible = false;
+				}
 			}
 			
 			public function refresh(): void
 			{
+				re.getADDomains();
 				adDomains.removeAll();
 				if(domainItem == null)
 					return;
@@ -91,7 +123,8 @@
 		<domain:ADDomainItem id="domainItem"/>
 		
 		<my:remote id="re" destination="adDomainBRS">
-			<my:method name="getFilteredADDomains" result="getADDomainsHandler(event)" />
+			<my:method name="getFilteredADDomains" result="getFilteredADDomainsHandler(event)" />
+			<my:method name="getADDomains" result="getADDomainsHandler(event)" />
 		</my:remote>
 	</fx:Declarations>
 	
@@ -104,7 +137,7 @@
 			<s:VerticalLayout gap="10"/>
 		</s:layout>
 		
-		<s:Group width="100%">
+		<s:Group width="100%" id="searchGroup">
 			<s:layout>
 				<s:HorizontalLayout gap="5" verticalAlign="middle"/>
 			</s:layout>
@@ -112,7 +145,7 @@
 			<s:Label text="@Resource(bundle = 'messages', key = 'inventory.adDomainItem.search.label')"/>
 			<s:TextInput id="searchInput"/>
 			
-			<s:Button id="searchButton" click="onClickSearchButton(event)" 
+			<s:Button id="searchButton" click="onClickSearchButton(event)" enabled="{searchInput.text.length &gt; 2}"
 					  label="@Resource(bundle = 'messages', key = 'inventory.adDomainItem.search.button.label')"/>
 			
 		</s:Group>
@@ -122,6 +155,8 @@
 					allowMultipleSelection="false"
 					change="onSelectionChange(event)"
 					/>
+			<s:Label id="warningMessage" text="@Resource(bundle = 'messages', key = 'inventory.adDomainItem.warningMessage')" 
+					 fontSize="12" color="red"/>
 	</s:Group>
 	
 </s:SkinnableContainer>
