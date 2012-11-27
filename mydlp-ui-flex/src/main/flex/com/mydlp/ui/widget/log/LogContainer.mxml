@@ -61,6 +61,7 @@
 						"Web",
 						"Mail",
 						"Removable Storage",
+						"Removable Storage Inbound",
 						"Printer",
 						"Discovery",
 						"API"
@@ -136,7 +137,7 @@
 					criteriaList.addItem(criteria3);
 				}
 				
-				if(destinationField.text != "")
+				if(destinationField.text != "" && isDestinationEnabled(channelList.selectedItem))
 				{
 					var criteria4:ListCollectionView = new ArrayCollection();
 					criteria4.addItem("destination");
@@ -179,6 +180,7 @@
 					{
 						case "Web": channelValue = "W"; break;
 						case "Removable Storage": channelValue = "R"; break;
+						case "Removable Storage Inbound": channelValue = "I"; break;
 						case "Mail": channelValue = "M"; break;
 						case "Printer": channelValue = "P"; break;
 						case "Discovery": channelValue = "D"; break;
@@ -284,6 +286,21 @@
 				exportButton.enabled=true;
 			}
 			
+			protected function isDestinationEnabled(item:*): Boolean
+			{
+				
+				if (item == null ||
+					item == "Discovery" ||
+					item == "Web" ||
+					item == "Mail"
+					)
+				{
+					return true;
+				}
+				
+				return false;
+			}
+			
 		]]>
 	</fx:Script>
 	<fx:Declarations>
@@ -342,22 +359,25 @@
 			<s:HorizontalLayout verticalAlign="middle"/>
 		</s:layout>
 		<s:HGroup width="100%" verticalAlign="middle">
+			<s:Spacer width="5"/>
 			<s:Label text="@Resource(bundle = 'messages', key = 'log.container.search.sourceIp.label')"/>
 			<s:TextInput  id="ipField"/>
-			<s:Spacer width="20"/>
+			<s:Spacer width="10"/>
 			<s:Label text="@Resource(bundle = 'messages', key = 'log.container.search.sourceUser.label')"/>
 			<s:TextInput id="userField"/>
-			<s:Spacer width="20"/>
-			<s:Label text="@Resource(bundle = 'messages', key = 'log.container.search.destination.label')"/>
-			<s:TextInput id="destinationField"/>
-			<s:Spacer width="20"/>
+			<s:Spacer width="10"/>
+			<s:Label text="@Resource(bundle = 'messages', key = 'log.container.search.destination.label')"
+					 enabled="{isDestinationEnabled(channelList.selectedItem)}"/>
+			<s:TextInput id="destinationField"
+						 enabled="{isDestinationEnabled(channelList.selectedItem)}"/>
+			<s:Spacer width="10"/>
 			<s:Label text="@Resource(bundle = 'messages', key = 'log.container.search.actionList.label')"/>
 			<s:DropDownList id="actionList" width="120"
 							contentBackgroundAlpha="1"
 							dataProvider="{actionSearch}"/>
-			<s:Spacer width="20"/>
+			<s:Spacer width="10"/>
 			<s:Label text="@Resource(bundle = 'messages', key = 'log.container.search.channelList.label')"/>
-			<s:DropDownList id="channelList" width="120"
+			<s:DropDownList id="channelList" width="180"
 							contentBackgroundAlpha="1"
 							dataProvider="{channelSearch}"/>
 		</s:HGroup>  
