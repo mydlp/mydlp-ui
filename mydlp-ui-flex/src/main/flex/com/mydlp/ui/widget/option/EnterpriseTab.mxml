@@ -48,6 +48,7 @@
 		<domain:Config id="syslogReportPort" />
 		<domain:Config id="syslogReportFacility" />
 		<domain:Config id="notificationMessage"/>
+		<domain:Config id="notificationMessageSubject"/>
 		
 		<s:NumberValidator id="icapLogPassValidator"
 						   source="{logPass}"
@@ -132,10 +133,17 @@
 					</s:layout>
 					<s:Group>
 						<s:layout>
-							<s:HorizontalLayout gap="75" verticalAlign="middle"/>
+							<s:HorizontalLayout gap="80" verticalAlign="middle"/>
 						</s:layout>
 						<s:Label text="@Resource(bundle = 'messages', key = 'options.tab.general.editDeniedPage.label')"/>
 						<s:Button label="@Resource(bundle = 'messages', key = 'options.tab.general.editDeniedPageButton.label')" click="openHTML(event)" />
+					</s:Group>
+					<s:Group>
+						<s:layout>
+							<s:HorizontalLayout gap="30" verticalAlign="middle"/>
+						</s:layout>
+						<s:Label text="@Resource(bundle = 'messages', key = 'options.tab.general.editEmailNotificationSubject.label')"/>
+						<s:TextInput width="200" text="@{notificationMessageSubject.value}"/>
 					</s:Group>
 					<s:Group>
 						<s:layout>
