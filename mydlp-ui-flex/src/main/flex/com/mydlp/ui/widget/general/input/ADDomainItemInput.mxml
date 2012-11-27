@@ -18,72 +18,71 @@
 			import mx.events.ListEvent;
 			import mx.rpc.events.ResultEvent;
 			
+			import spark.events.IndexChangeEvent;
+			
 			[Bindable]
-			protected var adDomains:ListCollectionView;
+			protected var adDomains:ListCollectionView = new ArrayCollection;
 			
 			[Bindable]
 			protected var domainItemIdx:int = -1;
 			
 			protected function getADDomainsHandler(event:ResultEvent): void
 			{
+				adDomains.removeAll();
 				adDomains = event.result as ListCollectionView;
-				
-				if (domainItem != null)
-				{
-					var parentItem:ADDomainItem = domainItem.parent;
-					var parentList:ArrayCollection = new ArrayCollection();
-					while (parentItem != null)
-					{
-						if (parentItem is ADDomainRoot)
-						{
-							parentList.addItem((parentItem as ADDomainRoot).domain);
-							break;
-						}
-						else
-						{
-							parentList.addItem(parentItem);
-							parentItem = parentItem.parent;
-						}
-					}
-					
-					adTree.openItems = parentList.toArray().reverse();
-					
-					adTree.validateNow();
-					
-					var idx:int = adTree.getItemIndex(domainItem);
-					adTree.scrollToIndex(idx);
-					domainItemIdx = idx;					
-				}
 			}
 			
 			public function refresh(): void
 			{
-				re.getADDomains();
+				adDomains.removeAll();
+				if(domainItem == null)
+					return;
+				
+				if(domainItem is ADDomainUser)
+				{
+					adDomains.addItem(domainItem as ADDomainUser);
+					searchInput.text = (domainItem as ADDomainUser).displayName;
+				} 
+				else if(domainItem is ADDomainOU)
+				{
+					adDomains.addItem(domainItem as ADDomainOU);
+					searchInput.text = (domainItem as ADDomainOU).name;
+				}
+				else if(domainItem is ADDomainGroup)
+				{
+					adDomains.addItem(domainItem as ADDomainGroup);
+					searchInput.text = (domainItem as ADDomainGroup).name;
+				}
+				filteredADUsers.selectedIndex = 0;
 			}
 			
-			protected function onSelectedItemChange(event:ListEvent):void
+			
+			protected function onClickSearchButton(event:MouseEvent):void
 			{
-				if(adTree.selectedIndex == -1)
+				re.getFilteredADDomains(searchInput.text);
+			}
+			
+			protected function onSelectionChange(event:IndexChangeEvent):void
+			{
+				if(filteredADUsers.selectedIndex == -1)
 				{
 					domainItem = null;
 					return;
 				}
-				
-				if(adTree.selectedItem is ADDomainUser)
+				if(filteredADUsers.selectedItem is ADDomainUser)
 				{
-					domainItem = adTree.selectedItem as ADDomainUser;
+					domainItem = filteredADUsers.selectedItem as ADDomainUser;
 				} 
-				else if(adTree.selectedItem is ADDomainOU)
+				else if(filteredADUsers.selectedItem is ADDomainOU)
 				{
-					domainItem = adTree.selectedItem as ADDomainOU;
+					domainItem = filteredADUsers.selectedItem as ADDomainOU;
 				}
-				else if(adTree.selectedItem is ADDomainGroup)
+				else if(filteredADUsers.selectedItem is ADDomainGroup)
 				{
-					domainItem = adTree.selectedItem as ADDomainGroup;
+					domainItem = filteredADUsers.selectedItem as ADDomainGroup;
 				}
 				else
 					domainItem = null;
-				
 			}
 			
 		]]>
@@ -92,7 +91,7 @@
 		<domain:ADDomainItem id="domainItem"/>
 		
 		<my:remote id="re" destination="adDomainBRS">
-			<my:method name="getADDomains" result="getADDomainsHandler(event)" />
+			<my:method name="getFilteredADDomains" result="getADDomainsHandler(event)" />
 		</my:remote>
 	</fx:Declarations>
 	
@@ -102,23 +101,27 @@
 	
 	<s:Group width="100%" height="100%">
 		<s:layout>
-			<s:VerticalLayout gap="2"/>
+			<s:VerticalLayout gap="10"/>
 		</s:layout>
 		
-		<mx:Tree id="adTree"
-				 labelField="label"
-				 width="100%" height="100%"
-				 showRoot="true"
-				 allowMultipleSelection="false"
-				 dataProvider="{adDomains}"
-				 itemRenderer="com.mydlp.ui.widget.general.input.ADDomainItemGroupTreeRenderer"
-				 folderOpenIcon="@Embed('/assets/icons/16x16/folder.png')"
-				 folderClosedIcon="@Embed('/assets/icons/16x16/folder.png')"
-				 change="onSelectedItemChange(event)"
-				 selectedIndex="{domainItemIdx}"
-				 variableRowHeight="true"
-				 />
-		
+		<s:Group width="100%">
+			<s:layout>
+				<s:HorizontalLayout gap="5" verticalAlign="middle"/>
+			</s:layout>
+					
+			<s:Label text="@Resource(bundle = 'messages', key = 'inventory.adDomainItem.search.label')"/>
+			<s:TextInput id="searchInput"/>
+			
+			<s:Button id="searchButton" click="onClickSearchButton(event)" 
+					  label="@Resource(bundle = 'messages', key = 'inventory.adDomainItem.search.button.label')"/>
+			
+		</s:Group>
+			<s:List id="filteredADUsers" width="100%" height="70%"
+					itemRenderer="com.mydlp.ui.widget.general.input.ADDomainItemGroupRenderer" 
+					dataProvider="{adDomains}"
+					allowMultipleSelection="false"
+					change="onSelectionChange(event)"
+					/>
 	</s:Group>
 	
 </s:SkinnableContainer>
