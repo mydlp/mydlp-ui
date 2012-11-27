@@ -83,6 +83,9 @@
     <session_util.key>Devel</session_util.key>
 
     <jetty.daemon>false</jetty.daemon>
+
+    <log.root.appender>STDOUT</log.root.appender>
+    <log.audit.appender>STDOUT</log.audit.appender>
   </properties>
 
   <profiles>
@@ -109,7 +112,9 @@
         <amf.channelType>mx.messaging.channels.SecureAMFChannel</amf.channelType>
         <amf.endpointType>flex.messaging.endpoints.SecureAMFEndpoint</amf.endpointType>
 
-        <session_util.key>Production</session_util.key>
+	<session_util.key>Production</session_util.key>
+        <log.root.appender>SYSLOG_ROOT</log.root.appender>
+        <log.audit.appender>SYSLOG_AUDIT</log.audit.appender>
       </properties>
     </profile>
     <profile>
