@@ -17,7 +17,7 @@
 		<s:State name="selected" />
 	</s:states>
 	
-	<s:HGroup left="0" right="0" top="0" bottom="0" verticalAlign="middle"
+	<s:HGroup left="5" right="0" top="0" bottom="0" verticalAlign="middle"
 			  paddingTop="2" paddingBottom="2">
 		<s:BitmapImage source="{data.icon}" />
 		<s:Label id="labelField" text="{data.label}" paddingTop="2" width="100%"/>

@@ -22,6 +22,8 @@ public interface ADDomainDAO {
 	
 	public List<ADDomain> getADDomains();
 	
+	public List<ADDomainItem> getFilteredADDomains(String  searchString);
+	
 	public List<ADDomainItem> getChildrenOf(ADDomainItemGroup domainItemGroup);
 	
 	public void finalizeProcess(Integer domainId);
