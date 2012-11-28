@@ -49,7 +49,7 @@
 	</fx:Declarations>
 	<s:VGroup width="100%" height="100%" gap="10">
 		<s:HGroup width="100%" height="100%">
-			<s:Form width="50%">	
+			<s:Form width="40%">	
 				<s:FormItem label="{maximumObjectSize.label}">
 					<s:TextInput text="@{maximumObjectSize.value}" width="100%"/>
 				</s:FormItem>
@@ -66,7 +66,7 @@
 					<s:TextInput text="@{spawnTimeout.value}" width="100%"/>
 				</s:FormItem>
 			</s:Form>
-			<s:Form width="50%">
+			<s:Form width="40%">
 				<s:FormItem label="{supervisorMaxRestartCount.label}">
 					<s:TextInput text="@{supervisorMaxRestartCount.value}" width="100%"/>
 				</s:FormItem>
@@ -85,7 +85,7 @@
 			</s:Form>
 		</s:HGroup>
 		
-		<s:HGroup width="100%" height="100%" gap="170">
+		<s:HGroup width="100%" height="100%" gap="270">
 			<s:Form>
 				<s:FormItem label="{errorAction.label}" >
 					<s:DropDownList id="errorActionComboBox" selectedIndex="{(errorAction.value == 'pass') ? 0 : 1}" 

@@ -1,16 +1,17 @@
-package com.mydlp.ui.util
+package com.mydlp.ui.validators
 {
 	import mx.validators.ValidationResult;
 	import mx.validators.Validator;
+	import com.mydlp.ui.util.LangUtil;
 
-	public class PasswordValidationUtil extends Validator
+	public class PasswordValidation extends Validator
 	{
 		private var results:Array;
 		
 		public var confirmationSource:Object;
 		public var confirmationProperty:String;
 		
-		public function PasswordValidationUtil()
+		public function PasswordValidation()
 		{
 			super();
 		}

@@ -6,7 +6,7 @@
 			   xmlns:input="com.mydlp.ui.widget.general.input.*"
 			   close="{close()}"
 			   visible="false" width="475"
-			   title="@Resource(bundle = 'messages', key = 'feature.matcher.title.label')"
+			   title="@Resource(bundle = 'messages', key = 'feature.matcher.title.label')" xmlns:util="com.mydlp.ui.util.*" xmlns:validators="com.mydlp.ui.validators.*"
 			   >
 	
 	<fx:Script>
@@ -107,7 +107,7 @@
 					r.regex = regexValue.text;
 				}
 				else if(matcherCombobox.selectedItem.data == "document_hash" ||
-						matcherCombobox.selectedItem.data == "document_pdm")
+					matcherCombobox.selectedItem.data == "document_pdm")
 				{
 					var nca:NonCascadingArgument = null;
 					if(m.matcherArguments == null || m.matcherArguments.length == 0)
@@ -189,9 +189,9 @@
 			protected function getNCArgument(): Argument
 			{
 				if (informationFeatureObject != null && 
-						informationFeatureObject.matcher != null &&
-						informationFeatureObject.matcher.matcherArguments != null &&
-						informationFeatureObject.matcher.matcherArguments.length > 0)
+					informationFeatureObject.matcher != null &&
+					informationFeatureObject.matcher.matcherArguments != null &&
+					informationFeatureObject.matcher.matcherArguments.length > 0)
 					return informationFeatureObject.matcher.matcherArguments.getItemAt(0).coupledArgument.argument;
 				return null;
 			}
@@ -200,9 +200,9 @@
 			{
 				
 				if (informationFeatureObject != null && 
-						informationFeatureObject.matcher != null &&
-						informationFeatureObject.matcher.matcherArguments != null &&
-						informationFeatureObject.matcher.matcherArguments.length > 0)
+					informationFeatureObject.matcher != null &&
+					informationFeatureObject.matcher.matcherArguments != null &&
+					informationFeatureObject.matcher.matcherArguments.length > 0)
 					return informationFeatureObject.matcher.matcherArguments.getItemAt(0).coupledArgument;
 				return null;
 			}
@@ -360,13 +360,12 @@
 			<s:SortField name="label" numeric="false"/>
 		</s:Sort>
 		
-		
-		<s:NumberValidator id="thresholdValidator"
-						   source="{featureThresholdInput}"
-						   property="text"
-						   minValue="1"
-						   valid="{saveButton.enabled = true}"
-						   invalid="{saveButton.enabled = false}"/>
+		<validators:MyNumberValidator id="thresholdValidator"
+									  source="{featureThresholdInput}"
+									  minValue="1"
+									  valid="{saveButton.enabled = true}"
+									  invalid="{saveButton.enabled = false}"
+										/>
 		
 		<my:remote id="re" destination="documentDatabaseBRS">
 			<my:method name="getDocumentDatabases" result="{

@@ -7,7 +7,7 @@
 			   close="{close()}"
 			   initialize="onInitialize(event)"
 			   visible="false"
-			   title="@Resource(bundle = 'messages', key = 'editCurrentUser.popup.title')" xmlns:util="com.mydlp.ui.util.*"
+			   title="@Resource(bundle = 'messages', key = 'editCurrentUser.popup.title')" xmlns:util="com.mydlp.ui.util.*" xmlns:validators="com.mydlp.ui.validators.*"
 			   >
 	<fx:Script>
 		<![CDATA[
@@ -81,7 +81,7 @@
 		<mx:RegExpValidator id="regExpValidator" 
 							noMatchError="@Resource(bundle = 'messages', key = 'setPassword.popup.password.regexpValidator.message')"
 							source="{newPasswd}" property="text"/>
-		<util:PasswordValidationUtil id="passwdValidation" required="true" source="{reenterPasswd}" property="text" 
+		<validators:PasswordValidation id="passwdValidation" required="true" source="{reenterPasswd}" property="text" 
 									 confirmationSource="{newPasswd}" confirmationProperty="text"
 									 valid="valid(event)"
 									 invalid="invalid(event)"/>

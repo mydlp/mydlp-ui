@@ -5,7 +5,7 @@
 					 xmlns:my="http://www.mydlp.com/flex/my"
 					 xmlns:option="com.mydlp.ui.widget.option.*"
 					 xmlns:domain="com.mydlp.ui.domain.*"
-					 creationComplete="reset()">
+					 creationComplete="reset()" xmlns:validators="com.mydlp.ui.validators.*">
 	
 	<fx:Script>
 		<![CDATA[
@@ -97,13 +97,12 @@
 		<domain:Config id="secloreFSServerPoolSize" />
 		<domain:Config id="secloreFSEndpointPoolSize" />
 		
-		<s:NumberValidator id="secloreFSPortValidator"
-						   source="{secloreFSPortInput}"
-						   property="text"
-						   minValue="1"
-						   maxValue="65535"
-						   valid="{optionContainer.validInput(event)}"
-						   invalid="{optionContainer.invalidInput(event)}"/>
+		<validators:MyNumberValidator id="secloreFSPortValidator"
+									  source="{secloreFSPortInput}"
+									  minValue="1"
+									  maxValue="65535"
+									  valid="{optionContainer.validInput(event)}"
+									  invalid="{optionContainer.invalidInput(event)}"/>
 		
 		<mx:RegExpValidator id="secloreFSAddressValidator"
 							source="{secloreFSAddressInput}"
@@ -112,12 +111,11 @@
 							valid="{optionContainer.validInput(event)}"
 							invalid="{optionContainer.invalidInput(event)}"/>
 		
-		<s:NumberValidator id="secloreFSHotFolderCabinetIdValidator"
-						   source="{secloreFSHotFolderCabinetIdInput}"
-						   property="text"
-						   minValue="1"
-						   valid="{optionContainer.validInput(event)}"
-						   invalid="{optionContainer.invalidInput(event)}"/>
+		<validators:MyNumberValidator id="secloreFSHotFolderCabinetIdValidator"
+									  source="{secloreFSHotFolderCabinetIdInput}"
+									  minValue="1"
+									  valid="{optionContainer.validInput(event)}"
+									  invalid="{optionContainer.invalidInput(event)}"/>
 		
 		<mx:RegExpValidator id="secloreFSAppNameValidator"
 							source="{secloreFSAppNameInput}"
@@ -126,27 +124,25 @@
 							valid="{optionContainer.validInput(event)}"
 							invalid="{optionContainer.invalidInput(event)}"/>
 		
-		<s:NumberValidator id="secloreFSServerPoolSizeValidator"
-						   source="{secloreFSServerPoolSizeInput}"
-						   property="text"
-						   minValue="1"
-						   maxValue="128"
-						   valid="{optionContainer.validInput(event)}"
-						   invalid="{optionContainer.invalidInput(event)}"/>
+		<validators:MyNumberValidator id="secloreFSServerPoolSizeValidator"
+									  source="{secloreFSServerPoolSizeInput}"
+									  minValue="1"
+									  maxValue="128"
+									  valid="{optionContainer.validInput(event)}"
+									  invalid="{optionContainer.invalidInput(event)}"/>
 		
-		<s:NumberValidator id="secloreFSEndpointPoolSizeValidator"
-						   source="{secloreFSEndpointPoolSize}"
-						   property="text"
-						   minValue="1"
-						   maxValue="8"
-						   valid="{optionContainer.validInput(event)}"
-						   invalid="{optionContainer.invalidInput(event)}"/>
+		<validators:MyNumberValidator id="secloreFSEndpointPoolSizeValidator"
+									  source="{secloreFSEndpointPoolSize}"
+									  minValue="1"
+									  maxValue="8"
+									  valid="{optionContainer.validInput(event)}"
+									  invalid="{optionContainer.invalidInput(event)}"/>
 		
-	
+		
 		<my:remote id="re" destination="customActionBRS">
 			<my:method name="getCustomActions" result="getCustomActionsHandler(event)" />
 		</my:remote>
-			
+		
 	</fx:Declarations>
 	
 	<s:VGroup width="100%" height="100%">

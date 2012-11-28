@@ -1,4 +1,4 @@
-package com.mydlp.ui.widget.general.validator
+package com.mydlp.ui.validators
 {
 	import com.mydlp.ui.util.LangUtil;
 	

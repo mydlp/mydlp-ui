@@ -113,7 +113,7 @@
 		</my:remote>
 	</fx:Declarations>
 	<s:VGroup paddingTop="25" paddingLeft="25" paddingRight="25" paddingBottom="25" horizontalAlign="right" gap="5">			
-		<s:DataGrid id="userList" width="900" height="450" dataProvider="{userDP}" 
+		<s:DataGrid id="userList" width="1100" height="450" dataProvider="{userDP}" 
 					gridClick="mouseMoveOnDataGrid(event)">
 			<s:columns>
 				<s:ArrayList>					
