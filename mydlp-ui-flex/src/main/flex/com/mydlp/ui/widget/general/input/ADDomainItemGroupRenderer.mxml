@@ -18,7 +18,7 @@
 	</s:states>
 	
 	<s:HGroup left="5" right="0" top="0" bottom="0" verticalAlign="middle"
-			  paddingTop="2" paddingBottom="2">
+			  paddingTop="2" paddingBottom="2" toolTip="{data.distinguishedName}">
 		<s:BitmapImage source="{data.icon}" />
 		<s:Label id="labelField" text="{data.label}" paddingTop="2" width="100%"/>
 	</s:HGroup>
