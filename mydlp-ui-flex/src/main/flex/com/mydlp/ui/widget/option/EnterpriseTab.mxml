@@ -8,7 +8,6 @@
 	<fx:Script>
 		<![CDATA[
 			import com.mydlp.ui.util.InteractionUtil;
-			import com.mydlp.ui.util.RegexUtil;
 			import com.mydlp.ui.util.SessionUtil;
 			
 			public var optionContainer:OptionContainer = null;
@@ -56,12 +55,12 @@
 									  valid="{optionContainer.validInput(event)}"
 									  invalid="{optionContainer.invalidInput(event)}"/>
 		
-		<mx:RegExpValidator id="syslogAclHostValidator"
-							source="{syslogAclHostInput}"
-							property="text"
-							expression="{RegexUtil.domainOrIpRegex()}"
-							valid="{optionContainer.validInput(event)}"
-							invalid="{optionContainer.invalidInput(event)}"/>
+		<validators:MyRegExValidator id="syslogAclHostValidator"
+									 source="{syslogAclHostInput}"
+									 expression="{MyRegExValidator.domainNameOrIpRegex()}"
+									 type="{MyRegExValidator.domain_ip()}"
+									 valid="{optionContainer.validInput(event)}"
+									 invalid="{optionContainer.invalidInput(event)}"/>
 		
 		<validators:MyNumberValidator id="syslogAclPortValidator"
 									  source="{syslogAclPortInput}"
@@ -70,12 +69,12 @@
 									  valid="{optionContainer.validInput(event)}"
 									  invalid="{optionContainer.invalidInput(event)}"/>
 		
-		<mx:RegExpValidator id="syslogDiagHostValidator"
-							source="{syslogDiagHostInput}"
-							property="text"
-							expression="{RegexUtil.domainOrIpRegex()}"
-							valid="{optionContainer.validInput(event)}"
-							invalid="{optionContainer.invalidInput(event)}"/>
+		<validators:MyRegExValidator id="syslogDiagHostValidator"
+									 source="{syslogDiagHostInput}"
+									 expression="{MyRegExValidator.domainNameOrIpRegex()}"
+									 type="{MyRegExValidator.domain_ip()}"
+									 valid="{optionContainer.validInput(event)}"
+									 invalid="{optionContainer.invalidInput(event)}"/>
 		
 		<validators:MyNumberValidator id="syslogDiagPortValidator"
 									  source="{syslogDiagPortInput}"
@@ -84,12 +83,12 @@
 									  valid="{optionContainer.validInput(event)}"
 									  invalid="{optionContainer.invalidInput(event)}"/>
 		
-		<mx:RegExpValidator id="syslogReportHostValidator"
-							source="{syslogReportHostInput}"
-							property="text"
-							expression="{RegexUtil.domainOrIpRegex()}"
-							valid="{optionContainer.validInput(event)}"
-							invalid="{optionContainer.invalidInput(event)}"/>
+		<validators:MyRegExValidator id="syslogReportHostValidator"
+									 source="{syslogReportHostInput}"
+									 expression="{MyRegExValidator.domainNameOrIpRegex()}"
+									 type="{MyRegExValidator.domain_ip()}"
+									 valid="{optionContainer.validInput(event)}"
+									 invalid="{optionContainer.invalidInput(event)}"/>
 		
 		<validators:MyNumberValidator id="syslogReportPortValidator"
 									  source="{syslogReportPortInput}"

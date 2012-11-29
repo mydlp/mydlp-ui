@@ -7,7 +7,6 @@
 	
 	<fx:Script>
 		<![CDATA[
-			import com.mydlp.ui.util.RegexUtil;
 			public var optionContainer:OptionContainer = null;
 		]]>
 	</fx:Script>
@@ -24,19 +23,19 @@
 		<domain:Config id="icapLogPass" />
 		<domain:Config id="icapLogPassLowerLimit" />
 		
-		<mx:RegExpValidator id="smtpHeloNameValidator"
-							source="{smtpHeloNameInput}"
-							property="text"
-							expression="{RegexUtil.domainOrIpRegex()}"
-							valid="{optionContainer.validInput(event)}"
-							invalid="{optionContainer.invalidInput(event)}"/>
+		<validators:MyRegExValidator id="smtpHeloNameValidator"
+									 source="{smtpHeloNameInput}"
+									 expression="{MyRegExValidator.domainNameOrIpRegex()}"
+									 type="{MyRegExValidator.domain_ip()}"
+									 valid="{optionContainer.validInput(event)}"
+									 invalid="{optionContainer.invalidInput(event)}"/>
 		
-		<mx:RegExpValidator id="smtpNextHopHostValidator"
-							source="{smtpNextHopHostInput}"
-							property="text"
-							expression="{RegexUtil.domainOrIpRegex()}"
-							valid="{optionContainer.validInput(event)}"
-							invalid="{optionContainer.invalidInput(event)}"/>
+		<validators:MyRegExValidator id="smtpNextHopHostValidator"
+									 source="{smtpNextHopHostInput}"
+									 expression="{MyRegExValidator.domainNameOrIpRegex()}"
+									 type="{MyRegExValidator.domain_ip()}"
+									 valid="{optionContainer.validInput(event)}"
+									 invalid="{optionContainer.invalidInput(event)}"/>
 		
 		<validators:MyNumberValidator id="smtpNextHopPortValidator"
 									  source="{smtpNextHopPortInput}"
@@ -45,12 +44,12 @@
 									  valid="{optionContainer.validInput(event)}"
 									  invalid="{optionContainer.invalidInput(event)}"/>
 		
-		<mx:RegExpValidator id="icapRegExValidator"
-							source="{icapRMP}"
-							property="text"
-							expression="{RegexUtil.urlRegex()}"
-							valid="{optionContainer.validInput(event)}"
-							invalid="{optionContainer.invalidInput(event)}"/>
+		<validators:MyRegExValidator id="icapRegExValidator"
+									 source="{icapRMP}"
+									 expression="{MyRegExValidator.urlRegex()}"
+									 type="{MyRegExValidator.url()}"
+									 valid="{optionContainer.validInput(event)}"
+									 invalid="{optionContainer.invalidInput(event)}"/>
 		
 		<validators:MyNumberValidator id="icapConValidator"
 									  source="{maxConnections}"
