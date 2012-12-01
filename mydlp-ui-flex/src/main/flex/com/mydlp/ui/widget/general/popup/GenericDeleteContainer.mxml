@@ -132,6 +132,10 @@
 				}
 				else
 				{
+					if (formObject is Rule)
+					{
+						FlexGlobals.topLevelApplication.policyContainer.ruleContainer.disableAddRule();
+					}
 					re.remove(formObject);
 				}
 				
@@ -146,6 +150,10 @@
 			
 			protected function okHandler(event:Event): void
 			{
+				if (formObject is Rule)
+				{
+					FlexGlobals.topLevelApplication.policyContainer.ruleContainer.enableAddRule();
+				}
 				FlexGlobals.topLevelApplication.topToolbar.policyInstallationState = false;
 				InteractionUtil.closeCurrentPopup();
 				FlexGlobals.topLevelApplication.refresh();
@@ -154,6 +162,11 @@
 			protected function faultHandler(event:FaultEvent):void
 			{
 				FlexGlobals.topLevelApplication.faultHandler(event);
+				if (formObject is Rule)
+				{
+					FlexGlobals.topLevelApplication.policyContainer.ruleContainer.enableAddRule();
+					FlexGlobals.topLevelApplication.ruleContainer.refreshRules();
+				}
 				InteractionUtil.closeCurrentPopup();
 			}
 			

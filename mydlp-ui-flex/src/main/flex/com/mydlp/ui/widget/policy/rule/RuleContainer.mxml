@@ -32,6 +32,7 @@
 			import mx.core.IUIComponent;
 			import mx.events.DragEvent;
 			import mx.events.FlexEvent;
+			import mx.events.ResizeEvent;
 			import mx.managers.DragManager;
 			import mx.rpc.events.ResultEvent;
 			
@@ -39,6 +40,8 @@
 			public var ruleDP:ListCollectionView = new ArrayCollection();
 			
 			public var isSelection:Boolean = false;
+			
+			public var collapseStates:Dictionary = new Dictionary();
 			
 			public static function getRule(value:Number): Rule
 			{
@@ -137,7 +140,31 @@
 				RuleList.resetRuleItemListList();
 				ruleList.invalidateList();
 				ruleDP = ruleDP2;
-				ruleList.validateNow();
+				
+				if (ruleDP.length == 0)
+				{
+					ruleListGroup.visible=false;
+					ruleListGroup.includeInLayout=false;
+					noRuleGroup.visible=true;
+					noRuleGroup.includeInLayout=true;
+				}
+				else
+				{
+					ruleListGroup.visible=true;
+					ruleListGroup.includeInLayout=true;
+					noRuleGroup.visible=false;
+					noRuleGroup.includeInLayout=false;
+					
+					ruleList.validateNow();
+					enableAddRule();
+					
+					if (ruleList.afterRefreshSelectedIndex != -1)
+					{
+						var oldAfterRefreshSelectedIndex:int = ruleList.afterRefreshSelectedIndex; 
+						ruleList.afterRefreshSelectedIndex = -1;
+						callLater(showIndex, [oldAfterRefreshSelectedIndex]);
+					}
+				}
 			}
 			
 			protected function clickHandler(event:MouseEvent):void
@@ -233,6 +260,102 @@
 				FlexGlobals.topLevelApplication.tapBar.selectedIndex = 1; // index of policy tab
 			}
 			
+			public function gotoRuleIndex(i:int): void 
+			{
+				ruleList.selectedIndex = i;
+				FlexGlobals.topLevelApplication.tapBar.selectedIndex = 1; // index of policy tab
+			}
+			
+			protected function ruleItemRendererFunction(item:Object):ClassFactory {
+				if (item is Rule)
+				{
+					return new ClassFactory(RuleBoxRenderer);	
+				}
+				else if (item is NewRuleShadow)
+				{
+					return new ClassFactory(NewRuleShadowRenderer);
+				}
+				else
+				{
+					throw new Error("Unhandled item type.");
+				}
+			} 
+			
+			public function disableAddRule(): void
+			{
+				addRuleButtonBottom.enabled = false;
+				addRuleButtonTop.enabled = false;
+				addRuleButtonFirst.enabled = false;
+			}
+			
+			public function enableAddRule(): void
+			{
+				addRuleButtonBottom.enabled = true;
+				addRuleButtonTop.enabled = true;
+				addRuleButtonFirst.enabled = true;
+			}
+			
+			protected function addRuleToTop(event:MouseEvent):void
+			{
+				var itemIndices:Vector.<int> = ruleList.dataGroup.getItemIndicesInView();
+				
+				if (itemIndices.length > 0)
+				{
+					addRuleShadow(itemIndices[0]);
+				}
+			}
+			
+			protected function addRuleToBottom(event:MouseEvent):void
+			{
+				var itemIndices:Vector.<int> = ruleList.dataGroup.getItemIndicesInView();
+				
+				var itemIndicesLength:int = itemIndices.length;
+				if (itemIndicesLength > 0)
+				{
+					addRuleShadow(itemIndices[itemIndicesLength-1] + 1);
+				}
+			}
+			
+			public function calculatePriorityFromIndex(index:int): Number
+			{
+				var calculatedPriority:Number = 0;
+				var ruleListLength:int = ruleList.dataProvider.length;
+				if (index == 0)
+				{
+					calculatedPriority = (ruleList.dataProvider.getItemAt(index) as Rule).priority + 100;
+				}
+				else if (index == ruleListLength)
+				{
+					calculatedPriority = (ruleList.dataProvider.getItemAt(index - 1) as Rule).priority - 100;
+				}
+				else
+				{
+					var maxP:Number = (ruleList.dataProvider.getItemAt(index - 1) as Rule).priority;
+					var minP:Number = (ruleList.dataProvider.getItemAt(index) as Rule).priority;
+					calculatedPriority = Math.round( (minP+maxP) / 2 );
+				}
+				
+				return calculatedPriority;
+			}
+			
+			protected function showIndex(index:int):void
+			{
+				
+				ruleList.selectedIndex = index;
+				ruleList.ensureIndexIsVisible(index);
+			}
+			
+			protected function addRuleShadow(index:int):void
+			{
+				var shadow:NewRuleShadow = new NewRuleShadow();
+				shadow.priority = calculatePriorityFromIndex(index);
+				ruleList.dataProvider.addItemAt(shadow, index);
+				ruleList.afterRefreshSelectedIndex = index;
+				callLater(showIndex, [index]);
+				
+				FlexGlobals.topLevelApplication.policyContainer.ruleContainer.disableAddRule();
+			}
+			
 		]]>
 	</fx:Script>
 	<fx:Declarations>
@@ -244,30 +367,56 @@
 		</my:remote>
 	</fx:Declarations>
 	
-	<s:layout>
-		<s:VerticalLayout gap="5"/>
-	</s:layout>
-	
-	<s:Group width="100%">
+	<s:Group id="ruleListGroup" width="100%" height="100%"
+			 includeInLayout="false" visible="false">
 		<s:layout>
-			<s:HorizontalLayout paddingTop="10" paddingBottom="5"/>
-		</s:layout>
-		<s:Button id="addRuleButton" skinClass="com.mydlp.ui.skin.AddBitmapLabelButton24Skin" label="@Resource(key='rules.addrule', bundle='messages')"
-				  click="{InteractionUtil.newPopup(NewRuleDialog)}" styleName="fontSize24Style" toolTip="@Resource(key='rules.addrule.tooltip.label', bundle='messages')"/>
-	</s:Group>
-	
-	<s:Group>
-		<s:layout>
-			<s:HorizontalLayout gap="55" paddingLeft="230"/>
+			<s:VerticalLayout gap="5"/>
 		</s:layout>
 		
-		<s:Label text="@Resource(key='rules.sources.label', bundle='messages')" styleName="fontSize24Style" visible="{ruleDP.length != 0}"/>
-		<s:Label text="@Resource(key='rules.destinations.label', bundle='messages')" styleName="fontSize24Style" visible="{ruleDP.length != 0}"/>
-		<s:Label text="@Resource(key='rules.informationTypes.label', bundle='messages')" styleName="fontSize24Style" visible="{ruleDP.length != 0}"/>
+		<s:Group width="100%">
+			<s:layout>
+				<s:HorizontalLayout paddingTop="5" paddingBottom="5" 
+									paddingLeft="20"
+									verticalAlign="middle" horizontalAlign="left"/>
+			</s:layout>
+			<s:Button id="addRuleButtonTop" skinClass="com.mydlp.ui.skin.AddBitmapLabelButton24Skin" 
+					  label="@Resource(key='rules.addrule', bundle='messages')"
+					  click="addRuleToTop(event)" styleName="fontSize24Style"/>
+		</s:Group>
+		
+		<s:Group>
+			<s:layout>
+				<s:HorizontalLayout gap="55" paddingLeft="248"/>
+			</s:layout>
+			
+			<s:Label text="@Resource(key='rules.sources.label', bundle='messages')" styleName="fontSize24Style" visible="{ruleDP.length != 0}"/>
+			<s:Label text="@Resource(key='rules.destinations.label', bundle='messages')" styleName="fontSize24Style" visible="{ruleDP.length != 0}"/>
+			<s:Label text="@Resource(key='rules.informationTypes.label', bundle='messages')" styleName="fontSize24Style" visible="{ruleDP.length != 0}"/>
+		</s:Group>
+		
+		<rule:RuleList id="ruleList" dataProvider="{ruleDP}" 
+						   width="100%" height="100%"
+						   itemRendererFunction="ruleItemRendererFunction"/>
+		
+		<s:Group width="100%" height="50">
+			<s:layout>
+				<s:HorizontalLayout paddingTop="15" paddingBottom="5" 
+									paddingLeft="20"
+									verticalAlign="middle" horizontalAlign="left"/>
+			</s:layout>
+			<s:Button id="addRuleButtonBottom" skinClass="com.mydlp.ui.skin.AddBitmapLabelButton24Skin" 
+					  label="@Resource(key='rules.addrule', bundle='messages')"
+					  click="addRuleToBottom(event)" styleName="fontSize24Style" />
+		</s:Group>
 	</s:Group>
 	
-	<rule:RuleList id="ruleList" dataProvider="{ruleDP}" 
-				width="100%" height="100%"
-			itemRenderer="com.mydlp.ui.widget.policy.rule.RuleBoxRenderer"/>
+	<s:Group id="noRuleGroup" width="100%" height="100%">
+		<s:layout>
+			<s:VerticalLayout horizontalAlign="center" verticalAlign="middle"/>
+		</s:layout>
+		<s:Button id="addRuleButtonFirst" skinClass="com.mydlp.ui.skin.AddBitmapButton128Skin"
+				  toolTip="@Resource(bundle='messages', key='rules.addFirstRule.tooltip.label')"
+				  click="{InteractionUtil.newPopup(NewRuleDialog)}"/>
+	</s:Group>
 
 </s:SkinnableContainer>

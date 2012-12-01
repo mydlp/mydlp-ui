@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:ItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009" 
+				xmlns:s="library://ns.adobe.com/flex/spark" 
+				xmlns:mx="library://ns.adobe.com/flex/mx"
+				xmlns:rule="com.mydlp.ui.widget.policy.rule.*"
+				autoDrawBackground="false"
+				xmlns:util="com.mydlp.ui.util.*" 
+				click="itemClickHandler(event)"
+				>
+	<fx:Script>
+		<![CDATA[
+			import com.mydlp.ui.domain.ApiRule;
+			import com.mydlp.ui.domain.ApplicationName;
+			import com.mydlp.ui.domain.DiscoveryRule;
+			import com.mydlp.ui.domain.Domain;
+			import com.mydlp.ui.domain.FileSystemDirectory;
+			import com.mydlp.ui.domain.InformationType;
+			import com.mydlp.ui.domain.InventoryBase;
+			import com.mydlp.ui.domain.InventoryCategory;
+			import com.mydlp.ui.domain.InventoryItem;
+			import com.mydlp.ui.domain.Item;
+			import com.mydlp.ui.domain.MailRule;
+			import com.mydlp.ui.domain.Network;
+			import com.mydlp.ui.domain.PrinterRule;
+			import com.mydlp.ui.domain.RemovableStorageInboundRule;
+			import com.mydlp.ui.domain.RemovableStorageRule;
+			import com.mydlp.ui.domain.Rule;
+			import com.mydlp.ui.domain.RuleItem;
+			import com.mydlp.ui.domain.RuleUser;
+			import com.mydlp.ui.domain.ScreenshotRule;
+			import com.mydlp.ui.domain.WebRule;
+			import com.mydlp.ui.util.InteractionUtil;
+			import com.mydlp.ui.util.ReflectionUtil;
+			import com.mydlp.ui.widget.general.popup.NewRuleDialog;
+			import com.mydlp.ui.widget.policy.inventory.InventoryTree;
+			
+			import mx.collections.ArrayCollection;
+			import mx.collections.IList;
+			import mx.collections.ListCollectionView;
+			import mx.core.FlexGlobals;
+			import mx.core.IUIComponent;
+			import mx.events.DragEvent;
+			import mx.events.FlexEvent;
+			import mx.events.ItemClickEvent;
+			import mx.managers.DragManager;
+			import mx.rpc.events.ResultEvent;
+			
+			import org.alivepdf.events.ProcessingEvent;
+			
+			import spark.components.List;
+			
+			[Bindable]
+			public var ruleObject:* = null;
+			
+			[Bindable]
+			protected var ruleList:List = FlexGlobals.topLevelApplication.policyContainer.ruleContainer.ruleList;
+			
+			
+			public override function set data(value:Object):void
+			{
+				super.data = value;
+				if(value == null) return;
+				populate();
+				dispatchEvent(new FlexEvent(FlexEvent.DATA_CHANGE));
+			}
+			
+			protected function populate():void
+			{
+				if (data is NewRuleShadow)
+				{
+					ruleObject = data;
+				}	
+				else
+					throw new Error("Unknown rule shadow type;");
+				
+				refresh();
+			}
+			
+			public function refresh():void
+			{
+				if (ruleObject == null) return;
+				invalidateDisplayList();
+				validateNow();
+			}
+			
+			protected function itemClickHandler(event:MouseEvent):void
+			{
+				var e:ItemClickEvent = new ItemClickEvent(ItemClickEvent.ITEM_CLICK, true);
+				e.item = data;
+				e.index = itemIndex;
+				dispatchEvent(e);
+			}
+			
+			protected function addRuleHere(event:MouseEvent):void
+			{
+				var popup:NewRuleDialog = InteractionUtil.newPopup(NewRuleDialog) as NewRuleDialog;
+				popup.recommendedPriority = ruleObject.priority;
+			}
+			
+			protected function cancel(event:MouseEvent):void
+			{
+				var ruleList:List = FlexGlobals.topLevelApplication.policyContainer.ruleContainer.ruleList;
+				var currentItemIndex:int = ruleList.dataProvider.getItemIndex(ruleObject);
+				ruleList.dataProvider.removeItemAt(currentItemIndex);
+				
+				FlexGlobals.topLevelApplication.policyContainer.ruleContainer.enableAddRule();
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<s:Rect left="0" right="0" top="0" bottom="0" >
+		<s:stroke>
+			<s:SolidColorStroke color="0xDEEBFF" alpha="1" weight="2"/>
+		</s:stroke>
+	</s:Rect>
+	
+	<s:Rect left="2" right="2" top="2" bottom="2" >
+		<s:stroke>
+			<s:SolidColorStroke color="0xCEDBEF" alpha="1" weight="2"/>
+		</s:stroke>
+	</s:Rect>
+	
+	<s:Rect left="4" right="4" top="4" bottom="4" >
+		<s:stroke>
+			<s:SolidColorStroke color="0xDEEBFF" alpha="1" weight="2"/>
+		</s:stroke>
+	</s:Rect>
+	
+	<s:Group top="6" bottom="6" left="6" right="6" color="0xACB9CD" width="914" fontWeight="bold">
+		<s:layout>
+			<s:VerticalLayout verticalAlign="middle" horizontalAlign="center" gap="5"
+							  paddingTop="3" paddingBottom="3"/>
+		</s:layout>
+		
+		<s:HGroup verticalAlign="middle">
+			<s:Label text="@Resource(bundle = 'messages', key = 'newRuleShadow.messages.part1')" />
+			<s:Button skinClass="com.mydlp.ui.skin.AddBitmapLabelButton16Skin" 
+					  label="@Resource(key='newRuleShadow.buttons.add.label', bundle='messages')"
+					  click="addRuleHere(event)" />
+		</s:HGroup>
+		<s:HGroup verticalAlign="middle">
+			<s:Label text="@Resource(bundle = 'messages', key = 'newRuleShadow.messages.part2')" />
+		</s:HGroup>
+		<s:HGroup verticalAlign="middle">
+			<s:Label text="@Resource(bundle = 'messages', key = 'newRuleShadow.messages.part3')" />
+			<s:Button skinClass="com.mydlp.ui.skin.CancelBitmapLabelButton16Skin" 
+					  label="@Resource(key='newRuleShadow.buttons.cancel.label', bundle='messages')"
+					  click="cancel(event)" />
+		</s:HGroup>
+		
+	</s:Group>
+</s:ItemRenderer>

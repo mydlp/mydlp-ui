@@ -4,7 +4,6 @@
 				xmlns:mx="library://ns.adobe.com/flex/mx" 
 				title="@Resource(bundle = 'messages', key = 'inventory.newdialog.addrule.title')" 
 				xmlns:popup="com.mydlp.ui.widget.general.popup.*" 
-				creationComplete="onCreationComplete(event)"
 				>
 	<fx:Script>
 		<![CDATA[
@@ -24,7 +23,7 @@
 			import mx.core.FlexGlobals;
 			import mx.events.FlexEvent;
 			
-			protected var recommendedPriority:int = 100000;
+			public var recommendedPriority:int = 100000;
 			
 			protected function close():void
 			{
@@ -77,15 +76,6 @@
 			protected function apiRuleHandler():void
 			{
 				ruleHandler(new ApiRule());
-			}
-			
-			protected function onCreationComplete(event:FlexEvent):void
-			{
-				if (FlexGlobals.topLevelApplication.policyContainer.ruleContainer.ruleList.dataProvider.length > 0)
-				{
-					var rule:Rule = FlexGlobals.topLevelApplication.policyContainer.ruleContainer.ruleList.dataProvider.getItemAt(0);
-					recommendedPriority = rule.priority + 100;
-				}
 			}
 			
 		]]>

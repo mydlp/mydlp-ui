@@ -5,6 +5,8 @@
 		 xmlns:rule="com.mydlp.ui.widget.policy.rule.*">
 	<fx:Script>
 		<![CDATA[
+			import com.mydlp.ui.util.LangUtil;
+			
 			import mx.collections.ListCollectionView;
 			[Bindable]
 			public var listDataProvider:ListCollectionView;
@@ -13,13 +15,14 @@
 	</fx:Script>
 	
 	<fx:Declarations>
-		<fx:String id="noneMessage" />
+		<fx:String id="itemLabel" />
 		
 	</fx:Declarations>
 	
 	<s:states>
-		<s:State name="normal" />
+		<s:State name="collapse" />
 		<s:State name="noitem" />
+		<s:State name="expand" />
 	</s:states>
 	
 	
@@ -29,11 +32,28 @@
 							  paddingBottom="4" paddingTop="4" />
 		</s:layout>
 		
-		<s:Label text="{noneMessage}" fontStyle="italic"/>
+		<s:Label text="{
+				 LangUtil.getString('messages','rulebox.ruleitembox.none.prefix') + ' ' + itemLabel
+				 }" fontStyle="italic"/>
 	
 	</s:Group>
 	
-	<s:Group left="0" right="0" top="0" bottom="0" includeIn="normal">
+	<s:Group left="0" right="0" top="0" bottom="0" includeIn="collapse">
+		<s:layout>
+			<s:VerticalLayout horizontalAlign="center" verticalAlign="middle" 
+							  paddingBottom="4" paddingTop="4" />
+		</s:layout>
+		
+		<s:Label text="{
+				 listDataProvider.length + ' ' + 
+				 LangUtil.getString('messages','rulebox.ruleitembox.collapse.prefix') + ' ' + 
+				 itemLabel + LangUtil.getString('messages','rulebox.ruleitembox.collapse.noSpaceSuffix')
+				 }"
+				 fontWeight="bold" />
+		
+	</s:Group>
+	
+	<s:Group left="0" right="0" top="0" bottom="0" includeIn="expand">
 		<s:layout>
 			<s:VerticalLayout horizontalAlign="center" verticalAlign="middle" 
 							  paddingBottom="4" paddingTop="4"/>

@@ -11,6 +11,7 @@
 				dragExit="onDragExit(event)"
 				dragDrop="onDragDrop(event)"
 				click="itemClickHandler(event)"
+				doubleClick="onDoubleClick(event)"
 				>
 	<fx:Script>
 		<![CDATA[
@@ -35,7 +36,9 @@
 			import com.mydlp.ui.domain.ScreenshotRule;
 			import com.mydlp.ui.domain.WebRule;
 			import com.mydlp.ui.util.InteractionUtil;
+			import com.mydlp.ui.util.LangUtil;
 			import com.mydlp.ui.util.ReflectionUtil;
+			import com.mydlp.ui.widget.policy.inventory.InventoryTree;
 			
 			import mx.collections.ArrayCollection;
 			import mx.collections.ListCollectionView;
@@ -111,7 +114,28 @@
 				super.data = value;
 				if(value == null) return;
 				populate();
+				collapse = getCollapseState();
 				dispatchEvent(new FlexEvent(FlexEvent.DATA_CHANGE));
+			}
+			
+			protected function getCollapseState(): Boolean
+			{
+				if (ruleObject == null) 
+					return true;
+				var collapseState:* = FlexGlobals.topLevelApplication.ruleContainer.collapseStates[ruleObject.id];
+				if (collapseState != null){
+					return collapseState as Boolean;
+				}
+				else
+				{
+					return true;
+				}
+			}
+			
+			protected function changeCollapse(): void
+			{
+				collapse = !collapse;
+				FlexGlobals.topLevelApplication.ruleContainer.collapseStates[ruleObject.id] = collapse;
 			}
 			
 			protected function populate():void
@@ -385,10 +409,17 @@
 				}
 			}
 			
-			protected function acceptDrop(): void
+			protected function acceptDrop(highlight:Boolean = true): void
 			{
 				DragManager.showFeedback(DragManager.COPY);
-				highlightOn();
+				if (highlight)
+				{
+					highlightOn();
+				}
+				else
+				{
+					highlightOff();
+				}
 			}
 			
 			protected function rejectDrop(): void
@@ -416,14 +447,25 @@
 			
 			protected function onDragOver(event:DragEvent):void
 			{
-				droppedMatchers = new ArrayCollection();
-				droppedSources = new ArrayCollection();
-				droppedDestinations = new ArrayCollection();
-				var treeItems:* = FlexGlobals.topLevelApplication.policyContainer.inventoryTree.selectedItems;
-				if (isAllDroppable(treeItems) && checkConsistency(treeItems))
-					acceptDrop();
+				if (event.dragInitiator is InventoryTree)
+				{
+					droppedMatchers = new ArrayCollection();
+					droppedSources = new ArrayCollection();
+					droppedDestinations = new ArrayCollection();
+					var treeItems:* = FlexGlobals.topLevelApplication.policyContainer.inventoryTree.selectedItems;
+					if (isAllDroppable(treeItems) && checkConsistency(treeItems))
+					{
+						acceptDrop();
+					}
+					else
+					{
+						rejectDrop();
+					}
+				}
 				else
+				{
 					rejectDrop();
+				}
 			}
 			
 			protected function checkConsistency(treeItems:*):Boolean //Controls whether dropped items consist both "All Network" and specific network
@@ -572,20 +614,23 @@
 			
 			protected function onDragExit(event:DragEvent):void
 			{
-				rejectDrop();    		
+				rejectDrop();
 			}
 			
 			protected function onDragDrop(dragEvent:DragEvent):void
 			{
-				deleteList = new ArrayCollection();
-				var inventoryObjects:* = FlexGlobals.topLevelApplication.policyContainer.inventoryTree.selectedItems;
-				for each (var o:* in inventoryObjects)
-				addDroppedObject(o as InventoryBase);
-				
-				invalidateProperties();
-				refresh();
-				
-				re.save(ruleObject);
+				if (dragEvent.dragInitiator is InventoryTree)
+				{
+					deleteList = new ArrayCollection();
+					var inventoryObjects:* = FlexGlobals.topLevelApplication.policyContainer.inventoryTree.selectedItems;
+					for each (var o:* in inventoryObjects)
+					addDroppedObject(o as InventoryBase);
+					
+					invalidateProperties();
+					refresh();
+					
+					re.save(ruleObject);
+				}
 			}
 			
 			protected function addDroppedObject(inventoryObject:InventoryBase):void
@@ -722,15 +767,45 @@
 				dispatchEvent(e);
 			}
 			
+			protected function getRuleItemListState(riDP:ListCollectionView, isCollapse:Boolean) : String
+			{
+				if (riDP == null || riDP.length == 0)
+				{
+					return "noitem";
+				}
+				else
+				{
+					if (isCollapse) 
+					{
+						if (riDP.length == 1)
+						{
+							return "expand";
+						}
+						else
+						{
+							return "collapse";
+						}
+					}
+					else
+					{
+						return "expand";
+					}
+				}
+			}
+			
+			protected function onDoubleClick(event:MouseEvent):void
+			{
+				changeCollapse();
+			}
+			
 		]]>
 	</fx:Script>
 	
 	<fx:Declarations>
+		<fx:Boolean id="collapse">true</fx:Boolean>
 		<my:remote id="re" destination="ruleBRS">
 			<my:method name="save" result="saveHandler(event)"/>
 			<my:method name="removeRuleItems" result="deleteRuleItemsHandler(event)"/>
-			<my:method name="ruleUp" result="changeHandler(event)"/>
-			<my:method name="ruleDown" result="changeHandler(event)"/>
 		</my:remote>
 	</fx:Declarations>
 	
@@ -790,35 +865,41 @@
 					<s:HorizontalLayout gap="2"/>
 				</s:layout>
 				
-				<s:Button styleName="upButtonStyle" toolTip="@Resource(bundle = 'messages', key = 'rulebox.upButton.tooltip.label')"
-						  enabled="{itemIndex != 0}"
-						  click="{re.ruleUp(ruleObject)}"/>
-				<s:Button styleName="downButtonStyle" toolTip="@Resource(bundle = 'messages', key = 'rulebox.downButton.tooltip.label')"
-						  enabled="{itemIndex != ruleList.dataProvider.length - 1}"
-						  click="{re.ruleDown(ruleObject)}"/>
-				<s:Button styleName="copyButtonStyle" toolTip="@Resource(bundle = 'messages', key = 'rulebox.copyButton.tooltip.label')"
+				<s:Button styleName="{this.collapse ? 'expandButtonStyle' : 'collapseButtonStyle'}" 
+						  toolTip="{
+						  this.collapse ?
+						  LangUtil.getString('messages', 'rulebox.expandButton.tooltip.label')
+						  : LangUtil.getString('messages', 'rulebox.collapseButton.tooltip.label')
+						  }"
+						  click="{changeCollapse()}"/>
+				<s:Button styleName="copyButtonStyle" 
+						  toolTip="@Resource(bundle = 'messages', key = 'rulebox.copyButton.tooltip.label')"
 						  click="{	var clone:Rule = ReflectionUtil.cloneDomainObject(ruleObject);
 						  clone.priority -= 50;
 						  InteractionUtil.newEditDialog(clone)}" />
-				<s:Button styleName="editButtonStyle" toolTip="@Resource(bundle = 'messages', key = 'rulebox.editButton.tooltip.label')"
+				<s:Button styleName="editButtonStyle" 
+						  toolTip="@Resource(bundle = 'messages', key = 'rulebox.editButton.tooltip.label')"
 						  click="{InteractionUtil.newEditDialog(ruleObject)}" />
-				<s:Button styleName="removeButtonStyle" toolTip="@Resource(bundle = 'messages', key = 'rulebox.removeButton.tooltip.label')"
+				<s:Button styleName="removeButtonStyle" 
+						  toolTip="@Resource(bundle = 'messages', key = 'rulebox.removeButton.tooltip.label')"
 						  click="{InteractionUtil.newDeleteDialog(ruleObject)}" />
-				<s:Button styleName="disableButton16Style" toolTip="@Resource(bundle = 'messages', key = 'rulebox.disableButton.tooltip.label')"
+				<s:Button styleName="disableButton16Style" 
+						  toolTip="@Resource(bundle = 'messages', key = 'rulebox.disableButton.tooltip.label')"
 						  visible="{ruleObject.enabled}"
 						  click="{ruleObject.enabled = false; re.save(ruleObject);}"/>
 			</s:Group>
 		</s:Group>
 		
 		<s:Button styleName="disableButton32Style" visible="{! ruleObject.enabled}"
-				  click="{ruleObject.enabled = true; re.save(ruleObject);}" toolTip="@Resource(bundle = 'messages', key = 'rulebox.enableButton.tooltip.label')"/>
+				  click="{ruleObject.enabled = true; re.save(ruleObject);}" 
+				  toolTip="@Resource(bundle = 'messages', key = 'rulebox.enableButton.tooltip.label')"/>
 		
 		<rule:RSpacer />
 		
 		<rule:RuleItemBox width="160"
 						  listDataProvider="{sourceDataProvider}"
-						  noneMessage="@Resource(bundle = 'messages', key = 'rulebox.ruleitembox.sources.nonemessage')"
-						  currentState="{sourceDataProvider.length == 0 ? 'noitem' : 'normal'}" />
+						  itemLabel="@Resource(bundle = 'messages', key = 'rulebox.ruleitembox.sources.itemLabel')"
+						  currentState="{getRuleItemListState(sourceDataProvider, collapse)}" />
 		
 		
 		<s:Group width="180" height="100%" 
@@ -842,8 +923,8 @@
 			
 			<rule:RuleItemBox width="170"
 							  listDataProvider="{destinationDataProvider}"
-							  noneMessage="@Resource(bundle = 'messages', key = 'rulebox.ruleitembox.destinations.nonemessage')"
-							  currentState="{destinationDataProvider.length == 0 ? 'noitem' : 'normal'}" />
+							  itemLabel="@Resource(bundle = 'messages', key = 'rulebox.ruleitembox.destinations.itemLabel')"
+							  currentState="{getRuleItemListState(destinationDataProvider, collapse)}"/>
 			
 		</s:Group> 
 		
@@ -867,8 +948,8 @@
 			<rule:RSpacer />	
 			<rule:RuleItemBox width="200"
 							  listDataProvider="{matcherDataProvider}"
-							  noneMessage="@Resource(bundle = 'messages', key = 'rulebox.ruleitembox.itypes.nonemessage')"
-							  currentState="{matcherDataProvider.length == 0 ? 'noitem' : 'normal'}" />
+							  itemLabel="@Resource(bundle = 'messages', key = 'rulebox.ruleitembox.itypes.itemLabel')"
+							  currentState="{getRuleItemListState(matcherDataProvider, collapse)}" />
 			<rule:RSpacer />
 		</s:Group>
 		

@@ -21,6 +21,8 @@ public interface RuleDAO {
 	
 	public void ruleDown(Rule r);
 	
+	public void ruleMove(Rule r, Long minPriority, Long maxPriority);
+	
 	public void balanceRulePriority();
 	
 }

@@ -809,7 +809,7 @@
 					} 
 					else if (formObject is Rule)
 					{
-						FlexGlobals.topLevelApplication.ruleContainer.addRuleButton.enabled = false;
+						FlexGlobals.topLevelApplication.ruleContainer.disableAddRule();
 					}
 					re.persistChange(formObject, deleteList);
 					cButton.enabled = false;
@@ -873,7 +873,7 @@
 			{
 				if (formObject is Rule)
 				{
-					FlexGlobals.topLevelApplication.ruleContainer.addRuleButton.enabled = true;
+					FlexGlobals.topLevelApplication.ruleContainer.enableAddRule();
 				}
 				
 				var returnCode:String = event.result as String;

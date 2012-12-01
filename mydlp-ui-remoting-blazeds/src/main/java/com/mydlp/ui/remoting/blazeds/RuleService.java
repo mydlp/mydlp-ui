@@ -25,6 +25,8 @@ public interface RuleService {
 	
 	public void ruleDown(Rule r);
 	
+	public void ruleMove(Rule rule, Long minPriority, Long maxPriority);
+	
 	public void balanceRulePriority();
 	
 }

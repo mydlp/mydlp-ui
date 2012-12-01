@@ -2,23 +2,44 @@
 <s:List xmlns:fx="http://ns.adobe.com/mxml/2009" 
 		xmlns:s="library://ns.adobe.com/flex/spark" 
 		xmlns:mx="library://ns.adobe.com/flex/mx"
+		xmlns:my="http://www.mydlp.com/flex/my" 
 		contentBackgroundAlpha="0"
 		selectionColor="0xCEDBEF"
 		rollOverColor="0xDEEBFF"
 		borderVisible="false"
 		requireSelection="false"
+		dragEnabled="true"
+		dropEnabled="true"
+		dragEnter="onDragEnter(event)"
+		dragOver="onDragOver(event)"
+		dragExit="onDragExit(event)"
+		dragDrop="onDragDrop(event)"
 		initialize="onInitialize(event)"
 		>
 	<fx:Script>
 		<![CDATA[
+			import com.mydlp.ui.domain.Rule;
+			
 			import mx.core.FlexGlobals;
+			import mx.core.IUIComponent;
+			import mx.core.UIComponent;
+			import mx.events.DragEvent;
 			import mx.events.FlexEvent;
 			import mx.events.ItemClickEvent;
+			import mx.managers.DragManager;
+			import mx.rpc.AsyncResponder;
+			import mx.rpc.AsyncToken;
+			import mx.rpc.events.FaultEvent;
+			import mx.rpc.events.ResultEvent;
 			
+			import spark.components.supportClasses.ItemRenderer;
 			import spark.events.IndexChangeEvent;
+			import spark.layouts.supportClasses.DropLocation;
 			
 			protected var isSelected:Boolean = false;
 			protected var itemClick:Boolean = false;
+			
+			public var afterRefreshSelectedIndex:int = -1;
 			
 			public function invalidateList():void
 			{
@@ -64,10 +85,188 @@
 				RuleItemList.resetListList();
 			}
 			
+			protected function acceptDrop(dragEvent:DragEvent = null): void
+			{
+				if (dragEvent != null)
+				{
+					var dropLocation:DropLocation = this.layout.calculateDropLocation(dragEvent);
+					this.layout.showDropIndicator(dropLocation);
+				}
+				DragManager.showFeedback(DragManager.COPY);
+			}
+			
+			protected function rejectDrop(): void
+			{
+				this.layout.hideDropIndicator();
+				DragManager.showFeedback(DragManager.NONE);
+			}
+			
+			protected function onDragEnter(event:DragEvent):void
+			{
+				event.preventDefault();
+				this.createDropIndicator();
+				var currentTarget:IUIComponent = event.currentTarget as IUIComponent;
+				if (currentTarget != null)
+				{
+					DragManager.acceptDragDrop(event.currentTarget as IUIComponent);
+					//event.currentTarget.createDropIndicator();
+				}
+			}
+			
+			protected function getCurrentDropIndex(event:DragEvent): int
+			{
+				var currentDropLocation:DropLocation = null;
+				
+				if (event.currentTarget is List)
+				{
+					var currentDropList:List = event.currentTarget as List;
+					currentDropLocation = currentDropList.layout.calculateDropLocation(event);
+				}
+				else 
+					throw new Error("Not handled point target");
+				
+				return currentDropLocation.dropIndex;
+			}
+			
+			protected function onDragOver(event:DragEvent):void
+			{
+				event.preventDefault();
+				if (event.dragInitiator is RuleList)
+				{
+					var selectedRuleIndex:int = this.selectedIndex;
+					var currentDropIndex:int = getCurrentDropIndex(event);
+					
+					if (selectedRuleIndex == currentDropIndex ||
+						selectedRuleIndex == (currentDropIndex - 1)
+						)
+					{
+						rejectDrop();
+					}
+					else 
+					{
+						acceptDrop(event);
+					}
+				}
+				else
+				{
+					rejectDrop();
+				}
+			}
+			
+			protected function onDragExit(event:DragEvent):void
+			{
+				event.preventDefault();
+				rejectDrop();
+			}
+			
+			protected function onDragDrop(event:DragEvent):void
+			{
+				event.preventDefault();
+				this.layout.hideDropIndicator();
+				var ruleListLength:int = this.dataProvider.length;
+				if (event.dragInitiator is RuleList && ruleListLength > 1)
+				{
+					var selectedRule:Rule = this.selectedItem as Rule;
+					var selectedRuleIndex:int = this.selectedIndex;
+					var currentDropIndex:int = getCurrentDropIndex(event);
+					
+					if ( selectedIndex == currentDropIndex ||
+						selectedIndex == (currentDropIndex - 1) 
+						)
+					{
+					}
+					else
+					{
+						var maxPriority:Number = 500000;
+						var minPriority:Number = 0;
+						
+						if (currentDropIndex == ruleListLength)
+						{
+							var lastItemIndex:int = ruleListLength - 1;
+							var lastRule:Rule = this.dataProvider.getItemAt(lastItemIndex) as Rule;
+							if (lastRule == null)
+							{
+								throw new Error("lastRule should not be null");
+							}
+							maxPriority = lastRule.priority;
+						}
+						else if (currentDropIndex == 0)
+						{
+							var firstRule:Rule = this.dataProvider.getItemAt(0) as Rule;
+							if (firstRule == null)
+							{
+								throw new Error("lastRule should not be null");
+							}
+							minPriority = firstRule.priority;
+						}
+						else
+						{
+							var indexBeforeDroppedLocationndex:int = currentDropIndex - 1;
+							var ruleBeforeDroppedLocation:Rule = this.dataProvider.getItemAt(indexBeforeDroppedLocationndex) as Rule;
+							if (ruleBeforeDroppedLocation == null)
+							{
+								throw new Error("ruleBeforeDroppedLocation should not be null");
+							}
+							maxPriority = ruleBeforeDroppedLocation.priority;
+							
+							var indexAfterDroppedLocation:int = currentDropIndex;
+							var ruleAfterDroppedLocation:Rule = this.dataProvider.getItemAt(indexAfterDroppedLocation) as Rule;
+							if (ruleAfterDroppedLocation == null)
+							{
+								throw new Error("ruleAfterDroppedLocation should not be null");
+							}
+							minPriority = ruleAfterDroppedLocation.priority;
+						}
+						
+						afterRefreshSelectedIndex = currentDropIndex;
+						if (currentDropIndex > selectedRuleIndex)
+						{
+							afterRefreshSelectedIndex = currentDropIndex - 1;
+						}
+						else if (currentDropIndex < selectedRuleIndex)
+						{
+							afterRefreshSelectedIndex = currentDropIndex;
+						}
+						
+						if (selectedItem is Rule)
+						{
+							re.ruleMove(selectedRule, minPriority, maxPriority);
+						}
+						else if (selectedItem is NewRuleShadow) 
+						{
+							var calculatedPriority:Number = Math.round((minPriority+maxPriority)/2);
+							(selectedItem as NewRuleShadow).priority = calculatedPriority;
+						}
+						else
+						{
+							throw new Error("Unhandled type");
+						}
+						//trace("setRulePriorityBetween: " + minPriority + " and " + maxPriority );
+						
+						// move rule in display
+						this.dataProvider.addItemAt(selectedItem, currentDropIndex);
+						this.dataProvider.removeItemAt(selectedIndex);
+					}
+				}
+			}
+			
+			protected function changeHandler(event:ResultEvent):void
+			{
+				FlexGlobals.topLevelApplication.topToolbar.policyInstallationState = false;
+				FlexGlobals.topLevelApplication.refresh();
+			}
+			
 		]]>
 	</fx:Script>
+	<fx:Declarations>
+		<my:remote id="re" destination="ruleBRS">
+			<my:method name="ruleMove" result="changeHandler(event)"/>
+		</my:remote>
+	</fx:Declarations>
 	
 	<s:layout>
-		<s:VerticalLayout useVirtualLayout="false" requestedMinRowCount="1"/>
+		<s:VerticalLayout useVirtualLayout="false" requestedMinRowCount="1" 
+						  paddingTop="8" paddingBottom="8" gap="4" 
+						  paddingLeft="18" paddingRight="18"/>
 	</s:layout>
 </s:List>

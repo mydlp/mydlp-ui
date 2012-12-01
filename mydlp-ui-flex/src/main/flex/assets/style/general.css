@@ -49,6 +49,14 @@ s|Application {
 	skinClass: ClassReference("com.mydlp.ui.skin.AddBitmapButton16Skin");
 }
 
+.expandButtonStyle {
+	skinClass: ClassReference("com.mydlp.ui.skin.ExpandBitmapButton16Skin");
+}
+
+.collapseButtonStyle {
+	skinClass: ClassReference("com.mydlp.ui.skin.CollapseBitmapButton16Skin");
+}
+
 .copyButtonStyle {
 	skinClass: ClassReference("com.mydlp.ui.skin.CopyBitmapButton16Skin");
 }

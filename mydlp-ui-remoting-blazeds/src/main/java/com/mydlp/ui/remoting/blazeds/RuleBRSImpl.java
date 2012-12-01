@@ -57,4 +57,9 @@ public class RuleBRSImpl implements RuleService
 		ruleDAO.balanceRulePriority();
 	}
 
+	@Override
+	public void ruleMove(Rule rule, Long minPriority, Long maxPriority) {
+		ruleDAO.ruleMove(rule, minPriority, maxPriority);
+	}
+
 }

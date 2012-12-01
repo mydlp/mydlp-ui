@@ -112,6 +112,15 @@ public class RuleDAOImpl extends AbstractPolicyDAO implements RuleDAO {
 			save(rule);
 		}
 	}
+
+	@Override
+	public void ruleMove(Rule rule, Long minPriority, Long maxPriority) {
+		Long newPriority = Math.round((minPriority + maxPriority)/2.0);
+		rule.setPriority(newPriority);
+		save(rule);
+		
+		balanceRulePriority();
+	}
 	
 	
 }
