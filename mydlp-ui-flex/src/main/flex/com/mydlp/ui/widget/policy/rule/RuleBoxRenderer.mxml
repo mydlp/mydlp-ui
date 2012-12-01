@@ -10,8 +10,7 @@
 				dragOver="onDragOver(event)"
 				dragExit="onDragExit(event)"
 				dragDrop="onDragDrop(event)"
-				click="itemClickHandler(event)"
-				doubleClick="onDoubleClick(event)"
+				click="onItemClickHandler(event)"
 				>
 	<fx:Script>
 		<![CDATA[
@@ -759,7 +758,7 @@
 				FlexGlobals.topLevelApplication.refresh();
 			}
 			
-			protected function itemClickHandler(event:MouseEvent):void
+			protected function onItemClickHandler(event:MouseEvent):void
 			{
 				var e:ItemClickEvent = new ItemClickEvent(ItemClickEvent.ITEM_CLICK, true);
 				e.item = data;
@@ -791,11 +790,6 @@
 						return "expand";
 					}
 				}
-			}
-			
-			protected function onDoubleClick(event:MouseEvent):void
-			{
-				changeCollapse();
 			}
 			
 		]]>
