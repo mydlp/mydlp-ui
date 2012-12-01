@@ -198,7 +198,7 @@
 	
 	<s:TabBar dataProvider="{vs}" fontSize="14" fontWeight="bold" id="tabbar"/>
 	
-	<s:Group id="optionContainerGroup" width="980" height="580">
+	<s:Group id="optionContainerGroup" width="1180" height="580">
 		<s:Rect left="0" right="0" top="0" bottom="30">
 			<s:stroke>
 				<s:SolidColorStroke color="0xACADAF" weight="3"/>
@@ -207,25 +207,25 @@
 		<s:VGroup paddingTop="6" paddingBottom="6" paddingLeft="6" paddingRight="6" width="100%" top="0" bottom="30" >
 			<mx:ViewStack id="vs" width="100%" height="100%" creationPolicy="all">
 				<s:NavigatorContent label="@Resource(bundle = 'messages', key = 'options.tab.protocols')" width="100%" height="100%">
-					<option:ProtocolsTab id="protocolsTab" optionContainer="{this}"/>
+					<option:ProtocolsTab id="protocolsTab" optionContainer="{this}"  width="100%" height="100%"/>
 				</s:NavigatorContent>
 				<s:NavigatorContent label="@Resource(bundle = 'messages', key = 'options.tab.user')" width="100%" height="100%">
-					<option:UserManagerTab id="userManagerTab" />
+					<option:UserManagerTab id="userManagerTab"  width="100%" height="100%"/>
 				</s:NavigatorContent>		
 				<s:NavigatorContent label="@Resource(bundle = 'messages', key = 'options.tab.ep')" width="100%" height="100%">
-					<option:EpTab id="epTab" optionContainer="{this}"/>
+					<option:EpTab id="epTab" optionContainer="{this}"  width="100%" height="100%"/>
 				</s:NavigatorContent>		
 				<s:NavigatorContent label="@Resource(bundle = 'messages', key = 'options.tab.advanced')" width="100%" height="100%">
-					<option:AdvancedTab id="advancedTab"/>
+					<option:AdvancedTab id="advancedTab"  width="100%" height="100%"/>
 				</s:NavigatorContent>
 				<s:NavigatorContent label="@Resource(bundle = 'messages', key = 'options.tab.misc')" width="100%" height="100%">
-					<option:USBDeviceTab id="usbAclTab"/> <!--enabled="{SessionUtil.isEnterprise()}" visible="{SessionUtil.isEnterprise()}"/>-->
+					<option:USBDeviceTab id="usbAclTab"  width="100%" height="100%"/> <!--enabled="{SessionUtil.isEnterprise()}" visible="{SessionUtil.isEnterprise()}"/>-->
 				</s:NavigatorContent>
 				<s:NavigatorContent label="@Resource(bundle = 'messages', key = 'options.tab.enterprise')" width="100%" height="100%">
-					<option:EnterpriseTab id="enterpriseTab" optionContainer="{this}"/>
+					<option:EnterpriseTab id="enterpriseTab" optionContainer="{this}"  width="100%" height="100%"/>
 				</s:NavigatorContent>
 				<s:NavigatorContent label="@Resource(bundle = 'messages', key = 'options.tab.irm')" width="100%" height="100%">
-					<option:IRMTab id="irmTab" optionContainer="{this}"/>
+					<option:IRMTab id="irmTab" optionContainer="{this}"  width="100%" height="100%"/>
 				</s:NavigatorContent>
 			</mx:ViewStack>
 		</s:VGroup>		

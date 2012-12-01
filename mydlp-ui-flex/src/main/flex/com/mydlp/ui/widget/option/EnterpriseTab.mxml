@@ -3,12 +3,11 @@
 					 xmlns:s="library://ns.adobe.com/flex/spark" 
 					 xmlns:mx="library://ns.adobe.com/flex/mx" 
 					 xmlns:option="com.mydlp.ui.widget.option.*"
-					 xmlns:domain="com.mydlp.ui.domain.*">
+					 xmlns:domain="com.mydlp.ui.domain.*" xmlns:validators="com.mydlp.ui.validators.*">
 	
 	<fx:Script>
 		<![CDATA[
 			import com.mydlp.ui.util.InteractionUtil;
-			import com.mydlp.ui.util.RegexUtil;
 			import com.mydlp.ui.util.SessionUtil;
 			
 			public var optionContainer:OptionContainer = null;
@@ -50,63 +49,59 @@
 		<domain:Config id="notificationMessage"/>
 		<domain:Config id="notificationMessageSubject"/>
 		
-		<s:NumberValidator id="icapLogPassValidator"
-						   source="{logPass}"
-						   property="text"
-						   minValue="0"
-						   valid="{optionContainer.validInput(event)}"
-						   invalid="{optionContainer.invalidInput(event)}"/>
+		<validators:MyNumberValidator id="icapLogPassValidator"
+									  source="{logPass}"
+									  minValue="0"
+									  valid="{optionContainer.validInput(event)}"
+									  invalid="{optionContainer.invalidInput(event)}"/>
 		
-		<mx:RegExpValidator id="syslogAclHostValidator"
-							source="{syslogAclHostInput}"
-							property="text"
-							expression="{RegexUtil.domainOrIpRegex()}"
-							valid="{optionContainer.validInput(event)}"
-							invalid="{optionContainer.invalidInput(event)}"/>
+		<validators:MyRegExValidator id="syslogAclHostValidator"
+									 source="{syslogAclHostInput}"
+									 expression="{MyRegExValidator.domainNameOrIpRegex()}"
+									 type="{MyRegExValidator.domain_ip()}"
+									 valid="{optionContainer.validInput(event)}"
+									 invalid="{optionContainer.invalidInput(event)}"/>
 		
-		<s:NumberValidator id="syslogAclPortValidator"
-						   source="{syslogAclPortInput}"
-						   property="text"
-						   minValue="0"
-						   maxValue="65535"
-						   valid="{optionContainer.validInput(event)}"
-						   invalid="{optionContainer.invalidInput(event)}"/>
+		<validators:MyNumberValidator id="syslogAclPortValidator"
+									  source="{syslogAclPortInput}"
+									  minValue="0"
+									  maxValue="65535"
+									  valid="{optionContainer.validInput(event)}"
+									  invalid="{optionContainer.invalidInput(event)}"/>
 		
-		<mx:RegExpValidator id="syslogDiagHostValidator"
-							source="{syslogDiagHostInput}"
-							property="text"
-							expression="{RegexUtil.domainOrIpRegex()}"
-							valid="{optionContainer.validInput(event)}"
-							invalid="{optionContainer.invalidInput(event)}"/>
+		<validators:MyRegExValidator id="syslogDiagHostValidator"
+									 source="{syslogDiagHostInput}"
+									 expression="{MyRegExValidator.domainNameOrIpRegex()}"
+									 type="{MyRegExValidator.domain_ip()}"
+									 valid="{optionContainer.validInput(event)}"
+									 invalid="{optionContainer.invalidInput(event)}"/>
 		
-		<s:NumberValidator id="syslogDiagPortValidator"
-						   source="{syslogDiagPortInput}"
-						   property="text"
-						   minValue="0"
-						   maxValue="65535"
-						   valid="{optionContainer.validInput(event)}"
-						   invalid="{optionContainer.invalidInput(event)}"/>
+		<validators:MyNumberValidator id="syslogDiagPortValidator"
+									  source="{syslogDiagPortInput}"
+									  minValue="0"
+									  maxValue="65535"
+									  valid="{optionContainer.validInput(event)}"
+									  invalid="{optionContainer.invalidInput(event)}"/>
 		
-		<mx:RegExpValidator id="syslogReportHostValidator"
-							source="{syslogReportHostInput}"
-							property="text"
-							expression="{RegexUtil.domainOrIpRegex()}"
-							valid="{optionContainer.validInput(event)}"
-							invalid="{optionContainer.invalidInput(event)}"/>
+		<validators:MyRegExValidator id="syslogReportHostValidator"
+									 source="{syslogReportHostInput}"
+									 expression="{MyRegExValidator.domainNameOrIpRegex()}"
+									 type="{MyRegExValidator.domain_ip()}"
+									 valid="{optionContainer.validInput(event)}"
+									 invalid="{optionContainer.invalidInput(event)}"/>
 		
-		<s:NumberValidator id="syslogReportPortValidator"
-						   source="{syslogReportPortInput}"
-						   property="text"
-						   minValue="0"
-						   maxValue="65535"
-						   valid="{optionContainer.validInput(event)}"
-						   invalid="{optionContainer.invalidInput(event)}"/>
+		<validators:MyNumberValidator id="syslogReportPortValidator"
+									  source="{syslogReportPortInput}"
+									  minValue="0"
+									  maxValue="65535"
+									  valid="{optionContainer.validInput(event)}"
+									  invalid="{optionContainer.invalidInput(event)}"/>
 		
 	</fx:Declarations>
 	
 	<s:VGroup width="100%" height="100%">
 		<s:HGroup width="100%" height="100%">
-			<s:VGroup width="50%" gap="50">
+			<s:VGroup width="45%" gap="50">
 				<s:Form width="100%" height="50%">
 					<s:FormItem label="{mailArchive.label}" includeInLayout="{SessionUtil.isEnterprise()}" visible="{SessionUtil.isEnterprise()}">
 						<s:CheckBox id="mailArchiveCheckBox" selected="{mailArchive.value == 'true'}" 
@@ -116,11 +111,11 @@
 						<s:CheckBox id="icapLogPassCheckBox" selected="{icapLogPass.value == 'true'}"
 									change="{icapLogPass.value = icapLogPassCheckBox.selected ? 'true' : 'false'}"/>
 					</s:FormItem>
-					<s:FormItem label="{icapLogPassLowerLimit.label}">
-						<s:TextInput id="logPass" text="@{icapLogPassLowerLimit.value}" width="200"/>
+					<s:FormItem label="{icapLogPassLowerLimit.label}" width="350">
+						<s:TextInput id="logPass" text="@{icapLogPassLowerLimit.value}" width="150"/>
 					</s:FormItem>
-					<s:FormItem label="{archiveMinimumSize.label}">
-						<s:TextInput text="@{archiveMinimumSize.value}" width="200"/>
+					<s:FormItem label="{archiveMinimumSize.label}" width="350">
+						<s:TextInput text="@{archiveMinimumSize.value}" width="150"/>
 					</s:FormItem>
 					<s:FormItem label="{archiveInbound.label}">
 						<s:CheckBox id="archiveInboundCheckBox" selected="{archiveInbound.value == 'true'}"
@@ -155,33 +150,33 @@
 				</s:Group>
 			</s:VGroup>
 			<s:Form width="50%">
-				<s:FormItem label="{syslogAclHost.label}">
-					<s:TextInput id="syslogAclHostInput" text="@{syslogAclHost.value}" width="200"/>
+				<s:FormItem label="{syslogAclHost.label}" width="350">
+					<s:TextInput id="syslogAclHostInput" text="@{syslogAclHost.value}" width="150"/>
 				</s:FormItem>
-				<s:FormItem label="{syslogAclPort.label}">
-					<s:TextInput id="syslogAclPortInput" text="@{syslogAclPort.value}" width="200"/>
+				<s:FormItem label="{syslogAclPort.label}" width="350">
+					<s:TextInput id="syslogAclPortInput" text="@{syslogAclPort.value}" width="150"/>
 				</s:FormItem>
 				<s:FormItem label="{syslogAclFacility.label}">
 					<s:DropDownList id="syslogAclFacilityInput" selectedItem="{syslogAclFacility.value}" 
 									change="syslogAclFacility.value = syslogAclFacilityInput.selectedItem"
 									dataProvider="{syslogFacilities}" />
 				</s:FormItem>
-				<s:FormItem label="{syslogDiagHost.label}">
-					<s:TextInput id="syslogDiagHostInput" text="@{syslogDiagHost.value}" width="200"/>
+				<s:FormItem label="{syslogDiagHost.label}" width="350">
+					<s:TextInput id="syslogDiagHostInput" text="@{syslogDiagHost.value}" width="150"/>
 				</s:FormItem>
-				<s:FormItem label="{syslogDiagPort.label}">
-					<s:TextInput id="syslogDiagPortInput" text="@{syslogDiagPort.value}" width="200"/>
+				<s:FormItem label="{syslogDiagPort.label}" width="350">
+					<s:TextInput id="syslogDiagPortInput" text="@{syslogDiagPort.value}" width="150"/>
 				</s:FormItem>
 				<s:FormItem label="{syslogDiagFacility.label}">
 					<s:DropDownList id="syslogDiagFacilityInput" selectedItem="{syslogDiagFacility.value}" 
 									change="syslogDiagFacility.value = syslogDiagFacilityInput.selectedItem"
 									dataProvider="{syslogFacilities}" />
 				</s:FormItem>
-				<s:FormItem label="{syslogReportHost.label}">
-					<s:TextInput id="syslogReportHostInput" text="@{syslogReportHost.value}" width="200"/>
+				<s:FormItem label="{syslogReportHost.label}" width="350">
+					<s:TextInput id="syslogReportHostInput" text="@{syslogReportHost.value}" width="150"/>
 				</s:FormItem>
-				<s:FormItem label="{syslogReportPort.label}">
-					<s:TextInput id="syslogReportPortInput" text="@{syslogReportPort.value}" width="200"/>
+				<s:FormItem label="{syslogReportPort.label}" width="350">
+					<s:TextInput id="syslogReportPortInput" text="@{syslogReportPort.value}" width="150"/>
 				</s:FormItem>
 				<s:FormItem label="{syslogReportFacility.label}">
 					<s:DropDownList id="syslogReportFacilityInput" selectedItem="{syslogReportFacility.value}" 

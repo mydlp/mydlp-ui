@@ -43,6 +43,7 @@
 			import com.mydlp.ui.util.LangUtil;
 			import com.mydlp.ui.util.ReflectionUtil;
 			import com.mydlp.ui.util.SessionUtil;
+			import com.mydlp.ui.validators.NullValidator;
 			import com.mydlp.ui.widget.general.input.ADDomainAliasInput;
 			import com.mydlp.ui.widget.general.input.ADDomainItemInput;
 			import com.mydlp.ui.widget.general.input.ADDomainItemListing;
@@ -59,7 +60,6 @@
 			import com.mydlp.ui.widget.general.input.RDBMSInformationTargetInput;
 			import com.mydlp.ui.widget.general.input.RegularExpressionGroupInput;
 			import com.mydlp.ui.widget.general.input.UserNotificationInput;
-			import com.mydlp.ui.widget.general.validator.NullValidator;
 			import com.mydlp.ui.widget.policy.rule.RuleContainer;
 			
 			import mx.binding.utils.BindingUtils;

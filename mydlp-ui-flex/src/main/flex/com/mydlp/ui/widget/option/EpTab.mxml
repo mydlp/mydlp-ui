@@ -3,7 +3,7 @@
 					 xmlns:s="library://ns.adobe.com/flex/spark" 
 					 xmlns:mx="library://ns.adobe.com/flex/mx" 
 					 xmlns:option="com.mydlp.ui.widget.option.*"
-					 xmlns:domain="com.mydlp.ui.domain.*">
+					 xmlns:domain="com.mydlp.ui.domain.*" xmlns:validators="com.mydlp.ui.validators.*">
 	
 	<fx:Script>
 		<![CDATA[
@@ -21,44 +21,39 @@
 		<domain:Config id="ignoreDiscoverFSMaxSizeExceeded" />
 		<domain:Config id="spoolSoftLimit" />
 		<domain:Config id="spoolHardLimit" />
-
 		
-		<s:NumberValidator id="epSyncValidator"
-						   source="{sync}"
-						   property="text"
-						   minValue="29999"
-						   valid="{optionContainer.validInput(event)}"
-						   invalid="{optionContainer.invalidInput(event)}"/>
 		
-		<s:NumberValidator id="epLogValidator"
-						   source="{log}"
-						   property="text"
-						   minValue="1048575"
-						   valid="{optionContainer.validInput(event)}"
-						   invalid="{optionContainer.invalidInput(event)}"/>
+		<validators:MyNumberValidator id="epSyncValidator"
+									  source="{sync}"
+									  minValue="29999"
+									  valid="{optionContainer.validInput(event)}"
+									  invalid="{optionContainer.invalidInput(event)}"/>
 		
-		<s:NumberValidator id="discSyncValidator"
-						   source="{discoverFSIntervalInput}"
-						   property="text"
-						   minValue="3599999"
-						   valid="{optionContainer.validInput(event)}"
-						   invalid="{optionContainer.invalidInput(event)}"/>
+		<validators:MyNumberValidator id="epLogValidator"
+									  source="{log}"
+									  minValue="1048575"
+									  valid="{optionContainer.validInput(event)}"
+									  invalid="{optionContainer.invalidInput(event)}"/>
 		
-		<s:NumberValidator id="spoolSoftLimitValidator"
-						   source="{spoolSoftLimitInput}"
-						   property="text"
-						   minValue="26214400"
-						   maxValue="52428800"
-						   valid="{optionContainer.validInput(event)}"
-						   invalid="{optionContainer.invalidInput(event)}"/>
+		<validators:MyNumberValidator id="discSyncValidator"
+									  source="{discoverFSIntervalInput}"
+									  minValue="3599999"
+									  valid="{optionContainer.validInput(event)}"
+									  invalid="{optionContainer.invalidInput(event)}"/>
 		
-		<s:NumberValidator id="spoolHardLimitValidator"
-						   source="{spoolHardLimitInput}"
-						   property="text"
-						   minValue="52428801"
-						   maxValue="104857600"
-						   valid="{optionContainer.validInput(event)}"
-						   invalid="{optionContainer.invalidInput(event)}"/>
+		<validators:MyNumberValidator id="spoolSoftLimitValidator"
+									  source="{spoolSoftLimitInput}"
+									  minValue="26214400"
+									  maxValue="52428800"
+									  valid="{optionContainer.validInput(event)}"
+									  invalid="{optionContainer.invalidInput(event)}"/>
+		
+		<validators:MyNumberValidator id="spoolHardLimitValidator"
+									  source="{spoolHardLimitInput}"
+									  minValue="52428801"
+									  maxValue="104857600"
+									  valid="{optionContainer.validInput(event)}"
+									  invalid="{optionContainer.invalidInput(event)}"/>
 		
 	</fx:Declarations>
 	

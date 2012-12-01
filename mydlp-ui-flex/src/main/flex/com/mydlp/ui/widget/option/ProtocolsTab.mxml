@@ -3,11 +3,10 @@
 					 xmlns:s="library://ns.adobe.com/flex/spark" 
 					 xmlns:mx="library://ns.adobe.com/flex/mx" 
 					 xmlns:option="com.mydlp.ui.widget.option.*"
-					 xmlns:domain="com.mydlp.ui.domain.*">
+					 xmlns:domain="com.mydlp.ui.domain.*" xmlns:validators="com.mydlp.ui.validators.*">
 	
 	<fx:Script>
 		<![CDATA[
-			import com.mydlp.ui.util.RegexUtil;
 			public var optionContainer:OptionContainer = null;
 		]]>
 	</fx:Script>
@@ -24,60 +23,57 @@
 		<domain:Config id="icapLogPass" />
 		<domain:Config id="icapLogPassLowerLimit" />
 		
-		<mx:RegExpValidator id="smtpHeloNameValidator"
-							source="{smtpHeloNameInput}"
-							property="text"
-							expression="{RegexUtil.domainOrIpRegex()}"
-							valid="{optionContainer.validInput(event)}"
-							invalid="{optionContainer.invalidInput(event)}"/>
+		<validators:MyRegExValidator id="smtpHeloNameValidator"
+									 source="{smtpHeloNameInput}"
+									 expression="{MyRegExValidator.domainNameOrIpRegex()}"
+									 type="{MyRegExValidator.domain_ip()}"
+									 valid="{optionContainer.validInput(event)}"
+									 invalid="{optionContainer.invalidInput(event)}"/>
 		
-		<mx:RegExpValidator id="smtpNextHopHostValidator"
-							source="{smtpNextHopHostInput}"
-							property="text"
-							expression="{RegexUtil.domainOrIpRegex()}"
-							valid="{optionContainer.validInput(event)}"
-							invalid="{optionContainer.invalidInput(event)}"/>
+		<validators:MyRegExValidator id="smtpNextHopHostValidator"
+									 source="{smtpNextHopHostInput}"
+									 expression="{MyRegExValidator.domainNameOrIpRegex()}"
+									 type="{MyRegExValidator.domain_ip()}"
+									 valid="{optionContainer.validInput(event)}"
+									 invalid="{optionContainer.invalidInput(event)}"/>
 		
-		<s:NumberValidator id="smtpNextHopPortValidator"
-						   source="{smtpNextHopPortInput}"
-						   property="text"
-						   minValue="0"
-						   maxValue="65535"
-						   valid="{optionContainer.validInput(event)}"
-						   invalid="{optionContainer.invalidInput(event)}"/>
+		<validators:MyNumberValidator id="smtpNextHopPortValidator"
+									  source="{smtpNextHopPortInput}"
+									  minValue="0"
+									  maxValue="65535"
+									  valid="{optionContainer.validInput(event)}"
+									  invalid="{optionContainer.invalidInput(event)}"/>
 		
-		<mx:RegExpValidator id="icapRegExValidator"
-							source="{icapRMP}"
-							property="text"
-							expression="{RegexUtil.urlRegex()}"
-							valid="{optionContainer.validInput(event)}"
-							invalid="{optionContainer.invalidInput(event)}"/>
+		<validators:MyRegExValidator id="icapRegExValidator"
+									 source="{icapRMP}"
+									 expression="{MyRegExValidator.urlRegex()}"
+									 type="{MyRegExValidator.url()}"
+									 valid="{optionContainer.validInput(event)}"
+									 invalid="{optionContainer.invalidInput(event)}"/>
 		
-		<s:NumberValidator id="icapConValidator"
-						   source="{maxConnections}"
-						   property="text"
-						   minValue="0"
-						   valid="{optionContainer.validInput(event)}"
-						   invalid="{optionContainer.invalidInput(event)}"/>
+		<validators:MyNumberValidator id="icapConValidator"
+									  source="{maxConnections}"
+									  minValue="0"
+									  valid="{optionContainer.validInput(event)}"
+									  invalid="{optionContainer.invalidInput(event)}"/>
 		
-		<s:NumberValidator id="icapTTLValidator"
-						   source="{optionsTTL}"
-						   property="text"
-						   minValue="0"
-						   valid="{optionContainer.validInput(event)}"
-						   invalid="{optionContainer.invalidInput(event)}"/>
+		<validators:MyNumberValidator id="icapTTLValidator"
+									  source="{optionsTTL}"
+									  minValue="0"
+									  valid="{optionContainer.validInput(event)}"
+									  invalid="{optionContainer.invalidInput(event)}"/>
 	</fx:Declarations>
 	
-	<s:HGroup width="100%" height="100%" gap="70">
+	<s:HGroup width="100%" height="100%">
 		
-		<s:Form>
-			<s:FormItem label="{smtpHeloName.label}">
+		<s:Form width="45%" height="100%">
+			<s:FormItem label="{smtpHeloName.label}" width="350">
 				<s:TextInput id="smtpHeloNameInput" text="@{smtpHeloName.value}" width="200"/>
 			</s:FormItem>
-			<s:FormItem label="{smtpNextHopHost.label}">
+			<s:FormItem label="{smtpNextHopHost.label}" width="350">
 				<s:TextInput id="smtpNextHopHostInput" text="@{smtpNextHopHost.value}" width="200"/>
 			</s:FormItem>
-			<s:FormItem label="{smtpNextHopPort.label}">
+			<s:FormItem label="{smtpNextHopPort.label}" width="350">
 				<s:TextInput id="smtpNextHopPortInput" text="@{smtpNextHopPort.value}" width="200"/>
 			</s:FormItem>
 			<s:FormItem label="{smtpBypassOnFail.label}">
@@ -86,23 +82,23 @@
 			</s:FormItem>
 		</s:Form>
 		
-		<s:Form>		
-			<s:FormItem label="{icapReqModPath.label}">
+		<s:Form width="50%" height="100%">		
+			<s:FormItem label="{icapReqModPath.label}" width="350">
 				<s:TextInput id="icapRMP" text="@{icapReqModPath.value}" width="200"/>
 			</s:FormItem>
-			<s:FormItem label="{icapRespModPath.label}">
+			<s:FormItem label="{icapRespModPath.label}" width="350">
 				<s:TextInput text="@{icapRespModPath.value}" width="200"/>
 			</s:FormItem>
-			<s:FormItem label="{icapMaxConnections.label}">
+			<s:FormItem label="{icapMaxConnections.label}" width="350">
 				<s:TextInput id="maxConnections" text="@{icapMaxConnections.value}" width="200"/>
 			</s:FormItem>
-			<s:FormItem label="{icapOptionsTTL.label}">
+			<s:FormItem label="{icapOptionsTTL.label}" width="350">
 				<s:TextInput id="optionsTTL" text="@{icapOptionsTTL.value}" width="200"/>
 			</s:FormItem>
-			<s:FormItem label="@Resource(bundle = 'messages', key = 'config.icap.download_user_der_title')">
+			<s:FormItem label="@Resource(bundle = 'messages', key = 'config.icap.download_user_der_title')" width="350">
 				<s:Button label="@Resource(bundle = 'messages', key = 'config.icap.download_user_der')"
 						  skinClass="com.mydlp.ui.skin.DownloadUserCertificate"
-						 click="{navigateToURL(new URLRequest ('download?key=user.der'), '_blank')}"/>
+						  click="{navigateToURL(new URLRequest ('download?key=user.der'), '_blank')}"/>
 			</s:FormItem>
 		</s:Form>
 		

@@ -73,7 +73,7 @@
 		<my:remote id="re" destination="usbDeviceBRS" />
 	</fx:Declarations>
 	
-	<s:Rect left="0" right="-200" top="0" bottom="-165">
+	<s:Rect left="0" right="-400" top="0" bottom="-165">
 		<s:stroke>
 			<s:SolidColorStroke color="0xAEBBCF" alpha="0.3" weight="3"/>
 		</s:stroke>
@@ -96,7 +96,7 @@
 			</s:HGroup>
 		</s:HGroup>
 		
-		<s:DataGrid id="usbDevices" dataProvider="{usbsacDP.asyncListView}" width="850" height="400"
+		<s:DataGrid id="usbDevices" dataProvider="{usbsacDP.asyncListView}" width="1050" height="400"
 					variableRowHeight="true">
 			<s:columns>
 				<s:ArrayList>
