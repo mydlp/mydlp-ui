@@ -134,7 +134,7 @@
           <themes>
             <theme>${settings.localRepository}/com/adobe/flex/framework/spark/${flex.version}/spark-${flex.version}-theme.css</theme>
           </themes>
-          <removeUnusedRsls>true</removeUnusedRsls>
+          <loadConfig>${settings.localRepository}/com/adobe/flex/framework/framework/${flex.version}/configs_zip/air-config.xml</loadConfig>
         </configuration>
 	    <dependencies>
           <dependency>

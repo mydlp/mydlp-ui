@@ -5,11 +5,12 @@
 					   width="500" height="400">
 	<fx:Script>
 		<![CDATA[
-			import com.mydlp.ui.tools.air.uploader.UploadStatus;
+			import com.mydlp.ui.tools.uploader.UploadStatus;
 			import mx.collections.ArrayCollection;
 			import mx.collections.ListCollectionView;
 			import mx.controls.Alert;
 			import mx.core.FlexGlobals;
+			
 			
 			protected var file:File = null;
 			
@@ -194,13 +195,13 @@
 					  />
 		</s:HGroup>  
 		
-		<s:List id="fileViewList"
+		<s:List id="fileViewList" borderVisible="false"
 				width="100%" height="100%"
 				visible="true" 
 				dataProvider.selected="{fileList}"
-				itemRenderer.selected="com.mydlp.ui.tools.air.uploader.AfterSelectRenderer"
+				itemRenderer.selected="com.mydlp.ui.tools.uploader.AfterSelectRenderer"
 				dataProvider.uploading="{uploadStatuses}"
-				itemRenderer.uploading="com.mydlp.ui.tools.air.uploader.UploadStatusRenderer"/>
+				itemRenderer.uploading="com.mydlp.ui.tools.uploader.UploadStatusRenderer"/>
 		
 		
 	</s:VGroup>

@@ -1,8 +1,8 @@
-package com.mydlp.ui.tools.air.uploader
+package com.mydlp.ui.tools.uploader  
 {
 	import flash.filesystem.File;
 	import flash.utils.ByteArray;
-
+	
 	[Bindable]
 	public class UploadStatus
 	{

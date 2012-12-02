@@ -133,8 +133,7 @@
   <modules>
     <module>mydlp-ui-util</module>
     <module>mydlp-ui-domain</module>
-    <module>mydlp-ui-tools-uploader-swf</module>
-    <module>mydlp-ui-tools-uploader-air</module>
+    <module>mydlp-ui-tools-uploader</module>
     <module>mydlp-ui-domain-as3</module>
     <module>mydlp-ui-flex-framework</module>
     <module>mydlp-ui-flex</module>

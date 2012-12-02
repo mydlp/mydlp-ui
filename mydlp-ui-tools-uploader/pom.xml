@@ -12,9 +12,9 @@
 
   <!-- The Basics -->
   <groupId>com.mydlp.ui</groupId>
-  <artifactId>mydlp-ui-tools-uploader-swf</artifactId>
-  <packaging>swf</packaging>
-  <name>MyDLP UI Multiple File Uploader SWF</name>
+  <artifactId>mydlp-ui-tools-uploader</artifactId>
+  <packaging>air</packaging>
+  <name>MyDLP UI Multiple File Uploader</name>
   <url>http://www.mydlp.com/</url>
 
   <!-- Build Settings -->
@@ -27,13 +27,33 @@
         <version>${flexmojos.version}</version>
         <extensions>true</extensions>
         <configuration>
+	      <flexBuilderCompatibility>true</flexBuilderCompatibility>
+          <sourceFile>${tools.uploader.application.name}.mxml</sourceFile>
+          <descriptorTemplate>${basedir}/src/main/flex/${tools.uploader.application.name}-app.xml</descriptorTemplate>
+          <keystore>${basedir}/../${keystore.path}</keystore>
+          <storepass>${keystore.password}</storepass>
+          <swfVersion>11</swfVersion>
+          <themes>
+            <theme>${settings.localRepository}/com/adobe/flex/framework/spark/${flex.version}/spark-${flex.version}-theme.css</theme>
+          </themes>
           <quality>${flex.quality}</quality>
           <optimize>${flex.optimize}</optimize>
           <debug>${flex.debug}</debug>
           <strict>true</strict>
-	  <flexBuilderCompatibility>true</flexBuilderCompatibility>
-          <sourceFile>${tools.uploader.application.name}.mxml</sourceFile>
         </configuration>
+        <dependencies>
+        <dependency>
+          <groupId>com.adobe.flex</groupId>
+          <artifactId>compiler</artifactId>
+          <version>${flex.version}</version>
+          <type>pom</type>
+        </dependency>
+        <dependency>
+          <groupId>com.adobe.flex.compiler</groupId>
+          <artifactId>adt</artifactId>
+          <version>${flex.version}</version>
+        </dependency>
+        </dependencies>
       </plugin>
     </plugins>
   </build>

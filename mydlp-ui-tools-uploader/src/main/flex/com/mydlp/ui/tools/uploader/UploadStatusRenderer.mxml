@@ -4,7 +4,7 @@
 				xmlns:mx="library://ns.adobe.com/flex/mx" 
 				autoDrawBackground="true" xmlns:local="*"
 				height="30"
-				currentState="@{uploadStatus.viewState}" xmlns:uploader="com.mydlp.ui.tools.air.uploader.*"
+				currentState="@{uploadStatus.viewState}" xmlns:uploader="com.mydlp.ui.tools.uploader.*"
 				>
 	<fx:Script>
 		<![CDATA[
