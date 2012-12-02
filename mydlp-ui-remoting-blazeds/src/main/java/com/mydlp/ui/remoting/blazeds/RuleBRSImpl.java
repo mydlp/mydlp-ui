@@ -24,7 +24,9 @@ public class RuleBRSImpl implements RuleService
 
 	@Override
 	public Rule save(Rule rule) {
-		return ruleDAO.save(rule);
+		rule = ruleDAO.save(rule);
+		ruleDAO.balanceRulePriority();
+		return rule;
 	}
 
 	@Override

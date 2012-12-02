@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:WindowedApplication xmlns:fx="http://ns.adobe.com/mxml/2009" 
+					   xmlns:s="library://ns.adobe.com/flex/spark" 
+					   xmlns:mx="library://ns.adobe.com/flex/mx"
+					   width="500" height="400">
+	<fx:Script>
+		<![CDATA[
+			import com.mydlp.ui.tools.air.uploader.UploadStatus;
+			import mx.collections.ArrayCollection;
+			import mx.collections.ListCollectionView;
+			import mx.controls.Alert;
+			import mx.core.FlexGlobals;
+			
+			protected var file:File = null;
+			
+			[Bindable]
+			protected var fileList:ListCollectionView = null;
+			
+			[Bindable]
+			protected var uploadStatuses:ListCollectionView = null;
+			
+			[Bindable]
+			protected var itemsRemaining:Number = 0;
+			
+			[Bindable]
+			protected var itemsUploaded:Number = 0;
+			
+			[Bindable]
+			protected var itemsFailed:Number = 0;
+			
+			protected function getFilesRecursively(event:Event): void
+			{
+				if (file != null || file.isDirectory)
+				{
+					fileList = new ArrayCollection();
+					addFilesRecursively(file);
+					currentState="selected";
+				}
+			}
+			
+			protected function addFilesRecursively(f:File): void
+			{
+				var listing:Array = f.getDirectoryListing();
+				
+				if (listing.length == 0) return;
+				
+				for each (var loopF:File in new ArrayCollection(listing))
+				{
+					if (loopF == null) continue;
+					if (!loopF.exists) continue;
+					if (loopF.isHidden) continue;
+					if (loopF.isSymbolicLink) continue;
+					if (loopF.isDirectory)
+					{
+						addFilesRecursively(loopF);
+						continue;
+					}
+					
+					var uploadStatus:UploadStatus = new UploadStatus();
+					uploadStatus = setFile(uploadStatus, loopF);
+					fileList.addItem(uploadStatus);
+				}
+			}
+			
+			protected function onBrowseClick(event:MouseEvent):void
+			{
+				file = new File();
+				file.addEventListener(Event.SELECT, getFilesRecursively);
+				file.browseForDirectory("Please select your directory...");
+			}
+			
+			protected function onStartUploadClick(event:MouseEvent):void
+			{
+				currentState="uploading";
+				startUpload();
+			}
+			
+			protected function startUpload(): void
+			{
+				itemsRemaining = fileList.length;
+				itemsUploaded = 0;
+				itemsFailed = 0;
+				uploadStatuses = new ArrayCollection();
+				uploadNextFile();
+			}
+			
+			public function fileUploadFinished(): void
+			{
+				itemsUploaded++;
+				itemsRemaining--;
+				uploadNextFile();
+			}
+			
+			public function fileUploadFailed(): void
+			{
+				itemsFailed++;
+				itemsRemaining--;
+				uploadNextFile();
+			}
+			
+			protected function uploadNextFile(): void
+			{
+				if (fileList.length == 0)
+				{
+					currentState="done";
+					return;
+				}
+				var uploadStatus:UploadStatus = fileList.getItemAt(0) as UploadStatus;
+				fileList.removeItemAt(0);
+				if (uploadStatus == null)
+				{
+					uploadNextFile();
+					return;
+				}
+				
+				if (uploadStatus == null)
+				{
+					fileUploadFailed();
+				}
+				else
+				{
+					addToStatuses(uploadStatus);
+				}
+			}
+			
+			protected function addToStatuses(uploadStatus:UploadStatus): void
+			{
+				if (uploadStatuses.length == 10)
+				{
+					uploadStatuses.removeItemAt(0);
+				}
+				uploadStatuses = new ArrayCollection(uploadStatuses.toArray());
+				uploadStatuses.addItem(uploadStatus);
+			}
+			
+			protected function setFile(uploadStatus:UploadStatus, f:File): UploadStatus
+			{
+				if (f == null) return null;
+				if (!f.exists) return null;
+				if (f.isDirectory) return null;
+				if (f.isHidden) return null;
+				if (f.isSymbolicLink) return null;
+				
+				uploadStatus.file = f;
+				
+				return uploadStatus;
+			}
+			
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	
+	<s:states>
+		<s:State name="browse" />
+		<s:State name="selected" />
+		<s:State name="uploading" />
+		<s:State name="done" />
+	</s:states>
+	
+	<s:VGroup width="100%" height="100%" 
+			  paddingTop="10" paddingBottom="20"
+			  paddingLeft="20" paddingRight="20"
+			  >
+		
+		<s:HGroup width="100%" height="20"
+				  horizontalAlign="center" verticalAlign="middle"
+				  fontWeight="bold" fontSize="12">
+			
+			<s:Label text.browse="Please click to select your directory:"
+					 text.selected="{fileList.length + ' items are selected.'}"
+					 text.uploading="{'Uploading...' + 
+					 ' Remaining: ' + itemsRemaining +
+					 ' Uploaded: ' + itemsUploaded +
+					 ' Failed: ' + itemsFailed
+					 }"
+					 text.done="{'Done...' + 
+					 ' Remaining: ' + itemsRemaining +
+					 ' Uploaded: ' + itemsUploaded +
+					 ' Failed: ' + itemsFailed
+					 }"
+					 />
+			
+			<s:Button label.browse="Browse"
+					  click.browse="onBrowseClick(event)"
+					  label.selected="Click to start upload"
+					  click.selected="onStartUploadClick(event)"
+					  enabled.selected="{fileList.length &gt; 0}"
+					  label.uploading="Waiting..."
+					  enabled.uploading="false"
+					  label.done="Close"
+					  click.done="{close()}"
+					  />
+		</s:HGroup>  
+		
+		<s:List id="fileViewList"
+				width="100%" height="100%" borderVisible="false"
+				visible="true" 
+				dataProvider.selected="{fileList}"
+				itemRenderer.selected="com.mydlp.ui.tools.air.uploader.AfterSelectRenderer"
+				dataProvider.uploading="{uploadStatuses}"
+				itemRenderer.uploading="com.mydlp.ui.tools.air.uploader.UploadStatusRenderer"/>
+		
+		
+	</s:VGroup>
+	
+</s:WindowedApplication>

@@ -29,7 +29,7 @@
 				currentState = "loading";
 				filename = fileReference.name;
 				completedFunction = valueFunction;
-				if (fileReference.size > 10*1024*1024)
+				if (fileReference.size > 10*1024*1024) // TODO: should be able to set limit through settings tab
 				{
 					error("moreThanMaximumSize");
 				}

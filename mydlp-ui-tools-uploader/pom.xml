@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>com.mydlp.ui</groupId>
+    <artifactId>mydlp-ui</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+  </parent>
+
+  <!-- The Basics -->
+  <groupId>com.mydlp.ui</groupId>
+  <artifactId>mydlp-ui-tools-uploader</artifactId>
+  <packaging>swf</packaging>
+  <name>MyDLP Multiple File Uploader</name>
+  <url>http://www.mydlp.com/</url>
+
+<properties>
+   <!-- the application name which must match the main mxml file
+	and application descriptor file names -->
+   <application.name>MyDLPUploader</application.name>
+</properties>
+
+
+  <!-- Build Settings -->
+<build>
+    <sourceDirectory>src/main/flex</sourceDirectory>
+    <plugins>
+      <plugin>
+        <groupId>org.sonatype.flexmojos</groupId>
+        <artifactId>flexmojos-maven-plugin</artifactId>
+        <version>${flexmojos.version}</version>
+        <extensions>true</extensions>
+        <configuration>
+          <compilerWarnings>
+            <warn-no-constructor>false</warn-no-constructor>
+          </compilerWarnings>
+          <coverageViewerPath />
+          <storepass />
+          <localesCompiled>
+            <locale>en_US</locale>
+          </localesCompiled>
+          <quality>${flex.quality}</quality>
+          <optimize>${flex.optimize}</optimize>
+          <debug>${flex.debug}</debug>
+          <strict>true</strict>
+	  <removeUnusedRsls>true</removeUnusedRsls>
+
+<flexBuilderCompatibility>true</flexBuilderCompatibility>
+
+      <sourceFile>${application.name}.mxml</sourceFile>
+      <descriptorTemplate>${basedir}/src/main/flex${application.name}-app.xml</descriptorTemplate>
+	  
+        </configuration>
+	    <dependencies>
+          <dependency>
+            <groupId>com.adobe.flex</groupId>
+            <artifactId>compiler</artifactId>
+            <version>${flex.version}</version>
+            <type>pom</type>
+    </dependency>
+      <dependency>
+         <groupId>com.adobe.flex.compiler</groupId>
+         <artifactId>adt</artifactId>
+         <version>${flex.version}</version>
+      </dependency>
+    
+	    </dependencies>
+      </plugin>
+    </plugins>
+  </build>
+  
+
+  <dependencies>
+    <dependency>
+      <groupId>com.adobe.flex.framework</groupId>
+      <artifactId>air-framework</artifactId>
+      <version>${flex.version}</version>
+      <type>pom</type>
+    </dependency>
+  </dependencies>
+</project>

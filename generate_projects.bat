@@ -18,6 +18,8 @@ cmd /c "cd mydlp-ui-service && mvn eclipse:eclipse"
 
 cmd /c "cd mydlp-ui-webapp && mvn eclipse:eclipse"
 
+cmd /c "cd mydlp-ui-tools-uploader && mvn org.sonatype.flexmojos:flexmojos-maven-plugin:3.9:flashbuilder"
+
 cmd /c "cd mydlp-ui-domain-as3 && mvn org.sonatype.flexmojos:flexmojos-maven-plugin:3.9:flashbuilder"
 
 cmd /c "cd mydlp-ui-flex && mvn org.sonatype.flexmojos:flexmojos-maven-plugin:3.9:flashbuilder"

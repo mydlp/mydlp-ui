@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:ItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009" 
+				xmlns:s="library://ns.adobe.com/flex/spark" 
+				xmlns:mx="library://ns.adobe.com/flex/mx" 
+				autoDrawBackground="true" xmlns:local="*"
+				height="30"
+				currentState="@{uploadStatus.viewState}" xmlns:uploader="com.mydlp.ui.tools.air.uploader.*"
+				>
+	<fx:Script>
+		<![CDATA[
+			import mx.controls.Alert;
+			import mx.core.FlexGlobals;
+			
+			override public function set data(value:Object):void
+			{
+				if (value is UploadStatus)
+				{
+					uploadStatus = value as UploadStatus;
+					super.currentState = uploadStatus.viewState;
+					super.data = value;
+				}
+				else
+				{
+					super.data = null;
+					return;
+				}
+				if (!uploadStatus.isStarted)
+				{
+					startUpload();
+				}
+			}
+			
+			protected function startUpload(): void
+			{
+				uploadStatus.size = uploadStatus.file.size;
+				uploadStatus.name = uploadStatus.file.name;
+				
+				configureListeners(uploadStatus.file);
+				
+				// Create the request URL based on the download URL
+				var requestURL:URLRequest = new URLRequest("http://10.0.0.2/test-form/");
+				requestURL.method = URLRequestMethod.POST;
+				
+				// Set the post parameters
+				var params:URLVariables = new URLVariables(); 
+				params.fileName = uploadStatus.name;
+				requestURL.data = params;
+				
+				// Start uploading the file to the server
+				uploadStatus.file.upload(requestURL, "fileData");
+				uploadStatus.isStarted = true;
+				currentState="uploading";
+			}
+			
+			protected function uploadCompleteDataHandler(event:DataEvent): void
+			{
+				uploadStatus.file = null;
+				trace("RESP: '" + event.data + "'");
+				currentState="finished";
+				FlexGlobals.topLevelApplication.fileUploadFinished();
+			}
+			
+			protected function errorHandler(event:Event): void
+			{
+				uploadStatus.file = null;
+				Alert.show(event.toString());
+				currentState="failed";
+				FlexGlobals.topLevelApplication.fileUploadFailed();
+			}
+			
+			private function configureListeners(dispatcher:IEventDispatcher):void {
+				dispatcher.addEventListener(Event.CANCEL, cancelHandler);
+				dispatcher.addEventListener(Event.COMPLETE, completeHandler);
+				dispatcher.addEventListener(HTTPStatusEvent.HTTP_STATUS, errorHandler);
+				dispatcher.addEventListener(IOErrorEvent.IO_ERROR, errorHandler);
+				dispatcher.addEventListener(Event.OPEN, openHandler);
+				dispatcher.addEventListener(ProgressEvent.PROGRESS, progressHandler);
+				dispatcher.addEventListener(SecurityErrorEvent.SECURITY_ERROR, errorHandler);
+				dispatcher.addEventListener(DataEvent.UPLOAD_COMPLETE_DATA, uploadCompleteDataHandler);
+			}
+			
+			private function progressHandler(event:ProgressEvent):void {
+				var file:FileReference = FileReference(event.target);
+				trace("progressHandler name=" + file.name + " bytesLoaded=" + event.bytesLoaded + " bytesTotal=" + event.bytesTotal);
+			}
+			
+			private function cancelHandler(event:Event):void {
+				trace("cancelHandler: " + event);
+			}
+			
+			private function completeHandler(event:Event):void {
+				trace("completeHandler: " + event);
+			}
+			
+			private function openHandler(event:Event):void {
+				trace("openHandler: " + event);
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<fx:Declarations>
+		<uploader:UploadStatus id="uploadStatus" />
+	</fx:Declarations>
+	
+	<s:states>
+		<s:State name="init" />
+		<s:State name="uploading" />
+		<s:State name="failed" />
+		<s:State name="finished" />
+	</s:states>
+	
+	<s:HGroup verticalAlign="middle" width="100%">
+		
+		<s:Label width="100%" 
+				 text.init="Starting..."
+				 text.uploading="{'Uploading... (' + uploadStatus.name + ', ' + uploadStatus.size + ' bytes)'}"
+				 text.failed="{'Failed! (' + uploadStatus.name + ')'}"
+				 text.finished="{'Finished! ' + uploadStatus.size + ' bytes are uploaded. (' + uploadStatus.name + ')'}"
+				 />
+		
+		<mx:ProgressBar width="200"
+						id="progressBar" 
+						visible="false" visible.uploading="true"
+						includeInLayout="false" includeInLayout.uploading="true"
+						mode="event"
+						source="{uploadStatus.file}"
+						/>
+		
+	</s:HGroup>
+	
+</s:ItemRenderer>
