@@ -195,7 +195,7 @@
 		</s:HGroup>  
 		
 		<s:List id="fileViewList"
-				width="100%" height="100%" borderVisible="false"
+				width="100%" height="100%"
 				visible="true" 
 				dataProvider.selected="{fileList}"
 				itemRenderer.selected="com.mydlp.ui.tools.air.uploader.AfterSelectRenderer"

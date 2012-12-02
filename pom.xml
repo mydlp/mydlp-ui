@@ -60,6 +60,8 @@
     <flex.optimize>false</flex.optimize>
     <flex.quality>0.0</flex.quality>
 
+    <tools.uploader.application.name>MyDLPUploader</tools.uploader.application.name>
+
     <amf.protocol>http</amf.protocol>
     <amf.channelType>mx.messaging.channels.AMFChannel</amf.channelType>
     <amf.endpointType>flex.messaging.endpoints.AMFEndpoint</amf.endpointType>
@@ -86,6 +88,9 @@
 
     <log.root.appender>STDOUT</log.root.appender>
     <log.audit.appender>STDOUT</log.audit.appender>
+
+    <keystore.path>dev-tools/pkcs12.pfx</keystore.path>
+    <keystore.password>123</keystore.password>
   </properties>
 
   <profiles>
@@ -128,7 +133,8 @@
   <modules>
     <module>mydlp-ui-util</module>
     <module>mydlp-ui-domain</module>
-    <module>mydlp-ui-tools-uploader</module>
+    <module>mydlp-ui-tools-uploader-swf</module>
+    <module>mydlp-ui-tools-uploader-air</module>
     <module>mydlp-ui-domain-as3</module>
     <module>mydlp-ui-flex-framework</module>
     <module>mydlp-ui-flex</module>

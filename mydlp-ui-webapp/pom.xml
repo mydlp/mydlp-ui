@@ -181,6 +181,12 @@
     </dependency>
     <dependency>
       <groupId>com.mydlp.ui</groupId>
+      <artifactId>mydlp-ui-tools-uploader-air</artifactId>
+      <version>${mydlp-ui.version}</version>
+      <type>air</type>
+    </dependency>
+    <dependency>
+      <groupId>com.mydlp.ui</groupId>
       <artifactId>mydlp-ui-flex</artifactId>
       <version>${mydlp-ui.version}</version>
       <type>swf</type>
@@ -254,7 +260,7 @@
             </goals>
           </execution>
           <execution>
-            <id>wrapper generation</id>
+            <id>Main Application Wrapper Generation</id>
             <goals>
               <goal>wrapper</goal>
             </goals>
@@ -271,13 +277,26 @@
               <htmlName>index</htmlName>
             </configuration>
           </execution>
+          <execution>
+            <id>Tools-Uploader Wrapper Generation</id>
+            <goals>
+              <goal>wrapper</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${project.build.directory}/${project.build.finalName}</outputDirectory>
+              <templateOutputDirectory>${project.build.directory}/templates</templateOutputDirectory>
+              <parameters>
+                <swf>mydlp-ui-tools-uploader-${project.version}</swf>
+                <title>MyDLP Multiple File Uploader</title>
+                <width>100%</width>
+                <height>100%</height>
+                <bgcolor>#FFFFFF</bgcolor>
+              </parameters>
+              <htmlName>mydlp-ui-tools-uploader</htmlName>
+            </configuration>
+          </execution>
         </executions>
         <configuration>
-          <wrapperArtifact>
-            <groupId>com.mydlp.ui</groupId>
-            <artifactId>mydlp-ui-flex</artifactId>
-            <version>${mydlp-ui.version}</version>
-          </wrapperArtifact>
           <templateInclusions>
             <String>WEB-INF/**/*</String>
           </templateInclusions>
