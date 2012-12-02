@@ -121,6 +121,11 @@
     <servlet-class>org.springframework.web.context.support.HttpRequestHandlerServlet</servlet-class>
   </servlet>
   
+  <servlet>
+    <servlet-name>toolsUploaderServlet</servlet-name>
+    <servlet-class>org.springframework.web.context.support.HttpRequestHandlerServlet</servlet-class>
+  </servlet>
+  
   <!-- Spring Flex Integration 1.0  -->
   <!-- Map all /messagbroker requests to the DispatcherServlet for handling -->
   <servlet-mapping>

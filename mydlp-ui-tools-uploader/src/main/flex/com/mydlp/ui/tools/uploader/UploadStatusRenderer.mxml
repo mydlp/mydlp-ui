@@ -65,7 +65,7 @@
 					uploadStatus.failReason = "Empty response";
 					FlexGlobals.topLevelApplication.fileUploadFailed();
 				} 
-				else if (event.data == "success")
+				else if (event.data == "ok")
 				{
 					currentState="finished";
 					FlexGlobals.topLevelApplication.fileUploadFinished();
