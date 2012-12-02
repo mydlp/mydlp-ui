@@ -163,5 +163,10 @@
     <url-pattern>/export</url-pattern>
   </servlet-mapping>
   
+  <servlet-mapping>
+    <servlet-name>toolsUploaderServlet</servlet-name>
+    <url-pattern>/tools/uploader</url-pattern>
+  </servlet-mapping>
+  
 
 </web-app>

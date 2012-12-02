@@ -6,13 +6,17 @@
 	<fx:Script>
 		<![CDATA[
 			import com.mydlp.ui.tools.uploader.UploadStatus;
+			
 			import mx.collections.ArrayCollection;
 			import mx.collections.ListCollectionView;
 			import mx.controls.Alert;
 			import mx.core.FlexGlobals;
 			
-			
 			protected var file:File = null;
+			
+			public var tokenMode:String = "";
+			public var tokenHost:String = "";
+			public var tokenKey:String = "";
 			
 			[Bindable]
 			protected var fileList:ListCollectionView = null;
@@ -31,7 +35,7 @@
 			
 			protected function getFilesRecursively(event:Event): void
 			{
-				if (file != null || file.isDirectory)
+				if (file != null && file.isDirectory)
 				{
 					fileList = new ArrayCollection();
 					addFilesRecursively(file);
@@ -147,6 +151,47 @@
 				return uploadStatus;
 			}
 			
+			protected function onTokenClick(event:MouseEvent):void
+			{
+				var token:String = tokenInput.text;
+				if (parseToken(token))
+				{
+					currentState="browse";
+				}
+				else
+				{
+					Alert.show("Invalid token!");
+					tokenInput.text = "";
+				}
+				
+			}
+			
+			protected function parseToken(token:String): Boolean
+			{
+				if (token == null || token.length < 33) return false;
+				
+				var sepIndex:int = token.indexOf('-');
+				if (sepIndex == -1) return false;
+				var tokenLength:int = token.length;
+				if (tokenLength < sepIndex + 33) return false;
+				
+				if (token.charAt(0) == "p")
+				{
+					tokenMode="http";
+				}
+				else if (token.charAt(0) == "s")
+				{
+					tokenMode="https";
+				}
+				else
+				{
+					return false;
+				}
+				tokenHost = token.substr(1, sepIndex - 1);
+				tokenKey = token.substring(sepIndex + 1);
+				return true;
+			}
+			
 		]]>
 	</fx:Script>
 	<fx:Declarations>
@@ -154,6 +199,7 @@
 	</fx:Declarations>
 	
 	<s:states>
+		<s:State name="token" />
 		<s:State name="browse" />
 		<s:State name="selected" />
 		<s:State name="uploading" />
@@ -161,15 +207,17 @@
 	</s:states>
 	
 	<s:VGroup width="100%" height="100%" 
-			  paddingTop="10" paddingBottom="20"
+			  paddingTop="10" paddingBottom="10"
 			  paddingLeft="20" paddingRight="20"
+			  verticalAlign="middle" horizontalAlign="center"
 			  >
 		
 		<s:HGroup width="100%" height="20"
 				  horizontalAlign="center" verticalAlign="middle"
 				  fontWeight="bold" fontSize="12">
 			
-			<s:Label text.browse="Please click to select your directory:"
+			<s:Label text.token="Please enter your token:" 
+					 text.browse="Please click to select your directory:"
 					 text.selected="{fileList.length + ' items are selected.'}"
 					 text.uploading="{'Uploading...' + 
 					 ' Remaining: ' + itemsRemaining +
@@ -183,7 +231,15 @@
 					 }"
 					 />
 			
-			<s:Button label.browse="Browse"
+			<s:TextInput id="tokenInput" 
+						 width="200"
+						 includeInLayout="false" visible="false"
+						 includeInLayout.token="true" visible.token="true"
+						 />
+			
+			<s:Button label.token="Enter"
+					  click.token="onTokenClick(event)"
+					  label.browse="Browse"
 					  click.browse="onBrowseClick(event)"
 					  label.selected="Click to start upload"
 					  click.selected="onStartUploadClick(event)"

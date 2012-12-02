@@ -22,5 +22,7 @@ package com.mydlp.ui.tools.uploader
 		
 		public var viewState:String = "init";
 		
+		public var failReason:String = "";
+		
 	}
 }

@@ -38,12 +38,15 @@
 				configureListeners(uploadStatus.file);
 				
 				// Create the request URL based on the download URL
-				var requestURL:URLRequest = new URLRequest("http://10.0.0.2/test-form/");
+				var requestURL:URLRequest = new URLRequest(
+					FlexGlobals.topLevelApplication.tokenMode + "://" + 
+					FlexGlobals.topLevelApplication.tokenHost + "/tools/uploader");
 				requestURL.method = URLRequestMethod.POST;
 				
 				// Set the post parameters
 				var params:URLVariables = new URLVariables(); 
 				params.fileName = uploadStatus.name;
+				params.tokenKey = FlexGlobals.topLevelApplication.tokenKey; 
 				requestURL.data = params;
 				
 				// Start uploading the file to the server
@@ -56,14 +59,36 @@
 			{
 				uploadStatus.file = null;
 				trace("RESP: '" + event.data + "'");
-				currentState="finished";
-				FlexGlobals.topLevelApplication.fileUploadFinished();
+				if (event.data == null || event.data.length == 0)
+				{
+					currentState="failed";
+					uploadStatus.failReason = "Empty response";
+					FlexGlobals.topLevelApplication.fileUploadFailed();
+				} 
+				else if (event.data == "success")
+				{
+					currentState="finished";
+					FlexGlobals.topLevelApplication.fileUploadFinished();
+				}
+				else if (event.data == "error")
+				{
+					currentState="failed";
+					uploadStatus.failReason = "Server sent error message";
+					FlexGlobals.topLevelApplication.fileUploadFailed();
+				}
+				else
+				{
+					currentState="failed";
+					uploadStatus.failReason = "Improper response";
+					FlexGlobals.topLevelApplication.fileUploadFailed();
+				}
 			}
 			
 			protected function errorHandler(event:Event): void
 			{
 				uploadStatus.file = null;
-				Alert.show(event.toString());
+				uploadStatus.failReason = "IO Error";
+				trace("errorHandler: " + event.toString());
 				currentState="failed";
 				FlexGlobals.topLevelApplication.fileUploadFailed();
 			}
@@ -86,6 +111,9 @@
 			
 			private function cancelHandler(event:Event):void {
 				trace("cancelHandler: " + event);
+				currentState="failed";
+				uploadStatus.failReason = "Canceled";
+				FlexGlobals.topLevelApplication.fileUploadFailed();
 			}
 			
 			private function completeHandler(event:Event):void {
@@ -112,10 +140,11 @@
 	
 	<s:HGroup verticalAlign="middle" width="100%">
 		
-		<s:Label width="100%" 
+		<s:Label width="220"
+				 width.failed="450"
 				 text.init="Starting..."
 				 text.uploading="{'Uploading... (' + uploadStatus.name + ', ' + uploadStatus.size + ' bytes)'}"
-				 text.failed="{'Failed! (' + uploadStatus.name + ')'}"
+				 text.failed="{'Failed! (' + uploadStatus.name + ') : ' + uploadStatus.failReason}"
 				 text.finished="{'Finished! ' + uploadStatus.size + ' bytes are uploaded. (' + uploadStatus.name + ')'}"
 				 />
 		
