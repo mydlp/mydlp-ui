@@ -3,13 +3,15 @@
 				xmlns:s="library://ns.adobe.com/flex/spark" 
 				xmlns:mx="library://ns.adobe.com/flex/mx" 
 				autoDrawBackground="true" xmlns:local="*"
+				width="100%"
 				height="30"
 				currentState="@{uploadStatus.viewState}" xmlns:uploader="com.mydlp.ui.tools.uploader.*"
 				>
 	<fx:Script>
 		<![CDATA[
-			import mx.controls.Alert;
 			import mx.core.FlexGlobals;
+			
+			private static const CHUNK_SIZE:Number=512*1024;
 			
 			override public function set data(value:Object):void
 			{
@@ -24,18 +26,22 @@
 					super.data = null;
 					return;
 				}
-				if (!uploadStatus.isStarted)
+				if (uploadStatus.viewState == "init")
 				{
-					startUpload();
+					start();
 				}
+			}
+			
+			protected function start(): void
+			{
+				uploadStatus.bytesTotal = uploadStatus.file.size;
+				uploadStatus.name = uploadStatus.file.name;
+				startUpload();
 			}
 			
 			protected function startUpload(): void
 			{
-				uploadStatus.size = uploadStatus.file.size;
-				uploadStatus.name = uploadStatus.file.name;
-				
-				configureListeners(uploadStatus.file);
+				configureListenersFile(uploadStatus.file);
 				
 				// Create the request URL based on the download URL
 				var requestURL:URLRequest = new URLRequest(
@@ -46,23 +52,22 @@
 				// Set the post parameters
 				var params:URLVariables = new URLVariables(); 
 				params.fileName = uploadStatus.name;
-				params.tokenKey = FlexGlobals.topLevelApplication.tokenKey; 
+				params.tokenKey = FlexGlobals.topLevelApplication.tokenKey;
 				requestURL.data = params;
 				
 				// Start uploading the file to the server
 				uploadStatus.file.upload(requestURL, "fileData");
-				uploadStatus.isStarted = true;
 				currentState="uploading";
 			}
 			
 			protected function uploadCompleteDataHandler(event:DataEvent): void
 			{
-				uploadStatus.file = null;
+				uploadStatus.resetData();
 				trace("RESP: '" + event.data + "'");
 				if (event.data == null || event.data.length == 0)
 				{
 					currentState="failed";
-					uploadStatus.failReason = "Empty response";
+					uploadStatus.serverReason = "Empty response";
 					FlexGlobals.topLevelApplication.fileUploadFailed();
 				} 
 				else if (event.data == "ok")
@@ -70,49 +75,50 @@
 					currentState="finished";
 					FlexGlobals.topLevelApplication.fileUploadFinished();
 				}
+				else if (event.data == "exists")
+				{
+					currentState="skipped";
+					uploadStatus.serverReason = "File already exists";
+					FlexGlobals.topLevelApplication.fileUploadSkipped();
+				}
 				else if (event.data == "error")
 				{
 					currentState="failed";
-					uploadStatus.failReason = "Server sent error message";
+					uploadStatus.serverReason = "Server sent error message";
 					FlexGlobals.topLevelApplication.fileUploadFailed();
 				}
 				else
 				{
 					currentState="failed";
-					uploadStatus.failReason = "Improper response";
+					uploadStatus.serverReason = "Improper response";
 					FlexGlobals.topLevelApplication.fileUploadFailed();
 				}
 			}
 			
 			protected function errorHandler(event:Event): void
 			{
-				uploadStatus.file = null;
-				uploadStatus.failReason = "IO Error";
+				uploadStatus.resetData();
+				uploadStatus.serverReason = "IO Error";
 				trace("errorHandler: " + event.toString());
 				currentState="failed";
 				FlexGlobals.topLevelApplication.fileUploadFailed();
 			}
 			
-			private function configureListeners(dispatcher:IEventDispatcher):void {
+			private function configureListenersFile(dispatcher:IEventDispatcher):void {
 				dispatcher.addEventListener(Event.CANCEL, cancelHandler);
 				dispatcher.addEventListener(Event.COMPLETE, completeHandler);
 				dispatcher.addEventListener(HTTPStatusEvent.HTTP_STATUS, errorHandler);
 				dispatcher.addEventListener(IOErrorEvent.IO_ERROR, errorHandler);
 				dispatcher.addEventListener(Event.OPEN, openHandler);
-				dispatcher.addEventListener(ProgressEvent.PROGRESS, progressHandler);
 				dispatcher.addEventListener(SecurityErrorEvent.SECURITY_ERROR, errorHandler);
 				dispatcher.addEventListener(DataEvent.UPLOAD_COMPLETE_DATA, uploadCompleteDataHandler);
 			}
 			
-			private function progressHandler(event:ProgressEvent):void {
-				var file:FileReference = FileReference(event.target);
-				trace("progressHandler name=" + file.name + " bytesLoaded=" + event.bytesLoaded + " bytesTotal=" + event.bytesTotal);
-			}
-			
 			private function cancelHandler(event:Event):void {
 				trace("cancelHandler: " + event);
+				uploadStatus.resetData();
 				currentState="failed";
-				uploadStatus.failReason = "Canceled";
+				uploadStatus.serverReason = "Canceled";
 				FlexGlobals.topLevelApplication.fileUploadFailed();
 			}
 			
@@ -135,25 +141,27 @@
 		<s:State name="init" />
 		<s:State name="uploading" />
 		<s:State name="failed" />
+		<s:State name="skipped" />
 		<s:State name="finished" />
 	</s:states>
 	
-	<s:HGroup verticalAlign="middle" width="100%">
+	<s:HGroup verticalAlign="middle" width="100%" height="100%" gap="20">
 		
-		<s:Label width="220"
-				 width.failed="450"
+		<s:Label width="100%" height="100%"
 				 text.init="Starting..."
-				 text.uploading="{'Uploading... (' + uploadStatus.name + ', ' + uploadStatus.size + ' bytes)'}"
-				 text.failed="{'Failed! (' + uploadStatus.name + ') : ' + uploadStatus.failReason}"
-				 text.finished="{'Finished! ' + uploadStatus.size + ' bytes are uploaded. (' + uploadStatus.name + ')'}"
+				 text.uploading="{'Uploading... (' + uploadStatus.name + ', ' + uploadStatus.bytesTotal + ' bytes)'}"
+				 text.failed="{'Failed! (' + uploadStatus.name + ') : ' + uploadStatus.serverReason}"
+				 text.skipped="{'Skipped. (' + uploadStatus.name + ') : ' + uploadStatus.serverReason}"
+				 text.finished="{'Finished! ' + uploadStatus.bytesTotal + ' bytes are uploaded. (' + uploadStatus.name + ')'}"
 				 />
 		
-		<mx:ProgressBar width="200"
-						id="progressBar" 
-						visible="false" visible.uploading="true"
-						includeInLayout="false" includeInLayout.uploading="true"
+		<mx:ProgressBar id="progressBar"
+						width="200"
+						height="100%"
+						includeIn="uploading"
 						mode="event"
-						source="{uploadStatus.file}"
+						source.uploading="{uploadStatus.file}"
+						label.uploading="UPLOADING %%%3"
 						/>
 		
 	</s:HGroup>

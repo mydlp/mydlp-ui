@@ -26,12 +26,12 @@
 			
 			[Bindable]
 			protected var itemsRemaining:Number = 0;
-			
 			[Bindable]
 			protected var itemsUploaded:Number = 0;
-			
 			[Bindable]
 			protected var itemsFailed:Number = 0;
+			[Bindable]
+			protected var itemsSkipped:Number = 0;
 			
 			protected function getFilesRecursively(event:Event): void
 			{
@@ -99,6 +99,13 @@
 			public function fileUploadFailed(): void
 			{
 				itemsFailed++;
+				itemsRemaining--;
+				uploadNextFile();
+			}
+			
+			public function fileUploadSkipped(): void
+			{
+				itemsSkipped++;
 				itemsRemaining--;
 				uploadNextFile();
 			}
@@ -222,11 +229,13 @@
 					 text.uploading="{'Uploading...' + 
 					 ' Remaining: ' + itemsRemaining +
 					 ' Uploaded: ' + itemsUploaded +
+					 ' Skipped: ' + itemsSkipped +
 					 ' Failed: ' + itemsFailed
 					 }"
 					 text.done="{'Done...' + 
 					 ' Remaining: ' + itemsRemaining +
 					 ' Uploaded: ' + itemsUploaded +
+					 ' Skipped: ' + itemsSkipped +
 					 ' Failed: ' + itemsFailed
 					 }"
 					 />

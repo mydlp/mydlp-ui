@@ -48,6 +48,7 @@ public class ToolsUploaderServlet implements HttpRequestHandler {
 				DiskFileItemFactory factory = new DiskFileItemFactory();
 				factory.setSizeThreshold(MAX_MEMORY_SIZE);
 				ServletFileUpload upload = new ServletFileUpload(factory);
+				@SuppressWarnings("unchecked")
 				List<FileItem> items = upload.parseRequest(req);
 				for (FileItem fileItem : items) {
 					if (fileItem.isFormField())
