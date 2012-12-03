@@ -36,6 +36,8 @@ public class Mydlp_ui {
 
     public void generateFingerprints(long DocumentId, String Filename, ByteBuffer Data) throws org.apache.thrift.TException;
 
+    public void generateFingerprintsWithFile(long DocumentId, String Filename, String Filepath) throws org.apache.thrift.TException;
+
     public void requeueIncident(long Incidentid) throws org.apache.thrift.TException;
 
     public Map<String,String> registerUserAddress(String Ipaddress, String Userh, ByteBuffer Payload) throws org.apache.thrift.TException;
@@ -61,6 +63,8 @@ public class Mydlp_ui {
     public void receiveChunk(String Ipaddress, long Itemid, ByteBuffer Chunkdata, int Chunknum, int Chunknumtotal, org.apache.thrift.async.AsyncMethodCallback<AsyncClient.receiveChunk_call> resultHandler) throws org.apache.thrift.TException;
 
     public void generateFingerprints(long DocumentId, String Filename, ByteBuffer Data, org.apache.thrift.async.AsyncMethodCallback<AsyncClient.generateFingerprints_call> resultHandler) throws org.apache.thrift.TException;
+
+    public void generateFingerprintsWithFile(long DocumentId, String Filename, String Filepath, org.apache.thrift.async.AsyncMethodCallback<AsyncClient.generateFingerprintsWithFile_call> resultHandler) throws org.apache.thrift.TException;
 
     public void requeueIncident(long Incidentid, org.apache.thrift.async.AsyncMethodCallback<AsyncClient.requeueIncident_call> resultHandler) throws org.apache.thrift.TException;
 
@@ -230,6 +234,28 @@ public class Mydlp_ui {
     {
       generateFingerprints_result result = new generateFingerprints_result();
       receiveBase(result, "generateFingerprints");
+      return;
+    }
+
+    public void generateFingerprintsWithFile(long DocumentId, String Filename, String Filepath) throws org.apache.thrift.TException
+    {
+      send_generateFingerprintsWithFile(DocumentId, Filename, Filepath);
+      recv_generateFingerprintsWithFile();
+    }
+
+    public void send_generateFingerprintsWithFile(long DocumentId, String Filename, String Filepath) throws org.apache.thrift.TException
+    {
+      generateFingerprintsWithFile_args args = new generateFingerprintsWithFile_args();
+      args.setDocumentId(DocumentId);
+      args.setFilename(Filename);
+      args.setFilepath(Filepath);
+      sendBase("generateFingerprintsWithFile", args);
+    }
+
+    public void recv_generateFingerprintsWithFile() throws org.apache.thrift.TException
+    {
+      generateFingerprintsWithFile_result result = new generateFingerprintsWithFile_result();
+      receiveBase(result, "generateFingerprintsWithFile");
       return;
     }
 
@@ -571,6 +597,44 @@ public class Mydlp_ui {
       }
     }
 
+    public void generateFingerprintsWithFile(long DocumentId, String Filename, String Filepath, org.apache.thrift.async.AsyncMethodCallback<generateFingerprintsWithFile_call> resultHandler) throws org.apache.thrift.TException {
+      checkReady();
+      generateFingerprintsWithFile_call method_call = new generateFingerprintsWithFile_call(DocumentId, Filename, Filepath, resultHandler, this, ___protocolFactory, ___transport);
+      this.___currentMethod = method_call;
+      ___manager.call(method_call);
+    }
+
+    public static class generateFingerprintsWithFile_call extends org.apache.thrift.async.TAsyncMethodCall {
+      private long DocumentId;
+      private String Filename;
+      private String Filepath;
+      public generateFingerprintsWithFile_call(long DocumentId, String Filename, String Filepath, org.apache.thrift.async.AsyncMethodCallback<generateFingerprintsWithFile_call> resultHandler, org.apache.thrift.async.TAsyncClient client, org.apache.thrift.protocol.TProtocolFactory protocolFactory, org.apache.thrift.transport.TNonblockingTransport transport) throws org.apache.thrift.TException {
+        super(client, protocolFactory, transport, resultHandler, false);
+        this.DocumentId = DocumentId;
+        this.Filename = Filename;
+        this.Filepath = Filepath;
+      }
+
+      public void write_args(org.apache.thrift.protocol.TProtocol prot) throws org.apache.thrift.TException {
+        prot.writeMessageBegin(new org.apache.thrift.protocol.TMessage("generateFingerprintsWithFile", org.apache.thrift.protocol.TMessageType.CALL, 0));
+        generateFingerprintsWithFile_args args = new generateFingerprintsWithFile_args();
+        args.setDocumentId(DocumentId);
+        args.setFilename(Filename);
+        args.setFilepath(Filepath);
+        args.write(prot);
+        prot.writeMessageEnd();
+      }
+
+      public void getResult() throws org.apache.thrift.TException {
+        if (getState() != org.apache.thrift.async.TAsyncMethodCall.State.RESPONSE_READ) {
+          throw new IllegalStateException("Method call not finished!");
+        }
+        org.apache.thrift.transport.TMemoryInputTransport memoryTransport = new org.apache.thrift.transport.TMemoryInputTransport(getFrameBuffer().array());
+        org.apache.thrift.protocol.TProtocol prot = client.getProtocolFactory().getProtocol(memoryTransport);
+        (new Client(prot)).recv_generateFingerprintsWithFile();
+      }
+    }
+
     public void requeueIncident(long Incidentid, org.apache.thrift.async.AsyncMethodCallback<requeueIncident_call> resultHandler) throws org.apache.thrift.TException {
       checkReady();
       requeueIncident_call method_call = new requeueIncident_call(Incidentid, resultHandler, this, ___protocolFactory, ___transport);
@@ -758,6 +822,7 @@ public class Mydlp_ui {
       processMap.put("receiveBegin", new receiveBegin());
       processMap.put("receiveChunk", new receiveChunk());
       processMap.put("generateFingerprints", new generateFingerprints());
+      processMap.put("generateFingerprintsWithFile", new generateFingerprintsWithFile());
       processMap.put("requeueIncident", new requeueIncident());
       processMap.put("registerUserAddress", new registerUserAddress());
       processMap.put("saveLicenseKey", new saveLicenseKey());
@@ -858,6 +923,22 @@ public class Mydlp_ui {
       protected generateFingerprints_result getResult(I iface, generateFingerprints_args args) throws org.apache.thrift.TException {
         generateFingerprints_result result = new generateFingerprints_result();
         iface.generateFingerprints(args.DocumentId, args.Filename, args.Data);
+        return result;
+      }
+    }
+
+    private static class generateFingerprintsWithFile<I extends Iface> extends org.apache.thrift.ProcessFunction<I, generateFingerprintsWithFile_args> {
+      public generateFingerprintsWithFile() {
+        super("generateFingerprintsWithFile");
+      }
+
+      protected generateFingerprintsWithFile_args getEmptyArgsInstance() {
+        return new generateFingerprintsWithFile_args();
+      }
+
+      protected generateFingerprintsWithFile_result getResult(I iface, generateFingerprintsWithFile_args args) throws org.apache.thrift.TException {
+        generateFingerprintsWithFile_result result = new generateFingerprintsWithFile_result();
+        iface.generateFingerprintsWithFile(args.DocumentId, args.Filename, args.Filepath);
         return result;
       }
     }
@@ -4923,6 +5004,682 @@ public class Mydlp_ui {
     @Override
     public String toString() {
       StringBuilder sb = new StringBuilder("generateFingerprints_result(");
+      boolean first = true;
+
+      sb.append(")");
+      return sb.toString();
+    }
+
+    public void validate() throws org.apache.thrift.TException {
+      // check for required fields
+    }
+
+    private void writeObject(java.io.ObjectOutputStream out) throws java.io.IOException {
+      try {
+        write(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(out)));
+      } catch (org.apache.thrift.TException te) {
+        throw new java.io.IOException(te);
+      }
+    }
+
+    private void readObject(java.io.ObjectInputStream in) throws java.io.IOException, ClassNotFoundException {
+      try {
+        read(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(in)));
+      } catch (org.apache.thrift.TException te) {
+        throw new java.io.IOException(te);
+      }
+    }
+
+  }
+
+  public static class generateFingerprintsWithFile_args implements org.apache.thrift.TBase<generateFingerprintsWithFile_args, generateFingerprintsWithFile_args._Fields>, java.io.Serializable, Cloneable   {
+    private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("generateFingerprintsWithFile_args");
+
+    private static final org.apache.thrift.protocol.TField DOCUMENT_ID_FIELD_DESC = new org.apache.thrift.protocol.TField("DocumentId", org.apache.thrift.protocol.TType.I64, (short)1);
+    private static final org.apache.thrift.protocol.TField FILENAME_FIELD_DESC = new org.apache.thrift.protocol.TField("Filename", org.apache.thrift.protocol.TType.STRING, (short)2);
+    private static final org.apache.thrift.protocol.TField FILEPATH_FIELD_DESC = new org.apache.thrift.protocol.TField("Filepath", org.apache.thrift.protocol.TType.STRING, (short)3);
+
+    public long DocumentId; // required
+    public String Filename; // required
+    public String Filepath; // required
+
+    /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
+    public enum _Fields implements org.apache.thrift.TFieldIdEnum {
+      DOCUMENT_ID((short)1, "DocumentId"),
+      FILENAME((short)2, "Filename"),
+      FILEPATH((short)3, "Filepath");
+
+      private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+
+      static {
+        for (_Fields field : EnumSet.allOf(_Fields.class)) {
+          byName.put(field.getFieldName(), field);
+        }
+      }
+
+      /**
+       * Find the _Fields constant that matches fieldId, or null if its not found.
+       */
+      public static _Fields findByThriftId(int fieldId) {
+        switch(fieldId) {
+          case 1: // DOCUMENT_ID
+            return DOCUMENT_ID;
+          case 2: // FILENAME
+            return FILENAME;
+          case 3: // FILEPATH
+            return FILEPATH;
+          default:
+            return null;
+        }
+      }
+
+      /**
+       * Find the _Fields constant that matches fieldId, throwing an exception
+       * if it is not found.
+       */
+      public static _Fields findByThriftIdOrThrow(int fieldId) {
+        _Fields fields = findByThriftId(fieldId);
+        if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+        return fields;
+      }
+
+      /**
+       * Find the _Fields constant that matches name, or null if its not found.
+       */
+      public static _Fields findByName(String name) {
+        return byName.get(name);
+      }
+
+      private final short _thriftId;
+      private final String _fieldName;
+
+      _Fields(short thriftId, String fieldName) {
+        _thriftId = thriftId;
+        _fieldName = fieldName;
+      }
+
+      public short getThriftFieldId() {
+        return _thriftId;
+      }
+
+      public String getFieldName() {
+        return _fieldName;
+      }
+    }
+
+    // isset id assignments
+    private static final int __DOCUMENTID_ISSET_ID = 0;
+    private BitSet __isset_bit_vector = new BitSet(1);
+
+    public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
+    static {
+      Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
+      tmpMap.put(_Fields.DOCUMENT_ID, new org.apache.thrift.meta_data.FieldMetaData("DocumentId", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+          new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.I64)));
+      tmpMap.put(_Fields.FILENAME, new org.apache.thrift.meta_data.FieldMetaData("Filename", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+          new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
+      tmpMap.put(_Fields.FILEPATH, new org.apache.thrift.meta_data.FieldMetaData("Filepath", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+          new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
+      metaDataMap = Collections.unmodifiableMap(tmpMap);
+      org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(generateFingerprintsWithFile_args.class, metaDataMap);
+    }
+
+    public generateFingerprintsWithFile_args() {
+    }
+
+    public generateFingerprintsWithFile_args(
+      long DocumentId,
+      String Filename,
+      String Filepath)
+    {
+      this();
+      this.DocumentId = DocumentId;
+      setDocumentIdIsSet(true);
+      this.Filename = Filename;
+      this.Filepath = Filepath;
+    }
+
+    /**
+     * Performs a deep copy on <i>other</i>.
+     */
+    public generateFingerprintsWithFile_args(generateFingerprintsWithFile_args other) {
+      __isset_bit_vector.clear();
+      __isset_bit_vector.or(other.__isset_bit_vector);
+      this.DocumentId = other.DocumentId;
+      if (other.isSetFilename()) {
+        this.Filename = other.Filename;
+      }
+      if (other.isSetFilepath()) {
+        this.Filepath = other.Filepath;
+      }
+    }
+
+    public generateFingerprintsWithFile_args deepCopy() {
+      return new generateFingerprintsWithFile_args(this);
+    }
+
+    @Override
+    public void clear() {
+      setDocumentIdIsSet(false);
+      this.DocumentId = 0;
+      this.Filename = null;
+      this.Filepath = null;
+    }
+
+    public long getDocumentId() {
+      return this.DocumentId;
+    }
+
+    public generateFingerprintsWithFile_args setDocumentId(long DocumentId) {
+      this.DocumentId = DocumentId;
+      setDocumentIdIsSet(true);
+      return this;
+    }
+
+    public void unsetDocumentId() {
+      __isset_bit_vector.clear(__DOCUMENTID_ISSET_ID);
+    }
+
+    /** Returns true if field DocumentId is set (has been assigned a value) and false otherwise */
+    public boolean isSetDocumentId() {
+      return __isset_bit_vector.get(__DOCUMENTID_ISSET_ID);
+    }
+
+    public void setDocumentIdIsSet(boolean value) {
+      __isset_bit_vector.set(__DOCUMENTID_ISSET_ID, value);
+    }
+
+    public String getFilename() {
+      return this.Filename;
+    }
+
+    public generateFingerprintsWithFile_args setFilename(String Filename) {
+      this.Filename = Filename;
+      return this;
+    }
+
+    public void unsetFilename() {
+      this.Filename = null;
+    }
+
+    /** Returns true if field Filename is set (has been assigned a value) and false otherwise */
+    public boolean isSetFilename() {
+      return this.Filename != null;
+    }
+
+    public void setFilenameIsSet(boolean value) {
+      if (!value) {
+        this.Filename = null;
+      }
+    }
+
+    public String getFilepath() {
+      return this.Filepath;
+    }
+
+    public generateFingerprintsWithFile_args setFilepath(String Filepath) {
+      this.Filepath = Filepath;
+      return this;
+    }
+
+    public void unsetFilepath() {
+      this.Filepath = null;
+    }
+
+    /** Returns true if field Filepath is set (has been assigned a value) and false otherwise */
+    public boolean isSetFilepath() {
+      return this.Filepath != null;
+    }
+
+    public void setFilepathIsSet(boolean value) {
+      if (!value) {
+        this.Filepath = null;
+      }
+    }
+
+    public void setFieldValue(_Fields field, Object value) {
+      switch (field) {
+      case DOCUMENT_ID:
+        if (value == null) {
+          unsetDocumentId();
+        } else {
+          setDocumentId((Long)value);
+        }
+        break;
+
+      case FILENAME:
+        if (value == null) {
+          unsetFilename();
+        } else {
+          setFilename((String)value);
+        }
+        break;
+
+      case FILEPATH:
+        if (value == null) {
+          unsetFilepath();
+        } else {
+          setFilepath((String)value);
+        }
+        break;
+
+      }
+    }
+
+    public Object getFieldValue(_Fields field) {
+      switch (field) {
+      case DOCUMENT_ID:
+        return Long.valueOf(getDocumentId());
+
+      case FILENAME:
+        return getFilename();
+
+      case FILEPATH:
+        return getFilepath();
+
+      }
+      throw new IllegalStateException();
+    }
+
+    /** Returns true if field corresponding to fieldID is set (has been assigned a value) and false otherwise */
+    public boolean isSet(_Fields field) {
+      if (field == null) {
+        throw new IllegalArgumentException();
+      }
+
+      switch (field) {
+      case DOCUMENT_ID:
+        return isSetDocumentId();
+      case FILENAME:
+        return isSetFilename();
+      case FILEPATH:
+        return isSetFilepath();
+      }
+      throw new IllegalStateException();
+    }
+
+    @Override
+    public boolean equals(Object that) {
+      if (that == null)
+        return false;
+      if (that instanceof generateFingerprintsWithFile_args)
+        return this.equals((generateFingerprintsWithFile_args)that);
+      return false;
+    }
+
+    public boolean equals(generateFingerprintsWithFile_args that) {
+      if (that == null)
+        return false;
+
+      boolean this_present_DocumentId = true;
+      boolean that_present_DocumentId = true;
+      if (this_present_DocumentId || that_present_DocumentId) {
+        if (!(this_present_DocumentId && that_present_DocumentId))
+          return false;
+        if (this.DocumentId != that.DocumentId)
+          return false;
+      }
+
+      boolean this_present_Filename = true && this.isSetFilename();
+      boolean that_present_Filename = true && that.isSetFilename();
+      if (this_present_Filename || that_present_Filename) {
+        if (!(this_present_Filename && that_present_Filename))
+          return false;
+        if (!this.Filename.equals(that.Filename))
+          return false;
+      }
+
+      boolean this_present_Filepath = true && this.isSetFilepath();
+      boolean that_present_Filepath = true && that.isSetFilepath();
+      if (this_present_Filepath || that_present_Filepath) {
+        if (!(this_present_Filepath && that_present_Filepath))
+          return false;
+        if (!this.Filepath.equals(that.Filepath))
+          return false;
+      }
+
+      return true;
+    }
+
+    @Override
+    public int hashCode() {
+      return 0;
+    }
+
+    public int compareTo(generateFingerprintsWithFile_args other) {
+      if (!getClass().equals(other.getClass())) {
+        return getClass().getName().compareTo(other.getClass().getName());
+      }
+
+      int lastComparison = 0;
+      generateFingerprintsWithFile_args typedOther = (generateFingerprintsWithFile_args)other;
+
+      lastComparison = Boolean.valueOf(isSetDocumentId()).compareTo(typedOther.isSetDocumentId());
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+      if (isSetDocumentId()) {
+        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.DocumentId, typedOther.DocumentId);
+        if (lastComparison != 0) {
+          return lastComparison;
+        }
+      }
+      lastComparison = Boolean.valueOf(isSetFilename()).compareTo(typedOther.isSetFilename());
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+      if (isSetFilename()) {
+        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.Filename, typedOther.Filename);
+        if (lastComparison != 0) {
+          return lastComparison;
+        }
+      }
+      lastComparison = Boolean.valueOf(isSetFilepath()).compareTo(typedOther.isSetFilepath());
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+      if (isSetFilepath()) {
+        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.Filepath, typedOther.Filepath);
+        if (lastComparison != 0) {
+          return lastComparison;
+        }
+      }
+      return 0;
+    }
+
+    public _Fields fieldForId(int fieldId) {
+      return _Fields.findByThriftId(fieldId);
+    }
+
+    public void read(org.apache.thrift.protocol.TProtocol iprot) throws org.apache.thrift.TException {
+      org.apache.thrift.protocol.TField field;
+      iprot.readStructBegin();
+      while (true)
+      {
+        field = iprot.readFieldBegin();
+        if (field.type == org.apache.thrift.protocol.TType.STOP) { 
+          break;
+        }
+        switch (field.id) {
+          case 1: // DOCUMENT_ID
+            if (field.type == org.apache.thrift.protocol.TType.I64) {
+              this.DocumentId = iprot.readI64();
+              setDocumentIdIsSet(true);
+            } else { 
+              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, field.type);
+            }
+            break;
+          case 2: // FILENAME
+            if (field.type == org.apache.thrift.protocol.TType.STRING) {
+              this.Filename = iprot.readString();
+            } else { 
+              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, field.type);
+            }
+            break;
+          case 3: // FILEPATH
+            if (field.type == org.apache.thrift.protocol.TType.STRING) {
+              this.Filepath = iprot.readString();
+            } else { 
+              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, field.type);
+            }
+            break;
+          default:
+            org.apache.thrift.protocol.TProtocolUtil.skip(iprot, field.type);
+        }
+        iprot.readFieldEnd();
+      }
+      iprot.readStructEnd();
+
+      // check for required fields of primitive type, which can't be checked in the validate method
+      validate();
+    }
+
+    public void write(org.apache.thrift.protocol.TProtocol oprot) throws org.apache.thrift.TException {
+      validate();
+
+      oprot.writeStructBegin(STRUCT_DESC);
+      oprot.writeFieldBegin(DOCUMENT_ID_FIELD_DESC);
+      oprot.writeI64(this.DocumentId);
+      oprot.writeFieldEnd();
+      if (this.Filename != null) {
+        oprot.writeFieldBegin(FILENAME_FIELD_DESC);
+        oprot.writeString(this.Filename);
+        oprot.writeFieldEnd();
+      }
+      if (this.Filepath != null) {
+        oprot.writeFieldBegin(FILEPATH_FIELD_DESC);
+        oprot.writeString(this.Filepath);
+        oprot.writeFieldEnd();
+      }
+      oprot.writeFieldStop();
+      oprot.writeStructEnd();
+    }
+
+    @Override
+    public String toString() {
+      StringBuilder sb = new StringBuilder("generateFingerprintsWithFile_args(");
+      boolean first = true;
+
+      sb.append("DocumentId:");
+      sb.append(this.DocumentId);
+      first = false;
+      if (!first) sb.append(", ");
+      sb.append("Filename:");
+      if (this.Filename == null) {
+        sb.append("null");
+      } else {
+        sb.append(this.Filename);
+      }
+      first = false;
+      if (!first) sb.append(", ");
+      sb.append("Filepath:");
+      if (this.Filepath == null) {
+        sb.append("null");
+      } else {
+        sb.append(this.Filepath);
+      }
+      first = false;
+      sb.append(")");
+      return sb.toString();
+    }
+
+    public void validate() throws org.apache.thrift.TException {
+      // check for required fields
+    }
+
+    private void writeObject(java.io.ObjectOutputStream out) throws java.io.IOException {
+      try {
+        write(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(out)));
+      } catch (org.apache.thrift.TException te) {
+        throw new java.io.IOException(te);
+      }
+    }
+
+    private void readObject(java.io.ObjectInputStream in) throws java.io.IOException, ClassNotFoundException {
+      try {
+        // it doesn't seem like you should have to do this, but java serialization is wacky, and doesn't call the default constructor.
+        __isset_bit_vector = new BitSet(1);
+        read(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(in)));
+      } catch (org.apache.thrift.TException te) {
+        throw new java.io.IOException(te);
+      }
+    }
+
+  }
+
+  public static class generateFingerprintsWithFile_result implements org.apache.thrift.TBase<generateFingerprintsWithFile_result, generateFingerprintsWithFile_result._Fields>, java.io.Serializable, Cloneable   {
+    private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("generateFingerprintsWithFile_result");
+
+
+
+    /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
+    public enum _Fields implements org.apache.thrift.TFieldIdEnum {
+;
+
+      private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+
+      static {
+        for (_Fields field : EnumSet.allOf(_Fields.class)) {
+          byName.put(field.getFieldName(), field);
+        }
+      }
+
+      /**
+       * Find the _Fields constant that matches fieldId, or null if its not found.
+       */
+      public static _Fields findByThriftId(int fieldId) {
+        switch(fieldId) {
+          default:
+            return null;
+        }
+      }
+
+      /**
+       * Find the _Fields constant that matches fieldId, throwing an exception
+       * if it is not found.
+       */
+      public static _Fields findByThriftIdOrThrow(int fieldId) {
+        _Fields fields = findByThriftId(fieldId);
+        if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+        return fields;
+      }
+
+      /**
+       * Find the _Fields constant that matches name, or null if its not found.
+       */
+      public static _Fields findByName(String name) {
+        return byName.get(name);
+      }
+
+      private final short _thriftId;
+      private final String _fieldName;
+
+      _Fields(short thriftId, String fieldName) {
+        _thriftId = thriftId;
+        _fieldName = fieldName;
+      }
+
+      public short getThriftFieldId() {
+        return _thriftId;
+      }
+
+      public String getFieldName() {
+        return _fieldName;
+      }
+    }
+    public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
+    static {
+      Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
+      metaDataMap = Collections.unmodifiableMap(tmpMap);
+      org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(generateFingerprintsWithFile_result.class, metaDataMap);
+    }
+
+    public generateFingerprintsWithFile_result() {
+    }
+
+    /**
+     * Performs a deep copy on <i>other</i>.
+     */
+    public generateFingerprintsWithFile_result(generateFingerprintsWithFile_result other) {
+    }
+
+    public generateFingerprintsWithFile_result deepCopy() {
+      return new generateFingerprintsWithFile_result(this);
+    }
+
+    @Override
+    public void clear() {
+    }
+
+    public void setFieldValue(_Fields field, Object value) {
+      switch (field) {
+      }
+    }
+
+    public Object getFieldValue(_Fields field) {
+      switch (field) {
+      }
+      throw new IllegalStateException();
+    }
+
+    /** Returns true if field corresponding to fieldID is set (has been assigned a value) and false otherwise */
+    public boolean isSet(_Fields field) {
+      if (field == null) {
+        throw new IllegalArgumentException();
+      }
+
+      switch (field) {
+      }
+      throw new IllegalStateException();
+    }
+
+    @Override
+    public boolean equals(Object that) {
+      if (that == null)
+        return false;
+      if (that instanceof generateFingerprintsWithFile_result)
+        return this.equals((generateFingerprintsWithFile_result)that);
+      return false;
+    }
+
+    public boolean equals(generateFingerprintsWithFile_result that) {
+      if (that == null)
+        return false;
+
+      return true;
+    }
+
+    @Override
+    public int hashCode() {
+      return 0;
+    }
+
+    public int compareTo(generateFingerprintsWithFile_result other) {
+      if (!getClass().equals(other.getClass())) {
+        return getClass().getName().compareTo(other.getClass().getName());
+      }
+
+      int lastComparison = 0;
+      generateFingerprintsWithFile_result typedOther = (generateFingerprintsWithFile_result)other;
+
+      return 0;
+    }
+
+    public _Fields fieldForId(int fieldId) {
+      return _Fields.findByThriftId(fieldId);
+    }
+
+    public void read(org.apache.thrift.protocol.TProtocol iprot) throws org.apache.thrift.TException {
+      org.apache.thrift.protocol.TField field;
+      iprot.readStructBegin();
+      while (true)
+      {
+        field = iprot.readFieldBegin();
+        if (field.type == org.apache.thrift.protocol.TType.STOP) { 
+          break;
+        }
+        switch (field.id) {
+          default:
+            org.apache.thrift.protocol.TProtocolUtil.skip(iprot, field.type);
+        }
+        iprot.readFieldEnd();
+      }
+      iprot.readStructEnd();
+
+      // check for required fields of primitive type, which can't be checked in the validate method
+      validate();
+    }
+
+    public void write(org.apache.thrift.protocol.TProtocol oprot) throws org.apache.thrift.TException {
+      oprot.writeStructBegin(STRUCT_DESC);
+
+      oprot.writeFieldStop();
+      oprot.writeStructEnd();
+    }
+
+    @Override
+    public String toString() {
+      StringBuilder sb = new StringBuilder("generateFingerprintsWithFile_result(");
       boolean first = true;
 
       sb.append(")");
