@@ -50,19 +50,6 @@ public class AuditTrailServiceImpl implements AuditTrailService {
         }
     }
 	
-	@Override
-	public void audit(Class<?> clazz, String method, Object[] args) {
-		logger.debug(
-				"Procedure " +
-        		prettifyClassName(clazz) + "." +
-        		method +
-        		argsToAuditString(args) +
-        		" has been called by " +
-        		"'" + request.getRemoteUser() + "' " +
-        		"from " + request.getRemoteAddr() + "."
-        	);
-	}
-	
 	protected static String argsToAuditString(Object [] args) {
 		List<String> auditStrList = new ArrayList<String>();
 		for (int i = 0; i < args.length; i++) {
@@ -126,6 +113,24 @@ public class AuditTrailServiceImpl implements AuditTrailService {
 		}
 		
 		return o.toString();
+	}
+
+	@Override
+	public void audit(Class<?> clazz, String method, Object[] args) {
+		audit(clazz, request.getRemoteUser(), method, args);
+	}
+	
+	@Override
+	public void audit(Class<?> clazz, String user, String method, Object[] args) {
+		logger.debug(
+				"Procedure " +
+        		prettifyClassName(clazz) + "." +
+        		method +
+        		argsToAuditString(args) +
+        		" has been called by " +
+        		"'" + user + "' " +
+        		"from " + request.getRemoteAddr() + "."
+        	);
 	}
 	
 }

@@ -31,5 +31,6 @@ public interface DocumentDatabaseDAO {
 	
 	public Integer putRDBMSEntry(DocumentDatabase documentDatabase, String originalId, String value);
 	
+	public Boolean isEntryExists(Integer documentDatabaseId, String fileHash);
 	
 }

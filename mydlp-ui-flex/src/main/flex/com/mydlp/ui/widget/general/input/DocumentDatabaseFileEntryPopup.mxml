@@ -2,18 +2,21 @@
 <s:TitleWindow xmlns:fx="http://ns.adobe.com/mxml/2009" 
 			   xmlns:s="library://ns.adobe.com/flex/spark" 
 			   xmlns:mx="library://ns.adobe.com/flex/mx"
+			   xmlns:my="http://www.mydlp.com/flex/my"
 			   xmlns:input="com.mydlp.ui.widget.general.input.*"
 			   close="{close()}"
 			   visible="false"
 			   title="@Resource(bundle = 'messages', key = 'documentDatabase.add.title.label')"
+			   width="650"
 			   >
-	
 	
 	<fx:Script>
 		<![CDATA[
 			import com.mydlp.ui.domain.DocumentDatabaseFileEntry;
 			import com.mydlp.ui.util.InteractionUtil;
 			import com.mydlp.ui.util.Md5Util;
+			
+			import flash.net.navigateToURL;
 			
 			import mx.collections.ArrayCollection;
 			import mx.controls.Alert;
@@ -60,8 +63,7 @@
 				remaining += fileListArray.length;
 				if (remaining > 0)
 				{
-					okButton.enabled = false;
-					browseButton.enabled = false;
+					disableButtons();
 				}
 				
 				for(var i:int = 0; i < fileListArray.length; i++)
@@ -78,8 +80,7 @@
 				remaining --;
 				if (remaining == 0)
 				{
-					okButton.enabled = true;
-					browseButton.enabled = true;
+					enableButtons();
 				}
 			}
 			
@@ -88,25 +89,120 @@
 				visible = true;
 			}
 			
+			protected function enableButtons(): void
+			{
+				webbasedButton.enabled = true;
+				uploaderappButton.enabled = true;
+				okButton.enabled = true;
+				browseButton.enabled = true;
+			}
+			
+			protected function disableButtons(): void
+			{
+				webbasedButton.enabled = false;
+				uploaderappButton.enabled = false;
+				okButton.enabled = false;
+				browseButton.enabled = false;
+			}
+			
+			protected function onRadioButtonChange(event:Event):void
+			{
+				if (webbasedButton.selected)
+				{
+					currentState="default";
+				}
+				else if (uploaderappButton.selected)
+				{
+					currentState="uploaderapp";
+				}
+				else
+				{
+					throw new Error("Unexpected!");
+				}
+			}
+			
+			protected function generateButtonClick(event:MouseEvent):void
+			{
+				disableButtons();
+				tokenInput.enabled = false;
+				re.generateToolsUploaderToken(ddfeInput.databaseId.toString());
+			}
+			
+			protected function generateTokenHandler(event:ResultEvent): void
+			{
+				tokenInput.text = event.result as String;
+				tokenInput.enabled = true;
+				enableButtons();
+			}
 			
 		]]>
 	</fx:Script>
-	<s:layout>
-		<s:VerticalLayout paddingTop="15" paddingBottom="15"
-						  paddingLeft="10" paddingRight="10" 
-						  />
-	</s:layout>
-	<s:VGroup id="loadStatusList" gap="5" paddingBottom="10" horizontalAlign="center" width="100%"/>
 	
-	<s:HGroup width="300" 
-			  horizontalAlign="center" gap="20" verticalAlign="middle" >
+	<fx:Declarations>
+		<my:remote id="re" destination="tokenBRS">
+			<my:method name="generateToolsUploaderToken" result="generateTokenHandler(event)" />
+		</my:remote>
 		
-		<s:Button id="browseButton" label="@Resource(key='documentDatabase.fileUpload.browse', bundle='messages')"
-				  click="uploadButton(event)" />
+		<s:RadioButtonGroup id="rbg" change="onRadioButtonChange(event)"/>
+	</fx:Declarations>
+	
+	<s:states>
+		<s:State name="default" />
+		<s:State name="uploaderapp" />
+	</s:states>
+	
+	
+	
+	<s:VGroup width="100%" height="100%" gap="20"
+			  paddingLeft="20" paddingRight="20" paddingTop="10" paddingBottom="10">
+		
+		<s:VGroup width="100%" height="60" 
+				  verticalAlign="middle" horizontalAlign="center">
+			<s:RadioButton id="webbasedButton"
+						   label="@Resource(key='documentDatabase.fileUpload.webbasedButton.label', bundle='messages')"
+						   group="{rbg}"
+						   width="100%" />
+			<s:RadioButton id="uploaderappButton"
+						   label="@Resource(key='documentDatabase.fileUpload.uploaderappButton.label', bundle='messages')"
+						   group="{rbg}"
+						   width="100%" />
+		</s:VGroup>
+		
+		<s:Group includeIn="default" width="100%" height="100%">
+			<s:layout>
+				<s:VerticalLayout />
+			</s:layout>
+			<s:VGroup id="loadStatusList" gap="5" paddingBottom="10" horizontalAlign="center" width="100%"/>
+			
+			<s:VGroup width="100%" horizontalAlign="center" gap="20" verticalAlign="middle" >
+				<s:Label width="100%" 
+					text="@Resource(key='documentDatabase.fileUpload.webbased.message', bundle='messages')" />
+				<s:HGroup width="100%" 
+						  horizontalAlign="center" gap="20" verticalAlign="middle" >
 					
-		<s:Button id="okButton" label="@Resource(bundle = 'messages', key = 'documentDatabase.button.ok.label')" 
-				  click="{close()}"/>
+					<s:Button id="browseButton" label="@Resource(key='documentDatabase.fileUpload.browse', bundle='messages')"
+							  click="uploadButton(event)" />
+					
+					<s:Button id="okButton" label="@Resource(bundle = 'messages', key = 'documentDatabase.button.ok.label')" 
+							  click="{close()}"/>
+					
+				</s:HGroup>
+			</s:VGroup>
+		</s:Group>
 		
-	</s:HGroup>
+		<s:VGroup includeIn="uploaderapp" width="100%" height="100%" gap="20">
+			<s:Label width="100%" 
+				text="@Resource(key='documentDatabase.fileUpload.uploaderapp.message', bundle='messages')" />
+			
+			<s:Label width="100%" 
+					 text="@Resource(key='documentDatabase.fileUpload.download.uploaderapp.message', bundle='messages')" 
+					 click="{navigateToURL(new URLRequest('/static/apps/mydlp-uploader.air'), '_blank')}"/>
+			
+			<s:Button label="@Resource(key='documentDatabase.fileUpload.uploaderapp.generateButton.label', bundle='messages')"
+					  click="generateButtonClick(event)" />
+			
+			<s:TextArea id="tokenInput" editable="false" enabled="false" width="100%" height="50"/>
+		</s:VGroup>
+	</s:VGroup>
 	
 </s:TitleWindow>
