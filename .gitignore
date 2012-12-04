@@ -37,4 +37,4 @@ mydlp-ui-webapp/hsqldb/MyDLPLog.log
 mydlp-ui-webapp/hsqldb/MyDLPLog.lck
 mydlp-ui-webapp/hsqldb/MyDLPLog.properties
 mydlp-ui-webapp/hsqldb/MyDLPLog.script
-src/main/webapp/static/apps/mydlp-uploader.air
+mydlp-ui-webapp/src/main/webapp/static/apps/mydlp-uploader.air
