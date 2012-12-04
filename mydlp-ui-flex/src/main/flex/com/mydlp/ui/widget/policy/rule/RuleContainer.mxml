@@ -397,18 +397,19 @@
 									paddingLeft="20"
 									verticalAlign="middle" gap="550"/>
 			</s:layout>
-			<s:HGroup horizontalAlign="left">
+			<s:HGroup width="900" horizontalAlign="left" verticalAlign="middle" gap="5">
 				<s:Button id="addRuleButtonTop" skinClass="com.mydlp.ui.skin.AddBitmapLabelButton24Skin" 
 						  label="@Resource(key='rules.addrule', bundle='messages')"
 						  click="addRuleToTop(event)" styleName="fontSize24Style"/>
-			</s:HGroup>
-			<s:HGroup id="expandAndCollapseGroup" horizontalAlign="right" gap="5">
-				<s:Button id="expandButton" skinClass="com.mydlp.ui.skin.ExpandBitmapLabelButton24Skin"
-						  label="@Resource(key='rules.expandAll', bundle='messages')"
-						  click="expandAllClickHandler(event)"/>
-				<s:Button id="collapseButton" skinClass="com.mydlp.ui.skin.CollapseBitmapLabelButton24Skin"
-						  label="@Resource(key='rules.collapseAll', bundle='messages')"
-						  click="collapseAllClickHandler(event)"/>
+			
+				<s:HGroup width="100%" horizontalAlign="right" verticalAlign="middle" gap="5">
+					<s:Button id="expandButton" skinClass="com.mydlp.ui.skin.ExpandBitmapButton24Skin"
+							  toolTip="@Resource(key='rules.expandAll', bundle='messages')"
+							  click="expandAllClickHandler(event)"/>
+					<s:Button id="collapseButton" skinClass="com.mydlp.ui.skin.CollapseBitmapButton24Skin"
+							  toolTip="@Resource(key='rules.collapseAll', bundle='messages')"
+							  click="collapseAllClickHandler(event)"/>
+				</s:HGroup>
 			</s:HGroup>
 		</s:Group>
 		
