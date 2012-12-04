@@ -27,7 +27,6 @@ public class TemporaryAccessToken extends AbstractEntity {
 	protected String serviceName;
 	protected String serviceParam;
 	
-	@Index(name = "ipAddressIndex")
 	@Column(nullable=false)
 	public String getIpAddress() {
 		return ipAddress;
@@ -57,7 +56,7 @@ public class TemporaryAccessToken extends AbstractEntity {
 		this.lastUpdate = lastUpdate;
 	}
 	@Index(name = "tokenKeyIndex")
-	@Column(nullable=false, unique=true)
+	@Column(nullable=false, unique=true, length=32)
 	public String getTokenKey() {
 		return tokenKey;
 	}
