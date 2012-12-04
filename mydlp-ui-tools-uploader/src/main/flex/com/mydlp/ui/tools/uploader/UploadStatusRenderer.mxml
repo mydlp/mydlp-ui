@@ -81,6 +81,12 @@
 					uploadStatus.serverReason = "File already exists";
 					FlexGlobals.topLevelApplication.fileUploadSkipped();
 				}
+				else if (event.data == "invalidtoken")
+				{
+					currentState="failed";
+					uploadStatus.serverReason = "Invalid token";
+					FlexGlobals.topLevelApplication.fileUploadFailed();
+				}
 				else if (event.data == "error")
 				{
 					currentState="failed";

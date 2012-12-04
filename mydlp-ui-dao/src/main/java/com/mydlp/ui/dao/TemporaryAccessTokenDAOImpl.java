@@ -57,6 +57,10 @@ public class TemporaryAccessTokenDAOImpl extends AbstractLogDAO implements
 	        MessageDigest digest = MessageDigest.getInstance("MD5");
 	        digest.update(input.getBytes(), 0, input.length());
 	        md5 = new BigInteger(1, digest.digest()).toString(16);
+	        if (md5.length() == 31)
+	        {
+	        	md5 = "0" + md5;
+	        }
         } catch (NoSuchAlgorithmException e) {
             logger.error("No such algorithm", e);
         }
@@ -81,8 +85,7 @@ public class TemporaryAccessTokenDAOImpl extends AbstractLogDAO implements
 	public TemporaryAccessToken getTokenObj(String tokenKey) {
 		DetachedCriteria criteria = 
 				DetachedCriteria.forClass(TemporaryAccessToken.class)
-					.add(Restrictions.eq("tokenKey", tokenKey))
-					.add(Restrictions.lt("expirationDate", new Date()));
+					.add(Restrictions.eq("tokenKey", tokenKey));
 		@SuppressWarnings("unchecked")
 		List<TemporaryAccessToken> list = getHibernateTemplate().findByCriteria(criteria);
 		TemporaryAccessToken token = DAOUtil.getSingleResult(list);
@@ -93,6 +96,34 @@ public class TemporaryAccessTokenDAOImpl extends AbstractLogDAO implements
 			getHibernateTemplate().saveOrUpdate(token);
 		}
 		return token;
+	}
+
+	@Override
+	public void cleanupExpiredTokens() {
+		DetachedCriteria criteria = 
+				DetachedCriteria.forClass(TemporaryAccessToken.class)
+					.add(Restrictions.lt("expirationDate", new Date()));
+		@SuppressWarnings("unchecked")
+		List<TemporaryAccessToken> list = getHibernateTemplate().findByCriteria(criteria);
+		for (TemporaryAccessToken temporaryAccessToken : list) {
+			getHibernateTemplate().delete(temporaryAccessToken);
+		}
+	}
+
+	@Override
+	public void cleanupIdleTokens() {
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(new Date());
+		cal.add(Calendar.MINUTE, 20);
+		
+		DetachedCriteria criteria = 
+				DetachedCriteria.forClass(TemporaryAccessToken.class)
+					.add(Restrictions.lt("lastUpdate", cal.getTime()));
+		@SuppressWarnings("unchecked")
+		List<TemporaryAccessToken> list = getHibernateTemplate().findByCriteria(criteria);
+		for (TemporaryAccessToken temporaryAccessToken : list) {
+			getHibernateTemplate().delete(temporaryAccessToken);
+		}
 	}
 	
 }

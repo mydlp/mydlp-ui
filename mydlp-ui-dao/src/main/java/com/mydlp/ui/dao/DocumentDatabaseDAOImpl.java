@@ -174,7 +174,7 @@ public class DocumentDatabaseDAOImpl extends AbstractPolicyDAO implements Docume
 	public Boolean isEntryExists(Integer documentDatabaseId, String fileHash) {
 		@SuppressWarnings("unchecked")
 		List<DocumentDatabaseRDBMSEntry> l = getHibernateTemplate().find(
-				"select re from DocumentDatabase as dd left join dd.rdbmsEntries as re where dd.id=? and re.md5Hash=?",
+				"select re from DocumentDatabase as dd left join dd.fileEntries as re where dd.id=? and re.md5Hash=?",
 					documentDatabaseId, fileHash
 				);
 		

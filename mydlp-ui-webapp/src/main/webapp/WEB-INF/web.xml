@@ -61,6 +61,11 @@
     <url-pattern>/download</url-pattern>
   </filter-mapping>
   
+  <filter-mapping>  
+    <filter-name>policySessionFilter</filter-name>  
+    <url-pattern>/tools/uploader</url-pattern>
+  </filter-mapping>
+  
   <filter-mapping>
     <filter-name>springSecurityFilterChain</filter-name>
     <url-pattern>/*</url-pattern>

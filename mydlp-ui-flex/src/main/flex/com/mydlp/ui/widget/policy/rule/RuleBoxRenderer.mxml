@@ -441,7 +441,14 @@
 			
 			protected function onDragEnter(dragEvent:DragEvent):void
 			{
-				DragManager.acceptDragDrop(dragEvent.currentTarget as IUIComponent);
+				if (dragEvent.dragInitiator is InventoryTree)
+				{
+					DragManager.acceptDragDrop(dragEvent.currentTarget as IUIComponent);
+				}
+				else if (dragEvent.dragInitiator is RuleList)
+				{
+					// do nothing
+				}	
 			}
 			
 			protected function onDragOver(event:DragEvent):void
@@ -460,6 +467,10 @@
 					{
 						rejectDrop();
 					}
+				}
+				else if (event.dragInitiator is RuleList)
+				{
+					// do nothing
 				}
 				else
 				{
@@ -629,6 +640,10 @@
 					refresh();
 					
 					re.save(ruleObject);
+				}
+				else if (dragEvent.dragInitiator is RuleList)
+				{
+					// do nothing
 				}
 			}
 			

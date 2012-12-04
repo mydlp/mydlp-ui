@@ -161,6 +161,7 @@
 			<s:RadioButton id="webbasedButton"
 						   label="@Resource(key='documentDatabase.fileUpload.webbasedButton.label', bundle='messages')"
 						   group="{rbg}"
+						   selected="true"
 						   width="100%" />
 			<s:RadioButton id="uploaderappButton"
 						   label="@Resource(key='documentDatabase.fileUpload.uploaderappButton.label', bundle='messages')"
@@ -194,14 +195,17 @@
 			<s:Label width="100%" 
 				text="@Resource(key='documentDatabase.fileUpload.uploaderapp.message', bundle='messages')" />
 			
-			<s:Label width="100%" 
+			<s:Label width="100%" fontWeight="bold"
 					 text="@Resource(key='documentDatabase.fileUpload.download.uploaderapp.message', bundle='messages')" 
 					 click="{navigateToURL(new URLRequest('/static/apps/mydlp-uploader.air'), '_blank')}"/>
 			
-			<s:Button label="@Resource(key='documentDatabase.fileUpload.uploaderapp.generateButton.label', bundle='messages')"
-					  click="generateButtonClick(event)" />
+			<s:HGroup width="100%" verticalAlign="middle" gap="10">
+				<s:Button label="@Resource(key='documentDatabase.fileUpload.uploaderapp.generateButton.label', bundle='messages')"
+						  click="generateButtonClick(event)" width="150"/>
+				<s:TextInput id="tokenInput" editable="false" enabled="false" width="100%" />
+			</s:HGroup>
 			
-			<s:TextArea id="tokenInput" editable="false" enabled="false" width="100%" height="50"/>
+			
 		</s:VGroup>
 	</s:VGroup>
 	

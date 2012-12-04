@@ -148,17 +148,6 @@ public class MyDLPUIThriftServiceImpl implements MyDLPUIThriftService {
 	}
 
 	@Override
-	public void generateFingerprints(final long documentId, final String filename, final ByteBuffer data) {
-		call(new ThriftCall<Void>() {
-			@Override
-			public Void execute(MyDLPUIThriftConnection thriftConnection) throws TException {
-				thriftConnection.client.generateFingerprints(documentId, filename, data);
-				return null;
-			}
-		});
-	}
-
-	@Override
 	public void requeueIncident(final Integer incidentId) {
 		call(new ThriftCall<Void>() {
 			@Override
@@ -216,6 +205,29 @@ public class MyDLPUIThriftServiceImpl implements MyDLPUIThriftService {
 			@Override
 			public String execute(MyDLPUIThriftConnection thriftConnection) throws TException {
 				return thriftConnection.client.getCompileStatus();
+			}
+		});
+	}
+
+
+	@Override
+	public void generateFingerprints(final long documentId, final String filename, final ByteBuffer data) {
+		call(new ThriftCall<Void>() {
+			@Override
+			public Void execute(MyDLPUIThriftConnection thriftConnection) throws TException {
+				thriftConnection.client.generateFingerprints(documentId, filename, data);
+				return null;
+			}
+		});
+	}
+	
+	@Override
+	public void generateFingerprintsWithFile(final long documentId, final String filename, final String filepath) {
+		call(new ThriftCall<Void>() {
+			@Override
+			public Void execute(MyDLPUIThriftConnection thriftConnection) throws TException {
+				thriftConnection.client.generateFingerprintsWithFile(documentId, filename, filepath);
+				return null;
 			}
 		});
 	}

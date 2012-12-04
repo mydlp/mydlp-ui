@@ -9,4 +9,8 @@ public interface TemporaryAccessTokenDAO {
 	
 	public TemporaryAccessToken getTokenObj(String tokenKey);
 	
+	public void cleanupExpiredTokens();
+	
+	public void cleanupIdleTokens();
+	
 }

@@ -266,7 +266,10 @@
 				dataProvider.selected="{fileList}"
 				itemRenderer.selected="com.mydlp.ui.tools.uploader.AfterSelectRenderer"
 				dataProvider.uploading="{uploadStatuses}"
-				itemRenderer.uploading="com.mydlp.ui.tools.uploader.UploadStatusRenderer"/>
+				itemRenderer.uploading="com.mydlp.ui.tools.uploader.UploadStatusRenderer"
+				dataProvider.done="{uploadStatuses}"
+				itemRenderer.done="com.mydlp.ui.tools.uploader.UploadStatusRenderer"
+				/>
 		
 		
 	</s:VGroup>

@@ -1,12 +1,10 @@
 package com.mydlp.ui.framework.servlet;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.PrintWriter;
-import java.security.DigestInputStream;
-import java.security.MessageDigest;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -25,9 +23,12 @@ import org.springframework.web.HttpRequestHandler;
 
 import com.mydlp.ui.dao.DocumentDatabaseDAO;
 import com.mydlp.ui.dao.TemporaryAccessTokenDAO;
+import com.mydlp.ui.domain.DocumentDatabase;
+import com.mydlp.ui.domain.DocumentDatabaseFileEntry;
 import com.mydlp.ui.domain.TemporaryAccessToken;
 import com.mydlp.ui.framework.util.HashUtil;
 import com.mydlp.ui.service.AuditTrailService;
+import com.mydlp.ui.thrift.MyDLPUIThriftService;
 
 @Service("toolsUploaderServlet")
 public class ToolsUploaderServlet implements HttpRequestHandler {
@@ -53,11 +54,13 @@ public class ToolsUploaderServlet implements HttpRequestHandler {
 	@Autowired
 	protected DocumentDatabaseDAO documentDatabaseDAO;
 	
+	@Autowired
+	protected MyDLPUIThriftService thriftService;
+	
 	@Override
 	public void handleRequest(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		String returnStr = ERROR;
-		
 		try {
 			boolean isMultipart = ServletFileUpload.isMultipartContent(req);
 			if (isMultipart)
@@ -65,7 +68,7 @@ public class ToolsUploaderServlet implements HttpRequestHandler {
 				String tokenKey = null;
 				String fileName = null;
 				String filePath = null;
-				Integer documentDatabaseId = null;
+				Long documentDatabaseId = null;
 				
 				DiskFileItemFactory factory = new DiskFileItemFactory();
 				factory.setSizeThreshold(MAX_MEMORY_SIZE);
@@ -96,9 +99,12 @@ public class ToolsUploaderServlet implements HttpRequestHandler {
 				}
 				
 				TemporaryAccessToken token = temporaryAccessTokenDAO.getTokenObj(tokenKey);
-				
+						
 				try {
-					documentDatabaseId = Integer.parseInt(token.getServiceParam());
+					if (token != null)
+					{
+						documentDatabaseId = Long.parseLong(token.getServiceParam());
+					}
 				} 
 				catch (Throwable e)
 				{
@@ -107,18 +113,22 @@ public class ToolsUploaderServlet implements HttpRequestHandler {
 				
 				if (token == null) 
 				{
+					logger.error("No valid token has been found. Token is null.");
 					returnStr = INVALID_TOKEN;
 				}
 				else if (!token.getIpAddress().equals(req.getRemoteAddr()))
 				{
+					logger.error("Remote address does not match with token: " + token.getIpAddress() + " " + req.getRemoteAddr());
 					returnStr = INVALID_TOKEN;
 				}
 				else if (!token.getServiceName().equals("tools-uploader"))
 				{
+					logger.error("Registered token service is not tools-uploader : " + token.getServiceName());
 					returnStr = INVALID_TOKEN;
 				}
 				else if (documentDatabaseId == null)
 				{
+					logger.error("Document database id is null");
 					returnStr = INVALID_TOKEN;
 				}
 				else
@@ -135,19 +145,17 @@ public class ToolsUploaderServlet implements HttpRequestHandler {
 				
 					if (fileHash == null)
 					{
+						logger.error("File hash is null");
 						returnStr = ERROR;
 					}
-					else if (documentDatabaseDAO.isEntryExists(documentDatabaseId, fileHash))
+					else if (documentDatabaseDAO.isEntryExists(documentDatabaseId.intValue(), fileHash))
 					{
 						returnStr = EXISTS;
 					}
 					else
 					{
-					
-						
-						System.out.println(tokenKey + " " + fileName + " " + filePath);
-						
-						auditTrailService.audit(getClass(), token.getUsername(), "tools-uploader", new Object[]{fileName});
+						generateDocumentDatabaseFileEntry(documentDatabaseId, fileName, fileHash, filePath);
+						//auditTrailService.audit(getClass(), token.getUsername(), "tools-uploader", new Object[]{fileName});
 						returnStr = SUCCESS;
 					}
 				}
@@ -173,6 +181,26 @@ public class ToolsUploaderServlet implements HttpRequestHandler {
 		out.print(returnStr);
 		out.flush();
 		out.close();
+	}
+	
+	public void generateDocumentDatabaseFileEntry(Long documentDatabaseId, String filename,  String md5sum, String filepath) {
+		DocumentDatabase documentDatabase = documentDatabaseDAO.getDocumentDatabaseById(
+				new Integer(documentDatabaseId.intValue()));
+		
+		DocumentDatabaseFileEntry documentDatabaseFileEntry = new DocumentDatabaseFileEntry();
+		documentDatabaseFileEntry.setCreatedDate(new Date());
+		documentDatabaseFileEntry.setFilename(filename);
+		documentDatabaseFileEntry.setMd5Hash(md5sum);
+		
+		if (documentDatabase.getFileEntries() == null)
+			documentDatabase.setFileEntries(new ArrayList<DocumentDatabaseFileEntry>());
+		
+		documentDatabaseFileEntry = documentDatabaseDAO.saveFileEntry(documentDatabaseFileEntry);
+		documentDatabase.getFileEntries().add(documentDatabaseFileEntry);
+		documentDatabaseDAO.save(documentDatabase);
+		
+		thriftService.generateFingerprintsWithFile(documentDatabaseId, filename, filepath);
+		
 	}
 
 }

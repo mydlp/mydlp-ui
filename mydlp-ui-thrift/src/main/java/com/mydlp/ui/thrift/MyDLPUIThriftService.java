@@ -18,6 +18,8 @@ public interface MyDLPUIThriftService {
     
     public void generateFingerprints(long documentId, String filename, ByteBuffer data);
     
+    public void generateFingerprintsWithFile(long documentId, String filename, String filepath);
+    
     public void requeueIncident(Integer incidentId);
     
     public Map<String,String> registerUserAddress(String ipAddress, String userH, ByteBuffer payload);

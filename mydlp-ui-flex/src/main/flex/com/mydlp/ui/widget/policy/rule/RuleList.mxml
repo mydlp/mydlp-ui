@@ -85,7 +85,7 @@
 				RuleItemList.resetListList();
 			}
 			
-			protected function acceptDrop(dragEvent:DragEvent = null): void
+			public function acceptDrop(dragEvent:DragEvent = null): void
 			{
 				if (dragEvent != null)
 				{
@@ -108,8 +108,7 @@
 				var currentTarget:IUIComponent = event.currentTarget as IUIComponent;
 				if (currentTarget != null)
 				{
-					DragManager.acceptDragDrop(event.currentTarget as IUIComponent);
-					//event.currentTarget.createDropIndicator();
+					DragManager.acceptDragDrop(currentTarget);
 				}
 			}
 			
@@ -121,6 +120,11 @@
 				{
 					var currentDropList:List = event.currentTarget as List;
 					currentDropLocation = currentDropList.layout.calculateDropLocation(event);
+				}
+				else if (event.currentTarget is ItemRenderer)
+				{
+					var currentDropRenderer:ItemRenderer = event.currentTarget as ItemRenderer;
+					currentDropLocation = currentDropRenderer.layout.calculateDropLocation(event);
 				}
 				else 
 					throw new Error("Not handled point target");
@@ -159,6 +163,24 @@
 				rejectDrop();
 			}
 			
+			public function getItemFromRuleList(index:int): *
+			{
+				var object:Object = this.dataProvider.getItemAt(index);
+				if (object is Rule)
+				{
+					return object as Rule;
+				}
+				else if (object is NewRuleShadow) 
+				{
+					return object as NewRuleShadow
+				}
+				else
+				{
+					throw new Error("Unhandled type");
+				}
+				return null;
+			}
+			
 			protected function onDragDrop(event:DragEvent):void
 			{
 				event.preventDefault();
@@ -183,7 +205,7 @@
 						if (currentDropIndex == ruleListLength)
 						{
 							var lastItemIndex:int = ruleListLength - 1;
-							var lastRule:Rule = this.dataProvider.getItemAt(lastItemIndex) as Rule;
+							var lastRule:* = getItemFromRuleList(lastItemIndex);
 							if (lastRule == null)
 							{
 								throw new Error("lastRule should not be null");
@@ -192,7 +214,7 @@
 						}
 						else if (currentDropIndex == 0)
 						{
-							var firstRule:Rule = this.dataProvider.getItemAt(0) as Rule;
+							var firstRule:* = getItemFromRuleList(0);
 							if (firstRule == null)
 							{
 								throw new Error("lastRule should not be null");
@@ -201,8 +223,8 @@
 						}
 						else
 						{
-							var indexBeforeDroppedLocationndex:int = currentDropIndex - 1;
-							var ruleBeforeDroppedLocation:Rule = this.dataProvider.getItemAt(indexBeforeDroppedLocationndex) as Rule;
+							var indexBeforeDroppedLocationIndex:int = currentDropIndex - 1;
+							var ruleBeforeDroppedLocation:* = getItemFromRuleList(indexBeforeDroppedLocationIndex);
 							if (ruleBeforeDroppedLocation == null)
 							{
 								throw new Error("ruleBeforeDroppedLocation should not be null");
@@ -210,7 +232,7 @@
 							maxPriority = ruleBeforeDroppedLocation.priority;
 							
 							var indexAfterDroppedLocation:int = currentDropIndex;
-							var ruleAfterDroppedLocation:Rule = this.dataProvider.getItemAt(indexAfterDroppedLocation) as Rule;
+							var ruleAfterDroppedLocation:* = getItemFromRuleList(indexAfterDroppedLocation);
 							if (ruleAfterDroppedLocation == null)
 							{
 								throw new Error("ruleAfterDroppedLocation should not be null");
