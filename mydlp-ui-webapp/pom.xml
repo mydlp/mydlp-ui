@@ -237,24 +237,6 @@
         </configuration>
       </plugin>
       <plugin>
-	    <artifactId>maven-antrun-plugin</artifactId>
-	    <executions>
-	      <execution>
-	        <id>copy-air-app</id>
-	        <phase>validate</phase>
-	        <goals>
-	          <goal>run</goal>
-            </goals>
-	        <configuration>
-	          <tasks>
-	            <copy file="../mydlp-ui-tools-uploader/target/mydlp-ui-tools-uploader-${mydlp-ui.version}.air"
-	            		tofile="src/main/webapp/static/apps/mydlp-uploader.air" />
-	          </tasks>
-	        </configuration>
-	      </execution>
-	    </executions>
-	  </plugin>
-      <plugin>
         <artifactId>maven-war-plugin</artifactId>
         <version>2.1.1</version>
         <configuration>
@@ -267,6 +249,14 @@
 	          <includes>
 	            <include>spring/application-persistence.xml</include>
 	            <include>flex/services-config.xml</include>
+	          </includes>
+	        </resource>
+	        <resource>
+	        <directory>${basedir}/../mydlp-ui-tools-uploader/target/</directory>
+	          <filtering>false</filtering>
+	          <targetPath>static/apps/mydlp-uploader.air</targetPath>
+	          <includes>
+	            <include>mydlp-ui-tools-uploader-${mydlp-ui.version}.air</include>
 	          </includes>
 	        </resource>
 	      </webResources>
