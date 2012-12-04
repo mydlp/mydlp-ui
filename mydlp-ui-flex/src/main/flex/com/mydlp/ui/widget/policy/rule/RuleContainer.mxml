@@ -414,12 +414,18 @@
 		
 		<s:Group>
 			<s:layout>
-				<s:HorizontalLayout gap="55" paddingLeft="248"/>
+				<s:HorizontalLayout paddingLeft="100"/>
 			</s:layout>
 			
+			<s:Label text="@Resource(key='rules.type.label', bundle='messages')" styleName="fontSize24Style" visible="{ruleDP.length != 0}"/>
+			<s:Spacer width="100"/>
 			<s:Label text="@Resource(key='rules.sources.label', bundle='messages')" styleName="fontSize24Style" visible="{ruleDP.length != 0}"/>
+			<s:Spacer width="50"/>
 			<s:Label text="@Resource(key='rules.destinations.label', bundle='messages')" styleName="fontSize24Style" visible="{ruleDP.length != 0}"/>
+			<s:Spacer width="20"/>
 			<s:Label text="@Resource(key='rules.informationTypes.label', bundle='messages')" styleName="fontSize24Style" visible="{ruleDP.length != 0}"/>
+			<s:Spacer width="50"/>
+			<s:Label text="@Resource(key='rules.action.label', bundle='messages')" styleName="fontSize24Style" visible="{ruleDP.length != 0}"/>
 		</s:Group>
 		
 		<rule:RuleList id="ruleList" dataProvider="{ruleDP}" 
