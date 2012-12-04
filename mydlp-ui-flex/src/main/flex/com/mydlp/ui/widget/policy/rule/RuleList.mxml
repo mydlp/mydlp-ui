@@ -103,12 +103,15 @@
 			
 			protected function onDragEnter(event:DragEvent):void
 			{
-				event.preventDefault();
-				this.createDropIndicator();
-				var currentTarget:IUIComponent = event.currentTarget as IUIComponent;
-				if (currentTarget != null)
+				if (event.dragInitiator is RuleList)
 				{
-					DragManager.acceptDragDrop(currentTarget);
+					event.preventDefault();
+					this.createDropIndicator();
+					var currentTarget:IUIComponent = event.currentTarget as IUIComponent;
+					if (currentTarget != null)
+					{
+						DragManager.acceptDragDrop(currentTarget);
+					}
 				}
 			}
 			

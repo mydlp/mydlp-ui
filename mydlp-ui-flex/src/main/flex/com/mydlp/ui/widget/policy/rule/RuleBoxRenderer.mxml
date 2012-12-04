@@ -445,10 +445,6 @@
 				{
 					DragManager.acceptDragDrop(dragEvent.currentTarget as IUIComponent);
 				}
-				else if (dragEvent.dragInitiator is RuleList)
-				{
-					// do nothing
-				}	
 			}
 			
 			protected function onDragOver(event:DragEvent):void
