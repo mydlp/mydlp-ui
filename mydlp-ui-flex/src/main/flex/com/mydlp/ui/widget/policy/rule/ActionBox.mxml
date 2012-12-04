@@ -236,7 +236,6 @@
 							/>
 			<s:Spacer width="13" />
 		</s:Group>
-		<s:Spacer height="19" />
 	</s:Group>
 	
 </s:SkinnableContainer>

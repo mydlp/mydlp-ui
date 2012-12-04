@@ -65,6 +65,10 @@ s|Application {
 	skinClass: ClassReference("com.mydlp.ui.skin.DisableRuleButton16Skin")
 }
 
+.disableButton24Style {
+	skinClass: ClassReference("com.mydlp.ui.skin.DisableRuleButton24Skin")
+}
+
 .disableButton32Style {
 	skinClass: ClassReference("com.mydlp.ui.skin.DisableRuleButton32Skin")
 }

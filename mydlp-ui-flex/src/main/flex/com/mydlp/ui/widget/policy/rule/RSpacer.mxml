@@ -4,6 +4,6 @@
 		xmlns:mx="library://ns.adobe.com/flex/mx"
 		backgroundAlpha="0.3"
 		backgroundColor="0xAEBBCF"
-		width="4"
+		width="2"
 		height="100%">
 </s:SkinnableContainer>

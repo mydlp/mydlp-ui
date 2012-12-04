@@ -388,39 +388,38 @@
 	<s:Group id="ruleListGroup" width="100%" height="100%"
 			 includeInLayout="false" visible="false">
 		<s:layout>
-			<s:VerticalLayout gap="5"/>
+			<s:VerticalLayout gap="2" paddingBottom="8"/>
 		</s:layout>
 		
-		<s:HGroup width="926" horizontalAlign="left" verticalAlign="middle" paddingLeft="20" paddingBottom="10">
+		<s:HGroup width="920" horizontalAlign="left" verticalAlign="middle" paddingLeft="20" paddingBottom="10">
 			<s:Button id="addRuleButtonTop" skinClass="com.mydlp.ui.skin.AddBitmapLabelButton24Skin" 
 					  label="@Resource(key='rules.addrule', bundle='messages')"
 					  click="addRuleToTop(event)" styleName="fontSize24Style"/>
 		
-			<s:HGroup width="100%" horizontalAlign="right" verticalAlign="middle" gap="5">
-				<s:Button id="expandButton" skinClass="com.mydlp.ui.skin.ExpandBitmapButton24Skin"
-						  toolTip="@Resource(key='rules.expandAll', bundle='messages')"
+			<s:HGroup width="100%" horizontalAlign="right" verticalAlign="middle" gap="8">
+				<s:Button id="expandButton" skinClass="com.mydlp.ui.skin.ExpandBitmapLabelButton16Skin"
+						  label="@Resource(key='rules.expandAll', bundle='messages')"
 						  click="expandAllClickHandler(event)"/>
-				<s:Button id="collapseButton" skinClass="com.mydlp.ui.skin.CollapseBitmapButton24Skin"
-						  toolTip="@Resource(key='rules.collapseAll', bundle='messages')"
+				<s:Button id="collapseButton" skinClass="com.mydlp.ui.skin.CollapseBitmapLabelButton16Skin"
+						  label="@Resource(key='rules.collapseAll', bundle='messages')"
 						  click="collapseAllClickHandler(event)"/>
 			</s:HGroup>
 		</s:HGroup>
 		
-		
 		<s:Group>
 			<s:layout>
-				<s:HorizontalLayout paddingLeft="100"/>
+				<s:HorizontalLayout paddingLeft="80"/>
 			</s:layout>
 			
-			<s:Label text="@Resource(key='rules.type.label', bundle='messages')" styleName="fontSize24Style" visible="{ruleDP.length != 0}"/>
-			<s:Spacer width="100"/>
-			<s:Label text="@Resource(key='rules.sources.label', bundle='messages')" styleName="fontSize24Style" visible="{ruleDP.length != 0}"/>
-			<s:Spacer width="50"/>
-			<s:Label text="@Resource(key='rules.destinations.label', bundle='messages')" styleName="fontSize24Style" visible="{ruleDP.length != 0}"/>
-			<s:Spacer width="20"/>
-			<s:Label text="@Resource(key='rules.informationTypes.label', bundle='messages')" styleName="fontSize24Style" visible="{ruleDP.length != 0}"/>
-			<s:Spacer width="50"/>
-			<s:Label text="@Resource(key='rules.action.label', bundle='messages')" styleName="fontSize24Style" visible="{ruleDP.length != 0}"/>
+			<s:Label text="@Resource(key='rules.type.label', bundle='messages')" styleName="fontSize16Style" fontWeight="bold"/>
+			<s:Spacer width="98"/>
+			<s:Label text="@Resource(key='rules.sources.label', bundle='messages')" styleName="fontSize16Style" fontWeight="bold"/>
+			<s:Spacer width="80"/>
+			<s:Label text="@Resource(key='rules.destinations.label', bundle='messages')" styleName="fontSize16Style" fontWeight="bold"/>
+			<s:Spacer width="64"/>
+			<s:Label text="@Resource(key='rules.informationTypes.label', bundle='messages')" styleName="fontSize16Style" fontWeight="bold"/>
+			<s:Spacer width="90"/>
+			<s:Label text="@Resource(key='rules.action.label', bundle='messages')" styleName="fontSize16Style" fontWeight="bold"/>
 		</s:Group>
 		
 		<rule:RuleList id="ruleList" dataProvider="{ruleDP}" 

@@ -48,8 +48,7 @@
 				 listDataProvider.length + ' ' + 
 				 LangUtil.getString('messages','rulebox.ruleitembox.collapse.prefix') + ' ' + 
 				 itemLabel + LangUtil.getString('messages','rulebox.ruleitembox.collapse.noSpaceSuffix')
-				 }"
-				 fontWeight="bold" />
+				 }" />
 		
 	</s:Group>
 	

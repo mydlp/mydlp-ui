@@ -26,7 +26,7 @@
 	</s:states>
 	
 	<s:Group left="0" right="0" top="0" bottom="0"
-			 minHeight="20">
+			 minHeight="16">
 		<s:layout>
 			<s:HorizontalLayout verticalAlign="middle"
 					paddingLeft="4" paddingRight="4"/>
@@ -36,8 +36,8 @@
 	</s:Group>
 	
 	<s:HGroup left="0" right="0" top="0" bottom="0" includeIn="selected"
-			  verticalAlign="middle"
-			  horizontalAlign="right">
+			  height="16"
+			  verticalAlign="middle" horizontalAlign="right">
 		<s:SkinnableContainer backgroundColor="0xCEDBEF" backgroundAlpha="1">
 			<s:layout>
 				<s:HorizontalLayout verticalAlign="middle"

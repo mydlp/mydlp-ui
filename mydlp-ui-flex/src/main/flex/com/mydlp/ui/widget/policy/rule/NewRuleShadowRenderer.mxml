@@ -111,26 +111,26 @@
 	
 	<s:Rect left="0" right="0" top="0" bottom="0" >
 		<s:stroke>
-			<s:SolidColorStroke color="0xDEEBFF" alpha="1" weight="2"/>
+			<s:SolidColorStroke color="0xDEEBFF" alpha="1" weight="1"/>
+		</s:stroke>
+	</s:Rect>
+	
+	<s:Rect left="1" right="1" top="1" bottom="1" >
+		<s:stroke>
+			<s:SolidColorStroke color="0xCEDBEF" alpha="1" weight="1"/>
 		</s:stroke>
 	</s:Rect>
 	
 	<s:Rect left="2" right="2" top="2" bottom="2" >
 		<s:stroke>
-			<s:SolidColorStroke color="0xCEDBEF" alpha="1" weight="2"/>
+			<s:SolidColorStroke color="0xDEEBFF" alpha="1" weight="1"/>
 		</s:stroke>
 	</s:Rect>
 	
-	<s:Rect left="4" right="4" top="4" bottom="4" >
-		<s:stroke>
-			<s:SolidColorStroke color="0xDEEBFF" alpha="1" weight="2"/>
-		</s:stroke>
-	</s:Rect>
-	
-	<s:Group top="6" bottom="6" left="6" right="6" color="0xACB9CD" width="914" fontWeight="bold">
+	<s:Group top="3" bottom="3" left="3" right="3" color="0xACB9CD" width="898" fontWeight="bold">
 		<s:layout>
-			<s:VerticalLayout verticalAlign="middle" horizontalAlign="center" gap="5"
-							  paddingTop="3" paddingBottom="3"/>
+			<s:VerticalLayout verticalAlign="middle" horizontalAlign="center" gap="2"
+							  paddingTop="1" paddingBottom="1"/>
 		</s:layout>
 		
 		<s:HGroup verticalAlign="middle">
