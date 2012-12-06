@@ -1,7 +1,6 @@
 package com.mydlp.ui.service;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
@@ -12,7 +11,7 @@ import javax.annotation.PostConstruct;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.SolrServerException;
-import org.apache.solr.client.solrj.impl.CommonsHttpSolrServer;
+import org.apache.solr.client.solrj.impl.HttpSolrServer;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
@@ -32,9 +31,9 @@ public class SolrServiceImpl implements SolrService {
 
 	@PostConstruct
 	protected synchronized void init() {
-		if (solrServer == null) {
-			try {
-				CommonsHttpSolrServer server = new CommonsHttpSolrServer(SOLR_URL);
+		try {
+			if (solrServer == null) {
+				HttpSolrServer server = new HttpSolrServer(SOLR_URL);
 				server.setSoTimeout(1000);
 				server.setConnectionTimeout(100);
 				server.setDefaultMaxConnectionsPerHost(100);
@@ -43,9 +42,10 @@ public class SolrServiceImpl implements SolrService {
 				server.setAllowCompression(true);
 				server.setMaxRetries(1);
 				solrServer = server;
-			} catch (MalformedURLException e) {
-				logger.error("Cannot connect solr : " + SOLR_URL , e);
 			}
+		}
+		catch (Throwable e) {
+			logger.error("Cannot initialize solrj server", e);
 		}
 	}
 
