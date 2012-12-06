@@ -131,9 +131,11 @@
           <optimize>${flex.optimize}</optimize>
           <debug>${flex.debug}</debug>
           <strict>true</strict>
+          <!--
           <themes>
             <theme>${settings.localRepository}/com/adobe/flex/framework/spark/${flex.version}/spark-${flex.version}-theme.css</theme>
           </themes>
+          -->
           <loadConfig>${settings.localRepository}/com/adobe/flex/framework/framework/${flex.version}/configs_zip/air-config.xml</loadConfig>
         </configuration>
 	    <dependencies>
