@@ -33,9 +33,11 @@
           <keystore>${basedir}/../${keystore.path}</keystore>
           <storepass>${keystore.password}</storepass>
           <swfVersion>11</swfVersion>
+          <!--
           <themes>
             <theme>${settings.localRepository}/com/adobe/flex/framework/spark/${flex.version}/spark-${flex.version}-theme.css</theme>
           </themes>
+          -->
           <quality>${flex.quality}</quality>
           <optimize>${flex.optimize}</optimize>
           <debug>${flex.debug}</debug>
