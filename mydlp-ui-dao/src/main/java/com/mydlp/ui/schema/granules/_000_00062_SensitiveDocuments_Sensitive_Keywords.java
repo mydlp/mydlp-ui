@@ -44,7 +44,7 @@ public class _000_00062_SensitiveDocuments_Sensitive_Keywords extends AbstractGr
 		
 		/*Confidential Keyword*/
 		RegularExpression regularExpression = new RegularExpression();
-		regularExpression.setRegex("confidental");
+		regularExpression.setRegex("confidential");
 		
 		Matcher matcher = new Matcher();
 		matcher.setFunctionName("keyword");
@@ -75,7 +75,7 @@ public class _000_00062_SensitiveDocuments_Sensitive_Keywords extends AbstractGr
 		informationType.setDataFormats(dfs);
 		
 		InventoryItem inventoryItem = new InventoryItem();
-		inventoryItem.setNameKey("informationType.compliance.sensitiveDocuments.sensitiveKeywords.confidental");
+		inventoryItem.setNameKey("informationType.compliance.sensitiveDocuments.sensitiveKeywords.confidential");
 		inventoryItem.setItem(informationType);
 		informationType.setCoupledInventoryItem(inventoryItem);
 		/*End of Confidential Keyword*/
