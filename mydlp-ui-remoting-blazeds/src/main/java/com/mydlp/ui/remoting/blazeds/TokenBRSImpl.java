@@ -26,13 +26,17 @@ public class TokenBRSImpl implements TokenService
 		String username = request.getRemoteUser();
 		String tokenKey = temporaryAccessTokenDAO.generateTokenKey(ipAddress, username, serviceName, serviceParam);
 
-		String proto = "p";
+		String proto = "p"; // as a workaround we always send request through http 80 
+		/*
 		if (request.isSecure())
 		{
 			proto = "s";
 		}
+		*/
 		String serverHost = request.getServerName();
-		int serverPort = request.getServerPort();
+		// as a workaround we always send request through http 80 
+		//int serverPort = request.getServerPort();
+		int serverPort = 80;
 		String returnToken = proto + serverHost + ":" + serverPort + "-" + tokenKey;
 		
 		return returnToken;
