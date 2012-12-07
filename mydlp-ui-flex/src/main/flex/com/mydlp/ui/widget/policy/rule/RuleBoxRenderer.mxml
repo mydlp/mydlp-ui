@@ -852,7 +852,7 @@
 								   source.selected="{icon32}"
 								   source="{icon24}"/>
 				</s:HGroup>
-				<s:Label id="nameLabel" maxWidth="110"/>
+				<s:Label id="nameLabel" width="100%"/>
 			</s:Group>
 			
 			<s:Group includeIn="selected">

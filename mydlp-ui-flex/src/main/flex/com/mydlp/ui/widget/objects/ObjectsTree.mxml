@@ -15,6 +15,7 @@
 		 folderClosedIcon="@Embed('/assets/icons/16x16/folder.png')"
 		 itemClick="onItemClick(event)"
 		 variableRowHeight="true"
+		 change="onChange(event)"
 		 >
 	<fx:Script>
 		<![CDATA[
@@ -53,6 +54,10 @@
 			
 			protected var tempOpenItems:Object;
 			
+			protected var tempVerticalScrollPosition:Number = 0;
+			
+			protected var afterRefreshSelectedIndex:int = -1;
+			
 			public function refreshTree(): void
 			{
 				/*
@@ -62,6 +67,8 @@
 				*/
 				tempOpenItems = openItems;
 				invalidateList();
+				tempVerticalScrollPosition = verticalScrollPosition;
+				afterRefreshSelectedIndex = selectedIndex;
 				re.getObjects();
 			}
 			
@@ -137,7 +144,15 @@
 				
 				openItems = tempOpenItems;
 				validateNow();
+				callLater(afterRefreshOps);
 			}
+			
+			protected function afterRefreshOps(): void
+			{
+				verticalScrollPosition = tempVerticalScrollPosition;
+				selectedIndex = afterRefreshSelectedIndex;
+			}
+			
 			
 			protected function populateTree():void
 			{
@@ -197,6 +212,11 @@
 					expandItem(selectedItem, !isItemOpen(selectedItem), true);
 				}
 				previousSelectedItem = selectedItem;
+			}
+			
+			protected function onChange(event:ListEvent):void
+			{
+				afterRefreshSelectedIndex = selectedIndex;
 			}
 			
 		]]>
