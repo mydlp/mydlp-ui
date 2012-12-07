@@ -76,7 +76,7 @@
 			protected var destinationDataProvider:ArrayCollection = new ArrayCollection();
 			
 			[Bindable]
-			protected var ruleList:List = FlexGlobals.topLevelApplication.policyContainer.ruleContainer.ruleList;
+			protected var ruleList:RuleList = FlexGlobals.topLevelApplication.policyContainer.ruleContainer.ruleList;
 			
 			protected var deleteList:ListCollectionView;
 			
@@ -150,6 +150,7 @@
 				if (ruleObject == null) return;
 				invalidateDisplayList();
 				refreshDataProviders();
+				setExpandCollapseEnabled();
 				validateNow();
 			}
 			
@@ -569,6 +570,8 @@
 			{
 				if (dragEvent.dragInitiator is InventoryTree)
 				{
+					ruleList.setAfterRefreshSelected(ruleObject);
+					
 					deleteList = new ArrayCollection();
 					var inventoryObjects:* = FlexGlobals.topLevelApplication.policyContainer.inventoryTree.selectedItems;
 					for each (var o:* in inventoryObjects)
@@ -576,7 +579,7 @@
 					
 					invalidateProperties();
 					refresh();
-					
+					 
 					re.save(ruleObject);
 				}
 				else if (dragEvent.dragInitiator is RuleList)
@@ -745,6 +748,38 @@
 				}
 			}
 			
+			protected function isExpandCollapseEnabled(): Boolean
+			{
+				if (sourceDataProvider.length > 1)
+				{
+					return true;
+				}
+				if (matcherDataProvider.length > 1)
+				{
+					return true;
+				}
+				if (destinationDataProvider.length > 1)
+				{
+					return true;
+				}
+				return false;
+			}
+			
+			protected function setExpandCollapseEnabled(): void
+			{
+				if (isExpandCollapseEnabled())
+				{
+					expandCollapseButtton.includeInLayout = true;
+					expandCollapseButtton.visible = true;
+				}
+				else
+				{
+					expandCollapseButtton.includeInLayout = false;
+					expandCollapseButtton.visible = false;
+				}
+			}
+			
+			
 		]]>
 	</fx:Script>
 	
@@ -817,7 +852,8 @@
 					<s:HorizontalLayout />
 				</s:layout>
 				
-				<s:Button styleName="{this.collapse ? 'expandButtonStyle' : 'collapseButtonStyle'}" 
+				<s:Button id="expandCollapseButtton" includeInLayout="false" visible="false" 
+						  styleName="{this.collapse ? 'expandButtonStyle' : 'collapseButtonStyle'}" 
 						  toolTip="{
 						  this.collapse ?
 						  LangUtil.getString('messages', 'rulebox.expandButton.tooltip.label')

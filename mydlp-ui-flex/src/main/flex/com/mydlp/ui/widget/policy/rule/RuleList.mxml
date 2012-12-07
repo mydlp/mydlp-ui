@@ -67,6 +67,12 @@
 				itemClick = false;
 			}
 			
+			public function setAfterRefreshSelected(afterRefreshSelectedItem:*): void
+			{
+				var arsi:int = dataProvider.getItemIndex(afterRefreshSelectedItem);
+				afterRefreshSelectedIndex = arsi;
+			}
+			
 			protected function onItemClick(event:ItemClickEvent):void
 			{
 				afterRefreshSelectedIndex = selectedIndex;

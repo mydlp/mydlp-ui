@@ -198,11 +198,10 @@ public class IncidentLogDAOImpl extends AbstractLogDAO implements IncidentLogDAO
 	public List<IncidentLog> getIncidents(AuthUser user, List<List<Object>> criteriaList, Integer offset, Integer limit) {
 		DetachedCriteria criteria = 
 				DetachedCriteria.forClass(IncidentLog.class)
-					.addOrder(Order.desc("id"));
+					.addOrder(Order.desc("date"));
 		criteria = applyUserCriteria(criteria, user);
 		criteria = applyCriteriaList(criteria, criteriaList);
 		return criteria.getExecutableCriteria(getSession())
-			.addOrder(Order.desc("date"))
 			.setFirstResult(offset)
 			.setMaxResults(limit)
 			.list();
