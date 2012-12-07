@@ -94,6 +94,7 @@
 				if (message != "") 
 				{
 					var dialogMessage:Label = new Label();
+					dialogMessage.percentWidth = 100;
 					dialogMessage.text = message;
 					deleteForm.addElement(dialogMessage);
 				}
@@ -106,6 +107,7 @@
 				if (message2 != "")
 				{
 					var dialogMessage2:Label = new Label();
+					dialogMessage2.percentWidth = 100;
 					dialogMessage2.text = message2;
 					deleteForm.addElement(dialogMessage2);
 				}

@@ -150,8 +150,14 @@
 				if (ruleObject == null) return;
 				invalidateDisplayList();
 				refreshDataProviders();
-				setExpandCollapseEnabled();
+				refreshView();
 				validateNow();
+			}
+			
+			public function refreshView(): void
+			{
+				expandCollapseButtonEnabled = isExpandCollapseEnabled();
+				setNameLabel();
 			}
 			
 			public static function isSourceRuleItem(item:Item):Boolean
@@ -765,17 +771,18 @@
 				return false;
 			}
 			
-			protected function setExpandCollapseEnabled(): void
+			protected function setNameLabel(): void
 			{
-				if (isExpandCollapseEnabled())
+				if (ruleObject.label == null || ruleObject.label.length == 0) return;
+				var ruleObjectLabel:String = ruleObject.label;
+				if (ruleObjectLabel.length > 22)
 				{
-					expandCollapseButtton.includeInLayout = true;
-					expandCollapseButtton.visible = true;
+					nameLabel.toolTip = ruleObjectLabel;
+					nameLabel.text = ruleObjectLabel.substr(0, 20) + "...";
 				}
 				else
 				{
-					expandCollapseButtton.includeInLayout = false;
-					expandCollapseButtton.visible = false;
+					nameLabel.text = ruleObjectLabel;
 				}
 			}
 			
@@ -785,6 +792,7 @@
 	
 	<fx:Declarations>
 		<fx:Boolean id="collapse">true</fx:Boolean>
+		<fx:Boolean id="expandCollapseButtonEnabled">false</fx:Boolean>
 		<fx:Class id="icon24" />
 		<fx:Class id="icon32" />
 		<my:remote id="re" destination="ruleBRS">
@@ -844,7 +852,7 @@
 								   source.selected="{icon32}"
 								   source="{icon24}"/>
 				</s:HGroup>
-				<s:Label id="nameLabel" text="{ruleObject.label}" maxWidth="110"/>
+				<s:Label id="nameLabel" maxWidth="110"/>
 			</s:Group>
 			
 			<s:Group includeIn="selected">
@@ -852,7 +860,7 @@
 					<s:HorizontalLayout />
 				</s:layout>
 				
-				<s:Button id="expandCollapseButtton" includeInLayout="false" visible="false" 
+				<s:Button includeInLayout="{expandCollapseButtonEnabled}" visible="{expandCollapseButtonEnabled}" 
 						  styleName="{this.collapse ? 'expandButtonStyle' : 'collapseButtonStyle'}" 
 						  toolTip="{
 						  this.collapse ?

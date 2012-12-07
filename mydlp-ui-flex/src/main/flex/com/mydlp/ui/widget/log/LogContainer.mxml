@@ -54,22 +54,41 @@
 					)
 				);
 				
-			[Bindable]
-			protected var channelSearch:ListCollectionView = 
+			protected static const channels:ListCollectionView = 
 				new ArrayCollection(
 					new Array(
-						"Web",
-						"Mail",
-						"Removable Storage",
-						"Removable Storage Inbound",
-						"Printer",
-						"Discovery",
-						"API"
+						{label: "Web", data:"W"},
+						{label: "Mail", data:"M"},
+						{label: "Removable Storage", data:"R"},
+						{label: "Removable Storage Inbound", data:"I"},
+						{label: "Printer", data:"P"},
+						{label: "Discovery", data:"D"},
+						{label: "API", data:"A"}
+					)
+				);
+			
+			protected static const channelsCommunity:ListCollectionView = 
+				new ArrayCollection(
+					new Array(
+						{label: "Web", data:"W"},
+						{label: "Mail", data:"M"},
+						{label: "Removable Storage", data:"R"},
+						{label: "Printer", data:"P"},
+						{label: "Discovery", data:"D"}
 					)
 				);
 			
 			protected function onCreationComplete(event:FlexEvent):void
 			{
+				if (SessionUtil.isEnterprise())
+				{
+					channelList.dataProvider = channels;
+				}
+				else
+				{
+					channelList.dataProvider = channelsCommunity;
+				}
+				
 				logSearchDP = new AsyncListDataProvider();
 				logSearchDP.countFunction = countLogSearch;
 				logSearchDP.fetchFunction = fetchLogSearch;
@@ -175,18 +194,7 @@
 				
 				if(channelList.selectedIndex != -1)
 				{
-					var channelValue:String;
-					switch(channelSearch.getItemAt(channelList.selectedIndex))
-					{
-						case "Web": channelValue = "W"; break;
-						case "Removable Storage": channelValue = "R"; break;
-						case "Removable Storage Inbound": channelValue = "I"; break;
-						case "Mail": channelValue = "M"; break;
-						case "Printer": channelValue = "P"; break;
-						case "Discovery": channelValue = "D"; break;
-						case "API": channelValue = "A"; break;
-						default: break;
-					}
+					var channelValue:String = channelList.selectedItem.data;
 					var criteria7:ListCollectionView = new ArrayCollection();
 					criteria7.addItem("channel");
 					criteria7.addItem("eq");
@@ -290,9 +298,9 @@
 			{
 				
 				if (item == null ||
-					item == "Discovery" ||
-					item == "Web" ||
-					item == "Mail"
+					item.data == "D" ||
+					item.data == "W" ||
+					item.data == "M"
 					)
 				{
 					return true;
@@ -378,8 +386,7 @@
 			<s:Spacer width="10"/>
 			<s:Label text="@Resource(bundle = 'messages', key = 'log.container.search.channelList.label')"/>
 			<s:DropDownList id="channelList" width="180"
-							contentBackgroundAlpha="1"
-							dataProvider="{channelSearch}"/>
+							contentBackgroundAlpha="1" />
 		</s:HGroup>  
 				
 	</s:Group>
