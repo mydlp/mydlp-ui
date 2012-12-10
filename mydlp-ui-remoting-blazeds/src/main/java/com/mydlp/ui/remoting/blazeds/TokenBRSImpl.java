@@ -19,8 +19,7 @@ public class TokenBRSImpl implements TokenService
 	@Autowired(required=true)
 	protected HttpServletRequest request;
 	
-	@Override
-	public String generateToken(String serviceName, String serviceParam) {
+	protected String generateToken(String serviceName, String serviceParam) {
 	
 		String ipAddress = request.getRemoteAddr();
 		String username = request.getRemoteUser();
@@ -45,6 +44,16 @@ public class TokenBRSImpl implements TokenService
 	@Override
 	public String generateToolsUploaderToken(String serviceParam) {
 		return generateToken("tools-uploader", serviceParam);
+	}
+
+	@Override
+	public Boolean hasAnyValidToken(String serviceName, String serviceParam) {
+		return temporaryAccessTokenDAO.hasAnyValidToken(serviceName, serviceParam);
+	}
+
+	@Override
+	public void revokateAllTokens(String serviceName, String serviceParam) {
+		temporaryAccessTokenDAO.revokateAllTokens(serviceName, serviceParam);
 	}
 	
 }
