@@ -11,7 +11,7 @@ import com.mydlp.ui.domain.InventoryItem;
 import com.mydlp.ui.domain.SourceDomainName;
 import com.mydlp.ui.schema.AbstractGranule;
 
-public class _001_00160_SourceDomainAll extends AbstractGranule {
+public class _001_00170_SourceDomainAll extends AbstractGranule {
 
 	@Override
 	protected void callback() {

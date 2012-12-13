@@ -203,7 +203,7 @@
 					var hasDestination:Boolean = false;
 					ruleItemLoop: for each (var ri:RuleItem in r.ruleItems)
 					{
-						if (hasSource == false && RuleBoxRenderer.isSourceRuleItem(ri.item))
+						if (hasSource == false && (RuleBoxRenderer.isSourceRuleItem(ri.item) || RuleBoxRenderer.isSourceDomainRuleItem(ri.item)))
 							hasSource = true;
 						if (hasIType == false && RuleBoxRenderer.isITypeRuleItem(ri.item))
 							hasIType = true;
