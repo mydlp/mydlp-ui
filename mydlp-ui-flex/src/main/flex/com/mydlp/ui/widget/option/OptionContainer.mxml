@@ -107,7 +107,9 @@
 					else if (config.key == "fsm_timeout") advancedTab.fsmTimeout = config;
 					else if (config.key == "spawn_timeout") advancedTab.spawnTimeout = config;
 					else if (config.key == "query_cache_cleanup_interval") advancedTab.queryCacheCleanupInterval = config;
-					else if (config.key == "query_cache_maximum_size") advancedTab.queryCacheMaximumSize = config;					
+					else if (config.key == "query_cache_maximum_size") advancedTab.queryCacheMaximumSize = config;
+					else if (config.key == "thrift_server_pool_size") advancedTab.thriftServerPoolSize = config;
+					else if (config.key == "thrift_endpoint_pool_size") advancedTab.thriftEndpointPoolSize = config;
 						
 					else if (config.key == "auto_distribution") advancedTab.autoDistribution = config;
 					else if (config.key == "auto_distribution_nodes") advancedTab.autoDistributionNodes = config;
@@ -196,7 +198,7 @@
 		<s:VerticalLayout gap="0" paddingTop="4" />
 	</s:layout>
 	
-	<s:TabBar dataProvider="{vs}" fontSize="14" fontWeight="bold" id="tabbar"/>
+	<s:TabBar dataProvider="{vs}" fontSize="12" fontWeight="bold" id="tabbar"/>
 	
 	<s:Group id="optionContainerGroup" width="1180" height="580">
 		<s:Rect left="0" right="0" top="0" bottom="30">

@@ -19,20 +19,23 @@ public class TokenBRSImpl implements TokenService
 	@Autowired(required=true)
 	protected HttpServletRequest request;
 	
-	@Override
-	public String generateToken(String serviceName, String serviceParam) {
+	protected String generateToken(String serviceName, String serviceParam) {
 	
 		String ipAddress = request.getRemoteAddr();
 		String username = request.getRemoteUser();
 		String tokenKey = temporaryAccessTokenDAO.generateTokenKey(ipAddress, username, serviceName, serviceParam);
 
-		String proto = "p";
+		String proto = "p"; // as a workaround we always send request through http 80 
+		/*
 		if (request.isSecure())
 		{
 			proto = "s";
 		}
+		*/
 		String serverHost = request.getServerName();
-		int serverPort = request.getServerPort();
+		// as a workaround we always send request through http 80 
+		//int serverPort = request.getServerPort();
+		int serverPort = 80;
 		String returnToken = proto + serverHost + ":" + serverPort + "-" + tokenKey;
 		
 		return returnToken;
@@ -41,6 +44,16 @@ public class TokenBRSImpl implements TokenService
 	@Override
 	public String generateToolsUploaderToken(String serviceParam) {
 		return generateToken("tools-uploader", serviceParam);
+	}
+
+	@Override
+	public Boolean hasAnyValidToken(String serviceName, String serviceParam) {
+		return temporaryAccessTokenDAO.hasAnyValidToken(serviceName, serviceParam);
+	}
+
+	@Override
+	public void revokateAllTokens(String serviceName, String serviceParam) {
+		temporaryAccessTokenDAO.revokateAllTokens(serviceName, serviceParam);
 	}
 	
 }

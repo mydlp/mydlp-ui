@@ -57,8 +57,10 @@
 				currentUser = FlexGlobals.topLevelApplication.user as AuthUser;
 				
 				if (currentUser != null)
-					userLabel.text = 	LangUtil.getString("messages", "toptoolbar.loggedinas") + " " +
+				{
+					userLabelText = 	LangUtil.getString("messages", "toptoolbar.loggedinas") + " " +
 										currentUser.username + " <" +currentUser.email + ">";
+				}
 			}
 			
 			protected function compilePolicyHandler(event:ResultEvent): void
@@ -247,6 +249,15 @@
 				else return false;
 			}
 				
+			protected function getVersionHandler(event:ResultEvent):void
+			{
+				var version:String = event.result as String;
+				if (version != null && version.length > 0)
+				{
+					mydlpVersion.text = LangUtil.getString("messages", "toptoolbar.version.label") + " " + version; 
+				}
+			}
+			
 		]]>
 	</fx:Script>
 
@@ -260,8 +271,10 @@
 			<my:method name="save" result="saveRevisionHandler(event)" />
 		</my:remote>
 		<my:remote id="rg" destination="genericBRS" >
-			<my:method name="getVersion" result="{mydlpVersion.text = event.result as String}" />
+			<my:method name="getVersion" result="getVersionHandler(event)" />
 		</my:remote>
+		
+		<fx:String id="userLabelText" />
 	</fx:Declarations>
 	
 	<s:states>
@@ -287,12 +300,12 @@
 	</s:Group>
 	
 	<s:Spacer width="6" />
-	<s:VGroup horizontalAlign="left" verticalAlign="middle">
-		<s:Label id="userLabel" />
-		<s:HGroup gap="5">
-			<s:Label text="@Resource(bundle='messages', key='toptoolbar.version.label')" />
-			<s:Label id="mydlpVersion" />
-		</s:HGroup>
+	<s:VGroup width="400" 
+			  includeInLayout="{userLabelText.length &gt; 0}" 
+			  visible="{userLabelText.length &gt; 0}"
+			  horizontalAlign="left" verticalAlign="middle">
+		<s:Label text="{userLabelText}" width="100%"/>
+		<s:Label id="mydlpVersion" width="100%" />
 	</s:VGroup>
 	
 	<s:Spacer width="4" />

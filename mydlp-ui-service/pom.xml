@@ -118,7 +118,7 @@
       <version>1.6.4</version>
     </dependency>
     <dependency>
-      <groupId>org.apache.solr.solr</groupId>
+      <groupId>org.apache.solr</groupId>
       <artifactId>solr-solrj</artifactId>
       <version>${solrj.version}</version>
     </dependency>

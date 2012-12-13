@@ -114,11 +114,37 @@ public class TemporaryAccessTokenDAOImpl extends AbstractLogDAO implements
 	public void cleanupIdleTokens() {
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(new Date());
-		cal.add(Calendar.MINUTE, 20);
+		cal.add(Calendar.MINUTE, -20);
 		
 		DetachedCriteria criteria = 
 				DetachedCriteria.forClass(TemporaryAccessToken.class)
 					.add(Restrictions.lt("lastUpdate", cal.getTime()));
+		@SuppressWarnings("unchecked")
+		List<TemporaryAccessToken> list = getHibernateTemplate().findByCriteria(criteria);
+		for (TemporaryAccessToken temporaryAccessToken : list) {
+			getHibernateTemplate().delete(temporaryAccessToken);
+		}
+	}
+
+	@Override
+	public Boolean hasAnyValidToken(String serviceName, String serviceParam) {
+		cleanupExpiredTokens();
+		cleanupIdleTokens();
+		DetachedCriteria criteria = 
+				DetachedCriteria.forClass(TemporaryAccessToken.class)
+					.add(Restrictions.eq("serviceName", serviceName))
+					.add(Restrictions.eq("serviceParam", serviceParam));
+		@SuppressWarnings("unchecked")
+		List<TemporaryAccessToken> list = getHibernateTemplate().findByCriteria(criteria);
+		return !list.isEmpty();
+	}
+
+	@Override
+	public void revokateAllTokens(String serviceName, String serviceParam) {
+		DetachedCriteria criteria = 
+				DetachedCriteria.forClass(TemporaryAccessToken.class)
+					.add(Restrictions.eq("serviceName", serviceName))
+					.add(Restrictions.eq("serviceParam", serviceParam));
 		@SuppressWarnings("unchecked")
 		List<TemporaryAccessToken> list = getHibernateTemplate().findByCriteria(criteria);
 		for (TemporaryAccessToken temporaryAccessToken : list) {

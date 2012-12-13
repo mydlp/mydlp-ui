@@ -79,7 +79,7 @@
 			protected var destinationDataProvider:ArrayCollection = new ArrayCollection();
 			
 			[Bindable]
-			protected var ruleList:List = FlexGlobals.topLevelApplication.policyContainer.ruleContainer.ruleList;
+			protected var ruleList:RuleList = FlexGlobals.topLevelApplication.policyContainer.ruleContainer.ruleList;
 			
 			protected var deleteList:ListCollectionView;
 			
@@ -155,7 +155,14 @@
 				if (ruleObject == null) return;
 				invalidateDisplayList();
 				refreshDataProviders();
+				refreshView();
 				validateNow();
+			}
+			
+			public function refreshView(): void
+			{
+				expandCollapseButtonEnabled = isExpandCollapseEnabled();
+				setNameLabel();
 			}
 			
 			public static function isSourceRuleItem(item:Item):Boolean
@@ -675,6 +682,8 @@
 			{
 				if (dragEvent.dragInitiator is InventoryTree)
 				{
+					ruleList.setAfterRefreshSelected(ruleObject);
+					
 					deleteList = new ArrayCollection();
 					var inventoryObjects:* = FlexGlobals.topLevelApplication.policyContainer.inventoryTree.selectedItems;
 					for each (var o:* in inventoryObjects)
@@ -682,7 +691,7 @@
 					
 					invalidateProperties();
 					refresh();
-					
+					 
 					re.save(ruleObject);
 				}
 				else if (dragEvent.dragInitiator is RuleList)
@@ -866,11 +875,45 @@
 				}
 			}
 			
+			protected function isExpandCollapseEnabled(): Boolean
+			{
+				if (sourceDataProvider.length > 1)
+				{
+					return true;
+				}
+				if (matcherDataProvider.length > 1)
+				{
+					return true;
+				}
+				if (destinationDataProvider.length > 1)
+				{
+					return true;
+				}
+				return false;
+			}
+			
+			protected function setNameLabel(): void
+			{
+				if (ruleObject.label == null || ruleObject.label.length == 0) return;
+				var ruleObjectLabel:String = ruleObject.label;
+				if (ruleObjectLabel.length > 22)
+				{
+					nameLabel.toolTip = ruleObjectLabel;
+					nameLabel.text = ruleObjectLabel.substr(0, 20) + "...";
+				}
+				else
+				{
+					nameLabel.text = ruleObjectLabel;
+				}
+			}
+			
+			
 		]]>
 	</fx:Script>
 	
 	<fx:Declarations>
 		<fx:Boolean id="collapse">true</fx:Boolean>
+		<fx:Boolean id="expandCollapseButtonEnabled">false</fx:Boolean>
 		<fx:Class id="icon24" />
 		<fx:Class id="icon32" />
 		<my:remote id="re" destination="ruleBRS">
@@ -930,7 +973,7 @@
 								   source.selected="{icon32}"
 								   source="{icon24}"/>
 				</s:HGroup>
-				<s:Label id="nameLabel" text="{ruleObject.label}" maxWidth="110"/>
+				<s:Label id="nameLabel" width="100%"/>
 			</s:Group>
 			
 			<s:Group includeIn="selected">
@@ -938,7 +981,8 @@
 					<s:HorizontalLayout />
 				</s:layout>
 				
-				<s:Button styleName="{this.collapse ? 'expandButtonStyle' : 'collapseButtonStyle'}" 
+				<s:Button includeInLayout="{expandCollapseButtonEnabled}" visible="{expandCollapseButtonEnabled}" 
+						  styleName="{this.collapse ? 'expandButtonStyle' : 'collapseButtonStyle'}" 
 						  toolTip="{
 						  this.collapse ?
 						  LangUtil.getString('messages', 'rulebox.expandButton.tooltip.label')

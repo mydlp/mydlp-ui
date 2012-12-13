@@ -170,7 +170,9 @@
 			protected function clickHandler(event:MouseEvent):void
 			{
 				if(!isSelection)
+				{
 					ruleList.selectedIndex = -1;
+				}
 				isSelection = false;
 			}
 			

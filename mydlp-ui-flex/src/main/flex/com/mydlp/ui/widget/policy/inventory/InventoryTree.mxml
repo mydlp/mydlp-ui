@@ -20,6 +20,7 @@
 		 folderOpenIcon="@Embed('/assets/icons/16x16/folder.png')"
 		 folderClosedIcon="@Embed('/assets/icons/16x16/folder.png')"
 		 itemClick="onItemClick(event)"
+		 change="onChange(event)"
 		 >
 	<fx:Script>
 		<![CDATA[
@@ -47,9 +48,14 @@
 			
 			protected var tempOpenItems:Object;
 			
+			protected var afterRefreshSelectedIndices:Array = [];
+			
+			protected var tempVerticalScrollPosition:Number = 0;
+			
 			public function refreshTree(): void
 			{
 				tempOpenItems = openItems;
+				tempVerticalScrollPosition = verticalScrollPosition;
 				re.getInventory();
 			}
 			
@@ -66,6 +72,13 @@
 				inventory = event.result as ListCollectionView;
 				openItems = tempOpenItems;
 				validateNow();
+				callLater(afterRefreshOps);
+			}
+			
+			protected function afterRefreshOps(): void
+			{
+				verticalScrollPosition = tempVerticalScrollPosition;
+				selectedIndices = afterRefreshSelectedIndices;
 			}
 			
 			protected function populateTree():void
@@ -199,6 +212,11 @@
 							return c;
 					}
 				return null;
+			}
+			
+			protected function onChange(event:ListEvent):void
+			{
+				afterRefreshSelectedIndices = selectedIndices;
 			}
 			
 		]]>

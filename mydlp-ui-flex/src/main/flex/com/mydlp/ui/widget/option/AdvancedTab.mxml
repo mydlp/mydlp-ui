@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<option:ConfigTabBox xmlns:fx="http://ns.adobe.com/mxml/2009" 
-					 xmlns:s="library://ns.adobe.com/flex/spark" 
-					 xmlns:mx="library://ns.adobe.com/flex/mx" 
+<option:ConfigTabBox xmlns:fx="http://ns.adobe.com/mxml/2009"
+					 xmlns:s="library://ns.adobe.com/flex/spark"
+					 xmlns:mx="library://ns.adobe.com/flex/mx"
 					 xmlns:option="com.mydlp.ui.widget.option.*"
 					 xmlns:domain="com.mydlp.ui.domain.*">
 	
@@ -33,63 +33,50 @@
 	</fx:Script>
 	
 	<fx:Declarations>
-		<domain:Config id="maximumObjectSize" />	
-		<domain:Config id="maximumMemoryObject" />	
-		<domain:Config id="maximumChunkSize" />	
-		<domain:Config id="supervisorMaxRestartCount" />	
-		<domain:Config id="supervisorMaxRestartTime" />			
-		<domain:Config id="supervisorKillTimeout" />	
-		<domain:Config id="fsmTimeout" />			
-		<domain:Config id="spawnTimeout" />	
-		<domain:Config id="queryCacheCleanupInterval" />			
-		<domain:Config id="queryCacheMaximumSize" />
-		<domain:Config id="errorAction" />
-		<domain:Config id="autoDistribution" />
-		<domain:Config id="autoDistributionNodes" />
+		<domain:Config id="maximumObjectSize"/>	
+		<domain:Config id="maximumMemoryObject"/>	
+		<domain:Config id="maximumChunkSize"/>	
+		<domain:Config id="supervisorMaxRestartCount"/>	
+		<domain:Config id="supervisorMaxRestartTime"/>			
+		<domain:Config id="supervisorKillTimeout"/>	
+		<domain:Config id="fsmTimeout"/>			
+		<domain:Config id="spawnTimeout"/>	
+		<domain:Config id="queryCacheCleanupInterval"/>			
+		<domain:Config id="queryCacheMaximumSize"/>
+		<domain:Config id="errorAction"/>
+		<domain:Config id="autoDistribution"/>
+		<domain:Config id="autoDistributionNodes"/>
+		<domain:Config id="thriftServerPoolSize"/>
+		<domain:Config id="thriftEndpointPoolSize"/>
 	</fx:Declarations>
 	<s:VGroup width="100%" height="100%" gap="10">
 		<s:HGroup width="100%" height="100%">
 			<s:Form width="40%">	
 				<s:FormItem label="{maximumObjectSize.label}">
-					<s:TextInput text="@{maximumObjectSize.value}" width="100%"/>
+					<s:TextInput width="100%" text="@{maximumObjectSize.value}"/>
 				</s:FormItem>
 				<s:FormItem label="{maximumMemoryObject.label}">
-					<s:TextInput text="@{maximumMemoryObject.value}" width="100%"/>
+					<s:TextInput width="100%" text="@{maximumMemoryObject.value}"/>
 				</s:FormItem>			
 				<s:FormItem label="{maximumChunkSize.label}">
-					<s:TextInput text="@{maximumChunkSize.value}" width="100%"/>
+					<s:TextInput width="100%" text="@{maximumChunkSize.value}"/>
 				</s:FormItem>
 				<s:FormItem label="{fsmTimeout.label}">
-					<s:TextInput text="@{fsmTimeout.value}" width="100%"/>
+					<s:TextInput width="100%" text="@{fsmTimeout.value}"/>
 				</s:FormItem>
 				<s:FormItem label="{spawnTimeout.label}">
-					<s:TextInput text="@{spawnTimeout.value}" width="100%"/>
+					<s:TextInput width="100%" text="@{spawnTimeout.value}"/>
 				</s:FormItem>
-			</s:Form>
-			<s:Form width="40%">
-				<s:FormItem label="{supervisorMaxRestartCount.label}">
-					<s:TextInput text="@{supervisorMaxRestartCount.value}" width="100%"/>
+				<s:FormItem label="{thriftServerPoolSize.label}">
+					<s:TextInput width="100%" text="@{thriftServerPoolSize.value}"/>
 				</s:FormItem>
-				<s:FormItem label="{supervisorMaxRestartTime.label}">
-					<s:TextInput text="@{supervisorMaxRestartTime.value}" width="100%"/>
+				<s:FormItem label="{thriftEndpointPoolSize.label}">
+					<s:TextInput width="100%" text="@{thriftEndpointPoolSize.value}"/>
 				</s:FormItem>
-				<s:FormItem label="{supervisorKillTimeout.label}">
-					<s:TextInput text="@{supervisorKillTimeout.value}" width="100%"/>
-				</s:FormItem>
-				<s:FormItem label="{queryCacheCleanupInterval.label}">
-					<s:TextInput text="@{queryCacheCleanupInterval.value}" width="100%"/>
-				</s:FormItem>
-				<s:FormItem label="{queryCacheMaximumSize.label}">
-					<s:TextInput text="@{queryCacheMaximumSize.value}" width="100%"/>
-				</s:FormItem>	
-			</s:Form>
-		</s:HGroup>
-		
-		<s:HGroup width="100%" height="100%" gap="270">
-			<s:Form>
-				<s:FormItem label="{errorAction.label}" >
-					<s:DropDownList id="errorActionComboBox" selectedIndex="{(errorAction.value == 'pass') ? 0 : 1}" 
-									change="{errorAction.value = (errorActionComboBox.selectedIndex == 0) ? 'pass' : 'block'}">
+				<s:FormItem label="{errorAction.label}">
+					<s:DropDownList id="errorActionComboBox"
+									change="{errorAction.value = (errorActionComboBox.selectedIndex == 0) ? 'pass' : 'block'}"
+									selectedIndex="{(errorAction.value == 'pass') ? 0 : 1}">
 						<s:dataProvider>
 							<mx:ArrayList>
 								<fx:String>pass</fx:String>
@@ -99,29 +86,41 @@
 					</s:DropDownList>				
 				</s:FormItem>
 			</s:Form>
-			<s:VGroup width="100%" height="100%">	
+			<s:Form width="40%">
+				<s:FormItem label="{supervisorMaxRestartCount.label}">
+					<s:TextInput width="100%" text="@{supervisorMaxRestartCount.value}"/>
+				</s:FormItem>
+				<s:FormItem label="{supervisorMaxRestartTime.label}">
+					<s:TextInput width="100%" text="@{supervisorMaxRestartTime.value}"/>
+				</s:FormItem>
+				<s:FormItem label="{supervisorKillTimeout.label}">
+					<s:TextInput width="100%" text="@{supervisorKillTimeout.value}"/>
+				</s:FormItem>
+				<s:FormItem label="{queryCacheCleanupInterval.label}">
+					<s:TextInput width="100%" text="@{queryCacheCleanupInterval.value}"/>
+				</s:FormItem>
+				<s:FormItem label="{queryCacheMaximumSize.label}">
+					<s:TextInput width="100%" text="@{queryCacheMaximumSize.value}"/>
+				</s:FormItem>	
+				<s:FormItem label="{autoDistribution.label}">
+					<s:CheckBox id="autoDistributionCheckBox"
+								change="{autoDistribution.value = autoDistributionCheckBox.selected ? 'true' : 'false'}"
+								selected="{autoDistribution.value == 'true'}"/>			
+				</s:FormItem>
 				
-				<s:Form>
-					<s:FormItem label="{autoDistribution.label}">
-						<s:CheckBox id="autoDistributionCheckBox" 
-									selected="{autoDistribution.value == 'true'}" 
-									change="{autoDistribution.value = autoDistributionCheckBox.selected ? 'true' : 'false'}"/>			
-					</s:FormItem>
-					
-					<s:FormItem label="{autoDistributionNodes.label}">
-						<option:NodeList id="nodeList" nodeText="{autoDistributionNodes.value}" width="200" height="100" />
-						<s:HGroup width="200">
-							<s:Spacer width="100%"/>
-							<s:Button label="@Resource(bundle = 'messages', key = 'options.hatab.popup.removenode')" 
-									  click="removeNodeClickHandler(event)"/>
-							
-							<s:Button label="@Resource(bundle = 'messages', key = 'options.hatab.popup.addnode')"
-									  click="newButtonHandler(event)"/>					
-						</s:HGroup>
-					</s:FormItem>
-				</s:Form>		
-				
-			</s:VGroup>
+				<s:FormItem label="{autoDistributionNodes.label}">
+					<option:NodeList id="nodeList" width="200" height="100"
+									 nodeText="{autoDistributionNodes.value}"/>
+					<s:HGroup width="200">
+						<s:Spacer width="100%"/>
+						<s:Button label="@Resource(bundle = 'messages', key = 'options.hatab.popup.removenode')"
+								  click="removeNodeClickHandler(event)"/>
+						
+						<s:Button label="@Resource(bundle = 'messages', key = 'options.hatab.popup.addnode')"
+								  click="newButtonHandler(event)"/>					
+					</s:HGroup>
+				</s:FormItem>
+			</s:Form>		
 		</s:HGroup>
 	</s:VGroup>
 </option:ConfigTabBox>

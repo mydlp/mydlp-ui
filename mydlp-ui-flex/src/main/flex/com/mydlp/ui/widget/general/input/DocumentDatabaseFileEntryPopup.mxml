@@ -20,6 +20,7 @@
 			
 			import mx.collections.ArrayCollection;
 			import mx.controls.Alert;
+			import mx.core.FlexGlobals;
 			import mx.events.DragEvent;
 			import mx.events.FlexEvent;
 			import mx.managers.DragManager;
@@ -132,6 +133,7 @@
 			{
 				tokenInput.text = event.result as String;
 				tokenInput.enabled = true;
+				FlexGlobals.topLevelApplication.objectsContainer.refreshDocumentDatabaseTokenControl();
 				enableButtons();
 			}
 			
@@ -195,9 +197,10 @@
 			<s:Label width="100%" 
 				text="@Resource(key='documentDatabase.fileUpload.uploaderapp.message', bundle='messages')" />
 			
-			<s:Label width="100%" fontWeight="bold"
-					 text="@Resource(key='documentDatabase.fileUpload.download.uploaderapp.message', bundle='messages')" 
-					 click="{navigateToURL(new URLRequest('/static/apps/mydlp-uploader.air'), '_blank')}"/>
+			<s:Button skinClass="com.mydlp.ui.skin.DownloadBitmapLabelButton16Skin"
+						  label="@Resource(key='documentDatabase.fileUpload.download.uploaderapp.message', bundle='messages')"
+						  click="{navigateToURL(new URLRequest('/static/apps/mydlp-uploader.air'), '_blank')}"
+						  fontWeight="bold"/>
 			
 			<s:HGroup width="100%" verticalAlign="middle" gap="10">
 				<s:Button label="@Resource(key='documentDatabase.fileUpload.uploaderapp.generateButton.label', bundle='messages')"

@@ -39,7 +39,7 @@
 
   <properties>
     <mydlp-ui.version>1.0.0-SNAPSHOT</mydlp-ui.version>
-    <flex.version>4.5.0.20967</flex.version>
+    <flex.version>4.5.1.21328</flex.version>
     <flex.dv.version>4.5.0.17855</flex.dv.version>
     <flexmojos.version>4.0-RC2</flexmojos.version>
     <dpHibernate.version>2.0-RC6</dpHibernate.version>
@@ -51,7 +51,7 @@
     <mysql.driver.version>5.1.18</mysql.driver.version>
     <jstl.version>1.2</jstl.version>
     <libthrift.version>0.7.0</libthrift.version>
-    <solrj.version>1.4.1</solrj.version>
+    <solrj.version>4.0.0</solrj.version>
     <AlivePDF.version>0.1.5-RC</AlivePDF.version>
     <commons-pool.version>1.6</commons-pool.version>
     <poi.version>3.8</poi.version>
