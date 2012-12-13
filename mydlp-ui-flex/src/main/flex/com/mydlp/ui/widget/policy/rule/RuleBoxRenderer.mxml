@@ -67,8 +67,6 @@
 			
 			protected static const APPLICATION_ALL:String = "inventory.applicationName.all";
 			
-			protected static const SOURCE_DOMAIN_ALL:String = "inventory.sourceDomain.all";
-			
 			[Bindable]
 			protected var sourceDataProvider:ArrayCollection = new ArrayCollection();
 			
@@ -135,7 +133,6 @@
 				{
 					if (ruleItem.item is Network ||
 						ruleItem.item is RuleUser ||
-						ruleItem.item is SourceDomainName ||
 						ruleItem.item is SourceDomainName)
 						sourceDataProvider1.addItem(ruleItem);
 					else if (ruleItem.item is InformationType)
@@ -171,13 +168,7 @@
 					return true;
 				else if(item is RuleUser)
 					return true;
-				else
-					return false;
-			}
-			
-			public static function isSourceDomainRuleItem(item:Item):Boolean
-			{
-				if(item is SourceDomainName)
+				else if(item is SourceDomainName)
 					return true;
 				else
 					return false;
@@ -196,21 +187,6 @@
 						return true;
 				}
 				return false;
-			}
-			
-			protected function hasAllSourceDomain():Boolean // Checks whether rule has "All Source Domain" or not
-			{
-				return ruleHasAllSourceDomain(ruleObject);
-			}
-			
-			public static function ruleHasAllSourceDomain(r:Rule):Boolean
-			{
-				for each(var ri:RuleItem in r.ruleItems)
-				{
-					if(ri.item.coupledInventoryItem.nameKey == SOURCE_DOMAIN_ALL)
-						return true;
-				}
-				return false;	
 			}
 			
 			protected function hasAllDestination():Boolean //Checks whether rule has "All Destination" or not.
@@ -276,46 +252,6 @@
 					for(var i:int = 0; i < ruleItems.length; i++)
 					{
 						if(isSourceRuleItem(ruleItems[i].item))
-						{
-							deleteList.addItem(ruleObject.ruleItems[i]);
-							ruleItems.removeItemAt(i);
-							loop = true;
-							break;
-						}
-					}	
-				}
-			}
-			
-			protected function removeAllSourcesDomainItem():void //called when "All Source Domain" is in rule and dropped network is a specific network.
-			{
-				var ruleItems:ListCollectionView = ruleObject.ruleItems;
-				var loop:Boolean = true;
-				while (loop)
-				{
-					loop = false;
-					for(var i:int = 0; i < ruleItems.length; i++)
-					{
-						if(ruleItems[i].item.coupledInventoryItem.nameKey == SOURCE_DOMAIN_ALL)
-						{
-							deleteList.addItem(ruleObject.ruleItems[i]);
-							ruleObject.ruleItems.removeItemAt(i);
-							loop = true;
-							break;
-						}
-					}
-				}
-			}
-			
-			protected function removeOtherSourceDomains():void // called when specific source domains are in rule and dropped network is "All Source Domain"
-			{
-				var ruleItems:ListCollectionView = ruleObject.ruleItems;
-				var loop:Boolean = true;
-				while (loop)
-				{
-					loop = false;
-					for(var i:int = 0; i < ruleItems.length; i++)
-					{
-						if(isSourceDomainRuleItem(ruleItems[i].item))
 						{
 							deleteList.addItem(ruleObject.ruleItems[i]);
 							ruleItems.removeItemAt(i);
@@ -494,35 +430,10 @@
 			protected function checkConsistency(treeItems:*):Boolean //Controls whether dropped items consist both "All Network" and specific network
 			{														// or both "All Information Types" and specific information types.
 				groupDroppedItems(treeItems);
-				if(isConsistentForSources() && isConsistentForMatchers() && isConsistentForDestinations() && isConsistentForSourceDomains())
+				if(isConsistentForSources() && isConsistentForMatchers() && isConsistentForDestinations())
 					return true;
 				return false;
 				
-			}
-			
-			protected function isConsistentForSourceDomains():Boolean
-			{
-				var hasAllSourceDomain:Boolean = false;
-				for each(var ri:InventoryItem in droppedSources)
-				{
-					if(ri.item.coupledInventoryItem.nameKey == SOURCE_DOMAIN_ALL)
-						hasAllSourceDomain = true;
-				}
-				if(hasAllSourceDomain)
-				{
-					var sourceDomainItemCount:int = 0; 
-					for each(var ri1:InventoryItem in droppedSources)
-					{
-						if(ri1.item.coupledInventoryItem is SourceDomainName)
-							sourceDomainItemCount ++;
-					}
-					if(sourceDomainItemCount > 1)
-						return false;
-					else
-						return true;
-				}
-				else
-					return true;
 			}
 			
 			protected function isConsistentForDestinations():Boolean // Controls whether dropped items consist both "All Network" and specific network
@@ -566,7 +477,7 @@
 			{
 				if(droppedItem is InventoryItem)
 				{
-					if(isSourceRuleItem(droppedItem.item) || isSourceDomainRuleItem(droppedItem.item))
+					if(isSourceRuleItem(droppedItem.item))
 						droppedSources.addItem(droppedItem);
 					else if(droppedItem.item is InformationType)
 						droppedMatchers.addItem(droppedItem);
@@ -620,28 +531,38 @@
 							ruleObject is ScreenshotRule)
 							return true;
 					}
-					else if (treeItem.item is SourceDomainName)
-					{
-						if(ruleObject is MailRule)
-							return true;
-					}
 					else if (treeItem.item is Domain)
 					{
 						if(ruleObject is WebRule || ruleObject is MailRule)
+						{
 							return true;
+						}
 					}
 					else if (treeItem.item is FileSystemDirectory)
 					{
 						if(ruleObject is DiscoveryRule)
+						{
 							return true;
+						}
 					}
 					else if (treeItem.item is ApplicationName)
 					{
 						if(ruleObject is ScreenshotRule)
+						{
 							return true;
+						}
 					}
 					else if ( treeItem.item is RuleUser )
+					{
 						return true;
+					}
+					else if ( treeItem.item is SourceDomainName )
+					{
+						if(ruleObject is MailRule)
+						{
+							return true;
+						}
+					}
 				}
 				else if (treeItem is InventoryCategory)
 				{
@@ -663,14 +584,6 @@
 				if(r is WebRule || r is DiscoveryRule || r is MailRule || r is RemovableStorageRule || r is ApiRule || r is PrinterRule)
 					return true;
 				else return false;
-			}
-			
-			public static function isSourceDomainApplicable(r:*):Boolean
-			{
-				if(r is MailRule)
-					return true;
-				else
-					return false;
 			}
 			
 			protected function onDragExit(event:DragEvent):void
@@ -753,21 +666,6 @@
 					{
 						if(sourceItem.coupledInventoryItem.nameKey == SOURCES_ALL)
 							removeOtherSources();
-					}
-				}
-				else if(isSourceDomainRuleItem(sourceItem))
-				{
-					if(hasAllSourceDomain())
-					{
-						if(sourceItem.coupledInventoryItem.nameKey == SOURCE_DOMAIN_ALL)
-							return;
-						else
-							removeAllSourcesDomainItem();
-					}
-					else
-					{
-						if(sourceItem.coupledInventoryItem.nameKey == SOURCE_DOMAIN_ALL)
-							removeOtherSourceDomains();
 					}
 				}
 				else if(isITypeRuleItem(sourceItem))
