@@ -15,6 +15,7 @@
 			import com.mydlp.ui.domain.InventoryCategory;
 			import com.mydlp.ui.domain.InventoryItem;
 			import com.mydlp.ui.domain.Network;
+			import com.mydlp.ui.domain.SourceDomainName;
 			import com.mydlp.ui.util.InteractionUtil;
 			import com.mydlp.ui.util.SessionUtil;
 			
@@ -68,6 +69,14 @@
 				InteractionUtil.newEditDialog(i);
 			}
 			
+			protected function sourceDomainHandler():void
+			{
+				close();
+				var i:InventoryItem = new InventoryItem();
+				i.item = new SourceDomainName();
+				InteractionUtil.newEditDialog(i);	
+			}
+			
 		]]>
 	</fx:Script>
 	<fx:Declarations>
@@ -97,6 +106,11 @@
 					  includeInLayout="{SessionUtil.isEnterprise()}"
 					  visible="{SessionUtil.isEnterprise()}"
 					  click="fileSystemDirectoryHandler()"/>
+			<s:Button skinClass="com.mydlp.ui.skin.DomainBitmapLabelButton16Skin" 
+					  label="@Resource(bundle = 'messages', key = 'inventory.newdialog.sourceDomain')"
+					  includeInLayout="{SessionUtil.isEnterprise()}"
+					  visible="{SessionUtil.isEnterprise()}"
+					  click="sourceDomainHandler()"/>
 			<s:Button skinClass="com.mydlp.ui.skin.ApplicationNameBitmapLabelButton16Skin" 
 					  label="@Resource(bundle = 'messages', key = 'inventory.newdialog.applicationName')" 
 					  includeInLayout="{SessionUtil.isEnterprise()}"
