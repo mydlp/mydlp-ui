@@ -81,6 +81,8 @@
 					if (dashboardItemBox != null)
 					{
 						var dashboardItemContainer:DashboardItemContainer = new DashboardItemContainer();
+						dashboardItemContainer.width = 350;
+						dashboardItemContainer.height = 250;
 						dashboardItemBox.itemKey = reportItemKey;
 						dashboardItemContainer.container.addElement(dashboardItemBox);
 						dashboardItemContainer.itemKey = reportItemKey; 
