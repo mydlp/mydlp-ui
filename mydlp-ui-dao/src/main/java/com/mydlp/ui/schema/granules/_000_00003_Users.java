@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.mydlp.ui.domain.AuthSecurityRole;
 import com.mydlp.ui.domain.AuthUser;
+import com.mydlp.ui.domain.DashboardItem;
 import com.mydlp.ui.domain.UserSettings;
 import com.mydlp.ui.schema.AbstractGranule;
 
@@ -40,7 +41,26 @@ public class _000_00003_Users extends AbstractGranule {
 	
 		UserSettings settings = new UserSettings();
 		settings.setUser(user);
+		
 		getHibernateTemplate().saveOrUpdate(settings);
+
+		DashboardItem di = new DashboardItem();
+		di.setDasboardItemKey(DashboardItem.INCIDENT_BY_ACTIONS_24H);
+		di.setUserSettings(settings);
+		DashboardItem di2 = new DashboardItem();
+		di2.setDasboardItemKey(DashboardItem.INCIDENTS_BY_PROTOCOLS_24H);
+		di2.setUserSettings(settings);
+		DashboardItem di3 = new DashboardItem();
+		di3.setDasboardItemKey(DashboardItem.TOP_5_USERS_24H);
+		di3.setUserSettings(settings);
+		DashboardItem di4 = new DashboardItem();
+		di4.setDasboardItemKey(DashboardItem.TOP_5_RULES_24H);
+		di4.setUserSettings(settings);
+		
+		getHibernateTemplate().saveOrUpdate(di3);
+		getHibernateTemplate().saveOrUpdate(di4);
+		getHibernateTemplate().saveOrUpdate(di);
+		getHibernateTemplate().saveOrUpdate(di2);
 		
 	}
 

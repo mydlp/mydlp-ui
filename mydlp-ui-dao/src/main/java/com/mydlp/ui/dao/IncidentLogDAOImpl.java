@@ -306,7 +306,12 @@ public class IncidentLogDAOImpl extends AbstractLogDAO implements IncidentLogDAO
 		Iterator<Object[]> iterator = query.list().iterator(); iterator.hasNext();) {
 			Object[] row = (Object[]) iterator.next();
 			Map<String, Object> returnMap = new HashMap<String, Object>();
-			returnMap.put(MAPKEY_LABEL, row[1]);
+			String sourceUser = (String) row[1];
+			if (sourceUser.length() > 16)
+			{
+				sourceUser = sourceUser.substring(0,15) + "...";
+			}
+			returnMap.put(MAPKEY_LABEL, sourceUser);
 			returnMap.put(MAPKEY_VALUE, row[0]);
 			returnList.add(returnMap);
 		}	

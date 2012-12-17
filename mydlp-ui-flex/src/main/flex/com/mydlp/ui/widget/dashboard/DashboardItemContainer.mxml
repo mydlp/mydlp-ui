@@ -4,7 +4,7 @@
 		 xmlns:mx="library://ns.adobe.com/flex/mx" 
 		 mouseOver="onMouseOver(event)"
 		 mouseOut="onMouseOut(event)"
-		 width="350" height="250">
+		 width="450" height="300">
 	<fx:Script>
 		<![CDATA[
 			import com.mydlp.ui.util.LangUtil;

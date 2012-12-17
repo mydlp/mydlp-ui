@@ -5,6 +5,7 @@
 							xmlns:dashboard="com.mydlp.ui.widget.dashboard.*">
 	<fx:Script>
 		<![CDATA[
+			import com.mydlp.ui.domain.DashboardItem;
 			import com.mydlp.ui.util.LangUtil;
 			
 			import mx.collections.ArrayCollection;
@@ -21,6 +22,15 @@
 			}
 			
 			protected function itemLabelFunc(data:Object, field:String, index:Number, percentValue:Number):String {
+				if (itemKey == DashboardItem.INCIDENT_BY_ACTIONS_1H || itemKey == DashboardItem.INCIDENT_BY_ACTIONS_24H || 
+					itemKey == DashboardItem.INCIDENTS_BY_ACTIONS_1W)
+				{
+					var dataLabelKey:String = data.labelKey as String;
+					if (dataLabelKey != null && dataLabelKey.substr(0,3) == "CIS")
+					{
+						return "Seclore";
+					}
+				}
 				return 	LangUtil.getString("messages", "dashboardItem." + itemKey + "." + data.labelKey) +
 						"\n " + data.value + " (" + round(percentValue,2) + "%)";
 			}

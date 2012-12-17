@@ -29,7 +29,14 @@
 					itemKey == DashboardItem.TOP_5_USERS_1H || itemKey == DashboardItem.TOP_5_USERS_24H || itemKey == DashboardItem.TOP_5_USERS_1W) 
 					return value.toString();
 				if (itemKey == DashboardItem.TOP_5_RULES_1H || itemKey == DashboardItem.TOP_5_RULES_24H || itemKey == DashboardItem.TOP_5_RULES_1W)
-					return RuleContainer.getRuleLabel(value as Number);
+				{
+					var ruleLabel:String = RuleContainer.getRuleLabel(value as Number) as String;
+					if (ruleLabel.length > 16)
+					{
+						ruleLabel = ruleLabel.substring(0, 15);
+					}
+					return ruleLabel;
+				}
 				if (itemKey == DashboardItem.TOP_5_ITYPES_1H || itemKey == DashboardItem.TOP_5_ITYPES_24H || itemKey == DashboardItem.TOP_5_ITYPES_1W)
 					return "Itype: " + (value as Number).toString();
 				return 	LangUtil.getString("messages", "dashboardItem." + itemKey + "." + value.toString());
