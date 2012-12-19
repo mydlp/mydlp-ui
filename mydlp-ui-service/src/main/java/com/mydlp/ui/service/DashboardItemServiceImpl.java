@@ -49,17 +49,41 @@ public class DashboardItemServiceImpl implements DashboardItemService {
 		registerAll();
 	}
 	
+	@Override
 	@Scheduled(cron="0 0/30 * * * ?")
 	public void registerAllJob() {
 		registerAll();
 	}
 	
-	protected void registerAll() {
-		for (String itemKey: userSettingsDAO.getDashboardItems()) 
-			register(itemKey);
+	@Override
+	@Scheduled(cron="0 5 4 * * ?")
+	public void registerReportJob() {
+		registerReportItems();
 		consume();
 	}
 	
+	protected void registerReportItems() {  // These are required for weekly report objects.
+		for (String itemKey: new String[]{	DashboardItem.INCIDENTS_BY_ACTIONS_1W,
+											DashboardItem.INCIDENTS_BY_PROTOCOL_1W, 
+											DashboardItem.TOP_5_USERS_1W, 
+											DashboardItem.TOP_5_RULES_1W,
+											DashboardItem.TOP_5_ITYPES_1W, 
+											DashboardItem.TOP_5_ADDRESS_1W}) 
+			register(itemKey);
+	}
+	
+	protected void registerAllItems() {
+		for (String itemKey: userSettingsDAO.getDashboardItems()) 
+			register(itemKey);
+	}
+	
+	protected void registerAll() {
+		registerAllItems();
+		registerReportItems();
+		consume();
+	}
+	
+	@Override
 	@Async
 	public void registerForGeneration(String itemKey) {
 		register(itemKey);
@@ -75,6 +99,7 @@ public class DashboardItemServiceImpl implements DashboardItemService {
 		}
 	}
 	
+	@Override
 	@Scheduled(fixedDelay=60000)
 	public void consumeJob() {
 		consume();

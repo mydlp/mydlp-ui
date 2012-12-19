@@ -7,6 +7,8 @@ public interface DashboardItemService {
 	
 	public void registerAllJob();
 	
+	public void registerReportJob();
+	
 	public void consumeJob();
 	
 	public void registerForGeneration(String itemKey);

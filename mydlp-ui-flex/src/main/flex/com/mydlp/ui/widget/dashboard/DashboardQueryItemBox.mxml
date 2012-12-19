@@ -19,11 +19,28 @@
 			
 			protected var timer:Timer = null;
 			
+			protected var falseCounter:Number = 0;
+			
 			protected function reget(): void
 			{
 				if((FlexGlobals.topLevelApplication.user as AuthUser).hasRole(AuthSecurityRole.ROLE_ADMIN) ||
 					(FlexGlobals.topLevelApplication.user as AuthUser).hasRole(AuthSecurityRole.ROLE_SUPER_ADMIN))
 					re.get(itemKey);
+			}
+			
+			protected function incrementFalseCounter(): void
+			{
+				falseCounter++;
+			}
+			
+			protected function resetFalseCounter(): void
+			{
+				falseCounter = 0;
+			}
+			
+			protected function getTimeoutValue(): Number
+			{
+				return 100 + Math.pow(2,falseCounter)*200; 
 			}
 			
 			protected function postDataLoad(): void {}
@@ -32,9 +49,11 @@
 			{
 				itemDP = event.result;
 				if (itemDP == null) {
-					timer = new Timer(10000, 1);
+					incrementFalseCounter();
+					timer = new Timer(getTimeoutValue(), 1);
 					timer.addEventListener(TimerEvent.TIMER_COMPLETE, onTimerComplete);
 				} else {
+					resetFalseCounter();
 					if (this is HBarChartBox && itemDP is ArrayCollection){
 						(itemDP as ArrayCollection).source.reverse();
 					}
