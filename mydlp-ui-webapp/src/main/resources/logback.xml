@@ -22,4 +22,9 @@
   <logger name="AUDIT" level="debug">
 	<appender-ref ref="${log.audit.appender}"/>  
   </logger>
+  <!-- DEBUG -->
+  <!-- 
+  <logger name="org.hibernate.type" level="ALL" />
+  <logger name="org.hibernate" level="DEBUG" />
+   -->
 </configuration>
