@@ -48,7 +48,7 @@
     <org.hibernate.version>3.6.8.Final</org.hibernate.version>
     <jpa.version>2.0-cr-1</jpa.version>
     <aspectj.version>1.6.12</aspectj.version>
-    <mysql.driver.version>5.1.18</mysql.driver.version>
+    <mysql.driver.version>5.1.22</mysql.driver.version>
     <jstl.version>1.2</jstl.version>
     <libthrift.version>0.7.0</libthrift.version>
     <solrj.version>4.0.0</solrj.version>
