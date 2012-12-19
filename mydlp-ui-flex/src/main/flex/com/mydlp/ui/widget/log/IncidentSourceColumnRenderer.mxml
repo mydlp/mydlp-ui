@@ -5,8 +5,6 @@
 	
 	<fx:Script>
 		<![CDATA[
-			import avmplus.getQualifiedClassName;
-			
 			import com.mydlp.ui.domain.IncidentLog;
 			import com.mydlp.ui.util.LangUtil;
 			import com.mydlp.ui.widget.general.input.IpAddressInput;
