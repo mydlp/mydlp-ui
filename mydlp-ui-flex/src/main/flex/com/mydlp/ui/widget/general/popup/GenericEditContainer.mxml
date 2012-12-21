@@ -29,6 +29,7 @@
 			import com.mydlp.ui.domain.InventoryCategory;
 			import com.mydlp.ui.domain.InventoryItem;
 			import com.mydlp.ui.domain.Item;
+			import com.mydlp.ui.domain.MailRule;
 			import com.mydlp.ui.domain.Matcher;
 			import com.mydlp.ui.domain.RDBMSConnection;
 			import com.mydlp.ui.domain.RDBMSInformationTarget;
@@ -39,6 +40,7 @@
 			import com.mydlp.ui.domain.ScreenshotRule;
 			import com.mydlp.ui.domain.USBDevice;
 			import com.mydlp.ui.domain.UserSettings;
+			import com.mydlp.ui.domain.WebRule;
 			import com.mydlp.ui.util.ClassMember;
 			import com.mydlp.ui.util.ErrorTipManager;
 			import com.mydlp.ui.util.InteractionUtil;
@@ -481,17 +483,52 @@
 					}
 					else if ( 
 							(targetObject is Rule && classMember.name == "description") ||
+							(targetObject is Rule && classMember.name == "userMessage") ||
 							(targetObject is USBDevice && classMember.name == "comment") 
 						)
 					{
+						if (classMember.name == "userMessage")
+						{
+							if (targetObject is WebRule ||
+								targetObject is MailRule
+								)
+							{
+							}
+							else
+							{
+								targetObject[classMember.name] = null;
+								continue;
+							}							
+						}
+						
 						var textArea:TextArea = new TextArea();
-						textArea.text = targetObject[classMember.name];
-						BindingUtils.bindProperty(targetObject, classMember.name, textArea, "text");
+						if (classMember.name == "userMessage" &&
+								(!(
+									targetObject["action"] == Rule.ACTION_BLOCK ||
+									targetObject["action"] == Rule.ACTION_QUARANTINE
+								))
+							)
+						{
+							textArea.enabled = false;
+							textArea.text = LangUtil.getString("messages", "generic.edit.Rule.userMessage.disabledReason.message");
+						}
+						else
+						{
+							textArea.text = targetObject[classMember.name];
+							BindingUtils.bindProperty(targetObject, classMember.name, textArea, "text");
+						}
 						textArea.width = InputLabel.VERTICAL_INPUT_WIDTH;
 						textArea.height = 60;
 						inputLabel = new VerticalInputLabel();
 						inputLabel.addElement(textArea);
-						index = 12;
+						if (classMember.name == "userMessage")
+						{
+							index = 13;
+						}
+						else
+						{
+							index = 12
+						}
 					}
 					else if (classMember.name == "dbType" && classMember.type == String)
 					{

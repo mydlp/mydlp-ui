@@ -148,6 +148,11 @@ public class _000_00027_Config_General_Advanced extends AbstractGranule {
 				"		<td class=\"reason-td\">\n" + 
 				"			<br />Your request has been <u>blocked</u> by <a href=\"http://www.mydlp.com\">MyDLP</a>\n" + 
 				"		</td>\n" + 
+				"	</tr>\n" +
+				"	<tr>\n" + 
+				"		<td class=\"reason-td\">\n" + 
+				"			<br /> %%MESSAGE%% \n" + 
+				"		</td>\n" + 
 				"	</tr>\n" + 
 				"	<tr>\n" + 
 				"		<td class=\"reason-td\">\n" + 
