@@ -34,6 +34,8 @@ public abstract class Rule extends AbstractNamedEntity {
 	
 	protected String action = Rule.ACTION_PASS;
 	
+	protected String userMessage;
+	
 	protected CustomAction customAction;
 	
 	protected List<RuleItem> ruleItems;
@@ -115,4 +117,11 @@ public abstract class Rule extends AbstractNamedEntity {
 		this.customAction = customAction;
 	}
 
+	public String getUserMessage() {
+		return userMessage;
+	}
+
+	public void setUserMessage(String userMessage) {
+		this.userMessage = userMessage;
+	}
 }
