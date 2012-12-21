@@ -35,6 +35,7 @@
 			import com.mydlp.ui.domain.RegularExpressionGroup;
 			import com.mydlp.ui.domain.Rule;
 			import com.mydlp.ui.domain.RuleUserAD;
+			import com.mydlp.ui.domain.ScreenshotRule;
 			import com.mydlp.ui.domain.USBDevice;
 			import com.mydlp.ui.domain.UserSettings;
 			import com.mydlp.ui.util.ClassMember;
@@ -207,7 +208,14 @@
 					}
 					
 					else if (targetObject is Rule && classMember.name == "notificationItems")
-					{	var nInput:UserNotificationInput = new UserNotificationInput();
+					{	
+						if (targetObject is ScreenshotRule)
+						{
+							targetObject["notificationEnabled"] = false;
+							targetObject[classMember.name] = new ArrayCollection(); 
+							continue;
+						}
+						var nInput:UserNotificationInput = new UserNotificationInput();
 						nInput.deleteList = this.deleteList
 						nInput.notificationList = targetObject[classMember.name];
 						nInput.notificationEnabled = targetObject["notificationEnabled"];
