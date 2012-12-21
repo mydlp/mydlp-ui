@@ -240,6 +240,7 @@ public class IncidentLogDAOImpl extends AbstractLogDAO implements IncidentLogDAO
 		Query query = getSession().createQuery(
 				"select count(l), l.channel from IncidentLog l " +
 				"where l.date between :startDate and :endDate " +
+				"and l.channel != 'I' and l.ruleId != -1 " +
 				"group by l.channel order by 1 desc");
 		query.setTimestamp("startDate", startDate);
 		query.setTimestamp("endDate", now);
@@ -272,6 +273,7 @@ public class IncidentLogDAOImpl extends AbstractLogDAO implements IncidentLogDAO
 				"select count(l), l.sourceIp from IncidentLog l " +
 				"where l.date between :startDate and :endDate " +
 				"and l.sourceIp is not null and l.sourceIp != 0 " +
+				"and l.channel != 'I' and l.ruleId != -1 " +
 				"group by l.sourceIp order by 1 desc");
 		query.setTimestamp("startDate", startDate);
 		query.setTimestamp("endDate", now);
@@ -297,6 +299,8 @@ public class IncidentLogDAOImpl extends AbstractLogDAO implements IncidentLogDAO
 		Query query = getSession().createQuery(
 				"select count(l), l.sourceUser from IncidentLog l " +
 				"where l.date between :startDate and :endDate " +
+				"and l.sourceUser is not null and l.sourceUser != '' " +
+				"and l.channel != 'I' and l.ruleId != -1 " +
 				"group by l.sourceUser order by 1 desc");
 		query.setTimestamp("startDate", startDate);
 		query.setTimestamp("endDate", now);
@@ -327,6 +331,7 @@ public class IncidentLogDAOImpl extends AbstractLogDAO implements IncidentLogDAO
 		Query query = getSession().createQuery(
 				"select count(l), l.action from IncidentLog l " +
 				"where l.date between :startDate and :endDate " +
+				"and l.channel != 'I' and l.ruleId != -1 " +
 				"group by l.action order by 1 desc");
 		query.setTimestamp("startDate", startDate);
 		query.setTimestamp("endDate", now);
@@ -351,6 +356,7 @@ public class IncidentLogDAOImpl extends AbstractLogDAO implements IncidentLogDAO
 		Query query = getSession().createQuery(
 				"select count(l), l.ruleId from IncidentLog l " +
 				"where l.date between :startDate and :endDate " +
+				"and l.channel != 'I' and l.ruleId != -1 " +
 				"group by l.ruleId order by 1 desc");
 		query.setTimestamp("startDate", startDate);
 		query.setTimestamp("endDate", now);
@@ -376,6 +382,8 @@ public class IncidentLogDAOImpl extends AbstractLogDAO implements IncidentLogDAO
 		Query query = getSession().createQuery(
 				"select count(l), l.informationTypeId from IncidentLog l " +
 				"where l.date between :startDate and :endDate " +
+				"and l.informationTypeId != -1 " +
+				"and l.channel != 'I' and l.ruleId != -1 " +
 				"group by l.informationTypeId order by 1 desc");
 		query.setTimestamp("startDate", startDate);
 		query.setTimestamp("endDate", now);
