@@ -33,6 +33,7 @@
 			import com.mydlp.ui.domain.RDBMSConnection;
 			import com.mydlp.ui.domain.RDBMSInformationTarget;
 			import com.mydlp.ui.domain.RegularExpressionGroup;
+			import com.mydlp.ui.domain.RemovableStorageInboundRule;
 			import com.mydlp.ui.domain.Rule;
 			import com.mydlp.ui.domain.RuleUserAD;
 			import com.mydlp.ui.domain.ScreenshotRule;
@@ -209,7 +210,7 @@
 					
 					else if (targetObject is Rule && classMember.name == "notificationItems")
 					{	
-						if (targetObject is ScreenshotRule)
+						if (targetObject is ScreenshotRule || targetObject is RemovableStorageInboundRule)
 						{
 							targetObject["notificationEnabled"] = false;
 							targetObject[classMember.name] = new ArrayCollection(); 
