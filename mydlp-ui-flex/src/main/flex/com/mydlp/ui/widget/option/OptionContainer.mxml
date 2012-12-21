@@ -33,16 +33,25 @@
 			
 			protected function initValidators(): void
 			{
+				validators.push(enterpriseTab.icapLogPassValidator);
+				validators.push(enterpriseTab.notificationMessageFromValidator);
+				validators.push(enterpriseTab.syslogAclHostValidator);
+				validators.push(enterpriseTab.syslogAclPortValidator);
+				validators.push(enterpriseTab.syslogDiagHostValidator);
+				validators.push(enterpriseTab.syslogDiagPortValidator);
+				validators.push(enterpriseTab.syslogReportHostValidator);
+				validators.push(enterpriseTab.syslogReportPortValidator);
+				validators.push(protocolsTab.icapTTLValidator);
 				validators.push(protocolsTab.icapRegExValidator);
 				validators.push(protocolsTab.icapConValidator);
-				validators.push(enterpriseTab.icapLogPassValidator);
-				validators.push(protocolsTab.icapTTLValidator);
 				validators.push(protocolsTab.smtpHeloNameValidator);
 				validators.push(protocolsTab.smtpNextHopHostValidator);
 				validators.push(protocolsTab.smtpNextHopPortValidator);
 				validators.push(epTab.epLogValidator);
 				validators.push(epTab.epSyncValidator);
 				validators.push(epTab.discSyncValidator);
+				validators.push(epTab.spoolHardLimitValidator);
+				validators.push(epTab.spoolSoftLimitValidator);
 			}
 			
 			protected function initEnterprise(): void
@@ -94,6 +103,7 @@
 					else if (config.key == "icap_log_pass") enterpriseTab.icapLogPass = config;
 					else if (config.key == "icap_log_pass_lower_limit") enterpriseTab.icapLogPassLowerLimit = config;
 					else if (config.key == "email_notification_message") enterpriseTab.notificationMessage = config;
+					else if (config.key == "email_notification_message_from") enterpriseTab.notificationMessageFrom = config;
 					else if (config.key == "email_notification_message_subject") enterpriseTab.notificationMessageSubject = config;
 						
 					else if (config.key == "archive_inbound") enterpriseTab.archiveInbound = config;

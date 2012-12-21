@@ -46,6 +46,7 @@
 		<domain:Config id="syslogReportHost" />
 		<domain:Config id="syslogReportPort" />
 		<domain:Config id="syslogReportFacility" />
+		<domain:Config id="notificationMessageFrom"/>
 		<domain:Config id="notificationMessage"/>
 		<domain:Config id="notificationMessageSubject"/>
 		
@@ -96,7 +97,11 @@
 									  maxValue="65535"
 									  valid="{optionContainer.validInput(event)}"
 									  invalid="{optionContainer.invalidInput(event)}"/>
-		
+		<mx:EmailValidator id="notificationMessageFromValidator"
+						   source="{notificationMessageFromInput}"
+						   property="text"
+						   valid="{optionContainer.validInput(event)}"
+						   invalid="{optionContainer.invalidInput(event)}"/>
 	</fx:Declarations>
 	
 	<s:VGroup width="100%" height="100%">
@@ -126,27 +131,22 @@
 					<s:layout>
 						<s:VerticalLayout paddingLeft="25"/>
 					</s:layout>
-					<s:Group>
-						<s:layout>
-							<s:HorizontalLayout gap="80" verticalAlign="middle"/>
-						</s:layout>
-						<s:Label text="@Resource(bundle = 'messages', key = 'options.tab.general.editDeniedPage.label')"/>
+					<s:HGroup verticalAlign="middle">
+						<s:Label width="200" text="@Resource(bundle = 'messages', key = 'options.tab.general.editDeniedPage.label')"/>
 						<s:Button label="@Resource(bundle = 'messages', key = 'options.tab.general.editDeniedPageButton.label')" click="openHTML(event)" />
-					</s:Group>
-					<s:Group>
-						<s:layout>
-							<s:HorizontalLayout gap="30" verticalAlign="middle"/>
-						</s:layout>
-						<s:Label text="@Resource(bundle = 'messages', key = 'options.tab.general.editEmailNotificationSubject.label')"/>
+					</s:HGroup>
+					<s:HGroup verticalAlign="middle">
+						<s:Label width="200" text="{notificationMessageFrom.label}"/>
+						<s:TextInput id="notificationMessageFromInput" width="200" text="@{notificationMessageFrom.value}"/>
+					</s:HGroup>
+					<s:HGroup verticalAlign="middle">
+						<s:Label width="200" text="{notificationMessageSubject.label}"/>
 						<s:TextInput width="200" text="@{notificationMessageSubject.value}"/>
-					</s:Group>
-					<s:Group>
-						<s:layout>
-							<s:HorizontalLayout gap="20" verticalAlign="middle"/>
-						</s:layout>
-						<s:Label text="@Resource(bundle = 'messages', key = 'options.tab.general.editEmailNotification.label')"/>
+					</s:HGroup>
+					<s:HGroup verticalAlign="middle">
+						<s:Label width="200" text="{notificationMessage.label}"/>
 						<s:TextArea height="80" width="250" text="@{notificationMessage.value}"/>
-					</s:Group>
+					</s:HGroup>
 				</s:Group>
 			</s:VGroup>
 			<s:Form width="50%">
