@@ -12,8 +12,14 @@
 			protected function getSourceText(value:*):String {
 				var log:IncidentLog = value as IncidentLog;
 				var labelText:String = "";
-				labelText += LangUtil.getString("messages","log.container.column.source.ip") 
-					+ ": " + IpAddressInput.numberToIPStr(log.sourceIp); 
+				if ((!isNaN(log.sourceIp)) && (log.sourceIp != 0))
+				{
+					var ipStr:String = IpAddressInput.numberToIPStr(log.sourceIp);
+					if (ipStr != "0.0.0.0")
+					{
+						labelText += LangUtil.getString("messages","log.container.column.source.ip") + ": " + ipStr;
+					}
+				}
 				if (log.sourceUser != null && log.sourceUser.length > 0)
 					labelText += "\n" + LangUtil.getString("messages","log.container.column.source.user") 
 						+ ": " + log.sourceUser;
