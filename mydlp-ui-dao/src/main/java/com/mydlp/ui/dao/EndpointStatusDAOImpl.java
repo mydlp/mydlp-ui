@@ -123,6 +123,8 @@ public class EndpointStatusDAOImpl extends AbstractLogDAO implements
 
 		disjunction.add(Restrictions.ilike("ipAddress", "%" + searchStr + "%"));
 		disjunction.add(Restrictions.ilike("username", "%" + searchStr + "%"));
+		disjunction.add(Restrictions.ilike("osName", "%" + searchStr + "%"));
+		disjunction.add(Restrictions.ilike("version", "%" + searchStr + "%"));
 
 		criteria = criteria.add(disjunction);
 
