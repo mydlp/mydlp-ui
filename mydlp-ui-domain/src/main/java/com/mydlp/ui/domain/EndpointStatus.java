@@ -25,6 +25,7 @@ public class EndpointStatus extends AbstractEntity {
 	protected Date lastUpdate;
 	protected String username;
 	protected String version;
+	protected String osName;
 	protected String computerName;
 	
 	@Index(name="ipAddressIndex")
@@ -73,5 +74,11 @@ public class EndpointStatus extends AbstractEntity {
 	}
 	public void setVersion(String version) {
 		this.version = version;
+	}
+	public String getOsName() {
+		return osName;
+	}
+	public void setOsName(String osName) {
+		this.osName = osName;
 	}
 }

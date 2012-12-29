@@ -50,8 +50,9 @@ public class EndpointSyncServiceImpl implements EndpointSyncService {
 			
 			String endpointUsername = endpointMeta.get("user");
 			String endpointVersion = endpointMeta.get("version");
+			String osName = endpointMeta.get("os");
 			
-			endpointStatusDAO.upToDateEndpoint(ipAddress, endpointVersion, endpointUsername);
+			endpointStatusDAO.upToDateEndpoint(ipAddress, endpointUsername, osName, endpointVersion);
 		} catch (Throwable e) {
 			logger.error("Runtime error occured when registering endpoint meta", e);
 		}

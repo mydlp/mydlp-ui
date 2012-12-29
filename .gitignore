@@ -22,6 +22,7 @@ mydlp-ui-domain-as3/src/main/flex/com/mydlp/ui/domain/*.as
 !mydlp-ui-domain-as3/src/main/flex/com/mydlp/ui/domain/AuthUser.as
 !mydlp-ui-domain-as3/src/main/flex/com/mydlp/ui/domain/Config.as
 !mydlp-ui-domain-as3/src/main/flex/com/mydlp/ui/domain/DashboardItem.as
+!mydlp-ui-domain-as3/src/main/flex/com/mydlp/ui/domain/EndpointStatus.as
 !mydlp-ui-domain-as3/src/main/flex/com/mydlp/ui/domain/RDBMSConnection.as
 !mydlp-ui-domain-as3/src/main/flex/com/mydlp/ui/domain/Rule.as
 !mydlp-ui-domain-as3/src/main/flex/com/mydlp/ui/domain/InventoryItem.as

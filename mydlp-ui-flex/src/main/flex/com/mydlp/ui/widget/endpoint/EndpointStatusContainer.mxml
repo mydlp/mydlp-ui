@@ -215,7 +215,7 @@
 					<s:GridColumn headerText="@Resource(bundle = 'messages', key = 'endpoints.header.username')"
 								  dataField="username" itemRendererFunction="endpointStatusItemRendererFunction"/>
 					<s:GridColumn headerText="@Resource(bundle = 'messages', key = 'endpoints.header.agentVersion')"
-								  dataField="version" itemRendererFunction="endpointStatusItemRendererFunction"/>
+								  dataField="agent" itemRendererFunction="endpointStatusItemRendererFunction"/>
 					<s:GridColumn headerText="@Resource(bundle = 'messages', key = 'endpoints.header.lastUpdate')"
 								  dataField="lastUpdate" itemRendererFunction="endpointStatusItemRendererFunction"/>
 					<s:GridColumn headerText="@Resource(bundle = 'messages', key = 'endpoints.header.firstSeen')"

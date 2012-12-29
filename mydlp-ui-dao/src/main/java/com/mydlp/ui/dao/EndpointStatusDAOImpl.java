@@ -27,7 +27,7 @@ public class EndpointStatusDAOImpl extends AbstractLogDAO implements
 	protected ConfigDAO configDAO;
 
 	@Override
-	public void upToDateEndpoint(String ipAddress, String version, String username) {
+	public void upToDateEndpoint(String ipAddress, String username, String osName, String version) {
 		DetachedCriteria criteria = DetachedCriteria.forClass(
 				EndpointStatus.class).add(
 				Restrictions.eq("ipAddress", ipAddress));
@@ -48,7 +48,7 @@ public class EndpointStatusDAOImpl extends AbstractLogDAO implements
 			if (username != null)
 				endpointStatus.setUsername(username);
 			else
-				logger.info("EndpointStatus#" + endpointStatus.getId() + " ("
+				logger.error("EndpointStatus#" + endpointStatus.getId() + " ("
 						+ endpointStatus.getIpAddress() + ") "
 						+ "has a not-null username ("
 						+ endpointStatus.getUsername()
@@ -60,11 +60,24 @@ public class EndpointStatusDAOImpl extends AbstractLogDAO implements
 			if (version != null)
 				endpointStatus.setVersion(version);
 			else
-				logger.info("EndpointStatus#" + endpointStatus.getId() + " ("
+				logger.error("EndpointStatus#" + endpointStatus.getId() + " ("
 						+ endpointStatus.getIpAddress() + ") "
 						+ "has a not-null version  ("
 						+ endpointStatus.getVersion()
-						+ "). Ignoring username update to null.");
+						+ "). Ignoring version update to null.");
+		}
+		
+		if (endpointStatus.getOsName() == null)
+			endpointStatus.setOsName(osName);
+		else {
+			if (osName != null)
+				endpointStatus.setOsName(osName);
+			else
+				logger.error("EndpointStatus#" + endpointStatus.getId() + " ("
+						+ endpointStatus.getIpAddress() + ") "
+						+ "has a not-null osName  ("
+						+ endpointStatus.getOsName()
+						+ "). Ignoring osName update to null.");
 		}
 
 		getHibernateTemplate().saveOrUpdate(endpointStatus);
