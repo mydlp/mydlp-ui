@@ -22,6 +22,7 @@
 		<domain:Config id="icapOptionsTTL" />
 		<domain:Config id="icapLogPass" />
 		<domain:Config id="icapLogPassLowerLimit" />
+		<domain:Config id="icapIgnoreBigRequests" />
 		
 		<validators:MyRegExValidator id="smtpHeloNameValidator"
 									 source="{smtpHeloNameInput}"
@@ -88,6 +89,10 @@
 			</s:FormItem>
 			<s:FormItem label="{icapRespModPath.label}" width="350">
 				<s:TextInput text="@{icapRespModPath.value}" width="200"/>
+			</s:FormItem>
+			<s:FormItem label="{icapIgnoreBigRequests.label}">
+				<s:CheckBox id="icapIgnoreBigRequestsCheckBox" selected="{icapIgnoreBigRequests.value == 'true'}" 
+							change="{icapIgnoreBigRequests.value = icapIgnoreBigRequestsCheckBox.selected ? 'true' : 'false'}"/>			
 			</s:FormItem>
 			<s:FormItem label="{icapMaxConnections.label}" width="350">
 				<s:TextInput id="maxConnections" text="@{icapMaxConnections.value}" width="200"/>

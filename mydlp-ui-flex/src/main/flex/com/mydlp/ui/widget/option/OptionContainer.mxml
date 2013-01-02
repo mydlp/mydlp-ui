@@ -103,6 +103,7 @@
 					else if (config.key == "icap_options_ttl") protocolsTab.icapOptionsTTL = config;
 					else if (config.key == "icap_log_pass") enterpriseTab.icapLogPass = config;
 					else if (config.key == "icap_log_pass_lower_limit") enterpriseTab.icapLogPassLowerLimit = config;
+					else if (config.key == "icap_ignore_big_requests") protocolsTab.icapIgnoreBigRequests = config;
 					else if (config.key == "email_notification_message") enterpriseTab.notificationMessage = config;
 					else if (config.key == "email_notification_message_from") enterpriseTab.notificationMessageFrom = config;
 					else if (config.key == "email_notification_message_subject") enterpriseTab.notificationMessageSubject = config;
