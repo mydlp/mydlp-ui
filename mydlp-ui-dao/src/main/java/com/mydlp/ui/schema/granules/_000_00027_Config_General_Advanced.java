@@ -18,7 +18,7 @@ public class _000_00027_Config_General_Advanced extends AbstractGranule {
 
 		Config archiveMinimumSize = new Config();
 		archiveMinimumSize.setKey("archive_minimum_size");
-		archiveMinimumSize.setValue("256");
+		archiveMinimumSize.setValue("2048");
 
 
 		Config maximumObjectSize = new Config();

@@ -33,6 +33,7 @@
 		</mx:ArrayList>
 		
 		<domain:Config id="mailArchive" />
+		<domain:Config id="webArchive" />
 		<domain:Config id="icapLogPass" />
 		<domain:Config id="icapLogPassLowerLimit" />
 		<domain:Config id="archiveMinimumSize" />	
@@ -108,9 +109,13 @@
 		<s:HGroup width="100%" height="100%">
 			<s:VGroup width="45%" gap="50">
 				<s:Form width="100%" height="50%">
-					<s:FormItem label="{mailArchive.label}" includeInLayout="{SessionUtil.isEnterprise()}" visible="{SessionUtil.isEnterprise()}">
+					<s:FormItem label="{mailArchive.label}">
 						<s:CheckBox id="mailArchiveCheckBox" selected="{mailArchive.value == 'true'}" 
 									change="{mailArchive.value = mailArchiveCheckBox.selected ? 'true' : 'false'}"/>			
+					</s:FormItem>
+					<s:FormItem label="{webArchive.label}">
+						<s:CheckBox id="webArchiveCheckBox" selected="{webArchive.value == 'true'}" 
+									change="{webArchive.value = webArchiveCheckBox.selected ? 'true' : 'false'}"/>			
 					</s:FormItem>
 					<s:FormItem label="{icapLogPass.label}">
 						<s:CheckBox id="icapLogPassCheckBox" selected="{icapLogPass.value == 'true'}"

@@ -90,6 +90,7 @@
 					var config:Config = c as Config;
 					if (config.key == "error_action") advancedTab.errorAction = config;
 					else if (config.key == "mail_archive") enterpriseTab.mailArchive = config;
+					else if (config.key == "web_archive") enterpriseTab.webArchive = config;
 						
 					else if (config.key == "smtp_helo_name") protocolsTab.smtpHeloName = config;
 					else if (config.key == "smtp_next_hop_host") protocolsTab.smtpNextHopHost = config;
