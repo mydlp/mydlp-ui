@@ -59,6 +59,9 @@ public class PayloadProcessServiceImpl implements PayloadProcessService {
 			
 			ByteBuffer payloadChunk = encryptionService.decrypt(endpointSecret, chunk);
 			payloadChunk.limit(payloadSize);
+			logger.error(payloadChunk.remaining() + "");
+			logger.error(payloadSize.toString());
+			logger.error(payloadChunk.remaining() + "");
 			
 			buf = new byte[15];
 			payloadChunk.get(buf);
