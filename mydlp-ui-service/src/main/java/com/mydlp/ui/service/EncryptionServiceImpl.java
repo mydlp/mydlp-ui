@@ -31,8 +31,9 @@ public class EncryptionServiceImpl implements EncryptionService {
         SecretKeySpec keySpec = new SecretKeySpec(secret.getBytes(), ALGORITHM);
         cipher.init(Cipher.DECRYPT_MODE, keySpec);
         ByteBuffer output = ByteBuffer.allocate(data.remaining());
-        cipher.doFinal(data, output);
-        output.flip();
+        int n = cipher.doFinal(data, output);
+        output.position(0);
+        output.limit(n);
         output.compact();
 		return output;
 	}
@@ -46,8 +47,9 @@ public class EncryptionServiceImpl implements EncryptionService {
         SecretKeySpec keySpec = new SecretKeySpec(secret.getBytes(), ALGORITHM);
         cipher.init(Cipher.ENCRYPT_MODE, keySpec);
         ByteBuffer output = ByteBuffer.allocate(data.remaining());
-        cipher.doFinal(data, output);
-        output.flip();
+        int n = cipher.doFinal(data, output);
+        output.position(0);
+        output.limit(n);
         output.compact();
 		return output;
 	}
