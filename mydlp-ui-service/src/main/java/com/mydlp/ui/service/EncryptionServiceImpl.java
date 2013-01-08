@@ -19,7 +19,7 @@ import org.springframework.stereotype.Service;
 @Service("encryptionService")
 public class EncryptionServiceImpl implements EncryptionService {
 
-	private static Logger logger = LoggerFactory.getLogger(EncryptionServiceImpl.class);
+	//private static Logger logger = LoggerFactory.getLogger(EncryptionServiceImpl.class);
 	
 	private static String ALGORITHM = "Blowfish";
 	private static String MODE = "/ECB/NoPadding";
@@ -33,10 +33,8 @@ public class EncryptionServiceImpl implements EncryptionService {
         SecretKeySpec keySpec = new SecretKeySpec(secret.getBytes(), ALGORITHM);
         cipher.init(Cipher.DECRYPT_MODE, keySpec);
         ByteBuffer output = ByteBuffer.allocate(data.remaining());
-        int n = cipher.doFinal(data, output);
-        logger.error(output.position() + "");
-		logger.error(output.remaining() + "");
-        output.rewind();
+        cipher.doFinal(data, output);
+        output.flip();
         return output;
 	}
 	
@@ -49,10 +47,8 @@ public class EncryptionServiceImpl implements EncryptionService {
         SecretKeySpec keySpec = new SecretKeySpec(secret.getBytes(), ALGORITHM);
         cipher.init(Cipher.ENCRYPT_MODE, keySpec);
         ByteBuffer output = ByteBuffer.allocate(data.remaining());
-        int n = cipher.doFinal(data, output);
-        output.position(0);
-        output.limit(n);
-        output.compact();
+        cipher.doFinal(data, output);
+        output.flip();
 		return output;
 	}
 

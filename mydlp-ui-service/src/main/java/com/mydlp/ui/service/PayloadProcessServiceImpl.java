@@ -70,9 +70,10 @@ public class PayloadProcessServiceImpl implements PayloadProcessService {
 			payloadChunk.get(buf);
 			
 			if (! PROTO_PAYLOAD_HEAD.equals(new String(buf)))
-				throw new ImproperPayloadEncapsulationException("Paylaod chunk does not start with " + PROTO_PAYLOAD_HEAD);
+				throw new ImproperPayloadEncapsulationException("Payload chunk does not start with " + PROTO_PAYLOAD_HEAD);
 			
-			payloadChunk.compact();
+			logger.error(payloadChunk.position() + "");
+			logger.error(payloadChunk.remaining() + "");
 			object.setPayload(payloadChunk);
 			return object;
 		} catch (ImproperPayloadEncapsulationException e) {
@@ -108,7 +109,6 @@ public class PayloadProcessServiceImpl implements PayloadProcessService {
 				payloadChunk.put((byte)0);
 			}
 			payloadChunk.flip();
-			payloadChunk.compact();
 			
 			ByteBuffer cipher = encryptionService.encrypt(endpointSecret, payloadChunk);
 			
@@ -119,7 +119,6 @@ public class PayloadProcessServiceImpl implements PayloadProcessService {
 			byteBuffer.put((byte)'_');
 			byteBuffer.put(cipher);
 			byteBuffer.flip();
-			byteBuffer.compact();
 			return byteBuffer;
 		} catch (ImproperPayloadEncapsulationException e) {
 			logger.error("An error occurred", e);
