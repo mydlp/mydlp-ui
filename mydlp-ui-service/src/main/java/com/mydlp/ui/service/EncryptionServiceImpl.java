@@ -36,10 +36,8 @@ public class EncryptionServiceImpl implements EncryptionService {
         int n = cipher.doFinal(data, output);
         logger.error(output.position() + "");
 		logger.error(output.remaining() + "");
-        output.position(0);
-        output.limit(n);
-        output.compact();
-		return output;
+        output.rewind();
+        return output;
 	}
 	
 
