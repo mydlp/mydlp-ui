@@ -12,12 +12,14 @@ import javax.crypto.NoSuchPaddingException;
 import javax.crypto.ShortBufferException;
 import javax.crypto.spec.SecretKeySpec;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 @Service("encryptionService")
 public class EncryptionServiceImpl implements EncryptionService {
 
-	//private static Logger logger = LoggerFactory.getLogger(EncryptionServiceImpl.class);
+	private static Logger logger = LoggerFactory.getLogger(EncryptionServiceImpl.class);
 	
 	private static String ALGORITHM = "Blowfish";
 	private static String MODE = "/ECB/NoPadding";
@@ -32,6 +34,8 @@ public class EncryptionServiceImpl implements EncryptionService {
         cipher.init(Cipher.DECRYPT_MODE, keySpec);
         ByteBuffer output = ByteBuffer.allocate(data.remaining());
         int n = cipher.doFinal(data, output);
+        logger.error(output.position() + "");
+		logger.error(output.remaining() + "");
         output.position(0);
         output.limit(n);
         output.compact();

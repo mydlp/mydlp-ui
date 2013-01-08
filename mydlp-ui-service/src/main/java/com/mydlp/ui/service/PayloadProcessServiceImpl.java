@@ -58,9 +58,12 @@ public class PayloadProcessServiceImpl implements PayloadProcessService {
 				throw new ImproperPayloadEncapsulationException("Expecting _");
 			
 			ByteBuffer payloadChunk = encryptionService.decrypt(endpointSecret, chunk);
-			payloadChunk.limit(payloadSize);
+			
+			logger.error(payloadChunk.position() + "");
 			logger.error(payloadChunk.remaining() + "");
 			logger.error(payloadSize.toString());
+			payloadChunk.limit(payloadSize);
+			logger.error(payloadChunk.position() + "");
 			logger.error(payloadChunk.remaining() + "");
 			
 			buf = new byte[15];
