@@ -20,6 +20,8 @@ import org.springframework.web.HttpRequestHandler;
 import com.mydlp.ui.dao.EndpointStatusDAO;
 import com.mydlp.ui.framework.util.NIOUtil;
 import com.mydlp.ui.service.EndpointSyncService;
+import com.mydlp.ui.service.PayloadProcessService;
+import com.mydlp.ui.service.PayloadProcessService.SyncObject;
 import com.mydlp.ui.thrift.MyDLPUIThriftService;
 
 @Service("syncServlet")
@@ -42,6 +44,9 @@ public class EndpointSyncServlet implements HttpRequestHandler {
 	@Autowired
 	protected EndpointSyncService endpointSyncService;
 	
+	@Autowired 
+	protected PayloadProcessService payloadProcessService;
+	
 	@Override
 	public void handleRequest(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
@@ -49,17 +54,22 @@ public class EndpointSyncServlet implements HttpRequestHandler {
 		try {
 			if (req.getContentLength() < MAX_CONTENT_LENGTH)
 			{
-				ByteBuffer payload = NIOUtil.toByteBuffer(req.getInputStream());
-				String urlKey = req.getParameter("rid");
+				ByteBuffer chunk = NIOUtil.toByteBuffer(req.getInputStream());
+				SyncObject syncObject = payloadProcessService.toSyncObject(chunk);
+				
+				String ruleTableUniqId = req.getParameter("rid");
 				String userH = req.getParameter("uh");
 				String ipAddress = req.getRemoteAddr();
 				
 				try {
-					endpointSyncService.asyncRegisterEndpointMeta(ipAddress, userH, payload);
+					endpointSyncService.asyncRegisterEndpointMeta(
+							syncObject.getEndpointId(), ipAddress, userH, syncObject.getPayload());
 				} catch (Throwable e) {
 					logger.error("Runtime error occured when reading payload", e);
 				}
-				responseBuffer = thriftService.getRuletable(ipAddress, userH, urlKey);
+				ByteBuffer thriftResponse = thriftService.getRuletable(ipAddress, userH, ruleTableUniqId);
+				syncObject.setPayload(thriftResponse);
+				responseBuffer = payloadProcessService.toByteBuffer(syncObject);
 			}
 			else 
 			{

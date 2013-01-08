@@ -27,29 +27,39 @@ public class EndpointStatusDAOImpl extends AbstractLogDAO implements
 	protected ConfigDAO configDAO;
 
 	@Override
-	public void upToDateEndpoint(String ipAddress, String username, String osName, String version) {
+	public void upToDateEndpoint(String endpointAlias, String ipAddress, String username, String osName, String version, Boolean discoverInProg) {
 		DetachedCriteria criteria = DetachedCriteria.forClass(
 				EndpointStatus.class).add(
-				Restrictions.eq("ipAddress", ipAddress));
+				Restrictions.eq("endpointAlias", endpointAlias));
 		@SuppressWarnings("unchecked")
 		List<EndpointStatus> list = getHibernateTemplate().findByCriteria(
 				criteria);
 		EndpointStatus endpointStatus = DAOUtil.getSingleResult(list);
 		if (endpointStatus == null) {
 			endpointStatus = new EndpointStatus();
-			endpointStatus.setIpAddress(ipAddress);
+			endpointStatus.setEndpointAlias(endpointAlias);
 			endpointStatus.setFirstAppeared(new Date());
 		}
 		endpointStatus.setIsUpToDate(true);
 		endpointStatus.setLastUpdate(new Date());
+		if (endpointStatus.getIpAddress() == null)
+			endpointStatus.setIpAddress(ipAddress);
+		else {
+			if (ipAddress != null)
+				endpointStatus.setIpAddress(ipAddress);
+			else
+				logger.error("EndpointStatus#" + endpointStatus.getEndpointAlias()
+						+ "has a not-null ip-address ("
+						+ endpointStatus.getIpAddress()
+						+ "). Ignoring ip-address update to null.");
+		}
 		if (endpointStatus.getUsername() == null)
 			endpointStatus.setUsername(username);
 		else {
 			if (username != null)
 				endpointStatus.setUsername(username);
 			else
-				logger.error("EndpointStatus#" + endpointStatus.getId() + " ("
-						+ endpointStatus.getIpAddress() + ") "
+				logger.error("EndpointStatus#" + endpointStatus.getEndpointAlias()
 						+ "has a not-null username ("
 						+ endpointStatus.getUsername()
 						+ "). Ignoring username update to null.");
@@ -60,8 +70,7 @@ public class EndpointStatusDAOImpl extends AbstractLogDAO implements
 			if (version != null)
 				endpointStatus.setVersion(version);
 			else
-				logger.error("EndpointStatus#" + endpointStatus.getId() + " ("
-						+ endpointStatus.getIpAddress() + ") "
+				logger.error("EndpointStatus#" + endpointStatus.getEndpointAlias()
 						+ "has a not-null version  ("
 						+ endpointStatus.getVersion()
 						+ "). Ignoring version update to null.");
@@ -73,11 +82,22 @@ public class EndpointStatusDAOImpl extends AbstractLogDAO implements
 			if (osName != null)
 				endpointStatus.setOsName(osName);
 			else
-				logger.error("EndpointStatus#" + endpointStatus.getId() + " ("
-						+ endpointStatus.getIpAddress() + ") "
+				logger.error("EndpointStatus#" + endpointStatus.getEndpointAlias()
 						+ "has a not-null osName  ("
 						+ endpointStatus.getOsName()
 						+ "). Ignoring osName update to null.");
+		}
+		
+		if (endpointStatus.getDiscoverInProg() == null)
+			endpointStatus.setDiscoverInProg(discoverInProg);
+		else {
+			if (discoverInProg != null)
+				endpointStatus.setDiscoverInProg(discoverInProg);
+			else
+				logger.error("EndpointStatus#" + endpointStatus.getEndpointAlias()
+						+ "has a not-null discoverInProg  ("
+						+ endpointStatus.getDiscoverInProg()
+						+ "). Ignoring discoverInProg update to null.");
 		}
 
 		getHibernateTemplate().saveOrUpdate(endpointStatus);

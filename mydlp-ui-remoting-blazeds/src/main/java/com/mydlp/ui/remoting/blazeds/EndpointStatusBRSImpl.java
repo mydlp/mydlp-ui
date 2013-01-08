@@ -47,6 +47,12 @@ public class EndpointStatusBRSImpl implements EndpointStatusService
 	public Boolean truncateEndpointStatus() {
 		return endpointStatusDAO.truncateEndpointStatus();
 	}
+
+	@Override
+	public void discoverEndpint(String endpointAlias) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 
 }

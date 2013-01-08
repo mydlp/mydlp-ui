@@ -22,4 +22,6 @@ public interface EndpointStatusService {
 	
 	public Boolean truncateEndpointStatus();
 	
+	public void discoverEndpint(String endpointAlias);
+	
 }

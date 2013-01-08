@@ -33,17 +33,17 @@ public class EndpointSyncServiceImpl implements EndpointSyncService {
 	
 	@Async
 	@Override
-	public void asyncRegisterEndpointMeta(final String ipAddress,
+	public void asyncRegisterEndpointMeta(final String endpointAlias, final String ipAddress,
 			final String usernameHash, final ByteBuffer payload) {
 		transactionTemplate.execute(new TransactionCallbackWithoutResult() {
 			@Override
 			protected void doInTransactionWithoutResult(TransactionStatus arg0) {
-				asyncRegisterEndpointMetaFun(ipAddress, usernameHash, payload);
+				asyncRegisterEndpointMetaFun(endpointAlias, ipAddress, usernameHash, payload);
 			}
 		});
 	}
 	
-	public void asyncRegisterEndpointMetaFun(String ipAddress,
+	public void asyncRegisterEndpointMetaFun(String endpointAlias, String ipAddress,
 			String usernameHash, ByteBuffer payload) {
 		try {
 			Map<String,String> endpointMeta = thriftService.registerUserAddress(ipAddress, usernameHash, payload);
@@ -51,8 +51,13 @@ public class EndpointSyncServiceImpl implements EndpointSyncService {
 			String endpointUsername = endpointMeta.get("user");
 			String endpointVersion = endpointMeta.get("version");
 			String osName = endpointMeta.get("os");
-			
-			endpointStatusDAO.upToDateEndpoint(ipAddress, endpointUsername, osName, endpointVersion);
+			String discoverInProgS = endpointMeta.get("discover_inprog");
+			Boolean discoverInProg = Boolean.FALSE;
+			if (discoverInProgS != null && discoverInProgS.equals("yes"))
+			{
+				discoverInProg = Boolean.TRUE;
+			}
+			endpointStatusDAO.upToDateEndpoint(endpointAlias, ipAddress, endpointUsername, osName, endpointVersion, discoverInProg);
 		} catch (Throwable e) {
 			logger.error("Runtime error occured when registering endpoint meta", e);
 		}

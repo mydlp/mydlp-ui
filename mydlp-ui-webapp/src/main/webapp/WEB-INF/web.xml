@@ -121,6 +121,11 @@
   </servlet>
   
   <servlet>
+    <servlet-name>registerServlet</servlet-name>
+    <servlet-class>org.springframework.web.context.support.HttpRequestHandlerServlet</servlet-class>
+  </servlet>
+  
+  <servlet>
     <servlet-name>apiQueryServlet</servlet-name>
     <servlet-class>org.springframework.web.context.support.HttpRequestHandlerServlet</servlet-class>
   </servlet>
@@ -163,6 +168,11 @@
   </servlet-mapping>
   
   <servlet-mapping>
+    <servlet-name>registerServlet</servlet-name>
+    <url-pattern>/register</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
     <servlet-name>htmlPreviewServlet</servlet-name>
     <url-pattern>/htmlPreview</url-pattern>
   </servlet-mapping>
@@ -182,5 +192,4 @@
     <url-pattern>/tools/uploader</url-pattern>
   </servlet-mapping>
   
-
 </web-app>

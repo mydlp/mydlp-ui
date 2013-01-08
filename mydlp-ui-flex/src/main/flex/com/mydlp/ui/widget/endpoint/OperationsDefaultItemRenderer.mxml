@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:GridItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009" 
+					xmlns:s="library://ns.adobe.com/flex/spark" 
+					xmlns:mx="library://ns.adobe.com/flex/mx"
+					xmlns:my="http://www.mydlp.com/flex/my"
+					clipAndEnableScrolling="true">
+	
+	<fx:Script>
+		<![CDATA[
+			import com.mydlp.ui.domain.EndpointStatus;
+			override public function prepare(hasBeenRecycled:Boolean):void {
+				if (data == null) return;
+				if (!data is EndpointStatus) return;
+				var e:EndpointStatus = data as EndpointStatus;
+				isDiscoveryInProg = e.discoverInProg;
+			}
+			
+			protected function discoverNowClickHandler(event:MouseEvent):void
+			{
+				if (data == null) return;
+				if (!data is EndpointStatus) return;
+				var e:EndpointStatus = data as EndpointStatus;
+				re.discoverEndpoint(e.endpointAlias);
+				e.discoverInProg = true;
+				isDiscoveryInProg = true;
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<fx:Declarations>
+		<fx:Boolean id="isDiscoveryInProg" />
+		<fx:uint id="bgColor">#FFFFFF</fx:uint>
+		<fx:Number id="bgAlpha">0.0</fx:Number>
+		
+		<my:remote id="re" destination="endpointStatusBRS">
+			<my:method name="discoverEndpoint" result="{}"/>
+		</my:remote>
+	</fx:Declarations>
+	
+	<s:states>
+		<s:State name="normal" />
+		<s:State name="hovered" />
+		<s:State name="selected" />
+	</s:states>
+	
+	<s:Rect top="0" bottom="0" right="0" left="0">
+		<s:fill>
+			<s:SolidColor color="{bgColor}" alpha="{bgAlpha}"/>
+		</s:fill>
+	</s:Rect>
+	
+	<s:VGroup width="120" horizontalAlign="left" paddingLeft="5" verticalAlign="middle" paddingTop="2" paddingBottom="2"
+			  visible="{data != null}" includeInLayout="{data != null}">
+		<s:Label id="discoveryScheduled" text="@Resource(bundle='messages', key='endpoints.state.discoveryInProg.true')" 
+				 visible="{isDiscoveryInProg}" includeInLayout="{isDiscoveryInProg}"/>
+		<mx:ProgressBar id="progressBar" indeterminate="true" width="100%" 
+						visible.normal="false" includeInLayout.normal="true"
+						visible="{!isDiscoveryInProg}" includeInLayout="{!isDiscoveryInProg}"/>
+		<s:Button id="discoverNow" label="@Resource(bundle='messages', key='endpoints.state.discoveryNowButton.label')" 
+				  click="discoverNowClickHandler(event)" 
+				  visible.normal="false" includeInLayout.normal="false" 
+				  visible="{!isDiscoveryInProg}" includeInLayout="{!isDiscoveryInProg}"/>
+	</s:VGroup>
+	
+</s:GridItemRenderer>

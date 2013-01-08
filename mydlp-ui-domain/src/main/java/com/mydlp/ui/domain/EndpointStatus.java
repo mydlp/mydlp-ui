@@ -16,7 +16,8 @@ public class EndpointStatus extends AbstractEntity {
 	 * 
 	 */
 	private static final long serialVersionUID = -7622243528531930685L;
-	
+
+	protected String endpointAlias;
 	protected String ipAddress;
 	protected Boolean isUpToDate;
 	@Temporal(TemporalType.TIMESTAMP)
@@ -27,9 +28,16 @@ public class EndpointStatus extends AbstractEntity {
 	protected String version;
 	protected String osName;
 	protected String computerName;
+	protected Boolean discoverInProg;
 	
-	@Index(name="ipAddressIndex")
-	@Column(nullable=false)
+	@Index(name="endpointAliasIndex")
+	@Column(nullable=false, length=32)
+	public String getEndpointAlias() {
+		return endpointAlias;
+	}
+	public void setEndpointAlias(String endpointAlias) {
+		this.endpointAlias = endpointAlias;
+	}
 	public String getIpAddress() {
 		return ipAddress;
 	}
@@ -42,7 +50,6 @@ public class EndpointStatus extends AbstractEntity {
 	public void setIsUpToDate(Boolean isUpToDate) {
 		this.isUpToDate = isUpToDate;
 	}
-	@Index(name="firstAppearedIndex")
 	@Column(nullable=false)
 	public Date getFirstAppeared() {
 		return firstAppeared;
@@ -51,6 +58,7 @@ public class EndpointStatus extends AbstractEntity {
 		this.firstAppeared = firstAppeared;
 	}
 	@Column(nullable=false)
+	@Index(name="lastUpdateIndex")
 	public Date getLastUpdate() {
 		return lastUpdate;
 	}
@@ -80,5 +88,11 @@ public class EndpointStatus extends AbstractEntity {
 	}
 	public void setOsName(String osName) {
 		this.osName = osName;
+	}
+	public Boolean getDiscoverInProg() {
+		return discoverInProg;
+	}
+	public void setDiscoverInProg(Boolean discoverInProg) {
+		this.discoverInProg = discoverInProg;
 	}
 }
