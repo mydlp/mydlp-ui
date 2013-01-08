@@ -35,10 +35,6 @@ public interface PayloadProcessService {
 		public ImproperPayloadEncapsulationException() {
 			super();
 		}
-		public ImproperPayloadEncapsulationException(String arg0,
-				Throwable arg1, boolean arg2, boolean arg3) {
-			super(arg0, arg1, arg2, arg3);
-		}
 		public ImproperPayloadEncapsulationException(String arg0, Throwable arg1) {
 			super(arg0, arg1);
 		}

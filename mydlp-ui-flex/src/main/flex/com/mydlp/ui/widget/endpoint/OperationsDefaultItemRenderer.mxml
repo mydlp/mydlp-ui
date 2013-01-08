@@ -9,10 +9,15 @@
 		<![CDATA[
 			import com.mydlp.ui.domain.EndpointStatus;
 			override public function prepare(hasBeenRecycled:Boolean):void {
+			}
+			
+			override public function set data(value:Object):void
+			{
 				if (data == null) return;
 				if (!data is EndpointStatus) return;
 				var e:EndpointStatus = data as EndpointStatus;
 				isDiscoveryInProg = e.discoverInProg;
+				super.data = data;
 			}
 			
 			protected function discoverNowClickHandler(event:MouseEvent):void
