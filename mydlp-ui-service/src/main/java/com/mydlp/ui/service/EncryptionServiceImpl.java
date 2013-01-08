@@ -30,7 +30,7 @@ public class EncryptionServiceImpl implements EncryptionService {
         Cipher cipher = Cipher.getInstance(ALGORITHM + MODE, PROVIDER);
         SecretKeySpec keySpec = new SecretKeySpec(secret.getBytes(), ALGORITHM);
         cipher.init(Cipher.DECRYPT_MODE, keySpec);
-        ByteBuffer output = ByteBuffer.allocate(data.capacity());
+        ByteBuffer output = ByteBuffer.allocate(data.remaining());
         cipher.doFinal(data, output);
 		return output;
 	}
@@ -43,7 +43,7 @@ public class EncryptionServiceImpl implements EncryptionService {
         Cipher cipher = Cipher.getInstance(ALGORITHM + MODE, PROVIDER);
         SecretKeySpec keySpec = new SecretKeySpec(secret.getBytes(), ALGORITHM);
         cipher.init(Cipher.ENCRYPT_MODE, keySpec);
-        ByteBuffer output = ByteBuffer.allocate(data.capacity());
+        ByteBuffer output = ByteBuffer.allocate(data.remaining());
         cipher.doFinal(data, output);
 		return output;
 	}
