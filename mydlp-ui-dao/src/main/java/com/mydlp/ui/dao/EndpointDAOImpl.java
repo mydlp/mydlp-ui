@@ -25,6 +25,7 @@ public class EndpointDAOImpl extends AbstractPolicyDAO implements
 		Endpoint e = new Endpoint();
 		e.setEndpointId(getRandomString());
 		e.setEndpointSecret(getRandomString());
+		e.setEndpointAlias(e.getEndpointId());
 		getHibernateTemplate().saveOrUpdate(e);
 		Integer realId = e.getId();
 		e.setEndpointAlias("E" + String.format("%07d", realId));
