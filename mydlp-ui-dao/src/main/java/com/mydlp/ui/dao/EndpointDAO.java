@@ -8,6 +8,8 @@ public interface EndpointDAO {
 	
 	public String getEndpointAlias(String endpointId);
 	
+	public String getEndpointId(String endpointAlias);
+	
 	public class RandomExhaustedException extends Throwable {
 
 		private static final long serialVersionUID = 8782953817602918953L;

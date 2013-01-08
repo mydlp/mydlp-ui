@@ -13,21 +13,34 @@
 			
 			override public function set data(value:Object):void
 			{
-				if (data == null) return;
-				if (!data is EndpointStatus) return;
-				var e:EndpointStatus = data as EndpointStatus;
-				isDiscoveryInProg = e.discoverInProg;
-				super.data = data;
+				if (value == null) return;
+				if (!value is EndpointStatus) return;
+				var es:EndpointStatus = value as EndpointStatus;
+				if (es == null) return;
+				isDiscoveryInProg = es.discoverInProg;
+				super.data = es;
 			}
 			
 			protected function discoverNowClickHandler(event:MouseEvent):void
 			{
 				if (data == null) return;
 				if (!data is EndpointStatus) return;
-				var e:EndpointStatus = data as EndpointStatus;
-				re.discoverEndpoint(e.endpointAlias);
-				e.discoverInProg = true;
+				var es:EndpointStatus = data as EndpointStatus;
+				if (es == null) return;
+				re.discoverEndpoint(es.endpointAlias);
+				es.discoverInProg = true;
 				isDiscoveryInProg = true;
+			}
+			
+			protected function stopDiscoveryClickHandler(event:MouseEvent):void
+			{
+				if (data == null) return;
+				if (!data is EndpointStatus) return;
+				var es:EndpointStatus = data as EndpointStatus;
+				if (es == null) return;
+				re.stopDiscovery(es.endpointAlias);
+				es.discoverInProg = false;
+				isDiscoveryInProg = false;
 			}
 			
 		]]>
@@ -40,6 +53,7 @@
 		
 		<my:remote id="re" destination="endpointStatusBRS">
 			<my:method name="discoverEndpoint" result="{}"/>
+			<my:method name="stopDiscovery" result="{}"/>
 		</my:remote>
 	</fx:Declarations>
 	
@@ -55,17 +69,32 @@
 		</s:fill>
 	</s:Rect>
 	
-	<s:VGroup width="120" horizontalAlign="left" paddingLeft="5" verticalAlign="middle" paddingTop="2" paddingBottom="2"
+	<s:VGroup width="120" horizontalAlign="left" paddingLeft="7" 
+			  verticalAlign="middle" paddingTop="9" paddingBottom="5"
 			  visible="{data != null}" includeInLayout="{data != null}">
 		<s:Label id="discoveryScheduled" text="@Resource(bundle='messages', key='endpoints.state.discoveryInProg.true')" 
-				 visible="{isDiscoveryInProg}" includeInLayout="{isDiscoveryInProg}"/>
-		<mx:ProgressBar id="progressBar" indeterminate="true" width="100%" 
-						visible.normal="false" includeInLayout.normal="true"
-						visible="{!isDiscoveryInProg}" includeInLayout="{!isDiscoveryInProg}"/>
+				 visible.normal="{isDiscoveryInProg}" includeInLayout.normal="{isDiscoveryInProg}"
+				 visible="false" includeInLayout="false"/>
+		
+		<s:HGroup paddingLeft="0" paddingTop="0" paddingBottom="0" paddingRight="0"
+				  visible="false" includeInLayout="false"
+				  visible.selected="{isDiscoveryInProg}" includeInLayout.selected="{isDiscoveryInProg}"
+				  visible.hovered="{isDiscoveryInProg}" includeInLayout.hovered="{isDiscoveryInProg}">
+			<mx:ProgressBar id="progressBar" indeterminate="true" width="50" height="10"
+							label="" labelPlacement="center" labelWidth="0"
+							/>
+			<s:Button id="stopDiscovery" label="@Resource(bundle='messages', key='endpoints.state.stopDiscoveryButton.label')" 
+					  click="stopDiscoveryClickHandler(event)" 
+					  />
+		</s:HGroup>
+		
 		<s:Button id="discoverNow" label="@Resource(bundle='messages', key='endpoints.state.discoveryNowButton.label')" 
 				  click="discoverNowClickHandler(event)" 
-				  visible.normal="false" includeInLayout.normal="false" 
-				  visible="{!isDiscoveryInProg}" includeInLayout="{!isDiscoveryInProg}"/>
+				  visible="false" includeInLayout="false" 
+				  visible.selected="{!isDiscoveryInProg}" includeInLayout.selected="{!isDiscoveryInProg}"
+				  visible.hovered="{!isDiscoveryInProg}" includeInLayout.hovered="{!isDiscoveryInProg}"
+				  />
+				  
 	</s:VGroup>
 	
 </s:GridItemRenderer>

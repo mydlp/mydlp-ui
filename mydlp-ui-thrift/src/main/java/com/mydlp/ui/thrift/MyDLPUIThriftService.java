@@ -9,7 +9,7 @@ public interface MyDLPUIThriftService {
 	
 	public String getCompileStatus();
 	
-	public ByteBuffer getRuletable(String ipAddress, String userH, String revisionId);
+	public ByteBuffer getRuletable(String endpointId, String ipAddress, String userH, String revisionId);
 	
     public String receiveBegin(String ipAddress);
 
@@ -29,5 +29,7 @@ public interface MyDLPUIThriftService {
     public LicenseObject getLicense();
     
     public String apiQuery(String ipAddress, String filename, ByteBuffer data);
+    
+    public void registerCommand(String endpointId, String command);
 
 }

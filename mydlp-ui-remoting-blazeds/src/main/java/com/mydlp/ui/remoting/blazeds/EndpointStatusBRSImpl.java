@@ -6,8 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.flex.remoting.RemotingDestination;
 import org.springframework.stereotype.Service;
 
+import com.mydlp.ui.dao.EndpointDAO;
 import com.mydlp.ui.dao.EndpointStatusDAO;
 import com.mydlp.ui.domain.EndpointStatus;
+import com.mydlp.ui.thrift.MyDLPUIThriftService;
 
 @Service("endpointStatusBRS")
 @RemotingDestination
@@ -16,6 +18,12 @@ public class EndpointStatusBRSImpl implements EndpointStatusService
 	
 	@Autowired
 	protected EndpointStatusDAO endpointStatusDAO;
+	
+	@Autowired
+	protected EndpointDAO endpointDAO;
+	
+	@Autowired
+	protected MyDLPUIThriftService thriftService;
 
 	@Override
 	public List<EndpointStatus> getEndpointStatuses(String searchString, Integer offset,
@@ -49,9 +57,15 @@ public class EndpointStatusBRSImpl implements EndpointStatusService
 	}
 
 	@Override
-	public void discoverEndpint(String endpointAlias) {
-		// TODO Auto-generated method stub
-		
+	public void discoverEndpoint(String endpointAlias) {
+		String endpointId = endpointDAO.getEndpointId(endpointAlias);
+		thriftService.registerCommand(endpointId, "schedule_discovery");
+	}
+
+	@Override
+	public void stopDiscovery(String endpointAlias) {
+		String endpointId = endpointDAO.getEndpointId(endpointAlias);
+		thriftService.registerCommand(endpointId, "stop_discovery");
 	}
 	
 

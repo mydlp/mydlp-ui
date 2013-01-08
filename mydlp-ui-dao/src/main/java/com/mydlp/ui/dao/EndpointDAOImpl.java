@@ -96,4 +96,15 @@ public class EndpointDAOImpl extends AbstractPolicyDAO implements
 		return e.getEndpointAlias();
 	}
 
+	@Override
+	public String getEndpointId(String endpointAlias) {
+		DetachedCriteria criteria = 
+				DetachedCriteria.forClass(Endpoint.class)
+					.add(Restrictions.eq("endpointAlias", endpointAlias));
+		@SuppressWarnings("unchecked")
+		List<Endpoint> l = getHibernateTemplate().findByCriteria(criteria);
+		Endpoint e = DAOUtil.getSingleResult(l);
+		return e.getEndpointId();
+	}
+
 }

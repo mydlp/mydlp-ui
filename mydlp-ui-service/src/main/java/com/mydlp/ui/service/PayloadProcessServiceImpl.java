@@ -58,13 +58,7 @@ public class PayloadProcessServiceImpl implements PayloadProcessService {
 				throw new ImproperPayloadEncapsulationException("Expecting _");
 			
 			ByteBuffer payloadChunk = encryptionService.decrypt(endpointSecret, chunk);
-			
-			logger.error(payloadChunk.position() + "");
-			logger.error(payloadChunk.remaining() + "");
-			logger.error(payloadSize.toString());
 			payloadChunk.limit(payloadSize);
-			logger.error(payloadChunk.position() + "");
-			logger.error(payloadChunk.remaining() + "");
 			
 			buf = new byte[15];
 			payloadChunk.get(buf);
@@ -72,8 +66,6 @@ public class PayloadProcessServiceImpl implements PayloadProcessService {
 			if (! PROTO_PAYLOAD_HEAD.equals(new String(buf)))
 				throw new ImproperPayloadEncapsulationException("Payload chunk does not start with " + PROTO_PAYLOAD_HEAD);
 			
-			logger.error(payloadChunk.position() + "");
-			logger.error(payloadChunk.remaining() + "");
 			object.setPayload(payloadChunk);
 			return object;
 		} catch (ImproperPayloadEncapsulationException e) {

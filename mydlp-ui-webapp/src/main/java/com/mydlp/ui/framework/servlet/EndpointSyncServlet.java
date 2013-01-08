@@ -67,7 +67,8 @@ public class EndpointSyncServlet implements HttpRequestHandler {
 				} catch (Throwable e) {
 					logger.error("Runtime error occured when reading payload", e);
 				}
-				ByteBuffer thriftResponse = thriftService.getRuletable(ipAddress, userH, ruleTableUniqId);
+				ByteBuffer thriftResponse = thriftService.getRuletable(
+						syncObject.getEndpointId(),	ipAddress, userH, ruleTableUniqId);
 				syncObject.setPayload(thriftResponse);
 				responseBuffer = payloadProcessService.toByteBuffer(syncObject);
 			}
