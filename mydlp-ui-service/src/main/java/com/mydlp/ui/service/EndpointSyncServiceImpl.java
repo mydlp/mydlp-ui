@@ -13,6 +13,7 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.springframework.transaction.support.TransactionTemplate;
 
+import com.mydlp.ui.dao.EndpointDAO;
 import com.mydlp.ui.dao.EndpointStatusDAO;
 import com.mydlp.ui.thrift.MyDLPUIThriftService;
 
@@ -23,6 +24,9 @@ public class EndpointSyncServiceImpl implements EndpointSyncService {
 
 	@Autowired
 	protected EndpointStatusDAO endpointStatusDAO;
+	
+	@Autowired
+	protected EndpointDAO endpointDAO;
 
 	@Autowired
 	protected MyDLPUIThriftService thriftService;
@@ -33,8 +37,10 @@ public class EndpointSyncServiceImpl implements EndpointSyncService {
 	
 	@Async
 	@Override
-	public void asyncRegisterEndpointMeta(final String endpointAlias, final String ipAddress,
+	public void asyncRegisterEndpointMeta(final String endpointId, final String ipAddress,
 			final String usernameHash, final ByteBuffer payload) {
+		final String endpointAlias = endpointDAO.getEndpointAlias(endpointId);
+		if (endpointAlias == null) return;
 		transactionTemplate.execute(new TransactionCallbackWithoutResult() {
 			@Override
 			protected void doInTransactionWithoutResult(TransactionStatus arg0) {

@@ -77,15 +77,17 @@
 				 visible="false" includeInLayout="false"/>
 		
 		<s:HGroup paddingLeft="0" paddingTop="0" paddingBottom="0" paddingRight="0"
+				  verticalAlign="middle"
 				  visible="false" includeInLayout="false"
 				  visible.selected="{isDiscoveryInProg}" includeInLayout.selected="{isDiscoveryInProg}"
 				  visible.hovered="{isDiscoveryInProg}" includeInLayout.hovered="{isDiscoveryInProg}">
-			<mx:ProgressBar id="progressBar" indeterminate="true" width="50" height="10"
-							label="" labelPlacement="center" labelWidth="0"
-							/>
 			<s:Button id="stopDiscovery" label="@Resource(bundle='messages', key='endpoints.state.stopDiscoveryButton.label')" 
 					  click="stopDiscoveryClickHandler(event)" 
 					  />
+			<mx:ProgressBar id="progressBar" indeterminate="true" width="40"
+							label="" labelPlacement="center" labelWidth="0"
+							/>
+			
 		</s:HGroup>
 		
 		<s:Button id="discoverNow" label="@Resource(bundle='messages', key='endpoints.state.discoveryNowButton.label')" 
