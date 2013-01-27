@@ -10,6 +10,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Transient;
 
 import org.dphibernate.serialization.annotations.NeverSerialize;
+import org.hibernate.annotations.Index;
 
 @Entity
 public class AuthUser extends AbstractEntity {
@@ -19,14 +20,15 @@ public class AuthUser extends AbstractEntity {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 2277869102174042066L;
+	private static final long serialVersionUID = 3027576149336767068L;
 	
 	
 	protected String username;
 	protected String password;
 	protected String email;
+	protected int emailHashCode;
 	protected Boolean isActive;
-	protected List<AuthSecurityRole> roles;
+	protected AuthSecurityRole role;
 	protected Boolean hasAuthorityScope;
 	protected List<ADDomainItem> authorityScopeADItems;
 	protected List<DocumentDatabase> documentDatabases;
@@ -59,7 +61,15 @@ public class AuthUser extends AbstractEntity {
 		return email;
 	}
 	public void setEmail(String email) {
+		this.emailHashCode = email.hashCode();
 		this.email = email;
+	}
+	@Column(nullable=false, unique=true)
+	@Index(name="emailHashCode")
+	public int getEmailHashCode() {
+		return emailHashCode;
+	}
+	public void setEmailHashCode(int emailHashCode) {
 	}
 	public Boolean getIsActive() {
 		return isActive;
@@ -68,12 +78,11 @@ public class AuthUser extends AbstractEntity {
 		this.isActive = isActive;
 	}
 	
-	@ManyToMany
-	public List<AuthSecurityRole> getRoles() {
-		return roles;
+	public AuthSecurityRole getRole() {
+		return role;
 	}
-	public void setRoles(List<AuthSecurityRole> roles) {
-		this.roles = roles;
+	public void setRole(AuthSecurityRole role) {
+		this.role = role;
 	}
 	
 	@Column(nullable=false)
@@ -103,11 +112,10 @@ public class AuthUser extends AbstractEntity {
 	
 	@Transient
 	public Boolean hasRole(String roleName) {
-		if (roles == null || roles.size() == 0)
+		if (role == null)
 			return false;
-		for (AuthSecurityRole role: roles)
-			if (role.getRoleName().equals(roleName))
-				return true;
+		if (role.getRoleName().equals(roleName))
+			return true;
 		
 		return false;
 	}

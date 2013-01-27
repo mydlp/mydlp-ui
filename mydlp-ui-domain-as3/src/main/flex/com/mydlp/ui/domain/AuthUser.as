@@ -12,12 +12,11 @@ package com.mydlp.ui.domain {
     public class AuthUser extends AuthUserBase {
 		public function hasRole(roleName:String): Boolean
 		{
-			if (roles == null) return false;
+			if (role == null) return false;
 			
-			for each (var i:* in roles)
-				if ((i as AuthSecurityRole).roleName == roleName)
-					return true;
-			
+			if(role.roleName == roleName)
+				return true;
+		
 			return false;
 		}
     }

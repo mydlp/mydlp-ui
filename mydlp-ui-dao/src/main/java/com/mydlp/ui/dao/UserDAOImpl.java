@@ -49,5 +49,15 @@ public class UserDAOImpl extends AbstractPolicyDAO implements UserDAO {
 				DetachedCriteria.forClass(AuthSecurityRole.class);
 		return getHibernateTemplate().findByCriteria(criteria);
 	}
+
+	@Override
+	public AuthUser findByEmailHashCode(int emailHashCode) {
+		DetachedCriteria criteria = 
+				DetachedCriteria.forClass(AuthUser.class)
+					.add(Restrictions.eq("emailHashCode", emailHashCode));
+		@SuppressWarnings("unchecked")
+		List<AuthUser> list = getHibernateTemplate().findByCriteria(criteria);
+		return DAOUtil.getSingleResult(list);
+	}
 	
 }

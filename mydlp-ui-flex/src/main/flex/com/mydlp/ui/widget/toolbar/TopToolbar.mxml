@@ -195,7 +195,11 @@
 			{
 				compileInProgress = true;
 				installPopup = InteractionUtil.newPopup(InstallPolicyPopup) as InstallPolicyPopup;
-				var sanityReturn:String = FlexGlobals.topLevelApplication.ruleContainer.sanityCheck();
+				var sanityReturn:String
+				if(FlexGlobals.topLevelApplication.hasRole(AuthSecurityRole.ROLE_CLASSIFIER))
+					sanityReturn = "ok";
+				else
+					sanityReturn = FlexGlobals.topLevelApplication.ruleContainer.sanityCheck();
 				if (sanityReturn == "ok")
 				{
 					pe.compilePolicy(1);

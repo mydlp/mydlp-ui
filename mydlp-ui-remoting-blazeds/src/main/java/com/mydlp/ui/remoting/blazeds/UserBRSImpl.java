@@ -67,5 +67,15 @@ public class UserBRSImpl implements UserService
 		authUser.setPassword(encodedPasswd);
 		return userDAO.save(authUser);
 	}
+
+	@Override
+	public Boolean isEmailValid(String email) {
+		int emailHashCode = email.hashCode();
+		AuthUser authUser = userDAO.findByEmailHashCode(emailHashCode);
+		if(authUser == null)
+			return true;
+		else
+			return false;
+	}
 	
 }

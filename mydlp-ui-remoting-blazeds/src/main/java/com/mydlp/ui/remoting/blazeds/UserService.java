@@ -27,5 +27,7 @@ public interface UserService {
 	@Secured({AuthSecurityRole.ROLE_ADMIN, AuthSecurityRole.ROLE_SUPER_ADMIN, AuthSecurityRole.ROLE_AUDITOR, AuthSecurityRole.ROLE_CLASSIFIER})
 	public AuthUser save(AuthUser user, String passwd);
 	
+	@Secured({AuthSecurityRole.ROLE_ADMIN, AuthSecurityRole.ROLE_SUPER_ADMIN})
+	public Boolean isEmailValid(String email);
 	
 }

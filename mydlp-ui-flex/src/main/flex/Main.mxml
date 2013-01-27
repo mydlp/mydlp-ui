@@ -56,7 +56,7 @@
 			
 			protected var isUserActive:Boolean = false;
 			
-			public var userRoles:ArrayCollection = new ArrayCollection;
+			public var userRole:AuthSecurityRole;
 			
 			public var notifiedUsers:ArrayCollection = new ArrayCollection;
 			
@@ -136,6 +136,16 @@
 				if (user == null || ! user is AuthUser)
 					return false;
 				return (user as AuthUser).hasRole(roleName);
+			}
+			
+			public function isSameUserWithLoginUser(targetUser:AuthUser):Boolean
+			{
+				if(user.email == targetUser.email)
+				{
+					return true;
+				}
+				else
+					return false;			
 			}
 			
 			public function hasAnyAdminRole():Boolean

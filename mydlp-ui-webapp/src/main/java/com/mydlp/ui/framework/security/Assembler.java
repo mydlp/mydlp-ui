@@ -26,9 +26,11 @@ public class Assembler {
 		boolean accountNonLocked = userEntity.getIsActive();
 
 		Collection<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
-		for (AuthSecurityRole role : userEntity.getRoles()) {
-			authorities.add(new GrantedAuthorityImpl(role.getRoleName()));
-		}
+		AuthSecurityRole role = userEntity.getRole();
+		authorities.add(new GrantedAuthorityImpl(role.getRoleName()));
+		//for (AuthSecurityRole role : userEntity.getRole()) {
+		//	authorities.add(new GrantedAuthorityImpl(role.getRoleName()));
+		//}
 		
 		if (password == null) password = "";
 

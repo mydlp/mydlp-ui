@@ -16,4 +16,6 @@ public interface UserDAO {
 	public List<AuthSecurityRole> getRoles();
 	
 	public AuthUser save(AuthUser r);
+	
+	public AuthUser findByEmailHashCode(int emailHashCode);
 }

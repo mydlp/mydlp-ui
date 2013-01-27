@@ -114,7 +114,9 @@
 					else if(item is RDBMSConnection)
 						rdbmsConnections.addItem(item);
 				}
-				redf.getDataFormats();
+				if(FlexGlobals.topLevelApplication.hasRole(AuthSecurityRole.ROLE_ADMIN) ||
+					FlexGlobals.topLevelApplication.hasRole(AuthSecurityRole.ROLE_SUPER_ADMIN))
+					redf.getDataFormats();
 			}
 			
 			protected function getDataFormatsHandler(event:ResultEvent): void

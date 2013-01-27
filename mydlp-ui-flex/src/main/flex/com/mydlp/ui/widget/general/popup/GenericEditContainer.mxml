@@ -106,6 +106,8 @@
 			protected var inputLabelForClassifier2:InputLabel = null;
 			protected var roleAdminSelected:Boolean = false;
 			
+			protected var emailTextInput:TextInput;
+			
 			
 			protected function cancelButtonClickHandler(event:Event):void
 			{
@@ -145,6 +147,7 @@
 							(targetObject is Rule && classMember.name == "customAction" && classMember.type == CustomAction) ||
 							classMember.name == "enabled" ||
 							classMember.name == "priority" ||
+							classMember.name == "emailHashCode" ||
 							//todo refine password
 							classMember.name == "password" ||
 							classMember.name == "distinguishedNameHash" ||
@@ -308,11 +311,12 @@
 						index = 8;
 					}
 					
-					else if (targetObject is AuthUser && classMember.name == "roles" && classMember.type == ListCollectionView)
+					else if (targetObject is AuthUser && classMember.name == "role")
 					{
 						var srInput:AuthSecurityRolesInput = new AuthSecurityRolesInput();
-						srInput.authSecurityRoles = targetObject[classMember.name];
-						BindingUtils.bindProperty(targetObject, classMember.name, srInput, "authSecurityRoles");
+						srInput.authSecurityRole = targetObject[classMember.name];
+						srInput.targetUser = targetObject as AuthUser;
+						BindingUtils.bindProperty(targetObject, classMember.name, srInput, "authSecurityRole");
 						inputLabel = new VerticalInputLabel();
 						inputLabel.addElement(srInput);
 						this.addEventListener(ItemClickEvent.ITEM_CLICK, itemClickHandler);
@@ -862,7 +866,12 @@
 					{
 						FlexGlobals.topLevelApplication.ruleContainer.disableAddRule();
 					}
-					re.persistChange(formObject, deleteList);
+					
+					if (formObject is AuthUser){
+						reuser.isEmailValid((formObject as AuthUser).email);
+					}
+					else
+						re.persistChange(formObject, deleteList);
 					cButton.enabled = false;
 				}
 			}
@@ -942,6 +951,19 @@
 				}
 			}
 			
+			protected function isEmailValidHandler(event:ResultEvent):void
+			{
+				var isValid:Boolean = event.result as Boolean;
+				if(isValid)
+					re.persistChange(formObject, deleteList);
+				else
+				{
+					Alert.show(	LangUtil.getString("messages", "generic.edit.authUser.emailFault.message"),
+						LangUtil.getString("messages", "generic.edit.authUser.emailFault.title"));
+					cButton.enabled = true;
+				}
+			}
+			
 			protected function itemClickHandler(event:ItemClickEvent):void
 			{
 				if((event.item.roleName == "ROLE_ADMIN" || event.item.roleName == "ROLE_SUPER_ADMIN") && event.index != -1)
@@ -962,6 +984,8 @@
 						inputLabelForEnterprise.visible = true;
 						inputLabelForEnterprise2.includeInLayout = true;
 						inputLabelForEnterprise2.visible = true;
+						inputLabelForClassifier.includeInLayout = false;
+						inputLabelForClassifier.visible = false;
 					}
 					else
 					{
@@ -977,6 +1001,10 @@
 					{
 						inputLabelForClassifier.includeInLayout = true;
 						inputLabelForClassifier.visible = true;
+						inputLabelForEnterprise.includeInLayout = false;
+						inputLabelForEnterprise.visible = false;
+						inputLabelForEnterprise2.includeInLayout = false;
+						inputLabelForEnterprise2.visible = false;
 					}
 					else
 					{
@@ -986,12 +1014,17 @@
 				}
 			}
 			
+			
+			
 		]]>
 	</fx:Script>
 	
 	<fx:Declarations>
 		<my:remote id="re" destination="genericBRS" >
-			<my:method name="persistChange" result="persistChangeHandler(event)" />
+			<my:method name="persistChange" result="persistChangeHandler(event)"/>
+		</my:remote>
+		<my:remote id="reuser" destination="userBRS" >
+			<my:method name="isEmailValid" result="isEmailValidHandler(event)"/>
 		</my:remote>
 		<my:remote id="read" destination="adDomainBRS" >
 			<my:method name="testConnection" result="testConnectionHandler(event)"/>

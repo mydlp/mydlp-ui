@@ -73,7 +73,15 @@ public class DownloadServlet implements HttpRequestHandler {
 			}
 		});
 		
-		if((isAdmin && urlKey != null && urlKey.equals("user.der")) || isSuperAdmin) {
+		boolean isAuditor = transactionTemplate.execute(new TransactionCallback<Boolean>() {
+			@Override
+			public Boolean doInTransaction(TransactionStatus arg0) {
+				AuthUser authUser = userDAO.findByName(username);
+				return authUser.hasRole(AuthSecurityRole.ROLE_AUDITOR);
+			}
+		});
+		
+		if((isAdmin && urlKey != null && urlKey.equals("user.der")) || isSuperAdmin || (isAuditor && urlKey == null )) {
 			try {
 				IncidentLogFile logFile = null;
 				if (urlKey != null) {

@@ -3,9 +3,10 @@
 				xmlns:s="library://ns.adobe.com/flex/spark" 
 				xmlns:mx="library://ns.adobe.com/flex/mx" 
 				autoDrawBackground="true"
-				click="itemClickHandler(event)">
+				click="itemClickHandler(event)"
+				creationComplete="onCreationComplete()">
+				<!--creationComplete="{checkBox.selected = this.selected;}"-->
 				<!--updateComplete="updateCompleteHandler(event)">-->
-				<!--creationComplete="{data = data as AuthSecurityRole}">-->
 	<fx:Script>
 		<![CDATA[
 			import com.mydlp.ui.domain.AuthSecurityRole;
@@ -20,59 +21,62 @@
 			
 			import spark.events.IndexChangeEvent;
 			
-			
+			public override function set data(value:Object):void
+			{
+				super.data = value;
+				if(value == null) return;
+				if(this.selected)
+					checkBox.selected = true;
+				else
+					checkBox.selected = false;
+				dispatchEvent(new FlexEvent(FlexEvent.DATA_CHANGE));
+			}
 		
 			protected function itemClickHandler(event:MouseEvent):void
 			{
 				var e:ItemClickEvent = new ItemClickEvent(ItemClickEvent.ITEM_CLICK, true);
 				e.item = data;
 				if(this.checkBox.selected)
+				{	
+					FlexGlobals.topLevelApplication.userRole = this.data;
 					e.index = itemIndex;
+				}
 				else
 					e.index = -1;
 				dispatchEvent(e);
 			}
 			
-			protected function isRoleSelected(data:*):Boolean
+			protected function isRoleSelected():Boolean
 			{
-				var roles:ArrayCollection = FlexGlobals.topLevelApplication.userRoles
-				for(var i:int = 0; i < roles.length; i++)
-				{
-					if(roles[i] == itemIndex)
-						return true;
-				}
-				return false;
+				var role:AuthSecurityRole = FlexGlobals.topLevelApplication.userRole;
+				if(role == null)
+					return false;
+				if(role == this.data)
+					return true;
+				else return false;
 			}
 			
 			protected function onChangeHandler(event:Event):void
 			{
-				var roles:ArrayCollection = FlexGlobals.topLevelApplication.userRoles;
+				var role:AuthSecurityRole = FlexGlobals.topLevelApplication.userRole;
 				if(event.currentTarget.selected == true)
 				{
-					if(this.data.roleName == "ROLE_ADMIN" || this.data.roleName == "ROLE_SUPER_ADMIN")
-						FlexGlobals.topLevelApplication.userRoles.removeAll();
-					else
-					{
-						if(FlexGlobals.topLevelApplication.userRoles.length != 0 && FlexGlobals.topLevelApplication.userRoles[0] == 0)
-							FlexGlobals.topLevelApplication.userRoles.removeAll();
-					}
-					FlexGlobals.topLevelApplication.userRoles.addItem(itemIndex);
-				}
-				else
-				{
-					for(var j:int = 0; j < roles.length; j++)
-					{
-						if(roles[j] == itemIndex)
-						{
-							FlexGlobals.topLevelApplication.userRoles.removeItemAt(j);
-							break;
-						}
-					}
+					FlexGlobals.topLevelApplication.userRole = this.data;
 				}
 				var e:IndexChangeEvent = new IndexChangeEvent(IndexChangeEvent.CHANGE, true);
 				e.newIndex = itemIndex;
 				e.oldIndex = -1;
 				dispatchEvent(e);
+			}
+			
+			
+			protected function onCreationComplete():void
+			{
+				var userRole:AuthSecurityRole = FlexGlobals.topLevelApplication.userRole;
+				if(userRole == this.data)
+					checkBox.selected = true
+				else 
+					checkBox.selected = false;
 			}
 			
 		]]>
@@ -84,7 +88,7 @@
 		<s:State name="selected" />
 	</s:states>
 	
-	<s:CheckBox label="{data.roleName}" id="checkBox" selected="{isRoleSelected(data)}"
+	<s:CheckBox label="{data.roleName}" id="checkBox" selected="{this.selected}"
 				change="onChangeHandler(event)"/>	
 	
 </s:ItemRenderer>
