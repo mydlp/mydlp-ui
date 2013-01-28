@@ -1,8 +1,5 @@
 package com.mydlp.ui.schema.granules;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.mydlp.ui.domain.AuthSecurityRole;
 import com.mydlp.ui.domain.AuthUser;
 import com.mydlp.ui.domain.DashboardItem;

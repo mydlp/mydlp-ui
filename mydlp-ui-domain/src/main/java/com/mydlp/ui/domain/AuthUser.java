@@ -5,7 +5,9 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Transient;
 
@@ -78,6 +80,8 @@ public class AuthUser extends AbstractEntity {
 		this.isActive = isActive;
 	}
 	
+	@ManyToOne
+	@JoinColumn(nullable=false)
 	public AuthSecurityRole getRole() {
 		return role;
 	}
