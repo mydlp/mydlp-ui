@@ -12,10 +12,6 @@ public class _000_00029_Config_End_Point extends AbstractGranule {
 		usbSerialAccessControl.setKey("usb_serial_access_control");
 		usbSerialAccessControl.setValue("false");
 
-		Config printMonitor = new Config();
-		printMonitor.setKey("print_monitor");
-		printMonitor.setValue("false");
-
 		Config logLevel = new Config();
 		logLevel.setKey("log_level");
 		logLevel.setValue("0");
@@ -41,7 +37,6 @@ public class _000_00029_Config_End_Point extends AbstractGranule {
 		ignoreDiscoverMaxSizeExceeded.setValue("true");
 
 		getHibernateTemplate().saveOrUpdate(usbSerialAccessControl);
-		getHibernateTemplate().saveOrUpdate(printMonitor);	
 		getHibernateTemplate().saveOrUpdate(logLevel);
 		getHibernateTemplate().saveOrUpdate(logLimit);	
 		getHibernateTemplate().saveOrUpdate(syncInterval);

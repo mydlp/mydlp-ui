@@ -124,8 +124,7 @@
 						
 					else if (config.key == "auto_distribution") advancedTab.autoDistribution = config;
 					else if (config.key == "auto_distribution_nodes") advancedTab.autoDistributionNodes = config;
-						
-					else if (config.key == "print_monitor") epTab.printMonitor = config;
+
 					else if (config.key == "log_level") epTab.logLevel = config;
 					else if (config.key == "log_limit") epTab.logLimit = config;
 					else if (config.key == "sync_interval") epTab.syncInterval = config;
