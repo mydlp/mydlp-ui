@@ -108,7 +108,6 @@
 					else if (config.key == "email_notification_message_from") enterpriseTab.notificationMessageFrom = config;
 					else if (config.key == "email_notification_message_subject") enterpriseTab.notificationMessageSubject = config;
 						
-					else if (config.key == "archive_inbound") enterpriseTab.archiveInbound = config;
 					else if (config.key == "archive_minimum_size") enterpriseTab.archiveMinimumSize = config;
 					else if (config.key == "maximum_object_size") advancedTab.maximumObjectSize = config;
 					else if (config.key == "maximum_memory_object") advancedTab.maximumMemoryObject = config;

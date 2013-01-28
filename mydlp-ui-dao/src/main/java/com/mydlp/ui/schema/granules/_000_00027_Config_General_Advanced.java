@@ -12,10 +12,6 @@ public class _000_00027_Config_General_Advanced extends AbstractGranule {
 		mailArchive.setKey("mail_archive");
 		mailArchive.setValue("false");
 
-		Config archiveInbound = new Config();
-		archiveInbound.setKey("archive_inbound");
-		archiveInbound.setValue("false");
-
 		Config archiveMinimumSize = new Config();
 		archiveMinimumSize.setKey("archive_minimum_size");
 		archiveMinimumSize.setValue("2048");
@@ -169,7 +165,6 @@ public class _000_00027_Config_General_Advanced extends AbstractGranule {
 
 		getHibernateTemplate().saveOrUpdate(mailArchive);
 		getHibernateTemplate().saveOrUpdate(archiveMinimumSize);
-		getHibernateTemplate().saveOrUpdate(archiveInbound);
 		getHibernateTemplate().saveOrUpdate(maximumObjectSize);
 		getHibernateTemplate().saveOrUpdate(maximumMemoryObject);
 		getHibernateTemplate().saveOrUpdate(maximumChunkSize);
