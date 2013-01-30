@@ -34,8 +34,6 @@
 		
 		<domain:Config id="mailArchive" />
 		<domain:Config id="webArchive" />
-		<domain:Config id="icapLogPass" />
-		<domain:Config id="icapLogPassLowerLimit" />
 		<domain:Config id="archiveMinimumSize" />
 		<domain:Config id="syslogAclHost" />
 		<domain:Config id="syslogAclPort" />
@@ -49,12 +47,6 @@
 		<domain:Config id="notificationMessageFrom"/>
 		<domain:Config id="notificationMessage"/>
 		<domain:Config id="notificationMessageSubject"/>
-		
-		<validators:MyNumberValidator id="icapLogPassValidator"
-									  source="{logPass}"
-									  minValue="0"
-									  valid="{optionContainer.validInput(event)}"
-									  invalid="{optionContainer.invalidInput(event)}"/>
 		
 		<validators:MyRegExValidator id="syslogAclHostValidator"
 									 source="{syslogAclHostInput}"
@@ -115,13 +107,6 @@
 					<s:FormItem label="{webArchive.label}">
 						<s:CheckBox id="webArchiveCheckBox" selected="{webArchive.value == 'true'}" 
 									change="{webArchive.value = webArchiveCheckBox.selected ? 'true' : 'false'}"/>			
-					</s:FormItem>
-					<s:FormItem label="{icapLogPass.label}">
-						<s:CheckBox id="icapLogPassCheckBox" selected="{icapLogPass.value == 'true'}"
-									change="{icapLogPass.value = icapLogPassCheckBox.selected ? 'true' : 'false'}"/>
-					</s:FormItem>
-					<s:FormItem label="{icapLogPassLowerLimit.label}" width="350">
-						<s:TextInput id="logPass" text="@{icapLogPassLowerLimit.value}" width="150"/>
 					</s:FormItem>
 					<s:FormItem label="{archiveMinimumSize.label}" width="350">
 						<s:TextInput text="@{archiveMinimumSize.value}" width="150"/>

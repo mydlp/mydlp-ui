@@ -33,7 +33,6 @@
 			
 			protected function initValidators(): void
 			{
-				validators.push(enterpriseTab.icapLogPassValidator);
 				validators.push(enterpriseTab.notificationMessageFromValidator);
 				validators.push(enterpriseTab.syslogAclHostValidator);
 				validators.push(enterpriseTab.syslogAclPortValidator);
@@ -101,8 +100,6 @@
 					else if (config.key == "icap_respmod_path") protocolsTab.icapRespModPath = config;
 					else if (config.key == "icap_max_connections") protocolsTab.icapMaxConnections = config;
 					else if (config.key == "icap_options_ttl") protocolsTab.icapOptionsTTL = config;
-					else if (config.key == "icap_log_pass") enterpriseTab.icapLogPass = config;
-					else if (config.key == "icap_log_pass_lower_limit") enterpriseTab.icapLogPassLowerLimit = config;
 					else if (config.key == "icap_ignore_big_requests") protocolsTab.icapIgnoreBigRequests = config;
 					else if (config.key == "email_notification_message") enterpriseTab.notificationMessage = config;
 					else if (config.key == "email_notification_message_from") enterpriseTab.notificationMessageFrom = config;
@@ -158,9 +155,8 @@
 					else if (config.key == "seclore_fs_hot_folder_cabinet_passphrase") irmTab.secloreFSHotFolderCabinetPassphrase = config;
 					else if (config.key == "seclore_fs_server_pool_size") irmTab.secloreFSServerPoolSize = config;
 					else if (config.key == "seclore_fs_endpoint_pool_size") irmTab.secloreFSEndpointPoolSize= config;
-					
-					visible = true;
 				}
+				visible = true;
 			}
 			
 			public function saveButtonHandler(event:MouseEvent):void
