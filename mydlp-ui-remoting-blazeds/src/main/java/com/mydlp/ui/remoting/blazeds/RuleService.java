@@ -1,6 +1,7 @@
 package com.mydlp.ui.remoting.blazeds;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.security.access.annotation.Secured;
 
@@ -28,5 +29,8 @@ public interface RuleService {
 	public void ruleMove(Rule rule, Long minPriority, Long maxPriority);
 	
 	public void balanceRulePriority();
+	
+	@Secured({AuthSecurityRole.ROLE_ADMIN, AuthSecurityRole.ROLE_SUPER_ADMIN, AuthSecurityRole.ROLE_AUDITOR})
+	public Map<String, String> getRuleLabelsAndIds();
 	
 }

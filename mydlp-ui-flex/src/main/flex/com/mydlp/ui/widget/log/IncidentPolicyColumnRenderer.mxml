@@ -50,7 +50,7 @@
 				
 				labelText += LangUtil.getString("messages","log.container.column.policy.rule") + ": ";
 				
-				labelText += RuleContainer.getRuleLabel(log.ruleId);
+				labelText += FlexGlobals.topLevelApplication.getRuleLabel(log.ruleId);
 				
 				labelText += "\n" + LangUtil.getString("messages","log.container.column.policy.action") + ": ";
 				

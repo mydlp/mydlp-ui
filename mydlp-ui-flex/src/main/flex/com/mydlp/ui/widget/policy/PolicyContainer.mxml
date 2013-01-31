@@ -4,6 +4,47 @@
 		 xmlns:mx="library://ns.adobe.com/flex/mx" width="100%" height="100%" 
 		 xmlns:inventory="com.mydlp.ui.widget.policy.inventory.*" 
 		 xmlns:rule="com.mydlp.ui.widget.policy.rule.*">
+	
+	<fx:Script>
+		<![CDATA[
+			import com.mydlp.ui.domain.InventoryCategory;
+			import com.mydlp.ui.domain.InventoryItem;
+			protected function isConsistent(items:Array):Boolean
+			{
+				var isAnyInventoryItem:Boolean = false;
+				if(items == null || items.length == 0)
+					return false;
+				else
+				{
+					for(var i:int = 0; i < items.length; i++)
+					{
+						if(items[i] is InventoryItem)
+						{
+							isAnyInventoryItem = true;
+							break;
+						}
+					}
+				}
+				if(isAnyInventoryItem)
+					return true;
+				else
+					return false;
+			}
+			
+			protected function findButtonClickHandler(event:MouseEvent):void
+			{
+				if(isConsistent(inventoryTree.selectedItems))
+					ruleContainer.filterRules(inventoryTree.selectedItems);
+			}
+			
+			protected function resetButtonClickHandler(event:MouseEvent):void
+			{
+				ruleContainer.resetFilterRules();
+			}
+			
+		]]>
+	</fx:Script>
+	
 	<fx:Declarations>
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
 	</fx:Declarations>
@@ -11,7 +52,21 @@
 	<s:layout>
 		<s:HorizontalLayout paddingTop="10" gap="0"/>
 	</s:layout>
-	<inventory:InventoryTree id="inventoryTree"/>
+	<s:Group height="100%">
+		<s:layout>
+			<s:VerticalLayout gap="10"/>
+		</s:layout>
+		<s:Group height="3%">
+			<s:layout>
+				<s:HorizontalLayout gap="5" horizontalAlign="right"/>
+			</s:layout>
+			<s:Button id="findButton" click="findButtonClickHandler(event)" skinClass="com.mydlp.ui.skin.FindInRulesBitmapLabelButton16Skin"
+					  label="@Resource(key='ruleContainer.policyContainer.findButton.label', bundle='messages')"/>
+			<s:Button id="resetButton" click="resetButtonClickHandler(event)" skinClass="com.mydlp.ui.skin.FindInRulesBitmapLabelButton16Skin"
+					  label="@Resource(key='ruleContainer.policyContainer.resetButton.label', bundle='messages')"/>
+		</s:Group>
+		<inventory:InventoryTree id="inventoryTree" height="97%"/>
+	</s:Group>
 	<rule:RSpacer/>
 	<rule:RuleContainer id="ruleContainer"/>	
 </s:Group>

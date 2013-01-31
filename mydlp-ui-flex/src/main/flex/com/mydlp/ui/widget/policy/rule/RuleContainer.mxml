@@ -39,9 +39,54 @@
 			[Bindable]
 			public var ruleDP:ListCollectionView = new ArrayCollection();
 			
+			[Bindable]
+			protected var resetRuleDP:ListCollectionView;
+			
 			public var isSelection:Boolean = false;
 			
 			public var collapseStates:Dictionary = new Dictionary();
+			
+			protected function deepCopyDPtoResetList():void
+			{
+				resetRuleDP = new ArrayCollection();
+				for(var i:int = 0; i < ruleDP.length; i++)
+				{
+					resetRuleDP.addItem(ruleDP[i]);
+				}
+			}
+			
+			//protected function isAlreadyAdded
+			
+			public function filterRules(items:Array):void
+			{
+				ruleDP = resetRuleDP;
+				var tempRuleDP:ListCollectionView = new ArrayCollection;
+				for(var i:int = 0; i < ruleDP.length;i++)
+				{
+					var rule:Rule = ruleDP[i] as Rule;
+					for(var j:int = 0; j < rule.ruleItems.length; j++)
+					{
+						var breakFlag:Boolean = false;
+						for(var k:int = 0; k < items.length; k++)
+						{
+							if(rule.ruleItems[j].item.coupledInventoryItem.uid == items[k].uid)
+							{
+								tempRuleDP.addItem(rule);
+								breakFlag = true;
+								break;
+							}
+						}	
+						if(breakFlag) 
+							break;
+					}
+				}
+				ruleDP = tempRuleDP;
+			}
+			
+			public function resetFilterRules():void
+			{
+				ruleDP = resetRuleDP;
+			}
 			
 			public static function getRule(value:Number): Rule
 			{
@@ -56,31 +101,7 @@
 					if (rule != null && rule is Rule && (rule as Rule).id == value)
 						return rule as Rule;
 				return null;
-			}
-			
-			public static function getRuleLabel(value:Number) : String
-			{
-				var labelText:String = "";
-				if (value == -1)
-				{
-					labelText +=  LangUtil.getString("messages","policy.rule.default");
-				}
-				else
-				{
-					var rule:Rule = getRule(value);
-					
-					if (rule != null)
-					{
-						labelText +=  rule.label;
-					}
-					else
-					{
-						labelText += "id(" + value + ")";
-					}
-				}
-				return labelText;
-			}
-			
+			}			
 			
 			public function refreshRules():void
 			{
@@ -140,6 +161,7 @@
 				RuleList.resetRuleItemListList();
 				ruleList.invalidateList();
 				ruleDP = ruleDP2;
+				deepCopyDPtoResetList();
 				
 				if (ruleDP.length == 0)
 				{
