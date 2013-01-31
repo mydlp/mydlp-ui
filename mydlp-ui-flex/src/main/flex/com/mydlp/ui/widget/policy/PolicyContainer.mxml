@@ -9,6 +9,8 @@
 		<![CDATA[
 			import com.mydlp.ui.domain.InventoryCategory;
 			import com.mydlp.ui.domain.InventoryItem;
+			
+			import mx.events.ListEvent;
 			protected function isConsistent(items:Array):Boolean
 			{
 				var isAnyInventoryItem:Boolean = false;
@@ -34,12 +36,26 @@
 			protected function findButtonClickHandler(event:MouseEvent):void
 			{
 				if(isConsistent(inventoryTree.selectedItems))
+				{
 					ruleContainer.filterRules(inventoryTree.selectedItems);
+					this.currentState = "filtered";
+				}
 			}
 			
 			protected function resetButtonClickHandler(event:MouseEvent):void
 			{
 				ruleContainer.resetFilterRules();
+				resetView();
+			}
+			
+			protected function inventoryTreeChangeHandler(event:ListEvent):void
+			{
+				resetButtonClickHandler(null);	
+			}
+			
+			public function resetView(): void
+			{
+				this.currentState = "default";
 			}
 			
 		]]>
@@ -48,6 +64,10 @@
 	<fx:Declarations>
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
 	</fx:Declarations>
+	<s:states>
+		<s:State name="default" />
+		<s:State name="filtered" />
+	</s:states>
 	
 	<s:layout>
 		<s:HorizontalLayout paddingTop="10" gap="0"/>
@@ -56,16 +76,23 @@
 		<s:layout>
 			<s:VerticalLayout gap="10"/>
 		</s:layout>
-		<s:Group height="3%">
+		<s:Group height="3%" width="320">
 			<s:layout>
-				<s:HorizontalLayout gap="5" horizontalAlign="right"/>
+				<s:HorizontalLayout paddingRight="3"
+									horizontalAlign="right"/>
 			</s:layout>
-			<s:Button id="findButton" click="findButtonClickHandler(event)" skinClass="com.mydlp.ui.skin.FindInRulesBitmapLabelButton16Skin"
-					  label="@Resource(key='ruleContainer.policyContainer.findButton.label', bundle='messages')"/>
-			<s:Button id="resetButton" click="resetButtonClickHandler(event)" skinClass="com.mydlp.ui.skin.FindInRulesBitmapLabelButton16Skin"
-					  label="@Resource(key='ruleContainer.policyContainer.resetButton.label', bundle='messages')"/>
+			<s:Button id="findButton"
+					  fontWeight="bold"
+					  skinClass.default="com.mydlp.ui.skin.FindInRulesBitmapLabelButton16Skin"
+					  skinClass.filtered="com.mydlp.ui.skin.CloseBitmapLabelButton16Skin"
+					  label.default="@Resource(key='ruleContainer.policyContainer.findButton.label', bundle='messages')"
+					  label.filtered="@Resource(key='ruleContainer.policyContainer.resetButton.label', bundle='messages')"
+					  click.default="findButtonClickHandler(event)"
+					  click.filtered="resetButtonClickHandler(event)"
+					  enabled="{isConsistent(inventoryTree.selectedItems)}"
+					  />
 		</s:Group>
-		<inventory:InventoryTree id="inventoryTree" height="97%"/>
+		<inventory:InventoryTree id="inventoryTree" height="97%" change="inventoryTreeChangeHandler(event)"/>
 	</s:Group>
 	<rule:RSpacer/>
 	<rule:RuleContainer id="ruleContainer"/>	
