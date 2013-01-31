@@ -1,6 +1,7 @@
 package com.mydlp.ui.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import com.mydlp.ui.domain.Rule;
 import com.mydlp.ui.domain.RuleItem;
@@ -24,5 +25,7 @@ public interface RuleDAO {
 	public void ruleMove(Rule r, Long minPriority, Long maxPriority);
 	
 	public void balanceRulePriority();
+	
+	public Map<String, String> getRuleLabelsAndIds();
 	
 }

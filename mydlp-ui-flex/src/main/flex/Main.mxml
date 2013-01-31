@@ -34,6 +34,7 @@
 			import com.mydlp.ui.widget.policy.PolicyContainer;
 			import com.mydlp.ui.widget.policy.inventory.InventoryTree;
 			import com.mydlp.ui.widget.policy.rule.RuleContainer;
+			import com.mydlp.ui.widget.policy.rule.RuleList;
 			import com.mydlp.ui.widget.revision.RevisionContainer;
 			
 			import mx.collections.ArrayCollection;
@@ -59,6 +60,8 @@
 			public var userRole:AuthSecurityRole;
 			
 			public var notifiedUsers:ArrayCollection = new ArrayCollection;
+			
+			public var ruleLabels:Object = new Object();
 			
 			[Bindable]
 			public var dashboardContainer:DashboardContainer = null;
@@ -246,7 +249,7 @@
 					currentState = "nolicense";
 				else
 					currentState = "user";
-				
+				ruleRE.getRuleLabelsAndIds();
 				regulateVisibilty();
 			}
 			
@@ -296,6 +299,33 @@
 				refresh();
 			}
 			
+			protected function getRuleLabelsAndIdsHandler(event:ResultEvent):void
+			{
+				ruleLabels = event.result as Object;
+			}
+			
+			public function getRuleLabel(value:Number):String
+			{
+				var ruleLabelsAndIds:Object = ruleLabels as Object;
+				var labelText:String = "";
+				if (value == -1)
+				{
+					labelText +=  LangUtil.getString("messages","policy.rule.default");
+				}
+				else
+				{	
+					if (ruleLabelsAndIds[value] != null)
+					{
+						labelText +=  ruleLabelsAndIds[value];
+					}
+					else
+					{
+						labelText += "id(" + value + ")";
+					}
+				}
+				return labelText;
+			}
+			
 		]]>
 	</fx:Script>
 	
@@ -314,6 +344,9 @@
 		</my:remote>
 		<my:remote id="licenseRE" destination="licenseInformationBRS">
 			<my:method name="getLicense" result="getLicenseHandler(event)"/>
+		</my:remote>
+		<my:remote id="ruleRE" destination="ruleBRS" >
+			<my:method name="getRuleLabelsAndIds" result="getRuleLabelsAndIdsHandler(event)"/>
 		</my:remote>
 	</fx:Declarations>
 

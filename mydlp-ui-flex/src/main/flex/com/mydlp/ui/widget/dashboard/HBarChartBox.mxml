@@ -30,7 +30,7 @@
 					return value.toString();
 				if (itemKey == DashboardItem.TOP_5_RULES_1H || itemKey == DashboardItem.TOP_5_RULES_24H || itemKey == DashboardItem.TOP_5_RULES_1W)
 				{
-					var ruleLabel:String = RuleContainer.getRuleLabel(value as Number) as String;
+					var ruleLabel:String = FlexGlobals.topLevelApplication.getRuleLabel(value as Number) as String;
 					if (ruleLabel.length > 16)
 					{
 						ruleLabel = ruleLabel.substring(0, 15);

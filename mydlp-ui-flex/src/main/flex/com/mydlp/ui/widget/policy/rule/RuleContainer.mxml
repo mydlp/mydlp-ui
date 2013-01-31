@@ -56,31 +56,7 @@
 					if (rule != null && rule is Rule && (rule as Rule).id == value)
 						return rule as Rule;
 				return null;
-			}
-			
-			public static function getRuleLabel(value:Number) : String
-			{
-				var labelText:String = "";
-				if (value == -1)
-				{
-					labelText +=  LangUtil.getString("messages","policy.rule.default");
-				}
-				else
-				{
-					var rule:Rule = getRule(value);
-					
-					if (rule != null)
-					{
-						labelText +=  rule.label;
-					}
-					else
-					{
-						labelText += "id(" + value + ")";
-					}
-				}
-				return labelText;
-			}
-			
+			}			
 			
 			public function refreshRules():void
 			{
