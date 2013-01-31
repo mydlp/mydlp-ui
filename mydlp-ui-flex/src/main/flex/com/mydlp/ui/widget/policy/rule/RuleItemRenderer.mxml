@@ -3,12 +3,14 @@
 				xmlns:s="library://ns.adobe.com/flex/spark" 
 				xmlns:mx="library://ns.adobe.com/flex/mx" 
 				autoDrawBackground="true"
-				width="100%" height="100%">
+				width="100%" height="100%"
+				click="onClickHandler(event)">
 	
 	<fx:Script>
 		<![CDATA[
 			import com.mydlp.ui.domain.RuleItem;
 			
+			import mx.core.FlexGlobals;
 			import mx.events.FlexEvent;
 			
 			public override function set data(value:Object):void
@@ -16,6 +18,16 @@
 				super.data = value as RuleItem;
 				dispatchEvent(new FlexEvent(FlexEvent.DATA_CHANGE));
 			}
+			
+			protected function onClickHandler(event:MouseEvent):void
+			{
+				if(this.selected)//This item is also selected. Show this item in 'Inventory Tree'
+				{
+					var ri:RuleItem = this.data as RuleItem;
+					FlexGlobals.topLevelApplication.inventoryTree.displayItem(ri.item.coupledInventoryItem);
+				}
+			}
+			
 		]]>
 	</fx:Script>
 	
