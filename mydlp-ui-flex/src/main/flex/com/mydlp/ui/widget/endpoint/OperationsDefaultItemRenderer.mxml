@@ -69,8 +69,8 @@
 		</s:fill>
 	</s:Rect>
 	
-	<s:VGroup width="120" horizontalAlign="left" paddingLeft="7" 
-			  verticalAlign="middle" paddingTop="9" paddingBottom="5"
+	<s:VGroup width="120" height="100%" horizontalAlign="left" paddingLeft="7" 
+			  verticalAlign="middle" paddingTop="1" paddingBottom="1"
 			  visible="{data != null}" includeInLayout="{data != null}">
 		<s:Label id="discoveryScheduled" text="@Resource(bundle='messages', key='endpoints.state.discoveryInProg.true')" 
 				 visible.normal="{isDiscoveryInProg}" includeInLayout.normal="{isDiscoveryInProg}"
