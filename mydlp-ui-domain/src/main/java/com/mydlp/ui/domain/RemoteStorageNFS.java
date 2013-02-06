@@ -10,18 +10,18 @@ public class RemoteStorageNFS extends RemoteStorage {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 6014388774855640392L;
+	private static final long serialVersionUID = 24738691905132351L;
 
 	protected String address;
 	
 	protected String path;
 
-	public String getIpAddress() {
+	public String getAddress() {
 		return address;
 	}
 
-	public void setIpAddress(String ipAddress) {
-		this.address = ipAddress;
+	public void setAddress(String address) {
+		this.address = address;
 	}
 
 	public String getPath() {

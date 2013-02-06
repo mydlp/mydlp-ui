@@ -4,6 +4,7 @@ package com.mydlp.ui.widget.policy.rule
 	import com.mydlp.ui.domain.DiscoveryRule;
 	import com.mydlp.ui.domain.MailRule;
 	import com.mydlp.ui.domain.PrinterRule;
+	import com.mydlp.ui.domain.RemoteStorageRule;
 	import com.mydlp.ui.domain.RemovableStorageInboundRule;
 	import com.mydlp.ui.domain.RemovableStorageRule;
 	import com.mydlp.ui.domain.Rule;
@@ -31,6 +32,9 @@ package com.mydlp.ui.widget.policy.rule
 		[Embed('/assets/icons/32x32/search.png')]
 		public static const discoveryRule32Icon:Class;
 		
+		[Embed('/assets/icons/32x32/remote_storage.png')]
+		public static const remoteStorageRule32Icon:Class;
+		
 		[Embed('/assets/icons/32x32/puzzle.png')]
 		public static const apiRule32Icon:Class;
 		
@@ -55,6 +59,9 @@ package com.mydlp.ui.widget.policy.rule
 		[Embed('/assets/icons/24x24/search.png')]
 		public static const discoveryRule24Icon:Class;
 		
+		[Embed('/assets/icons/24x24/remote_storage.png')]
+		public static const remoteStorageRule24Icon:Class;
+		
 		[Embed('/assets/icons/24x24/puzzle.png')]
 		public static const apiRule24Icon:Class;
 		
@@ -78,6 +85,9 @@ package com.mydlp.ui.widget.policy.rule
 		
 		[Embed('/assets/icons/16x16/search.png')]
 		public static const discoveryRule16Icon:Class;
+		
+		[Embed('/assets/icons/16x16/remote_storage.png')]
+		public static const remoteStorageRule16Icon:Class;
 		
 		[Embed('/assets/icons/16x16/puzzle.png')]
 		public static const apiRule16Icon:Class;
@@ -109,6 +119,10 @@ package com.mydlp.ui.widget.policy.rule
 			else if (rule is DiscoveryRule)
 			{
 				return discoveryRule32Icon;
+			}
+			else if (rule is RemoteStorageRule)
+			{
+				return remoteStorageRule32Icon;
 			}
 			else if (rule is ApiRule)
 			{
@@ -151,6 +165,10 @@ package com.mydlp.ui.widget.policy.rule
 			{
 				return discoveryRule16Icon;
 			}
+			else if (rule is RemoteStorageRule)
+			{
+				return remoteStorageRule16Icon;
+			}
 			else if (rule is ApiRule)
 			{
 				return apiRule16Icon;
@@ -191,6 +209,10 @@ package com.mydlp.ui.widget.policy.rule
 			else if (rule is DiscoveryRule)
 			{
 				return discoveryRule24Icon;
+			}
+			else if (rule is RemoteStorageRule)
+			{
+				return remoteStorageRule24Icon
 			}
 			else if (rule is ApiRule)
 			{

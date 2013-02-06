@@ -8,6 +8,7 @@ public class RemovableStorageRule extends Rule {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 577124080446829623L;
+	private static final long serialVersionUID = 8056509923020433428L;
+
 
 }

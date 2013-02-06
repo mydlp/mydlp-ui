@@ -27,6 +27,13 @@
 			import com.mydlp.ui.domain.MailRule;
 			import com.mydlp.ui.domain.Network;
 			import com.mydlp.ui.domain.PrinterRule;
+			import com.mydlp.ui.domain.RemoteStorage;
+			import com.mydlp.ui.domain.RemoteStorageCIFS;
+			import com.mydlp.ui.domain.RemoteStorageDFS;
+			import com.mydlp.ui.domain.RemoteStorageFTPFS;
+			import com.mydlp.ui.domain.RemoteStorageNFS;
+			import com.mydlp.ui.domain.RemoteStorageRule;
+			import com.mydlp.ui.domain.RemoteStorageSSHFS;
 			import com.mydlp.ui.domain.RemovableStorageInboundRule;
 			import com.mydlp.ui.domain.RemovableStorageRule;
 			import com.mydlp.ui.domain.Rule;
@@ -122,6 +129,15 @@
 				refresh();
 			}
 			
+			protected function isRemoteStorageRuleItem(item:*):Boolean
+			{
+				if(item is RemoteStorageCIFS || item is RemoteStorageDFS || item is RemoteStorageFTPFS ||
+					item is RemoteStorageNFS || item is RemoteStorageSSHFS)
+					return true;
+				else
+					return false;
+			}
+			
 			public function refreshDataProviders(): void
 			{
 				var sourceDataProvider1:ArrayCollection = new ArrayCollection();
@@ -133,7 +149,8 @@
 				{
 					if (ruleItem.item is Network ||
 						ruleItem.item is RuleUser ||
-						ruleItem.item is SourceDomainName)
+						ruleItem.item is SourceDomainName ||
+						isRemoteStorageRuleItem(ruleItem.item))
 						sourceDataProvider1.addItem(ruleItem);
 					else if (ruleItem.item is InformationType)
 						matcherDataProvider1.addItem(ruleItem);
@@ -169,6 +186,9 @@
 				else if(item is RuleUser)
 					return true;
 				else if(item is SourceDomainName)
+					return true;
+				else if(item is RemoteStorageCIFS || RemoteStorageDFS || RemoteStorageFTPFS ||
+						item is RemoteStorageNFS || RemoteStorageSSHFS)
 					return true;
 				else
 					return false;
@@ -493,6 +513,17 @@
 				}
 			}
 			
+			protected function isDroppableForRemoteStorage(treeItem:*):Boolean
+			{
+				if(ruleObject is RemoteStorageRule &&
+					(treeItem is RemoteStorageCIFS || treeItem is RemoteStorageDFS ||
+					treeItem is RemoteStorageFTPFS || treeItem is RemoteStorageNFS ||
+					treeItem is RemoteStorageSSHFS))
+					return true;
+				else
+					return false;
+			}
+			
 			protected function isAllDroppable(treeItems:*): Boolean
 			{
 				
@@ -515,12 +546,13 @@
 							ruleObject is MailRule ||
 							ruleObject is ApiRule ||
 							ruleObject is PrinterRule ||
-							ruleObject is DiscoveryRule)
+							ruleObject is DiscoveryRule ||
+							ruleObject is RemoteStorageRule)
 							return true;
 					}
 					else if ( treeItem.item is Network )
 					{
-						if (treeItem.nameKey == SOURCES_ALL)
+						if (treeItem.nameKey == SOURCES_ALL && !(ruleObject is RemoteStorageRule))
 							return true;
 						else if(ruleObject is WebRule ||
 							ruleObject is RemovableStorageRule ||
@@ -552,7 +584,7 @@
 							return true;
 						}
 					}
-					else if ( treeItem.item is RuleUser )
+					else if ( treeItem.item is RuleUser  && !(ruleObject is RemoteStorageRule))
 					{
 						return true;
 					}
@@ -563,6 +595,8 @@
 							return true;
 						}
 					}
+					else if (isDroppableForRemoteStorage(treeItem.item))
+						return true;
 				}
 				else if (treeItem is InventoryCategory)
 				{
@@ -581,7 +615,8 @@
 			}
 			public static function isMatcherApplicable(r:*):Boolean
 			{
-				if(r is WebRule || r is DiscoveryRule || r is MailRule || r is RemovableStorageRule || r is ApiRule || r is PrinterRule)
+				if(r is WebRule || r is DiscoveryRule || r is MailRule || r is RemovableStorageRule || 
+					r is ApiRule || r is PrinterRule || r is RemoteStorageRule)
 					return true;
 				else return false;
 			}

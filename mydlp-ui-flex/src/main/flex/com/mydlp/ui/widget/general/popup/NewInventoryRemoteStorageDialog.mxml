@@ -73,19 +73,19 @@
 			  horizontalAlign="center">
 		<s:Label text="@Resource(bundle = 'messages', key = 'inventory.newuserdialog.message')"/>
 		<s:VGroup horizontalAlign="left" >
-			<s:Button skinClass="com.mydlp.ui.skin.UserStaticBitmapLabelButton16Skin" 
+			<s:Button skinClass="com.mydlp.ui.skin.RemoteStorageBitmapLabelButton16Skin" 
 					  label="@Resource(bundle = 'messages', key = 'inventory.newremotestoragedialog.sshfs.label')" 
 					  click="sshfsHandler(event)"/>
-			<s:Button skinClass="com.mydlp.ui.skin.UserDirectoryBitmapLabelButton16Skin" 
+			<s:Button skinClass="com.mydlp.ui.skin.RemoteStorageBitmapLabelButton16Skin" 
 					  label="@Resource(bundle = 'messages', key = 'inventory.newremotestoragedialog.ftpfs.label')" 
 					  click="ftpfsHandler(event)"/>
-			<s:Button skinClass="com.mydlp.ui.skin.UserStaticBitmapLabelButton16Skin" 
+			<s:Button skinClass="com.mydlp.ui.skin.WindowsRemoteStorageBitmapLabelButton16Skin" 
 					  label="@Resource(bundle = 'messages', key = 'inventory.newremotestoragedialog.cifs.label')" 
 					  click="cifsHandler(event)"/>
-			<s:Button skinClass="com.mydlp.ui.skin.UserDirectoryBitmapLabelButton16Skin" 
+			<s:Button skinClass="com.mydlp.ui.skin.WindowsRemoteStorageBitmapLabelButton16Skin" 
 					  label="@Resource(bundle = 'messages', key = 'inventory.newremotestoragedialog.dfs.label')" 
 					  click="dfsHandler(event)"/>
-			<s:Button skinClass="com.mydlp.ui.skin.UserDirectoryBitmapLabelButton16Skin" 
+			<s:Button skinClass="com.mydlp.ui.skin.RemoteStorageBitmapLabelButton16Skin" 
 					  label="@Resource(bundle = 'messages', key = 'inventory.newremotestoragedialog.nfs.label')" 
 					  click="nfsHandler(event)"/>
 		</s:VGroup>

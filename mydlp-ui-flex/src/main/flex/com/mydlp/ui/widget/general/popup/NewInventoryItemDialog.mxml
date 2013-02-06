@@ -106,12 +106,12 @@
 					  includeInLayout="{SessionUtil.isEnterprise()}"
 					  visible="{SessionUtil.isEnterprise()}"
 					  click="fileSystemDirectoryHandler()"/>
-			<s:Button skinClass="com.mydlp.ui.skin.FileSystemDirectoryBitmapLabelButton16Skin" 
+			<s:Button skinClass="com.mydlp.ui.skin.RemoteStorageBitmapLabelButton16Skin" 
 					  label="@Resource(bundle = 'messages', key = 'inventory.newdialog.remoteFileSystemDirectory')" 
 					  includeInLayout="{SessionUtil.isEnterprise()}"
 					  visible="{SessionUtil.isEnterprise()}"
 					  click="{close(); InteractionUtil.newPopup(NewInventoryRemoteStorageDialog);}"/>
-			<s:Button skinClass="com.mydlp.ui.skin.DomainBitmapLabelButton16Skin" 
+			<s:Button skinClass="com.mydlp.ui.skin.SourceDomainBitmapLabelButton16Skin" 
 					  label="@Resource(bundle = 'messages', key = 'inventory.newdialog.sourceDomain')"
 					  includeInLayout="{SessionUtil.isEnterprise()}"
 					  visible="{SessionUtil.isEnterprise()}"

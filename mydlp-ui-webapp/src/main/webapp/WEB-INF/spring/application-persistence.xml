@@ -72,6 +72,7 @@
          <value>com.mydlp.ui.domain.RegularExpressionGroup</value>
          <value>com.mydlp.ui.domain.RegularExpressionGroupEntry</value>
          <value>com.mydlp.ui.domain.RemoteStorage</value>
+         <value>com.mydlp.ui.domain.RemoteStorageRule</value>
          <value>com.mydlp.ui.domain.RemoteStorageSSHFS</value>
          <value>com.mydlp.ui.domain.RemoteStorageFTPFS</value>
          <value>com.mydlp.ui.domain.RemoteStorageCIFS</value>
