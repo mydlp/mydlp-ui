@@ -6,16 +6,14 @@ import javax.persistence.Entity;
 public class RemoteStorageFTPFS extends RemoteStorage {
 
 
-	
+
+
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 5169862004259443011L;
-	
+	private static final long serialVersionUID = 5983755200164506389L;
 
 	protected String address;
-	
-	protected int port;
 	
 	protected String username;
 
@@ -30,14 +28,6 @@ public class RemoteStorageFTPFS extends RemoteStorage {
 
 	public void setAddress(String address) {
 		this.address = address;
-	}
-
-	public int getPort() {
-		return port;
-	}
-
-	public void setPort(int port) {
-		this.port = port;
 	}
 
 	public String getUsername() {
