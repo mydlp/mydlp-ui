@@ -40,6 +40,7 @@
 				validators.push(enterpriseTab.syslogDiagPortValidator);
 				validators.push(enterpriseTab.syslogReportHostValidator);
 				validators.push(enterpriseTab.syslogReportPortValidator);
+				validators.push(enterpriseTab.rfsIntervalValidator);
 				validators.push(protocolsTab.icapTTLValidator);
 				validators.push(protocolsTab.icapRegExValidator);
 				validators.push(protocolsTab.icapConValidator);
@@ -142,6 +143,8 @@
 					else if (config.key == "syslog_report_host") enterpriseTab.syslogReportHost = config;
 					else if (config.key == "syslog_report_port") enterpriseTab.syslogReportPort = config;
 					else if (config.key == "syslog_report_facility") enterpriseTab.syslogReportFacility = config;
+					else if (config.key == "discover_rfs_interval") enterpriseTab.discoverRfsInterval = config;
+					else if (config.key == "discover_rfs_on_startup") enterpriseTab.discoverRfsStartup = config;
 					
 					else if (config.key == "seclore_fs_enable")
 					{
