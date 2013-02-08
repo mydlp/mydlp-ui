@@ -57,6 +57,8 @@
 			
 			protected var isUserActive:Boolean = false;
 			
+			protected var isStartup:Boolean = true;
+			
 			public var userRole:AuthSecurityRole;
 			
 			public var notifiedUsers:ArrayCollection = new ArrayCollection;
@@ -250,7 +252,6 @@
 				else
 					currentState = "user";
 				ruleRE.getRuleLabelsAndIds();
-				regulateVisibilty();
 			}
 			
 			protected function getLicenseHandler(event:ResultEvent):void
@@ -269,8 +270,9 @@
 					LangUtil.getString("messages", "inventory.delete.error." + errorString + ".title"));
 			}
 			
-			public function refresh(): void
-			{
+			public function refresh(): void {
+				ruleRE.getRuleLabelsAndIds();
+				
 				if (policyContainer != null && policyContainer.inventoryTree != null)
 					policyContainer.inventoryTree.refreshTree();
 				if (policyContainer != null && policyContainer.ruleContainer != null)
@@ -287,10 +289,14 @@
 				}
 				if (objectsContainer != null)
 					objectsContainer.refreshObjects();
-				if (dashboardContainer != null)
-					dashboardContainer.refreshDashboard();
 				if (endpointStatusContainer != null)
 					endpointStatusContainer.refresh();
+			}
+			
+			protected function refreshRuleLabelDependant(): void
+			{
+				if (dashboardContainer != null)
+					dashboardContainer.refreshDashboard();
 			}
 			
 			protected function genericResultHandler(event:ResultEvent):void
@@ -302,6 +308,14 @@
 			protected function getRuleLabelsAndIdsHandler(event:ResultEvent):void
 			{
 				ruleLabels = event.result as Object;
+				if (isStartup) {
+					regulateVisibilty();
+					isStartup = false;
+				}
+				else
+				{
+					refreshRuleLabelDependant();
+				}
 			}
 			
 			public function getRuleLabel(value:Number):String
