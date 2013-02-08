@@ -164,6 +164,11 @@ public class GenericBRSImpl implements GenericService
 	public String getVersion() {
 		return versionService.getVersion();
 	}
+
+	@Override
+	public String getWindowsAgentVersion() {
+		return versionService.getWindowsAgentVersion();
+	}
 	
 	
 	

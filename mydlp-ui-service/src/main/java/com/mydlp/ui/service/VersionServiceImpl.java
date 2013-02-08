@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+import javax.annotation.PostConstruct;
+
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,13 +21,19 @@ public class VersionServiceImpl implements VersionService {
 
 	protected static final String MYDLP_VERSION = "/usr/sbin/mydlp-version";
 
+	protected static final String MYDLP_WIN_AGENT_VERSION_FILE = "/usr/share/mydlp/endpoint/win/latest.txt";
+	
 	protected String version = null;
+	protected String windowsAgentVersion = null;
+	
+	@PostConstruct
+	public void init() {
+		generateWindowsAgentVersion();
+		generateVersion();
+	}
 
 	@Override
 	public String getVersion() {
-		if (version == null)
-			generateVersion();
-
 		return version;
 	}
 
@@ -61,6 +69,22 @@ public class VersionServiceImpl implements VersionService {
 		} finally {
 			tmpFile.delete();
 		}
+	}
+
+	@Override
+	public String getWindowsAgentVersion() {
+		return windowsAgentVersion;
+	}
+		
+	protected void generateWindowsAgentVersion() {
+		try {
+			String fileContent = FileUtils.readFileToString(new File(MYDLP_WIN_AGENT_VERSION_FILE));
+			if (fileContent != null && fileContent.length() > 0)
+				windowsAgentVersion = fileContent.trim();
+		} catch (IOException e) {
+			logger.error("Can not read windows agent version file", e);
+		}
+		
 	}
 
 }

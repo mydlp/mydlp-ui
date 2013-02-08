@@ -45,6 +45,7 @@
 				endpointsDP.fetchFunction = fetchEndpints;
 				endpointsDP.pendingObject = ENDPOINT_PENDING_OBJECT;
 				
+				gre.getWindowsAgentVersion();
 				refresh();
 			}
 			
@@ -176,6 +177,7 @@
 		<my:remote id="are" destination="endpointStatusBRS" />
 		<my:remote id="gre" destination="genericBRS" >
 			<my:method name="getSystemTime" result="getSystemTimeHandler(event)"/>
+			<my:method name="getWindowsAgentVersion" result="{latestWindowsAgentVersion.text = event.result as String}"/>
 		</my:remote>
 		<my:remote id="cre" destination="configBRS">
 			<my:method name="getConfigValue" result="getConfigValueHandler(event)"/>
@@ -197,6 +199,14 @@
 			<s:Button label="@Resource(key='endpoints.reset.button.label', bundle='messages')" click="onResetClick(event)"/>
 			<s:Button label="@Resource(key='endpoints.truncate.button.label', bundle='messages')" click="onTruncateClick(event)"/>
 			<s:Spacer width="100%"/>
+			
+			<s:VGroup paddingBottom="0" paddingTop="0" width="200" height="100%">
+				<s:Label text="@Resource(key='endpoints.latestAgents.label', bundle='messages')" fontWeight="bold"/>
+				<s:HGroup width="100%" paddingBottom="0" paddingTop="0">
+					<s:Label text="@Resource(key='endpoints.windowsAgentLatest.label', bundle='messages')" />
+					<s:Label id="latestWindowsAgentVersion" width="30"/>
+				</s:HGroup>	
+			</s:VGroup>
 			
 			<s:VGroup paddingBottom="0" paddingTop="0" width="90" height="100%">
 				<s:HGroup paddingBottom="0" paddingTop="0">
@@ -222,6 +232,7 @@
 			
 			<s:Spacer width="20"/>
 		</s:HGroup>
+		
 		
 		<s:DataGrid id="endpoints" dataProvider="{endpointsDP.asyncListView}" width="100%" height="100%"
 					variableRowHeight="true" click="onClickEndpointStatus(event)">

@@ -28,12 +28,15 @@ import com.mydlp.ui.domain.AuthUser;
 import com.mydlp.ui.domain.IncidentLogFile;
 import com.mydlp.ui.domain.IncidentLogFileContent;
 import com.mydlp.ui.service.AuditTrailService;
+import com.mydlp.ui.service.VersionService;
 
 @Service("downloadServlet")
 public class DownloadServlet implements HttpRequestHandler {
 
 	private static Logger logger = LoggerFactory.getLogger(DownloadServlet.class);
 
+	private static final String WINDOWS_AGENT_FOLDER = "/usr/share/mydlp/endpoint/win/";
+	
 	private static final int BUFFER_SIZE = 102400;
 
 	@Autowired
@@ -44,6 +47,10 @@ public class DownloadServlet implements HttpRequestHandler {
 
 	@Autowired
 	protected AuditTrailService auditTrailService;
+	
+	@Autowired
+	protected VersionService versionService;
+	
 	
 	@Autowired
 	@Qualifier("policyTransactionTemplate")
@@ -61,7 +68,10 @@ public class DownloadServlet implements HttpRequestHandler {
 			@Override
 			public Boolean doInTransaction(TransactionStatus arg0) {
 				AuthUser authUser = userDAO.findByName(username);
-				return authUser.hasRole(AuthSecurityRole.ROLE_ADMIN);
+				if (authUser == null)
+					return false;
+				else
+					return authUser.hasRole(AuthSecurityRole.ROLE_ADMIN);
 			}
 		});
 		
@@ -69,7 +79,10 @@ public class DownloadServlet implements HttpRequestHandler {
 			@Override
 			public Boolean doInTransaction(TransactionStatus arg0) {
 				AuthUser authUser = userDAO.findByName(username);
-				return authUser.hasRole(AuthSecurityRole.ROLE_SUPER_ADMIN);
+				if (authUser == null)
+					return false;
+				else
+					return authUser.hasRole(AuthSecurityRole.ROLE_SUPER_ADMIN);
 			}
 		});
 		
@@ -77,11 +90,18 @@ public class DownloadServlet implements HttpRequestHandler {
 			@Override
 			public Boolean doInTransaction(TransactionStatus arg0) {
 				AuthUser authUser = userDAO.findByName(username);
-				return authUser.hasRole(AuthSecurityRole.ROLE_AUDITOR);
+				if (authUser == null)
+					return false;
+				else
+					return authUser.hasRole(AuthSecurityRole.ROLE_AUDITOR);
 			}
 		});
 		
-		if((isAdmin && urlKey != null && urlKey.equals("user.der")) || isSuperAdmin || (isAuditor && urlKey == null )) {
+		if( 	(urlKey != null && urlKey.equals("latest-windows-agent")) ||
+				(isAdmin && urlKey != null && urlKey.equals("user.der")) || 
+				isSuperAdmin || 
+				(isAuditor && urlKey == null )
+				) {
 			try {
 				IncidentLogFile logFile = null;
 				if (urlKey != null) {
@@ -92,7 +112,16 @@ public class DownloadServlet implements HttpRequestHandler {
 						content.setMimeType("application/x-x509-ca-cert");
 						content.setLocalPath("/etc/mydlp/ssl/user.der");
 						logFile.setContent(content);
-					} else {
+					} else if (urlKey.equals("latest-windows-agent")) {
+						String filename = getWindowsAgentFilename(); 
+						logFile = new IncidentLogFile();
+						logFile.setFilename(filename);
+						IncidentLogFileContent content = new IncidentLogFileContent();
+						content.setMimeType("application/x-msi");
+						content.setLocalPath(WINDOWS_AGENT_FOLDER + filename);
+						logFile.setContent(content);
+					}
+					else {
 						logger.error("Unkown key: " + req.getParameter("key"));
 						return;
 					}
@@ -108,27 +137,37 @@ public class DownloadServlet implements HttpRequestHandler {
 				}
 
 				File localFile = new File(logFile.getContent().getLocalPath());
+				
+				if (localFile.exists()) {
+					resp.setContentType(logFile.getContent().getMimeType());
+					resp.setContentLength((int) localFile.length());
+					resp.setHeader( "Content-Disposition", "attachment; filename=\"" + logFile.getFilename() + "\"" );
 
-				resp.setContentType(logFile.getContent().getMimeType());
-				resp.setContentLength((int) localFile.length());
-				resp.setHeader( "Content-Disposition", "attachment; filename=\"" + logFile.getFilename() + "\"" );
+					//
+					//  Stream to the requester.
+					//
+					byte[] bbuf = new byte[BUFFER_SIZE];
+					DataInputStream in = new DataInputStream(new FileInputStream(localFile));
+					ServletOutputStream op = resp.getOutputStream();
 
-				//
-				//  Stream to the requester.
-				//
-				byte[] bbuf = new byte[BUFFER_SIZE];
-				DataInputStream in = new DataInputStream(new FileInputStream(localFile));
-				ServletOutputStream op = resp.getOutputStream();
+					int length = 0;
+					while ((in != null) && ((length = in.read(bbuf)) != -1))
+					{
+						op.write(bbuf,0,length);
+					}
 
-				int length = 0;
-				while ((in != null) && ((length = in.read(bbuf)) != -1))
-				{
-					op.write(bbuf,0,length);
+					in.close();
+					op.flush();
+					op.close();
 				}
-
-				in.close();
-				op.flush();
-				op.close();
+				else
+				{
+					resp.setContentType("text/plain");
+					resp.getWriter().println("File is not available");
+					logger.error("File is not available: " + logFile.getContent().getLocalPath());
+					resp.getOutputStream().flush();
+					resp.getOutputStream().close();
+				}
 
 				auditTrailService.audit(getClass(), "download", new Object[]{urlKey, urlId});
 			} catch (NumberFormatException e) {
@@ -142,5 +181,13 @@ public class DownloadServlet implements HttpRequestHandler {
 			}
 		}
 	}
-
+	
+	protected String getWindowsAgentFilename() {
+		String version = versionService.getVersion();
+		if (version == null || version.length() == 0) {
+			return "none";
+		}
+		return "mydlp_" + version.replace('.', '_') + ".msi";
+	}
+	
 }

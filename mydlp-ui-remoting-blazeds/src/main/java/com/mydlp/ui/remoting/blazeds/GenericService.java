@@ -26,5 +26,7 @@ public interface GenericService {
 	public String persistChange(AbstractEntity itemToSave, List<AbstractEntity> itemsToRemove);
 	
 	public String getVersion();
+	
+	public String getWindowsAgentVersion();
 
 }

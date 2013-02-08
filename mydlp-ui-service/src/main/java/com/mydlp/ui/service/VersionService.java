@@ -4,4 +4,6 @@ public interface VersionService {
 
 	public String getVersion();
 	
+	public String getWindowsAgentVersion();
+	
 }
