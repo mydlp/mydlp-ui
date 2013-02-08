@@ -137,7 +137,6 @@ public class RuleDAOImpl extends AbstractPolicyDAO implements RuleDAO {
 		Iterator<Object[]> iterator = query.list().iterator(); iterator.hasNext();) {
 			Object[] row = (Object[]) iterator.next();
 			returnMap.put(row[0].toString(), (String)row[1]);
-			System.out.println((String)row[1]);
 		}
 		return returnMap;
 	}

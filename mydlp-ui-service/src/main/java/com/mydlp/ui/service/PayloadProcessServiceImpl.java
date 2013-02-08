@@ -69,10 +69,10 @@ public class PayloadProcessServiceImpl implements PayloadProcessService {
 			object.setPayload(payloadChunk);
 			return object;
 		} catch (ImproperPayloadEncapsulationException e) {
-			logger.error("An error occurred", e);
+			logger.error("An error occurred: " + e.getMessage(), e);
 			throw e;
 		} catch (Throwable e) {
-			logger.error("An error occurred", e);
+			logger.error("An error occurred" + e.getMessage(), e);
 			throw new ImproperPayloadEncapsulationException(e);
 		}
 		
@@ -113,10 +113,10 @@ public class PayloadProcessServiceImpl implements PayloadProcessService {
 			byteBuffer.flip();
 			return byteBuffer;
 		} catch (ImproperPayloadEncapsulationException e) {
-			logger.error("An error occurred", e);
+			logger.error("An error occurred" + e.getMessage(), e);
 			throw e;
 		} catch (Throwable e) {
-			logger.error("An error occurred", e);
+			logger.error("An error occurred" + e.getMessage(), e);
 			throw new ImproperPayloadEncapsulationException(e);
 		}
 	}
