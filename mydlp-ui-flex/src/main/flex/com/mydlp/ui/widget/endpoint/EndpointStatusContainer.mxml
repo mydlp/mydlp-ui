@@ -204,7 +204,7 @@
 				<s:Label text="@Resource(key='endpoints.latestAgents.label', bundle='messages')" fontWeight="bold"/>
 				<s:HGroup width="100%" paddingBottom="0" paddingTop="0">
 					<s:Label text="@Resource(key='endpoints.windowsAgentLatest.label', bundle='messages')" />
-					<s:Label id="latestWindowsAgentVersion"/>
+					<s:Label id="latestWindowsAgentVersion" width="80"/>
 				</s:HGroup>	
 			</s:VGroup>
 			
