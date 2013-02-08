@@ -48,6 +48,7 @@
 			import com.mydlp.ui.util.ReflectionUtil;
 			import com.mydlp.ui.util.SessionUtil;
 			import com.mydlp.ui.validators.NullValidator;
+			import com.mydlp.ui.validators.EmptyListValidator;
 			import com.mydlp.ui.widget.general.input.ADDomainAliasInput;
 			import com.mydlp.ui.widget.general.input.ADDomainItemInput;
 			import com.mydlp.ui.widget.general.input.ADDomainItemListing;
@@ -267,6 +268,13 @@
 						inputLabel = new VerticalInputLabel();
 						inputLabel.addElement(dfInput);
 						index = 8;
+						var emptyListValidator:EmptyListValidator = new EmptyListValidator();
+						emptyListValidator.source = dfInput;
+						emptyListValidator.property = "dataFormats";
+						ErrorTipManager.registerValidator(emptyListValidator);
+						//nullValidator.addEventListener(ValidationResultEvent.INVALID, invalidInput);
+						//nullValidator.addEventListener(ValidationResultEvent.VALID, validInput);
+						validators.push(emptyListValidator);
 					}
 					
 					else if(targetObject is DocumentDatabase &&
@@ -362,6 +370,13 @@
 						numberValidator2.maxValue = "5000";
 						ErrorTipManager.registerValidator(numberValidator2);
 						validators.push(numberValidator2);
+						var emptyListValidator2:EmptyListValidator = new EmptyListValidator();
+						emptyListValidator2.source = ifInput;
+						emptyListValidator2.property = "informationFeatures";
+						ErrorTipManager.registerValidator(emptyListValidator2);
+						//nullValidator.addEventListener(ValidationResultEvent.INVALID, invalidInput);
+						//nullValidator.addEventListener(ValidationResultEvent.VALID, validInput);
+						validators.push(emptyListValidator2);
 						index = 9;
 					}
 					else if (targetObject is InformationType &&

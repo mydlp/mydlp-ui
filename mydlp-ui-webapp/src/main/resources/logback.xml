@@ -6,12 +6,22 @@
       </Pattern>
     </layout>
   </appender>
+  <appender name="LOGFILE_JETTY" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <file>/var/log/mydlp/jetty.log</file>
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      <fileNamePattern>/var/log/mydlp/jetty.log-%d{yyyyMMdd}.gz</fileNamePattern>
+      <maxHistory>60</maxHistory>
+    </rollingPolicy>
+    <encoder>
+      <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+    </encoder>
+  </appender> 
   <appender name="SYSLOG_AUDIT" class="ch.qos.logback.classic.net.SyslogAppender">
     <syslogHost>127.0.0.1</syslogHost>
     <facility>LOCAL6</facility>
     <suffixPattern>[%thread]: [MyDLP Audit] %msg</suffixPattern>
   </appender>
-  <appender name="SYSLOG_ROOT" class="ch.qos.logback.classic.net.SyslogAppender">
+  <appender name="SYSLOG_IERROR" class="ch.qos.logback.classic.net.SyslogAppender">
     <syslogHost>127.0.0.1</syslogHost>
     <facility>LOCAL6</facility>
     <suffixPattern>[%thread]: [ui] %msg</suffixPattern>
@@ -21,6 +31,9 @@
   </root>
   <logger name="AUDIT" level="debug">
 	<appender-ref ref="${log.audit.appender}"/>  
+  </logger>
+  <logger name="IERROR" level="error">
+	<appender-ref ref="${log.ierror.appender}"/>  
   </logger>
   <!-- DEBUG -->
   <!-- 

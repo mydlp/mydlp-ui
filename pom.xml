@@ -88,6 +88,7 @@
 
     <log.root.appender>STDOUT</log.root.appender>
     <log.audit.appender>STDOUT</log.audit.appender>
+    <log.ierror.appender>STDOUT</log.ierror.appender>
 
     <keystore.path>dev-tools/pkcs12.pfx</keystore.path>
     <keystore.password>123</keystore.password>
@@ -118,8 +119,10 @@
         <amf.endpointType>flex.messaging.endpoints.SecureAMFEndpoint</amf.endpointType>
 
 	<session_util.key>Production</session_util.key>
-        <log.root.appender>SYSLOG_ROOT</log.root.appender>
+
+        <log.root.appender>LOGFILE_JETTY</log.root.appender>
         <log.audit.appender>SYSLOG_AUDIT</log.audit.appender>
+        <log.ierror.appender>SYSLOG_IERROR</log.ierror.appender>
       </properties>
     </profile>
     <profile>
