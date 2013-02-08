@@ -95,6 +95,7 @@
 					case "P": labelText += LangUtil.getString("messages","log.container.column.policy.channel.printer"); break;
 					case "D": labelText += LangUtil.getString("messages","log.container.column.policy.channel.discovery"); break;
 					case "A": labelText += LangUtil.getString("messages","log.container.column.policy.channel.api"); break;
+					case "RD": labelText += LangUtil.getString("messages","log.container.column.policy.channel.remote_discovery"); break;
 					default: labelText += log.channel; break;
 				}
 				
