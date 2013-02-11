@@ -56,10 +56,9 @@
       </form>
       <br />
       <div>
-      	<strong>Latest MyDLP Endpoint Agents:</strong>
-      	<ul>
-       	  <li><a href="/download?key=latest-windows-agent" target="_blank">MyDLP Endpoint Agent for Microsoft Windows</a></li>
-       	</ul>
+     	<strong>Latest MyDLP Endpoint Agents:</strong>
+     	<br />
+       	<a href="/download?key=latest-windows-agent" target="_blank">MyDLP Endpoint Agent for Microsoft Windows</a>
       </div>
     <center>
   </body>
