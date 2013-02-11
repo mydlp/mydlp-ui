@@ -46,6 +46,7 @@
 			import com.mydlp.ui.domain.USBDevice;
 			import com.mydlp.ui.domain.UserSettings;
 			import com.mydlp.ui.domain.WebRule;
+			import com.mydlp.ui.domain.WebServer;
 			import com.mydlp.ui.util.ClassMember;
 			import com.mydlp.ui.util.ErrorTipManager;
 			import com.mydlp.ui.util.InteractionUtil;
@@ -69,6 +70,7 @@
 			import com.mydlp.ui.widget.general.input.RDBMSInformationTargetInput;
 			import com.mydlp.ui.widget.general.input.RegularExpressionGroupInput;
 			import com.mydlp.ui.widget.general.input.UserNotificationInput;
+			import com.mydlp.ui.widget.general.input.WebServerInput;
 			import com.mydlp.ui.widget.policy.rule.RuleContainer;
 			
 			import mx.binding.utils.BindingUtils;
@@ -89,6 +91,7 @@
 			import spark.components.Button;
 			import spark.components.CheckBox;
 			import spark.components.ComboBox;
+			import spark.components.DropDownList;
 			import spark.components.TextArea;
 			import spark.components.TextInput;
 			
@@ -181,7 +184,11 @@
 							(classMember.name == "parent" && classMember.type == ADDomainItemGroup) ||
 							(classMember.name == "isDeleted" && classMember.type == Boolean) ||
 							(classMember.name == "settings" && classMember.type == UserSettings) ||
-							(targetObject is CustomAction && classMember.name == "typeKey" && classMember.type == String)
+							(targetObject is CustomAction && classMember.name == "typeKey" && classMember.type == String) ||
+							(targetObject is WebServer && classMember.name == "address") ||
+							(targetObject is WebServer && classMember.name == "port") ||
+							(targetObject is WebServer && classMember.name == "digDepth") ||
+							(targetObject is WebServer && classMember.name == "startPath")
 						)
 					{
 						continue;
@@ -324,6 +331,27 @@
 						inputLabel = new VerticalInputLabel();
 						inputLabel.addElement(mtInput);
 						index = 8;
+					}
+					
+					else if (targetObject is WebServer && classMember.name == "proto")
+					{
+						var wsi:WebServerInput = new WebServerInput();
+						wsi.proto = targetObject["proto"];
+						wsi.address = targetObject["address"];
+						wsi.port = targetObject["port"];
+						wsi.digDepth = targetObject["digDepth"];
+						wsi.startPath = targetObject["startPath"];
+						BindingUtils.bindProperty(targetObject, "proto", wsi, "proto");
+						BindingUtils.bindProperty(targetObject, "address", wsi, "address");
+						BindingUtils.bindProperty(targetObject, "port", wsi, "port");
+						BindingUtils.bindProperty(targetObject, "digDepth", wsi, "digDepth");
+						BindingUtils.bindProperty(targetObject, "startPath", wsi, "startPath");
+						inputLabel = new VerticalInputLabel();
+						inputLabel.addElement(wsi);
+						index = 2;
+						/*var ddList:DropDownList = new DropDownList;
+						ddList.dataProvider = protocols;
+						ddList.*/
 					}
 					
 					else if (targetObject is AuthUser && classMember.name == "role")

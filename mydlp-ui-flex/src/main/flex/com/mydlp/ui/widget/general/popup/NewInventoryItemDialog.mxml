@@ -110,7 +110,7 @@
 					  label="@Resource(bundle = 'messages', key = 'inventory.newdialog.remoteFileSystemDirectory')" 
 					  includeInLayout="{SessionUtil.isEnterprise()}"
 					  visible="{SessionUtil.isEnterprise()}"
-					  click="{close(); InteractionUtil.newPopup(NewInventoryRemoteStorageDialog);}"/>
+					  click="{close(); InteractionUtil.newPopup(NewInventoryRemoteDiscoveryDialog);}"/>
 			<s:Button skinClass="com.mydlp.ui.skin.SourceDomainBitmapLabelButton16Skin" 
 					  label="@Resource(bundle = 'messages', key = 'inventory.newdialog.sourceDomain')"
 					  includeInLayout="{SessionUtil.isEnterprise()}"

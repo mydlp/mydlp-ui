@@ -89,6 +89,7 @@
          <value>com.mydlp.ui.domain.USBDevice</value>
          <value>com.mydlp.ui.domain.UserSettings</value>
          <value>com.mydlp.ui.domain.WebRule</value>
+         <value>com.mydlp.ui.domain.WebServer</value>
        </list>
      </property>
      <property name="hibernateProperties">

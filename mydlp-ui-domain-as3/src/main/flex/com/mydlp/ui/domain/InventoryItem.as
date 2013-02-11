@@ -35,6 +35,9 @@ package com.mydlp.ui.domain {
 		[Embed("../../../../../../../../mydlp-ui-flex/src/main/flex/assets/icons/16x16/remote_storage.png")]
 		public static const REMOTE_STORAGE:Class;
 		
+		[Embed("../../../../../../../../mydlp-ui-flex/src/main/flex/assets/icons/16x16/remote_storage.png")]
+		public static const WEB_DISCOVERY:Class;
+		
 		[Embed("../../../../../../../../mydlp-ui-flex/src/main/flex/assets/icons/16x16/windows_storage.png")]
 		public static const WINDOWS_STORAGE:Class;
 		
@@ -83,6 +86,8 @@ package com.mydlp.ui.domain {
 						_icon = WINDOWS_STORAGE;
 					else if(iitem is RemoteStorageDFS)
 						_icon = WINDOWS_STORAGE;
+					else if(iitem is WebServer)
+						_icon = WEB_DISCOVERY;
 				}
 			}
 			return _icon;

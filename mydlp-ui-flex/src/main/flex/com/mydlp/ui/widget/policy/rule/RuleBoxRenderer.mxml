@@ -42,6 +42,7 @@
 			import com.mydlp.ui.domain.ScreenshotRule;
 			import com.mydlp.ui.domain.SourceDomainName;
 			import com.mydlp.ui.domain.WebRule;
+			import com.mydlp.ui.domain.WebServer;
 			import com.mydlp.ui.util.InteractionUtil;
 			import com.mydlp.ui.util.LangUtil;
 			import com.mydlp.ui.util.ReflectionUtil;
@@ -132,7 +133,7 @@
 			protected function isRemoteStorageRuleItem(item:*):Boolean
 			{
 				if(item is RemoteStorageCIFS || item is RemoteStorageDFS || item is RemoteStorageFTPFS ||
-					item is RemoteStorageNFS || item is RemoteStorageSSHFS)
+					item is RemoteStorageNFS || item is RemoteStorageSSHFS || item is WebServer)
 					return true;
 				else
 					return false;
@@ -187,8 +188,8 @@
 					return true;
 				else if(item is SourceDomainName)
 					return true;
-				else if(item is RemoteStorageCIFS || RemoteStorageDFS || RemoteStorageFTPFS ||
-						item is RemoteStorageNFS || RemoteStorageSSHFS)
+				else if(item is RemoteStorageCIFS || item is RemoteStorageDFS || item is RemoteStorageFTPFS ||
+						item is RemoteStorageNFS || item is RemoteStorageSSHFS || item is WebServer)
 					return true;
 				else
 					return false;
@@ -518,7 +519,7 @@
 				if(ruleObject is RemoteStorageRule &&
 					(treeItem is RemoteStorageCIFS || treeItem is RemoteStorageDFS ||
 					treeItem is RemoteStorageFTPFS || treeItem is RemoteStorageNFS ||
-					treeItem is RemoteStorageSSHFS))
+					treeItem is RemoteStorageSSHFS || treeItem is WebServer))
 					return true;
 				else
 					return false;
