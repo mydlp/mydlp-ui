@@ -346,6 +346,21 @@
 						inputLabel = new VerticalInputLabel();
 						inputLabel.addElement(wsi);
 						index = 2;
+						
+						var regExpValidatorP:RegExpValidator = new RegExpValidator();
+						regExpValidatorP.source = wsi;
+						regExpValidatorP.property = "address";
+						regExpValidatorP.expression = "^(www\.){0,1}[a-zA-Z0-9\.\-]+\.[a-zA-Z]{2,5}[\.]{0,1}$";
+						ErrorTipManager.registerValidator(regExpValidatorP);
+						validators.push(regExpValidatorP);
+						
+						var regExpValidatorPt:RegExpValidator = new RegExpValidator();
+						regExpValidatorPt.source = wsi;
+						regExpValidatorPt.required=false;
+						regExpValidatorPt.property = "startPath";
+						regExpValidatorPt.expression = "^([a-zA-Z-]+\/)*[a-zA-Z-]*$";
+						ErrorTipManager.registerValidator(regExpValidatorPt);
+						validators.push(regExpValidatorPt);
 					}
 					
 					else if (targetObject is AuthUser && classMember.name == "role")
@@ -716,7 +731,7 @@
 						}
 						else if(classMember.name == "digDepth") {
 							if(isNaN(targetObject[classMember.name]) || targetObject[classMember.name] < 1)
-								textInput.text = new String("1");
+								textInput.text = new String("8");
 							textInput.width = 50;
 							var numberValidatorP:NumberValidator = new NumberValidator();
 							numberValidatorP.source = textInput;

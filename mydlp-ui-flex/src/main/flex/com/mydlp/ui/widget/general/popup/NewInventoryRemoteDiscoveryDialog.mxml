@@ -3,7 +3,7 @@
 				xmlns:s="library://ns.adobe.com/flex/spark" 
 				xmlns:mx="library://ns.adobe.com/flex/mx" 
 				xmlns:general="com.mydlp.ui.widget.general.*"
-				title="@Resource(bundle = 'messages', key = 'inventory.newuserdialog.title')" 
+				title="@Resource(bundle = 'messages', key = 'inventory.newremotediscoverydialog.title')" 
 				xmlns:popup="com.mydlp.ui.widget.general.popup.*" 
 				>
 	<fx:Script>
