@@ -49,6 +49,8 @@
 		<domain:Config id="notificationMessageSubject"/>
 		<domain:Config id="discoverRfsStartup"/>
 		<domain:Config id="discoverRfsInterval"/>
+		<domain:Config id="discoverWebStartup"/>
+		<domain:Config id="discoverWebInterval"/>
 		
 		<validators:MyRegExValidator id="syslogAclHostValidator"
 									 source="{syslogAclHostInput}"
@@ -101,11 +103,16 @@
 									  minValue="1800000"
 									  valid="{optionContainer.validInput(event)}"
 									  invalid="{optionContainer.invalidInput(event)}"/>
+		<validators:MyNumberValidator id="webIntervalValidator"
+									  source="{webIntervalInput}"
+									  minValue="1800000"
+									  valid="{optionContainer.validInput(event)}"
+									  invalid="{optionContainer.invalidInput(event)}"/>
 	</fx:Declarations>
 	
 	<s:VGroup width="100%" height="100%">
 		<s:HGroup width="100%" height="100%">
-			<s:VGroup width="45%" gap="50">
+			<s:VGroup width="45%" gap="35">
 				<s:Form width="100%" height="50%">
 					<s:FormItem label="{mailArchive.label}">
 						<s:CheckBox id="mailArchiveCheckBox" selected="{mailArchive.value == 'true'}" 
@@ -124,6 +131,13 @@
 					</s:FormItem>
 					<s:FormItem label="{discoverRfsInterval.label}" width="350">
 						<s:TextInput id="rfsIntervalInput" text="@{discoverRfsInterval.value}" width="150"/>
+					</s:FormItem>
+					<s:FormItem label="{discoverWebStartup.label}">
+						<s:CheckBox id="webStartupCheckBox" selected="{discoverWebStartup.value == 'true'}" 
+									change="{discoverWebStartup.value = webStartupCheckBox.selected ? 'true' : 'false'}"/>			
+					</s:FormItem>
+					<s:FormItem label="{discoverWebInterval.label}" width="350">
+						<s:TextInput id="webIntervalInput" text="@{discoverWebInterval.value}" width="150"/>
 					</s:FormItem>
 				</s:Form>
 				<s:Group width="100%" height="50%">

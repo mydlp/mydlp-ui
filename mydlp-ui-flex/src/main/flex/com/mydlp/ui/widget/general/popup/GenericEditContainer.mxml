@@ -358,7 +358,7 @@
 						regExpValidatorPt.source = wsi;
 						regExpValidatorPt.required=false;
 						regExpValidatorPt.property = "startPath";
-						regExpValidatorPt.expression = "^([a-zA-Z-]+\/)*[a-zA-Z-]*$";
+						regExpValidatorPt.expression = "^([a-zA-Z-]+\/)*[a-zA-Z-	]*$";
 						ErrorTipManager.registerValidator(regExpValidatorPt);
 						validators.push(regExpValidatorPt);
 					}

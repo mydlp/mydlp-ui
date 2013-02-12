@@ -15,9 +15,19 @@ public class _001_00200_Config_Discover_RFS extends AbstractGranule {
 		Config rfsStartup = new Config();
 		rfsStartup.setKey("discover_rfs_on_startup");
 		rfsStartup.setValue("false");
+		
+		Config webInterval = new Config();
+		webInterval.setKey("discover_web_interval");
+		webInterval.setValue("7200000");
+
+		Config webStartup = new Config();
+		webStartup.setKey("discover_web_on_startup");
+		webStartup.setValue("false");
 
 		getHibernateTemplate().saveOrUpdate(rfsInterval);
 		getHibernateTemplate().saveOrUpdate(rfsStartup);
+		getHibernateTemplate().saveOrUpdate(webInterval);
+		getHibernateTemplate().saveOrUpdate(webStartup);
 
 	}
 

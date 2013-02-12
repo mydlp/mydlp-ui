@@ -145,6 +145,8 @@
 					else if (config.key == "syslog_report_facility") enterpriseTab.syslogReportFacility = config;
 					else if (config.key == "discover_rfs_interval") enterpriseTab.discoverRfsInterval = config;
 					else if (config.key == "discover_rfs_on_startup") enterpriseTab.discoverRfsStartup = config;
+					else if (config.key == "discover_web_on_startup") enterpriseTab.discoverWebStartup = config;
+					else if (config.key == "discover_web_interval") enterpriseTab.discoverWebInterval = config;
 					
 					else if (config.key == "seclore_fs_enable")
 					{
