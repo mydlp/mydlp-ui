@@ -19,7 +19,7 @@ public class WebServer extends Item {
 	
 	protected int port = 80;
 	
-	protected int digDepth;
+	protected int digDepth = 1;
 	
 	protected String startPath;
 

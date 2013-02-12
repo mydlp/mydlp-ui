@@ -3,7 +3,8 @@
 					  xmlns:s="library://ns.adobe.com/flex/spark" 
 					  xmlns:my="http://www.mydlp.com/flex/my"
 					  xmlns:mx="library://ns.adobe.com/flex/mx"
-					  width="{InputLabel.VERTICAL_INPUT_WIDTH*1.5}"
+					  width="{InputLabel.VERTICAL_INPUT_WIDTH*1.2}"
+					  creationComplete="onCreationComplete(event)"
 					  xmlns:util="com.mydlp.ui.util.*" xmlns:domain="com.mydlp.ui.domain.*">
 	<fx:Script>
 		<![CDATA[
@@ -12,6 +13,7 @@
 			
 			import mx.collections.ArrayCollection;
 			import mx.collections.ListCollectionView;
+			import mx.events.FlexEvent;
 			
 			import spark.events.IndexChangeEvent;
 			
@@ -23,26 +25,38 @@
 					)
 				);
 			
+			[Bindable]
+			public var proto:String;
 			
 			protected function onChangeProtocol(event:IndexChangeEvent):void
 			{
 				if (protocolDropDown.selectedIndex == 0)
 				{
+					proto = WebServer.PROTO_HTTP;
 					portText.text = "80";
 				}
 				else if (protocolDropDown.selectedIndex == 1)
 				{
+					proto = WebServer.PROTO_HTTPS;
 					portText.text = "443";	
 				}
+			}
+			
+			protected function onCreationComplete(event:FlexEvent):void
+			{
+				if(proto != null && proto != "")
+				{
+					protocolDropDown.selectedItem = proto;
+				}
+				else
+					protocolDropDown.selectedIndex = 0;
 			}
 			
 		]]>
 	</fx:Script>
 	<fx:Declarations>
-		<fx:String id="proto"/>
 		<fx:String id="address"/>
 		<fx:String id="port"/>
-		<fx:String id="digDepth"/>
 		<fx:String id="startPath"/>
 	</fx:Declarations>
 	
@@ -60,22 +74,13 @@
 			</s:layout>
 			
 			<s:DropDownList id="protocolDropDown" dataProvider="{protocols}"
-							change="onChangeProtocol(event)"
-							selectedIndex="0" width="14%"/>
+							change="onChangeProtocol(event)" width="17%"/>
 			<s:Label text="://" fontSize="20" width="3%"/>
-			<s:TextInput id="addressText" text="@{address}" width="36%"/>
+			<s:TextInput id="addressText" text="@{address}" width="35%"/>
 			<s:Label text=":" fontSize="20" width="2%"/>
-			<s:TextInput id="portText" text="@{port}" width="7%"/>
+			<s:TextInput id="portText" text="@{port}" width="8%"/>
 			<s:Label text="/" fontSize="20" width="2%"/>
-			<s:TextInput id="start" text="@{startPath}" width="36%"/>
-		</s:Group>
-		<s:Group>
-			<s:layout>
-				<s:HorizontalLayout gap="5" verticalAlign="middle"/>
-			</s:layout>
-			<s:Label text="@Resource(bundle = 'messages', key = 'generic.edit.WebServer.depth.label')" fontWeight="bold"/>
-			<s:TextInput  id="depthLink" text="@{digDepth}"/>
-			<s:Label text="@Resource(bundle = 'messages', key = 'generic.edit.WebServer.description.label')" fontWeight="bold"/>
+			<s:TextInput id="start" text="@{startPath}" width="33%"/>
 		</s:Group>
 	</s:Group>
 	

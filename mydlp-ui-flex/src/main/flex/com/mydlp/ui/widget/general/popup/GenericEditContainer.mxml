@@ -187,7 +187,6 @@
 							(targetObject is CustomAction && classMember.name == "typeKey" && classMember.type == String) ||
 							(targetObject is WebServer && classMember.name == "address") ||
 							(targetObject is WebServer && classMember.name == "port") ||
-							(targetObject is WebServer && classMember.name == "digDepth") ||
 							(targetObject is WebServer && classMember.name == "startPath")
 						)
 					{
@@ -339,19 +338,14 @@
 						wsi.proto = targetObject["proto"];
 						wsi.address = targetObject["address"];
 						wsi.port = targetObject["port"];
-						wsi.digDepth = targetObject["digDepth"];
 						wsi.startPath = targetObject["startPath"];
 						BindingUtils.bindProperty(targetObject, "proto", wsi, "proto");
 						BindingUtils.bindProperty(targetObject, "address", wsi, "address");
 						BindingUtils.bindProperty(targetObject, "port", wsi, "port");
-						BindingUtils.bindProperty(targetObject, "digDepth", wsi, "digDepth");
 						BindingUtils.bindProperty(targetObject, "startPath", wsi, "startPath");
 						inputLabel = new VerticalInputLabel();
 						inputLabel.addElement(wsi);
 						index = 2;
-						/*var ddList:DropDownList = new DropDownList;
-						ddList.dataProvider = protocols;
-						ddList.*/
 					}
 					
 					else if (targetObject is AuthUser && classMember.name == "role")
@@ -720,7 +714,20 @@
 						else if(classMember.name == "sourceDomain") {
 							index = 1;
 						}
-						
+						else if(classMember.name == "digDepth") {
+							if(isNaN(targetObject[classMember.name]) || targetObject[classMember.name] < 1)
+								textInput.text = new String("1");
+							textInput.width = 50;
+							var numberValidatorP:NumberValidator = new NumberValidator();
+							numberValidatorP.source = textInput;
+							numberValidatorP.property = "text";
+							numberValidatorP.domain = "int";
+							numberValidatorP.minValue = "1";
+							numberValidatorP.maxValue = "16";
+							ErrorTipManager.registerValidator(numberValidatorP);
+							validators.push(numberValidatorP);
+							index = 3;
+						}
 						else if(classMember.name == "loginUsername") {
 							index = 3;
 						}
