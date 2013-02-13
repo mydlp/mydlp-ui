@@ -49,7 +49,10 @@
 					protocolDropDown.selectedItem = proto;
 				}
 				else
+				{
 					protocolDropDown.selectedIndex = 0;
+					portText.text = "80";
+				}
 			}
 			
 		]]>
