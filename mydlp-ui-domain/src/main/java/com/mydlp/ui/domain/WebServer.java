@@ -10,16 +10,16 @@ public class WebServer extends Item {
 	 */
 	private static final long serialVersionUID = 8331986811939300472L;
 	
-	public static final String PROTO_HTTP = "HTTP";
-	public static final String PROTO_HTTPS = "HTTPS";
+	public static final String PROTO_HTTP = "http";
+	public static final String PROTO_HTTPS = "https";
 	
-	protected String proto = WebServer.PROTO_HTTP;
+	protected String proto;
 	
 	protected String address;
 	
-	protected int port = 80;
+	protected int port;
 	
-	protected int digDepth = 1;
+	protected int digDepth;
 	
 	protected String startPath;
 

@@ -350,7 +350,7 @@
 						var regExpValidatorP:RegExpValidator = new RegExpValidator();
 						regExpValidatorP.source = wsi;
 						regExpValidatorP.property = "address";
-						regExpValidatorP.expression = "^(www\.){0,1}[a-zA-Z0-9\.\-]+\.[a-zA-Z]{2,5}[\.]{0,1}$";
+						regExpValidatorP.expression = "^(www\.){0,1}[a-zA-Z0-9\.\-]*[\.]{0,1}[a-zA-Z]{0,5}[\.]{0,1}$";
 						ErrorTipManager.registerValidator(regExpValidatorP);
 						validators.push(regExpValidatorP);
 						
@@ -358,7 +358,7 @@
 						regExpValidatorPt.source = wsi;
 						regExpValidatorPt.required=false;
 						regExpValidatorPt.property = "startPath";
-						regExpValidatorPt.expression = "^([a-zA-Z-]+\/)*[a-zA-Z-	]*$";
+						regExpValidatorPt.expression = "^([a-zA-Z-]+\/)*[a-zA-Z-]*$";
 						ErrorTipManager.registerValidator(regExpValidatorPt);
 						validators.push(regExpValidatorPt);
 					}

@@ -10,7 +10,7 @@ package com.mydlp.ui.domain {
     [Managed]
     [RemoteClass(alias="com.mydlp.ui.domain.WebServer")]
     public class WebServer extends WebServerBase {
-		public static const PROTO_HTTP:String = "HTTP";
-		public static const PROTO_HTTPS:String = "HTTPS";
+		public static const PROTO_HTTP:String = "http";
+		public static const PROTO_HTTPS:String = "https";
     }
 }
