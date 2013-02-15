@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:SkinnableContainer xmlns:fx="http://ns.adobe.com/mxml/2009"
+					  xmlns:s="library://ns.adobe.com/flex/spark"
+					  xmlns:my="http://www.mydlp.com/flex/my"
+					  xmlns:mx="library://ns.adobe.com/flex/mx"
+					  xmlns:domain="com.mydlp.ui.domain.*"
+					  xmlns:input="com.mydlp.ui.widget.general.input.*"
+					  xmlns:popup="com.mydlp.ui.widget.general.popup.*"
+					  xmlns:validators="com.mydlp.ui.validators.*"
+					  xmlns:util="com.mydlp.ui.util.*"
+					  width="{InputLabel.VERTICAL_INPUT_WIDTH}" height="15"
+					  creationComplete="onCreationComplete(event)" xmlns:option="com.mydlp.ui.widget.option.*">
+	<fx:Script>
+		<![CDATA[
+			import com.mydlp.ui.skin.SettingsBitmapButton16Skin;
+			import com.mydlp.ui.widget.general.popup.InputLabel;
+			
+			import mx.collections.ArrayCollection;
+			import mx.collections.ListCollectionView;
+			import mx.controls.Alert;
+			import mx.events.FlexEvent;
+			import mx.utils.OnDemandEventDispatcher;
+			
+			import spark.events.IndexChangeEvent;
+			import spark.events.TextOperationEvent;
+			
+			
+			public static var UNIT_GB:String = "GB";
+			public static var UNIT_MB:String = "MB";
+			public static var UNIT_KB:String = "KB";
+			public static var UNIT_B:String = "Byte";
+			public static var UNIT_H:String = "Hour(s)";
+			public static var UNIT_M:String = "Minute(s)";
+			public static var UNIT_S:String = "Second(s)";
+			public static var UNIT_MS:String = "Milisecond(s)";
+			
+			public var _settingValue:String;
+			
+			[Bindable(event="settingValueChanged")]
+			public function get settingValue():String
+			{
+				return _settingValue;
+			}
+			
+			public function set settingValue(value:String):void
+			{
+				_settingValue = value;
+				if(value != null && (sValue.text == null || sValue.text == ""))
+				{
+					var settingValueN:Number = Number(settingValue);
+					if(unit == UNIT_GB)
+					{
+						sValue.text = (settingValueN/(1024*1024*1024)).toFixed(2);
+					}
+					else if(unit == UNIT_MB)
+					{
+						sValue.text = (settingValueN/(1024*1024)).toFixed(2);
+					}
+					else if(unit == UNIT_KB)
+					{
+						sValue.text = (settingValueN/(1024)).toFixed(2);
+					}
+					else if(unit == UNIT_B)
+					{
+						sValue.text = (settingValueN/(1024)).toFixed(2);
+					}
+					else if(unit == UNIT_H)
+					{
+						sValue.text = (settingValueN/(60*60*1000)).toFixed(2);
+					}
+					else if(unit == UNIT_M)
+					{
+						sValue.text = (settingValueN/(60*1000)).toFixed(0);
+					}
+					else if(unit == UNIT_S)
+					{
+						sValue.text = (settingValueN/(1000)).toFixed(0);
+					}
+					else if(unit == UNIT_MS)
+					{
+						sValue.text = settingValueN.toFixed();
+					}		
+				}
+			}
+			
+			protected function onCreationComplete(event:FlexEvent):void
+			{
+				if(validator == null)
+					return;
+				if(unit == UNIT_GB)
+				{
+					validator.minValue = minValue/(1024*1024*1024);
+					validator.maxValue = maxValue/(1024*1024*1024);
+				}
+				else if(unit == UNIT_MB)
+				{
+					validator.minValue = minValue/(1024*1024);
+					validator.maxValue = maxValue/(1024*1024);
+				}
+				else if(unit == UNIT_KB)
+				{
+					validator.minValue = minValue/(1024);
+					validator.maxValue = maxValue/(1024);
+				}
+				else if(unit == UNIT_H)
+				{
+					validator.minValue = minValue/(60*60*1000);
+					validator.maxValue = maxValue/(60*60*1000);
+				}
+				else if(unit == UNIT_M)
+				{
+					validator.minValue = minValue/(60*1000);
+					validator.maxValue = maxValue/(60*1000);
+				}
+				else if(unit == UNIT_S)
+				{
+					validator.minValue = minValue/(1000);
+					validator.maxValue = maxValue/(1000);
+				}
+				else
+				{
+					validator.minValue = minValue;
+					validator.maxValue = maxValue;
+				}
+			}
+			
+			protected function onSettingChange(event:TextOperationEvent):void
+			{
+				if(isNaN(Number(sValue.text)))
+					return;
+				
+				if(unit == UNIT_GB)
+					settingValue = ((Number(sValue.text))*(1024*1024*1024)).toString();
+				else if(unit == UNIT_MB)
+					settingValue = ((Number(sValue.text))*(1024*1024)).toString();
+				else if(unit == UNIT_KB)
+					settingValue = ((Number(sValue.text))*(1024)).toString();
+				else if(unit == UNIT_H)
+					settingValue = ((Number(sValue.text))*(60*60*1000)).toString();
+				else if(unit == UNIT_M)
+					settingValue = ((Number(sValue.text))*(60*1000)).toString();
+				else if(unit == UNIT_S)
+					settingValue = ((Number(sValue.text))*(1000)).toString();
+				else
+					settingValue = (Number(sValue.text)).toString();
+				
+				dispatchEvent(new Event("settingValueChanged"));
+				
+			}
+			
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<fx:Boolean id="isSize"/>
+		<fx:String id="textInputWidth"/>
+		<fx:String id="unit"/>
+		<fx:Number id="minValue"/>
+		<fx:Number id="maxValue"/>
+		<option:OptionContainer id="optionContainer"/>
+		<validators:MyNumberValidator id="validator"
+									  domain="real"
+									  source="{sValue}"
+									  valid="{optionContainer.validInput(event)}"
+									  invalid="{optionContainer.invalidInput(event)}"/>
+	</fx:Declarations>
+	
+	<s:Group>
+		<s:layout>
+			<s:HorizontalLayout gap="10" verticalAlign="middle"/>
+		</s:layout>
+		<s:TextInput id="sValue" width="{textInputWidth}" change="onSettingChange(event)" textAlign="right"  restrict="0-9\\.\\-"/>
+		<s:Label id="unitLabel" text="{unit}"/>
+	</s:Group>
+	
+</s:SkinnableContainer>

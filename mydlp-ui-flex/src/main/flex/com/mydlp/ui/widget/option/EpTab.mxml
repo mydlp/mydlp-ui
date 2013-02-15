@@ -3,7 +3,7 @@
 					 xmlns:s="library://ns.adobe.com/flex/spark" 
 					 xmlns:mx="library://ns.adobe.com/flex/mx" 
 					 xmlns:option="com.mydlp.ui.widget.option.*"
-					 xmlns:domain="com.mydlp.ui.domain.*" xmlns:validators="com.mydlp.ui.validators.*">
+					 xmlns:domain="com.mydlp.ui.domain.*" xmlns:validators="com.mydlp.ui.validators.*" xmlns:input="com.mydlp.ui.widget.general.input.*">
 	
 	<fx:Script>
 		<![CDATA[
@@ -22,7 +22,7 @@
 		<domain:Config id="spoolHardLimit" />
 		
 		
-		<validators:MyNumberValidator id="epSyncValidator"
+		<!--<validators:MyNumberValidator id="epSyncValidator"
 									  source="{sync}"
 									  minValue="29999"
 									  valid="{optionContainer.validInput(event)}"
@@ -52,7 +52,7 @@
 									  minValue="52428801"
 									  maxValue="104857600"
 									  valid="{optionContainer.validInput(event)}"
-									  invalid="{optionContainer.invalidInput(event)}"/>
+									  invalid="{optionContainer.invalidInput(event)}"/>-->
 		
 	</fx:Declarations>
 	
@@ -86,13 +86,19 @@
 				</s:DropDownList>				
 			</s:FormItem>
 			<s:FormItem label="{syncInterval.label}">
-				<s:TextInput id="sync" text="@{syncInterval.value}" width="200"/>
+				<input:GenericSettingsInputWidget  isSize="false" settingValue="@{syncInterval.value}"
+												   textInputWidth="150" unit="{GenericSettingsInputWidget.UNIT_S}"
+												   optionContainer="{optionContainer}" minValue="29999"/>
 			</s:FormItem>
 			<s:FormItem label="{logLimit.label}">
-				<s:TextInput id="log" text="@{logLimit.value}" width="200"/>
+				<input:GenericSettingsInputWidget  isSize="true" settingValue="@{logLimit.value}"
+												   textInputWidth="150" unit="{GenericSettingsInputWidget.UNIT_MB}"
+												   optionContainer="{optionContainer}" minValue="1048575"/>
 			</s:FormItem>
 			<s:FormItem label="{discoverFSInterval.label}">
-				<s:TextInput id="discoverFSIntervalInput" text="@{discoverFSInterval.value}" width="200"/>
+				<input:GenericSettingsInputWidget  isSize="false" settingValue="@{discoverFSInterval.value}"
+												   textInputWidth="150" unit="{GenericSettingsInputWidget.UNIT_S}"
+												   optionContainer="{optionContainer}" minValue="3599999"/>
 			</s:FormItem>
 			<s:FormItem label="{discoverFSOnStartup.label}">
 				<s:CheckBox id="discoverFSOnStartupCheckBox" selected="{discoverFSOnStartup.value == 'true'}" 
@@ -103,10 +109,14 @@
 							change="{ignoreDiscoverFSMaxSizeExceeded.value = ignoreDiscoverFSMaxSizeExceededCheckBox.selected ? 'true' : 'false'}"/>			
 			</s:FormItem>
 			<s:FormItem label="{spoolSoftLimit.label}">
-				<s:TextInput id="spoolSoftLimitInput" text="@{spoolSoftLimit.value}" width="200"/>
+				<input:GenericSettingsInputWidget  isSize="true" settingValue="@{spoolSoftLimit.value}"
+												   textInputWidth="150" unit="{GenericSettingsInputWidget.UNIT_MB}"
+												   optionContainer="{optionContainer}" minValue="26214400" maxValue="52428800"/>
 			</s:FormItem>
 			<s:FormItem label="{spoolHardLimit.label}">
-				<s:TextInput id="spoolHardLimitInput" text="@{spoolHardLimit.value}" width="200"/>
+				<input:GenericSettingsInputWidget  isSize="true" settingValue="@{spoolHardLimit.value}"
+												   textInputWidth="150" unit="{GenericSettingsInputWidget.UNIT_MB}"
+												   optionContainer="{optionContainer}" minValue="52428801" maxValue="104857600"/>
 			</s:FormItem>
 			
 		</s:Form>	

@@ -3,7 +3,7 @@
 					 xmlns:s="library://ns.adobe.com/flex/spark"
 					 xmlns:mx="library://ns.adobe.com/flex/mx"
 					 xmlns:option="com.mydlp.ui.widget.option.*"
-					 xmlns:domain="com.mydlp.ui.domain.*">
+					 xmlns:domain="com.mydlp.ui.domain.*" xmlns:input="com.mydlp.ui.widget.general.input.*">
 	
 	<fx:Script>
 		<![CDATA[
@@ -53,25 +53,30 @@
 		<s:HGroup width="100%" height="100%">
 			<s:Form width="40%">	
 				<s:FormItem label="{maximumObjectSize.label}">
-					<s:TextInput width="100%" text="@{maximumObjectSize.value}"/>
+					<input:GenericSettingsInputWidget  isSize="true" settingValue="@{maximumObjectSize.value}" validator="{null}"
+													   textInputWidth="150" unit="{GenericSettingsInputWidget.UNIT_MB}"/>
 				</s:FormItem>
 				<s:FormItem label="{maximumMemoryObject.label}">
-					<s:TextInput width="100%" text="@{maximumMemoryObject.value}"/>
+					<input:GenericSettingsInputWidget  isSize="true" settingValue="@{maximumMemoryObject.value}" validator="{null}"
+													   textInputWidth="150" unit="{GenericSettingsInputWidget.UNIT_MB}"/>
 				</s:FormItem>			
 				<s:FormItem label="{maximumChunkSize.label}">
-					<s:TextInput width="100%" text="@{maximumChunkSize.value}"/>
+					<input:GenericSettingsInputWidget  isSize="true" settingValue="@{maximumChunkSize.value}" validator="{null}"
+													   textInputWidth="150" unit="{GenericSettingsInputWidget.UNIT_MB}"/>
 				</s:FormItem>
 				<s:FormItem label="{fsmTimeout.label}">
-					<s:TextInput width="100%" text="@{fsmTimeout.value}"/>
+					<input:GenericSettingsInputWidget  isSize="false" settingValue="@{fsmTimeout.value}" validator="{null}"
+													   textInputWidth="150" unit="{GenericSettingsInputWidget.UNIT_S}"/>
 				</s:FormItem>
 				<s:FormItem label="{spawnTimeout.label}">
-					<s:TextInput width="100%" text="@{spawnTimeout.value}"/>
+					<input:GenericSettingsInputWidget  isSize="false" settingValue="@{spawnTimeout.value}" validator="{null}"
+													   textInputWidth="150" unit="{GenericSettingsInputWidget.UNIT_S}"/>
 				</s:FormItem>
 				<s:FormItem label="{thriftServerPoolSize.label}">
-					<s:TextInput width="100%" text="@{thriftServerPoolSize.value}"/>
+					<s:TextInput width="50%" text="@{thriftServerPoolSize.value}"/>
 				</s:FormItem>
 				<s:FormItem label="{thriftEndpointPoolSize.label}">
-					<s:TextInput width="100%" text="@{thriftEndpointPoolSize.value}"/>
+					<s:TextInput width="50%" text="@{thriftEndpointPoolSize.value}"/>
 				</s:FormItem>
 				<s:FormItem label="{errorAction.label}">
 					<s:DropDownList id="errorActionComboBox"

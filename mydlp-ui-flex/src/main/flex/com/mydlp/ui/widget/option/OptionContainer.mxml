@@ -46,11 +46,6 @@
 				validators.push(protocolsTab.smtpHeloNameValidator);
 				validators.push(protocolsTab.smtpNextHopHostValidator);
 				validators.push(protocolsTab.smtpNextHopPortValidator);
-				validators.push(epTab.epLogValidator);
-				validators.push(epTab.epSyncValidator);
-				validators.push(epTab.discSyncValidator);
-				validators.push(epTab.spoolHardLimitValidator);
-				validators.push(epTab.spoolSoftLimitValidator);
 			}
 			
 			protected function initEnterprise(): void

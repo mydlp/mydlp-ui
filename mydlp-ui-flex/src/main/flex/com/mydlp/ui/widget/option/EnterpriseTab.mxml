@@ -3,7 +3,7 @@
 					 xmlns:s="library://ns.adobe.com/flex/spark" 
 					 xmlns:mx="library://ns.adobe.com/flex/mx" 
 					 xmlns:option="com.mydlp.ui.widget.option.*"
-					 xmlns:domain="com.mydlp.ui.domain.*" xmlns:validators="com.mydlp.ui.validators.*">
+					 xmlns:domain="com.mydlp.ui.domain.*" xmlns:validators="com.mydlp.ui.validators.*" xmlns:input="com.mydlp.ui.widget.general.input.*">
 	
 	<fx:Script>
 		<![CDATA[
@@ -94,10 +94,12 @@
 						   property="text"
 						   valid="{optionContainer.validInput(event)}"
 						   invalid="{optionContainer.invalidInput(event)}"/>
+		
 	</fx:Declarations>
 	
 	<s:VGroup width="100%" height="100%">
 		<s:HGroup width="100%" height="100%">
+
 			<s:VGroup width="45%" gap="50">
 				<s:Form width="100%" height="50%">
 					<s:FormItem label="{mailArchive.label}">
@@ -109,8 +111,28 @@
 									change="{webArchive.value = webArchiveCheckBox.selected ? 'true' : 'false'}"/>			
 					</s:FormItem>
 					<s:FormItem label="{archiveMinimumSize.label}" width="350">
-						<s:TextInput text="@{archiveMinimumSize.value}" width="150"/>
+						<input:GenericSettingsInputWidget  isSize="true" settingValue="@{archiveMinimumSize.value}" validator="{null}"
+														   textInputWidth="150" unit="{GenericSettingsInputWidget.UNIT_KB}"/>
 					</s:FormItem>
+
+					<!--<s:FormItem label="{discoverRfsStartup.label}">
+						<s:CheckBox id="rfsStartupCheckBox" selected="{discoverRfsStartup.value == 'true'}" 
+									change="{discoverRfsStartup.value = rfsStartupCheckBox.selected ? 'true' : 'false'}"/>			
+					</s:FormItem>
+					<s:FormItem label="{discoverRfsInterval.label}" width="350">
+						<input:GenericSettingsInputWidget  isSize="false" settingValue="@{discoverRfsInterval.value}"
+														   textInputWidth="150" unit="{GenericSettingsInputWidget.UNIT_S}"
+														   optionContainer="{optionContainer}" minValue="1800000"/>
+					</s:FormItem>
+					<s:FormItem label="{discoverWebStartup.label}">
+						<s:CheckBox id="webStartupCheckBox" selected="{discoverWebStartup.value == 'true'}" 
+									change="{discoverWebStartup.value = webStartupCheckBox.selected ? 'true' : 'false'}"/>			
+					</s:FormItem>
+					<s:FormItem label="{discoverWebInterval.label}" width="350">
+						<input:GenericSettingsInputWidget  isSize="false" settingValue="@{discoverWebInterval.value}"
+														  textInputWidth="150" unit="{GenericSettingsInputWidget.UNIT_S}"
+														  optionContainer="{optionContainer}" minValue="1800000"/>
+					</s:FormItem>-->
 				</s:Form>
 				<s:Group width="100%" height="50%">
 					<s:layout>
