@@ -40,7 +40,7 @@ public class Mydlp_ui {
 
     public void requeueIncident(long Incidentid) throws org.apache.thrift.TException;
 
-    public Map<String,String> registerUserAddress(String Ipaddress, String Userh, ByteBuffer Payload) throws org.apache.thrift.TException;
+    public Map<String,String> registerUserAddress(String EndpointId, String Ipaddress, String Userh, ByteBuffer Payload) throws org.apache.thrift.TException;
 
     public String saveLicenseKey(String licenseKey) throws org.apache.thrift.TException;
 
@@ -70,7 +70,7 @@ public class Mydlp_ui {
 
     public void requeueIncident(long Incidentid, org.apache.thrift.async.AsyncMethodCallback<AsyncClient.requeueIncident_call> resultHandler) throws org.apache.thrift.TException;
 
-    public void registerUserAddress(String Ipaddress, String Userh, ByteBuffer Payload, org.apache.thrift.async.AsyncMethodCallback<AsyncClient.registerUserAddress_call> resultHandler) throws org.apache.thrift.TException;
+    public void registerUserAddress(String EndpointId, String Ipaddress, String Userh, ByteBuffer Payload, org.apache.thrift.async.AsyncMethodCallback<AsyncClient.registerUserAddress_call> resultHandler) throws org.apache.thrift.TException;
 
     public void saveLicenseKey(String licenseKey, org.apache.thrift.async.AsyncMethodCallback<AsyncClient.saveLicenseKey_call> resultHandler) throws org.apache.thrift.TException;
 
@@ -276,15 +276,16 @@ public class Mydlp_ui {
       sendBase("requeueIncident", args);
     }
 
-    public Map<String,String> registerUserAddress(String Ipaddress, String Userh, ByteBuffer Payload) throws org.apache.thrift.TException
+    public Map<String,String> registerUserAddress(String EndpointId, String Ipaddress, String Userh, ByteBuffer Payload) throws org.apache.thrift.TException
     {
-      send_registerUserAddress(Ipaddress, Userh, Payload);
+      send_registerUserAddress(EndpointId, Ipaddress, Userh, Payload);
       return recv_registerUserAddress();
     }
 
-    public void send_registerUserAddress(String Ipaddress, String Userh, ByteBuffer Payload) throws org.apache.thrift.TException
+    public void send_registerUserAddress(String EndpointId, String Ipaddress, String Userh, ByteBuffer Payload) throws org.apache.thrift.TException
     {
       registerUserAddress_args args = new registerUserAddress_args();
+      args.setEndpointId(EndpointId);
       args.setIpaddress(Ipaddress);
       args.setUserh(Userh);
       args.setPayload(Payload);
@@ -687,19 +688,21 @@ public class Mydlp_ui {
       }
     }
 
-    public void registerUserAddress(String Ipaddress, String Userh, ByteBuffer Payload, org.apache.thrift.async.AsyncMethodCallback<registerUserAddress_call> resultHandler) throws org.apache.thrift.TException {
+    public void registerUserAddress(String EndpointId, String Ipaddress, String Userh, ByteBuffer Payload, org.apache.thrift.async.AsyncMethodCallback<registerUserAddress_call> resultHandler) throws org.apache.thrift.TException {
       checkReady();
-      registerUserAddress_call method_call = new registerUserAddress_call(Ipaddress, Userh, Payload, resultHandler, this, ___protocolFactory, ___transport);
+      registerUserAddress_call method_call = new registerUserAddress_call(EndpointId, Ipaddress, Userh, Payload, resultHandler, this, ___protocolFactory, ___transport);
       this.___currentMethod = method_call;
       ___manager.call(method_call);
     }
 
     public static class registerUserAddress_call extends org.apache.thrift.async.TAsyncMethodCall {
+      private String EndpointId;
       private String Ipaddress;
       private String Userh;
       private ByteBuffer Payload;
-      public registerUserAddress_call(String Ipaddress, String Userh, ByteBuffer Payload, org.apache.thrift.async.AsyncMethodCallback<registerUserAddress_call> resultHandler, org.apache.thrift.async.TAsyncClient client, org.apache.thrift.protocol.TProtocolFactory protocolFactory, org.apache.thrift.transport.TNonblockingTransport transport) throws org.apache.thrift.TException {
+      public registerUserAddress_call(String EndpointId, String Ipaddress, String Userh, ByteBuffer Payload, org.apache.thrift.async.AsyncMethodCallback<registerUserAddress_call> resultHandler, org.apache.thrift.async.TAsyncClient client, org.apache.thrift.protocol.TProtocolFactory protocolFactory, org.apache.thrift.transport.TNonblockingTransport transport) throws org.apache.thrift.TException {
         super(client, protocolFactory, transport, resultHandler, false);
+        this.EndpointId = EndpointId;
         this.Ipaddress = Ipaddress;
         this.Userh = Userh;
         this.Payload = Payload;
@@ -708,6 +711,7 @@ public class Mydlp_ui {
       public void write_args(org.apache.thrift.protocol.TProtocol prot) throws org.apache.thrift.TException {
         prot.writeMessageBegin(new org.apache.thrift.protocol.TMessage("registerUserAddress", org.apache.thrift.protocol.TMessageType.CALL, 0));
         registerUserAddress_args args = new registerUserAddress_args();
+        args.setEndpointId(EndpointId);
         args.setIpaddress(Ipaddress);
         args.setUserh(Userh);
         args.setPayload(Payload);
@@ -1025,7 +1029,7 @@ public class Mydlp_ui {
 
       protected registerUserAddress_result getResult(I iface, registerUserAddress_args args) throws org.apache.thrift.TException {
         registerUserAddress_result result = new registerUserAddress_result();
-        result.success = iface.registerUserAddress(args.Ipaddress, args.Userh, args.Payload);
+        result.success = iface.registerUserAddress(args.EndpointId, args.Ipaddress, args.Userh, args.Payload);
         return result;
       }
     }
@@ -6168,19 +6172,22 @@ public class Mydlp_ui {
   public static class registerUserAddress_args implements org.apache.thrift.TBase<registerUserAddress_args, registerUserAddress_args._Fields>, java.io.Serializable, Cloneable   {
     private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("registerUserAddress_args");
 
-    private static final org.apache.thrift.protocol.TField IPADDRESS_FIELD_DESC = new org.apache.thrift.protocol.TField("Ipaddress", org.apache.thrift.protocol.TType.STRING, (short)1);
-    private static final org.apache.thrift.protocol.TField USERH_FIELD_DESC = new org.apache.thrift.protocol.TField("Userh", org.apache.thrift.protocol.TType.STRING, (short)2);
-    private static final org.apache.thrift.protocol.TField PAYLOAD_FIELD_DESC = new org.apache.thrift.protocol.TField("Payload", org.apache.thrift.protocol.TType.STRING, (short)3);
+    private static final org.apache.thrift.protocol.TField ENDPOINT_ID_FIELD_DESC = new org.apache.thrift.protocol.TField("EndpointId", org.apache.thrift.protocol.TType.STRING, (short)1);
+    private static final org.apache.thrift.protocol.TField IPADDRESS_FIELD_DESC = new org.apache.thrift.protocol.TField("Ipaddress", org.apache.thrift.protocol.TType.STRING, (short)2);
+    private static final org.apache.thrift.protocol.TField USERH_FIELD_DESC = new org.apache.thrift.protocol.TField("Userh", org.apache.thrift.protocol.TType.STRING, (short)3);
+    private static final org.apache.thrift.protocol.TField PAYLOAD_FIELD_DESC = new org.apache.thrift.protocol.TField("Payload", org.apache.thrift.protocol.TType.STRING, (short)4);
 
+    public String EndpointId; // required
     public String Ipaddress; // required
     public String Userh; // required
     public ByteBuffer Payload; // required
 
     /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
     public enum _Fields implements org.apache.thrift.TFieldIdEnum {
-      IPADDRESS((short)1, "Ipaddress"),
-      USERH((short)2, "Userh"),
-      PAYLOAD((short)3, "Payload");
+      ENDPOINT_ID((short)1, "EndpointId"),
+      IPADDRESS((short)2, "Ipaddress"),
+      USERH((short)3, "Userh"),
+      PAYLOAD((short)4, "Payload");
 
       private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
 
@@ -6195,11 +6202,13 @@ public class Mydlp_ui {
        */
       public static _Fields findByThriftId(int fieldId) {
         switch(fieldId) {
-          case 1: // IPADDRESS
+          case 1: // ENDPOINT_ID
+            return ENDPOINT_ID;
+          case 2: // IPADDRESS
             return IPADDRESS;
-          case 2: // USERH
+          case 3: // USERH
             return USERH;
-          case 3: // PAYLOAD
+          case 4: // PAYLOAD
             return PAYLOAD;
           default:
             return null;
@@ -6245,6 +6254,8 @@ public class Mydlp_ui {
     public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
     static {
       Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
+      tmpMap.put(_Fields.ENDPOINT_ID, new org.apache.thrift.meta_data.FieldMetaData("EndpointId", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+          new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
       tmpMap.put(_Fields.IPADDRESS, new org.apache.thrift.meta_data.FieldMetaData("Ipaddress", org.apache.thrift.TFieldRequirementType.DEFAULT, 
           new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
       tmpMap.put(_Fields.USERH, new org.apache.thrift.meta_data.FieldMetaData("Userh", org.apache.thrift.TFieldRequirementType.DEFAULT, 
@@ -6259,11 +6270,13 @@ public class Mydlp_ui {
     }
 
     public registerUserAddress_args(
+      String EndpointId,
       String Ipaddress,
       String Userh,
       ByteBuffer Payload)
     {
       this();
+      this.EndpointId = EndpointId;
       this.Ipaddress = Ipaddress;
       this.Userh = Userh;
       this.Payload = Payload;
@@ -6273,6 +6286,9 @@ public class Mydlp_ui {
      * Performs a deep copy on <i>other</i>.
      */
     public registerUserAddress_args(registerUserAddress_args other) {
+      if (other.isSetEndpointId()) {
+        this.EndpointId = other.EndpointId;
+      }
       if (other.isSetIpaddress()) {
         this.Ipaddress = other.Ipaddress;
       }
@@ -6291,9 +6307,34 @@ public class Mydlp_ui {
 
     @Override
     public void clear() {
+      this.EndpointId = null;
       this.Ipaddress = null;
       this.Userh = null;
       this.Payload = null;
+    }
+
+    public String getEndpointId() {
+      return this.EndpointId;
+    }
+
+    public registerUserAddress_args setEndpointId(String EndpointId) {
+      this.EndpointId = EndpointId;
+      return this;
+    }
+
+    public void unsetEndpointId() {
+      this.EndpointId = null;
+    }
+
+    /** Returns true if field EndpointId is set (has been assigned a value) and false otherwise */
+    public boolean isSetEndpointId() {
+      return this.EndpointId != null;
+    }
+
+    public void setEndpointIdIsSet(boolean value) {
+      if (!value) {
+        this.EndpointId = null;
+      }
     }
 
     public String getIpaddress() {
@@ -6380,6 +6421,14 @@ public class Mydlp_ui {
 
     public void setFieldValue(_Fields field, Object value) {
       switch (field) {
+      case ENDPOINT_ID:
+        if (value == null) {
+          unsetEndpointId();
+        } else {
+          setEndpointId((String)value);
+        }
+        break;
+
       case IPADDRESS:
         if (value == null) {
           unsetIpaddress();
@@ -6409,6 +6458,9 @@ public class Mydlp_ui {
 
     public Object getFieldValue(_Fields field) {
       switch (field) {
+      case ENDPOINT_ID:
+        return getEndpointId();
+
       case IPADDRESS:
         return getIpaddress();
 
@@ -6429,6 +6481,8 @@ public class Mydlp_ui {
       }
 
       switch (field) {
+      case ENDPOINT_ID:
+        return isSetEndpointId();
       case IPADDRESS:
         return isSetIpaddress();
       case USERH:
@@ -6451,6 +6505,15 @@ public class Mydlp_ui {
     public boolean equals(registerUserAddress_args that) {
       if (that == null)
         return false;
+
+      boolean this_present_EndpointId = true && this.isSetEndpointId();
+      boolean that_present_EndpointId = true && that.isSetEndpointId();
+      if (this_present_EndpointId || that_present_EndpointId) {
+        if (!(this_present_EndpointId && that_present_EndpointId))
+          return false;
+        if (!this.EndpointId.equals(that.EndpointId))
+          return false;
+      }
 
       boolean this_present_Ipaddress = true && this.isSetIpaddress();
       boolean that_present_Ipaddress = true && that.isSetIpaddress();
@@ -6495,6 +6558,16 @@ public class Mydlp_ui {
       int lastComparison = 0;
       registerUserAddress_args typedOther = (registerUserAddress_args)other;
 
+      lastComparison = Boolean.valueOf(isSetEndpointId()).compareTo(typedOther.isSetEndpointId());
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+      if (isSetEndpointId()) {
+        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.EndpointId, typedOther.EndpointId);
+        if (lastComparison != 0) {
+          return lastComparison;
+        }
+      }
       lastComparison = Boolean.valueOf(isSetIpaddress()).compareTo(typedOther.isSetIpaddress());
       if (lastComparison != 0) {
         return lastComparison;
@@ -6542,21 +6615,28 @@ public class Mydlp_ui {
           break;
         }
         switch (field.id) {
-          case 1: // IPADDRESS
+          case 1: // ENDPOINT_ID
+            if (field.type == org.apache.thrift.protocol.TType.STRING) {
+              this.EndpointId = iprot.readString();
+            } else { 
+              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, field.type);
+            }
+            break;
+          case 2: // IPADDRESS
             if (field.type == org.apache.thrift.protocol.TType.STRING) {
               this.Ipaddress = iprot.readString();
             } else { 
               org.apache.thrift.protocol.TProtocolUtil.skip(iprot, field.type);
             }
             break;
-          case 2: // USERH
+          case 3: // USERH
             if (field.type == org.apache.thrift.protocol.TType.STRING) {
               this.Userh = iprot.readString();
             } else { 
               org.apache.thrift.protocol.TProtocolUtil.skip(iprot, field.type);
             }
             break;
-          case 3: // PAYLOAD
+          case 4: // PAYLOAD
             if (field.type == org.apache.thrift.protocol.TType.STRING) {
               this.Payload = iprot.readBinary();
             } else { 
@@ -6578,6 +6658,11 @@ public class Mydlp_ui {
       validate();
 
       oprot.writeStructBegin(STRUCT_DESC);
+      if (this.EndpointId != null) {
+        oprot.writeFieldBegin(ENDPOINT_ID_FIELD_DESC);
+        oprot.writeString(this.EndpointId);
+        oprot.writeFieldEnd();
+      }
       if (this.Ipaddress != null) {
         oprot.writeFieldBegin(IPADDRESS_FIELD_DESC);
         oprot.writeString(this.Ipaddress);
@@ -6602,6 +6687,14 @@ public class Mydlp_ui {
       StringBuilder sb = new StringBuilder("registerUserAddress_args(");
       boolean first = true;
 
+      sb.append("EndpointId:");
+      if (this.EndpointId == null) {
+        sb.append("null");
+      } else {
+        sb.append(this.EndpointId);
+      }
+      first = false;
+      if (!first) sb.append(", ");
       sb.append("Ipaddress:");
       if (this.Ipaddress == null) {
         sb.append("null");
