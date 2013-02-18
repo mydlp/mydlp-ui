@@ -65,6 +65,7 @@
          <value>com.mydlp.ui.domain.PrinterRule</value>
          <value>com.mydlp.ui.domain.RemovableStorageRule</value>
          <value>com.mydlp.ui.domain.RemovableStorageInboundRule</value>
+         <value>com.mydlp.ui.domain.RemovableStorageEncryptionRule</value>
          <value>com.mydlp.ui.domain.RDBMSConnection</value>
          <value>com.mydlp.ui.domain.RDBMSEnumeratedValue</value>
          <value>com.mydlp.ui.domain.RDBMSInformationTarget</value>

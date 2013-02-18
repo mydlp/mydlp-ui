@@ -159,12 +159,12 @@ public class MyDLPUIThriftServiceImpl implements MyDLPUIThriftService {
 	}
 
 	@Override
-	public Map<String,String> registerUserAddress(final String ipAddress, final String userH,
+	public Map<String,String> registerUserAddress(final String endpointId, final String ipAddress, final String userH,
 			final ByteBuffer payload) {
 		return call(new ThriftCall< Map<String,String> >() {
 			@Override
 			public Map<String,String> execute(MyDLPUIThriftConnection thriftConnection) throws TException {
-				return thriftConnection.client.registerUserAddress(ipAddress, userH, payload);
+				return thriftConnection.client.registerUserAddress(endpointId, ipAddress, userH, payload);
 			}
 		});
 	}

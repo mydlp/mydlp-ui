@@ -34,6 +34,7 @@
 			import com.mydlp.ui.domain.RDBMSConnection;
 			import com.mydlp.ui.domain.RDBMSInformationTarget;
 			import com.mydlp.ui.domain.RegularExpressionGroup;
+			import com.mydlp.ui.domain.RemovableStorageEncryptionRule;
 			import com.mydlp.ui.domain.RemovableStorageInboundRule;
 			import com.mydlp.ui.domain.Rule;
 			import com.mydlp.ui.domain.RuleUserAD;
@@ -47,8 +48,8 @@
 			import com.mydlp.ui.util.LangUtil;
 			import com.mydlp.ui.util.ReflectionUtil;
 			import com.mydlp.ui.util.SessionUtil;
-			import com.mydlp.ui.validators.NullValidator;
 			import com.mydlp.ui.validators.EmptyListValidator;
+			import com.mydlp.ui.validators.NullValidator;
 			import com.mydlp.ui.widget.general.input.ADDomainAliasInput;
 			import com.mydlp.ui.widget.general.input.ADDomainItemInput;
 			import com.mydlp.ui.widget.general.input.ADDomainItemListing;
@@ -216,7 +217,7 @@
 					
 					else if (targetObject is Rule && classMember.name == "notificationItems")
 					{	
-						if (targetObject is ScreenshotRule || targetObject is RemovableStorageInboundRule)
+						if (targetObject is ScreenshotRule || targetObject is RemovableStorageInboundRule || targetObject is RemovableStorageEncryptionRule )
 						{
 							targetObject["notificationEnabled"] = false;
 							targetObject[classMember.name] = new ArrayCollection(); 

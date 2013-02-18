@@ -22,7 +22,7 @@ public interface MyDLPUIThriftService {
     
     public void requeueIncident(Integer incidentId);
     
-    public Map<String,String> registerUserAddress(String ipAddress, String userH, ByteBuffer payload);
+    public Map<String,String> registerUserAddress(String endpointId, String ipAddress, String userH, ByteBuffer payload);
     
     public String saveLicenseKey(String licenseKey);
 

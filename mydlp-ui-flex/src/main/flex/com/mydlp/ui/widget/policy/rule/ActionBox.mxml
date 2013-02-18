@@ -9,6 +9,7 @@
 			import com.mydlp.ui.domain.CustomAction;
 			import com.mydlp.ui.domain.DiscoveryRule;
 			import com.mydlp.ui.domain.MailRule;
+			import com.mydlp.ui.domain.RemovableStorageEncryptionRule;
 			import com.mydlp.ui.domain.RemovableStorageInboundRule;
 			import com.mydlp.ui.domain.Rule;
 			import com.mydlp.ui.domain.ScreenshotRule;
@@ -57,6 +58,14 @@
 						new ActionObject(Rule.ACTION_PASS),
 						new ActionObject(Rule.ACTION_LOG),
 						new ActionObject(Rule.ACTION_ARCHIVE)
+					)
+				);
+			
+			protected static var actionsEncrypt:ListCollectionView = 
+				new ArrayCollection(
+					new Array(
+						new ActionObject(Rule.ACTION_PASS),
+						new ActionObject(Rule.ACTION_ENCRYPT)
 					)
 				);
 			
@@ -156,6 +165,8 @@
 						return actionsCustom;
 					else if (rule is RemovableStorageInboundRule)
 						return actionsInbound;
+					else if (rule is RemovableStorageEncryptionRule)
+						return actionsEncrypt;
 					else if (rule is ScreenshotRule)
 						return actionsScreenshot;
 					else 

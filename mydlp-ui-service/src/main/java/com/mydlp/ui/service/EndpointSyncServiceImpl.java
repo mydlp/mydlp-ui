@@ -44,15 +44,15 @@ public class EndpointSyncServiceImpl implements EndpointSyncService {
 		transactionTemplate.execute(new TransactionCallbackWithoutResult() {
 			@Override
 			protected void doInTransactionWithoutResult(TransactionStatus arg0) {
-				asyncRegisterEndpointMetaFun(endpointAlias, ipAddress, usernameHash, payload);
+				asyncRegisterEndpointMetaFun(endpointId, ipAddress, usernameHash, payload);
 			}
 		});
 	}
 	
-	public void asyncRegisterEndpointMetaFun(String endpointAlias, String ipAddress,
+	public void asyncRegisterEndpointMetaFun(String endpointId, String ipAddress,
 			String usernameHash, ByteBuffer payload) {
 		try {
-			Map<String,String> endpointMeta = thriftService.registerUserAddress(ipAddress, usernameHash, payload);
+			Map<String,String> endpointMeta = thriftService.registerUserAddress(endpointId, ipAddress, usernameHash, payload);
 			
 			String endpointUsername = endpointMeta.get("user");
 			String endpointVersion = endpointMeta.get("version");
@@ -63,7 +63,7 @@ public class EndpointSyncServiceImpl implements EndpointSyncService {
 			{
 				discoverInProg = Boolean.TRUE;
 			}
-			endpointStatusDAO.upToDateEndpoint(endpointAlias, ipAddress, endpointUsername, osName, endpointVersion, discoverInProg);
+			endpointStatusDAO.upToDateEndpoint(endpointId, ipAddress, endpointUsername, osName, endpointVersion, discoverInProg);
 		} catch (Throwable e) {
 			logger.error("Runtime error occured when registering endpoint meta", e);
 		}
