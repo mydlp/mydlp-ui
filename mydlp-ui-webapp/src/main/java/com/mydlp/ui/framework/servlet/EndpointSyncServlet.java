@@ -21,6 +21,7 @@ import com.mydlp.ui.dao.EndpointStatusDAO;
 import com.mydlp.ui.framework.util.NIOUtil;
 import com.mydlp.ui.service.EndpointSyncService;
 import com.mydlp.ui.service.PayloadProcessService;
+import com.mydlp.ui.service.PayloadProcessService.ImproperPayloadEncapsulationException;
 import com.mydlp.ui.service.PayloadProcessService.SyncObject;
 import com.mydlp.ui.thrift.MyDLPUIThriftService;
 
@@ -28,10 +29,15 @@ import com.mydlp.ui.thrift.MyDLPUIThriftService;
 public class EndpointSyncServlet implements HttpRequestHandler {
 
 	private static Logger logger = LoggerFactory.getLogger(EndpointSyncServlet.class);
+	private static Logger errorLogger = LoggerFactory.getLogger("IERROR");
 	
 	private static final String UP_TO_DATE = "up-to-date";
 	
+	private static final String INVALID = "invalid";
+	
 	private static final ByteBuffer errorResponse = Charset.forName("ISO-8859-1").encode(CharBuffer.wrap(UP_TO_DATE));
+	
+	private static final ByteBuffer invalidResponse = Charset.forName("ISO-8859-1").encode(CharBuffer.wrap(INVALID));
 	
 	protected static final int MAX_CONTENT_LENGTH = 10*1024*1024;
 
@@ -65,7 +71,7 @@ public class EndpointSyncServlet implements HttpRequestHandler {
 					endpointSyncService.asyncRegisterEndpointMeta(
 							syncObject.getEndpointId(), ipAddress, userH, syncObject.getPayload());
 				} catch (Throwable e) {
-					logger.error("Runtime error occured when reading payload", e);
+					logger.error("Runtime error occured when reading request payload", e);
 				}
 				ByteBuffer thriftResponse = thriftService.getRuletable(
 						syncObject.getEndpointId(),	ipAddress, userH, ruleTableUniqId);
@@ -74,9 +80,16 @@ public class EndpointSyncServlet implements HttpRequestHandler {
 			}
 			else 
 			{
-				logger.error("Content-Length is bigger than 10MB ; " + req.getContentLength());
+				errorLogger.error("Content-Length is bigger than 10MB ; " + req.getContentLength());
 			}
-		} catch (Throwable e) {
+		}
+		catch (ImproperPayloadEncapsulationException e)
+		{
+			logger.error("Improper payload.",e);
+			errorLogger.error("Improper sync request received from address: " + req.getRemoteAddr() + " . Sending invalid_endpoint response.");
+			responseBuffer = invalidResponse;
+		}
+		catch (Throwable e) {
 			logger.error("Runtime error occured", e);
 		}
 		

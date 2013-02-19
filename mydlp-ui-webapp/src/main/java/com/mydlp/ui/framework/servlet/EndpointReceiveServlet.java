@@ -19,6 +19,7 @@ import org.springframework.web.HttpRequestHandler;
 
 import com.mydlp.ui.framework.util.NIOUtil;
 import com.mydlp.ui.service.PayloadProcessService;
+import com.mydlp.ui.service.PayloadProcessService.ImproperPayloadEncapsulationException;
 import com.mydlp.ui.service.PayloadProcessService.SyncObject;
 import com.mydlp.ui.thrift.MyDLPUIThriftService;
 
@@ -27,9 +28,13 @@ public class EndpointReceiveServlet implements HttpRequestHandler {
 
 	private static Logger logger = LoggerFactory
 			.getLogger(EndpointReceiveServlet.class);
+	private static Logger errorLogger = LoggerFactory.getLogger("IERROR");
 
 	private static final Charset charset = Charset.forName("ISO-8859-1");
+	
 	private static final ByteBuffer errorResponse = Charset.forName("ISO-8859-1").encode(CharBuffer.wrap("error"));
+	private static final ByteBuffer invalidResponse = Charset.forName("ISO-8859-1").encode(CharBuffer.wrap("invalid"));
+	
 	
 	protected static final int MAX_CONTENT_LENGTH = 10*1024*1024;
 
@@ -68,9 +73,16 @@ public class EndpointReceiveServlet implements HttpRequestHandler {
 			}
 			else 
 			{
-				logger.error("Content-Length is bigger than 10MB ; " + req.getContentLength());
+				errorLogger.error("Content-Length is bigger than 10MB ; " + req.getContentLength());
 			}
-		} catch (IOException e) {
+		}
+		catch (ImproperPayloadEncapsulationException e)
+		{
+			logger.error("Improper payload.",e);
+			errorLogger.error("Improper sync request received from address: " + req.getRemoteAddr() + " . Sending invalid_endpoint response.");
+			responseBuffer = invalidResponse;
+		}
+		catch (IOException e) {
 			logger.error("IOError occurred", e);
 		} catch (Throwable e) {
 			logger.error("An error occured", e);
