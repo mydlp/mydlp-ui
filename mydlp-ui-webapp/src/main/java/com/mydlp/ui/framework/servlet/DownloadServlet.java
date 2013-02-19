@@ -34,6 +34,7 @@ import com.mydlp.ui.service.VersionService;
 public class DownloadServlet implements HttpRequestHandler {
 
 	private static Logger logger = LoggerFactory.getLogger(DownloadServlet.class);
+	private static Logger errorLogger = LoggerFactory.getLogger("IERROR");
 
 	private static final String WINDOWS_AGENT_FOLDER = "/usr/share/mydlp/endpoint/win/";
 	
@@ -96,7 +97,7 @@ public class DownloadServlet implements HttpRequestHandler {
 					return authUser.hasRole(AuthSecurityRole.ROLE_AUDITOR);
 			}
 		});
-		
+		errorLogger.error("zart1");
 		if( 	(urlKey != null && urlKey.equals("latest-windows-agent")) ||
 				(isAdmin && urlKey != null && urlKey.equals("user.der")) || 
 				isSuperAdmin || 
@@ -106,6 +107,7 @@ public class DownloadServlet implements HttpRequestHandler {
 				IncidentLogFile logFile = null;
 				if (urlKey != null) {
 					if (urlKey.equals("user.der")) {
+						errorLogger.error("zart2");
 						logFile = new IncidentLogFile();
 						logFile.setFilename("mydlp-user-certificate.der");
 						IncidentLogFileContent content = new IncidentLogFileContent();
@@ -113,6 +115,7 @@ public class DownloadServlet implements HttpRequestHandler {
 						content.setLocalPath("/etc/mydlp/ssl/user.der");
 						logFile.setContent(content);
 					} else if (urlKey.equals("latest-windows-agent")) {
+						errorLogger.error("zart3");
 						String filename = getWindowsAgentFilename(); 
 						logFile = new IncidentLogFile();
 						logFile.setFilename(filename);
@@ -122,23 +125,26 @@ public class DownloadServlet implements HttpRequestHandler {
 						logFile.setContent(content);
 					}
 					else {
-						logger.error("Unkown key: " + req.getParameter("key"));
+						errorLogger.error("zart4");
+						errorLogger.error("Unknown download key: " + req.getParameter("key"));
 						return;
 					}
 				} else {
+					errorLogger.error("zart5");
 					Integer logFileId = Integer.parseInt(urlId);
 					logFile = incidentLogDAO.geIncidentLogFile(logFileId);
 
 					if (logFile == null)
 					{
-						logger.error("Null object returned from DAO. urlId: ", urlId);
+						errorLogger.error("Null object returned from DAO. urlId: " + urlId);
 						return;
 					}
 				}
 
 				File localFile = new File(logFile.getContent().getLocalPath());
-				
+				errorLogger.error("zart6");
 				if (localFile.exists()) {
+					errorLogger.error("zart7");
 					resp.setContentType(logFile.getContent().getMimeType());
 					resp.setContentLength((int) localFile.length());
 					resp.setHeader( "Content-Disposition", "attachment; filename=\"" + logFile.getFilename() + "\"" );
@@ -162,9 +168,10 @@ public class DownloadServlet implements HttpRequestHandler {
 				}
 				else
 				{
+					errorLogger.error("zart8");
 					resp.setContentType("text/plain");
 					resp.getWriter().println("File is not available");
-					logger.error("File is not available: " + logFile.getContent().getLocalPath());
+					errorLogger.error("File is not available: " + logFile.getContent().getLocalPath());
 					resp.getOutputStream().flush();
 					resp.getOutputStream().close();
 				}
