@@ -203,12 +203,12 @@
 						if (targetObject.id == null || isNaN(targetObject.id) ) // means that this is a new object
 							if (targetObject[classMember.name] != null)
 								continue;
-							else if (FlexGlobals.topLevelApplication.inventoryTree.selectedItem == null)
+							else if (FlexGlobals.topLevelApplication.inventoryTree.myInventoryTree.selectedItem == null)
 								continue;
-							else if (FlexGlobals.topLevelApplication.inventoryTree.selectedItem is InventoryCategory)
-								targetObject[classMember.name] = FlexGlobals.topLevelApplication.inventoryTree.selectedItem;
-							else if (FlexGlobals.topLevelApplication.inventoryTree.selectedItem is InventoryBase)
-								targetObject[classMember.name] = FlexGlobals.topLevelApplication.inventoryTree.selectedItem.category;
+							else if (FlexGlobals.topLevelApplication.inventoryTree.myInventoryTree.selectedItem is InventoryCategory)
+								targetObject[classMember.name] = FlexGlobals.topLevelApplication.inventoryTree.myInventoryTree.selectedItem;
+							else if (FlexGlobals.topLevelApplication.inventoryTree.myInventoryTree.selectedItem is InventoryBase)
+								targetObject[classMember.name] = FlexGlobals.topLevelApplication.inventoryTree.myInventoryTree.selectedItem.category;
 						continue;
 					}
 					else if (targetObject is DocumentDatabase && classMember.name == "rdbmsEntries" && classMember.type == ListCollectionView)

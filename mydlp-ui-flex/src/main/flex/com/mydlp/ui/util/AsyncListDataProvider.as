@@ -1,5 +1,6 @@
 package com.mydlp.ui.util
 {
+	import flash.external.ExternalInterface;
 	import flash.utils.Dictionary;
 	
 	import mx.collections.AsyncListView;

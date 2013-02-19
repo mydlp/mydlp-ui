@@ -44,6 +44,7 @@
 			import com.mydlp.ui.domain.WebRule;
 			import com.mydlp.ui.domain.WebServer;
 			import com.mydlp.ui.util.InteractionUtil;
+			import com.mydlp.ui.util.InventoryTree;
 			import com.mydlp.ui.util.LangUtil;
 			import com.mydlp.ui.util.ReflectionUtil;
 			import com.mydlp.ui.widget.policy.inventory.InventoryTree;
@@ -92,6 +93,9 @@
 			protected var droppedSources:ListCollectionView;//Array for dropped Sources items from inventory tree to rule container.
 			protected var droppedMatchers:ListCollectionView;//Array for dropped Matchers items from inventory tree to rule container.
 			protected var droppedDestinations:ListCollectionView;//Array for dropped Destination items from inventory tree to rule container.
+			
+			[Embed('/assets/icons/16x16/calendar_full.png')]
+			protected var calendarIcon:Class;
 			
 			public override function set data(value:Object):void
 			{
@@ -189,7 +193,7 @@
 				else if(item is SourceDomainName)
 					return true;
 				else if(item is RemoteStorageCIFS || item is RemoteStorageDFS || item is RemoteStorageFTPFS ||
-						item is RemoteStorageNFS || item is RemoteStorageSSHFS || item is WebServer)
+					item is RemoteStorageNFS || item is RemoteStorageSSHFS || item is WebServer)
 					return true;
 				else
 					return false;
@@ -199,7 +203,7 @@
 			{
 				return ruleHasAllSources(ruleObject);
 			}
-				
+			
 			public static function ruleHasAllSources(r:Rule):Boolean
 			{
 				for each(var o:RuleItem in r.ruleItems)
@@ -214,7 +218,7 @@
 			{
 				return ruleHasAllDestination(ruleObject);
 			}
-				
+			
 			public static function ruleHasAllDestination(r:Rule):Boolean
 			{
 				for each(var o:RuleItem in r.ruleItems)
@@ -331,7 +335,7 @@
 			{
 				return ruleHasAllIType(ruleObject);
 			}
-				
+			
 			public static function ruleHasAllIType(r:Rule):Boolean 
 			{
 				for each(var o:RuleItem in r.ruleItems)
@@ -415,7 +419,7 @@
 			
 			protected function onDragEnter(dragEvent:DragEvent):void
 			{
-				if (dragEvent.dragInitiator is InventoryTree)
+				if (dragEvent.dragInitiator is com.mydlp.ui.util.InventoryTree)
 				{
 					DragManager.acceptDragDrop(dragEvent.currentTarget as IUIComponent);
 				}
@@ -423,12 +427,12 @@
 			
 			protected function onDragOver(event:DragEvent):void
 			{
-				if (event.dragInitiator is InventoryTree)
+				if (event.dragInitiator is com.mydlp.ui.util.InventoryTree)
 				{
 					droppedMatchers = new ArrayCollection();
 					droppedSources = new ArrayCollection();
 					droppedDestinations = new ArrayCollection();
-					var treeItems:* = FlexGlobals.topLevelApplication.policyContainer.inventoryTree.selectedItems;
+					var treeItems:* = FlexGlobals.topLevelApplication.policyContainer.inventoryTree.myInventoryTree.selectedItems;
 					if (isAllDroppable(treeItems) && checkConsistency(treeItems))
 					{
 						acceptDrop();
@@ -518,8 +522,8 @@
 			{
 				if(ruleObject is RemoteStorageRule &&
 					(treeItem is RemoteStorageCIFS || treeItem is RemoteStorageDFS ||
-					treeItem is RemoteStorageFTPFS || treeItem is RemoteStorageNFS ||
-					treeItem is RemoteStorageSSHFS || treeItem is WebServer))
+						treeItem is RemoteStorageFTPFS || treeItem is RemoteStorageNFS ||
+						treeItem is RemoteStorageSSHFS || treeItem is WebServer))
 					return true;
 				else
 					return false;
@@ -629,18 +633,18 @@
 			
 			protected function onDragDrop(dragEvent:DragEvent):void
 			{
-				if (dragEvent.dragInitiator is InventoryTree)
+				if (dragEvent.dragInitiator is com.mydlp.ui.util.InventoryTree)
 				{
 					ruleList.setAfterRefreshSelected(ruleObject);
 					
 					deleteList = new ArrayCollection();
-					var inventoryObjects:* = FlexGlobals.topLevelApplication.policyContainer.inventoryTree.selectedItems;
+					var inventoryObjects:* = FlexGlobals.topLevelApplication.policyContainer.inventoryTree.myInventoryTree.selectedItems;
 					for each (var o:* in inventoryObjects)
 					addDroppedObject(o as InventoryBase);
 					
 					invalidateProperties();
 					refresh();
-					 
+					
 					re.save(ruleObject);
 				}
 				else if (dragEvent.dragInitiator is RuleList)
@@ -842,10 +846,16 @@
 			}
 			
 			
+			protected function scheduleButtonHandler(event:MouseEvent):void
+			{
+				
+			}
+			
 		]]>
 	</fx:Script>
 	
 	<fx:Declarations>
+		<fx:Boolean id="isDiscoverTab">true</fx:Boolean>
 		<fx:Boolean id="collapse">true</fx:Boolean>
 		<fx:Boolean id="expandCollapseButtonEnabled">false</fx:Boolean>
 		<fx:Class id="icon24" />
@@ -947,6 +957,31 @@
 					  toolTip="@Resource(bundle = 'messages', key = 'rulebox.enableButton.tooltip.label')"/>
 		</s:HGroup>
 		
+		<s:HGroup id="discoveryGroup" visible="{isDiscoverTab}" includeInLayout="{isDiscoverTab}" height="100%">
+		
+			<rule:RSpacer height="100%"/>
+			
+			<s:Group width="80" height="100%">
+				<s:layout>
+					<s:VerticalLayout verticalAlign="middle" horizontalAlign="center"/>
+				</s:layout>
+				
+				<s:Button skinClass="com.mydlp.ui.skin.CalendarBitmapButton16Skin" click="scheduleButtonHandler(event)"/>
+			</s:Group>
+			
+			<rule:RSpacer height="100%"/>
+			
+			<s:Group width="100" height="100%">
+				<s:layout>
+					<s:HorizontalLayout gap="5" horizontalAlign="center" verticalAlign="middle"/>
+				</s:layout>
+				
+				<s:Button skinClass="com.mydlp.ui.skin.PlayBitmapButton16Skin"/>
+				<s:Button skinClass="com.mydlp.ui.skin.PauseBitmapButton16Skin"/>
+				<s:Button skinClass="com.mydlp.ui.skin.StopBitmapButton16Skin"/>
+			</s:Group>
+			
+		</s:HGroup>
 		
 		<rule:RSpacer />
 		

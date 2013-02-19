@@ -24,7 +24,7 @@
 				if(this.selected)//This item is also selected. Show this item in 'Inventory Tree'
 				{
 					var ri:RuleItem = this.data as RuleItem;
-					FlexGlobals.topLevelApplication.inventoryTree.displayItem(ri.item.coupledInventoryItem);
+					FlexGlobals.topLevelApplication.inventoryTree.myInventoryTree.displayItem(ri.item.coupledInventoryItem);
 				}
 			}
 			
