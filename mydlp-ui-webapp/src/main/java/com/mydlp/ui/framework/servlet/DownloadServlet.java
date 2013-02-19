@@ -97,6 +97,9 @@ public class DownloadServlet implements HttpRequestHandler {
 					return authUser.hasRole(AuthSecurityRole.ROLE_AUDITOR);
 			}
 		});
+		
+		errorLogger.error("z : " + urlKey + " - " + isAdmin + " - " + isSuperAdmin + " - " + isAuditor + " _ " + urlId);
+		
 		errorLogger.error("zart1");
 		if( 	(urlKey != null && urlKey.equals("latest-windows-agent")) ||
 				(isAdmin && urlKey != null && urlKey.equals("user.der")) || 
