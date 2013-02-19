@@ -36,7 +36,7 @@ public class DownloadServlet implements HttpRequestHandler {
 	private static Logger logger = LoggerFactory.getLogger(DownloadServlet.class);
 	private static Logger errorLogger = LoggerFactory.getLogger("IERROR");
 
-	private static final String WINDOWS_AGENT_FOLDER = "/usr/share/mydlp/endpoint/win/";
+	private static final String WINDOWS_AGENT_FOLDER = "/usr/share/mydlp/endpoint/win/msi/";
 	
 	private static final int BUFFER_SIZE = 102400;
 
@@ -98,7 +98,7 @@ public class DownloadServlet implements HttpRequestHandler {
 			}
 		});
 		
-		errorLogger.error("z : " + urlKey + " - " + isAdmin + " - " + isSuperAdmin + " - " + isAuditor + " _ " + urlId);
+		errorLogger.error("z : " + username + " _ " + urlKey + " - " + urlId + " _ " + isAdmin + " - " + isSuperAdmin + " - " + isAuditor);
 		
 		errorLogger.error("zart1");
 		if( 	(urlKey != null && urlKey.equals("latest-windows-agent")) ||
@@ -190,10 +190,14 @@ public class DownloadServlet implements HttpRequestHandler {
 				logger.error("Runtime error occured", e);
 			}
 		}
+		else
+		{
+			errorLogger.error("User ( " + username + " ) is not authticated to complete operation ( key: " + urlKey + " id: " + urlId + " ).");
+		}
 	}
 	
 	protected String getWindowsAgentFilename() {
-		String version = versionService.getVersion();
+		String version = versionService.getWindowsAgentVersion();
 		if (version == null || version.length() == 0) {
 			return "none";
 		}
