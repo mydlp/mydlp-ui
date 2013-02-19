@@ -15,6 +15,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallback;
@@ -52,18 +54,26 @@ public class DownloadServlet implements HttpRequestHandler {
 	@Autowired
 	protected VersionService versionService;
 	
-	
 	@Autowired
 	@Qualifier("policyTransactionTemplate")
 	protected TransactionTemplate transactionTemplate;
 	
-
+	protected String getCurrentUser(HttpServletRequest req) {
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		UserDetails userDetails = null;
+		if (principal instanceof UserDetails) {
+			userDetails = (UserDetails) principal;
+			return userDetails.getUsername();
+		}
+		return req.getRemoteUser();
+	}
+	
 	@Override
 	public void handleRequest(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		String urlKey = req.getParameter("key"); 
 		String urlId = req.getParameter("id");
-		final String username = req.getRemoteUser();
+		final String username = getCurrentUser(req);
 		
 		boolean isAdmin = transactionTemplate.execute(new TransactionCallback<Boolean>() {
 			@Override
