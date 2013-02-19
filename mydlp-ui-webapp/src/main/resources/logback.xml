@@ -7,9 +7,9 @@
     </layout>
   </appender>
   <appender name="LOGFILE_JETTY" class="ch.qos.logback.core.rolling.RollingFileAppender">
-    <file>/var/log/mydlp/jetty.log</file>
+    <file>/var/log/jetty/mydlp.log</file>
     <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-      <fileNamePattern>/var/log/mydlp/jetty.log-%d{yyyyMMdd}.gz</fileNamePattern>
+      <fileNamePattern>/var/log/jetty/mydlp.log-%d{yyyyMMdd}.gz</fileNamePattern>
       <maxHistory>60</maxHistory>
     </rollingPolicy>
     <encoder>
