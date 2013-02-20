@@ -250,7 +250,7 @@
 								  dataField="lastUpdate" itemRendererFunction="endpointStatusItemRendererFunction"/>
 					<s:GridColumn headerText="@Resource(bundle = 'messages', key = 'endpoints.header.firstSeen')"
 								  dataField="firstAppeared" itemRendererFunction="endpointStatusItemRendererFunction"/>
-					<s:GridColumn headerText="@Resource(bundle = 'messages', key = 'endpoints.header.operations" 
+					<s:GridColumn headerText="@Resource(bundle = 'messages', key = 'endpoints.header.operations')" 
 								  itemRendererFunction="endpointStatusOperationsItemRendererFunction"/>
 				</s:ArrayList>
 			</s:columns>
