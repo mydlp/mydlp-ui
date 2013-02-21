@@ -24,6 +24,7 @@ public abstract class Rule extends AbstractNamedEntity {
 	public static final String ACTION_LOG = "LOG";
 	public static final String ACTION_QUARANTINE = "QUARANTINE";
 	public static final String ACTION_ARCHIVE = "ARCHIVE";
+	public static final String ACTION_ENCRYPT = "ENCRYPT";
 	public static final String ACTION_CUSTOM = "CUSTOM";
 	
 	protected Long priority;

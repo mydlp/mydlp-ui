@@ -15,6 +15,7 @@ package com.mydlp.ui.domain {
 		public static const ACTION_LOG:String = "LOG";
 		public static const ACTION_QUARANTINE:String = "QUARANTINE";
 		public static const ACTION_ARCHIVE:String = "ARCHIVE";
+		public static const ACTION_ENCRYPT:String = "ENCRYPT";
 		public static const ACTION_CUSTOM:String = "CUSTOM";
     }
 }

@@ -4,6 +4,7 @@ package com.mydlp.ui.widget.policy.rule
 	import com.mydlp.ui.domain.DiscoveryRule;
 	import com.mydlp.ui.domain.MailRule;
 	import com.mydlp.ui.domain.PrinterRule;
+	import com.mydlp.ui.domain.RemovableStorageEncryptionRule;
 	import com.mydlp.ui.domain.RemovableStorageInboundRule;
 	import com.mydlp.ui.domain.RemovableStorageRule;
 	import com.mydlp.ui.domain.Rule;
@@ -37,6 +38,9 @@ package com.mydlp.ui.widget.policy.rule
 		[Embed('/assets/icons/32x32/usbiconinbound.png')]
 		public static const removableStorageInboundRule32Icon:Class;
 		
+		[Embed('/assets/icons/24x24/usbencryption.png')]
+		public static const removableStorageEncryptionRule32Icon:Class;
+		
 		[Embed('/assets/icons/32x32/photo_camera.png')]
 		public static const screenshotRule32Icon:Class;
 		
@@ -61,6 +65,9 @@ package com.mydlp.ui.widget.policy.rule
 		[Embed('/assets/icons/24x24/usbiconinbound.png')]
 		public static const removableStorageInboundRule24Icon:Class;
 		
+		[Embed('/assets/icons/24x24/usbencryption.png')]
+		public static const removableStorageEncryptionRule24Icon:Class;
+		
 		[Embed('/assets/icons/24x24/photo_camera.png')]
 		public static const screenshotRule24Icon:Class;
 		
@@ -84,6 +91,9 @@ package com.mydlp.ui.widget.policy.rule
 		
 		[Embed('/assets/icons/16x16/usbiconinbound.png')]
 		public static const removableStorageInboundRule16Icon:Class;
+		
+		[Embed('/assets/icons/16x16/usbencryption.png')]
+		public static const removableStorageEncryptionRule16Icon:Class;
 		
 		[Embed('/assets/icons/16x16/photo_camera.png')]
 		public static const screenshotRule16Icon:Class;
@@ -117,6 +127,10 @@ package com.mydlp.ui.widget.policy.rule
 			else if (rule is RemovableStorageInboundRule)
 			{
 				return removableStorageInboundRule32Icon;
+			}
+			else if (rule is RemovableStorageEncryptionRule)
+			{
+				return removableStorageEncryptionRule32Icon;
 			}
 			else if (rule is ScreenshotRule)
 			{
@@ -159,6 +173,10 @@ package com.mydlp.ui.widget.policy.rule
 			{
 				return removableStorageInboundRule16Icon;
 			}
+			else if (rule is RemovableStorageEncryptionRule)
+			{
+				return removableStorageEncryptionRule16Icon;
+			}
 			else if (rule is ScreenshotRule)
 			{
 				return screenshotRule16Icon;
@@ -199,6 +217,10 @@ package com.mydlp.ui.widget.policy.rule
 			else if (rule is RemovableStorageInboundRule)
 			{
 				return removableStorageInboundRule24Icon;
+			}
+			else if (rule is RemovableStorageEncryptionRule)
+			{
+				return removableStorageEncryptionRule24Icon;
 			}
 			else if (rule is ScreenshotRule)
 			{

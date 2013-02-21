@@ -27,6 +27,7 @@
 			import com.mydlp.ui.domain.MailRule;
 			import com.mydlp.ui.domain.Network;
 			import com.mydlp.ui.domain.PrinterRule;
+			import com.mydlp.ui.domain.RemovableStorageEncryptionRule;
 			import com.mydlp.ui.domain.RemovableStorageInboundRule;
 			import com.mydlp.ui.domain.RemovableStorageRule;
 			import com.mydlp.ui.domain.Rule;
@@ -528,6 +529,7 @@
 							ruleObject is DiscoveryRule ||
 							ruleObject is ApiRule ||
 							ruleObject is RemovableStorageInboundRule ||
+							ruleObject is RemovableStorageEncryptionRule ||
 							ruleObject is ScreenshotRule)
 							return true;
 					}

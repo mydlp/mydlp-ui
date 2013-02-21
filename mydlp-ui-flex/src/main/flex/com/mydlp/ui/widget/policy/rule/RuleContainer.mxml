@@ -15,6 +15,7 @@
 			import com.mydlp.ui.domain.DiscoveryRule;
 			import com.mydlp.ui.domain.MailRule;
 			import com.mydlp.ui.domain.PrinterRule;
+			import com.mydlp.ui.domain.RemovableStorageEncryptionRule;
 			import com.mydlp.ui.domain.RemovableStorageInboundRule;
 			import com.mydlp.ui.domain.RemovableStorageRule;
 			import com.mydlp.ui.domain.Rule;
@@ -150,6 +151,10 @@
 					else if (rule is RemovableStorageInboundRule)
 					{
 						rule = rule as RemovableStorageInboundRule;
+					}
+					else if (rule is RemovableStorageEncryptionRule)
+					{
+						rule = rule as RemovableStorageEncryptionRule;
 					}
 					else if (rule is ScreenshotRule)
 					{
