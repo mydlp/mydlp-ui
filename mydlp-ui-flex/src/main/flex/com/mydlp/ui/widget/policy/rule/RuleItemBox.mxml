@@ -11,12 +11,19 @@
 			[Bindable]
 			public var listDataProvider:ListCollectionView;
 			
+			protected function itemRendererFunction(item:Object):ClassFactory
+			{
+				var ir:ClassFactory = new ClassFactory(RuleItemRenderer);
+				ir.properties = {isDiscoveryTab: isDiscoveryTab};
+				return ir;
+			}
+			
 		]]>
 	</fx:Script>
 	
 	<fx:Declarations>
 		<fx:String id="itemLabel" />
-		
+		<fx:Boolean id="isDiscoveryTab"/>
 	</fx:Declarations>
 	
 	<s:states>
@@ -61,7 +68,7 @@
 		<rule:RuleItemList	width="100%"
 							height="100%"
 							dataProvider="{listDataProvider}"
-							itemRenderer="com.mydlp.ui.widget.policy.rule.RuleItemRenderer"
+							itemRendererFunction="itemRendererFunction"
 							verticalScrollPolicy="off"
 							horizontalScrollPolicy="off"
 							/>

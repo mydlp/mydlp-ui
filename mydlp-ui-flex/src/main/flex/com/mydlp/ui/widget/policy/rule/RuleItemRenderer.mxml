@@ -24,12 +24,19 @@
 				if(this.selected)//This item is also selected. Show this item in 'Inventory Tree'
 				{
 					var ri:RuleItem = this.data as RuleItem;
-					FlexGlobals.topLevelApplication.inventoryTree.myInventoryTree.displayItem(ri.item.coupledInventoryItem);
+					if(isDiscoveryTab)
+						FlexGlobals.topLevelApplication.inventoryTreeDiscovery.myInventoryTree.displayItem(ri.item.coupledInventoryItem);
+					else
+						FlexGlobals.topLevelApplication.inventoryTree.myInventoryTree.displayItem(ri.item.coupledInventoryItem);
 				}
 			}
 			
 		]]>
 	</fx:Script>
+	
+	<fx:Declarations>
+		<fx:Boolean id="isDiscoveryTab"/>
+	</fx:Declarations>
 	
 	<s:states>
 		<s:State name="normal" />

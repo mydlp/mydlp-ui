@@ -19,15 +19,24 @@
 			import com.mydlp.ui.domain.WebServer;
 			import com.mydlp.ui.util.InteractionUtil;
 			
+			import mx.core.FlexGlobals;
+			
 			protected function close():void
 			{
 				InteractionUtil.closeCurrentPopup();
 			}
 			
+			protected function generateInventoryItem():InventoryItem
+			{
+				var i:InventoryItem = new InventoryItem();
+				i.category = FlexGlobals.topLevelApplication.discoveryContainer.inventoryTree.myInventoryTree.selectedItem;
+				return i;
+			}
+			
 			protected function sshfsHandler(event:MouseEvent):void
 			{
 				close();
-				var i:InventoryItem = new InventoryItem();
+				var i:InventoryItem = generateInventoryItem();
 				i.item = new RemoteStorageSSHFS();
 				InteractionUtil.newEditDialog(i);
 			}
@@ -35,7 +44,7 @@
 			protected function ftpfsHandler(event:MouseEvent):void
 			{
 				close();
-				var i:InventoryItem = new InventoryItem();
+				var i:InventoryItem = generateInventoryItem();
 				i.item = new RemoteStorageFTPFS();
 				InteractionUtil.newEditDialog(i);
 			}
@@ -43,7 +52,7 @@
 			protected function cifsHandler(event:MouseEvent):void
 			{
 				close();
-				var i:InventoryItem = new InventoryItem();
+				var i:InventoryItem = generateInventoryItem();
 				i.item = new RemoteStorageCIFS();
 				InteractionUtil.newEditDialog(i);
 			}
@@ -51,7 +60,7 @@
 			protected function dfsHandler(event:MouseEvent):void
 			{
 				close();
-				var i:InventoryItem = new InventoryItem();
+				var i:InventoryItem = generateInventoryItem();
 				i.item = new RemoteStorageDFS();
 				InteractionUtil.newEditDialog(i);
 			}
@@ -59,7 +68,7 @@
 			protected function nfsHandler(event:MouseEvent):void
 			{
 				close();
-				var i:InventoryItem = new InventoryItem();
+				var i:InventoryItem = generateInventoryItem();
 				i.item = new RemoteStorageNFS;
 				InteractionUtil.newEditDialog(i);
 			}
@@ -67,7 +76,7 @@
 			protected function webServerHandler(event:MouseEvent):void
 			{
 				close();
-				var i:InventoryItem = new InventoryItem();
+				var i:InventoryItem = generateInventoryItem();
 				i.item = new WebServer();
 				InteractionUtil.newEditDialog(i);
 			}

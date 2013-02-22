@@ -432,7 +432,11 @@
 					droppedMatchers = new ArrayCollection();
 					droppedSources = new ArrayCollection();
 					droppedDestinations = new ArrayCollection();
-					var treeItems:* = FlexGlobals.topLevelApplication.policyContainer.inventoryTree.myInventoryTree.selectedItems;
+					var treeItems:*;
+					if(isDiscoveryTab)
+						treeItems = FlexGlobals.topLevelApplication.discoveryContainer.inventoryTree.myInventoryTree.selectedItems;
+					else
+						treeItems = FlexGlobals.topLevelApplication.policyContainer.inventoryTree.myInventoryTree.selectedItems;
 					if (isAllDroppable(treeItems) && checkConsistency(treeItems))
 					{
 						acceptDrop();
@@ -638,7 +642,11 @@
 					ruleList.setAfterRefreshSelected(ruleObject);
 					
 					deleteList = new ArrayCollection();
-					var inventoryObjects:* = FlexGlobals.topLevelApplication.policyContainer.inventoryTree.myInventoryTree.selectedItems;
+					var inventoryObjects:*;
+					if(isDiscoveryTab)
+						inventoryObjects = FlexGlobals.topLevelApplication.discoveryContainer.inventoryTree.myInventoryTree.selectedItems;
+					else
+						inventoryObjects = FlexGlobals.topLevelApplication.policyContainer.inventoryTree.myInventoryTree.selectedItems;
 					for each (var o:* in inventoryObjects)
 					addDroppedObject(o as InventoryBase);
 					
@@ -855,7 +863,7 @@
 	</fx:Script>
 	
 	<fx:Declarations>
-		<fx:Boolean id="isDiscoverTab">true</fx:Boolean>
+		<fx:Boolean id="isDiscoveryTab"/>
 		<fx:Boolean id="collapse">true</fx:Boolean>
 		<fx:Boolean id="expandCollapseButtonEnabled">false</fx:Boolean>
 		<fx:Class id="icon24" />
@@ -957,7 +965,7 @@
 					  toolTip="@Resource(bundle = 'messages', key = 'rulebox.enableButton.tooltip.label')"/>
 		</s:HGroup>
 		
-		<s:HGroup id="discoveryGroup" visible="{isDiscoverTab}" includeInLayout="{isDiscoverTab}" height="100%">
+		<s:HGroup id="discoveryGroup" visible="{isDiscoveryTab}" includeInLayout="{isDiscoveryTab}" height="100%">
 		
 			<rule:RSpacer height="100%"/>
 			
@@ -986,6 +994,7 @@
 		<rule:RSpacer />
 		
 		<rule:RuleItemBox width="160"
+						  isDiscoveryTab="{isDiscoveryTab}"
 						  listDataProvider="{sourceDataProvider}"
 						  itemLabel="@Resource(bundle = 'messages', key = 'rulebox.ruleitembox.sources.itemLabel')"
 						  currentState="{getRuleItemListState(sourceDataProvider, collapse)}" />
@@ -1011,6 +1020,7 @@
 			<rule:RSpacer />
 			
 			<rule:RuleItemBox width="170"
+							  isDiscoveryTab="{isDiscoveryTab}"
 							  listDataProvider="{destinationDataProvider}"
 							  itemLabel="@Resource(bundle = 'messages', key = 'rulebox.ruleitembox.destinations.itemLabel')"
 							  currentState="{getRuleItemListState(destinationDataProvider, collapse)}"/>
@@ -1037,6 +1047,7 @@
 			<rule:RSpacer />	
 			<rule:RuleItemBox width="200"
 							  listDataProvider="{matcherDataProvider}"
+							  isDiscoveryTab="{isDiscoveryTab}"
 							  itemLabel="@Resource(bundle = 'messages', key = 'rulebox.ruleitembox.itypes.itemLabel')"
 							  currentState="{getRuleItemListState(matcherDataProvider, collapse)}" />
 			<rule:RSpacer />

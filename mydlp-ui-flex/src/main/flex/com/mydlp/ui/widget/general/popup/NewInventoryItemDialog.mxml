@@ -19,36 +19,52 @@
 			import com.mydlp.ui.util.InteractionUtil;
 			import com.mydlp.ui.util.SessionUtil;
 			
+			import mx.core.FlexGlobals;
+			
 			protected function close():void
 			{
 				InteractionUtil.closeCurrentPopup();
+			}
+			
+			protected function generateInventoryItem():InventoryItem
+			{
+				var i:InventoryItem = new InventoryItem;
+				if(isDiscoveryTab)
+					i.category = FlexGlobals.topLevelApplication.discoveryContainer.inventoryTree.myInventoryTree.selectedItem;
+				else
+					i.category = FlexGlobals.topLevelApplication.policyContainer.inventoryTree.myInventoryTree.selectedItem;
+				return i;
 			}
 			
 			protected function categoryHandler():void
 			{
 				close();
 				var c:InventoryCategory = new InventoryCategory();
+				if(isDiscoveryTab)
+					c.category = FlexGlobals.topLevelApplication.discoveryContainer.inventoryTree.myInventoryTree.selectedItem;
+				else
+					c.category = FlexGlobals.topLevelApplication.policyContainer.inventoryTree.myInventoryTree.selectedItem;
 				c.editable = true;
 				InteractionUtil.newEditDialog(c);
 			}
 			protected function networkHandler():void
 			{
 				close();
-				var i:InventoryItem = new InventoryItem();
+				var i:InventoryItem = generateInventoryItem();
 				i.item = new Network();
 				InteractionUtil.newEditDialog(i);
 			}
 			protected function informationTypeHandler():void
 			{
 				close();
-				var i:InventoryItem = new InventoryItem();
+				var i:InventoryItem = generateInventoryItem();
 				i.item = new InformationType();
 				InteractionUtil.newEditDialog(i);	
 			}
 			protected function domainHandler():void
 			{
 				close();
-				var i:InventoryItem = new InventoryItem();
+				var i:InventoryItem = generateInventoryItem();
 				i.item = new Domain();
 				InteractionUtil.newEditDialog(i);	
 			}
@@ -56,7 +72,7 @@
 			protected function fileSystemDirectoryHandler():void
 			{
 				close();
-				var i:InventoryItem = new InventoryItem();
+				var i:InventoryItem = generateInventoryItem();
 				i.item = new FileSystemDirectory();
 				InteractionUtil.newEditDialog(i);
 			}
@@ -64,7 +80,7 @@
 			protected function applicationNameHandler():void
 			{
 				close();
-				var i:InventoryItem = new InventoryItem();
+				var i:InventoryItem = generateInventoryItem();
 				i.item = new ApplicationName();
 				InteractionUtil.newEditDialog(i);
 			}
@@ -72,15 +88,22 @@
 			protected function sourceDomainHandler():void
 			{
 				close();
-				var i:InventoryItem = new InventoryItem();
+				var i:InventoryItem = generateInventoryItem();
 				i.item = new SourceDomainName();
 				InteractionUtil.newEditDialog(i);	
+			}
+			
+			protected function addUserClickHandler(event:MouseEvent):void
+			{
+				close(); 
+				var popup:NewInventoryUserDialog = InteractionUtil.newPopup(NewInventoryUserDialog) as NewInventoryUserDialog;
+				popup.isDiscoveryTab = isDiscoveryTab;
 			}
 			
 		]]>
 	</fx:Script>
 	<fx:Declarations>
-		<!-- Place non-visual elements (e.g., services, value objects) here -->
+		<fx:Boolean id="isDiscoveryTab"/>
 	</fx:Declarations>
 	
 	<s:VGroup paddingBottom="10" paddingLeft="10" paddingRight="10" paddingTop="10"
@@ -98,32 +121,32 @@
 					  click="informationTypeHandler()"/>
 			<s:Button skinClass="com.mydlp.ui.skin.DomainBitmapLabelButton16Skin" 
 					  label="@Resource(bundle = 'messages', key = 'inventory.newdialog.domain')"
-					  includeInLayout="{SessionUtil.isEnterprise()}"
-					  visible="{SessionUtil.isEnterprise()}"
+					  includeInLayout="{SessionUtil.isEnterprise() &amp;&amp; !isDiscoveryTab}"
+					  visible="{SessionUtil.isEnterprise() &amp;&amp; !isDiscoveryTab}"
 					  click="domainHandler()"/>
 			<s:Button skinClass="com.mydlp.ui.skin.FileSystemDirectoryBitmapLabelButton16Skin" 
 					  label="@Resource(bundle = 'messages', key = 'inventory.newdialog.fileSystemDirectory')" 
-					  includeInLayout="{SessionUtil.isEnterprise()}"
-					  visible="{SessionUtil.isEnterprise()}"
+					  includeInLayout="{SessionUtil.isEnterprise() &amp;&amp; isDiscoveryTab}"
+					  visible="{SessionUtil.isEnterprise() &amp;&amp; isDiscoveryTab}"
 					  click="fileSystemDirectoryHandler()"/>
 			<s:Button skinClass="com.mydlp.ui.skin.RemoteStorageBitmapLabelButton16Skin" 
 					  label="@Resource(bundle = 'messages', key = 'inventory.newdialog.remoteFileSystemDirectory')" 
-					  includeInLayout="{SessionUtil.isEnterprise()}"
-					  visible="{SessionUtil.isEnterprise()}"
+					  includeInLayout="{SessionUtil.isEnterprise() &amp;&amp; isDiscoveryTab}"
+					  visible="{SessionUtil.isEnterprise() &amp;&amp; isDiscoveryTab}"
 					  click="{close(); InteractionUtil.newPopup(NewInventoryRemoteDiscoveryDialog);}"/>
 			<s:Button skinClass="com.mydlp.ui.skin.SourceDomainBitmapLabelButton16Skin" 
 					  label="@Resource(bundle = 'messages', key = 'inventory.newdialog.sourceDomain')"
-					  includeInLayout="{SessionUtil.isEnterprise()}"
-					  visible="{SessionUtil.isEnterprise()}"
+					  includeInLayout="{SessionUtil.isEnterprise() &amp;&amp; !isDiscoveryTab}"
+					  visible="{SessionUtil.isEnterprise() &amp;&amp; !isDiscoveryTab}"
 					  click="sourceDomainHandler()"/>
 			<s:Button skinClass="com.mydlp.ui.skin.ApplicationNameBitmapLabelButton16Skin" 
 					  label="@Resource(bundle = 'messages', key = 'inventory.newdialog.applicationName')" 
-					  includeInLayout="{SessionUtil.isEnterprise()}"
-					  visible="{SessionUtil.isEnterprise()}"
+					  includeInLayout="{SessionUtil.isEnterprise() &amp;&amp; !isDiscoveryTab}"
+					  visible="{SessionUtil.isEnterprise() &amp;&amp; !isDiscoveryTab}"
 					  click="applicationNameHandler()"/>
 			<s:Button skinClass="com.mydlp.ui.skin.UserBitmapLabelButton16Skin" 
 					  label="@Resource(bundle = 'messages', key = 'inventory.newdialog.userObject')" 
-					  click="{close(); InteractionUtil.newPopup(NewInventoryUserDialog);}"/>
+					  click="addUserClickHandler(event)"/>
 			
 		</s:VGroup>
 	</s:VGroup>

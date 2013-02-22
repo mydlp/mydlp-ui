@@ -66,8 +66,19 @@
 				event.toolTip = toolTip;
 			}
 			
+			protected function addButtonClickHandler(event:MouseEvent):void
+			{
+				var popup:NewInventoryItemDialog = InteractionUtil.newPopup(NewInventoryItemDialog) as NewInventoryItemDialog;
+				popup.isDiscoveryTab = isDiscoveryTab
+				event.stopPropagation();
+			}
+			
 		]]>
 	</fx:Script>
+	
+	<fx:Declarations>
+		<fx:Boolean id="isDiscoveryTab"/>
+	</fx:Declarations>
 	
 	<s:states>
 		<s:State name="normal" />            
@@ -103,10 +114,7 @@
 			</s:layout>
 			
 			<s:Button styleName="addButtonStyle"
-					  click="{
-					  InteractionUtil.newPopup(NewInventoryItemDialog);
-					  event.stopPropagation();
-					  }"
+					  click="addButtonClickHandler(event)"
 					  includeInLayout="{isAddEnabled(treeListData.item)}"
 					  visible="{isAddEnabled(treeListData.item)}"/>
 			<s:Button styleName="copyButtonStyle"

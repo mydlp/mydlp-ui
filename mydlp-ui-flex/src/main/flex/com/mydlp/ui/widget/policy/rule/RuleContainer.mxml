@@ -29,6 +29,7 @@
 			import mx.collections.ArrayCollection;
 			import mx.collections.ListCollectionView;
 			import mx.core.FlexGlobals;
+			import mx.core.IFlexDisplayObject;
 			import mx.core.IUIComponent;
 			import mx.events.DragEvent;
 			import mx.events.FlexEvent;
@@ -45,8 +46,6 @@
 			[Bindable]
 			protected var resetRuleDP:ListCollectionView;
 			
-			protected var _getRulesFunction:Function;
-			
 			public var isSelection:Boolean = false;
 			
 			public var collapseStates:Dictionary = new Dictionary();
@@ -59,8 +58,6 @@
 					resetRuleDP.addItem(ruleDP[i]);
 				}
 			}
-			
-			//protected function isAlreadyAdded
 			
 			public function filterRules(items:Array):void
 			{
@@ -123,9 +120,39 @@
 				DragManager.showFeedback(DragManager.COPY);
 			}
 			
-			protected function getRulesHandler(event:ResultEvent, token:Object): void
+			protected function isDiscoveryTypeRule(rule:*):Boolean
 			{
-				var ruleDP2:ArrayCollection = event.result as ArrayCollection;
+				if(rule is DiscoveryRule || rule is RemoteStorageRule)
+					return true;
+				else
+					return false;
+			}
+			
+			protected function filterRulesTab(): ArrayCollection
+			{
+				var filteredRules:ArrayCollection = new ArrayCollection;
+				if(isDiscoveryTab)
+				{
+					for(var i:int = 0; i < rulesList.length; i++)
+					{
+						if(isDiscoveryTypeRule(rulesList[i]))
+							filteredRules.addItem(rulesList[i]);
+					}
+				}
+				else
+				{
+					for(var j:int = 0; j < rulesList.length; j++)
+					{
+						if(!isDiscoveryTypeRule(rulesList[j]))
+							filteredRules.addItem(rulesList[j]);
+					}
+				}
+				return filteredRules;
+			}
+			
+			protected function populateRules(): void
+			{
+				var ruleDP2:ArrayCollection = filterRulesTab();
 				for each (var rule:* in ruleDP2) 
 				{
 					if (rule is WebRule)
@@ -223,8 +250,7 @@
 					customActions = new ArrayCollection();
 				customActions = event.result as ListCollectionView;
 				ActionBox.generateCustomActions(customActions);
-				var asyncToken:AsyncToken = _getRulesFunction();
-				asyncToken.addResponder(new AsyncResponder(getRulesHandler, faultHandler, null));
+				populateRules();
 			}
 			
 			public function sanityCheck(): String
@@ -308,18 +334,15 @@
 			}
 			
 			protected function ruleItemRendererFunction(item:Object):ClassFactory {
+				var ir:ClassFactory;
 				if (item is Rule)
-				{
-					return new ClassFactory(RuleBoxRenderer);	
-				}
+					ir = new ClassFactory(RuleBoxRenderer);
 				else if (item is NewRuleShadow)
-				{
-					return new ClassFactory(NewRuleShadowRenderer);
-				}
+					ir = new ClassFactory(NewRuleShadowRenderer);
 				else
-				{
 					throw new Error("Unhandled item type.");
-				}
+				ir.properties = {isDiscoveryTab: isDiscoveryTab};
+				return ir;
 			} 
 			
 			public function disableAddRule(): void
@@ -401,7 +424,6 @@
 			
 			protected function showIndex(index:int):void
 			{
-				
 				ruleList.selectedIndex = index;
 				ruleList.ensureIndexIsVisible(index);
 			}
@@ -414,7 +436,10 @@
 				ruleList.afterRefreshSelectedIndex = index;
 				callLater(showIndex, [index]);
 				
-				FlexGlobals.topLevelApplication.policyContainer.ruleContainer.disableAddRule();
+				if(!isDiscoveryTab)
+					FlexGlobals.topLevelApplication.policyContainer.ruleContainer.disableAddRule();
+				else
+					FlexGlobals.topLevelApplication.discoveryContainer.ruleContainer.disableAddRule();
 			}
 			
 			protected function expandAllClickHandler(event:MouseEvent):void
@@ -435,16 +460,13 @@
 				ruleList.invalidateList();
 			}
 
-			public function get getRulesFunction():Function
+			protected function emptyRuleSetAddButtonClick(event:MouseEvent):void
 			{
-				return _getRulesFunction;
+				//var newRuleDialog:NewRuleDialog = new NewRuleDialog;
+				//newRuleDialog.isDiscoveryTab = isDiscoveryTab;
+				var popup:NewRuleDialog = InteractionUtil.newPopup(NewRuleDialog) as NewRuleDialog;
+				popup.isDiscoveryTab = isDiscoveryTab;
 			}
-
-			public function set getRulesFunction(value:Function):void
-			{
-				_getRulesFunction = value;
-			}
-
 			
 		]]>
 	</fx:Script>
@@ -452,6 +474,7 @@
 		<my:remote id="rec" destination="customActionBRS">
 			<my:method name="getCustomActions" result="getCustomActionsHandler(event)" />
 		</my:remote>
+		<mx:ListCollectionView id="rulesList"/>
 		<fx:Boolean id="isDiscoveryTab"/>
 	</fx:Declarations>
 	
@@ -519,7 +542,7 @@
 		</s:layout>
 		<s:Button id="addRuleButtonFirst" skinClass="com.mydlp.ui.skin.AddBitmapButton128Skin"
 				  toolTip="@Resource(bundle='messages', key='rules.addFirstRule.tooltip.label')"
-				  click="{InteractionUtil.newPopup(NewRuleDialog)}"/>
+				  click="emptyRuleSetAddButtonClick(event)"/>
 	</s:Group>
 	
 </s:SkinnableContainer>

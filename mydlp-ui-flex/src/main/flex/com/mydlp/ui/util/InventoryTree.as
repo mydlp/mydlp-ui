@@ -14,6 +14,7 @@ package com.mydlp.ui.util
 	import mx.controls.Tree;
 	import mx.controls.listClasses.IListItemRenderer;
 	import mx.core.ClassFactory;
+	import mx.core.FlexGlobals;
 	import mx.events.DragEvent;
 	import mx.events.ListEvent;
 	import mx.managers.DragManager;
@@ -35,6 +36,8 @@ package com.mydlp.ui.util
 		
 		protected var afterRefreshSelectedIndices:Array = [];
 		
+		public var isDiscoveryTab:Boolean;
+		
 		protected var tempVerticalScrollPosition:Number = 0;
 		
 		protected var previousSelectedItem:Object = null;
@@ -50,7 +53,7 @@ package com.mydlp.ui.util
 			this.allowMultipleSelection = true;
 			this.labelField = "label";
 			this.showRoot = false;
-			this.dataProvider = inventory;
+			
 			this.addEventListener(ListEvent.ITEM_CLICK, itemClickHandler);
 			this.addEventListener(ListEvent.CHANGE, onChangeHandler);
 			this.addEventListener(DragEvent.DRAG_DROP, onDragDrop);
@@ -60,9 +63,7 @@ package com.mydlp.ui.util
 		
 		public function populate():void
 		{
-			inventory = new ArrayCollection;
-			var asyncToken:AsyncToken = _getInventoryFunction();
-			asyncToken.addResponder(new AsyncResponder(getInventoryHandler, faultHandler, null));
+			getInventoryHandler(null, null);
 		}
 		
 		protected function getInventoryHandler(event:ResultEvent, token:Object):void
@@ -72,15 +73,17 @@ package com.mydlp.ui.util
 			invalidateDisplayList();
 			invalidateSize();
 			
-			inventory = event.result as ArrayCollection;
-			this.dataProvider = inventory;
-			this.itemRenderer = new ClassFactory(InventoryItemRenderer);
+		//	inventory = event.result as ArrayCollection;
+		//	this.dataProvider = inventory;
+			var ir:ClassFactory = new ClassFactory(InventoryItemRenderer);
+			ir.properties = {isDiscoveryTab: isDiscoveryTab};
+			this.itemRenderer = ir;
 			
 			validateNow();
 			callLater(afterRefreshOps);
 		}
 		
-		protected function afterRefreshOps(): void
+		public function afterRefreshOps(): void
 		{
 			openItems = tempOpenItems;
 			verticalScrollPosition = tempVerticalScrollPosition;
@@ -95,9 +98,9 @@ package com.mydlp.ui.util
 		public function displayItem(item:InventoryItem):void
 		{
 			var ii:InventoryItem;
-			for(var i:int = 0; i < inventory.length; i++)
+			for(var i:int = 0; i < dataProvider.length; i++)
 			{
-				ii = traverse(inventory[i], item);
+				ii = traverse(dataProvider[i], item);
 				if(ii != null)
 					break
 			}
@@ -191,19 +194,13 @@ package com.mydlp.ui.util
 			if (itemsToSave.length > 0)
 			{
 				var asyncToken:AsyncToken = _saveAllFunction(itemsToSave);
-				asyncToken.addResponder(new AsyncResponder(
-					function result(event:ResultEvent, token:Object = null):void 
-					{
-						tempOpenItems = openItems;
-						tempVerticalScrollPosition = verticalScrollPosition;
-						populate();
-					}, 
-					function fault(event:FaultEvent, token:Object = null):void 
-					{
-						trace(event.fault.faultString);
-					}, null
-				));
+				asyncToken.addResponder(new AsyncResponder(saveAllHandler, faultHandler, null));
 			}
+		}
+		
+		protected function saveAllHandler(event:ResultEvent, token:Object):void
+		{
+			FlexGlobals.topLevelApplication.getInventoryFunction();
 		}
 		
 		protected function onDragExit(event:DragEvent):void
@@ -233,10 +230,14 @@ package com.mydlp.ui.util
 			var parentCategory:InventoryCategory = null;
 			if (renderer == null)
 			{
-				return true;
+				return false;
 			}
 			else
 			{
+				if(renderer.data.nameKey != null)
+					trace("name: " + renderer.data.nameKey);
+				else
+					trace("name: " + renderer.data.name);
 				var dropTarget:InventoryBase = renderer.data as InventoryBase;
 				if (renderer.data is InventoryCategory)
 				{
@@ -273,7 +274,7 @@ package com.mydlp.ui.util
 		{
 			tempOpenItems = openItems;
 			tempVerticalScrollPosition = verticalScrollPosition;
-			populate();
+			afterRefreshSelectedIndices = this.selectedIndices;
 		}
 		
 		public function get getInventoryFunction():Function

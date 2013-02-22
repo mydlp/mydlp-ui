@@ -95,19 +95,31 @@
 			{
 				var popup:NewRuleDialog = InteractionUtil.newPopup(NewRuleDialog) as NewRuleDialog;
 				popup.recommendedPriority = ruleObject.priority;
+				popup.isDiscoveryTab = isDiscoveryTab;
 			}
 			
 			protected function cancel(event:MouseEvent):void
 			{
-				var ruleList:List = FlexGlobals.topLevelApplication.policyContainer.ruleContainer.ruleList;
+				var ruleList:List;
+				if(isDiscoveryTab)
+					ruleList = FlexGlobals.topLevelApplication.discoveryContainer.ruleContainer.ruleList;
+				else
+					ruleList = FlexGlobals.topLevelApplication.policyContainer.ruleContainer.ruleList;
 				var currentItemIndex:int = ruleList.dataProvider.getItemIndex(ruleObject);
 				ruleList.dataProvider.removeItemAt(currentItemIndex);
 				
-				FlexGlobals.topLevelApplication.policyContainer.ruleContainer.enableAddRule();
+				if(isDiscoveryTab)
+					FlexGlobals.topLevelApplication.discoveryContainer.ruleContainer.enableAddRule();
+				else
+					FlexGlobals.topLevelApplication.policyContainer.ruleContainer.enableAddRule();
 			}
 			
 		]]>
 	</fx:Script>
+	
+	<fx:Declarations>
+		<fx:Boolean id="isDiscoveryTab"/>
+	</fx:Declarations>
 	
 	<s:Rect left="0" right="0" top="0" bottom="0" >
 		<s:stroke>

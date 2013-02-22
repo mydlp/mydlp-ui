@@ -10,24 +10,102 @@
 	>
 	<fx:Script>
 		<![CDATA[
+			import com.mydlp.ui.domain.ApplicationName;
+			import com.mydlp.ui.domain.Domain;
+			import com.mydlp.ui.domain.FileSystemDirectory;
+			import com.mydlp.ui.domain.InventoryCategory;
+			import com.mydlp.ui.domain.InventoryItem;
+			import com.mydlp.ui.domain.RemoteStorageCIFS;
+			import com.mydlp.ui.domain.RemoteStorageDFS;
+			import com.mydlp.ui.domain.RemoteStorageFTPFS;
+			import com.mydlp.ui.domain.RemoteStorageNFS;
+			import com.mydlp.ui.domain.RemoteStorageSSHFS;
+			import com.mydlp.ui.domain.SourceDomainName;
+			import com.mydlp.ui.util.FilterDataDescriptor;
+			
+			import mx.collections.ArrayCollection;
 			import mx.collections.ListCollectionView;
 			import mx.core.FlexGlobals;
 			import mx.rpc.AsyncToken;
 			import mx.rpc.events.ResultEvent;
 			
-			[Bindable]
-			protected var inventory:Object; 
+			
+			protected function isDiscoveyItem(item:*):Boolean
+			{
+				/*if(item is InventoryCategory && item.name != null)
+					return true;
+				else if(item is InventoryCategory)
+					return traverse(item.children);*/
+				if(item is InventoryCategory)
+				{
+					if(item.nameKey != null)
+						return traverse(item.children);
+					else
+						return true;
+				}
+				else if(item.item is SourceDomainName || item.item is Domain || 
+					item.item is ApplicationName)
+					return false;
+				else
+					return true;
+			}
+			
+			protected function isPolicyItem(item:*):Boolean
+			{
+				/*if(item is InventoryCategory && item.name != null)
+					return true;
+				else if(item is InventoryCategory)
+					return traverse(item.children);*/
+				if(item is InventoryCategory)
+				{
+					if(item.nameKey != null)
+						return traverse(item.children);
+					else 
+						return true;
+				}
+				else if(item.item is FileSystemDirectory || item.item is RemoteStorageCIFS ||
+					item.item is RemoteStorageDFS || item.item is RemoteStorageFTPFS ||
+					item.item is RemoteStorageNFS || item.item is RemoteStorageSSHFS)
+					return false;
+				else
+					return true;
+			}
+			
+			protected function traverse(list:ArrayCollection):Boolean
+			{
+				var retVal:Boolean = false;
+				for(var i:int = 0; i < list.length; i++)
+				{
+					if(list[i] is InventoryCategory)
+						retVal =  traverse(list[i].children)
+					else if(list[i] is InventoryItem)
+					{
+						if(isDiscoveryTab)
+						{
+							if(isDiscoveyItem(list[i]))
+								return true;
+						}
+						else
+						{
+							if(isPolicyItem(list[i]))
+								return true;
+						}	
+					}
+				}
+				return retVal;
+			}
 			
 			protected function populateTree():void
 			{
-				myInventoryTree.getInventoryFunction = getInventoryFunction;
+				var dd:FilterDataDescriptor;
+				if(isDiscoveryTab)
+					dd = new FilterDataDescriptor(isDiscoveyItem);
+				else
+					dd = new FilterDataDescriptor(isPolicyItem);
+				myInventoryTree.dataDescriptor = dd;
 				myInventoryTree.saveAllFunction = saveInventoryFunction;
 				myInventoryTree.populate();
-			}
-			
-			protected function getInventoryFunction():AsyncToken
-			{
-				return re.getInventory();				
+				myInventoryTree.refreshTree();
 			}
 			
 			protected function saveInventoryFunction(list:ListCollectionView):AsyncToken
@@ -44,15 +122,18 @@
 	
 	<fx:Declarations>
 		<my:remote id="re" destination="inventoryBRS"/>
-		
+		<fx:Object id="inventory"/>
+		<fx:Boolean id="isDiscoveryTab"/>
 	</fx:Declarations>
 	<s:Group width="100%" height="100%">
 		
 		
 		<util:InventoryTree width="100%" height="100%" id="myInventoryTree" borderVisible="false" 
 							selectionColor="0xA8C6EE"
+							isDiscoveryTab="{isDiscoveryTab}"
 							folderOpenIcon="@Embed('/assets/icons/16x16/folder.png')"
 							folderClosedIcon="@Embed('/assets/icons/16x16/folder.png')"
-							change="{FlexGlobals.topLevelApplication.policyContainer.inventoryTreeChangeHandler(event)}"/>
+							change="{FlexGlobals.topLevelApplication.policyContainer.inventoryTreeChangeHandler(event)}"
+							dataProvider="@{inventory}"/>
 	</s:Group>
 </s:SkinnableContainer>
