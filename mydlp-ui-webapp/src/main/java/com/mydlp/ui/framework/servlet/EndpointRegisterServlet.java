@@ -44,7 +44,7 @@ public class EndpointRegisterServlet implements HttpRequestHandler {
 	
 	protected Boolean isBanned(String ipAddress) {
 		Calendar calendar = Calendar.getInstance();
-		calendar.add(Calendar.MINUTE, -30);
+		calendar.add(Calendar.SECOND, -30);
 		Date threshold = calendar.getTime();
 		Entry<Date,String> lower = null;
 		synchronized (latestRequests) {

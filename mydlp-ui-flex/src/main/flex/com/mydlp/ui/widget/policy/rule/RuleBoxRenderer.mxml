@@ -64,6 +64,8 @@
 			
 			protected static const DOMAIN_ALL:String = "inventory.domain.all";
 			
+			protected static const DESTINATION_HASBCC:String = "inventory.mail.hasBcc";
+			
 			protected static const DIRECTORY_ALL:String = "inventory.fileSystemDirectory.all";
 			
 			protected static const APPLICATION_ALL:String = "inventory.applicationName.all";
@@ -535,7 +537,18 @@
 					}
 					else if (treeItem.item is Domain)
 					{
-						if(ruleObject is WebRule || ruleObject is MailRule)
+						if (treeItem.nameKey == DESTINATION_HASBCC) 
+						{
+							if (ruleObject is MailRule)
+							{
+								return true;
+							}
+							else
+							{
+								return false;
+							}
+						}
+						else if(ruleObject is WebRule || ruleObject is MailRule)
 						{
 							return true;
 						}
