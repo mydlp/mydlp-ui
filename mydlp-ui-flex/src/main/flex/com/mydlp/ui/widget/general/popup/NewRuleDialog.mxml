@@ -16,6 +16,8 @@
 			import com.mydlp.ui.domain.RemovableStorageInboundRule;
 			import com.mydlp.ui.domain.RemovableStorageRule;
 			import com.mydlp.ui.domain.Rule;
+			import com.mydlp.ui.domain.RuleSchedule;
+			import com.mydlp.ui.domain.ScheduleDetails;
 			import com.mydlp.ui.domain.ScreenshotRule;
 			import com.mydlp.ui.domain.WebRule;
 			import com.mydlp.ui.util.InteractionUtil;
@@ -30,6 +32,19 @@
 			protected function close():void
 			{
 				InteractionUtil.closeCurrentPopup();
+			}
+			
+			protected function generateRuleScheduler():RuleSchedule
+			{
+				var ruleSchedule:RuleSchedule = new RuleSchedule;
+				ruleSchedule.sun = new ScheduleDetails;
+				ruleSchedule.mon = new ScheduleDetails;
+				ruleSchedule.tue = new ScheduleDetails;
+				ruleSchedule.wed = new ScheduleDetails;
+				ruleSchedule.thu = new ScheduleDetails;
+				ruleSchedule.fri = new ScheduleDetails;
+				ruleSchedule.sat = new ScheduleDetails;
+				return ruleSchedule;
 			}
 			
 			protected function ruleHandler(rule:Rule): void
@@ -72,7 +87,9 @@
 			
 			protected function discoveryRuleHandler():void
 			{
-				ruleHandler(new DiscoveryRule());
+				var discoveryRule:DiscoveryRule = new DiscoveryRule;
+				discoveryRule.ruleSchedule = generateRuleScheduler();
+				ruleHandler(discoveryRule);
 			}
 			
 			protected function apiRuleHandler():void
@@ -82,7 +99,9 @@
 			
 			protected function remoteStorageRuleHandler(event:MouseEvent):void
 			{
-				ruleHandler(new RemoteStorageRule());
+				var remDisRule:RemoteStorageRule = new RemoteStorageRule;
+				remDisRule.ruleSchedule = generateRuleScheduler();
+				ruleHandler(remDisRule);
 			}
 			
 		]]>

@@ -10,6 +10,7 @@ public class ScheduleDetails extends AbstractEntity{
 	 */
 	private static final long serialVersionUID = 3275882241297612757L;
 	
+	protected Boolean hour00;
 	protected Boolean hour01;
 	protected Boolean hour02;
 	protected Boolean hour03;
@@ -34,6 +35,12 @@ public class ScheduleDetails extends AbstractEntity{
 	protected Boolean hour22;
 	protected Boolean hour23;
 	
+	public Boolean getHour00() {
+		return hour00;
+	}
+	public void setHour00(Boolean hour00) {
+		this.hour00 = hour00;
+	}
 	public Boolean getHour01() {
 		return hour01;
 	}

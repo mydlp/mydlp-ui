@@ -81,9 +81,11 @@
          <value>com.mydlp.ui.domain.Revision</value>
          <value>com.mydlp.ui.domain.Rule</value>
          <value>com.mydlp.ui.domain.RuleItem</value>
+         <value>com.mydlp.ui.domain.RuleSchedule</value>
          <value>com.mydlp.ui.domain.RuleUser</value>
          <value>com.mydlp.ui.domain.RuleUserAD</value>
          <value>com.mydlp.ui.domain.RuleUserStatic</value>
+         <value>com.mydlp.ui.domain.ScheduleDetails</value>
          <value>com.mydlp.ui.domain.ScreenshotRule</value>
          <value>com.mydlp.ui.domain.SourceDomainName</value>
          <value>com.mydlp.ui.domain.USBDevice</value>

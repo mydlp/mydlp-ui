@@ -48,6 +48,7 @@
 			import com.mydlp.ui.util.LangUtil;
 			import com.mydlp.ui.util.ReflectionUtil;
 			import com.mydlp.ui.widget.policy.inventory.InventoryTree;
+			import com.mydlp.ui.widget.policy.rule.discovery.SchedulePopup;
 			
 			import mx.collections.ArrayCollection;
 			import mx.collections.ListCollectionView;
@@ -856,7 +857,9 @@
 			
 			protected function scheduleButtonHandler(event:MouseEvent):void
 			{
-				
+				var popup:SchedulePopup = InteractionUtil.newPopup(SchedulePopup) as SchedulePopup;
+				popup.ruleSchedule = ruleObject.ruleSchedule;
+				popup.ruleObject = ruleObject;
 			}
 			
 		]]>

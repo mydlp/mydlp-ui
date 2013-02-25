@@ -38,6 +38,8 @@ public abstract class Rule extends AbstractNamedEntity {
 	
 	protected CustomAction customAction;
 	
+	protected RuleSchedule ruleSchedule;
+	
 	protected List<RuleItem> ruleItems;
 	
 	protected List<NotificationItem> notificationItems;
@@ -123,5 +125,14 @@ public abstract class Rule extends AbstractNamedEntity {
 
 	public void setUserMessage(String userMessage) {
 		this.userMessage = userMessage;
+	}
+
+	@Column(nullable=true)
+	public RuleSchedule getRuleSchedule() {
+		return ruleSchedule;
+	}
+
+	public void setRuleSchedule(RuleSchedule ruleSchedule) {
+		this.ruleSchedule = ruleSchedule;
 	}
 }

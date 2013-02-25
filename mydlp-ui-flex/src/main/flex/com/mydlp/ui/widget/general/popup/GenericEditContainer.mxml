@@ -41,6 +41,7 @@
 			import com.mydlp.ui.domain.RemoteStorageSSHFS;
 			import com.mydlp.ui.domain.RemovableStorageInboundRule;
 			import com.mydlp.ui.domain.Rule;
+			import com.mydlp.ui.domain.RuleSchedule;
 			import com.mydlp.ui.domain.RuleUserAD;
 			import com.mydlp.ui.domain.ScreenshotRule;
 			import com.mydlp.ui.domain.USBDevice;
@@ -184,6 +185,7 @@
 							(classMember.name == "parent" && classMember.type == ADDomainItemGroup) ||
 							(classMember.name == "isDeleted" && classMember.type == Boolean) ||
 							(classMember.name == "settings" && classMember.type == UserSettings) ||
+							(classMember.name == "ruleSchedule" && classMember.type == RuleSchedule) ||
 							(targetObject is CustomAction && classMember.name == "typeKey" && classMember.type == String) ||
 							(targetObject is WebServer && classMember.name == "address") ||
 							(targetObject is WebServer && classMember.name == "port") ||
