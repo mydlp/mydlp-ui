@@ -9,6 +9,7 @@ import javax.persistence.Inheritance;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 @Entity
 @Inheritance
@@ -127,7 +128,8 @@ public abstract class Rule extends AbstractNamedEntity {
 		this.userMessage = userMessage;
 	}
 
-	@Column(nullable=true)
+	@OneToOne(cascade=CascadeType.ALL)
+	@JoinColumn(nullable=true)
 	public RuleSchedule getRuleSchedule() {
 		return ruleSchedule;
 	}
