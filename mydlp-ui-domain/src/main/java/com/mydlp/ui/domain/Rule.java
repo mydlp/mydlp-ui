@@ -128,7 +128,7 @@ public abstract class Rule extends AbstractNamedEntity {
 		this.userMessage = userMessage;
 	}
 
-	@OneToOne(cascade=CascadeType.ALL)
+	@OneToOne(cascade={CascadeType.ALL})
 	@JoinColumn(nullable=true)
 	public RuleSchedule getRuleSchedule() {
 		return ruleSchedule;
