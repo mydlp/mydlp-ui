@@ -37,6 +37,8 @@
 			protected function generateRuleScheduler():RuleSchedule
 			{
 				var ruleSchedule:RuleSchedule = new RuleSchedule;
+				ruleSchedule.isDaily = true;
+				ruleSchedule.startHour = 2;
 				ruleSchedule.sun = new ScheduleDetails;
 				ruleSchedule.mon = new ScheduleDetails;
 				ruleSchedule.tue = new ScheduleDetails;

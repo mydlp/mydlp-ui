@@ -1,14 +1,16 @@
 package com.mydlp.ui.domain;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 
 @Entity
 public class RuleSchedule extends AbstractEntity {
 
+	
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 4904216712130122147L;
+	private static final long serialVersionUID = -8613217283851321246L;
 	
 	protected ScheduleDetails sun;
 	protected ScheduleDetails mon;
@@ -17,6 +19,10 @@ public class RuleSchedule extends AbstractEntity {
 	protected ScheduleDetails thu;
 	protected ScheduleDetails fri;
 	protected ScheduleDetails sat;
+	
+	protected Boolean isDaily;
+	protected int startHour;
+	protected String startDay;
 	
 	
 	public ScheduleDetails getSun() {
@@ -60,5 +66,25 @@ public class RuleSchedule extends AbstractEntity {
 	}
 	public void setSat(ScheduleDetails sat) {
 		this.sat = sat;
+	}
+	public Boolean getIsDaily() {
+		return isDaily;
+	}
+	public void setIsDaily(Boolean isDaily) {
+		this.isDaily = isDaily;
+	}
+	public int getStartHour() {
+		return startHour;
+	}
+	public void setStartHour(int startHour) {
+		this.startHour = startHour;
+	}
+	
+	@Column(nullable=true)
+	public String getStartDay() {
+		return startDay;
+	}
+	public void setStartDay(String startDay) {
+		this.startDay = startDay;
 	}
 }
