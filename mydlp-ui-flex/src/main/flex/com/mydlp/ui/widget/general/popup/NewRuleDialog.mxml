@@ -42,6 +42,7 @@
 				var ds:DailySchedule = new DailySchedule;
 				ds.hour = 0;
 				ruleSchedule.schedule = ds;
+				ruleSchedule.rule = rule;
 				var si:ScheduleIntervals = new ScheduleIntervals;
 				si.sun = new ScheduleDayInterval;
 				si.mon = new ScheduleDayInterval;
