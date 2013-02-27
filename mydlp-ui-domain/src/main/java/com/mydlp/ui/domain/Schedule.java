@@ -24,5 +24,4 @@ public abstract class Schedule extends AbstractEntity {
 	public void setHour(int hour) {
 		this.hour = hour;
 	}
-	
 }

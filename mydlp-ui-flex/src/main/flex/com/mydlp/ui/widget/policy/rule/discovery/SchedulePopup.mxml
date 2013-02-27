@@ -5,6 +5,7 @@
 						   title="@Resource(bundle = 'messages', key = 'inventory.newdialog.addrule.title')" 
 						   xmlns:popup="com.mydlp.ui.widget.general.popup.*" xmlns:domain="com.mydlp.ui.domain.*"
 						   xmlns:discovery="com.mydlp.ui.widget.policy.rule.discovery.*"
+						   xmlns:my="http://www.mydlp.com/flex/my"
 						   close="close()"
 						   >
 	<fx:Script>
@@ -18,9 +19,12 @@
 			
 			import mx.collections.ArrayCollection;
 			import mx.collections.ListCollectionView;
+			import mx.rpc.events.ResultEvent;
 			
 			import spark.components.HGroup;
 			import spark.events.IndexChangeEvent;
+			
+			public var deleteList:ListCollectionView = new ArrayCollection;
 			
 			protected static var hoursOfDay:ListCollectionView = new ArrayCollection(new Array(
 				[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23]
@@ -235,9 +239,7 @@
 			
 			protected function saveButtonclickHandler(event:MouseEvent):void
 			{
-				ruleSchedule.schedule.hour = hourDropDown.selectedIndex;
-				ruleObject.save(); 
-				close();
+				re.persistChange(ruleObject, deleteList)
 			}
 			
 			protected function onChangeHandler(event:IndexChangeEvent):void
@@ -245,13 +247,26 @@
 				if(scheduleDropDown.selectedItem == "Daily")
 				{
 					if(!(ruleSchedule.schedule is DailySchedule))
+					{
+						deleteList.addItem(ruleSchedule.schedule);
 						ruleSchedule.schedule = new DailySchedule;
+					}
 				}
 				else if(scheduleDropDown.selectedItem == "Weekly")
 				{
 					if(!(ruleSchedule.schedule is WeeklySchedule))
+					{
+						deleteList.addItem(ruleSchedule.schedule);
 						ruleSchedule.schedule = new WeeklySchedule;
+					}
 				}
+			}
+			
+			protected function persistChangeHandler(event:ResultEvent):void
+			{
+				ruleSchedule.schedule.hour = hourDropDown.selectedIndex;
+				ruleObject.save(); 
+				close();
 			}
 			
 		]]>
@@ -259,11 +274,14 @@
 	<fx:Declarations>
 		<domain:Rule id="ruleObject"/>
 		<domain:RuleSchedule id="ruleSchedule" />
+		<my:remote id="re" destination="genericBRS" >
+			<my:method name="persistChange" result="persistChangeHandler(event)"/>
+		</my:remote>
 	</fx:Declarations>
 	<s:VGroup id="container"
 			  paddingBottom="10" paddingLeft="10" paddingRight="10" paddingTop="10" horizontalAlign="center" gap="20">
 		
-		<s:VGroup horizontalAlign="left" paddingLeft="0">
+		<s:VGroup horizontalAlign="left" paddingLeft="0" width="100%">
 			<s:Label text="@Resource(bundle = 'messages', key = 'rule.schedule.label')" fontWeight="bold"/>
 			
 			<s:DropDownList id="scheduleDropDown" dataProvider="{scheduleDP}" change="onChangeHandler(event)"/>
@@ -286,7 +304,7 @@
 			
 		</s:VGroup>
 		
-		<s:VGroup >
+		<s:VGroup width="100%">
 			<s:Label text="@Resource(bundle = 'messages', key = 'rule.availabilty.label')" fontWeight="bold"/>
 			<s:HGroup verticalAlign="middle">
 				<discovery:ScheduleItemInput isActive="true" enabled="false"/>
