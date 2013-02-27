@@ -3,7 +3,7 @@ package com.mydlp.ui.domain;
 import javax.persistence.Entity;
 
 @Entity
-public class ScheduleDetails extends AbstractEntity{
+public class ScheduleDayInterval extends AbstractEntity{
 
 	/**
 	 * 

@@ -8,6 +8,7 @@
 	<fx:Script>
 		<![CDATA[
 			import com.mydlp.ui.domain.ApiRule;
+			import com.mydlp.ui.domain.DailySchedule;
 			import com.mydlp.ui.domain.DiscoveryRule;
 			import com.mydlp.ui.domain.MailRule;
 			import com.mydlp.ui.domain.PrinterRule;
@@ -17,7 +18,8 @@
 			import com.mydlp.ui.domain.RemovableStorageRule;
 			import com.mydlp.ui.domain.Rule;
 			import com.mydlp.ui.domain.RuleSchedule;
-			import com.mydlp.ui.domain.ScheduleDetails;
+			import com.mydlp.ui.domain.ScheduleDayInterval;
+			import com.mydlp.ui.domain.ScheduleIntervals;
 			import com.mydlp.ui.domain.ScreenshotRule;
 			import com.mydlp.ui.domain.WebRule;
 			import com.mydlp.ui.util.InteractionUtil;
@@ -34,18 +36,21 @@
 				InteractionUtil.closeCurrentPopup();
 			}
 			
-			protected function generateRuleScheduler():RuleSchedule
+			protected function generateRuleScheduler(rule:*):RuleSchedule
 			{
 				var ruleSchedule:RuleSchedule = new RuleSchedule;
-				ruleSchedule.isDaily = true;
-				ruleSchedule.startHour = 2;
-				ruleSchedule.sun = new ScheduleDetails;
-				ruleSchedule.mon = new ScheduleDetails;
-				ruleSchedule.tue = new ScheduleDetails;
-				ruleSchedule.wed = new ScheduleDetails;
-				ruleSchedule.thu = new ScheduleDetails;
-				ruleSchedule.fri = new ScheduleDetails;
-				ruleSchedule.sat = new ScheduleDetails;
+				var ds:DailySchedule = new DailySchedule;
+				ds.hour = 0;
+				ruleSchedule.schedule = ds;
+				var si:ScheduleIntervals = new ScheduleIntervals;
+				si.sun = new ScheduleDayInterval;
+				si.mon = new ScheduleDayInterval;
+				si.tue = new ScheduleDayInterval;
+				si.wed = new ScheduleDayInterval;
+				si.thu = new ScheduleDayInterval;
+				si.fri = new ScheduleDayInterval;
+				si.sat = new ScheduleDayInterval;
+				ruleSchedule.scheduleIntervals = si;
 				return ruleSchedule;
 			}
 			
@@ -90,7 +95,7 @@
 			protected function discoveryRuleHandler():void
 			{
 				var discoveryRule:DiscoveryRule = new DiscoveryRule;
-				discoveryRule.ruleSchedule = generateRuleScheduler();
+				discoveryRule.ruleSchedule = generateRuleScheduler(discoveryRule);
 				ruleHandler(discoveryRule);
 			}
 			
@@ -102,7 +107,7 @@
 			protected function remoteStorageRuleHandler(event:MouseEvent):void
 			{
 				var remDisRule:RemoteStorageRule = new RemoteStorageRule;
-				remDisRule.ruleSchedule = generateRuleScheduler();
+				remDisRule.ruleSchedule = generateRuleScheduler(remDisRule);
 				ruleHandler(remDisRule);
 			}
 			

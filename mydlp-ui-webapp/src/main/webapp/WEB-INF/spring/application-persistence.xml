@@ -36,6 +36,7 @@
          <value>com.mydlp.ui.domain.CustomActionDescription</value>
          <value>com.mydlp.ui.domain.CustomActionDescriptionSeclore</value>
          <value>com.mydlp.ui.domain.DashboardItem</value>
+         <value>com.mydlp.ui.domain.DailySchedule</value>
          <value>com.mydlp.ui.domain.DataFormat</value>
          <value>com.mydlp.ui.domain.DiscoveryRule</value>
          <value>com.mydlp.ui.domain.Document</value>
@@ -85,13 +86,16 @@
          <value>com.mydlp.ui.domain.RuleUser</value>
          <value>com.mydlp.ui.domain.RuleUserAD</value>
          <value>com.mydlp.ui.domain.RuleUserStatic</value>
-         <value>com.mydlp.ui.domain.ScheduleDetails</value>
+         <value>com.mydlp.ui.domain.Schedule</value>
+         <value>com.mydlp.ui.domain.ScheduleDayInterval</value>
+         <value>com.mydlp.ui.domain.ScheduleIntervals</value>
          <value>com.mydlp.ui.domain.ScreenshotRule</value>
          <value>com.mydlp.ui.domain.SourceDomainName</value>
          <value>com.mydlp.ui.domain.USBDevice</value>
          <value>com.mydlp.ui.domain.UserSettings</value>
          <value>com.mydlp.ui.domain.WebRule</value>
          <value>com.mydlp.ui.domain.WebServer</value>
+         <value>com.mydlp.ui.domain.WeeklySchedule</value>
        </list>
      </property>
      <property name="hibernateProperties">

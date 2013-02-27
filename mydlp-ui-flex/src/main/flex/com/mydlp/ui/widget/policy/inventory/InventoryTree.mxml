@@ -108,6 +108,18 @@
 				myInventoryTree.refreshTree();
 			}
 			
+			public function getUserDefinedCategory(): InventoryCategory
+			{
+				for each (var i:* in inventory)
+				if (i is InventoryCategory)
+				{
+					var c:InventoryCategory = i as InventoryCategory;
+					if (c.nameKey == InventoryItemRenderer.USERDEFINED_NAMEKEY)
+						return c;
+				}
+				return null;
+			}
+			
 			protected function saveInventoryFunction(list:ListCollectionView):AsyncToken
 			{
 				return re.saveAll(list);
