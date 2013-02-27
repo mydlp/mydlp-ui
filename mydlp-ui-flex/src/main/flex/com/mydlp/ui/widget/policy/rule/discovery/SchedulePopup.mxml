@@ -6,6 +6,7 @@
 						   xmlns:popup="com.mydlp.ui.widget.general.popup.*" xmlns:domain="com.mydlp.ui.domain.*"
 						   xmlns:discovery="com.mydlp.ui.widget.policy.rule.discovery.*"
 						   xmlns:my="http://www.mydlp.com/flex/my"
+						   visible="false"
 						   close="close()"
 						   >
 	<fx:Script>
@@ -24,7 +25,7 @@
 			import spark.components.HGroup;
 			import spark.events.IndexChangeEvent;
 			
-			public var deleteList:ListCollectionView = new ArrayCollection;
+			public var deleteList:ListCollectionView = new ArrayCollection();
 			
 			protected static var hoursOfDay:ListCollectionView = new ArrayCollection(new Array(
 				[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23]
@@ -83,12 +84,12 @@
 			
 			public function populate():void
 			{
-				if(ruleSchedule.schedule is DailySchedule)
+				if(ruleObject.ruleSchedule.schedule is DailySchedule)
 					scheduleDropDown.selectedIndex = 0;
-				else if(ruleSchedule.schedule is WeeklySchedule)
+				else if(ruleObject.ruleSchedule.schedule is WeeklySchedule)
 				{
 					scheduleDropDown.selectedIndex = 1;
-					var s:WeeklySchedule = ruleSchedule.schedule as WeeklySchedule;
+					var s:WeeklySchedule = ruleObject.ruleSchedule.schedule as WeeklySchedule;
 					if(s.sun) sun.selected = true;
 					if(s.mon) mon.selected = true;
 					if(s.tue) tue.selected = true;
@@ -98,14 +99,16 @@
 					if(s.sat) sat.selected = true;
 				}
 				
-				hourDropDown.selectedIndex = ruleSchedule.schedule.hour;
+				hourDropDown.selectedIndex = ruleObject.ruleSchedule.schedule.hour;
+				
+				visible=true;
 			}
 			
 			protected function populateSelections(dayList:Array, hourList:Array, selection:Boolean):void
 			{
 				for(var i:int = 0; i < dayList.length; i++)
 				{
-					var s:ScheduleDayInterval = ruleSchedule.scheduleIntervals[dayList[i]] as ScheduleDayInterval;
+					var s:ScheduleDayInterval = ruleObject.ruleSchedule.scheduleIntervals[dayList[i]] as ScheduleDayInterval;
 					for(var j:int = 0; j < hourList.length; j++)
 					{
 						s[hourList[j]] = selection;
@@ -214,7 +217,7 @@
 			protected function onCheckBoxChangeHandler(event:Event):void
 			{
 				var label:String = event.currentTarget.label;
-				var s:WeeklySchedule = ruleSchedule.schedule as WeeklySchedule;
+				var s:WeeklySchedule = ruleObject.ruleSchedule.schedule as WeeklySchedule;
 				if(event.currentTarget.selected)
 				{
 					if(event.currentTarget.id == "sun") s.sun = true;
@@ -239,33 +242,33 @@
 			
 			protected function saveButtonclickHandler(event:MouseEvent):void
 			{
-				re.persistChange(ruleObject, deleteList)
+				ruleObject.ruleSchedule.schedule.hour = hourDropDown.selectedIndex;
+				re.persistChange(ruleObject, deleteList);
+				this.enabled = false;
 			}
 			
 			protected function onChangeHandler(event:IndexChangeEvent):void
 			{
 				if(scheduleDropDown.selectedItem == "Daily")
 				{
-					if(!(ruleSchedule.schedule is DailySchedule))
+					if(!(ruleObject.ruleSchedule.schedule is DailySchedule))
 					{
-						deleteList.addItem(ruleSchedule.schedule);
-						ruleSchedule.schedule = new DailySchedule;
+						deleteList.addItem(ruleObject.ruleSchedule.schedule);
+						ruleObject.ruleSchedule.schedule = new DailySchedule;
 					}
 				}
 				else if(scheduleDropDown.selectedItem == "Weekly")
 				{
-					if(!(ruleSchedule.schedule is WeeklySchedule))
+					if(!(ruleObject.ruleSchedule.schedule is WeeklySchedule))
 					{
-						deleteList.addItem(ruleSchedule.schedule);
-						ruleSchedule.schedule = new WeeklySchedule;
+						deleteList.addItem(ruleObject.ruleSchedule.schedule);
+						ruleObject.ruleSchedule.schedule = new WeeklySchedule;
 					}
 				}
 			}
 			
 			protected function persistChangeHandler(event:ResultEvent):void
 			{
-				ruleSchedule.schedule.hour = hourDropDown.selectedIndex;
-				ruleObject.save(); 
 				close();
 			}
 			
@@ -273,7 +276,6 @@
 	</fx:Script>
 	<fx:Declarations>
 		<domain:Rule id="ruleObject"/>
-		<domain:RuleSchedule id="ruleSchedule" />
 		<my:remote id="re" destination="genericBRS" >
 			<my:method name="persistChange" result="persistChangeHandler(event)"/>
 		</my:remote>
@@ -339,243 +341,243 @@
 					
 					<s:VGroup verticalAlign="middle" paddingLeft="0" gap="0">
 						<s:Label width="35" text="00:00" rotation="90"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.sun.hour00}"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.mon.hour00}"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.tue.hour00}"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.wed.hour00}"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.thu.hour00}" />
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.fri.hour00}"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.sat.hour00}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.sun.hour00}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.mon.hour00}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.tue.hour00}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.wed.hour00}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.thu.hour00}" />
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.fri.hour00}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.sat.hour00}"/>
 					</s:VGroup>
 					<s:VGroup verticalAlign="middle" paddingLeft="0" gap="0">
 						<s:Label width="35" text="01:00" rotation="90"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.sun.hour01}"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.mon.hour01}"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.tue.hour01}"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.wed.hour01}"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.thu.hour01}" />
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.fri.hour01}"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.sat.hour01}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.sun.hour01}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.mon.hour01}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.tue.hour01}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.wed.hour01}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.thu.hour01}" />
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.fri.hour01}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.sat.hour01}"/>
 					</s:VGroup>
 					<s:VGroup verticalAlign="middle" paddingLeft="0" gap="0">
 						<s:Label width="35" text="02:00" rotation="90"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.sun.hour02}"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.mon.hour02}"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.tue.hour02}"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.wed.hour02}"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.thu.hour02}" />
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.fri.hour02}"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.sat.hour02}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.sun.hour02}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.mon.hour02}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.tue.hour02}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.wed.hour02}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.thu.hour02}" />
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.fri.hour02}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.sat.hour02}"/>
 					</s:VGroup>
 					<s:VGroup verticalAlign="middle" paddingLeft="0" gap="0">
 						<s:Label width="35" text="03:00"  rotation="90"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.sun.hour03}"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.mon.hour03}"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.tue.hour03}"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.wed.hour03}"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.thu.hour03}" />
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.fri.hour03}"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.sat.hour03}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.sun.hour03}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.mon.hour03}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.tue.hour03}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.wed.hour03}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.thu.hour03}" />
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.fri.hour03}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.sat.hour03}"/>
 					</s:VGroup>
 					<s:VGroup verticalAlign="middle" paddingLeft="0" gap="0">
 						<s:Label width="35" text="04:00"  rotation="90"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.sun.hour04}"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.mon.hour04}"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.tue.hour04}"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.wed.hour04}"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.thu.hour04}" />
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.fri.hour04}"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.sat.hour04}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.sun.hour04}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.mon.hour04}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.tue.hour04}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.wed.hour04}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.thu.hour04}" />
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.fri.hour04}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.sat.hour04}"/>
 					</s:VGroup>
 					<s:VGroup verticalAlign="middle" paddingLeft="0"  gap="0">
 						<s:Label width="35" text="05:00"  rotation="90"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.sun.hour05}"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.mon.hour05}"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.tue.hour05}"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.wed.hour05}"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.thu.hour05}" />
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.fri.hour05}"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.sat.hour05}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.sun.hour05}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.mon.hour05}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.tue.hour05}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.wed.hour05}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.thu.hour05}" />
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.fri.hour05}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.sat.hour05}"/>
 					</s:VGroup>
 					<s:VGroup verticalAlign="middle" paddingLeft="0" gap="0">
 						<s:Label width="35" text="06:00"  rotation="90"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.sun.hour06}"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.mon.hour06}"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.tue.hour06}"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.wed.hour06}"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.thu.hour06}" />
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.fri.hour06}"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.sat.hour06}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.sun.hour06}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.mon.hour06}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.tue.hour06}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.wed.hour06}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.thu.hour06}" />
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.fri.hour06}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.sat.hour06}"/>
 					</s:VGroup>
 					<s:VGroup verticalAlign="middle" paddingLeft="0" gap="0">
 						<s:Label width="35" text="07:00"  rotation="90"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.sun.hour07}"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.mon.hour07}"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.tue.hour07}"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.wed.hour07}"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.thu.hour07}" />
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.fri.hour07}"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.sat.hour07}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.sun.hour07}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.mon.hour07}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.tue.hour07}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.wed.hour07}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.thu.hour07}" />
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.fri.hour07}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.sat.hour07}"/>
 					</s:VGroup>
 					<s:VGroup verticalAlign="middle" paddingLeft="0" gap="0">
 						<s:Label width="35" text="08:00"  rotation="90"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.sun.hour08}"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.mon.hour08}"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.tue.hour08}"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.wed.hour08}"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.thu.hour08}" />
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.fri.hour08}"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.sat.hour08}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.sun.hour08}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.mon.hour08}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.tue.hour08}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.wed.hour08}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.thu.hour08}" />
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.fri.hour08}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.sat.hour08}"/>
 					</s:VGroup>
 					<s:VGroup verticalAlign="middle" paddingLeft="0" gap="0">
 						<s:Label width="35" text="09:00" rotation="90"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.sun.hour09}"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.mon.hour09}"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.tue.hour09}"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.wed.hour09}"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.thu.hour09}" />
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.fri.hour09}"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.sat.hour09}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.sun.hour09}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.mon.hour09}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.tue.hour09}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.wed.hour09}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.thu.hour09}" />
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.fri.hour09}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.sat.hour09}"/>
 					</s:VGroup>
 					<s:VGroup verticalAlign="middle" paddingLeft="0" gap="0">
 						<s:Label width="35" text="10:00" rotation="90"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.sun.hour10}"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.mon.hour10}"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.tue.hour10}"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.wed.hour10}"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.thu.hour10}" />
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.fri.hour10}"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.sat.hour10}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.sun.hour10}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.mon.hour10}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.tue.hour10}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.wed.hour10}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.thu.hour10}" />
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.fri.hour10}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.sat.hour10}"/>
 					</s:VGroup>
 					<s:VGroup verticalAlign="middle" paddingLeft="0" gap="0">
 						<s:Label width="35" text="11:00" rotation="90"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.sun.hour11}"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.mon.hour11}"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.tue.hour11}"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.wed.hour11}"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.thu.hour11}" />
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.fri.hour11}"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.sat.hour11}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.sun.hour11}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.mon.hour11}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.tue.hour11}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.wed.hour11}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.thu.hour11}" />
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.fri.hour11}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.sat.hour11}"/>
 					</s:VGroup>
 					<s:VGroup verticalAlign="middle" paddingLeft="0" gap="0">
 						<s:Label width="35" text="12:00" rotation="90"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.sun.hour12}"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.mon.hour12}"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.tue.hour12}"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.wed.hour12}"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.thu.hour12}" />
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.fri.hour12}"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.sat.hour12}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.sun.hour12}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.mon.hour12}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.tue.hour12}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.wed.hour12}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.thu.hour12}" />
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.fri.hour12}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.sat.hour12}"/>
 					</s:VGroup>
 					<s:VGroup verticalAlign="middle" paddingLeft="0" gap="0">
 						<s:Label width="35" text="13:00" rotation="90"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.sun.hour13}"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.mon.hour13}"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.tue.hour13}"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.wed.hour13}"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.thu.hour13}" />
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.fri.hour13}"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.sat.hour13}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.sun.hour13}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.mon.hour13}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.tue.hour13}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.wed.hour13}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.thu.hour13}" />
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.fri.hour13}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.sat.hour13}"/>
 					</s:VGroup>
 					<s:VGroup verticalAlign="middle" paddingLeft="0" gap="0">
 						<s:Label width="35" text="14:00" rotation="90"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.sun.hour14}"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.mon.hour14}"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.tue.hour14}"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.wed.hour14}"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.thu.hour14}" />
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.fri.hour14}"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.sat.hour14}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.sun.hour14}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.mon.hour14}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.tue.hour14}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.wed.hour14}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.thu.hour14}" />
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.fri.hour14}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.sat.hour14}"/>
 					</s:VGroup>
 					<s:VGroup verticalAlign="middle" paddingLeft="0" gap="0">
 						<s:Label width="35" text="15:00" rotation="90"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.sun.hour15}"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.mon.hour15}"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.tue.hour15}"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.wed.hour15}"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.thu.hour15}" />
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.fri.hour15}"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.sat.hour15}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.sun.hour15}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.mon.hour15}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.tue.hour15}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.wed.hour15}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.thu.hour15}" />
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.fri.hour15}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.sat.hour15}"/>
 					</s:VGroup>
 					<s:VGroup verticalAlign="middle" paddingLeft="0" gap="0">
 						<s:Label width="35" text="16:00" rotation="90"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.sun.hour16}"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.mon.hour16}"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.tue.hour16}"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.wed.hour16}"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.thu.hour16}" />
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.fri.hour16}"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.sat.hour16}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.sun.hour16}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.mon.hour16}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.tue.hour16}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.wed.hour16}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.thu.hour16}" />
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.fri.hour16}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.sat.hour16}"/>
 					</s:VGroup>
 					<s:VGroup verticalAlign="middle" paddingLeft="0" gap="0">
 						<s:Label width="35" text="17:00" rotation="90"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.sun.hour17}"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.mon.hour17}"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.tue.hour17}"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.wed.hour17}"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.thu.hour17}" />
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.fri.hour17}"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.sat.hour17}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.sun.hour17}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.mon.hour17}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.tue.hour17}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.wed.hour17}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.thu.hour17}" />
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.fri.hour17}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.sat.hour17}"/>
 					</s:VGroup>
 					<s:VGroup verticalAlign="middle" paddingLeft="0" gap="0">
 						<s:Label width="35" text="18:00" rotation="90"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.sun.hour18}"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.mon.hour18}"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.tue.hour18}"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.wed.hour18}"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.thu.hour18}" />
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.fri.hour18}"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.sat.hour18}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.sun.hour18}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.mon.hour18}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.tue.hour18}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.wed.hour18}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.thu.hour18}" />
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.fri.hour18}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.sat.hour18}"/>
 					</s:VGroup>
 					<s:VGroup verticalAlign="middle" paddingLeft="0" gap="0">
 						<s:Label width="35" text="19:00" rotation="90"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.sun.hour19}"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.mon.hour19}"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.tue.hour19}"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.wed.hour19}"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.thu.hour19}" />
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.fri.hour19}"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.sat.hour19}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.sun.hour19}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.mon.hour19}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.tue.hour19}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.wed.hour19}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.thu.hour19}" />
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.fri.hour19}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.sat.hour19}"/>
 					</s:VGroup>
 					<s:VGroup verticalAlign="middle" paddingLeft="0" gap="0">
 						<s:Label width="35" text="20:00" rotation="90"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.sun.hour20}"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.mon.hour20}"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.tue.hour20}"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.wed.hour20}"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.thu.hour20}" />
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.fri.hour20}"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.sat.hour20}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.sun.hour20}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.mon.hour20}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.tue.hour20}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.wed.hour20}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.thu.hour20}" />
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.fri.hour20}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.sat.hour20}"/>
 					</s:VGroup>
 					<s:VGroup verticalAlign="middle" paddingLeft="0" gap="0">
 						<s:Label width="35" text="21:00" rotation="90"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.sun.hour21}"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.mon.hour21}"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.tue.hour21}"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.wed.hour21}"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.thu.hour21}" />
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.fri.hour21}"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.sat.hour21}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.sun.hour21}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.mon.hour21}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.tue.hour21}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.wed.hour21}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.thu.hour21}" />
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.fri.hour21}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.sat.hour21}"/>
 					</s:VGroup>
 					<s:VGroup verticalAlign="middle" paddingLeft="0" gap="0">
 						<s:Label width="35" text="22:00" rotation="90"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.sun.hour22}"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.mon.hour22}"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.tue.hour22}"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.wed.hour22}"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.thu.hour22}" />
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.fri.hour22}"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.sat.hour22}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.sun.hour22}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.mon.hour22}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.tue.hour22}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.wed.hour22}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.thu.hour22}" />
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.fri.hour22}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.sat.hour22}"/>
 					</s:VGroup>
 					<s:VGroup verticalAlign="middle" paddingLeft="0" gap="0">
 						<s:Label width="35" text="23:00" rotation="90"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.sun.hour23}"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.mon.hour23}"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.tue.hour23}"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.wed.hour23}"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.thu.hour23}" />
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.fri.hour23}"/>
-						<discovery:ScheduleItemInput isActive="@{ruleSchedule.scheduleIntervals.sat.hour23}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.sun.hour23}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.mon.hour23}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.tue.hour23}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.wed.hour23}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.thu.hour23}" />
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.fri.hour23}"/>
+						<discovery:ScheduleItemInput isActive="@{ruleObject.ruleSchedule.scheduleIntervals.sat.hour23}"/>
 					</s:VGroup>
 				</s:HGroup>
 			</s:HGroup>
