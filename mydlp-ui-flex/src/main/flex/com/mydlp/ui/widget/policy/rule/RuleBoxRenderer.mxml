@@ -858,7 +858,7 @@
 			protected function scheduleButtonHandler(event:MouseEvent):void
 			{
 				var popup:SchedulePopup = InteractionUtil.newPopup(SchedulePopup) as SchedulePopup;
-				popup.ruleObject = ruleObject;
+				popup.ruleSchedule = ruleObject.ruleSchedule;
 				popup.populate();
 			}
 			
