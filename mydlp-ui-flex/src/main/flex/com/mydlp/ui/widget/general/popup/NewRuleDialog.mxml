@@ -36,6 +36,21 @@
 				InteractionUtil.closeCurrentPopup();
 			}
 			
+			protected function generateScheduleDayInterval():ScheduleDayInterval
+			{
+				var sdi:ScheduleDayInterval = new ScheduleDayInterval;
+				for(var i:int = 0; i < 24; i++)
+				{
+					var s:String;
+					if(i < 10)
+						s = "hour0" + i;
+					else
+						s = "hour" + i;
+					sdi[s] = true;
+				}
+				return sdi;
+			}
+			
 			protected function generateRuleScheduler(rule:*):RuleSchedule
 			{
 				var ruleSchedule:RuleSchedule = new RuleSchedule;
@@ -44,13 +59,13 @@
 				ruleSchedule.schedule = ds;
 				ruleSchedule.rule = rule;
 				var si:ScheduleIntervals = new ScheduleIntervals;
-				si.sun = new ScheduleDayInterval;
-				si.mon = new ScheduleDayInterval;
-				si.tue = new ScheduleDayInterval;
-				si.wed = new ScheduleDayInterval;
-				si.thu = new ScheduleDayInterval;
-				si.fri = new ScheduleDayInterval;
-				si.sat = new ScheduleDayInterval;
+				si.sun = generateScheduleDayInterval();
+				si.mon = generateScheduleDayInterval();
+				si.tue = generateScheduleDayInterval();
+				si.wed = generateScheduleDayInterval();
+				si.thu = generateScheduleDayInterval();
+				si.fri = generateScheduleDayInterval();
+				si.sat = generateScheduleDayInterval();
 				ruleSchedule.scheduleIntervals = si;
 				return ruleSchedule;
 			}
