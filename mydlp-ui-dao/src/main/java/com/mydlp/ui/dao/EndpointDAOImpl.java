@@ -82,6 +82,8 @@ public class EndpointDAOImpl extends AbstractPolicyDAO implements
 		@SuppressWarnings("unchecked")
 		List<Endpoint> l = getHibernateTemplate().findByCriteria(criteria);
 		Endpoint e = DAOUtil.getSingleResult(l);
+		if (e == null)
+			return null;
 		return e.getEndpointSecret();
 	}
 
