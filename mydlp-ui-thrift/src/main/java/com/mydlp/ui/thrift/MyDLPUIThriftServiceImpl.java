@@ -243,4 +243,15 @@ public class MyDLPUIThriftServiceImpl implements MyDLPUIThriftService {
 		});
 	}
 
+	@Override
+	public void startDiscoveryOnDemand(final int ruleId) {
+		call(new ThriftCall<Void>() {
+			@Override
+			public Void execute(MyDLPUIThriftConnection thriftConnection) throws TException {
+				thriftConnection.client.startDiscoveryOnDemand(ruleId);
+				return null;
+			}
+		});
+	}
+
 }

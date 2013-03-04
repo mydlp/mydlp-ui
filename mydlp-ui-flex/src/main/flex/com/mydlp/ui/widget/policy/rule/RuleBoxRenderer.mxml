@@ -862,6 +862,16 @@
 				popup.populate();
 			}
 			
+			protected function startButtonClickHandler(event:MouseEvent):void
+			{
+				de.startDiscoveryOnDemand(ruleObject.id);
+			}
+			
+			protected function startDiscoveryHandler(event:ResultEvent):void
+			{
+				
+			}
+			
 		]]>
 	</fx:Script>
 	
@@ -874,6 +884,9 @@
 		<my:remote id="re" destination="ruleBRS">
 			<my:method name="save" result="saveHandler(event)"/>
 			<my:method name="removeRuleItems" result="deleteRuleItemsHandler(event)"/>
+		</my:remote>
+		<my:remote id="de" destination="discoveryBRS" >
+			<my:method name="startDiscoveryOnDemand" result="startDiscoveryHandler(event)"/>
 		</my:remote>
 	</fx:Declarations>
 	
@@ -987,7 +1000,7 @@
 					<s:HorizontalLayout gap="5" horizontalAlign="center" verticalAlign="middle"/>
 				</s:layout>
 				
-				<s:Button skinClass="com.mydlp.ui.skin.PlayBitmapButton16Skin"/>
+				<s:Button skinClass="com.mydlp.ui.skin.PlayBitmapButton16Skin" click="startButtonClickHandler(event)"/>
 				<s:Button skinClass="com.mydlp.ui.skin.PauseBitmapButton16Skin"/>
 				<s:Button skinClass="com.mydlp.ui.skin.StopBitmapButton16Skin"/>
 			</s:Group>
