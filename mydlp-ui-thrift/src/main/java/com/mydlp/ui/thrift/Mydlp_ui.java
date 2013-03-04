@@ -50,6 +50,8 @@ public class Mydlp_ui {
 
     public void registerCommand(String EndpointId, String Command) throws org.apache.thrift.TException;
 
+    public void startDiscoveryOnDemand(int RuleId) throws org.apache.thrift.TException;
+
   }
 
   public interface AsyncIface {
@@ -79,6 +81,8 @@ public class Mydlp_ui {
     public void apiQuery(String Ipaddress, String Filename, ByteBuffer Data, org.apache.thrift.async.AsyncMethodCallback<AsyncClient.apiQuery_call> resultHandler) throws org.apache.thrift.TException;
 
     public void registerCommand(String EndpointId, String Command, org.apache.thrift.async.AsyncMethodCallback<AsyncClient.registerCommand_call> resultHandler) throws org.apache.thrift.TException;
+
+    public void startDiscoveryOnDemand(int RuleId, org.apache.thrift.async.AsyncMethodCallback<AsyncClient.startDiscoveryOnDemand_call> resultHandler) throws org.apache.thrift.TException;
 
   }
 
@@ -382,6 +386,18 @@ public class Mydlp_ui {
       args.setEndpointId(EndpointId);
       args.setCommand(Command);
       sendBase("registerCommand", args);
+    }
+
+    public void startDiscoveryOnDemand(int RuleId) throws org.apache.thrift.TException
+    {
+      send_startDiscoveryOnDemand(RuleId);
+    }
+
+    public void send_startDiscoveryOnDemand(int RuleId) throws org.apache.thrift.TException
+    {
+      startDiscoveryOnDemand_args args = new startDiscoveryOnDemand_args();
+      args.setRuleId(RuleId);
+      sendBase("startDiscoveryOnDemand", args);
     }
 
   }
@@ -858,6 +874,37 @@ public class Mydlp_ui {
       }
     }
 
+    public void startDiscoveryOnDemand(int RuleId, org.apache.thrift.async.AsyncMethodCallback<startDiscoveryOnDemand_call> resultHandler) throws org.apache.thrift.TException {
+      checkReady();
+      startDiscoveryOnDemand_call method_call = new startDiscoveryOnDemand_call(RuleId, resultHandler, this, ___protocolFactory, ___transport);
+      this.___currentMethod = method_call;
+      ___manager.call(method_call);
+    }
+
+    public static class startDiscoveryOnDemand_call extends org.apache.thrift.async.TAsyncMethodCall {
+      private int RuleId;
+      public startDiscoveryOnDemand_call(int RuleId, org.apache.thrift.async.AsyncMethodCallback<startDiscoveryOnDemand_call> resultHandler, org.apache.thrift.async.TAsyncClient client, org.apache.thrift.protocol.TProtocolFactory protocolFactory, org.apache.thrift.transport.TNonblockingTransport transport) throws org.apache.thrift.TException {
+        super(client, protocolFactory, transport, resultHandler, true);
+        this.RuleId = RuleId;
+      }
+
+      public void write_args(org.apache.thrift.protocol.TProtocol prot) throws org.apache.thrift.TException {
+        prot.writeMessageBegin(new org.apache.thrift.protocol.TMessage("startDiscoveryOnDemand", org.apache.thrift.protocol.TMessageType.CALL, 0));
+        startDiscoveryOnDemand_args args = new startDiscoveryOnDemand_args();
+        args.setRuleId(RuleId);
+        args.write(prot);
+        prot.writeMessageEnd();
+      }
+
+      public void getResult() throws org.apache.thrift.TException {
+        if (getState() != org.apache.thrift.async.TAsyncMethodCall.State.RESPONSE_READ) {
+          throw new IllegalStateException("Method call not finished!");
+        }
+        org.apache.thrift.transport.TMemoryInputTransport memoryTransport = new org.apache.thrift.transport.TMemoryInputTransport(getFrameBuffer().array());
+        org.apache.thrift.protocol.TProtocol prot = client.getProtocolFactory().getProtocol(memoryTransport);
+      }
+    }
+
   }
 
   public static class Processor<I extends Iface> extends org.apache.thrift.TBaseProcessor implements org.apache.thrift.TProcessor {
@@ -884,6 +931,7 @@ public class Mydlp_ui {
       processMap.put("getLicense", new getLicense());
       processMap.put("apiQuery", new apiQuery());
       processMap.put("registerCommand", new registerCommand());
+      processMap.put("startDiscoveryOnDemand", new startDiscoveryOnDemand());
       return processMap;
     }
 
@@ -1089,6 +1137,21 @@ public class Mydlp_ui {
 
       protected org.apache.thrift.TBase getResult(I iface, registerCommand_args args) throws org.apache.thrift.TException {
         iface.registerCommand(args.EndpointId, args.Command);
+        return null;
+      }
+    }
+
+    private static class startDiscoveryOnDemand<I extends Iface> extends org.apache.thrift.ProcessFunction<I, startDiscoveryOnDemand_args> {
+      public startDiscoveryOnDemand() {
+        super("startDiscoveryOnDemand");
+      }
+
+      protected startDiscoveryOnDemand_args getEmptyArgsInstance() {
+        return new startDiscoveryOnDemand_args();
+      }
+
+      protected org.apache.thrift.TBase getResult(I iface, startDiscoveryOnDemand_args args) throws org.apache.thrift.TException {
+        iface.startDiscoveryOnDemand(args.RuleId);
         return null;
       }
     }
@@ -9244,6 +9307,303 @@ public class Mydlp_ui {
 
     private void readObject(java.io.ObjectInputStream in) throws java.io.IOException, ClassNotFoundException {
       try {
+        read(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(in)));
+      } catch (org.apache.thrift.TException te) {
+        throw new java.io.IOException(te);
+      }
+    }
+
+  }
+
+  public static class startDiscoveryOnDemand_args implements org.apache.thrift.TBase<startDiscoveryOnDemand_args, startDiscoveryOnDemand_args._Fields>, java.io.Serializable, Cloneable   {
+    private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("startDiscoveryOnDemand_args");
+
+    private static final org.apache.thrift.protocol.TField RULE_ID_FIELD_DESC = new org.apache.thrift.protocol.TField("RuleId", org.apache.thrift.protocol.TType.I32, (short)1);
+
+    public int RuleId; // required
+
+    /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
+    public enum _Fields implements org.apache.thrift.TFieldIdEnum {
+      RULE_ID((short)1, "RuleId");
+
+      private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+
+      static {
+        for (_Fields field : EnumSet.allOf(_Fields.class)) {
+          byName.put(field.getFieldName(), field);
+        }
+      }
+
+      /**
+       * Find the _Fields constant that matches fieldId, or null if its not found.
+       */
+      public static _Fields findByThriftId(int fieldId) {
+        switch(fieldId) {
+          case 1: // RULE_ID
+            return RULE_ID;
+          default:
+            return null;
+        }
+      }
+
+      /**
+       * Find the _Fields constant that matches fieldId, throwing an exception
+       * if it is not found.
+       */
+      public static _Fields findByThriftIdOrThrow(int fieldId) {
+        _Fields fields = findByThriftId(fieldId);
+        if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+        return fields;
+      }
+
+      /**
+       * Find the _Fields constant that matches name, or null if its not found.
+       */
+      public static _Fields findByName(String name) {
+        return byName.get(name);
+      }
+
+      private final short _thriftId;
+      private final String _fieldName;
+
+      _Fields(short thriftId, String fieldName) {
+        _thriftId = thriftId;
+        _fieldName = fieldName;
+      }
+
+      public short getThriftFieldId() {
+        return _thriftId;
+      }
+
+      public String getFieldName() {
+        return _fieldName;
+      }
+    }
+
+    // isset id assignments
+    private static final int __RULEID_ISSET_ID = 0;
+    private BitSet __isset_bit_vector = new BitSet(1);
+
+    public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
+    static {
+      Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
+      tmpMap.put(_Fields.RULE_ID, new org.apache.thrift.meta_data.FieldMetaData("RuleId", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+          new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.I32)));
+      metaDataMap = Collections.unmodifiableMap(tmpMap);
+      org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(startDiscoveryOnDemand_args.class, metaDataMap);
+    }
+
+    public startDiscoveryOnDemand_args() {
+    }
+
+    public startDiscoveryOnDemand_args(
+      int RuleId)
+    {
+      this();
+      this.RuleId = RuleId;
+      setRuleIdIsSet(true);
+    }
+
+    /**
+     * Performs a deep copy on <i>other</i>.
+     */
+    public startDiscoveryOnDemand_args(startDiscoveryOnDemand_args other) {
+      __isset_bit_vector.clear();
+      __isset_bit_vector.or(other.__isset_bit_vector);
+      this.RuleId = other.RuleId;
+    }
+
+    public startDiscoveryOnDemand_args deepCopy() {
+      return new startDiscoveryOnDemand_args(this);
+    }
+
+    @Override
+    public void clear() {
+      setRuleIdIsSet(false);
+      this.RuleId = 0;
+    }
+
+    public int getRuleId() {
+      return this.RuleId;
+    }
+
+    public startDiscoveryOnDemand_args setRuleId(int RuleId) {
+      this.RuleId = RuleId;
+      setRuleIdIsSet(true);
+      return this;
+    }
+
+    public void unsetRuleId() {
+      __isset_bit_vector.clear(__RULEID_ISSET_ID);
+    }
+
+    /** Returns true if field RuleId is set (has been assigned a value) and false otherwise */
+    public boolean isSetRuleId() {
+      return __isset_bit_vector.get(__RULEID_ISSET_ID);
+    }
+
+    public void setRuleIdIsSet(boolean value) {
+      __isset_bit_vector.set(__RULEID_ISSET_ID, value);
+    }
+
+    public void setFieldValue(_Fields field, Object value) {
+      switch (field) {
+      case RULE_ID:
+        if (value == null) {
+          unsetRuleId();
+        } else {
+          setRuleId((Integer)value);
+        }
+        break;
+
+      }
+    }
+
+    public Object getFieldValue(_Fields field) {
+      switch (field) {
+      case RULE_ID:
+        return Integer.valueOf(getRuleId());
+
+      }
+      throw new IllegalStateException();
+    }
+
+    /** Returns true if field corresponding to fieldID is set (has been assigned a value) and false otherwise */
+    public boolean isSet(_Fields field) {
+      if (field == null) {
+        throw new IllegalArgumentException();
+      }
+
+      switch (field) {
+      case RULE_ID:
+        return isSetRuleId();
+      }
+      throw new IllegalStateException();
+    }
+
+    @Override
+    public boolean equals(Object that) {
+      if (that == null)
+        return false;
+      if (that instanceof startDiscoveryOnDemand_args)
+        return this.equals((startDiscoveryOnDemand_args)that);
+      return false;
+    }
+
+    public boolean equals(startDiscoveryOnDemand_args that) {
+      if (that == null)
+        return false;
+
+      boolean this_present_RuleId = true;
+      boolean that_present_RuleId = true;
+      if (this_present_RuleId || that_present_RuleId) {
+        if (!(this_present_RuleId && that_present_RuleId))
+          return false;
+        if (this.RuleId != that.RuleId)
+          return false;
+      }
+
+      return true;
+    }
+
+    @Override
+    public int hashCode() {
+      return 0;
+    }
+
+    public int compareTo(startDiscoveryOnDemand_args other) {
+      if (!getClass().equals(other.getClass())) {
+        return getClass().getName().compareTo(other.getClass().getName());
+      }
+
+      int lastComparison = 0;
+      startDiscoveryOnDemand_args typedOther = (startDiscoveryOnDemand_args)other;
+
+      lastComparison = Boolean.valueOf(isSetRuleId()).compareTo(typedOther.isSetRuleId());
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+      if (isSetRuleId()) {
+        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.RuleId, typedOther.RuleId);
+        if (lastComparison != 0) {
+          return lastComparison;
+        }
+      }
+      return 0;
+    }
+
+    public _Fields fieldForId(int fieldId) {
+      return _Fields.findByThriftId(fieldId);
+    }
+
+    public void read(org.apache.thrift.protocol.TProtocol iprot) throws org.apache.thrift.TException {
+      org.apache.thrift.protocol.TField field;
+      iprot.readStructBegin();
+      while (true)
+      {
+        field = iprot.readFieldBegin();
+        if (field.type == org.apache.thrift.protocol.TType.STOP) { 
+          break;
+        }
+        switch (field.id) {
+          case 1: // RULE_ID
+            if (field.type == org.apache.thrift.protocol.TType.I32) {
+              this.RuleId = iprot.readI32();
+              setRuleIdIsSet(true);
+            } else { 
+              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, field.type);
+            }
+            break;
+          default:
+            org.apache.thrift.protocol.TProtocolUtil.skip(iprot, field.type);
+        }
+        iprot.readFieldEnd();
+      }
+      iprot.readStructEnd();
+
+      // check for required fields of primitive type, which can't be checked in the validate method
+      validate();
+    }
+
+    public void write(org.apache.thrift.protocol.TProtocol oprot) throws org.apache.thrift.TException {
+      validate();
+
+      oprot.writeStructBegin(STRUCT_DESC);
+      oprot.writeFieldBegin(RULE_ID_FIELD_DESC);
+      oprot.writeI32(this.RuleId);
+      oprot.writeFieldEnd();
+      oprot.writeFieldStop();
+      oprot.writeStructEnd();
+    }
+
+    @Override
+    public String toString() {
+      StringBuilder sb = new StringBuilder("startDiscoveryOnDemand_args(");
+      boolean first = true;
+
+      sb.append("RuleId:");
+      sb.append(this.RuleId);
+      first = false;
+      sb.append(")");
+      return sb.toString();
+    }
+
+    public void validate() throws org.apache.thrift.TException {
+      // check for required fields
+    }
+
+    private void writeObject(java.io.ObjectOutputStream out) throws java.io.IOException {
+      try {
+        write(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(out)));
+      } catch (org.apache.thrift.TException te) {
+        throw new java.io.IOException(te);
+      }
+    }
+
+    private void readObject(java.io.ObjectInputStream in) throws java.io.IOException, ClassNotFoundException {
+      try {
+        // it doesn't seem like you should have to do this, but java serialization is wacky, and doesn't call the default constructor.
+        __isset_bit_vector = new BitSet(1);
         read(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(in)));
       } catch (org.apache.thrift.TException te) {
         throw new java.io.IOException(te);
