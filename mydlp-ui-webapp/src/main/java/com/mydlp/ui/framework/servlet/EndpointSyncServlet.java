@@ -31,14 +31,6 @@ public class EndpointSyncServlet implements HttpRequestHandler {
 	private static Logger logger = LoggerFactory.getLogger(EndpointSyncServlet.class);
 	private static Logger errorLogger = LoggerFactory.getLogger("IERROR");
 	
-	private static final String UP_TO_DATE = "up-to-date";
-	
-	private static final String INVALID = "invalid";
-	
-	private static final ByteBuffer errorResponse = Charset.forName("ISO-8859-1").encode(CharBuffer.wrap(UP_TO_DATE));
-	
-	private static final ByteBuffer invalidResponse = Charset.forName("ISO-8859-1").encode(CharBuffer.wrap(INVALID));
-	
 	protected static final int MAX_CONTENT_LENGTH = 10*1024*1024;
 
 	@Autowired
@@ -87,18 +79,27 @@ public class EndpointSyncServlet implements HttpRequestHandler {
 		{
 			logger.error("Improper payload.",e);
 			errorLogger.error("Improper sync request received from address: " + req.getRemoteAddr() + " . Sending invalid_endpoint response.");
-			responseBuffer = invalidResponse;
+			responseBuffer = getInvalidResponse();
 		}
 		catch (Throwable e) {
 			logger.error("Runtime error occured", e);
 		}
 		
 		if (responseBuffer == null)
-			responseBuffer = errorResponse;
+			responseBuffer = getErrorResponse();
 		
 		WritableByteChannel channel = Channels.newChannel(resp.getOutputStream());
         channel.write(responseBuffer);
         channel.close();
 	}
 
+
+	protected ByteBuffer getErrorResponse() {
+		return Charset.forName("ISO-8859-1").encode(CharBuffer.wrap("error"));
+	}
+	
+	protected ByteBuffer getInvalidResponse() {
+		return Charset.forName("ISO-8859-1").encode(CharBuffer.wrap("invalid"));
+	}
+	 
 }

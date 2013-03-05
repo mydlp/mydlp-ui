@@ -28,12 +28,10 @@ import com.mydlp.ui.dao.EndpointDAO.RandomExhaustedException;
 @Service("registerServlet")
 public class EndpointRegisterServlet implements HttpRequestHandler {
 
-	private static Logger logger = LoggerFactory
-			.getLogger(EndpointRegisterServlet.class);
+	private static Logger logger = LoggerFactory.getLogger(EndpointRegisterServlet.class);
+	private static Logger errorLogger = LoggerFactory.getLogger("IERROR");
 
 	private static final Charset charset = Charset.forName("ISO-8859-1");
-
-	private static final ByteBuffer errorResponse = charset.encode(CharBuffer.wrap("retry"));
 
 	protected TreeMap<Date, String> latestRequests = new TreeMap<Date, String>();
 	
@@ -92,14 +90,15 @@ public class EndpointRegisterServlet implements HttpRequestHandler {
 			addToBanList(ipAddress);
 		} catch ( RandomExhaustedException e) {
 			logger.error("Random exhausted at register for " + ipAddress, e);
+			errorLogger.error("Random exhausted at register for " + ipAddress);
 		} catch (AddressBannedException e) {
-			logger.error("Address " + ipAddress + " is banned for register temporarily.");
+			errorLogger.error("Address " + ipAddress + " is banned for register temporarily.");
 		} catch (Throwable e) {
 			logger.error("Runtime error occured", e);
 		}
 
 		if (responseBuffer == null)
-			responseBuffer = errorResponse;
+			responseBuffer = getRetryResponse();
 
 		WritableByteChannel channel = Channels.newChannel(resp
 				.getOutputStream());
@@ -116,4 +115,8 @@ public class EndpointRegisterServlet implements HttpRequestHandler {
 		
 	}
 	
+
+	protected ByteBuffer getRetryResponse() {
+		return Charset.forName("ISO-8859-1").encode(CharBuffer.wrap("retry"));
+	}
 }
