@@ -21,6 +21,16 @@ public class DiscoveryBRSImpl implements DiscoveryService
 		
 		thriftService.startDiscoveryOnDemand(ruleId);
 	}
+
+	@Override
+	public void stopDiscoveryOnDemand(Integer ruleId) {
+		thriftService.stopDiscoveryOnDemand(ruleId);
+	}
+
+	@Override
+	public void pauseDiscoveryOnDemand(Integer ruleId) {
+		thriftService.pauseDiscoveryOnDemand(ruleId);
+	}
 	
 
 }

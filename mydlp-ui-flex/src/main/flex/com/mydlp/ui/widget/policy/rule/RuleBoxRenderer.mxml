@@ -872,6 +872,16 @@
 				
 			}
 			
+			protected function pauseButtonClickHandler(event:MouseEvent):void
+			{
+				de.pauseDiscoveryOnDemand(ruleObject.id);
+			}
+			
+			protected function stopButtonClickHandler(event:MouseEvent):void
+			{
+				de.stopDiscoveryOnDemand(ruleObject.id);
+			}
+			
 		]]>
 	</fx:Script>
 	
@@ -887,6 +897,8 @@
 		</my:remote>
 		<my:remote id="de" destination="discoveryBRS" >
 			<my:method name="startDiscoveryOnDemand" result="startDiscoveryHandler(event)"/>
+			<my:method name="stopDiscoveryOnDemand" result="startDiscoveryHandler(event)"/>
+			<my:method name="pauseDiscoveryOnDemand" result="startDiscoveryHandler(event)"/>
 		</my:remote>
 	</fx:Declarations>
 	
@@ -1001,8 +1013,8 @@
 				</s:layout>
 				
 				<s:Button skinClass="com.mydlp.ui.skin.PlayBitmapButton16Skin" click="startButtonClickHandler(event)"/>
-				<s:Button skinClass="com.mydlp.ui.skin.PauseBitmapButton16Skin"/>
-				<s:Button skinClass="com.mydlp.ui.skin.StopBitmapButton16Skin"/>
+				<s:Button skinClass="com.mydlp.ui.skin.PauseBitmapButton16Skin" click="pauseButtonClickHandler(event)"/>
+				<s:Button skinClass="com.mydlp.ui.skin.StopBitmapButton16Skin" click="stopButtonClickHandler(event)"/>
 			</s:Group>
 			
 		</s:HGroup>

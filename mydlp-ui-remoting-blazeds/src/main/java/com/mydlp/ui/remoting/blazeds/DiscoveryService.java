@@ -8,5 +8,9 @@ import com.mydlp.ui.domain.AuthSecurityRole;
 public interface DiscoveryService {
 
 	public void startDiscoveryOnDemand(Integer ruleId);
+	
+	public void stopDiscoveryOnDemand(Integer ruleId);
+	
+	public void pauseDiscoveryOnDemand(Integer ruleId);
 
 }

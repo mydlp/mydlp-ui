@@ -33,5 +33,9 @@ public interface MyDLPUIThriftService {
     public void registerCommand(String endpointId, String command);
     
     public void startDiscoveryOnDemand(int ruleId);
+    
+    public void stopDiscoveryOnDemand(int ruleId);
+    
+    public void pauseDiscoveryOnDemand(int ruleId);
 
 }
