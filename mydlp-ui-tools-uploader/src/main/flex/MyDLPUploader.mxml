@@ -260,7 +260,8 @@
 					  />
 		</s:HGroup>  
 		
-		<s:List id="fileViewList" borderVisible="false"
+		<!-- borderVisible="false" -->
+		<s:List id="fileViewList" 
 				width="100%" height="100%"
 				visible="true" 
 				dataProvider.selected="{fileList}"
@@ -270,7 +271,6 @@
 				dataProvider.done="{uploadStatuses}"
 				itemRenderer.done="com.mydlp.ui.tools.uploader.UploadStatusRenderer"
 				/>
-		
 		
 	</s:VGroup>
 	

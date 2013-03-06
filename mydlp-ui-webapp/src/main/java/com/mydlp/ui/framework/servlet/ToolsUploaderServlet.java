@@ -200,7 +200,6 @@ public class ToolsUploaderServlet implements HttpRequestHandler {
 		documentDatabaseDAO.save(documentDatabase);
 		
 		thriftService.generateFingerprintsWithFile(documentDatabaseId, filename, filepath);
-		
 	}
 
 }
