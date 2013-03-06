@@ -33,8 +33,8 @@ import com.mydlp.ui.thrift.MyDLPUIThriftService;
 @Service("toolsUploaderServlet")
 public class ToolsUploaderServlet implements HttpRequestHandler {
 
-	private static Logger logger = LoggerFactory
-			.getLogger(ToolsUploaderServlet.class);
+	private static Logger logger = LoggerFactory.getLogger(ToolsUploaderServlet.class);
+	private static Logger errorLogger = LoggerFactory.getLogger("IERROR");
 
 	private static final String ERROR = "error";
 	private static final String SUCCESS = "ok";
@@ -108,27 +108,28 @@ public class ToolsUploaderServlet implements HttpRequestHandler {
 				} 
 				catch (Throwable e)
 				{
+					errorLogger.error("Error occurred when extracting document database id");
 					logger.error("Error occurred when extracting document database id", e);
 				}
 				
 				if (token == null) 
 				{
-					logger.error("No valid token has been found. Token is null.");
+					errorLogger.error("No valid token has been found. Token is null.");
 					returnStr = INVALID_TOKEN;
 				}
 				else if (!token.getIpAddress().equals(req.getRemoteAddr()))
 				{
-					logger.error("Remote address does not match with token: " + token.getIpAddress() + " " + req.getRemoteAddr());
+					errorLogger.error("Remote address does not match with token: " + token.getIpAddress() + " " + req.getRemoteAddr());
 					returnStr = INVALID_TOKEN;
 				}
 				else if (!token.getServiceName().equals("tools-uploader"))
 				{
-					logger.error("Registered token service is not tools-uploader : " + token.getServiceName());
+					errorLogger.error("Registered token service is not tools-uploader : " + token.getServiceName());
 					returnStr = INVALID_TOKEN;
 				}
 				else if (documentDatabaseId == null)
 				{
-					logger.error("Document database id is null");
+					errorLogger.error("Document database id is null");
 					returnStr = INVALID_TOKEN;
 				}
 				else
@@ -162,7 +163,7 @@ public class ToolsUploaderServlet implements HttpRequestHandler {
 			}
 			else
 			{
-				logger.error("Request is not multipart");
+				errorLogger.error("Request is not multipart");
 			}
 		} catch (IOException e) {
 			logger.error("IOError occurred", e);
@@ -174,7 +175,7 @@ public class ToolsUploaderServlet implements HttpRequestHandler {
 		
 		if (returnStr == null || returnStr.length() == 0)
 		{
-			logger.error("Returned empty or null value from thrift call");
+			errorLogger.error("Returned empty or null value from thrift call");
 			returnStr = ERROR;
 		}
 		PrintWriter out = resp.getWriter();
@@ -198,8 +199,10 @@ public class ToolsUploaderServlet implements HttpRequestHandler {
 		documentDatabaseFileEntry = documentDatabaseDAO.saveFileEntry(documentDatabaseFileEntry);
 		documentDatabase.getFileEntries().add(documentDatabaseFileEntry);
 		documentDatabaseDAO.save(documentDatabase);
-		
-		thriftService.generateFingerprintsWithFile(documentDatabaseId, filename, filepath);
+		if (documentDatabaseFileEntry != null && documentDatabaseFileEntry.getId() != null)
+			thriftService.generateFingerprintsWithFile(documentDatabaseFileEntry.getId(), filename, filepath);
+		else
+			errorLogger.error("DocumentDatabaseFileEntry.id is null or not accessible. Does not sending thrift to generate fingerprints.");
 	}
 
 }
