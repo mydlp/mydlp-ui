@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:SkinnableContainer xmlns:fx="http://ns.adobe.com/mxml/2009" 
+					  xmlns:s="library://ns.adobe.com/flex/spark" 
+					  xmlns:mx="library://ns.adobe.com/flex/mx"
+					  xmlns:my="http://www.mydlp.com/flex/my"
+					  xmlns:util="com.mydlp.ui.util.*"
+					  width="100%" height="100%" 
+					  creationComplete="onCreationComplete(event)">
+	<fx:Script>
+		<![CDATA[
+			import com.mydlp.ui.domain.IncidentLog;
+			import com.mydlp.ui.domain.IncidentLogFileContent;
+			import com.mydlp.ui.domain.Rule;
+			import com.mydlp.ui.skin.DetailSearchLabelButton16Skin;
+			import com.mydlp.ui.util.AsyncListDataProvider;
+			import com.mydlp.ui.util.InteractionUtil;
+			import com.mydlp.ui.util.LangUtil;
+			import com.mydlp.ui.util.SessionUtil;
+			import com.mydlp.ui.util.SpecialCharacterUtil;
+			import com.mydlp.ui.widget.general.input.IpAddressInput;
+			
+			import mx.collections.ArrayCollection;
+			import mx.collections.ListCollectionView;
+			import mx.events.FlexEvent;
+			import mx.rpc.AsyncToken;
+			import mx.rpc.events.ResultEvent;
+			
+			import spark.events.GridEvent;
+			
+			protected const LOG_PENDING_OBJECT:Object = 
+				{date: LangUtil.getString("messages", "log.container.search.pending.message")};
+			
+			protected const CONTENT_PENDING_OBJECT:Object = 
+				{message: LangUtil.getString("messages", "log.container.search.pending.message")};
+			
+			protected var criteriaList:ListCollectionView = new ArrayCollection();
+			protected var searchString:String = "";
+			protected var contentId:Number = Number.NaN;
+			
+			[Bindable]
+			protected var logSearchDP:AsyncListDataProvider = null;
+			
+			[Bindable]
+			protected var contentSearchDP:AsyncListDataProvider = null;
+			
+			[Bindable]
+			protected var actionSearch:ListCollectionView = 
+				new ArrayCollection(
+					new Array(
+						Rule.ACTION_ARCHIVE,
+						Rule.ACTION_BLOCK,
+						Rule.ACTION_LOG,
+						Rule.ACTION_QUARANTINE
+					)
+				);
+			
+			protected static const channels:ListCollectionView = 
+				new ArrayCollection(
+					new Array(
+						{label: "Web", data:"W"},
+						{label: "Mail", data:"M"},
+						{label: "Removable Storage", data:"R"},
+						{label: "Removable Storage Inbound", data:"I"},
+						{label: "Printer", data:"P"},
+						{label: "Discovery", data:"D"},
+						{label: "API", data:"A"}
+					)
+				);
+			
+			protected static const channelsCommunity:ListCollectionView = 
+				new ArrayCollection(
+					new Array(
+						{label: "Web", data:"W"},
+						{label: "Mail", data:"M"},
+						{label: "Removable Storage", data:"R"},
+						{label: "Printer", data:"P"},
+						{label: "Discovery", data:"D"}
+					)
+				);
+			
+			protected function onCreationComplete(event:FlexEvent):void
+			{
+				
+				logSearchDP = new AsyncListDataProvider();
+				logSearchDP.countFunction = countLogSearch;
+				logSearchDP.fetchFunction = fetchLogSearch;
+				logSearchDP.pendingObject = LOG_PENDING_OBJECT;
+				
+				contentSearchDP = new AsyncListDataProvider();
+				contentSearchDP.countFunction = countContentSearch;
+				contentSearchDP.fetchFunction = fetchContentSearch;
+				contentSearchDP.pendingObject = CONTENT_PENDING_OBJECT;
+				
+				refresh();
+			}
+			
+			protected function countLogSearch(): AsyncToken
+			{
+				return re.getLogCount(criteriaList);
+			}
+			
+			protected function fetchLogSearch(offset:Number, count:Number): AsyncToken
+			{
+				return re.getLogs(criteriaList, offset, count);
+			}
+			
+			protected function countContentSearch(): AsyncToken
+			{
+				return re.getLogContentCount(searchString);
+			}
+			
+			protected function fetchContentSearch(offset:Number, count:Number): AsyncToken
+			{
+				return re.getLogContents(searchString, offset, count);
+			}
+			
+			protected function generateCriteriaList():void
+			{
+				criteriaList = new ArrayCollection();
+				
+				var criteria:ListCollectionView = new ArrayCollection();
+				criteria.addItem("reportId");
+				criteria.addItem("neq");
+				criteria.addItem("-1");
+				
+				criteriaList.addItem(criteria);
+			}
+			
+			protected function searchLogHandler(event:MouseEvent):void
+			{
+				refresh();
+			}
+			
+			protected function resetHandler(event:MouseEvent):void
+			{
+				refresh();
+			}
+			
+			protected function searchContentHandler(event:MouseEvent):void
+			{
+				contentSearchDP.init();
+			}
+			
+			protected function onContentClick(event:GridEvent):void
+			{
+				if (event.item == null || ! event.item is IncidentLogFileContent) return;
+				var content:IncidentLogFileContent = 
+					event.item as IncidentLogFileContent;
+				contentId = content.id;
+				refresh();
+			}
+			
+			public function requeueIncident(value:IncidentLog): void
+			{
+				re.requeueIncident(value);
+			}
+			
+			protected function refresh(): void
+			{
+				generateCriteriaList();
+				logSearchDP.init();
+			}
+			
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<my:remote id="re" destination="logBRS" >
+			<my:method name="exportExcel" />
+		</my:remote>
+	</fx:Declarations>
+	
+	
+	<s:layout>
+		<s:VerticalLayout paddingTop="10" />
+	</s:layout>
+	
+	
+	
+	<s:Group width="100%" height="100%">
+		<s:layout>
+			<s:HorizontalLayout gap="10"/>
+		</s:layout>
+		<s:DataGrid id="logList" dataProvider="{logSearchDP.asyncListView}" width="100%" height="100%" variableRowHeight="true">
+			<s:columns>
+				<s:ArrayList>
+					<s:GridColumn headerText="@Resource(bundle = 'messages', key = 'log.container.header.date')"
+								  dataField="date"/>
+					<s:GridColumn headerText="@Resource(bundle = 'messages', key = 'log.container.header.source')" 
+								  itemRenderer="com.mydlp.ui.widget.log.IncidentSourceColumnRenderer"/>
+					<s:GridColumn headerText="@Resource(bundle = 'messages', key = 'log.container.header.destination')"
+								  itemRenderer="com.mydlp.ui.widget.log.IncidentDestinationColumnRenderer"/>
+					<s:GridColumn headerText="@Resource(bundle = 'messages', key = 'log.container.header.policy')"
+								  itemRenderer="com.mydlp.ui.widget.log.IncidentPolicyColumnRenderer"/>
+					<s:GridColumn headerText="@Resource(bundle = 'messages', key = 'log.container.header.details')"
+								  itemRenderer="com.mydlp.ui.widget.log.IncidentDetailsColumnRenderer"/>
+					<s:GridColumn headerText="@Resource(bundle = 'messages', key = 'log.container.header.files')"
+								  itemRenderer="com.mydlp.ui.widget.log.IncidentFilesColumnRenderer"/>
+					<s:GridColumn headerText="@Resource(bundle = 'messages', key = 'log.container.header.reportId')"
+								  itemRenderer="com.mydlp.ui.widget.log.DiscoveryIncidentReportIdColumnRenderer"/>
+				</s:ArrayList>
+			</s:columns>
+		</s:DataGrid>
+	</s:Group>
+	
+</s:SkinnableContainer>

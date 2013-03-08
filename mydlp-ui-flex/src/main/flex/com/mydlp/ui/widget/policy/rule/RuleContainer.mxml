@@ -5,7 +5,7 @@
 					  xmlns:my="http://www.mydlp.com/flex/my"
 					  xmlns:rule="com.mydlp.ui.widget.policy.rule.*"
 					  width="100%" height="100%"
-					  minWidth="700" 
+					  minWidth="700" xmlns:discovery="com.mydlp.ui.widget.policy.rule.discovery.*" 
 					  >
 	<fx:Script>
 		<![CDATA[
@@ -524,7 +524,7 @@
 					   width="100%" height="100%"
 					   itemRendererFunction="ruleItemRendererFunction"/>
 		
-		<s:Group width="100%" height="50">
+		<s:Group width="100%" height="50" includeInLayout="{!isDiscoveryTab}" visible="{!isDiscoveryTab}">
 			<s:layout>
 				<s:HorizontalLayout paddingTop="5" paddingBottom="5" 
 									paddingLeft="20"
@@ -533,6 +533,13 @@
 			<s:Button id="addRuleButtonBottom" skinClass="com.mydlp.ui.skin.AddBitmapLabelButton24Skin" 
 					  label="@Resource(key='rules.addrule', bundle='messages')"
 					  click="addRuleToBottom(event)" styleName="fontSize24Style" />
+		</s:Group>
+		<s:Group width="100%" height="250" includeInLayout="{isDiscoveryTab}" visible="{isDiscoveryTab}">
+			<s:layout>
+				<s:HorizontalLayout paddingTop="5" paddingBottom="5" paddingLeft="20"/>
+			</s:layout>
+			
+			<discovery:DiscoveryReportContainer/>
 		</s:Group>
 	</s:Group>
 	
