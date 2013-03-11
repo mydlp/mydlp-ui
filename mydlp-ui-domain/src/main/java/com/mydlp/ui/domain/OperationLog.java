@@ -3,13 +3,13 @@ package com.mydlp.ui.domain;
 import java.util.Date;
 
 import javax.persistence.Column;
-import javax.persistence.MappedSuperclass;
+import javax.persistence.Entity;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.Index;
 
-@MappedSuperclass
+@Entity
 public class OperationLog extends AbstractEntity {
 	
 	public static final String CONTEXT_DISCOVERY = "discovery";
