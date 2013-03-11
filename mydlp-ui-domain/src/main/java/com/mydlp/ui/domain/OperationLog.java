@@ -28,6 +28,7 @@ public class OperationLog extends AbstractEntity {
 	protected Byte severity;
 	protected String message;
 	protected String messageKey;
+	protected String groupId;
 	
 	@Index(name="dateIndex")
 	@Column(nullable=false)
@@ -84,6 +85,13 @@ public class OperationLog extends AbstractEntity {
 	}
 	public void setRuleId(Long ruleId) {
 		this.ruleId = ruleId;
+	}
+	@Column(nullable=true)
+	public String getGroupId() {
+		return groupId;
+	}
+	public void setGroupId(String groupId) {
+		this.groupId = groupId;
 	}
 	
 }
