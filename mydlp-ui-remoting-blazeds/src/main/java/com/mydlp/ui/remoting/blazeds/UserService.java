@@ -28,6 +28,6 @@ public interface UserService {
 	public AuthUser save(AuthUser user, String passwd);
 	
 	@Secured({AuthSecurityRole.ROLE_ADMIN, AuthSecurityRole.ROLE_SUPER_ADMIN})
-	public Boolean isEmailValid(String email);
+	public Boolean isEmailValid(Integer userId, String email);
 	
 }

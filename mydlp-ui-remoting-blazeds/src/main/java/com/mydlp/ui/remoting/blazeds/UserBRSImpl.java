@@ -69,10 +69,10 @@ public class UserBRSImpl implements UserService
 	}
 
 	@Override
-	public Boolean isEmailValid(String email) {
+	public Boolean isEmailValid(Integer userId, String email) {
 		int emailHashCode = email.hashCode();
 		AuthUser authUser = userDAO.findByEmailHashCode(emailHashCode);
-		if(authUser == null)
+		if(authUser == null || authUser.getId().equals(userId))
 			return true;
 		else
 			return false;

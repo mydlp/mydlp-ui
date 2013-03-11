@@ -118,14 +118,24 @@
 				}
 				
 				if(targetUser.role == null)//It means it is new user.
-					srList.selectedIndex = 0;					
+				{
+					for(var l:int = 0; l < allAuthSecurity.length; l++)
+					{
+						if(allAuthSecurity[l].roleName == "ROLE_NONE")
+						{
+							FlexGlobals.topLevelApplication.temporaryWorkaroundSelectedUserRole = allAuthSecurity[l];
+							srList.selectedIndex = l;
+							break;
+						}
+					}
+				}					
 				else
 				{
 					for (var i:int=0; i < allAuthSecurity.length; i++)				
 					{
 						if (allAuthSecurity[i].roleName == targetUser.role.roleName)
 						{
-							FlexGlobals.topLevelApplication.userRole = allAuthSecurity[i];
+							FlexGlobals.topLevelApplication.temporaryWorkaroundSelectedUserRole = allAuthSecurity[i];
 							srList.selectedIndex = i;
 						}					
 					}
@@ -136,7 +146,7 @@
 			
 			public function onChange(event:IndexChangeEvent): void
 			{
-				var role:AuthSecurityRole = FlexGlobals.topLevelApplication.userRole;
+				var role:AuthSecurityRole = FlexGlobals.topLevelApplication.temporaryWorkaroundSelectedUserRole;
 				
 				authSecurityRole = allAuthSecurity.getItemAt(event.newIndex) as AuthSecurityRole;
 				srList.selectedIndex = event.newIndex;	

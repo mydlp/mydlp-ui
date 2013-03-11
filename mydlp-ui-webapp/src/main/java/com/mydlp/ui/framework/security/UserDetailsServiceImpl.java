@@ -26,6 +26,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 		AuthUser userEntity = userDAO.findByName(username);
 		if (userEntity == null)
 			throw new UsernameNotFoundException("user not found");
+		
+		if (userEntity.getRole() == null)
+			throw new UsernameNotFoundException("user is not authorized, has no role");
 
 		return assembler.buildUserFromUserEntity(userEntity);
 	}

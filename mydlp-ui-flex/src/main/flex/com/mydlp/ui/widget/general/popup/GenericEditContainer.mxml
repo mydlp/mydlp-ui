@@ -702,6 +702,13 @@
 							index = 2;
 						}
 						else if(classMember.name == "username"){
+							var regExpValidator7:RegExpValidator = new RegExpValidator();
+							regExpValidator7.source = textInput;
+							regExpValidator7.property = "text";
+							regExpValidator7.expression = "^[a-zA-Z0-9_/\.\ ]+$";
+							regExpValidator7.required = true;
+							ErrorTipManager.registerValidator(regExpValidator7);
+							validators.push(regExpValidator7);
 							index = 3;
 						}
 						else if(classMember.name == "deviceId"){
@@ -884,7 +891,7 @@
 					}
 					
 					if (formObject is AuthUser){
-						reuser.isEmailValid((formObject as AuthUser).email);
+						reuser.isEmailValid(((formObject as AuthUser)).id, (formObject as AuthUser).email);
 					}
 					else
 						re.persistChange(formObject, deleteList);

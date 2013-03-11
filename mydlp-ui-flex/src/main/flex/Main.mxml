@@ -59,7 +59,7 @@
 			
 			protected var isStartup:Boolean = true;
 			
-			public var userRole:AuthSecurityRole;
+			public var temporaryWorkaroundSelectedUserRole:AuthSecurityRole;
 			
 			public var notifiedUsers:ArrayCollection = new ArrayCollection;
 			

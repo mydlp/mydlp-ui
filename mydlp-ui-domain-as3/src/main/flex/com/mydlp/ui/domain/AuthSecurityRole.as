@@ -14,5 +14,6 @@ package com.mydlp.ui.domain {
 		public static const ROLE_AUDITOR:String = "ROLE_AUDITOR";
 		public static const ROLE_CLASSIFIER:String = "ROLE_CLASSIFIER";
 		public static const ROLE_SUPER_ADMIN:String = "ROLE_SUPER_ADMIN";
+		public static const ROLE_NONE:String = "ROLE_NONE";
     }
 }

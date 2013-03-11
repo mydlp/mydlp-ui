@@ -46,6 +46,7 @@
 					userDP.addItem(user);
 				userList.validateNow();
 			}
+			
 			protected function onCreationComplete(event:Event):void
 			{
 				refreshUsers();
@@ -78,7 +79,6 @@
 				setPassword.enabled = false;
 			}
 			
-			
 			protected function isButtonEnabled():Boolean
 			{
 				return true;
@@ -88,7 +88,8 @@
 			{
 				var currentUser:AuthUser = FlexGlobals.topLevelApplication.user as AuthUser;
 				
-				if(targetUser.role.roleName == AuthSecurityRole.ROLE_SUPER_ADMIN && 
+				if(targetUser.role != null && 
+					targetUser.role.roleName == AuthSecurityRole.ROLE_SUPER_ADMIN && 
 					!currentUser.hasRole(AuthSecurityRole.ROLE_SUPER_ADMIN))
 					return false;
 				else return true;

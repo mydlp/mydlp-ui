@@ -38,7 +38,7 @@
 				e.item = data;
 				if(this.checkBox.selected)
 				{	
-					FlexGlobals.topLevelApplication.userRole = this.data;
+					FlexGlobals.topLevelApplication.temporaryWorkaroundSelectedUserRole = this.data;
 					e.index = itemIndex;
 				}
 				else
@@ -48,7 +48,7 @@
 			
 			protected function isRoleSelected():Boolean
 			{
-				var role:AuthSecurityRole = FlexGlobals.topLevelApplication.userRole;
+				var role:AuthSecurityRole = FlexGlobals.topLevelApplication.temporaryWorkaroundSelectedUserRole;
 				if(role == null)
 					return false;
 				if(role == this.data)
@@ -58,10 +58,10 @@
 			
 			protected function onChangeHandler(event:Event):void
 			{
-				var role:AuthSecurityRole = FlexGlobals.topLevelApplication.userRole;
+				var role:AuthSecurityRole = FlexGlobals.topLevelApplication.temporaryWorkaroundSelectedUserRole;
 				if(event.currentTarget.selected == true)
 				{
-					FlexGlobals.topLevelApplication.userRole = this.data;
+					FlexGlobals.topLevelApplication.temporaryWorkaroundSelectedUserRole = this.data;
 				}
 				var e:IndexChangeEvent = new IndexChangeEvent(IndexChangeEvent.CHANGE, true);
 				e.newIndex = itemIndex;
@@ -72,7 +72,7 @@
 			
 			protected function onCreationComplete():void
 			{
-				var userRole:AuthSecurityRole = FlexGlobals.topLevelApplication.userRole;
+				var userRole:AuthSecurityRole = FlexGlobals.topLevelApplication.temporaryWorkaroundSelectedUserRole;
 				if(userRole == this.data)
 					checkBox.selected = true
 				else 
