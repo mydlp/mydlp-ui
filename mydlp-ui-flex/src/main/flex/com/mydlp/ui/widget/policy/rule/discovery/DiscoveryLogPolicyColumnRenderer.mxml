@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:GridItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009" 
+					xmlns:s="library://ns.adobe.com/flex/spark" 
+					xmlns:mx="library://ns.adobe.com/flex/mx" clipAndEnableScrolling="true">
+	
+	<fx:Script>
+		<![CDATA[
+			import com.mydlp.ui.domain.DiscoveryReport;
+			import com.mydlp.ui.domain.IncidentLog;
+			import com.mydlp.ui.domain.OperationLog;
+			import com.mydlp.ui.domain.Rule;
+			import com.mydlp.ui.util.LangUtil;
+			import com.mydlp.ui.widget.policy.rule.RuleContainer;
+			import com.mydlp.ui.widget.revision.RevisionContainer;
+			
+			import mx.core.FlexGlobals;
+			
+			protected var selectedRule:Rule = null;
+			
+			protected function isGotoVisible(value:*): Boolean
+			{
+				if (value == null) return false;
+				var report:DiscoveryReport = value as DiscoveryReport;
+				if (! (report.ruleId == -1))
+				{
+					var rule:Rule = RuleContainer.getRule(report.ruleId, true);
+					if (rule != null)
+					{
+						selectedRule = rule;
+						return true;
+					}
+				}
+				return false;
+			}
+			
+			
+			protected function getPolicyText(value:*):String {
+				if (value == null) return "";
+				
+				var report:DiscoveryReport = value as DiscoveryReport;
+				var labelText:String = "";
+				
+				labelText += LangUtil.getString("messages","log.container.column.policy.rule") + ": ";
+				
+				labelText += FlexGlobals.topLevelApplication.getRuleLabel(report.ruleId);
+
+				return labelText;
+			}
+			
+			protected function goToRuleButtonClickHandler(event:MouseEvent):void
+			{
+				FlexGlobals.topLevelApplication.discoveryContainer.ruleContainer.gotoRule(selectedRule);
+			}
+			
+			
+		]]>
+	</fx:Script>
+	
+	<s:states>
+		<s:State name="normal" />
+		<s:State name="hovered" />
+		<s:State name="selected" />
+	</s:states>
+	
+	<s:Group>
+		
+		<s:layout>
+			<s:HorizontalLayout gap="5"/>
+		</s:layout>
+		
+		<s:Group>
+			
+			<s:layout>
+				<s:VerticalLayout paddingBottom="4" paddingTop="4" paddingLeft="4"/>
+			</s:layout>
+			
+			<s:Label id="lblData" text="{getPolicyText(data)}"/>
+		</s:Group>
+		
+		<s:Group height="100%">
+			<s:layout>
+				<s:VerticalLayout verticalAlign="middle" horizontalAlign="left"/>
+			</s:layout>
+			<s:HGroup includeIn="selected">
+				<s:Button  id="gotoRuleButton" skinClass="com.mydlp.ui.skin.GotoButton16Skin"
+						  toolTip="@Resource(bundle = 'messages', key = 'log.gotoRule.tooltip')"
+						  includeInLayout="{isGotoVisible(data)}"
+						  click="goToRuleButtonClickHandler(event)" />
+			</s:HGroup>
+		</s:Group>
+		
+	</s:Group>
+	
+</s:GridItemRenderer>

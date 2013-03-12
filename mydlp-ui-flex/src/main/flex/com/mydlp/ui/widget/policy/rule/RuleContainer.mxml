@@ -90,11 +90,20 @@
 				hideFiltered();
 			}
 			
-			public static function getRule(value:Number): Rule
+			public static function getRule(value:Number, isDiscovery:Boolean): Rule
 			{
-				if (FlexGlobals.topLevelApplication.ruleContainer == null)
-					return null;
-				return FlexGlobals.topLevelApplication.ruleContainer.getRuleI(value);
+				if(isDiscovery)
+				{
+					if (FlexGlobals.topLevelApplication.discoveryContainer.ruleContainer == null)
+						return null;
+					return FlexGlobals.topLevelApplication.discoveryContainer.ruleContainer.getRuleI(value);
+				}
+				else
+				{
+					if (FlexGlobals.topLevelApplication.ruleContainer == null)
+						return null;
+					return FlexGlobals.topLevelApplication.ruleContainer.getRuleI(value);
+				}
 			}
 			
 			public function getRuleI(value:Number): Rule
@@ -319,7 +328,10 @@
 			public function gotoRule(r:Rule): void 
 			{
 				ruleList.selectedItem = r;
-				FlexGlobals.topLevelApplication.tapBar.selectedIndex = 1; // index of policy tab
+				if(isDiscoveryTab)
+					FlexGlobals.topLevelApplication.tapBar.selectedIndex = 2; // index of discovery tab
+				else
+					FlexGlobals.topLevelApplication.tapBar.selectedIndex = 1; // index of policy tab
 			}
 			
 			public function gotoRuleIndex(i:int): void 

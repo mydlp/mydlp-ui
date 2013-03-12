@@ -8,9 +8,11 @@ import org.springframework.flex.remoting.RemotingDestination;
 import org.springframework.stereotype.Service;
 
 import com.mydlp.ui.dao.IncidentLogDAO;
+import com.mydlp.ui.dao.OperationLogDAO;
 import com.mydlp.ui.domain.AuthUser;
 import com.mydlp.ui.domain.IncidentLog;
 import com.mydlp.ui.domain.IncidentLogFileContent;
+import com.mydlp.ui.domain.OperationLog;
 import com.mydlp.ui.service.LogExportService;
 import com.mydlp.ui.service.SolrService;
 import com.mydlp.ui.thrift.MyDLPUIThriftService;
@@ -21,6 +23,9 @@ public class LogBRSImpl implements LogService
 {
 	@Autowired
 	protected IncidentLogDAO incidentLogDAO;
+	
+	@Autowired
+	protected OperationLogDAO operationLogDAO;
 	
 	@Autowired 
 	protected SolrService solrService;
@@ -80,6 +85,17 @@ public class LogBRSImpl implements LogService
 	public String exportExcel(List<List<Object>> criteriaList) {
 		AuthUser currentUser = userService.getCurrentUser();
 		return logExportService.exportExcel(currentUser, criteriaList);
+	}
+
+	@Override
+	public List<OperationLog> getDiscoveryOperationLogs(
+			List<List<Object>> criteriaList, Integer offset, Integer count) {
+		return operationLogDAO.getOperationLogs(criteriaList, offset, count);
+	}
+
+	@Override
+	public Long getDiscoveryOperationLogCount(List<List<Object>> criteriaList) {
+		return operationLogDAO.getOperationLogCount(criteriaList);
 	}
 
 }

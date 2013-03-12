@@ -21,7 +21,7 @@
 				var log:IncidentLog = value as IncidentLog;
 				if (! (log.ruleId == -1))
 				{
-					var rule:Rule = RuleContainer.getRule(log.ruleId);
+					var rule:Rule = RuleContainer.getRule(log.ruleId, false);
 					if (rule != null)
 					{
 						selectedRule = rule;

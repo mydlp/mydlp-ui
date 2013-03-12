@@ -82,6 +82,12 @@
     <ds.log.username>sa</ds.log.username>
     <ds.log.password></ds.log.password>    
 
+    <dao.report.dialect>org.hibernate.dialect.HSQLDialect</dao.report.dialect>
+    <ds.report.driver>org.hsqldb.jdbcDriver</ds.report.driver>
+    <ds.report.url>jdbc:hsqldb:file:hsqldb/MyDLPReport</ds.report.url>
+    <ds.report.username>sa</ds.report.username>
+    <ds.report.password></ds.report.password>    
+
     <session_util.key>Devel</session_util.key>
 
     <jetty.daemon>false</jetty.daemon>
@@ -108,6 +114,11 @@
         <ds.log.url>jdbc:mysql://localhost/mydlp_log?characterEncoding=UTF-8</ds.log.url>
         <ds.log.username>root</ds.log.username>
         <ds.log.password></ds.log.password>   
+        <dao.report.dialect>org.hibernate.dialect.MySQL5InnoDBDialect</dao.report.dialect>
+        <ds.report.driver>com.mysql.jdbc.Driver</ds.report.driver>
+        <ds.report.url>jdbc:mysql://localhost/mydlp_report?characterEncoding=UTF-8</ds.report.url>
+        <ds.report.username>root</ds.report.username>
+        <ds.report.password></ds.report.password>   
 
         <flex.debug>false</flex.debug>
         <flex.optimize>true</flex.optimize>

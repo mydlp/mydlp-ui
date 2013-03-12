@@ -131,6 +131,23 @@
        </props>
      </property>
   </bean>
+  
+  <bean id="reportSessionFactory" class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
+     <property name="dataSource"><ref bean="reportDataSource"/></property>
+     <property name="annotatedClasses">
+       <list>
+         <value>com.mydlp.ui.domain.DiscoveryReport</value>
+       </list>
+     </property>
+     <property name="hibernateProperties">
+       <props>
+         <prop key="hibernate.dialect">${dao.log.dialect}</prop>
+         <prop key="hibernate.hbm2ddl.auto">update</prop>
+         <prop key="hibernate.show_sql">${dao.show_sql}</prop>
+         <prop key="hibernate.connection.zeroDateTimeBehavior">convertToNull</prop>
+       </props>
+     </property>
+  </bean>
 
   <bean id="policyDataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
     <property name="driverClassName" value="${ds.policy.driver}"/>
@@ -145,6 +162,13 @@
     <property name="username" value="${ds.log.username}"/>
     <property name="password" value="${ds.log.password}"/>
   </bean>
+  
+  <bean id="reportDataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+    <property name="driverClassName" value="${ds.report.driver}"/>
+    <property name="url" value="${ds.report.url}"/>
+    <property name="username" value="${ds.report.username}"/>
+    <property name="password" value="${ds.report.password}"/>
+  </bean>
 
   <bean id="policyTransactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
     <property name="sessionFactory"><ref local="policySessionFactory"/></property>
@@ -152,6 +176,10 @@
   
   <bean id="logTransactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
     <property name="sessionFactory"><ref local="logSessionFactory"/></property>
+  </bean>
+  
+  <bean id="reportTransactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+    <property name="sessionFactory"><ref local="reportSessionFactory"/></property>
   </bean>
   
   <bean id="policyTransactionTemplate" class="org.springframework.transaction.support.TransactionTemplate">
@@ -162,8 +190,13 @@
     <property name="transactionManager" ref="logTransactionManager"/>
   </bean>
   
+  <bean id="reportTransactionTemplate" class="org.springframework.transaction.support.TransactionTemplate">
+    <property name="transactionManager" ref="reportTransactionManager"/>
+  </bean>
+  
   <tx:annotation-driven transaction-manager="policyTransactionManager"/>
   
   <tx:annotation-driven transaction-manager="logTransactionManager"/>
   
+  <tx:annotation-driven transaction-manager="reportTransactionManager"/>
 </beans>

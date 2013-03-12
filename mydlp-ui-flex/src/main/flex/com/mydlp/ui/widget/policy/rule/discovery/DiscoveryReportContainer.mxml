@@ -8,6 +8,7 @@
 					  creationComplete="onCreationComplete(event)">
 	<fx:Script>
 		<![CDATA[
+			import com.mydlp.ui.domain.DiscoveryReport;
 			import com.mydlp.ui.domain.IncidentLog;
 			import com.mydlp.ui.domain.IncidentLogFileContent;
 			import com.mydlp.ui.domain.Rule;
@@ -29,19 +30,13 @@
 			
 			protected const LOG_PENDING_OBJECT:Object = 
 				{date: LangUtil.getString("messages", "log.container.search.pending.message")};
-			
-			protected const CONTENT_PENDING_OBJECT:Object = 
-				{message: LangUtil.getString("messages", "log.container.search.pending.message")};
-			
+		
 			protected var criteriaList:ListCollectionView = new ArrayCollection();
 			protected var searchString:String = "";
 			protected var contentId:Number = Number.NaN;
 			
 			[Bindable]
 			protected var logSearchDP:AsyncListDataProvider = null;
-			
-			[Bindable]
-			protected var contentSearchDP:AsyncListDataProvider = null;
 			
 			[Bindable]
 			protected var actionSearch:ListCollectionView = 
@@ -86,32 +81,17 @@
 				logSearchDP.fetchFunction = fetchLogSearch;
 				logSearchDP.pendingObject = LOG_PENDING_OBJECT;
 				
-				contentSearchDP = new AsyncListDataProvider();
-				contentSearchDP.countFunction = countContentSearch;
-				contentSearchDP.fetchFunction = fetchContentSearch;
-				contentSearchDP.pendingObject = CONTENT_PENDING_OBJECT;
-				
 				refresh();
 			}
 			
 			protected function countLogSearch(): AsyncToken
 			{
-				return re.getLogCount(criteriaList);
+				return re.getDiscoveryReportCount(criteriaList);
 			}
 			
 			protected function fetchLogSearch(offset:Number, count:Number): AsyncToken
 			{
-				return re.getLogs(criteriaList, offset, count);
-			}
-			
-			protected function countContentSearch(): AsyncToken
-			{
-				return re.getLogContentCount(searchString);
-			}
-			
-			protected function fetchContentSearch(offset:Number, count:Number): AsyncToken
-			{
-				return re.getLogContents(searchString, offset, count);
+				return re.getDiscoveryReports(criteriaList, offset, count);
 			}
 			
 			protected function generateCriteriaList():void
@@ -119,9 +99,9 @@
 				criteriaList = new ArrayCollection();
 				
 				var criteria:ListCollectionView = new ArrayCollection();
-				criteria.addItem("reportId");
-				criteria.addItem("neq");
-				criteria.addItem("-1");
+				criteria.addItem("groupId");
+				criteria.addItem("eq");
+				criteria.addItem("213_123123");
 				
 				criteriaList.addItem(criteria);
 			}
@@ -134,11 +114,6 @@
 			protected function resetHandler(event:MouseEvent):void
 			{
 				refresh();
-			}
-			
-			protected function searchContentHandler(event:MouseEvent):void
-			{
-				contentSearchDP.init();
 			}
 			
 			protected function onContentClick(event:GridEvent):void
@@ -161,11 +136,28 @@
 				logSearchDP.init();
 			}
 			
+			protected function onClick(event:MouseEvent):void
+			{
+				var d:DiscoveryReport = new DiscoveryReport;
+				d.ruleId = 1;
+				d.groupId = "213_123123";
+				d.startDate = new Date();
+				de.save(d);
+			}
+			
+			protected function onResult(event:ResultEvent):void
+			{
+				refresh();
+			}
+			
 		]]>
 	</fx:Script>
 	<fx:Declarations>
 		<my:remote id="re" destination="logBRS" >
 			<my:method name="exportExcel" />
+		</my:remote>
+		<my:remote id="de" destination="discoveryReportBRS">
+			<my:method name="save" result="onResult(event)"/>
 		</my:remote>
 	</fx:Declarations>
 	
@@ -174,7 +166,7 @@
 		<s:VerticalLayout paddingTop="10" />
 	</s:layout>
 	
-	
+	<s:Button id="hede" click="onClick(event)" label="new"/>
 	
 	<s:Group width="100%" height="100%">
 		<s:layout>
@@ -183,20 +175,14 @@
 		<s:DataGrid id="logList" dataProvider="{logSearchDP.asyncListView}" width="100%" height="100%" variableRowHeight="true">
 			<s:columns>
 				<s:ArrayList>
-					<s:GridColumn headerText="@Resource(bundle = 'messages', key = 'log.container.header.date')"
-								  dataField="date"/>
-					<s:GridColumn headerText="@Resource(bundle = 'messages', key = 'log.container.header.source')" 
-								  itemRenderer="com.mydlp.ui.widget.log.IncidentSourceColumnRenderer"/>
-					<s:GridColumn headerText="@Resource(bundle = 'messages', key = 'log.container.header.destination')"
-								  itemRenderer="com.mydlp.ui.widget.log.IncidentDestinationColumnRenderer"/>
-					<s:GridColumn headerText="@Resource(bundle = 'messages', key = 'log.container.header.policy')"
-								  itemRenderer="com.mydlp.ui.widget.log.IncidentPolicyColumnRenderer"/>
-					<s:GridColumn headerText="@Resource(bundle = 'messages', key = 'log.container.header.details')"
-								  itemRenderer="com.mydlp.ui.widget.log.IncidentDetailsColumnRenderer"/>
-					<s:GridColumn headerText="@Resource(bundle = 'messages', key = 'log.container.header.files')"
-								  itemRenderer="com.mydlp.ui.widget.log.IncidentFilesColumnRenderer"/>
-					<s:GridColumn headerText="@Resource(bundle = 'messages', key = 'log.container.header.reportId')"
-								  itemRenderer="com.mydlp.ui.widget.log.DiscoveryIncidentReportIdColumnRenderer"/>
+					<s:GridColumn headerText="@Resource(bundle = 'messages', key = 'discovery.log.container.header.date')"
+								  dataField="startDate"/>
+					<s:GridColumn headerText="@Resource(bundle = 'messages', key = 'discovery.log.container.header.policy')"
+								  itemRenderer="com.mydlp.ui.widget.policy.rule.discovery.DiscoveryLogPolicyColumnRenderer"/>
+					<s:GridColumn headerText="@Resource(bundle = 'messages', key = 'discovery.log.container.header.message')"
+								  itemRenderer="com.mydlp.ui.widget.policy.rule.discovery.DiscoveryLogMessageColumnRenderer"/>
+					<s:GridColumn headerText="@Resource(bundle = 'messages', key = 'discovery.log.container.header.reportId')"
+								  itemRenderer="com.mydlp.ui.widget.policy.rule.discovery.DiscoveryLogReportIdColumnRenderer"/>
 				</s:ArrayList>
 			</s:columns>
 		</s:DataGrid>

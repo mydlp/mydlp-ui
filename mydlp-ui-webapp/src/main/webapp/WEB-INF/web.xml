@@ -45,6 +45,19 @@
       <param-value>logSessionFactory</param-value>
     </init-param>        
   </filter>
+  
+  <filter>  
+    <filter-name>reportSessionFilter</filter-name>  
+    <filter-class>org.springframework.orm.hibernate3.support.OpenSessionInViewFilter</filter-class>
+    <init-param>
+      <param-name>flushMode</param-name>
+      <param-value>ALWAYS</param-value>
+    </init-param>
+    <init-param>
+      <param-name>sessionFactoryBeanName</param-name>
+      <param-value>reportSessionFactory</param-value>
+    </init-param>        
+  </filter>
 
   <filter-mapping>  
     <filter-name>policySessionFilter</filter-name>  
@@ -53,6 +66,11 @@
   
   <filter-mapping>  
     <filter-name>logSessionFilter</filter-name>  
+    <url-pattern>/spring/*</url-pattern>
+  </filter-mapping>
+  
+  <filter-mapping>  
+    <filter-name>reportSessionFilter</filter-name>  
     <url-pattern>/spring/*</url-pattern>
   </filter-mapping>
   
