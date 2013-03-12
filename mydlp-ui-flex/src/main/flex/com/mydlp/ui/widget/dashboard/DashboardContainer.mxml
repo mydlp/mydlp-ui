@@ -156,8 +156,7 @@
 		<s:layout>
 			<s:VerticalLayout verticalAlign="middle" horizontalAlign="center" gap="20"/>
 		</s:layout>
-		<s:BitmapImage source="@Embed('/assets/images/logo_314x124.png')" />
-		<s:Spacer height="2%" />
+		<s:Spacer height="12%" />
 		<dashboard:LicenseBox id="licenseBox" currentState.nolicense="nolicense" currentState="default"/>
 		<s:Spacer height="2%" />
 	</s:Group>

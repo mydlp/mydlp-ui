@@ -3,7 +3,6 @@
 		 xmlns:s="library://ns.adobe.com/flex/spark" 
 		 xmlns:mx="library://ns.adobe.com/flex/mx"
 		 xmlns:my="http://www.mydlp.com/flex/my"
-		 width="100%" height="36"
 		 creationComplete="onCreationComplete(event)">
 
 	<fx:Script>
@@ -287,36 +286,38 @@
 	</s:states>
 	
 	<s:layout>
-		<s:HorizontalLayout verticalAlign="middle" horizontalAlign="right"/>
+		<s:VerticalLayout verticalAlign="middle" horizontalAlign="right" gap="5"/>
 	</s:layout>
 	
-	<s:Group includeIn="default" includeInLayout="{canInstall()}" visible="{canInstall()}">
-		<s:Button id="installButton" skinClass="com.mydlp.ui.skin.InstallBitmapLabelButton24Skin" 
-				  label="@Resource(bundle = 'messages', key = 'toptoolbar.installPolicy')"
-				  styleName="fontSize24Style" click="{installPolicy()}" 
-				  includeInLayout="{compileProgress == 'done'}" visible="{compileProgress == 'done'}"/>
-		<s:HGroup verticalAlign="middle"
-				  includeInLayout="{compileProgress != 'done'}" visible="{compileProgress != 'done'}">
-			<s:Label text="@Resource(bundle = 'messages', key = 'toptoolbar.compiling.message')" />
-			<mx:ProgressBar indeterminate="true" width="100" height="10"
-							labelPlacement="center" label="" labelWidth="0"/>
-		</s:HGroup>
-	</s:Group>
+	<s:HGroup horizontalAlign="right" verticalAlign="top" height="30">
+		<s:Group includeIn="default" includeInLayout="{canInstall()}" visible="{canInstall()}">
+			<s:Button id="installButton" skinClass="com.mydlp.ui.skin.InstallBitmapLabelButton24Skin" 
+					  label="@Resource(bundle = 'messages', key = 'toptoolbar.installPolicy')"
+					  styleName="fontSize24Style" click="{installPolicy()}" 
+					  includeInLayout="{compileProgress == 'done'}" visible="{compileProgress == 'done'}"/>
+			<s:HGroup verticalAlign="middle"
+					  includeInLayout="{compileProgress != 'done'}" visible="{compileProgress != 'done'}">
+				<s:Label text="@Resource(bundle = 'messages', key = 'toptoolbar.compiling.message')" />
+				<mx:ProgressBar indeterminate="true" width="100" height="10"
+								labelPlacement="center" label="" labelWidth="0"/>
+			</s:HGroup>
+		</s:Group>
+		
+		<s:Spacer width="10" />
+		
+		<s:Button skinClass="com.mydlp.ui.skin.SettingsBitmapButton16Skin" 
+				  toolTip="@Resource(bundle = 'messages', key = 'toptoolbar.settings')"
+				  click="settingButtonClickHandler(event)"/>
+		<s:Button skinClass="com.mydlp.ui.skin.CloseBitmapButton16Skin" 
+				  click="logoutButtonClickHandler(event)"
+				  toolTip="@Resource(bundle = 'messages', key = 'toptoolbar.logout')"/>	
+	</s:HGroup>
 	
-	<s:Spacer width="6" />
-	<s:VGroup width="400" 
-			  includeInLayout="{userLabelText.length &gt; 0}" 
+	<s:VGroup includeInLayout="{userLabelText.length &gt; 0}" 
 			  visible="{userLabelText.length &gt; 0}"
 			  horizontalAlign="left" verticalAlign="middle">
 		<s:Label text="{userLabelText}" width="100%"/>
 		<s:Label id="mydlpVersion" width="100%" />
 	</s:VGroup>
 	
-	<s:Spacer width="4" />
-	<s:Button skinClass="com.mydlp.ui.skin.SettingsBitmapButton16Skin" 
-			  toolTip="@Resource(bundle = 'messages', key = 'toptoolbar.settings')"
-			  click="settingButtonClickHandler(event)"/>
-	<s:Button skinClass="com.mydlp.ui.skin.CloseBitmapButton16Skin" 
-			  click="logoutButtonClickHandler(event)"
-			  toolTip="@Resource(bundle = 'messages', key = 'toptoolbar.logout')"/>
 </s:Group>

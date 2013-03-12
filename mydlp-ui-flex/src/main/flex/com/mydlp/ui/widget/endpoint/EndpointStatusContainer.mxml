@@ -189,8 +189,7 @@
 	</s:layout>
 	
 	<s:VGroup gap="8" width="100%" height="100%"
-			  paddingTop="6" paddingBottom="6"
-			  paddingLeft="6" paddingRight="6">
+			  paddingTop="6">
 		<s:HGroup width="100%" horizontalAlign="center">
 			<s:Spacer width="10" />
 			<s:TextInput id="searchStrTextInput" width="300"/>

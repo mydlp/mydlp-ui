@@ -44,15 +44,15 @@
 		<s:fill>
 			<!-- gradient fill colors - default ratios are 0,1 -->
 			<s:LinearGradient rotation="90">
-				<s:GradientEntry color="#fabe00"
-								 color.down="#cc6600"/>
-				<s:GradientEntry color="#e17b00"
-								 color.down="#ff9900"/>
+				<s:GradientEntry color="0xC6D3E7"
+								 color.down="0xCEDBEF"/>
+				<s:GradientEntry color="0xCEDBEF"
+								 color.down="0xDEEBFF"/>
 			</s:LinearGradient>
 		</s:fill>
 	</s:Rect>
 	
-	<s:Group top="1" right="1" bottom="1" left="1">
+	<s:Group top="1" right="12" bottom="1" left="6">
 		<s:layout>
 			<s:HorizontalLayout verticalAlign="middle" gap="{bitmapSize/4}"/>
 		</s:layout>

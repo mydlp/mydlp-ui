@@ -12,8 +12,9 @@
 			   xmlns:dashboard="com.mydlp.ui.widget.dashboard.*"
 			   xmlns:revision="com.mydlp.ui.widget.revision.*"
 			   height="100%" width="100%"
-			   preloader="com.mydlp.ui.util.DownloadProgressBarUtil"
-			   applicationComplete="onCreationComplete(event)" xmlns:endpoint="com.mydlp.ui.widget.endpoint.*"
+			   preloader="MainPreloader"
+			   applicationComplete="onCreationComplete(event)" 
+			   xmlns:endpoint="com.mydlp.ui.widget.endpoint.*"
 			   skinClass="com.mydlp.ui.skin.MainSkin"
 			   >
 	<fx:Style source="/assets/style/general.css" />
@@ -122,6 +123,8 @@
 			
 			protected function onCreationComplete(event:FlexEvent):void
 			{
+				
+				
 				HibernateManaged.defaultHibernateService = this.dataAccessService;
 				
 				if(stage != null)
@@ -181,11 +184,22 @@
 						{
 							element = new NoLicenseDashboardContainer();
 							noLicenseDashboardContainer = element;
+							licenseType.text = "";
+							licenseType.visible = false;
 						}
 						else
 						{
 							element = new DashboardContainer();
 							dashboardContainer = element;
+							if (SessionUtil.isEnterprise())
+							{
+								licenseType.text = "Enterprise Edition";
+							}
+							else
+							{
+								licenseType.text = "Community Edition";
+							}
+							licenseType.visible = true;
 						}
 					}
 					else if(i == 1 && hasAnyAdminRole())
@@ -373,27 +387,39 @@
 	</s:states>
 	
 	<s:Group minWidth="1416" minHeight="730" width="100%" height="100%">
-		<s:layout>
-			<s:VerticalLayout gap="0" paddingTop="4" paddingBottom="24"
-							  paddingLeft="24" paddingRight="24"/>
-		</s:layout>
 		
-		<toolbar:TopToolbar id="topToolbar" currentState.nolicense="nolicense" currentState="default"/>
+		<s:Group top="2" left="24" height="70" width="400" >
+			<s:BitmapImage top="0" left="0" source="@Embed('/assets/images/logo_220x70.png')" />
+			<s:Label top="14" left="230" id="licenseType" fontSize="17" fontWeight="bold" visible="false"/>
+		</s:Group>
 		
-		<s:Spacer height="5" width="100%" />
+		<s:BitmapImage bottom="32" right="32"
+					   alpha="0.25"
+					   source="@Embed('/assets/images/logo_icon.png')" />
 		
-		<s:TabBar id="tapBar" dataProvider="{vs}" fontWeight="bold" fontSize="14"/>
+		<toolbar:TopToolbar id="topToolbar"
+							top="10" right="24"
+							currentState.nolicense="nolicense" currentState="default"/>
 		
-		<s:Group width="100%" height="100%">
-			<s:Rect left="0" right="0" top="0" bottom="0" >
+		<s:Group top="80" left="24" right="24" bottom="24">
+			<s:Rect left="0" right="0" top="25" bottom="0" >
 				<s:stroke>
-					<s:SolidColorStroke color="0xACADAF" weight="3"/>
+					<s:SolidColorStroke color="0x000000"
+										alpha="0.90"
+										weight="2"/>
 				</s:stroke>
 			</s:Rect>
-			<s:VGroup paddingTop="6" paddingBottom="6" paddingLeft="6" paddingRight="6" width="100%" height="100%">
+			<s:VGroup left="0" right="0" top="25" bottom="0"
+					  paddingTop="6" paddingBottom="6" paddingLeft="6" paddingRight="6" >
 				<mx:ViewStack id="vs" width="100%" height="100%" creationPolicy="all">
 				</mx:ViewStack>
 			</s:VGroup>
+			
+			<s:HGroup left="0" right="0" top="0" height="25"
+					  paddingBottom="0" paddingLeft="0" paddingTop="0" paddingRight="0" gap="0"
+					  horizontalAlign="left" verticalAlign="bottom">
+				<s:TabBar id="tapBar" dataProvider="{vs}" fontSize="14" width="100%"/>
+			</s:HGroup>
 		</s:Group>
 	</s:Group>
 	

@@ -25,8 +25,7 @@
 		<s:VerticalLayout horizontalAlign="center" verticalAlign="middle"/>
 	</s:layout>
 	
-	<s:BitmapImage source="@Embed('/assets/images/logo_314x124.png')" />
-	<s:Spacer height="5%" />
+	<s:Spacer height="15%" />
 	<dashboard:LicenseBox currentState="nolicense"/>
 	<s:Spacer height="5%" />
 	<dashboard:LicenseDayInformation />

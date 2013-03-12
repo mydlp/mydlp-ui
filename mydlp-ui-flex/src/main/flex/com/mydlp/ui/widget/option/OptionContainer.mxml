@@ -199,15 +199,16 @@
 		<s:VerticalLayout gap="0" paddingTop="4" />
 	</s:layout>
 	
-	<s:TabBar dataProvider="{vs}" fontSize="12" fontWeight="bold" id="tabbar"/>
-	
-	<s:Group id="optionContainerGroup" width="1180" height="580">
-		<s:Rect left="0" right="0" top="0" bottom="30">
+	<s:Group width="1180" height="580">
+		<s:Rect left="0" right="0" top="20" bottom="0" >
 			<s:stroke>
-				<s:SolidColorStroke color="0xACADAF" weight="3"/>
-			</s:stroke>		
+				<s:SolidColorStroke color="0x000000"
+									alpha="0.90"
+									weight="2"/>
+			</s:stroke>
 		</s:Rect>
-		<s:VGroup paddingTop="6" paddingBottom="6" paddingLeft="6" paddingRight="6" width="100%" top="0" bottom="30" >
+		<s:VGroup left="0" right="0" top="20" bottom="30"
+				  paddingTop="6" paddingBottom="6" paddingLeft="6" paddingRight="6" >
 			<mx:ViewStack id="vs" width="100%" height="100%" creationPolicy="all">
 				<s:NavigatorContent label="@Resource(bundle = 'messages', key = 'options.tab.protocols')" width="100%" height="100%">
 					<option:ProtocolsTab id="protocolsTab" optionContainer="{this}"  width="100%" height="100%"/>
@@ -231,16 +232,18 @@
 					<option:IRMTab id="irmTab" optionContainer="{this}"  width="100%" height="100%"/>
 				</s:NavigatorContent>
 			</mx:ViewStack>
-		</s:VGroup>		
+		</s:VGroup>
 		
-		<s:Spacer height="10" />
-		
-		<s:HGroup bottom="5" right="30">
+		<s:HGroup bottom="10" right="30">
 			<s:Button id="saveButton" label="@Resource(bundle = 'messages', key = 'options.button.save.label')" 
 					  click="saveButtonHandler(event)"/>
 		</s:HGroup>	
-	</s:Group>		
-	
-	
+		
+		<s:HGroup left="0" right="0" top="0" height="20"
+				  paddingBottom="0" paddingLeft="0" paddingTop="0" paddingRight="0" gap="0"
+				  horizontalAlign="left" verticalAlign="bottom">
+			<s:TabBar dataProvider="{vs}" fontSize="12" id="tabbar"/>
+		</s:HGroup>
+	</s:Group>
 	
 </s:SkinnableContainer>

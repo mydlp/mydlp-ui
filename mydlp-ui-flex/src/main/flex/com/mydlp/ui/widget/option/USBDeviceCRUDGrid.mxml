@@ -3,7 +3,7 @@
 		 xmlns:s="library://ns.adobe.com/flex/spark" 
 		 xmlns:mx="library://ns.adobe.com/flex/mx"
 		 xmlns:my="http://www.mydlp.com/flex/my"
-		 width="670" height="300"
+		 width="100%" height="100%"
 		 creationComplete="onCreationComplete(event)">
 	<fx:Script>
 		<![CDATA[

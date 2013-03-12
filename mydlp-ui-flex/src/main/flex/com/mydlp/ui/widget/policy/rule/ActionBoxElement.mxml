@@ -82,5 +82,4 @@
 	
 	<s:Label text="{getLabel(ruleType, action, customAction)}"/>
 	
-	
 </s:Group>

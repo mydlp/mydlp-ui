@@ -8,6 +8,8 @@
 @namespace rule "com.mydlp.ui.widget.policy.rule.*";
 @namespace popup "com.mydlp.ui.widget.general.popup.*";
 @namespace option "com.mydlp.ui.widget.option.*";
+@namespace skin "com.mydlp.ui.skin.*";
+@namespace local1 "*";
 
 option|OptionContainer{
 	fontWeight:bold;
@@ -15,6 +17,30 @@ option|OptionContainer{
 
 rule|RuleBox s|SkinnableContainer#labelBox #nameLabel {
 	fontWeight: bold;
+}
+
+s|Button {
+	skinClass: ClassReference("com.mydlp.ui.skin.GenericButtonSkin");
+}
+
+s|TabBar {
+	skinClass: ClassReference("com.mydlp.ui.skin.MainTabBarSkin");
+}
+
+s|TitleWindow {
+	skinClass: ClassReference("com.mydlp.ui.skin.GenericTitleWindowSkin");
+}
+
+s|DataGrid {
+	skinClass: ClassReference("com.mydlp.ui.skin.GenericDataGridSkin");
+}
+
+s|CheckBox {
+	skinClass: ClassReference("com.mydlp.ui.skin.GenericCheckBoxSkin");
+}
+
+s|DropDownList {
+	skinClass: ClassReference("com.mydlp.ui.skin.GenericDropDownListSkin");
 }
 
 .fontSize24Style{
