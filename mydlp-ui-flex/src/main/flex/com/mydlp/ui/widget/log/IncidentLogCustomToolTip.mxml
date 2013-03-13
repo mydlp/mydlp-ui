@@ -32,8 +32,8 @@
 	<s:Rect left="0" right="0" top="0" bottom="0">
 		<s:stroke>
 			<s:LinearGradientStroke rotation="90" weight="3">
-				<s:GradientEntry color="#fabe00"/>
-				<s:GradientEntry color="#e17b00"/>
+				<s:GradientEntry color="0x00679E"/>
+				<s:GradientEntry color="0x33A0D2"/>
 			</s:LinearGradientStroke>
 		</s:stroke>
 	</s:Rect>

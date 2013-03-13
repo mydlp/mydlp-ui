@@ -72,19 +72,19 @@
 	<s:Rect id="buttonBorderBack" left="0" right="0" top="0" bottom="0" topLeftRadiusX="1" topRightRadiusX="1">
 		<s:stroke>
 			<s:SolidColorStroke color="0xFFFFFF"
-								alpha.selectedStates="1.00"
+								alpha="1.00"
 								weight="1"
 								weight.selectedStates="2"/>
 		</s:stroke>
 	</s:Rect>
 	
-	<s:Rect id="buttonBorder" left="0" right="0" top="0" bottom="0" topLeftRadiusX="1" topRightRadiusX="1">
+	<s:Rect id="buttonBorder" left="0" right="0" top="0" bottom="-1" bottom.selectedStates="-2" topLeftRadiusX="1" topRightRadiusX="1">
 		<s:stroke>
 			<s:SolidColorStroke color="0x000000"
 								alpha="0.25"
-								alpha.over="0.15"
-								alpha.down="0.65"
-								alpha.selectedStates="0.75"
+								alpha.over="0.35"
+								alpha.down="0.75"
+								alpha.selectedStates="0.90"
 								weight="1"
 								weight.selectedStates="2"/>
 		</s:stroke>
@@ -102,13 +102,13 @@
 	</s:Rect>
 	
 	<s:Rect id="buttonfill"
-			left="1" right="1" top="1" bottom="1" 
+			left="1" right="1" top="1" bottom="0" 
 			topLeftRadiusX="1" topRightRadiusX="1">
 		<s:fill>
 			<s:SolidColor color="0x000000" 
-						  alpha="0.65"
-						  alpha.over="0.75"
-						  alpha.down="0.00"
+						  alpha="0.60"
+						  alpha.over="0.70"
+						  alpha.down="0.10"
 						  alpha.selectedStates="0.00"/>
 		</s:fill>
 	</s:Rect>
@@ -123,8 +123,8 @@
              horizontalCenter="0" verticalCenter="1"
 			 color="0xFFFFFF"
 			 color.over="0xFFFFFF"
-			 color.down="0x000000"
-			 color.selectedStates="0x000000"
+			 color.down="0x333333"
+			 color.selectedStates="0x222222"
 			 fontWeight="bold"
              left="20" right="20" top="6" bottom="3">
     </s:Label>

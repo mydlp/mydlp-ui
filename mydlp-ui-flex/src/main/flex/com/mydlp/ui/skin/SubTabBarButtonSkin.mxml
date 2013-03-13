@@ -92,7 +92,7 @@
 	</s:Rect>
 	
 	<s:Rect id="buttonfill"
-			left="1" right="1" top="1" bottom="1" 
+			left="1" right="1" top="1" bottom="0" 
 			topLeftRadiusX="1" topRightRadiusX="1">
 		<s:fill>
 			<s:SolidColor color="0x000000" 

@@ -390,8 +390,8 @@
 		<s:Rect top="0" right="0" left="0" height="105">
 			<s:fill>
 				<s:LinearGradient rotation="96">
-					<s:GradientEntry color="0x00679E" alpha="0.13"/>
-					<s:GradientEntry color="0x00679E" alpha="0.00"/>
+					<s:GradientEntry color="0x33A0D2" alpha="0.14"/>
+					<s:GradientEntry color="0x33A0D2" alpha="0.00"/>
 				</s:LinearGradient>
 			</s:fill>
 		</s:Rect>
