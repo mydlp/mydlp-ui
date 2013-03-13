@@ -21,17 +21,6 @@
 		</s:fill>
 	</s:Rect>
 	
-	<s:Rect id="buttonBorder" left="0" right="0" top="0" bottom="0">
-		<s:stroke>
-			<s:SolidColorStroke color="0x000000"
-								alpha="0.85"
-								alpha.hovered="0.75"
-								alpha.down="0.75"
-								weight="1" />
-		</s:stroke>
-		
-	</s:Rect>
-	
 	<s:HGroup left="7" right="7" top="5" bottom="5" gap="2" verticalAlign="middle">
 		
 		<!-- layer 7: Container for labelDisplay:TextBase  -->

@@ -361,9 +361,7 @@
 			<s:HorizontalLayout verticalAlign="middle"/>
 		</s:layout>
 		<s:HGroup width="100%" verticalAlign="middle">
-			<s:Spacer width="1"/>
-			<s:CheckBox id="showAll" label="@Resource(bundle = 'messages', key = 'log.container.showAll.checkbox.label')" />
-			<s:Spacer width="5"/>
+			<s:Spacer width="2"/>
 			<s:Label text="@Resource(bundle = 'messages', key = 'log.container.search.sourceIp.label')"/>
 			<s:TextInput  id="ipField" width="110"/>
 			<s:Spacer width="2"/>
@@ -383,6 +381,8 @@
 			<s:Label text="@Resource(bundle = 'messages', key = 'log.container.search.channelList.label')"/>
 			<s:DropDownList id="channelList" width="180"
 							contentBackgroundAlpha="1"/>
+			<s:Spacer width="1"/>
+			<s:CheckBox id="showAll" label="@Resource(bundle = 'messages', key = 'log.container.showAll.checkbox.label')" />
 		</s:HGroup>  
 				
 	</s:Group>
@@ -425,5 +425,4 @@
 			</s:columns>
 		</s:DataGrid>
 	</s:Group>
-	
 </s:SkinnableContainer>
