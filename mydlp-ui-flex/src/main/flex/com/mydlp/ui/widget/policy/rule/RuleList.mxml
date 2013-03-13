@@ -10,6 +10,7 @@
 		requireSelection="false"
 		dragEnabled="true"
 		dropEnabled="true"
+		horizontalScrollPolicy="off"
 		dragEnter="onDragEnter(event)"
 		dragOver="onDragOver(event)"
 		dragExit="onDragExit(event)"
@@ -299,6 +300,6 @@
 	<s:layout>
 		<s:VerticalLayout useVirtualLayout="false" requestedMinRowCount="1" 
 						  paddingTop="2" paddingBottom="18" gap="2" 
-						  paddingLeft="18" paddingRight="18"/>
+						  paddingLeft="8" paddingRight="8"/>
 	</s:layout>
 </s:List>

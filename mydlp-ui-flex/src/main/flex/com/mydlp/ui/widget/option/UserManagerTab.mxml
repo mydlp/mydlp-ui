@@ -131,8 +131,9 @@
 			<my:method name="getUsers" result="getUsersHandler(event)" />
 		</my:remote>
 	</fx:Declarations>
-	<s:VGroup paddingTop="25" paddingLeft="25" paddingRight="25" paddingBottom="25" horizontalAlign="right" gap="5">			
-		<s:DataGrid id="userList" width="1100" height="450" dataProvider="{userDP}" 
+	<s:VGroup width="100%" height="100%"
+		paddingTop="15" paddingBottom="15" horizontalAlign="right" gap="5">			
+		<s:DataGrid id="userList" width="100%" height="100%" dataProvider="{userDP}" 
 					 click="onClickDataGrid(event)">
 			<s:columns>
 				<s:ArrayList>					

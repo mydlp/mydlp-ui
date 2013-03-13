@@ -72,11 +72,11 @@
 	<s:layout>
 		<s:HorizontalLayout paddingTop="10" gap="0"/>
 	</s:layout>
-	<s:Group height="100%">
+	<s:Group  width="320" height="100%">
 		<s:layout>
 			<s:VerticalLayout gap="10"/>
 		</s:layout>
-		<s:Group height="3%" width="320">
+		<s:Group height="3%" width="100%">
 			<s:layout>
 				<s:HorizontalLayout paddingRight="3"
 									horizontalAlign="right"/>
@@ -92,7 +92,7 @@
 					  enabled="{isConsistent(inventoryTree.selectedItems)}"
 					  />
 		</s:Group>
-		<inventory:InventoryTree id="inventoryTree" height="97%" change="inventoryTreeChangeHandler(event)"/>
+		<inventory:InventoryTree id="inventoryTree" height="97%" width="100%" change="inventoryTreeChangeHandler(event)"/>
 	</s:Group>
 	<rule:RSpacer/>
 	<rule:RuleContainer id="ruleContainer"/>	

@@ -76,7 +76,7 @@ created by the TabBarSkin use the TabBarButtonSkin class.
     <!--- @copy spark.components.SkinnableDataContainer#dataGroup -->
     <s:DataGroup id="dataGroup" width="100%" height="100%">
         <s:layout>
-            <s:ButtonBarHorizontalLayout gap="5"/>
+            <s:ButtonBarHorizontalLayout gap="0"/>
         </s:layout>
         <s:itemRenderer>
             <fx:Component>

@@ -105,7 +105,7 @@
 	</fx:Declarations>
 	
 	<s:layout>
-		<s:HorizontalLayout paddingTop="10" gap="10"/>
+		<s:HorizontalLayout paddingTop="10" gap="0"/>
 	</s:layout>
 	
 	<objects:ObjectsTree id="objectsTree" change="onSelectedItemChange(event)"/>

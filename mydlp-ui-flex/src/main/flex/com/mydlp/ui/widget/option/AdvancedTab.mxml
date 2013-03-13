@@ -5,33 +5,6 @@
 					 xmlns:option="com.mydlp.ui.widget.option.*"
 					 xmlns:domain="com.mydlp.ui.domain.*" xmlns:input="com.mydlp.ui.widget.general.input.*">
 	
-	<fx:Script>
-		<![CDATA[
-			import com.mydlp.ui.util.InteractionUtil;
-			
-			protected function removeNodeClickHandler(event:MouseEvent):void
-			{
-				if (nodeList.selectedIndex != -1)
-				{
-					nodeList.nodeListCollection.removeItemAt(nodeList.selectedIndex);
-					autoDistributionNodes.value = nodeList.nodeText;
-				}
-			}
-			
-			public function addNode(node:String):void
-			{
-				nodeList.nodeListCollection.addItem(node);				
-				autoDistributionNodes.value = nodeList.nodeText;
-			}
-			
-			protected function newButtonHandler(event:MouseEvent):void
-			{
-				var popup:NewNodeDialog = InteractionUtil.newPopup(NewNodeDialog) as NewNodeDialog;
-				popup.parentTab = this;
-			}
-		]]>
-	</fx:Script>
-	
 	<fx:Declarations>
 		<domain:Config id="maximumObjectSize"/>	
 		<domain:Config id="maximumMemoryObject"/>	
@@ -106,24 +79,6 @@
 				</s:FormItem>
 				<s:FormItem label="{queryCacheMaximumSize.label}">
 					<s:TextInput width="100%" text="@{queryCacheMaximumSize.value}"/>
-				</s:FormItem>	
-				<s:FormItem label="{autoDistribution.label}">
-					<s:CheckBox id="autoDistributionCheckBox"
-								change="{autoDistribution.value = autoDistributionCheckBox.selected ? 'true' : 'false'}"
-								selected="{autoDistribution.value == 'true'}"/>			
-				</s:FormItem>
-				
-				<s:FormItem label="{autoDistributionNodes.label}">
-					<option:NodeList id="nodeList" width="200" height="100"
-									 nodeText="{autoDistributionNodes.value}"/>
-					<s:HGroup width="200">
-						<s:Spacer width="100%"/>
-						<s:Button label="@Resource(bundle = 'messages', key = 'options.hatab.popup.removenode')"
-								  click="removeNodeClickHandler(event)"/>
-						
-						<s:Button label="@Resource(bundle = 'messages', key = 'options.hatab.popup.addnode')"
-								  click="newButtonHandler(event)"/>					
-					</s:HGroup>
 				</s:FormItem>
 			</s:Form>		
 		</s:HGroup>

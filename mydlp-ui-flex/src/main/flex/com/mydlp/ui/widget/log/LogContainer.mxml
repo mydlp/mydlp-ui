@@ -326,67 +326,63 @@
 		<s:VerticalLayout paddingTop="10" />
 	</s:layout>
 	
-	<s:Group id="searchBar" width="100%" height="32">
-		<s:layout>
-			<s:HorizontalLayout verticalAlign="middle" />
-		</s:layout>
-		
-		<s:HGroup verticalAlign="middle" width="100%">
+	<s:HGroup width="100%" height="32">
+		<s:HGroup verticalAlign="middle" horizontalAlign="left" 
+				  width="70%" height="100%">
 			<s:Spacer width="5"/>
 			<s:Label text="@Resource(bundle = 'messages', key = 'log.container.search.date.start.label')"/>
 			<mx:DateField id="startDate"/>
 			<s:Label text="@Resource(bundle = 'messages', key = 'log.container.search.date.end.label')"/>
 			<mx:DateField id="endDate"/>
-			<s:Spacer width="20"/>
+			<s:Spacer width="4"/>
 			<s:Button label="@Resource(bundle = 'messages', key = 'log.container.search.button.label')"
 					  click="searchLogHandler(event)"/>
 			<s:Button label="@Resource(bundle = 'messages', key = 'log.container.search.reset.label')"
 					  click="resetHandler(event)"/>
 			<s:Button label="@Resource(bundle = 'messages', key = 'log.container.refresh.button.label')"
 					  click="searchLogHandler(event)"/>
-			<s:Spacer width="5"/>
-			<s:CheckBox id="showAll" change="{searchLogHandler(null)}"
-				label="@Resource(bundle = 'messages', key = 'log.container.showAll.checkbox.label')" />
-			<s:Spacer width="20"/>
 			<s:Button id="detailSearchButton" skinClass="com.mydlp.ui.skin.DetailSearchLabelButton16Skin"
 					  label="@Resource(bundle = 'messages', key = 'log.container.detailSearch.button.label')"
 					  click="onDetailSearchClickHandler(event)"/>
-			<s:Spacer width="100"/>
+			<s:Spacer width="16"/>
 			<s:Button label="@Resource(bundle = 'messages', key = 'log.container.export.button.label')" 
 					  id="exportButton"
 					  click="onExportClick(event)"/>
 		</s:HGroup>
-		<s:HGroup width="400" verticalAlign="middle" includeInLayout="{SessionUtil.isEnterprise()}">
+		<s:HGroup width="30%" height="100%" verticalAlign="middle" includeInLayout="{SessionUtil.isEnterprise()}">
 			<s:Button label="@Resource(bundle = 'messages', key = 'log.container.search.fulltext.label')"
 					  click="searchContentHandler(event)" enabled="{fulltextInput.text.length > 3}"/>
 			<s:TextInput id="fulltextInput" width="100%"/>
 		</s:HGroup>
-	</s:Group>
-	<s:Group id="detailSearchGroup" height="32" includeInLayout="false" visible="false">
+	</s:HGroup>
+	
+	<s:Group id="detailSearchGroup" height="32" width="100%" includeInLayout="false" visible="false">
 		<s:layout>
 			<s:HorizontalLayout verticalAlign="middle"/>
 		</s:layout>
 		<s:HGroup width="100%" verticalAlign="middle">
+			<s:Spacer width="1"/>
+			<s:CheckBox id="showAll" label="@Resource(bundle = 'messages', key = 'log.container.showAll.checkbox.label')" />
 			<s:Spacer width="5"/>
 			<s:Label text="@Resource(bundle = 'messages', key = 'log.container.search.sourceIp.label')"/>
-			<s:TextInput  id="ipField"/>
-			<s:Spacer width="10"/>
+			<s:TextInput  id="ipField" width="110"/>
+			<s:Spacer width="2"/>
 			<s:Label text="@Resource(bundle = 'messages', key = 'log.container.search.sourceUser.label')"/>
-			<s:TextInput id="userField"/>
-			<s:Spacer width="10"/>
+			<s:TextInput id="userField" width="120"/>
+			<s:Spacer width="2"/>
 			<s:Label text="@Resource(bundle = 'messages', key = 'log.container.search.destination.label')"
 					 enabled="{isDestinationEnabled(channelList.selectedItem)}"/>
-			<s:TextInput id="destinationField"
+			<s:TextInput id="destinationField" width="120"
 						 enabled="{isDestinationEnabled(channelList.selectedItem)}"/>
-			<s:Spacer width="10"/>
+			<s:Spacer width="2"/>
 			<s:Label text="@Resource(bundle = 'messages', key = 'log.container.search.actionList.label')"/>
-			<s:DropDownList id="actionList" width="120"
+			<s:DropDownList id="actionList" width="90"
 							contentBackgroundAlpha="1"
 							dataProvider="{actionSearch}"/>
-			<s:Spacer width="10"/>
+			<s:Spacer width="2"/>
 			<s:Label text="@Resource(bundle = 'messages', key = 'log.container.search.channelList.label')"/>
 			<s:DropDownList id="channelList" width="180"
-							contentBackgroundAlpha="1" />
+							contentBackgroundAlpha="1"/>
 		</s:HGroup>  
 				
 	</s:Group>
@@ -395,7 +391,7 @@
 		<s:layout>
 			<s:HorizontalLayout gap="10"/>
 		</s:layout>
-		<s:DataGrid id="logList" dataProvider="{logSearchDP.asyncListView}" width="100%" height="100%" variableRowHeight="true">
+		<s:DataGrid id="logList" dataProvider="{logSearchDP.asyncListView}" width="100%" width.fulltext="70%" height="100%" variableRowHeight="true">
 			<s:columns>
 				<s:ArrayList>
 					<s:GridColumn headerText="@Resource(bundle = 'messages', key = 'log.container.header.date')"
@@ -415,7 +411,7 @@
 		</s:DataGrid>
 		
 		<s:DataGrid id="logContentList" includeIn="fulltext" gridClick="onContentClick(event)"
-					dataProvider="{contentSearchDP.asyncListView}" width="400" height="100%" variableRowHeight="true">
+					dataProvider="{contentSearchDP.asyncListView}" width="30%" height="100%" variableRowHeight="true">
 			<s:columns>
 				<s:ArrayList>
 					<s:GridColumn headerText=""

@@ -47,10 +47,12 @@
             <td><input type='password' name='j_password' /></td>
           </tr>
           <tr>
-            <td colspan='2'><input type="submit" value="Login" /></td>
+          	<td></td>
+            <td><input type="submit" value="Login" /></td>
           </tr>
           <tr>
-            <td colspan='2'><input name="reset" type="reset" /></td>
+            <td></td>
+            <td><input name="reset" type="reset" /></td>
           </tr>
         </table>
       </form>

@@ -11,6 +11,7 @@
 				dragExit="onDragExit(event)"
 				dragDrop="onDragDrop(event)"
 				click="onItemClickHandler(event)"
+				width="100%"
 				>
 	<fx:Script>
 		<![CDATA[
@@ -41,6 +42,7 @@
 			import com.mydlp.ui.util.ReflectionUtil;
 			import com.mydlp.ui.widget.policy.inventory.InventoryTree;
 			
+			import mx.binding.utils.ChangeWatcher;
 			import mx.collections.ArrayCollection;
 			import mx.collections.ListCollectionView;
 			import mx.core.FlexGlobals;
@@ -80,7 +82,7 @@
 			protected var destinationDataProvider:ArrayCollection = new ArrayCollection();
 			
 			[Bindable]
-			protected var ruleList:RuleList = FlexGlobals.topLevelApplication.policyContainer.ruleContainer.ruleList;
+			protected var ruleContainer:RuleContainer = FlexGlobals.topLevelApplication.policyContainer.ruleContainer; 
 			
 			protected var deleteList:ListCollectionView;
 			
@@ -610,7 +612,7 @@
 			{
 				if (dragEvent.dragInitiator is InventoryTree)
 				{
-					ruleList.setAfterRefreshSelected(ruleObject);
+					ruleContainer.ruleList.setAfterRefreshSelected(ruleObject);
 					
 					deleteList = new ArrayCollection();
 					var inventoryObjects:* = FlexGlobals.topLevelApplication.policyContainer.inventoryTree.selectedItems;
@@ -821,6 +823,7 @@
 			}
 			
 			
+			
 		]]>
 	</fx:Script>
 	
@@ -842,10 +845,11 @@
 		<s:State name="disabled"/>
 	</s:states>
 	
-	<s:Rect includeIn="hovered, selected"
+	<s:Rect
 			left="0" right="0" top="0" bottom="0" >
 		<s:fill>
-			<s:SolidColor color.selected="0xCEDBEF"
+			<s:SolidColor color="0xFFFFFF"
+						  color.selected="0xCEDBEF"
 						  color.hovered="0xDEEBFF" 
 						  alpha="1"  />
 		</s:fill>
@@ -929,13 +933,13 @@
 		
 		<rule:RSpacer />
 		
-		<rule:RuleItemBox width="160"
+		<rule:RuleItemBox width="{ruleContainer.sourceWidth}"
 						  listDataProvider="{sourceDataProvider}"
 						  itemLabel="@Resource(bundle = 'messages', key = 'rulebox.ruleitembox.sources.itemLabel')"
 						  currentState="{getRuleItemListState(sourceDataProvider, collapse)}" />
 		
 		
-		<s:Group width="178" height="100%" 
+		<s:Group width="{ruleContainer.destinationWidth + 8}" height="100%" 
 				 visible="{!isDestinationApplicable(ruleObject)}" 
 				 includeInLayout="{!isDestinationApplicable(ruleObject)}">
 			<s:Rect left="0" right="0" top="0" bottom="0" >
@@ -954,14 +958,13 @@
 			</s:layout>
 			<rule:RSpacer />
 			
-			<rule:RuleItemBox width="170"
+			<rule:RuleItemBox width="{ruleContainer.destinationWidth}"
 							  listDataProvider="{destinationDataProvider}"
 							  itemLabel="@Resource(bundle = 'messages', key = 'rulebox.ruleitembox.destinations.itemLabel')"
 							  currentState="{getRuleItemListState(destinationDataProvider, collapse)}"/>
-			
 		</s:Group> 
 		
-		<s:Group width="216" height="100%" 
+		<s:Group width="{ruleContainer.informationTypeWidth + 16}" height="100%" 
 				 visible="{!isMatcherApplicable(ruleObject)}" 
 				 includeInLayout="{!isMatcherApplicable(ruleObject)}">
 			<s:Rect left="0" right="0" top="0" bottom="0" >
@@ -979,14 +982,14 @@
 				<s:HorizontalLayout verticalAlign="middle"/>
 			</s:layout>
 			<rule:RSpacer />	
-			<rule:RuleItemBox width="200"
+			<rule:RuleItemBox width="{ruleContainer.informationTypeWidth}"
 							  listDataProvider="{matcherDataProvider}"
 							  itemLabel="@Resource(bundle = 'messages', key = 'rulebox.ruleitembox.itypes.itemLabel')"
 							  currentState="{getRuleItemListState(matcherDataProvider, collapse)}" />
 			<rule:RSpacer />
 		</s:Group>
 		
-		<rule:ActionBox id="actionBox" width="160" 
+		<rule:ActionBox id="actionBox" width="{ruleContainer.actionWidth}" 
 						ruleObject="@{ruleObject}" 
 						currentState="{this.currentState}"/>
 		

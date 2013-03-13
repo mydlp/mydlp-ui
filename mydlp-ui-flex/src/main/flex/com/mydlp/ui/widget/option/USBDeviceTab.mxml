@@ -19,10 +19,7 @@
 			</s:FormItem>
 		</s:Form>
 		
-		<s:HGroup width="100%">
-			<s:Spacer width="20" />
-			<option:USBDeviceCRUDGrid id="usbDeviceCrudGrid" />
-		</s:HGroup>
+		<option:USBDeviceCRUDGrid id="usbDeviceCrudGrid" width="100%" height="100%" />
 		
 	</s:VGroup>
 	

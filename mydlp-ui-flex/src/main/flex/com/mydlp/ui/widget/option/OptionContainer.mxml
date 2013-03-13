@@ -199,13 +199,18 @@
 		<s:VerticalLayout gap="0" paddingTop="4" />
 	</s:layout>
 	
-	<s:Group width="1180" height="580">
+	<s:Group width="1120" height="460">
 		<s:Rect left="0" right="0" top="20" bottom="0" >
 			<s:stroke>
 				<s:SolidColorStroke color="0x000000"
 									alpha="0.90"
 									weight="2"/>
 			</s:stroke>
+		</s:Rect>
+		<s:Rect left="2" right="2" top="22" bottom="2" >
+			<s:fill>
+				<s:SolidColor color="0xFFFFFF" />
+			</s:fill>
 		</s:Rect>
 		<s:VGroup left="0" right="0" top="20" bottom="30"
 				  paddingTop="6" paddingBottom="6" paddingLeft="6" paddingRight="6" >

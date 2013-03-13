@@ -143,7 +143,7 @@
 	</fx:Declarations>
 	
 	<s:VGroup width="100%" height="100%">
-		<s:HGroup width="100%" height="100%" paddingTop="10">
+		<s:HGroup width="100%" height="100%" paddingTop="10" paddingRight="8">
 			<s:VGroup width="40%" height="100%">
 				<s:Label text="@Resource(bundle = 'messages', key = 'options.irm.seclore.title')" 
 						 paddingTop="15" paddingLeft="5" fontWeight="bold" fontSize="14"/>
@@ -185,7 +185,7 @@
 					</s:FormItem>
 				</s:Form>
 			</s:VGroup>
-			<s:VGroup width="60%" height="100%">
+			<s:VGroup width="60%" height="100%" paddingBottom="16" paddingRight="8">
 				<s:HGroup width="100%">
 					<s:HGroup horizontalAlign="left" width="50%" >
 						<s:Button skinClass="com.mydlp.ui.skin.AddBitmapLabelButton16Skin"

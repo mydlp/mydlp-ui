@@ -43,6 +43,10 @@ s|DropDownList {
 	skinClass: ClassReference("com.mydlp.ui.skin.GenericDropDownListSkin");
 }
 
+s|FormItem {
+	skinClass: ClassReference("com.mydlp.ui.skin.GenericFormItemSkin");
+}
+
 .fontSize24Style{
 	fontSize: "24"
 }
