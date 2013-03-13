@@ -40,3 +40,7 @@ mydlp-ui-webapp/hsqldb/MyDLPLog.log
 mydlp-ui-webapp/hsqldb/MyDLPLog.lck
 mydlp-ui-webapp/hsqldb/MyDLPLog.properties
 mydlp-ui-webapp/hsqldb/MyDLPLog.script
+mydlp-ui-webapp/hsqldb/MyDLPReport.log
+mydlp-ui-webapp/hsqldb/MyDLPReport.lck
+mydlp-ui-webapp/hsqldb/MyDLPReport.properties
+mydlp-ui-webapp/hsqldb/MyDLPReport.script

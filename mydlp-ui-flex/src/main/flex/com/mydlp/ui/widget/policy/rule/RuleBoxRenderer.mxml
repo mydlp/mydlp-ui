@@ -1013,8 +1013,6 @@
 				</s:layout>
 				
 				<s:Button skinClass="com.mydlp.ui.skin.PlayBitmapButton16Skin" click="startButtonClickHandler(event)"/>
-				<s:Button skinClass="com.mydlp.ui.skin.PauseBitmapButton16Skin" click="pauseButtonClickHandler(event)"/>
-				<s:Button skinClass="com.mydlp.ui.skin.StopBitmapButton16Skin" click="stopButtonClickHandler(event)"/>
 			</s:Group>
 			
 		</s:HGroup>
