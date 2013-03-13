@@ -204,10 +204,10 @@
 			<s:stroke>
 				<s:SolidColorStroke color="0x000000"
 									alpha="0.90"
-									weight="2"/>
+									weight="1"/>
 			</s:stroke>
 		</s:Rect>
-		<s:Rect left="2" right="2" top="22" bottom="2" >
+		<s:Rect left="1" right="1" top="21" bottom="1" >
 			<s:fill>
 				<s:SolidColor color="0xFFFFFF" />
 			</s:fill>
@@ -247,7 +247,7 @@
 		<s:HGroup left="0" right="0" top="0" height="20"
 				  paddingBottom="0" paddingLeft="0" paddingTop="0" paddingRight="0" gap="0"
 				  horizontalAlign="left" verticalAlign="bottom">
-			<s:TabBar dataProvider="{vs}" fontSize="12" id="tabbar"/>
+			<s:TabBar dataProvider="{vs}" fontSize="12" id="tabbar" skinClass="com.mydlp.ui.skin.SubTabBarSkin"/>
 		</s:HGroup>
 	</s:Group>
 	

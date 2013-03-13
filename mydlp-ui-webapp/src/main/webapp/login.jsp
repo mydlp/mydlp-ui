@@ -47,12 +47,7 @@
             <td><input type='password' name='j_password' /></td>
           </tr>
           <tr>
-          	<td></td>
-            <td><input type="submit" value="Login" /></td>
-          </tr>
-          <tr>
-            <td></td>
-            <td><input name="reset" type="reset" /></td>
+          	<td colspan="2"><input type="submit" value="Login" style="vertical-align:top; float: right"/></td>
           </tr>
         </table>
       </form>

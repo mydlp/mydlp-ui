@@ -387,6 +387,15 @@
 	</s:states>
 	
 	<s:Group minWidth="1220" minHeight="600" width="100%" height="100%">
+		<s:Rect top="0" right="0" left="0" height="105">
+			<s:fill>
+				<s:LinearGradient rotation="96">
+					<s:GradientEntry color="0x00679E" alpha="0.13"/>
+					<s:GradientEntry color="0x00679E" alpha="0.00"/>
+				</s:LinearGradient>
+			</s:fill>
+		</s:Rect>
+		
 		
 		<s:Group top="2" left="24" height="70" width="400" >
 			<s:BitmapImage top="0" left="0" source="@Embed('/assets/images/logo_220x70.png')" />
