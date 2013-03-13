@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:GridItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009" 
+					xmlns:s="library://ns.adobe.com/flex/spark" 
+					xmlns:my="http://www.mydlp.com/flex/my" 
+					xmlns:mx="library://ns.adobe.com/flex/mx" clipAndEnableScrolling="true" 
+					xmlns:discovery="com.mydlp.ui.widget.policy.rule.discovery.*">
+	
+	<fx:Script>
+		<![CDATA[
+			import com.mydlp.ui.domain.DiscoveryReport;
+			
+			import mx.events.FlexEvent;
+			public override function set data(value:Object):void
+			{
+				super.data = value;
+				if(value == null || !(value is DiscoveryReport)) return;
+				
+				lblData.text = data[column.dataField];
+				var report:DiscoveryReport = value as DiscoveryReport;
+				if(report.status == DiscoveryReport.STATUS_DISCOVERING)
+				{
+					isStartEnabled = false;
+					isStopEnabled = true;
+					isPauseEnabled = true;
+				}
+				else if(report.status == DiscoveryReport.STATUS_PAUSED)
+				{
+					isStartEnabled = true;
+					isStopEnabled = true;
+					isPauseEnabled = false;
+				}
+				if(report.status == DiscoveryReport.STATUS_STOPPED)
+				{
+					isStartEnabled = false;
+					isStopEnabled = false;
+					isPauseEnabled = false;
+				}
+			}
+			
+			protected function startButtonClickHandler(event:MouseEvent):void
+			{
+				de.startDiscoveryOnDemand(data.ruleId);
+				isStartEnabled = false;
+				isStopEnabled = true;
+				isPauseEnabled = true;
+			}
+			
+			protected function stopButtonClickHandler(event:MouseEvent):void
+			{
+				de.stopDiscoveryOnDemand(data.ruleId);
+				isStartEnabled = false;
+				isStopEnabled = false;
+				isPauseEnabled = false;
+			}
+			
+			protected function pauseButtonClickHandler(event:MouseEvent):void
+			{
+				de.pauseDiscoveryOnDemand(data.ruleId);
+				isStartEnabled = true;
+				isStopEnabled = true;
+				isPauseEnabled = false;
+			}
+			
+			protected function isStartButtonEnabled():Boolean
+			{
+				if(data.status == DiscoveryReport.STATUS_PAUSED)
+					return true;
+				else
+					return false;
+			}
+			
+			protected function isPauseButtonEnabled():Boolean
+			{
+				if(data.status == DiscoveryReport.STATUS_DISCOVERING)
+					return true;
+				else
+					return false;
+			}
+			
+			protected function isStopButtonEnabled():Boolean
+			{
+				if(data.status == DiscoveryReport.STATUS_STOPPED)
+					return false;
+				else
+					return true;
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<fx:Declarations>
+		<my:remote id="de" destination="discoveryBRS" />
+		<fx:Boolean id="isStartEnabled"/>
+		<fx:Boolean id="isPauseEnabled"/>
+		<fx:Boolean id="isStopEnabled"/>
+	</fx:Declarations>
+	
+	<s:Group>
+		<s:layout>
+			<s:HorizontalLayout gap="2" verticalAlign="middle"/>
+		</s:layout>
+		<s:Button id="startButton" skinClass="com.mydlp.ui.skin.PlayBitmapButton16Skin" click="startButtonClickHandler(event)"
+				  enabled="{isStartEnabled}"/>
+		<s:Button id="pauseButton" skinClass="com.mydlp.ui.skin.PauseBitmapButton16Skin" click="pauseButtonClickHandler(event)"
+				  enabled="{isPauseEnabled}"/>
+		<s:Button id="stopButton" skinClass="com.mydlp.ui.skin.StopBitmapButton16Skin" click="stopButtonClickHandler(event)"
+				  enabled="{isStopEnabled}"/>
+		<s:Label id="lblData" top="9" left="7" text=""/>
+	</s:Group>
+	
+</s:GridItemRenderer>

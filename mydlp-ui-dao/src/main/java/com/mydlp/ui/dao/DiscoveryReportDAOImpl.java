@@ -50,7 +50,7 @@ public class DiscoveryReportDAOImpl extends AbstractReportDAO implements Discove
 			List<List<Object>> criteriaList, Integer offset, Integer limit) {
 		DetachedCriteria criteria = 
 				DetachedCriteria.forClass(DiscoveryReport.class)
-					.addOrder(Order.desc("date"));
+					.addOrder(Order.desc("startDate"));
 		criteria = applyCriteriaList(criteria, criteriaList);
 		return criteria.getExecutableCriteria(getSession())
 			.setFirstResult(offset)

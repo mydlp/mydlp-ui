@@ -5,20 +5,23 @@
 	
 	<fx:Script>
 		<![CDATA[
+			import com.mydlp.ui.domain.DiscoveryReport;
 			import com.mydlp.ui.domain.IncidentLog;
 			import com.mydlp.ui.domain.OperationLog;
 			import com.mydlp.ui.domain.Rule;
 			import com.mydlp.ui.util.LangUtil;
 			import com.mydlp.ui.widget.policy.rule.RuleContainer;
 			import com.mydlp.ui.widget.revision.RevisionContainer;
+			
 			import mx.core.FlexGlobals;
 			
 			protected var selectedRule:Rule = null;
 			
 			
 			protected function getPolicyText(value:*):String {
-				
-				return "hede";
+				if (value == null) return "";
+				var report:DiscoveryReport = value as DiscoveryReport;
+				return report.status;
 			}
 			
 		]]>

@@ -16,6 +16,10 @@ public class DiscoveryReport extends AbstractEntity {
 	 * 
 	 */
 	private static final long serialVersionUID = -5932983358890048714L;
+	
+	public static final String STATUS_DISCOVERING = "running";
+	public static final String STATUS_STOPPED = "stopped";
+	public static final String STATUS_PAUSED = "paused";
 
 	@Temporal(TemporalType.TIMESTAMP)
 	protected Date startDate;
@@ -25,6 +29,7 @@ public class DiscoveryReport extends AbstractEntity {
 
 	protected String groupId;
 	protected Long ruleId;
+	protected String status;
 	
 	@Column(nullable=false)
 	public Date getStartDate() {
@@ -58,5 +63,11 @@ public class DiscoveryReport extends AbstractEntity {
 		this.ruleId = ruleId;
 	}
 	
-	
+	@Column(nullable=true)
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
+	}
 }
