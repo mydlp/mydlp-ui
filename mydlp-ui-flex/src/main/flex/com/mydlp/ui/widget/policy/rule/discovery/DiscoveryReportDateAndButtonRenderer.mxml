@@ -23,13 +23,19 @@
 					isStopEnabled = true;
 					isPauseEnabled = true;
 				}
-				else if(report.status == DiscoveryReport.STATUS_PAUSED)
+				else if(report.status == DiscoveryReport.STATUS_PAUSED_USER || report.status == DiscoveryReport.STATUS_PAUSED_SYSTEM)
 				{
 					isStartEnabled = true;
 					isStopEnabled = true;
 					isPauseEnabled = false;
 				}
-				if(report.status == DiscoveryReport.STATUS_STOPPED)
+				else if(report.status == DiscoveryReport.STATUS_STOPPED)
+				{
+					isStartEnabled = false;
+					isStopEnabled = false;
+					isPauseEnabled = false;
+				}
+				else if(report.status == DiscoveryReport.STATUS_ERROR)
 				{
 					isStartEnabled = false;
 					isStopEnabled = false;
@@ -63,7 +69,7 @@
 			
 			protected function isStartButtonEnabled():Boolean
 			{
-				if(data.status == DiscoveryReport.STATUS_PAUSED)
+				if(data.status == DiscoveryReport.STATUS_PAUSED_SYSTEM || data.status == DiscoveryReport.STATUS_PAUSED_USER)
 					return true;
 				else
 					return false;
@@ -79,7 +85,7 @@
 			
 			protected function isStopButtonEnabled():Boolean
 			{
-				if(data.status == DiscoveryReport.STATUS_STOPPED)
+				if(data.status == DiscoveryReport.STATUS_STOPPED || data.status == DiscoveryReport.STATUS_ERROR)
 					return false;
 				else
 					return true;

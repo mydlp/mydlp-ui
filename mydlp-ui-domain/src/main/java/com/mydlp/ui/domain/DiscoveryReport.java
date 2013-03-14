@@ -19,7 +19,9 @@ public class DiscoveryReport extends AbstractEntity {
 	
 	public static final String STATUS_DISCOVERING = "running";
 	public static final String STATUS_STOPPED = "stopped";
-	public static final String STATUS_PAUSED = "paused";
+	public static final String STATUS_PAUSED_SYSTEM = "paused_system";
+	public static final String STATUS_PAUSED_USER = "paused_user";
+	public static final String STATUS_ERROR = "error";
 
 	@Temporal(TemporalType.TIMESTAMP)
 	protected Date startDate;
