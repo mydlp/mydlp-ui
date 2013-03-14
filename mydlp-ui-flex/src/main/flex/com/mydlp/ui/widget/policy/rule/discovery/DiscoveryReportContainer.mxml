@@ -97,23 +97,6 @@
 			protected function generateCriteriaList():void
 			{
 				criteriaList = new ArrayCollection();
-				
-				var criteria:ListCollectionView = new ArrayCollection();
-				criteria.addItem("groupId");
-				criteria.addItem("eq");
-				criteria.addItem("213_123123");
-				
-				criteriaList.addItem(criteria);
-			}
-			
-			protected function searchLogHandler(event:MouseEvent):void
-			{
-				refresh();
-			}
-			
-			protected function resetHandler(event:MouseEvent):void
-			{
-				refresh();
 			}
 			
 			protected function onContentClick(event:GridEvent):void
@@ -135,31 +118,13 @@
 				generateCriteriaList();
 				logSearchDP.init();
 			}
-			
-			protected function onClick(event:MouseEvent):void
-			{
-				var d:DiscoveryReport = new DiscoveryReport;
-				d.ruleId = 1;
-				d.groupId = "213_123123";
-				d.startDate = new Date();
-				d.status = DiscoveryReport.STATUS_DISCOVERING
-				de.save(d);
-			}
-			
-			protected function onResult(event:ResultEvent):void
-			{
-				refresh();
-			}
-			
 		]]>
 	</fx:Script>
 	<fx:Declarations>
 		<my:remote id="re" destination="logBRS" >
 			<my:method name="exportExcel" />
 		</my:remote>
-		<my:remote id="de" destination="discoveryReportBRS">
-			<my:method name="save" result="onResult(event)"/>
-		</my:remote>
+		<my:remote id="de" destination="discoveryReportBRS"/>
 	</fx:Declarations>
 	
 	

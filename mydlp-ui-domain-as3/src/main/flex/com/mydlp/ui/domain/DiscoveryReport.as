@@ -12,6 +12,8 @@ package com.mydlp.ui.domain {
     public class DiscoveryReport extends DiscoveryReportBase {
 		public static const STATUS_DISCOVERING:String = "running";
 		public static const STATUS_STOPPED:String = "stopped";
-		public static const STATUS_PAUSED:String = "paused";
+		public static const STATUS_PAUSED_SYSTEM:String = "paused_system";
+		public static const STATUS_PAUSED_USER:String = "paused_user";
+		public static const STATUS_ERROR:String = "error";
     }
 }
