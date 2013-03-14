@@ -25,7 +25,7 @@ public class DiscoveryReport extends AbstractEntity {
 	protected Date startDate;
 	
 	@Temporal(TemporalType.TIMESTAMP)
-	protected Date finisDate;
+	protected Date finishDate;
 
 	protected String groupId;
 	protected Long ruleId;
@@ -40,10 +40,10 @@ public class DiscoveryReport extends AbstractEntity {
 	}
 	
 	public Date getFinisDate() {
-		return finisDate;
+		return finishDate;
 	}
-	public void setFinisDate(Date finisDate) {
-		this.finisDate = finisDate;
+	public void setFinisDate(Date finishDate) {
+		this.finishDate = finishDate;
 	}
 	
 	@Column(nullable=false)
