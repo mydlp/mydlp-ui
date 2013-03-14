@@ -39,10 +39,10 @@ public class DiscoveryReport extends AbstractEntity {
 		this.startDate = startDate;
 	}
 	
-	public Date getFinisDate() {
+	public Date getFinishDate() {
 		return finishDate;
 	}
-	public void setFinisDate(Date finishDate) {
+	public void setFinishDate(Date finishDate) {
 		this.finishDate = finishDate;
 	}
 	
