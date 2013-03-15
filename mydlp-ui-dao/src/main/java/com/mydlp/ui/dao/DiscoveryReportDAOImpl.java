@@ -92,6 +92,9 @@ public class DiscoveryReportDAOImpl extends AbstractReportDAO implements Discove
 				.addOrder(Order.desc("startDate"));
 		@SuppressWarnings("unchecked")
 		List<DiscoveryReport> l = getHibernateTemplate().findByCriteria(criteria);
-		return DAOUtil.getSingleResult(l);
+		if( l == null || l.size() == 0)
+			return null;
+		else
+			return l.get(0);
 	}
 }
