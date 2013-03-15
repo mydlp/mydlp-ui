@@ -9,6 +9,7 @@
 		<![CDATA[
 			import com.mydlp.ui.domain.DiscoveryReport;
 			import com.mydlp.ui.util.InteractionUtil;
+			import com.mydlp.ui.util.LangUtil;
 			
 			import mx.core.FlexGlobals;
 			import mx.events.FlexEvent;
@@ -19,6 +20,10 @@
 				
 				lblData.text = data[column.dataField];
 				var report:DiscoveryReport = value as DiscoveryReport;
+				if(report.finishDate == null)
+					lblData.text += " - " + LangUtil.getString('messages', 'discovery.finishDate.null.label');
+				else
+					lblData.text += " - " + data["finishDate"];
 				if(report.status == DiscoveryReport.STATUS_DISCOVERING)
 				{
 					isStartEnabled = false;
@@ -154,7 +159,7 @@
 			<s:Button id="generateReportButton" skinClass="com.mydlp.ui.skin.GenerateReportBitmapButton16Skin" click="generateReport(event)"/>
 		</s:Group>
 		
-		<s:Label id="lblData" top="9" left="7" text=""/>
+		<s:Label id="lblData" top="9" left="7"/>
 	</s:Group>
 	
 </s:GridItemRenderer>
