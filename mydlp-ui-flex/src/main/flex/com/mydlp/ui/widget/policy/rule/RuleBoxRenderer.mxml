@@ -53,6 +53,7 @@
 			
 			import mx.collections.ArrayCollection;
 			import mx.collections.ListCollectionView;
+			import mx.controls.Alert;
 			import mx.core.FlexGlobals;
 			import mx.core.IUIComponent;
 			import mx.events.DragEvent;
@@ -192,6 +193,10 @@
 			public function getDiscoveryStatusHandler(event:ResultEvent):void
 			{
 				discoveryReport = event.result as DiscoveryReport;
+				if(isPlayButtonEnabled())
+					playButton.enabled = true;
+				else
+					playButton.enabled = false;
 				refreshDataProviders();
 				refreshView();
 			}
@@ -876,23 +881,9 @@
 			protected function startButtonClickHandler(event:MouseEvent):void
 			{
 				de.startDiscoveryOnDemand(ruleObject.id);
+				FlexGlobals.topLevelApplication.refresh();
 			}
-			
-			protected function startDiscoveryHandler(event:ResultEvent):void
-			{
-				
-			}
-			
-			protected function pauseButtonClickHandler(event:MouseEvent):void
-			{
-				de.pauseDiscoveryOnDemand(ruleObject.id);
-			}
-			
-			protected function stopButtonClickHandler(event:MouseEvent):void
-			{
-				de.stopDiscoveryOnDemand(ruleObject.id);
-			}
-			
+	
 			protected function isPlayButtonEnabled():Boolean
 			{
 				if(discoveryReport == null)
@@ -919,9 +910,7 @@
 			<my:method name="getDiscoveryStatus" result="getDiscoveryStatusHandler(event)"/>
 		</my:remote>
 		<my:remote id="de" destination="discoveryBRS" >
-			<my:method name="startDiscoveryOnDemand" result="startDiscoveryHandler(event)"/>
-			<my:method name="stopDiscoveryOnDemand" result="startDiscoveryHandler(event)"/>
-			<my:method name="pauseDiscoveryOnDemand" result="startDiscoveryHandler(event)"/>
+			<my:method name="startDiscoveryOnDemand"/>
 		</my:remote>
 	</fx:Declarations>
 	
@@ -1035,8 +1024,7 @@
 					<s:HorizontalLayout gap="5" horizontalAlign="center" verticalAlign="middle"/>
 				</s:layout>
 				
-				<s:Button skinClass="com.mydlp.ui.skin.PlayBitmapButton16Skin" click="startButtonClickHandler(event)"
-						  enabled="{isPlayButtonEnabled()}"/>
+				<s:Button id="playButton" skinClass="com.mydlp.ui.skin.PlayBitmapButton16Skin" click="startButtonClickHandler(event)"/>
 			</s:Group>
 			
 		</s:HGroup>

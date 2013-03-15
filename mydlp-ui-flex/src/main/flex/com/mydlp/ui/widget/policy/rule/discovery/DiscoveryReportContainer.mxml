@@ -30,7 +30,7 @@
 			
 			protected const LOG_PENDING_OBJECT:Object = 
 				{date: LangUtil.getString("messages", "log.container.search.pending.message")};
-		
+			
 			protected var criteriaList:ListCollectionView = new ArrayCollection();
 			protected var searchString:String = "";
 			protected var contentId:Number = Number.NaN;
@@ -116,7 +116,8 @@
 			public function refresh(): void
 			{
 				generateCriteriaList();
-				logSearchDP.init();
+				if(logSearchDP != null)
+					logSearchDP.init();
 			}
 			
 			protected function onResetClickHandler(event:MouseEvent):void
