@@ -234,6 +234,8 @@
 						callLater(showIndex, [oldAfterRefreshSelectedIndex]);
 					}
 				}
+				if(isDiscoveryTab)
+					discoveryReportContainer.refresh();
 			}
 			
 			protected function clickHandler(event:MouseEvent):void
@@ -551,7 +553,7 @@
 				<s:HorizontalLayout paddingTop="5" paddingBottom="5" paddingLeft="20"/>
 			</s:layout>
 			
-			<discovery:DiscoveryReportContainer/>
+			<discovery:DiscoveryReportContainer id="discoveryReportContainer"/>
 		</s:Group>
 	</s:Group>
 	

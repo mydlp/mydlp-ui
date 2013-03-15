@@ -15,4 +15,6 @@ public interface DiscoveryReportDAO {
 	
 	public void remove(DiscoveryReport d);
 	
+	public DiscoveryReport getDiscoveryStatus(Long ruleId);
+	
 }

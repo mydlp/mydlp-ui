@@ -82,4 +82,16 @@ public class DiscoveryReportDAOImpl extends AbstractReportDAO implements Discove
 	public void remove(DiscoveryReport d) {
 		getHibernateTemplate().delete(d);
 	}
+
+
+	@Override
+	public DiscoveryReport getDiscoveryStatus(Long ruleId) {
+		DetachedCriteria criteria = 
+				DetachedCriteria.forClass(DiscoveryReport.class)
+				.add(Restrictions.eq("ruleId", ruleId))
+				.addOrder(Order.desc("startDate"));
+		@SuppressWarnings("unchecked")
+		List<DiscoveryReport> l = getHibernateTemplate().findByCriteria(criteria);
+		return DAOUtil.getSingleResult(l);
+	}
 }

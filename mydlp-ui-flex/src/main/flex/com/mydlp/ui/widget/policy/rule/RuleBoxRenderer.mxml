@@ -16,6 +16,7 @@
 		<![CDATA[
 			import com.mydlp.ui.domain.ApiRule;
 			import com.mydlp.ui.domain.ApplicationName;
+			import com.mydlp.ui.domain.DiscoveryReport;
 			import com.mydlp.ui.domain.DiscoveryRule;
 			import com.mydlp.ui.domain.Domain;
 			import com.mydlp.ui.domain.FileSystemDirectory;
@@ -66,6 +67,8 @@
 			
 			[Bindable]
 			public var ruleObject:* = null;
+			
+			protected var discoveryReport:DiscoveryReport;
 			
 			protected static const SOURCES_ALL:String = "inventory.networks.all";
 			
@@ -132,6 +135,8 @@
 				ruleObject = data;
 				icon24 = RuleIcon.getIcon24(ruleObject);
 				icon32 = RuleIcon.getIcon32(ruleObject);
+				if(isDiscoveryTab)
+					
 				refresh();
 			}
 			
@@ -174,8 +179,7 @@
 			{
 				if (ruleObject == null) return;
 				invalidateDisplayList();
-				refreshDataProviders();
-				refreshView();
+				re.getDiscoveryStatus((ruleObject as Rule).id)
 				validateNow();
 			}
 			
@@ -183,6 +187,13 @@
 			{
 				expandCollapseButtonEnabled = isExpandCollapseEnabled();
 				setNameLabel();
+			}
+			
+			public function getDiscoveryStatusHandler(event:ResultEvent):void
+			{
+				discoveryReport = event.result as DiscoveryReport;
+				refreshDataProviders();
+				refreshView();
 			}
 			
 			public static function isSourceRuleItem(item:Item):Boolean
@@ -882,6 +893,17 @@
 				de.stopDiscoveryOnDemand(ruleObject.id);
 			}
 			
+			protected function isPlayButtonEnabled():Boolean
+			{
+				if(discoveryReport == null)
+					return true;
+				else if(discoveryReport.status == DiscoveryReport.STATUS_STOPPED || discoveryReport.status == DiscoveryReport.STATUS_ERROR)
+					return true;
+				else
+					return false;
+			}
+			
+			
 		]]>
 	</fx:Script>
 	
@@ -894,6 +916,7 @@
 		<my:remote id="re" destination="ruleBRS">
 			<my:method name="save" result="saveHandler(event)"/>
 			<my:method name="removeRuleItems" result="deleteRuleItemsHandler(event)"/>
+			<my:method name="getDiscoveryStatus" result="getDiscoveryStatusHandler(event)"/>
 		</my:remote>
 		<my:remote id="de" destination="discoveryBRS" >
 			<my:method name="startDiscoveryOnDemand" result="startDiscoveryHandler(event)"/>
@@ -1012,7 +1035,8 @@
 					<s:HorizontalLayout gap="5" horizontalAlign="center" verticalAlign="middle"/>
 				</s:layout>
 				
-				<s:Button skinClass="com.mydlp.ui.skin.PlayBitmapButton16Skin" click="startButtonClickHandler(event)"/>
+				<s:Button skinClass="com.mydlp.ui.skin.PlayBitmapButton16Skin" click="startButtonClickHandler(event)"
+						  enabled="{isPlayButtonEnabled()}"/>
 			</s:Group>
 			
 		</s:HGroup>

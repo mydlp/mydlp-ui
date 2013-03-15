@@ -9,6 +9,7 @@
 		<![CDATA[
 			import com.mydlp.ui.domain.DiscoveryReport;
 			
+			import mx.core.FlexGlobals;
 			import mx.events.FlexEvent;
 			public override function set data(value:Object):void
 			{
@@ -49,6 +50,7 @@
 				isStartEnabled = false;
 				isStopEnabled = true;
 				isPauseEnabled = true;
+				FlexGlobals.topLevelApplication.refresh();
 			}
 			
 			protected function stopButtonClickHandler(event:MouseEvent):void
@@ -57,6 +59,7 @@
 				isStartEnabled = false;
 				isStopEnabled = false;
 				isPauseEnabled = false;
+				FlexGlobals.topLevelApplication.refresh();
 			}
 			
 			protected function pauseButtonClickHandler(event:MouseEvent):void
@@ -65,6 +68,7 @@
 				isStartEnabled = true;
 				isStopEnabled = true;
 				isPauseEnabled = false;
+				FlexGlobals.topLevelApplication.refresh();
 			}
 			
 			protected function isStartButtonEnabled():Boolean

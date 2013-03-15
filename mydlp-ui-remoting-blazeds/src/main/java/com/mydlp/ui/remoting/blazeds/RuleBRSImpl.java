@@ -7,7 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.flex.remoting.RemotingDestination;
 import org.springframework.stereotype.Service;
 
+import com.mydlp.ui.dao.DiscoveryReportDAO;
 import com.mydlp.ui.dao.RuleDAO;
+import com.mydlp.ui.domain.DiscoveryReport;
 import com.mydlp.ui.domain.Rule;
 import com.mydlp.ui.domain.RuleItem;
 
@@ -17,6 +19,9 @@ public class RuleBRSImpl implements RuleService
 {
 	@Autowired
 	protected RuleDAO ruleDAO;
+	
+	@Autowired
+	protected DiscoveryReportDAO discoveryReportDAO;
 
 	@Override
 	public List<Rule> getRules() {
@@ -69,6 +74,11 @@ public class RuleBRSImpl implements RuleService
 	public Map<String, String> getRuleLabelsAndIds() {
 		return ruleDAO.getRuleLabelsAndIds();
 			
+	}
+
+	@Override
+	public DiscoveryReport getDiscoveryStatus(Long ruleId) {
+		return discoveryReportDAO.getDiscoveryStatus(ruleId);
 	}
 
 }
