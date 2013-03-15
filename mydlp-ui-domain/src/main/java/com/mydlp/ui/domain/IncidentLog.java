@@ -34,7 +34,7 @@ public class IncidentLog extends AbstractEntity {
 	protected String matcherMessage;
 	protected List<IncidentLogFile> files;
 	protected IncidentLogRequeueStatus requeueStatus;
-	protected String reportId;
+	protected String groupId;
 	
 	@Index(name="dateIndex")
 	@Column(nullable=false)
@@ -122,11 +122,13 @@ public class IncidentLog extends AbstractEntity {
 	public void setRequeueStatus(IncidentLogRequeueStatus requeueStatus) {
 		this.requeueStatus = requeueStatus;
 	}
-	public String getReportId() {
-		return reportId;
-	}
-	public void setReportId(String reportId) {
-		this.reportId = reportId;
-	}
 	
+	@Column(nullable=true)
+	public String getGroupId() {
+		return groupId;
+	}
+	public void setGroupId(String groupId) {
+		this.groupId = groupId;
+	}
+
 }

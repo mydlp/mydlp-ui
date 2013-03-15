@@ -8,6 +8,7 @@
 	<fx:Script>
 		<![CDATA[
 			import com.mydlp.ui.domain.DiscoveryReport;
+			import com.mydlp.ui.util.InteractionUtil;
 			
 			import mx.core.FlexGlobals;
 			import mx.events.FlexEvent;
@@ -23,24 +24,44 @@
 					isStartEnabled = false;
 					isStopEnabled = true;
 					isPauseEnabled = true;
+					
+					discoveryGroup.includeInLayout = true;
+					discoveryGroup.visible = true;
+					reportGroup.includeInLayout = false;
+					reportGroup.visible = false;
 				}
 				else if(report.status == DiscoveryReport.STATUS_PAUSED_USER || report.status == DiscoveryReport.STATUS_PAUSED_SYSTEM)
 				{
 					isStartEnabled = true;
 					isStopEnabled = true;
 					isPauseEnabled = false;
+					
+					discoveryGroup.includeInLayout = true;
+					discoveryGroup.visible = true;
+					reportGroup.includeInLayout = false;
+					reportGroup.visible = false;
 				}
 				else if(report.status == DiscoveryReport.STATUS_STOPPED)
 				{
 					isStartEnabled = false;
 					isStopEnabled = false;
 					isPauseEnabled = false;
+					
+					discoveryGroup.includeInLayout = false;
+					discoveryGroup.visible = false;
+					reportGroup.includeInLayout = true;
+					reportGroup.visible = true;
 				}
 				else if(report.status == DiscoveryReport.STATUS_ERROR)
 				{
 					isStartEnabled = false;
 					isStopEnabled = false;
 					isPauseEnabled = false;
+					
+					discoveryGroup.includeInLayout = false;
+					discoveryGroup.visible = false;
+					reportGroup.includeInLayout = false;
+					reportGroup.visible = false;
 				}
 			}
 			
@@ -95,6 +116,13 @@
 					return true;
 			}
 			
+			protected function generateReport(event:MouseEvent):void
+			{
+				var drp:DiscoveryReportPopup = InteractionUtil.newPopup(DiscoveryReportPopup) as DiscoveryReportPopup;
+				drp.groupId = data.groupId;
+				drp.populate();
+			}
+			
 		]]>
 	</fx:Script>
 	
@@ -109,12 +137,23 @@
 		<s:layout>
 			<s:HorizontalLayout gap="2" verticalAlign="middle"/>
 		</s:layout>
-		<s:Button id="startButton" skinClass="com.mydlp.ui.skin.PlayBitmapButton16Skin" click="startButtonClickHandler(event)"
-				  enabled="{isStartEnabled}"/>
-		<s:Button id="pauseButton" skinClass="com.mydlp.ui.skin.PauseBitmapButton16Skin" click="pauseButtonClickHandler(event)"
-				  enabled="{isPauseEnabled}"/>
-		<s:Button id="stopButton" skinClass="com.mydlp.ui.skin.StopBitmapButton16Skin" click="stopButtonClickHandler(event)"
-				  enabled="{isStopEnabled}"/>
+		
+		<s:Group id="discoveryGroup">
+			<s:layout>
+				<s:HorizontalLayout gap="2"/>
+			</s:layout>		
+			<s:Button id="startButton" skinClass="com.mydlp.ui.skin.PlayBitmapButton16Skin" click="startButtonClickHandler(event)"
+					  enabled="{isStartEnabled}"/>
+			<s:Button id="pauseButton" skinClass="com.mydlp.ui.skin.PauseBitmapButton16Skin" click="pauseButtonClickHandler(event)"
+					  enabled="{isPauseEnabled}"/>
+			<s:Button id="stopButton" skinClass="com.mydlp.ui.skin.StopBitmapButton16Skin" click="stopButtonClickHandler(event)"
+					  enabled="{isStopEnabled}"/>
+		</s:Group>
+		
+		<s:Group id="reportGroup">
+			<s:Button id="generateReportButton" skinClass="com.mydlp.ui.skin.GenerateReportBitmapButton16Skin" click="generateReport(event)"/>
+		</s:Group>
+		
 		<s:Label id="lblData" top="9" left="7" text=""/>
 	</s:Group>
 	

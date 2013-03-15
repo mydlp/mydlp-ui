@@ -186,6 +186,11 @@ public class IncidentLogDAOImpl extends AbstractLogDAO implements IncidentLogDAO
 				String reportId = (String)list.get(2);
 				criteria.add(Restrictions.not(Restrictions.eq(field, reportId)));
 			}
+			else if(field.equals("groupId") && operation.equals("eq"))
+			{
+				String groupId = (String)list.get(2);
+				criteria.add(Restrictions.eq(field, groupId));
+			}
 			else if (field.equals("showAll") && operation.equals("eq"))
 			{
 				Boolean showAll = (Boolean) list.get(2); 

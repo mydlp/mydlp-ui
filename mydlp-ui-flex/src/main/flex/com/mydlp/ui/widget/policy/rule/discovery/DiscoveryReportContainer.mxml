@@ -151,11 +151,11 @@
 					<s:GridColumn headerText="@Resource(bundle = 'messages', key = 'discovery.log.container.header.date')" dataField="startDate"
 								  itemRenderer="com.mydlp.ui.widget.policy.rule.discovery.DiscoveryReportDateAndButtonRenderer"/>
 					<s:GridColumn headerText="@Resource(bundle = 'messages', key = 'discovery.log.container.header.policy')"
-								  itemRenderer="com.mydlp.ui.widget.policy.rule.discovery.DiscoveryLogPolicyColumnRenderer"/>
+								  itemRenderer="com.mydlp.ui.widget.policy.rule.discovery.DiscoveryReportPolicyColumnRenderer"/>
 					<s:GridColumn headerText="@Resource(bundle = 'messages', key = 'discovery.log.container.header.message')"
-								  itemRenderer="com.mydlp.ui.widget.policy.rule.discovery.DiscoveryLogMessageColumnRenderer"/>
+								  itemRenderer="com.mydlp.ui.widget.policy.rule.discovery.DiscoveryReportMessageColumnRenderer"/>
 					<s:GridColumn headerText="@Resource(bundle = 'messages', key = 'discovery.log.container.header.reportId')"
-								  itemRenderer="com.mydlp.ui.widget.policy.rule.discovery.DiscoveryLogReportIdColumnRenderer"/>
+								  itemRenderer="com.mydlp.ui.widget.policy.rule.discovery.DiscoveryReportGroupIdColumnRenderer"/>
 				</s:ArrayList>
 			</s:columns>
 		</s:DataGrid>
