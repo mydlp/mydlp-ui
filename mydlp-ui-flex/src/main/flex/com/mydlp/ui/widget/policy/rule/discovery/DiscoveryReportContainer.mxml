@@ -121,7 +121,7 @@
 			
 			protected function onResetClickHandler(event:MouseEvent):void
 			{
-				
+				refresh();
 			}
 			
 		]]>
