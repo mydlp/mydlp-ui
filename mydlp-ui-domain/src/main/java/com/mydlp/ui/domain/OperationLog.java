@@ -29,6 +29,7 @@ public class OperationLog extends AbstractEntity {
 	protected String message;
 	protected String messageKey;
 	protected String groupId;
+	protected String ipAddress;
 	
 	@Index(name="dateIndex")
 	@Column(nullable=false)
@@ -86,12 +87,21 @@ public class OperationLog extends AbstractEntity {
 	public void setRuleId(Long ruleId) {
 		this.ruleId = ruleId;
 	}
+	
 	@Column(nullable=true)
 	public String getGroupId() {
 		return groupId;
 	}
 	public void setGroupId(String groupId) {
 		this.groupId = groupId;
+	}
+	
+	@Column(nullable=true)
+	public String getIpAddress() {
+		return ipAddress;
+	}
+	public void setIpAddress(String ipAddress) {
+		this.ipAddress = ipAddress;
 	}
 	
 }
