@@ -29,7 +29,7 @@ public class OperationLog extends AbstractEntity {
 	protected String message;
 	protected String messageKey;
 	protected String groupId;
-	protected String ipAddress;
+	protected String source;
 	
 	@Index(name="dateIndex")
 	@Column(nullable=false)
@@ -97,11 +97,12 @@ public class OperationLog extends AbstractEntity {
 	}
 	
 	@Column(nullable=true)
-	public String getIpAddress() {
-		return ipAddress;
+	public String getSource() {
+		return source;
 	}
-	public void setIpAddress(String ipAddress) {
-		this.ipAddress = ipAddress;
+	public void setSource(String source) {
+		this.source = source;
 	}
+	
 	
 }
