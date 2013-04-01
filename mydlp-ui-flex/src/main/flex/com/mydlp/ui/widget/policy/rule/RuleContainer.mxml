@@ -518,13 +518,31 @@
 			</s:HGroup>
 		</s:HGroup>
 		
-		<s:Group>
+		<s:Group includeInLayout="{!isDiscoveryTab}" visible="{!isDiscoveryTab}">
 			<s:layout>
 				<s:HorizontalLayout paddingLeft="80"/>
 			</s:layout>
 			
 			<s:Label text="@Resource(key='rules.type.label', bundle='messages')" styleName="fontSize16Style" fontWeight="bold"/>
 			<s:Spacer width="98"/>
+			<s:Label text="@Resource(key='rules.sources.label', bundle='messages')" styleName="fontSize16Style" fontWeight="bold"/>
+			<s:Spacer width="80"/>
+			<s:Label text="@Resource(key='rules.destinations.label', bundle='messages')" styleName="fontSize16Style" fontWeight="bold"/>
+			<s:Spacer width="64"/>
+			<s:Label text="@Resource(key='rules.informationTypes.label', bundle='messages')" styleName="fontSize16Style" fontWeight="bold"/>
+			<s:Spacer width="90"/>
+			<s:Label text="@Resource(key='rules.action.label', bundle='messages')" styleName="fontSize16Style" fontWeight="bold"/>
+		</s:Group>
+		
+		<s:Group includeInLayout="{isDiscoveryTab}" visible="{isDiscoveryTab}">
+			<s:layout>
+				<s:HorizontalLayout paddingLeft="80"/>
+			</s:layout>
+			
+			<s:Label text="@Resource(key='rules.type.label', bundle='messages')" styleName="fontSize16Style" fontWeight="bold"/>
+			<s:Spacer width="70"/>
+			<s:Label text="@Resource(key='rules.scheduling.label', bundle='messages')" styleName="fontSize16Style" fontWeight="bold"/>
+			<s:Spacer width="65"/>
 			<s:Label text="@Resource(key='rules.sources.label', bundle='messages')" styleName="fontSize16Style" fontWeight="bold"/>
 			<s:Spacer width="80"/>
 			<s:Label text="@Resource(key='rules.destinations.label', bundle='messages')" styleName="fontSize16Style" fontWeight="bold"/>

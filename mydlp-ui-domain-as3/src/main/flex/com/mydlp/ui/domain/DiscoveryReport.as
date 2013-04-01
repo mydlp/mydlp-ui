@@ -14,6 +14,7 @@ package com.mydlp.ui.domain {
 		public static const STATUS_STOPPED:String = "stopped";
 		public static const STATUS_PAUSED_SYSTEM:String = "paused_system";
 		public static const STATUS_PAUSED_USER:String = "paused_user";
+		public static const STATUS_WAITING:String = "waiting";
 		public static const STATUS_ERROR:String = "error";
     }
 }
