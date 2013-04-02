@@ -21,7 +21,7 @@
 			protected function getPolicyText(value:*):String {
 				if (value == null) return "";
 				var report:DiscoveryReport = value as DiscoveryReport;
-				return LangUtil.getString('messages', 'discovey.report.status'+report.status);
+				return LangUtil.getString('messages', 'discovey.report.status.'+report.status);
 			}
 			
 		]]>
