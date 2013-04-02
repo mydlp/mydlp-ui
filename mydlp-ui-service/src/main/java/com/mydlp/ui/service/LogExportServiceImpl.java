@@ -144,7 +144,7 @@ public class LogExportServiceImpl implements LogExportService {
 				cell = row.createCell(3);
 				cell.setCellStyle(styles.get("cell_normal"));
 				
-				if (log.getSourceUser() != null)
+				if (log.getDestination() != null)
 				{
 					cell.setCellValue(log.getDestination());
 				}
