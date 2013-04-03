@@ -78,12 +78,12 @@
 			
 			<s:DropDownList id="protocolDropDown" dataProvider="{protocols}"
 							change="onChangeProtocol(event)" width="17%"/>
-			<s:Label text="://" fontSize="20" width="3%"/>
-			<s:TextInput id="addressText" text="@{address}" width="35%"/>
+			<s:Label text="://" fontSize="20" width="5%"/>
+			<s:TextInput id="addressText" text="@{address}" width="34%"/>
 			<s:Label text=":" fontSize="20" width="2%"/>
 			<s:TextInput id="portText" text="@{port}" width="8%"/>
 			<s:Label text="/" fontSize="20" width="2%"/>
-			<s:TextInput id="start" text="@{startPath}" width="33%"/>
+			<s:TextInput id="start" text="@{startPath}" width="32%"/>
 		</s:Group>
 	</s:Group>
 	
