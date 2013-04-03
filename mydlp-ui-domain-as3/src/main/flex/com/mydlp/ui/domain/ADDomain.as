@@ -41,7 +41,14 @@ package com.mydlp.ui.domain {
 
 		public function get label(): String
 		{
-			return this.domainName;
+			var str:String = this.domainName;
+			
+			var dnLength:Number = ( "dc=" + this.domainName.split(".").join(",dc=") ).length;
+			if (this.baseDistinguishedName.length > (dnLength + 1))
+			{
+				str = str + " [" + this.baseDistinguishedName.substr(0, (this.baseDistinguishedName.length - 1 - dnLength)) + "]";
+			}
+			return str;
 		}
 
     }

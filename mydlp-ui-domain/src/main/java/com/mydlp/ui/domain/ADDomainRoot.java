@@ -19,7 +19,11 @@ public class ADDomainRoot extends ADDomainItemGroup {
 		return domain;
 	}
 
+	@Override
 	public void setDomain(ADDomain domain) {
 		this.domain = domain;
+		this.domainId = domain.getId();
 	}
+	
+	
 }

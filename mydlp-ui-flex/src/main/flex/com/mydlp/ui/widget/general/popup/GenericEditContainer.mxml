@@ -53,6 +53,7 @@
 			import com.mydlp.ui.widget.general.input.ADDomainAliasInput;
 			import com.mydlp.ui.widget.general.input.ADDomainItemInput;
 			import com.mydlp.ui.widget.general.input.ADDomainItemListing;
+			import com.mydlp.ui.widget.general.input.ADDomainNameInput;
 			import com.mydlp.ui.widget.general.input.ADDomainUserAliasListing;
 			import com.mydlp.ui.widget.general.input.AuthSecurityRolesInput;
 			import com.mydlp.ui.widget.general.input.AuthorityScopeADItemInput;
@@ -110,7 +111,6 @@
 			
 			protected var emailTextInput:TextInput;
 			
-			
 			protected function cancelButtonClickHandler(event:Event):void
 			{
 				ErrorTipManager.hideAllErrorTips();
@@ -157,6 +157,7 @@
 							(classMember.name == "distanceEnabled" && targetObject is InformationDescription) ||
 							(classMember.name == "notificationEnabled" && targetObject is Rule) ||
 							(classMember.name == "action" && !(targetObject is USBDevice)) ||
+							(classMember.name == "domainId" && classMember.type == Number) ||
 							(classMember.name == "children" && classMember.type == ListCollectionView)||						
 							(classMember.name == "coupledInventoryItem" && classMember.type == InventoryItem) ||
 							(classMember.name == "coupledCustomAction" && classMember.type == CustomAction) ||
@@ -165,6 +166,7 @@
 							(classMember.name == "editable" && classMember.type == Boolean) ||
 							(classMember.name == "matcher" && classMember.type == Matcher) ||
 							(classMember.name == "root" && classMember.type == ADDomainRoot) ||
+							(targetObject is ADDomain && classMember.name == "baseDistinguishedName" && classMember.type == String) ||
 							(classMember.name == "parent" && classMember.type == ADDomainItemGroup) ||
 							(classMember.name == "isDeleted" && classMember.type == Boolean) ||
 							(classMember.name == "settings" && classMember.type == UserSettings) ||
@@ -422,6 +424,28 @@
 						index = 8;						
 					}
 					else if (targetObject is ADDomain &&
+						classMember.name == "domainName" &&
+						classMember.type == String)
+					{
+						index = 0;
+						var addnInput:ADDomainNameInput = new ADDomainNameInput();
+						addnInput.domainName = targetObject["domainName"];
+						addnInput.baseDistinguishedName = targetObject["baseDistinguishedName"];
+						if (isNaN(targetObject["id"]))
+						{
+							BindingUtils.bindProperty(targetObject, "domainName", addnInput, "domainName");
+							BindingUtils.bindProperty(targetObject, "baseDistinguishedName", addnInput, "baseDistinguishedName");
+							ErrorTipManager.registerValidator(addnInput.domainNameValidator);
+							validators.push(addnInput.domainNameValidator);
+						}
+						else
+						{
+							addnInput.enabled = false;
+						}
+						inputLabel = new VerticalInputLabel();
+						inputLabel.addElement(addnInput);
+					}
+					else if (targetObject is ADDomain &&
 						classMember.name == "aliases" && 
 						classMember.type == ListCollectionView)
 					{
@@ -638,15 +662,6 @@
 						else if(classMember.name == "displayName"){
 							index = 0;
 						}
-						else if(classMember.name == "domainName"){
-							index = 0;
-							var regExpValidator4:RegExpValidator = new RegExpValidator();
-							regExpValidator4.source = textInput;
-							regExpValidator4.property = "text";
-							regExpValidator4.expression = "^([\\w\\.-]{1,255})$";
-							ErrorTipManager.registerValidator(regExpValidator4);
-							validators.push(regExpValidator4);
-						}
 						else if(classMember.name == "serverIp"){
 							index = 1;
 							var regExpValidator3:RegExpValidator = new RegExpValidator();
@@ -836,6 +851,10 @@
 					miscButton.addEventListener(MouseEvent.CLICK, testConnectionButtonClickHandler);
 					miscButton.addEventListener(KeyboardEvent.KEY_DOWN, keyPressed);
 					buttonGroup.addElement(miscButton);
+					if (formObject is ADDomain && (formObject as ADDomain).currentlyEnumerating)
+					{
+						miscButton.enabled=false;
+					}
 					
 					cButton.enabled = false;
 				} 
@@ -851,6 +870,10 @@
 					misc2Button.label = LangUtil.getString("messages", "generic.edit." + getSimpleName() + ".enumButton.label");
 					misc2Button.addEventListener(MouseEvent.CLICK, enumButtonClickHandler);
 					misc2Button.addEventListener(KeyboardEvent.KEY_DOWN, keyPressed);
+					if (formObject is ADDomain && (formObject as ADDomain).currentlyEnumerating)
+					{
+						misc2Button.enabled=false;
+					}
 					buttonGroup.addElement(misc2Button);
 				}
 				buttonGroup.addElement(cancelButton);

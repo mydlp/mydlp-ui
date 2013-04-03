@@ -31,7 +31,7 @@ public class ADDomainBRSImpl implements ADDomainService
 	@Override
 	public ADDomain save(ADDomain domain) {
 		if (domain == null) return null;
-		
+	
 		if (domain.getId() != null) {
 			if (domain.getRoot() != null){
 				ADDomainRoot persistentRoot = adDomainDAO.getDomainRoot(domain.getId());

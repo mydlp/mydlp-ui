@@ -18,7 +18,8 @@ public interface ADDomainDAO {
 	
 	public void remove(AbstractEntity domainObj);
 	
-	public ADDomainItem findByDistinguishedName(String distinguishedName);
+	public ADDomainItem findByDistinguishedName(ADDomain domain, String distinguishedName);
+	public ADDomainItem findByDistinguishedName(Integer domainId, String distinguishedName);
 	
 	public List<ADDomain> getADDomains();
 	

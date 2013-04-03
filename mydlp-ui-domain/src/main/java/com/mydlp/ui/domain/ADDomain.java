@@ -18,7 +18,9 @@ public class ADDomain extends AbstractEntity {
 	private static final long serialVersionUID = -4064500948953317680L;
 	
 	protected String domainName;
-
+	
+	protected String baseDistinguishedName;
+	
 	protected String serverIp;
 	
 	protected String loginUsername;
@@ -32,14 +34,34 @@ public class ADDomain extends AbstractEntity {
 	protected ADDomainRoot root;
 	
 	protected List<ADDomainAlias> aliases;
-
-	@Column(nullable=false, unique=true, length=190)
+	
+	@Column(nullable=false, length=190)
 	public String getDomainName() {
 		return domainName;
 	}
 
 	public void setDomainName(String domainName) {
 		this.domainName = domainName;
+	}
+
+	@Column(nullable=false, length=1024)
+	public String getBaseDistinguishedName() {
+		return baseDistinguishedName;
+	}
+	
+	@Column(nullable=false, unique=true)
+	public Integer getBaseDistinguishedNameHash() {
+		if (baseDistinguishedName != null)
+			return baseDistinguishedName.hashCode();
+		else
+			return 0;
+	}
+
+	public void setBaseDistinguishedNameHash(Integer baseDistinguishedNameHash) {
+	}
+
+	public void setBaseDistinguishedName(String baseDistinguishedName) {
+		this.baseDistinguishedName = baseDistinguishedName;
 	}
 
 	public String getNetbiosName() {
