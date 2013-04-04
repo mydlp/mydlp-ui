@@ -7,6 +7,7 @@
 					  width="100%" height="100%"
 					  minWidth="800"
                       xmlns:discovery="com.mydlp.ui.widget.policy.rule.discovery.*" 
+					  creationComplete="onCreationComplete(event)"
 					  >
 	<fx:Script>
 		<![CDATA[
@@ -15,8 +16,8 @@
 			import com.mydlp.ui.domain.DiscoveryRule;
 			import com.mydlp.ui.domain.MailRule;
 			import com.mydlp.ui.domain.PrinterRule;
-			import com.mydlp.ui.domain.RemovableStorageEncryptionRule;
 			import com.mydlp.ui.domain.RemoteStorageRule;
+			import com.mydlp.ui.domain.RemovableStorageEncryptionRule;
 			import com.mydlp.ui.domain.RemovableStorageInboundRule;
 			import com.mydlp.ui.domain.RemovableStorageRule;
 			import com.mydlp.ui.domain.Rule;
@@ -314,14 +315,6 @@
 				isSelection = false;
 			}
 			
-			public function populateRuleContainer():void
-			{
-				this.addEventListener(DragEvent.DRAG_ENTER, acceptDrop);
-				this.addEventListener(MouseEvent.CLICK, clickHandler);
-				attachWatchers();
-				refreshRules();
-			}
-			
 			protected function getCustomActionsHandler(event:ResultEvent): void
 			{
 				var customActions:ListCollectionView = null;
@@ -550,6 +543,14 @@
 				popup.isDiscoveryTab = isDiscoveryTab;
 			}
 			
+			protected function onCreationComplete(event:FlexEvent):void
+			{
+				this.addEventListener(DragEvent.DRAG_ENTER, acceptDrop);
+				this.addEventListener(MouseEvent.CLICK, clickHandler);
+				attachWatchers();
+				refreshRules();
+			}
+			
 		]]>
 	</fx:Script>
 	<fx:Declarations>
@@ -615,20 +616,33 @@
 		
 		<s:Group includeInLayout="{isDiscoveryTab}" visible="{isDiscoveryTab}">
 			<s:layout>
-				<s:HorizontalLayout paddingLeft="80"/>
+				<s:HorizontalLayout paddingLeft="4"/>
 			</s:layout>
 			
-			<s:Label text="@Resource(key='rules.type.label', bundle='messages')" styleName="fontSize16Style" fontWeight="bold"/>
-			<s:Spacer width="70"/>
-			<s:Label text="@Resource(key='rules.scheduling.label', bundle='messages')" styleName="fontSize16Style" fontWeight="bold"/>
-			<s:Spacer width="65"/>
-			<s:Label text="@Resource(key='rules.sources.label', bundle='messages')" styleName="fontSize16Style" fontWeight="bold"/>
-			<s:Spacer width="80"/>
-			<s:Label text="@Resource(key='rules.destinations.label', bundle='messages')" styleName="fontSize16Style" fontWeight="bold"/>
-			<s:Spacer width="64"/>
-			<s:Label text="@Resource(key='rules.informationTypes.label', bundle='messages')" styleName="fontSize16Style" fontWeight="bold"/>
-			<s:Spacer width="90"/>
-			<s:Label text="@Resource(key='rules.action.label', bundle='messages')" styleName="fontSize16Style" fontWeight="bold"/>
+			<s:Label text="@Resource(key='rules.type.label', bundle='messages')" 
+					 width="190"
+					 textAlign="center"
+					 styleName="fontSize16Style" fontWeight="bold"/>
+			<s:Label text="@Resource(key='rules.scheduling.label', bundle='messages')"
+					 width="{36 + 8 + 32 + 8}"
+					 textAlign="center"
+					 styleName="fontSize16Style" fontWeight="bold"/>
+			<s:Label text="@Resource(key='rules.sources.label', bundle='messages')"
+					 width="{sourceWidth + 8 - RuleBoxRenderer.DISCOVERY_WIDTH_DIFF}"
+					 textAlign="center"
+					 styleName="fontSize16Style" fontWeight="bold"/>
+			<s:Label text="@Resource(key='rules.destinations.label', bundle='messages')"
+					 width="{destinationWidth + 8 - RuleBoxRenderer.DISCOVERY_WIDTH_DIFF}"
+					 textAlign="center"
+					 styleName="fontSize16Style" fontWeight="bold"/>
+			<s:Label text="@Resource(key='rules.informationTypes.label', bundle='messages')"
+					 width="{informationTypeWidth + 8 - RuleBoxRenderer.DISCOVERY_WIDTH_DIFF}"
+					 textAlign="center"
+					 styleName="fontSize16Style" fontWeight="bold"/>
+			<s:Label text="@Resource(key='rules.action.label', bundle='messages')"
+					 width="{actionWidth - RuleBoxRenderer.DISCOVERY_WIDTH_DIFF}"
+					 textAlign="center"
+					 styleName="fontSize16Style" fontWeight="bold"/>
 		</s:Group>
 		
 		<rule:RuleList id="ruleList" dataProvider="{ruleDP}" 

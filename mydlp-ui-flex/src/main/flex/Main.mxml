@@ -332,8 +332,14 @@
 					objectsContainer.refreshObjects();
 				if (endpointStatusContainer != null)
 					endpointStatusContainer.refresh();
-				if (discoveryContainer != null && policyContainer != null)
+				if (discoveryContainer != null || policyContainer != null)
+				{
 					refreshPolicyDataProviders();
+					if (discoveryContainer != null)
+						discoveryContainer.ruleContainer.refreshRules();
+					if (policyContainer != null)
+						policyContainer.ruleContainer.refreshRules();
+				}
 			}
 			
 			protected function refreshPolicyDataProviders():void
