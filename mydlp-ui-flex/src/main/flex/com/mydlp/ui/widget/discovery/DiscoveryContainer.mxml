@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx" width="100%" height="100%" 
+		 xmlns:inventory="com.mydlp.ui.widget.policy.inventory.*" 
+		 xmlns:rule="com.mydlp.ui.widget.policy.rule.*">
+	
+	<fx:Script>
+		<![CDATA[
+			import com.mydlp.ui.domain.InventoryCategory;
+			import com.mydlp.ui.domain.InventoryItem;
+			
+			import mx.events.ListEvent;
+			protected function isConsistent(items:Array):Boolean
+			{
+				var isAnyInventoryItem:Boolean = false;
+				if(items == null || items.length == 0)
+					return false;
+				else
+				{
+					for(var i:int = 0; i < items.length; i++)
+					{
+						if(items[i] is InventoryItem)
+						{
+							isAnyInventoryItem = true;
+							break;
+						}
+					}
+				}
+				if(isAnyInventoryItem)
+					return true;
+				else
+					return false;
+			}
+			
+			protected function findButtonClickHandler(event:MouseEvent):void
+			{
+				if(isConsistent(inventoryTree.myInventoryTree.selectedItems))
+				{
+					ruleContainer.filterRules(inventoryTree.myInventoryTree.selectedItems);
+					this.currentState = "filtered";
+				}
+			}
+			
+			protected function resetButtonClickHandler(event:MouseEvent):void
+			{
+				ruleContainer.resetFilterRules();
+				resetView();
+			}
+			
+			public function inventoryTreeChangeHandler(event:ListEvent):void
+			{
+				resetButtonClickHandler(null);	
+			}
+			
+			public function resetView(): void
+			{
+				this.currentState = "default";
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	<s:states>
+		<s:State name="default" />
+		<s:State name="filtered" />
+	</s:states>
+	
+	<s:layout>
+		<s:HorizontalLayout paddingTop="10" gap="0"/>
+	</s:layout>
+	<s:Group height="100%">
+		<s:layout>
+			<s:VerticalLayout gap="10"/>
+		</s:layout>
+		<s:Group height="3%" width="320">
+			<s:layout>
+				<s:HorizontalLayout paddingRight="3"
+									horizontalAlign="right"/>
+			</s:layout>
+			<s:Button id="findButton"
+					  fontWeight="bold"
+					  skinClass.default="com.mydlp.ui.skin.FindInRulesBitmapLabelButton16Skin"
+					  skinClass.filtered="com.mydlp.ui.skin.CloseBitmapLabelButton16Skin"
+					  label.default="@Resource(key='ruleContainer.policyContainer.findButton.label', bundle='messages')"
+					  label.filtered="@Resource(key='ruleContainer.policyContainer.resetButton.label', bundle='messages')"
+					  click.default="findButtonClickHandler(event)"
+					  click.filtered="resetButtonClickHandler(event)"
+					  enabled="{isConsistent(inventoryTree.myInventoryTree.selectedItems)}"
+					  />
+		</s:Group>
+		<inventory:InventoryTree id="inventoryTree" height="97%"/>
+	</s:Group>
+	<rule:RSpacer/>
+	<rule:RuleContainer id="ruleContainer"/>	
+</s:Group>

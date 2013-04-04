@@ -21,7 +21,7 @@
 				var log:IncidentLog = value as IncidentLog;
 				if (! (log.ruleId == -1))
 				{
-					var rule:Rule = RuleContainer.getRule(log.ruleId);
+					var rule:Rule = RuleContainer.getRule(log.ruleId, false);
 					if (rule != null)
 					{
 						selectedRule = rule;
@@ -95,6 +95,7 @@
 					case "P": labelText += LangUtil.getString("messages","log.container.column.policy.channel.printer"); break;
 					case "D": labelText += LangUtil.getString("messages","log.container.column.policy.channel.discovery"); break;
 					case "A": labelText += LangUtil.getString("messages","log.container.column.policy.channel.api"); break;
+					case "RD": labelText += LangUtil.getString("messages","log.container.column.policy.channel.remote_discovery"); break;
 					default: labelText += log.channel; break;
 				}
 				

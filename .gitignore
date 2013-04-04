@@ -22,12 +22,14 @@ mydlp-ui-domain-as3/src/main/flex/com/mydlp/ui/domain/*.as
 !mydlp-ui-domain-as3/src/main/flex/com/mydlp/ui/domain/AuthUser.as
 !mydlp-ui-domain-as3/src/main/flex/com/mydlp/ui/domain/Config.as
 !mydlp-ui-domain-as3/src/main/flex/com/mydlp/ui/domain/DashboardItem.as
+!mydlp-ui-domain-as3/src/main/flex/com/mydlp/ui/domain/DiscoveryReport.as
 !mydlp-ui-domain-as3/src/main/flex/com/mydlp/ui/domain/EndpointStatus.as
 !mydlp-ui-domain-as3/src/main/flex/com/mydlp/ui/domain/RDBMSConnection.as
 !mydlp-ui-domain-as3/src/main/flex/com/mydlp/ui/domain/Rule.as
 !mydlp-ui-domain-as3/src/main/flex/com/mydlp/ui/domain/InventoryItem.as
 !mydlp-ui-domain-as3/src/main/flex/com/mydlp/ui/domain/InformationFeature.as
 !mydlp-ui-domain-as3/src/main/flex/com/mydlp/ui/domain/LicenseInformation.as
+!mydlp-ui-domain-as3/src/main/flex/com/mydlp/ui/domain/WebServer.as
 mydlp-ui-flex/src/main/flex/com/mydlp/ui/util/SessionUtil.as
 mydlp-ui-webapp/hs*.log
 mydlp-ui-webapp/hsqldb/MyDLP.log
@@ -38,3 +40,7 @@ mydlp-ui-webapp/hsqldb/MyDLPLog.log
 mydlp-ui-webapp/hsqldb/MyDLPLog.lck
 mydlp-ui-webapp/hsqldb/MyDLPLog.properties
 mydlp-ui-webapp/hsqldb/MyDLPLog.script
+mydlp-ui-webapp/hsqldb/MyDLPReport.log
+mydlp-ui-webapp/hsqldb/MyDLPReport.lck
+mydlp-ui-webapp/hsqldb/MyDLPReport.properties
+mydlp-ui-webapp/hsqldb/MyDLPReport.script

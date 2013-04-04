@@ -13,29 +13,38 @@
 			import com.mydlp.ui.domain.RuleUserStatic;
 			import com.mydlp.ui.util.InteractionUtil;
 			
+			import mx.core.FlexGlobals;
+			
 			protected function close():void
 			{
 				InteractionUtil.closeCurrentPopup();
 			}
 			
+			protected function generateInventoryItem():InventoryItem
+			{
+				var i:InventoryItem = new InventoryItem();
+				i.category = FlexGlobals.topLevelApplication.discoveryContainer.inventoryTree.myInventoryTree.selectedItem;
+				return i;
+			}
+			
 			protected function userStaticHandler():void
 			{
 				close();
-				var i:InventoryItem = new InventoryItem();
+				var i:InventoryItem = generateInventoryItem();
 				i.item = new RuleUserStatic();
 				InteractionUtil.newEditDialog(i);
 			}
 			protected function userADHandler():void
 			{
 				close();
-				var i:InventoryItem = new InventoryItem();
+				var i:InventoryItem = generateInventoryItem();
 				i.item = new RuleUserAD();
 				InteractionUtil.newEditDialog(i);	
 			}
 		]]>
 	</fx:Script>
 	<fx:Declarations>
-		<!-- Place non-visual elements (e.g., services, value objects) here -->
+		<fx:Boolean id="isDiscoveryTab"/>
 	</fx:Declarations>
 	
 	<s:VGroup paddingBottom="10" paddingLeft="10" paddingRight="10" paddingTop="10"

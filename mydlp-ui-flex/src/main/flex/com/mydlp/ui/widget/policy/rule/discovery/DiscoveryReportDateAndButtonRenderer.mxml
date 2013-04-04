@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:GridItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009" 
+					xmlns:s="library://ns.adobe.com/flex/spark" 
+					xmlns:my="http://www.mydlp.com/flex/my" 
+					xmlns:mx="library://ns.adobe.com/flex/mx" clipAndEnableScrolling="true" 
+					xmlns:discovery="com.mydlp.ui.widget.policy.rule.discovery.*">
+	
+	<fx:Script>
+		<![CDATA[
+			import com.mydlp.ui.domain.DiscoveryReport;
+			import com.mydlp.ui.util.InteractionUtil;
+			import com.mydlp.ui.util.LangUtil;
+			
+			import mx.core.FlexGlobals;
+			import mx.events.FlexEvent;
+			public override function set data(value:Object):void
+			{
+				super.data = value;
+				if(value == null || !(value is DiscoveryReport)) return;
+				
+				lblData.text = data[column.dataField];
+				var report:DiscoveryReport = value as DiscoveryReport;
+				if(report.finishDate == null)
+					lblData.text += " - " + LangUtil.getString('messages', 'discovery.finishDate.null.label');
+				else
+					lblData.text += " - " + data["finishDate"];
+				if(report.status == DiscoveryReport.STATUS_DISCOVERING)
+				{
+					isStartEnabled = false;
+					isStopEnabled = true;
+					isPauseEnabled = true;
+					
+					discoveryGroup.includeInLayout = true;
+					discoveryGroup.visible = true;
+					reportGroup.includeInLayout = false;
+					reportGroup.visible = false;
+				}
+				else if(report.status == DiscoveryReport.STATUS_PAUSED_USER || report.status == DiscoveryReport.STATUS_PAUSED_SYSTEM)
+				{
+					isStartEnabled = true;
+					isStopEnabled = true;
+					isPauseEnabled = false;
+					
+					discoveryGroup.includeInLayout = true;
+					discoveryGroup.visible = true;
+					reportGroup.includeInLayout = false;
+					reportGroup.visible = false;
+				}
+				else if(report.status == DiscoveryReport.STATUS_STOPPED)
+				{
+					isStartEnabled = false;
+					isStopEnabled = false;
+					isPauseEnabled = false;
+					
+					discoveryGroup.includeInLayout = false;
+					discoveryGroup.visible = false;
+					reportGroup.includeInLayout = true;
+					reportGroup.visible = true;
+				}
+				else if(report.status == DiscoveryReport.STATUS_ERROR)
+				{
+					isStartEnabled = false;
+					isStopEnabled = false;
+					isPauseEnabled = false;
+					
+					discoveryGroup.includeInLayout = false;
+					discoveryGroup.visible = false;
+					reportGroup.includeInLayout = false;
+					reportGroup.visible = false;
+				}
+			}
+			
+			protected function startButtonClickHandler(event:MouseEvent):void
+			{
+				de.startDiscoveryOnDemand(data.ruleId);
+				isStartEnabled = false;
+				isStopEnabled = true;
+				isPauseEnabled = true;
+				FlexGlobals.topLevelApplication.refresh();
+			}
+			
+			protected function stopButtonClickHandler(event:MouseEvent):void
+			{
+				de.stopDiscoveryOnDemand(data.ruleId);
+				isStartEnabled = false;
+				isStopEnabled = false;
+				isPauseEnabled = false;
+				FlexGlobals.topLevelApplication.refresh();
+			}
+			
+			protected function pauseButtonClickHandler(event:MouseEvent):void
+			{
+				de.pauseDiscoveryOnDemand(data.ruleId);
+				isStartEnabled = true;
+				isStopEnabled = true;
+				isPauseEnabled = false;
+				FlexGlobals.topLevelApplication.refresh();
+			}
+			
+			protected function isStartButtonEnabled():Boolean
+			{
+				if(data.status == DiscoveryReport.STATUS_PAUSED_SYSTEM || data.status == DiscoveryReport.STATUS_PAUSED_USER)
+					return true;
+				else
+					return false;
+			}
+			
+			protected function isPauseButtonEnabled():Boolean
+			{
+				if(data.status == DiscoveryReport.STATUS_DISCOVERING)
+					return true;
+				else
+					return false;
+			}
+			
+			protected function isStopButtonEnabled():Boolean
+			{
+				if(data.status == DiscoveryReport.STATUS_STOPPED || data.status == DiscoveryReport.STATUS_ERROR)
+					return false;
+				else
+					return true;
+			}
+			
+			protected function generateReport(event:MouseEvent):void
+			{
+				var drp:DiscoveryReportPopup = InteractionUtil.newPopup(DiscoveryReportPopup) as DiscoveryReportPopup;
+				drp.groupId = data.groupId;
+				drp.populate();
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<fx:Declarations>
+		<my:remote id="de" destination="discoveryBRS" />
+		<fx:Boolean id="isStartEnabled"/>
+		<fx:Boolean id="isPauseEnabled"/>
+		<fx:Boolean id="isStopEnabled"/>
+	</fx:Declarations>
+	
+	<s:Group>
+		<s:layout>
+			<s:HorizontalLayout gap="2" verticalAlign="middle"/>
+		</s:layout>
+		
+		<s:Group id="discoveryGroup">
+			<s:layout>
+				<s:HorizontalLayout gap="2"/>
+			</s:layout>		
+			<s:Button id="startButton" skinClass="com.mydlp.ui.skin.PlayBitmapButton16Skin" click="startButtonClickHandler(event)"
+					  enabled="{isStartEnabled}"/>
+			<s:Button id="pauseButton" skinClass="com.mydlp.ui.skin.PauseBitmapButton16Skin" click="pauseButtonClickHandler(event)"
+					  enabled="{isPauseEnabled}"/>
+			<s:Button id="stopButton" skinClass="com.mydlp.ui.skin.StopBitmapButton16Skin" click="stopButtonClickHandler(event)"
+					  enabled="{isStopEnabled}"/>
+		</s:Group>
+		
+		<s:Group id="reportGroup">
+			<s:Button id="generateReportButton" skinClass="com.mydlp.ui.skin.GenerateReportBitmapButton16Skin" click="generateReport(event)"/>
+		</s:Group>
+		
+		<s:Label id="lblData" top="9" left="7"/>
+	</s:Group>
+	
+</s:GridItemRenderer>

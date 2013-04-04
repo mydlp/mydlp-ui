@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+					  xmlns:s="library://ns.adobe.com/flex/spark" 
+					  xmlns:my="http://www.mydlp.com/flex/my"
+					  xmlns:mx="library://ns.adobe.com/flex/mx"
+					  width="20" height="20" creationComplete="onCreationComplete(event)"
+					  click="onClickHandler(event)">
+	<fx:Script>
+		<![CDATA[
+			import mx.events.FlexEvent;
+			
+			
+			protected function onCreationComplete(event:FlexEvent):void
+			{
+				if(isActive) 
+					this.currentState = "progress";
+				else
+					this.currentState = "inprogress";
+			}
+			
+			protected function onClickHandler(event:MouseEvent):void
+			{
+				isActive = !isActive
+				if(isActive)
+					this.currentState = "progress"
+				else
+					this.currentState = "inprogress";
+				//color.progress="0x00B000" color.inprogress="0xB0B0B0" 	
+			}
+			
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<fx:Boolean id="isActive"/>
+	</fx:Declarations>
+	
+	<s:states>
+		<s:State name="progress"/>
+		<s:State name="inprogress"/>
+	</s:states>
+	
+	<s:Rect bottom="1" left="1" right="0" top="0">
+		<s:fill>
+			<s:SolidColor color="{isActive? 0x00B000 : 0xB0B0B0}" />
+		</s:fill>
+	</s:Rect>
+
+</s:Group>

@@ -34,7 +34,6 @@
 			
 			protected function onInitialize(event:FlexEvent):void
 			{
-				
 				this.addEventListener(ItemClickEvent.ITEM_CLICK, onItemClick);
 				this.addEventListener(IndexChangeEvent.CHANGE, onChange);
 				
@@ -66,6 +65,8 @@
 					{
 						deselect(l);
 					}
+					else if (FlexGlobals.topLevelApplication.ruleContainer.ruleList.selectedItem is NewRuleShadow)
+						deselect(l);
 					else if ( FlexGlobals.topLevelApplication.policyContainer.ruleContainer.ruleList.selectedItem != null &&
 								(
 									l.selectedItem == null ||

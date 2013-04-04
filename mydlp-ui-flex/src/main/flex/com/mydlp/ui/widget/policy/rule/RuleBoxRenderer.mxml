@@ -17,6 +17,7 @@
 		<![CDATA[
 			import com.mydlp.ui.domain.ApiRule;
 			import com.mydlp.ui.domain.ApplicationName;
+			import com.mydlp.ui.domain.DiscoveryReport;
 			import com.mydlp.ui.domain.DiscoveryRule;
 			import com.mydlp.ui.domain.Domain;
 			import com.mydlp.ui.domain.FileSystemDirectory;
@@ -29,6 +30,13 @@
 			import com.mydlp.ui.domain.Network;
 			import com.mydlp.ui.domain.PrinterRule;
 			import com.mydlp.ui.domain.RemovableStorageEncryptionRule;
+			import com.mydlp.ui.domain.RemoteStorage;
+			import com.mydlp.ui.domain.RemoteStorageCIFS;
+			import com.mydlp.ui.domain.RemoteStorageDFS;
+			import com.mydlp.ui.domain.RemoteStorageFTPFS;
+			import com.mydlp.ui.domain.RemoteStorageNFS;
+			import com.mydlp.ui.domain.RemoteStorageRule;
+			import com.mydlp.ui.domain.RemoteStorageSSHFS;
 			import com.mydlp.ui.domain.RemovableStorageInboundRule;
 			import com.mydlp.ui.domain.RemovableStorageRule;
 			import com.mydlp.ui.domain.Rule;
@@ -37,14 +45,18 @@
 			import com.mydlp.ui.domain.ScreenshotRule;
 			import com.mydlp.ui.domain.SourceDomainName;
 			import com.mydlp.ui.domain.WebRule;
+			import com.mydlp.ui.domain.WebServer;
 			import com.mydlp.ui.util.InteractionUtil;
+			import com.mydlp.ui.util.InventoryTree;
 			import com.mydlp.ui.util.LangUtil;
 			import com.mydlp.ui.util.ReflectionUtil;
 			import com.mydlp.ui.widget.policy.inventory.InventoryTree;
+			import com.mydlp.ui.widget.policy.rule.discovery.SchedulePopup;
 			
 			import mx.binding.utils.ChangeWatcher;
 			import mx.collections.ArrayCollection;
 			import mx.collections.ListCollectionView;
+			import mx.controls.Alert;
 			import mx.core.FlexGlobals;
 			import mx.core.IUIComponent;
 			import mx.events.DragEvent;
@@ -59,6 +71,8 @@
 			
 			[Bindable]
 			public var ruleObject:* = null;
+			
+			protected var discoveryReport:DiscoveryReport;
 			
 			protected static const SOURCES_ALL:String = "inventory.networks.all";
 			
@@ -89,6 +103,9 @@
 			protected var droppedSources:ListCollectionView;//Array for dropped Sources items from inventory tree to rule container.
 			protected var droppedMatchers:ListCollectionView;//Array for dropped Matchers items from inventory tree to rule container.
 			protected var droppedDestinations:ListCollectionView;//Array for dropped Destination items from inventory tree to rule container.
+			
+			[Embed('/assets/icons/16x16/calendar_full.png')]
+			protected var calendarIcon:Class;
 			
 			public override function set data(value:Object):void
 			{
@@ -124,7 +141,18 @@
 				ruleObject = data;
 				icon24 = RuleIcon.getIcon24(ruleObject);
 				icon32 = RuleIcon.getIcon32(ruleObject);
+				if(isDiscoveryTab)
+					
 				refresh();
+			}
+			
+			protected function isRemoteStorageRuleItem(item:*):Boolean
+			{
+				if(item is RemoteStorageCIFS || item is RemoteStorageDFS || item is RemoteStorageFTPFS ||
+					item is RemoteStorageNFS || item is RemoteStorageSSHFS || item is WebServer)
+					return true;
+				else
+					return false;
 			}
 			
 			public function refreshDataProviders(): void
@@ -138,7 +166,8 @@
 				{
 					if (ruleItem.item is Network ||
 						ruleItem.item is RuleUser ||
-						ruleItem.item is SourceDomainName)
+						ruleItem.item is SourceDomainName ||
+						isRemoteStorageRuleItem(ruleItem.item))
 						sourceDataProvider1.addItem(ruleItem);
 					else if (ruleItem.item is InformationType)
 						matcherDataProvider1.addItem(ruleItem);
@@ -156,8 +185,7 @@
 			{
 				if (ruleObject == null) return;
 				invalidateDisplayList();
-				refreshDataProviders();
-				refreshView();
+				re.getDiscoveryStatus((ruleObject as Rule).id)
 				validateNow();
 			}
 			
@@ -165,6 +193,17 @@
 			{
 				expandCollapseButtonEnabled = isExpandCollapseEnabled();
 				setNameLabel();
+			}
+			
+			public function getDiscoveryStatusHandler(event:ResultEvent):void
+			{
+				discoveryReport = event.result as DiscoveryReport;
+				if(isPlayButtonEnabled())
+					playButton.enabled = true;
+				else
+					playButton.enabled = false;
+				refreshDataProviders();
+				refreshView();
 			}
 			
 			public static function isSourceRuleItem(item:Item):Boolean
@@ -175,6 +214,9 @@
 					return true;
 				else if(item is SourceDomainName)
 					return true;
+				else if(item is RemoteStorageCIFS || item is RemoteStorageDFS || item is RemoteStorageFTPFS ||
+					item is RemoteStorageNFS || item is RemoteStorageSSHFS || item is WebServer)
+					return true;
 				else
 					return false;
 			}
@@ -183,7 +225,7 @@
 			{
 				return ruleHasAllSources(ruleObject);
 			}
-				
+			
 			public static function ruleHasAllSources(r:Rule):Boolean
 			{
 				for each(var o:RuleItem in r.ruleItems)
@@ -198,7 +240,7 @@
 			{
 				return ruleHasAllDestination(ruleObject);
 			}
-				
+			
 			public static function ruleHasAllDestination(r:Rule):Boolean
 			{
 				for each(var o:RuleItem in r.ruleItems)
@@ -315,7 +357,7 @@
 			{
 				return ruleHasAllIType(ruleObject);
 			}
-				
+			
 			public static function ruleHasAllIType(r:Rule):Boolean 
 			{
 				for each(var o:RuleItem in r.ruleItems)
@@ -399,7 +441,7 @@
 			
 			protected function onDragEnter(dragEvent:DragEvent):void
 			{
-				if (dragEvent.dragInitiator is InventoryTree)
+				if (dragEvent.dragInitiator is com.mydlp.ui.util.InventoryTree)
 				{
 					DragManager.acceptDragDrop(dragEvent.currentTarget as IUIComponent);
 				}
@@ -407,12 +449,16 @@
 			
 			protected function onDragOver(event:DragEvent):void
 			{
-				if (event.dragInitiator is InventoryTree)
+				if (event.dragInitiator is com.mydlp.ui.util.InventoryTree)
 				{
 					droppedMatchers = new ArrayCollection();
 					droppedSources = new ArrayCollection();
 					droppedDestinations = new ArrayCollection();
-					var treeItems:* = FlexGlobals.topLevelApplication.policyContainer.inventoryTree.selectedItems;
+					var treeItems:*;
+					if(isDiscoveryTab)
+						treeItems = FlexGlobals.topLevelApplication.discoveryContainer.inventoryTree.myInventoryTree.selectedItems;
+					else
+						treeItems = FlexGlobals.topLevelApplication.policyContainer.inventoryTree.myInventoryTree.selectedItems;
 					if (isAllDroppable(treeItems) && checkConsistency(treeItems))
 					{
 						acceptDrop();
@@ -498,6 +544,17 @@
 				}
 			}
 			
+			protected function isDroppableForRemoteStorage(treeItem:*):Boolean
+			{
+				if(ruleObject is RemoteStorageRule &&
+					(treeItem is RemoteStorageCIFS || treeItem is RemoteStorageDFS ||
+						treeItem is RemoteStorageFTPFS || treeItem is RemoteStorageNFS ||
+						treeItem is RemoteStorageSSHFS || treeItem is WebServer))
+					return true;
+				else
+					return false;
+			}
+			
 			protected function isAllDroppable(treeItems:*): Boolean
 			{
 				
@@ -520,12 +577,13 @@
 							ruleObject is MailRule ||
 							ruleObject is ApiRule ||
 							ruleObject is PrinterRule ||
-							ruleObject is DiscoveryRule)
+							ruleObject is DiscoveryRule ||
+							ruleObject is RemoteStorageRule)
 							return true;
 					}
 					else if ( treeItem.item is Network )
 					{
-						if (treeItem.nameKey == SOURCES_ALL)
+						if (treeItem.nameKey == SOURCES_ALL && !(ruleObject is RemoteStorageRule))
 							return true;
 						else if(ruleObject is WebRule ||
 							ruleObject is RemovableStorageRule ||
@@ -569,7 +627,7 @@
 							return true;
 						}
 					}
-					else if ( treeItem.item is RuleUser )
+					else if ( treeItem.item is RuleUser  && !(ruleObject is RemoteStorageRule))
 					{
 						return true;
 					}
@@ -580,6 +638,8 @@
 							return true;
 						}
 					}
+					else if (isDroppableForRemoteStorage(treeItem.item))
+						return true;
 				}
 				else if (treeItem is InventoryCategory)
 				{
@@ -598,7 +658,8 @@
 			}
 			public static function isMatcherApplicable(r:*):Boolean
 			{
-				if(r is WebRule || r is DiscoveryRule || r is MailRule || r is RemovableStorageRule || r is ApiRule || r is PrinterRule)
+				if(r is WebRule || r is DiscoveryRule || r is MailRule || r is RemovableStorageRule || 
+					r is ApiRule || r is PrinterRule || r is RemoteStorageRule)
 					return true;
 				else return false;
 			}
@@ -610,18 +671,22 @@
 			
 			protected function onDragDrop(dragEvent:DragEvent):void
 			{
-				if (dragEvent.dragInitiator is InventoryTree)
+				if (dragEvent.dragInitiator is com.mydlp.ui.util.InventoryTree)
 				{
 					ruleContainer.ruleList.setAfterRefreshSelected(ruleObject);
 					
 					deleteList = new ArrayCollection();
-					var inventoryObjects:* = FlexGlobals.topLevelApplication.policyContainer.inventoryTree.selectedItems;
+					var inventoryObjects:*;
+					if(isDiscoveryTab)
+						inventoryObjects = FlexGlobals.topLevelApplication.discoveryContainer.inventoryTree.myInventoryTree.selectedItems;
+					else
+						inventoryObjects = FlexGlobals.topLevelApplication.policyContainer.inventoryTree.myInventoryTree.selectedItems;
 					for each (var o:* in inventoryObjects)
 					addDroppedObject(o as InventoryBase);
 					
 					invalidateProperties();
 					refresh();
-					 
+					
 					re.save(ruleObject);
 				}
 				else if (dragEvent.dragInitiator is RuleList)
@@ -822,12 +887,34 @@
 				}
 			}
 			
+			protected function scheduleButtonHandler(event:MouseEvent):void
+			{
+				var popup:SchedulePopup = InteractionUtil.newPopup(SchedulePopup) as SchedulePopup;
+				popup.ruleSchedule = ruleObject.ruleSchedule;
+				popup.populate();
+			}
 			
+			protected function startButtonClickHandler(event:MouseEvent):void
+			{
+				de.startDiscoveryOnDemand(ruleObject.id);
+				FlexGlobals.topLevelApplication.refresh();
+			}
+	
+			protected function isPlayButtonEnabled():Boolean
+			{
+				if(discoveryReport == null)
+					return true;
+				else if(discoveryReport.status == DiscoveryReport.STATUS_STOPPED || discoveryReport.status == DiscoveryReport.STATUS_ERROR)
+					return true;
+				else
+					return false;
+			}
 			
 		]]>
 	</fx:Script>
 	
 	<fx:Declarations>
+		<fx:Boolean id="isDiscoveryTab"/>
 		<fx:Boolean id="collapse">true</fx:Boolean>
 		<fx:Boolean id="expandCollapseButtonEnabled">false</fx:Boolean>
 		<fx:Class id="icon24" />
@@ -835,6 +922,10 @@
 		<my:remote id="re" destination="ruleBRS">
 			<my:method name="save" result="saveHandler(event)"/>
 			<my:method name="removeRuleItems" result="deleteRuleItemsHandler(event)"/>
+			<my:method name="getDiscoveryStatus" result="getDiscoveryStatusHandler(event)"/>
+		</my:remote>
+		<my:remote id="de" destination="discoveryBRS" >
+			<my:method name="startDiscoveryOnDemand"/>
 		</my:remote>
 	</fx:Declarations>
 	
@@ -930,10 +1021,35 @@
 					  toolTip="@Resource(bundle = 'messages', key = 'rulebox.enableButton.tooltip.label')"/>
 		</s:HGroup>
 		
+		<s:HGroup id="discoveryGroup" visible="{isDiscoveryTab}" includeInLayout="{isDiscoveryTab}" height="100%">
+		
+			<rule:RSpacer height="100%"/>
+			
+			<s:Group width="60" height="100%">
+				<s:layout>
+					<s:VerticalLayout verticalAlign="middle" horizontalAlign="center"/>
+				</s:layout>
+				
+				<s:Button skinClass="com.mydlp.ui.skin.CalendarBitmapButton24Skin" click="scheduleButtonHandler(event)"/>
+			</s:Group>
+			
+			<rule:RSpacer height="100%"/>
+			
+			<s:Group width="50" height="100%">
+				<s:layout>
+					<s:HorizontalLayout gap="5" horizontalAlign="center" verticalAlign="middle"/>
+				</s:layout>
+				
+				<s:Button id="playButton" skinClass="com.mydlp.ui.skin.PlayBitmapButton16Skin" click="startButtonClickHandler(event)"/>
+			</s:Group>
+			
+		</s:HGroup>
 		
 		<rule:RSpacer />
 		
+
 		<rule:RuleItemBox width="{ruleContainer.sourceWidth}"
+						  isDiscoveryTab="{isDiscoveryTab}"
 						  listDataProvider="{sourceDataProvider}"
 						  itemLabel="@Resource(bundle = 'messages', key = 'rulebox.ruleitembox.sources.itemLabel')"
 						  currentState="{getRuleItemListState(sourceDataProvider, collapse)}" />
@@ -959,6 +1075,7 @@
 			<rule:RSpacer />
 			
 			<rule:RuleItemBox width="{ruleContainer.destinationWidth}"
+							  isDiscoveryTab="{isDiscoveryTab}"
 							  listDataProvider="{destinationDataProvider}"
 							  itemLabel="@Resource(bundle = 'messages', key = 'rulebox.ruleitembox.destinations.itemLabel')"
 							  currentState="{getRuleItemListState(destinationDataProvider, collapse)}"/>
@@ -974,16 +1091,16 @@
 			</s:Rect>
 		</s:Group>
 		
-		
 		<s:Group height="100%"
 				 visible="{isMatcherApplicable(ruleObject)}" 
 				 includeInLayout="{isMatcherApplicable(ruleObject)}">
 			<s:layout>
 				<s:HorizontalLayout verticalAlign="middle"/>
 			</s:layout>
-			<rule:RSpacer />	
+			<rule:RSpacer />
 			<rule:RuleItemBox width="{ruleContainer.informationTypeWidth}"
 							  listDataProvider="{matcherDataProvider}"
+							  isDiscoveryTab="{isDiscoveryTab}"
 							  itemLabel="@Resource(bundle = 'messages', key = 'rulebox.ruleitembox.itypes.itemLabel')"
 							  currentState="{getRuleItemListState(matcherDataProvider, collapse)}" />
 			<rule:RSpacer />

@@ -8,13 +8,19 @@
 	<fx:Script>
 		<![CDATA[
 			import com.mydlp.ui.domain.ApiRule;
+			import com.mydlp.ui.domain.DailySchedule;
 			import com.mydlp.ui.domain.DiscoveryRule;
 			import com.mydlp.ui.domain.MailRule;
 			import com.mydlp.ui.domain.PrinterRule;
 			import com.mydlp.ui.domain.RemovableStorageEncryptionRule;
+			import com.mydlp.ui.domain.RemoteStorage;
+			import com.mydlp.ui.domain.RemoteStorageRule;
 			import com.mydlp.ui.domain.RemovableStorageInboundRule;
 			import com.mydlp.ui.domain.RemovableStorageRule;
 			import com.mydlp.ui.domain.Rule;
+			import com.mydlp.ui.domain.RuleSchedule;
+			import com.mydlp.ui.domain.ScheduleDayInterval;
+			import com.mydlp.ui.domain.ScheduleIntervals;
 			import com.mydlp.ui.domain.ScreenshotRule;
 			import com.mydlp.ui.domain.WebRule;
 			import com.mydlp.ui.util.InteractionUtil;
@@ -29,6 +35,40 @@
 			protected function close():void
 			{
 				InteractionUtil.closeCurrentPopup();
+			}
+			
+			protected function generateScheduleDayInterval():ScheduleDayInterval
+			{
+				var sdi:ScheduleDayInterval = new ScheduleDayInterval;
+				for(var i:int = 0; i < 24; i++)
+				{
+					var s:String;
+					if(i < 10)
+						s = "hour0" + i;
+					else
+						s = "hour" + i;
+					sdi[s] = true;
+				}
+				return sdi;
+			}
+			
+			protected function generateRuleScheduler(rule:*):RuleSchedule
+			{
+				var ruleSchedule:RuleSchedule = new RuleSchedule;
+				var ds:DailySchedule = new DailySchedule;
+				ds.hour = 0;
+				ruleSchedule.schedule = ds;
+				ruleSchedule.rule = rule;
+				var si:ScheduleIntervals = new ScheduleIntervals;
+				si.sun = generateScheduleDayInterval();
+				si.mon = generateScheduleDayInterval();
+				si.tue = generateScheduleDayInterval();
+				si.wed = generateScheduleDayInterval();
+				si.thu = generateScheduleDayInterval();
+				si.fri = generateScheduleDayInterval();
+				si.sat = generateScheduleDayInterval();
+				ruleSchedule.scheduleIntervals = si;
+				return ruleSchedule;
 			}
 			
 			protected function ruleHandler(rule:Rule): void
@@ -76,7 +116,9 @@
 			
 			protected function discoveryRuleHandler():void
 			{
-				ruleHandler(new DiscoveryRule());
+				var discoveryRule:DiscoveryRule = new DiscoveryRule;
+				discoveryRule.ruleSchedule = generateRuleScheduler(discoveryRule);
+				ruleHandler(discoveryRule);
 			}
 			
 			protected function apiRuleHandler():void
@@ -84,32 +126,45 @@
 				ruleHandler(new ApiRule());
 			}
 			
+			protected function remoteStorageRuleHandler(event:MouseEvent):void
+			{
+				var remDisRule:RemoteStorageRule = new RemoteStorageRule;
+				remDisRule.ruleSchedule = generateRuleScheduler(remDisRule);
+				ruleHandler(remDisRule);
+			}
+			
 		]]>
 	</fx:Script>
 	<fx:Declarations>
-		<!-- Place non-visual elements (e.g., services, value objects) here -->
+		<fx:Boolean id="isDiscoveryTab"/>
 	</fx:Declarations>
 	
 	<s:VGroup paddingBottom="10" paddingLeft="10" paddingRight="10" paddingTop="10"
 			  horizontalAlign="center">
 		<s:Label text="@Resource(bundle = 'messages', key = 'inventory.newdialog.addrule')"/>
 		<s:VGroup horizontalAlign="left" >
-			<s:Button skinClass="com.mydlp.ui.skin.WebRuleBitmapLabelButton16Skin" label="@Resource(bundle = 'messages', key = 'inventory.newdialog.webrule')" click="webRuleHandler()"/>
-			<s:Button skinClass="com.mydlp.ui.skin.MailRuleBitmapLabelButton16Skin" label="@Resource(bundle = 'messages', key = 'inventory.newdialog.mailrule')" click="mailRuleHandler()"/>
-			<s:Button skinClass="com.mydlp.ui.skin.RemovableStorageRuleBitmapLabelButton16Skin" label="@Resource(bundle = 'messages', key = 'inventory.newdialog.removableStoragerule')" click="removableStorageRuleHandler()"/>
-			<s:Button skinClass="com.mydlp.ui.skin.RemovableStorageInboundRuleBitmapLabelButton16Skin" 
-					  label="@Resource(bundle = 'messages', key = 'inventory.newdialog.removableStorageInboundrule')" 
-					  click="removableStorageInboundRuleHandler()"
-					  includeInLayout="{SessionUtil.isEnterprise()}" visible="{SessionUtil.isEnterprise()}"/>
+			<s:Button skinClass="com.mydlp.ui.skin.WebRuleBitmapLabelButton16Skin" label="@Resource(bundle = 'messages', key = 'inventory.newdialog.webrule')" click="webRuleHandler()"
+					  includeInLayout="{!isDiscoveryTab}" visible="{!isDiscoveryTab}"/>
+			<s:Button skinClass="com.mydlp.ui.skin.MailRuleBitmapLabelButton16Skin" label="@Resource(bundle = 'messages', key = 'inventory.newdialog.mailrule')" click="mailRuleHandler()"
+					  includeInLayout="{!isDiscoveryTab}" visible="{!isDiscoveryTab}"/>
+			<s:Button skinClass="com.mydlp.ui.skin.RemovableStorageRuleBitmapLabelButton16Skin" label="@Resource(bundle = 'messages', key = 'inventory.newdialog.removableStoragerule')" click="removableStorageRuleHandler()"
+					  includeInLayout="{!isDiscoveryTab}" visible="{!isDiscoveryTab}"/>
+			<s:Button skinClass="com.mydlp.ui.skin.RemovableStorageInboundRuleBitmapLabelButton16Skin" label="@Resource(bundle = 'messages', key = 'inventory.newdialog.removableStorageInboundrule')" click="removableStorageInboundRuleHandler()"
+					  includeInLayout="{SessionUtil.isEnterprise() &amp;&amp; !isDiscoveryTab}" visible="{SessionUtil.isEnterprise() &amp;&amp; !isDiscoveryTab}"/>
 			<s:Button skinClass="com.mydlp.ui.skin.RemovableStorageEncryptionRuleBitmapLabelButton16Skin" 
 					  label="@Resource(bundle = 'messages', key = 'inventory.newdialog.removableStorageEncryptionrule')" 
 					  click="removableStorageEncryptionRuleHandler()"
-					  includeInLayout="{SessionUtil.isEnterprise()}" visible="{SessionUtil.isEnterprise()}"/>
-			<s:Button skinClass="com.mydlp.ui.skin.ScreenshotRuleBitmapLabelButton16Skin" label="@Resource(bundle = 'messages', key = 'inventory.newdialog.screenshotrule')" click="screenshotRuleHandler()"/>
-			<s:Button skinClass="com.mydlp.ui.skin.PrinterRuleBitmapLabelButton16Skin" label="@Resource(bundle = 'messages', key = 'inventory.newdialog.printerrule')" click="printerRuleHandler()"/>
-			<s:Button skinClass="com.mydlp.ui.skin.DiscoveryRuleBitmapLabelButton16Skin" label="@Resource(bundle = 'messages', key = 'inventory.newdialog.discoveryrule')" click="discoveryRuleHandler()"/>
+					  includeInLayout="{SessionUtil.isEnterprise() &amp;&amp; !isDiscoveryTab}" visible="{SessionUtil.isEnterprise()}"/>
+			<s:Button skinClass="com.mydlp.ui.skin.ScreenshotRuleBitmapLabelButton16Skin" label="@Resource(bundle = 'messages', key = 'inventory.newdialog.screenshotrule')" click="screenshotRuleHandler()"
+					  includeInLayout="{!isDiscoveryTab}" visible="{!isDiscoveryTab}"/>
+			<s:Button skinClass="com.mydlp.ui.skin.PrinterRuleBitmapLabelButton16Skin" label="@Resource(bundle = 'messages', key = 'inventory.newdialog.printerrule')" click="printerRuleHandler()"
+					  includeInLayout="{!isDiscoveryTab}" visible="{!isDiscoveryTab}"/>
+			<s:Button skinClass="com.mydlp.ui.skin.DiscoveryRuleBitmapLabelButton16Skin" label="@Resource(bundle = 'messages', key = 'inventory.newdialog.discoveryrule')" click="discoveryRuleHandler()"
+					  includeInLayout="{isDiscoveryTab}" visible="{isDiscoveryTab}"/>
+			<s:Button skinClass="com.mydlp.ui.skin.RemoteStorageBitmapLabelButton16Skin" label="@Resource(bundle = 'messages', key = 'inventory.newdialog.remotestoragerule')" click="remoteStorageRuleHandler(event)"
+					  includeInLayout="{isDiscoveryTab}" visible="{isDiscoveryTab}"/>
 			<s:Button skinClass="com.mydlp.ui.skin.ApiRuleBitmapLabelButton16Skin" label="@Resource(bundle = 'messages', key = 'inventory.newdialog.apirule')" click="apiRuleHandler()"
-					  includeInLayout="{SessionUtil.isEnterprise()}" visible="{SessionUtil.isEnterprise()}" />
+					  includeInLayout="{SessionUtil.isEnterprise() &amp;&amp; !isDiscoveryTab}" visible="{SessionUtil.isEnterprise() &amp;&amp; !isDiscoveryTab}" />
 		</s:VGroup>
 	</s:VGroup>
 	

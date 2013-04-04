@@ -28,6 +28,7 @@
 			import com.mydlp.ui.util.SessionUtil;
 			import com.mydlp.ui.widget.dashboard.DashboardContainer;
 			import com.mydlp.ui.widget.dashboard.NoLicenseDashboardContainer;
+			import com.mydlp.ui.widget.discovery.DiscoveryContainer;
 			import com.mydlp.ui.widget.endpoint.EndpointStatusContainer;
 			import com.mydlp.ui.widget.log.LogContainer;
 			import com.mydlp.ui.widget.objects.ObjectsContainer;
@@ -39,6 +40,7 @@
 			import com.mydlp.ui.widget.revision.RevisionContainer;
 			
 			import mx.collections.ArrayCollection;
+			import mx.collections.ListCollectionView;
 			import mx.controls.Alert;
 			import mx.core.FlexGlobals;
 			import mx.events.FlexEvent;
@@ -66,6 +68,11 @@
 			
 			public var ruleLabels:Object = new Object();
 			
+			protected var rulesList:ListCollectionView;
+			
+			protected var inventoryList:Object;
+			protected var inventoryList2:Object;
+			
 			[Bindable]
 			public var dashboardContainer:DashboardContainer = null;
 			[Bindale]
@@ -76,6 +83,12 @@
 			public var ruleContainer:RuleContainer = null;
 			[Bindable]
 			public var inventoryTree:InventoryTree = null;
+			[Bindable]
+			public var discoveryContainer:PolicyContainer = null;
+			[Bindable]
+			public var ruleContainerDiscovery:RuleContainer = null;
+			[Bindable]
+			public var inventoryTreeDiscovery:InventoryTree = null;
 			[Bindable]
 			public var objectsContainer:ObjectsContainer = null;
 			[Bindable] 
@@ -170,7 +183,7 @@
 					topToolbar.installButton.includeInLayout = false;
 					topToolbar.installButton.visible = false;
 				}
-				for(var i:int = 0; i < 7; i++)
+				for(var i:int = 0; i < 8; i++)
 				{
 					var navigatorContent:NavigatorContent = new NavigatorContent();
 					navigatorContent.percentHeight = 100;
@@ -207,34 +220,44 @@
 						navigatorContent.label = LangUtil.getString("messages", "maintab.policy");
 						element = new PolicyContainer();
 						policyContainer = element;
+						policyContainer.isDiscoveryTab = false;
 						ruleContainer = policyContainer.ruleContainer;
 						inventoryTree = policyContainer.inventoryTree;						
 					}
-					else if(i == 2 && ( hasAnyAdminRole() || hasRole(AuthSecurityRole.ROLE_CLASSIFIER) ) )
+					else if(i == 2 && hasAnyAdminRole())
+					{
+						navigatorContent.label = LangUtil.getString("messages", "maintab.discovery");
+						element = new PolicyContainer();
+						discoveryContainer = element;
+						discoveryContainer.isDiscoveryTab = true;
+						ruleContainerDiscovery = discoveryContainer.ruleContainer;
+						inventoryTreeDiscovery = discoveryContainer.inventoryTree;						
+					}
+					else if(i == 3 && ( hasAnyAdminRole() || hasRole(AuthSecurityRole.ROLE_CLASSIFIER) ) )
 					{
 						navigatorContent.label = LangUtil.getString("messages", "maintab.objects");
 						element = new ObjectsContainer;
 						objectsContainer = element;
 					}
-					else if(i == 3 && hasAnyAdminRole())
+					else if(i == 4 && hasAnyAdminRole())
 					{
 						navigatorContent.label = LangUtil.getString("messages", "maintab.options");
 						element = new OptionContainer();
 						optionContainer = element;
 					}
-					else if(i == 4 && ( hasAnyAdminRole() || hasRole(AuthSecurityRole.ROLE_AUDITOR) ) )
+					else if(i == 5 && ( hasAnyAdminRole() || hasRole(AuthSecurityRole.ROLE_AUDITOR) ) )
 					{
 						navigatorContent.label = LangUtil.getString("messages", "maintab.logs");
 						element = new LogContainer();
 						logContainer = element;
 					}
-					else if(i == 5 && hasAnyAdminRole())
+					else if(i == 6 && hasAnyAdminRole())
 					{
 						navigatorContent.label = LangUtil.getString("messages", "maintab.endpointStatus");
 						element = new EndpointStatusContainer;
 						endpointStatusContainer = element;
 					}
-					else if(i == 6 && hasAnyAdminRole())
+					else if(i == 7 && hasAnyAdminRole())
 					{
 						navigatorContent.label = LangUtil.getString("messages", "maintab.revisions");
 						element = new RevisionContainer();
@@ -266,6 +289,10 @@
 				else
 					currentState = "user";
 				ruleRE.getRuleLabelsAndIds();
+
+				//ruleRE.getRules();
+				//regulateVisibilty(); // TODO: inspect
+				refreshPolicyDataProviders();
 			}
 			
 			protected function getLicenseHandler(event:ResultEvent):void
@@ -289,8 +316,8 @@
 				
 				if (policyContainer != null && policyContainer.inventoryTree != null)
 					policyContainer.inventoryTree.refreshTree();
-				if (policyContainer != null && policyContainer.ruleContainer != null)
-					policyContainer.ruleContainer.refreshRules();
+				if (discoveryContainer != null && discoveryContainer.inventoryTree != null)
+					discoveryContainer.inventoryTree.refreshTree();
 				if (optionContainer != null)
 				{
 					optionContainer.refresh();
@@ -305,6 +332,13 @@
 					objectsContainer.refreshObjects();
 				if (endpointStatusContainer != null)
 					endpointStatusContainer.refresh();
+				if (discoveryContainer != null && policyContainer != null)
+					refreshPolicyDataProviders();
+			}
+			
+			protected function refreshPolicyDataProviders():void
+			{
+				ruleRE.getRules();
 			}
 			
 			protected function refreshRuleLabelDependant(): void
@@ -354,6 +388,36 @@
 				return labelText;
 			}
 			
+			protected function getRulesHandler(event:ResultEvent):void
+			{
+				rulesList = new ArrayCollection();
+				rulesList = event.result as ListCollectionView;
+				getInventoryFunction();
+			}
+			
+			public function getInventoryFunction():void
+			{
+				if (policyContainer != null && policyContainer.inventoryTree != null)
+					policyContainer.inventoryTree.refreshTree();
+				if (discoveryContainer != null && discoveryContainer.inventoryTree != null)
+					discoveryContainer.inventoryTree.refreshTree();
+				inventoryRE.getInventory();
+			}
+			
+			protected function getInventoryHandler(event:ResultEvent):void
+			{
+				inventoryList = new Object();
+				inventoryList = event.result as Object;
+				policyContainer.rulesList = rulesList;
+				policyContainer.inventory = inventoryList;
+				discoveryContainer.rulesList = rulesList;
+				discoveryContainer.inventory = inventoryList;
+				inventoryTree.myInventoryTree.afterRefreshOps();
+				inventoryTreeDiscovery.myInventoryTree.afterRefreshOps();
+				ruleContainer.refreshRules();
+				ruleContainerDiscovery.refreshRules();
+			}
+			
 		]]>
 	</fx:Script>
 	
@@ -375,6 +439,10 @@
 		</my:remote>
 		<my:remote id="ruleRE" destination="ruleBRS" >
 			<my:method name="getRuleLabelsAndIds" result="getRuleLabelsAndIdsHandler(event)"/>
+			<my:method name="getRules" result="getRulesHandler(event)"/>
+		</my:remote>
+		<my:remote id="inventoryRE" destination="inventoryBRS">
+			<my:method name="getInventory" result="getInventoryHandler(event)"/>
 		</my:remote>
 	</fx:Declarations>
 
@@ -395,7 +463,6 @@
 				</s:LinearGradient>
 			</s:fill>
 		</s:Rect>
-		
 		
 		<s:Group top="2" left="24" height="70" width="400" >
 			<s:BitmapImage top="0" left="0" source="@Embed('/assets/images/logo_220x70.png')" />

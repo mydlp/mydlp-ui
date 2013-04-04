@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:GridItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009" 
+					xmlns:s="library://ns.adobe.com/flex/spark" 
+					xmlns:mx="library://ns.adobe.com/flex/mx" clipAndEnableScrolling="true">
+	
+	<fx:Script>
+		<![CDATA[
+			import com.mydlp.ui.domain.IncidentLog;
+			import com.mydlp.ui.domain.Rule;
+			import com.mydlp.ui.util.LangUtil;
+			import com.mydlp.ui.widget.policy.rule.RuleContainer;
+			import com.mydlp.ui.widget.revision.RevisionContainer;
+			
+			import mx.core.FlexGlobals;
+	
+			protected function getPolicyText(value:*):String {
+				if (value == null) return "";
+				
+				var log:IncidentLog = value as IncidentLog;
+				var labelText:String = "";
+				
+				labelText += LangUtil.getString("messages","log.container.column.policy.rule") + ": ";
+				
+				labelText += FlexGlobals.topLevelApplication.getRuleLabel(log.ruleId);
+				
+				labelText += "\n" + LangUtil.getString("messages","log.container.column.policy.action") + ": ";
+				
+				switch (log.action)
+				{
+					case "B": labelText += LangUtil.getString("messages","log.container.column.policy.action.block"); break;
+					case "L": labelText += LangUtil.getString("messages","log.container.column.policy.action.log"); break;
+					case "Q": labelText += LangUtil.getString("messages","log.container.column.policy.action.quarantine"); break;
+					case "A": labelText += LangUtil.getString("messages","log.container.column.policy.action.archive"); break;
+					default:
+						if (log.action.substr(0,4) == "CIS ")
+						{
+							labelText += LangUtil.getString("messages","log.container.column.policy.action.custom.irm.seclore");
+							var restStr:String = log.action.substr(4);
+							var hotFolderId:String = "";
+							var customActionName:String = "";
+							var sIndex:int = -1;
+							sIndex = restStr.indexOf(" ");
+							if (sIndex != -1)
+							{
+								hotFolderId = restStr.substr(0, sIndex);
+								customActionName = restStr.substr(sIndex + 1);
+								labelText += " [" + LangUtil.getString("messages","log.container.column.policy.action.custom.irm.seclore.hotFolderId");
+								labelText += ": " + hotFolderId +"] " + customActionName;  
+							}
+						}
+						else
+						{
+							labelText += log.action;
+						}
+						break;
+				}
+				
+				labelText += "\n" + LangUtil.getString("messages","log.container.column.policy.channel") + ": ";
+				
+				switch (log.channel)
+				{
+					case "W": labelText += LangUtil.getString("messages","log.container.column.policy.channel.web"); break;
+					case "R": labelText += LangUtil.getString("messages","log.container.column.policy.channel.removableStorage"); break;
+					case "I": labelText += LangUtil.getString("messages","log.container.column.policy.channel.removableStorageInbound"); break;
+					case "M": labelText += LangUtil.getString("messages","log.container.column.policy.channel.mail"); break;
+					case "P": labelText += LangUtil.getString("messages","log.container.column.policy.channel.printer"); break;
+					case "D": labelText += LangUtil.getString("messages","log.container.column.policy.channel.discovery"); break;
+					case "A": labelText += LangUtil.getString("messages","log.container.column.policy.channel.api"); break;
+					case "RD": labelText += LangUtil.getString("messages","log.container.column.policy.channel.remote_discovery"); break;
+					default: labelText += log.channel; break;
+				}
+				
+				if (log.requeueStatus != null && log.requeueStatus.isRequeued)
+				{
+					if (log.requeueStatus.date != null)
+						labelText += "\n" + LangUtil.getString("messages","log.container.column.policy.requeuedOn") 
+										  + ": " + log.requeueStatus.date.toString();
+					else
+						labelText += "\n" + LangUtil.getString("messages","log.container.column.policy.requeueOnProgress");
+				}
+				
+				return labelText;
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<s:states>
+		<s:State name="normal" />
+		<s:State name="hovered" />
+		<s:State name="selected" />
+	</s:states>
+	
+	<s:Group>
+		
+		<s:layout>
+			<s:HorizontalLayout gap="5"/>
+		</s:layout>
+		
+		<s:Group>
+			
+			<s:layout>
+				<s:VerticalLayout paddingBottom="4" paddingTop="4" paddingLeft="4"/>
+			</s:layout>
+			
+			<s:Label id="lblData" text="{getPolicyText(data)}"/>
+		</s:Group>
+		
+	</s:Group>
+	
+</s:GridItemRenderer>

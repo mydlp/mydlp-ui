@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
 		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:my="http://www.mydlp.com/flex/my"
 		 xmlns:mx="library://ns.adobe.com/flex/mx" width="100%" height="100%" 
 		 xmlns:inventory="com.mydlp.ui.widget.policy.inventory.*" 
 		 xmlns:rule="com.mydlp.ui.widget.policy.rule.*">
@@ -9,8 +10,9 @@
 		<![CDATA[
 			import com.mydlp.ui.domain.InventoryCategory;
 			import com.mydlp.ui.domain.InventoryItem;
-			
+			import mx.events.FlexEvent;
 			import mx.events.ListEvent;
+			import mx.rpc.AsyncToken;
 			protected function isConsistent(items:Array):Boolean
 			{
 				var isAnyInventoryItem:Boolean = false;
@@ -35,9 +37,9 @@
 			
 			protected function findButtonClickHandler(event:MouseEvent):void
 			{
-				if(isConsistent(inventoryTree.selectedItems))
+				if(isConsistent(inventoryTree.myInventoryTree.selectedItems))
 				{
-					ruleContainer.filterRules(inventoryTree.selectedItems);
+					ruleContainer.filterRules(inventoryTree.myInventoryTree.selectedItems);
 					this.currentState = "filtered";
 				}
 			}
@@ -48,7 +50,7 @@
 				resetView();
 			}
 			
-			protected function inventoryTreeChangeHandler(event:ListEvent):void
+			public function inventoryTreeChangeHandler(event:ListEvent):void
 			{
 				resetButtonClickHandler(null);	
 			}
@@ -62,7 +64,9 @@
 	</fx:Script>
 	
 	<fx:Declarations>
-		<!-- Place non-visual elements (e.g., services, value objects) here -->
+		<mx:ListCollectionView id="rulesList"/>
+		<fx:Object id="inventory"/>
+		<fx:Boolean id="isDiscoveryTab"/>
 	</fx:Declarations>
 	<s:states>
 		<s:State name="default" />
@@ -89,11 +93,13 @@
 					  label.filtered="@Resource(key='ruleContainer.policyContainer.resetButton.label', bundle='messages')"
 					  click.default="findButtonClickHandler(event)"
 					  click.filtered="resetButtonClickHandler(event)"
-					  enabled="{isConsistent(inventoryTree.selectedItems)}"
+					  enabled="{isConsistent(inventoryTree.myInventoryTree.selectedItems)}"
 					  />
 		</s:Group>
-		<inventory:InventoryTree id="inventoryTree" height="97%" width="100%" change="inventoryTreeChangeHandler(event)"/>
+		
+		<inventory:InventoryTree id="inventoryTree" height="97%" width="100%" 
+								 isDiscoveryTab="{isDiscoveryTab}" inventory="{inventory}"/>
 	</s:Group>
 	<rule:RSpacer/>
-	<rule:RuleContainer id="ruleContainer"/>	
+	<rule:RuleContainer id="ruleContainer" rulesList="{rulesList}" isDiscoveryTab="{isDiscoveryTab}"/>	
 </s:Group>

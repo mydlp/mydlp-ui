@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:GridItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009" 
+					xmlns:s="library://ns.adobe.com/flex/spark" 
+					xmlns:mx="library://ns.adobe.com/flex/mx" clipAndEnableScrolling="true">
+	
+	<fx:Script>
+		<![CDATA[
+			import com.mydlp.ui.domain.DiscoveryReport;
+			import com.mydlp.ui.domain.IncidentLog;
+			import com.mydlp.ui.domain.OperationLog;
+			import com.mydlp.ui.domain.Rule;
+			import com.mydlp.ui.util.LangUtil;
+			import com.mydlp.ui.widget.policy.rule.RuleContainer;
+			import com.mydlp.ui.widget.revision.RevisionContainer;
+			
+			import mx.core.FlexGlobals;
+			
+			protected var selectedRule:Rule = null;
+			
+			
+			protected function getPolicyText(value:*):String {
+				if (value == null) return "";
+				var report:DiscoveryReport = value as DiscoveryReport;
+				return LangUtil.getString('messages', 'discovery.report.status.'+report.status);
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<s:states>
+		<s:State name="normal" />
+		<s:State name="hovered" />
+		<s:State name="selected" />
+	</s:states>
+	
+	<s:Group>
+		
+		<s:layout>
+			<s:HorizontalLayout gap="5"/>
+		</s:layout>
+		
+		<s:Group>
+			
+			<s:layout>
+				<s:VerticalLayout paddingBottom="4" paddingTop="4" paddingLeft="4"/>
+			</s:layout>
+			
+			<s:Label id="lblData" text="{getPolicyText(data)}"/>
+		</s:Group>
+		
+	</s:Group>
+	
+</s:GridItemRenderer>

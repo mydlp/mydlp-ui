@@ -26,11 +26,20 @@ package com.mydlp.ui.domain {
 		[Embed("../../../../../../../../mydlp-ui-flex/src/main/flex/assets/icons/16x16/folder_fs.png")]
 		public static const ICON_DESTINATION_FILESYSTEM_DIRECTORY:Class;
 		
-		[Embed("../../../../../../../../mydlp-ui-flex/src/main/flex/assets/icons/16x16/email.png")]
+		[Embed("../../../../../../../../mydlp-ui-flex/src/main/flex/assets/icons/16x16/source_domain.png")]
 		public static const ICON_SOURCE_DOMAIN:Class;
 		
 		[Embed("../../../../../../../../mydlp-ui-flex/src/main/flex/assets/icons/16x16/computer.png")]
 		public static const ICON_APPLICATION_NAME:Class;
+		
+		[Embed("../../../../../../../../mydlp-ui-flex/src/main/flex/assets/icons/16x16/remote_storage.png")]
+		public static const REMOTE_STORAGE:Class;
+		
+		[Embed("../../../../../../../../mydlp-ui-flex/src/main/flex/assets/icons/16x16/remote_storage.png")]
+		public static const WEB_DISCOVERY:Class;
+		
+		[Embed("../../../../../../../../mydlp-ui-flex/src/main/flex/assets/icons/16x16/windows_storage.png")]
+		public static const WINDOWS_STORAGE:Class;
 		
 		private var _icon:Object = null;
 		
@@ -67,6 +76,18 @@ package com.mydlp.ui.domain {
 						else
 							_icon = ADDomainGroup.ICON_CLASS;
 					}
+					else if(iitem is RemoteStorageSSHFS)
+						_icon = REMOTE_STORAGE;
+					else if(iitem is RemoteStorageFTPFS)
+						_icon = REMOTE_STORAGE;
+					else if(iitem is RemoteStorageNFS)
+						_icon = REMOTE_STORAGE;
+					else if(iitem is RemoteStorageCIFS)
+						_icon = WINDOWS_STORAGE;
+					else if(iitem is RemoteStorageDFS)
+						_icon = WINDOWS_STORAGE;
+					else if(iitem is WebServer)
+						_icon = WEB_DISCOVERY;
 				}
 			}
 			return _icon;

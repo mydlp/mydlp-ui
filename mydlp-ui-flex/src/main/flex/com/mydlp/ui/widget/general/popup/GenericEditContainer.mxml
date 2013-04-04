@@ -35,13 +35,20 @@
 			import com.mydlp.ui.domain.RDBMSInformationTarget;
 			import com.mydlp.ui.domain.RegularExpressionGroup;
 			import com.mydlp.ui.domain.RemovableStorageEncryptionRule;
+			import com.mydlp.ui.domain.RemoteStorageCIFS;
+			import com.mydlp.ui.domain.RemoteStorageDFS;
+			import com.mydlp.ui.domain.RemoteStorageFTPFS;
+			import com.mydlp.ui.domain.RemoteStorageNFS;
+			import com.mydlp.ui.domain.RemoteStorageSSHFS;
 			import com.mydlp.ui.domain.RemovableStorageInboundRule;
 			import com.mydlp.ui.domain.Rule;
+			import com.mydlp.ui.domain.RuleSchedule;
 			import com.mydlp.ui.domain.RuleUserAD;
 			import com.mydlp.ui.domain.ScreenshotRule;
 			import com.mydlp.ui.domain.USBDevice;
 			import com.mydlp.ui.domain.UserSettings;
 			import com.mydlp.ui.domain.WebRule;
+			import com.mydlp.ui.domain.WebServer;
 			import com.mydlp.ui.util.ClassMember;
 			import com.mydlp.ui.util.ErrorTipManager;
 			import com.mydlp.ui.util.InteractionUtil;
@@ -67,6 +74,7 @@
 			import com.mydlp.ui.widget.general.input.RDBMSInformationTargetInput;
 			import com.mydlp.ui.widget.general.input.RegularExpressionGroupInput;
 			import com.mydlp.ui.widget.general.input.UserNotificationInput;
+			import com.mydlp.ui.widget.general.input.WebServerInput;
 			import com.mydlp.ui.widget.policy.rule.RuleContainer;
 			
 			import mx.binding.utils.BindingUtils;
@@ -87,6 +95,7 @@
 			import spark.components.Button;
 			import spark.components.CheckBox;
 			import spark.components.ComboBox;
+			import spark.components.DropDownList;
 			import spark.components.TextArea;
 			import spark.components.TextInput;
 			
@@ -130,6 +139,16 @@
 				return true;
 			}
 			
+			protected function isRemoteStorageObject(obj:*):Boolean
+			{
+				if(obj is RemoteStorageCIFS || obj is RemoteStorageDFS ||
+					obj is RemoteStorageFTPFS || obj is RemoteStorageNFS ||
+					obj is RemoteStorageSSHFS)
+					return true;
+				else 
+					return false;
+			}
+			
 			public function populateClassMembers(targetObject:Object): void
 			{
 				var classMembers:Array = ReflectionUtil.getClassMembers(targetObject as Object);
@@ -151,7 +170,7 @@
 							classMember.name == "priority" ||
 							classMember.name == "emailHashCode" ||
 							//todo refine password
-							classMember.name == "password" ||
+							(classMember.name == "password" && !isRemoteStorageObject(targetObject)) ||
 							classMember.name == "distinguishedNameHash" ||
 							(classMember.name == "distance" && targetObject is InformationDescription) ||
 							(classMember.name == "distanceEnabled" && targetObject is InformationDescription) ||
@@ -170,7 +189,11 @@
 							(classMember.name == "parent" && classMember.type == ADDomainItemGroup) ||
 							(classMember.name == "isDeleted" && classMember.type == Boolean) ||
 							(classMember.name == "settings" && classMember.type == UserSettings) ||
-							(targetObject is CustomAction && classMember.name == "typeKey" && classMember.type == String)
+							(classMember.name == "ruleSchedule" && classMember.type == RuleSchedule) ||
+							(targetObject is CustomAction && classMember.name == "typeKey" && classMember.type == String) ||
+							(targetObject is WebServer && classMember.name == "address") ||
+							(targetObject is WebServer && classMember.name == "port") ||
+							(targetObject is WebServer && classMember.name == "startPath")
 						)
 					{
 						continue;
@@ -181,17 +204,17 @@
 							targetObject[classMember.name] == null)
 						targetObject[classMember.name] = new ArrayCollection();
 					
-					if (classMember.name == "category" && classMember.type == InventoryCategory)
+					if (classMember.name == "category" && classMember.type == InventoryCategory)//should be revised because we have two tab now
 					{
 						if (targetObject.id == null || isNaN(targetObject.id) ) // means that this is a new object
 							if (targetObject[classMember.name] != null)
 								continue;
-							else if (FlexGlobals.topLevelApplication.inventoryTree.selectedItem == null)
+							else if (FlexGlobals.topLevelApplication.inventoryTree.myInventoryTree.selectedItem == null)
 								continue;
-							else if (FlexGlobals.topLevelApplication.inventoryTree.selectedItem is InventoryCategory)
-								targetObject[classMember.name] = FlexGlobals.topLevelApplication.inventoryTree.selectedItem;
-							else if (FlexGlobals.topLevelApplication.inventoryTree.selectedItem is InventoryBase)
-								targetObject[classMember.name] = FlexGlobals.topLevelApplication.inventoryTree.selectedItem.category;
+							else if (FlexGlobals.topLevelApplication.inventoryTree.myInventoryTree.selectedItem is InventoryCategory)
+								targetObject[classMember.name] = FlexGlobals.topLevelApplication.inventoryTree.myInventoryTree.selectedItem;
+							else if (FlexGlobals.topLevelApplication.inventoryTree.myInventoryTree.selectedItem is InventoryBase)
+								targetObject[classMember.name] = FlexGlobals.topLevelApplication.inventoryTree.myInventoryTree.selectedItem.category;
 						continue;
 					}
 					else if (targetObject is DocumentDatabase && classMember.name == "rdbmsEntries" && classMember.type == ListCollectionView)
@@ -320,6 +343,37 @@
 						inputLabel = new VerticalInputLabel();
 						inputLabel.addElement(mtInput);
 						index = 8;
+					}
+					
+					else if (targetObject is WebServer && classMember.name == "proto")
+					{
+						var wsi:WebServerInput = new WebServerInput();
+						wsi.proto = targetObject["proto"];
+						wsi.address = targetObject["address"];
+						wsi.port = targetObject["port"];
+						wsi.startPath = targetObject["startPath"];
+						BindingUtils.bindProperty(targetObject, "proto", wsi, "proto");
+						BindingUtils.bindProperty(targetObject, "address", wsi, "address");
+						BindingUtils.bindProperty(targetObject, "port", wsi, "port");
+						BindingUtils.bindProperty(targetObject, "startPath", wsi, "startPath");
+						inputLabel = new VerticalInputLabel();
+						inputLabel.addElement(wsi);
+						index = 2;
+						
+						var regExpValidatorP:RegExpValidator = new RegExpValidator();
+						regExpValidatorP.source = wsi;
+						regExpValidatorP.property = "address";
+						regExpValidatorP.expression = "^(www\.){0,1}[a-zA-Z0-9\.\-]*[\.]{0,1}[a-zA-Z]{0,5}[\.]{0,1}$";
+						ErrorTipManager.registerValidator(regExpValidatorP);
+						validators.push(regExpValidatorP);
+						
+						var regExpValidatorPt:RegExpValidator = new RegExpValidator();
+						regExpValidatorPt.source = wsi;
+						regExpValidatorPt.required=false;
+						regExpValidatorPt.property = "startPath";
+						regExpValidatorPt.expression = "^([a-zA-Z-]+\/)*[a-zA-Z-]*$";
+						ErrorTipManager.registerValidator(regExpValidatorPt);
+						validators.push(regExpValidatorPt);
 					}
 					
 					else if (targetObject is AuthUser && classMember.name == "role")
@@ -659,6 +713,14 @@
 							ErrorTipManager.registerValidator(regExpValidator2);
 							validators.push(regExpValidator2);
 						}
+						else if(classMember.name == "address")
+							index = 1;
+						else if(classMember.name == "windowsShare")
+							index = 1;
+						else if(classMember.name == "port")
+							index = 2;
+						else if(classMember.name == "path")
+							index = 3;
 						else if(classMember.name == "displayName"){
 							index = 0;
 						}
@@ -700,7 +762,20 @@
 						else if(classMember.name == "sourceDomain") {
 							index = 1;
 						}
-						
+						else if(classMember.name == "digDepth") {
+							if(isNaN(targetObject[classMember.name]) || targetObject[classMember.name] < 1)
+								textInput.text = new String("8");
+							textInput.width = 50;
+							var numberValidatorP:NumberValidator = new NumberValidator();
+							numberValidatorP.source = textInput;
+							numberValidatorP.property = "text";
+							numberValidatorP.domain = "int";
+							numberValidatorP.minValue = "1";
+							numberValidatorP.maxValue = "16";
+							ErrorTipManager.registerValidator(numberValidatorP);
+							validators.push(numberValidatorP);
+							index = 3;
+						}
 						else if(classMember.name == "loginUsername") {
 							index = 3;
 						}
@@ -726,7 +801,7 @@
 								ErrorTipManager.registerValidator(regExpValidator7);
 								validators.push(regExpValidator7);
 							}
-							index = 3;
+							index = 4;
 						}
 						else if(classMember.name == "deviceId"){
 							index = 3;
@@ -744,6 +819,7 @@
 						}
 						else if(classMember.name == "password"){
 							index = 5;
+							textInput.displayAsPassword = true;
 						}
 						else if(classMember.name == "threshold"){
 							if(isNaN(targetObject[classMember.name]))
@@ -913,6 +989,7 @@
 					else if (formObject is Rule)
 					{
 						FlexGlobals.topLevelApplication.ruleContainer.disableAddRule();
+						FlexGlobals.topLevelApplication.ruleContainerDiscovery.disableAddRule();
 					}
 					
 					if (formObject is AuthUser){
@@ -982,6 +1059,7 @@
 				if (formObject is Rule)
 				{
 					FlexGlobals.topLevelApplication.ruleContainer.enableAddRule();
+					FlexGlobals.topLevelApplication.ruleContainerDiscovery.enableAddRule();
 				}
 				
 				var returnCode:String = event.result as String;

@@ -9,6 +9,7 @@ import javax.persistence.Inheritance;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 @Entity
 @Inheritance
@@ -38,6 +39,8 @@ public abstract class Rule extends AbstractNamedEntity {
 	protected String userMessage;
 	
 	protected CustomAction customAction;
+	
+	protected RuleSchedule ruleSchedule;
 	
 	protected List<RuleItem> ruleItems;
 	
@@ -124,5 +127,15 @@ public abstract class Rule extends AbstractNamedEntity {
 
 	public void setUserMessage(String userMessage) {
 		this.userMessage = userMessage;
+	}
+
+	@OneToOne(cascade={CascadeType.ALL}, mappedBy="rule")
+	@JoinColumn(nullable=true)
+	public RuleSchedule getRuleSchedule() {
+		return ruleSchedule;
+	}
+
+	public void setRuleSchedule(RuleSchedule ruleSchedule) {
+		this.ruleSchedule = ruleSchedule;
 	}
 }

@@ -1,267 +1,151 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Tree xmlns:fx="http://ns.adobe.com/mxml/2009" 
-		 xmlns:s="library://ns.adobe.com/flex/spark" 
-		 xmlns:mx="library://ns.adobe.com/flex/mx"
-		 xmlns:my="http://www.mydlp.com/flex/my"
-		 labelField="label"
-		 width="320" height="100%"
-		 showRoot="false"
-		 borderVisible="false"
-		 allowMultipleSelection="true"
-		 selectionColor="0xA8C6EE"
-		 creationComplete="populateTree()"
-		 dataProvider="@{inventory}"
-		 dragEnabled="true" 
-		 dropEnabled="true"
-		 variableRowHeight="true"
-		 dragDrop="onDragDrop(event)"
-		 dragExit="onDragExit(event)"
-		 itemRenderer="com.mydlp.ui.widget.policy.inventory.InventoryItemRenderer"
-		 folderOpenIcon="@Embed('/assets/icons/16x16/folder.png')"
-		 folderClosedIcon="@Embed('/assets/icons/16x16/folder.png')"
-		 itemClick="onItemClick(event)"
-		 change="onChange(event)"
-		 >
+<s:SkinnableContainer
+	xmlns:fx="http://ns.adobe.com/mxml/2009" 
+	xmlns:s="library://ns.adobe.com/flex/spark" 
+	xmlns:mx="library://ns.adobe.com/flex/mx"
+	xmlns:my="http://www.mydlp.com/flex/my"
+	creationComplete="populateTree()" 
+	xmlns:util="com.mydlp.ui.util.*"
+	width="320" height="100%"
+	>
 	<fx:Script>
 		<![CDATA[
-			import com.mydlp.ui.domain.InventoryBase;
+			import com.mydlp.ui.domain.ApplicationName;
+			import com.mydlp.ui.domain.Domain;
+			import com.mydlp.ui.domain.FileSystemDirectory;
 			import com.mydlp.ui.domain.InventoryCategory;
 			import com.mydlp.ui.domain.InventoryItem;
+			import com.mydlp.ui.domain.RemoteStorageCIFS;
+			import com.mydlp.ui.domain.RemoteStorageDFS;
+			import com.mydlp.ui.domain.RemoteStorageFTPFS;
+			import com.mydlp.ui.domain.RemoteStorageNFS;
+			import com.mydlp.ui.domain.RemoteStorageSSHFS;
+			import com.mydlp.ui.domain.SourceDomainName;
+			import com.mydlp.ui.util.FilterDataDescriptor;
 			
 			import mx.collections.ArrayCollection;
 			import mx.collections.ListCollectionView;
-			import mx.controls.listClasses.IListItemRenderer;
-			import mx.events.DragEvent;
-			import mx.events.ListEvent;
-			import mx.managers.DragManager;
+			import mx.core.FlexGlobals;
+			import mx.rpc.AsyncToken;
 			import mx.rpc.events.ResultEvent;
 			
-			[Bindable]
-			protected var inventory:Object;
 			
-			protected var tempOpenItems:Object;
-			
-			protected var afterRefreshSelectedIndices:Array = [];
-			
-			protected var tempVerticalScrollPosition:Number = 0;
-			
-			public function refreshTree(): void
+			protected function isDiscoveyItem(item:*):Boolean
 			{
-				tempOpenItems = openItems;
-				tempVerticalScrollPosition = verticalScrollPosition;
-				re.getInventory();
-			}
-			
-			protected function traverse(iitem:*, searcehedItem:InventoryItem):InventoryItem
-			{
-				if(iitem is InventoryCategory)
+				/*if(item is InventoryCategory && item.name != null)
+					return true;
+				else if(item is InventoryCategory)
+					return traverse(item.children);*/
+				if(item is InventoryCategory)
 				{
-					for(var i:int = 0; i < iitem.children.length;i++)
-					{
-						var retItem:InventoryItem = traverse(iitem.children[i], searcehedItem);
-						if(retItem != null)
-							return retItem;
-					}
-					return null;
+					if(item.nameKey != null)
+						return traverse(item.children);
+					else
+						return true;
 				}
-				else if(iitem is InventoryItem && (iitem.uid == searcehedItem.uid))
-				{
-					return iitem;
-				}
+				else if(item.item is SourceDomainName || item.item is Domain || 
+					item.item is ApplicationName)
+					return false;
 				else
-					return null;
+					return true;
 			}
 			
-			protected function expandCategories(item:*):void
+			protected function isPolicyItem(item:*):Boolean
 			{
-				if(item.category != null)
+				/*if(item is InventoryCategory && item.name != null)
+					return true;
+				else if(item is InventoryCategory)
+					return traverse(item.children);*/
+				if(item is InventoryCategory)
 				{
-					if(!isItemOpen(item.category))
-						expandItem(item.category, true);
-					expandCategories(item.category);
+					if(item.nameKey != null)
+						return traverse(item.children);
+					else 
+						return true;
 				}
+				else if(item.item is FileSystemDirectory || item.item is RemoteStorageCIFS ||
+					item.item is RemoteStorageDFS || item.item is RemoteStorageFTPFS ||
+					item.item is RemoteStorageNFS || item.item is RemoteStorageSSHFS)
+					return false;
+				else
+					return true;
 			}
 			
-			public function displayItem(item:InventoryItem):void
+			protected function traverse(list:ArrayCollection):Boolean
 			{
-				var ii:InventoryItem;
-				for(var i:int = 0; i < inventory.length; i++)
+				var retVal:Boolean = false;
+				for(var i:int = 0; i < list.length; i++)
 				{
-					ii = traverse(inventory[i], item);
-					if(ii != null)
-						break
+					if(list[i] is InventoryCategory)
+						retVal =  traverse(list[i].children)
+					else if(list[i] is InventoryItem)
+					{
+						if(isDiscoveryTab)
+						{
+							if(isDiscoveyItem(list[i]))
+								return true;
+						}
+						else
+						{
+							if(isPolicyItem(list[i]))
+								return true;
+						}	
+					}
 				}
-				expandCategories(ii);
-				this.selectedItem = ii;
-			}
-			
-			protected function saveAllHandler(event:ResultEvent): void
-			{
-				refreshTree();
-			}
-			
-			protected function getInventoryHandler(event:ResultEvent): void
-			{
-				invalidateList();
-				invalidateDisplayList();
-				invalidateSize();
-				inventory = event.result as ListCollectionView;
-				openItems = tempOpenItems;
-				validateNow();
-				callLater(afterRefreshOps);
-			}
-			
-			protected function afterRefreshOps(): void
-			{
-				verticalScrollPosition = tempVerticalScrollPosition;
-				selectedIndices = afterRefreshSelectedIndices;
+				return retVal;
 			}
 			
 			protected function populateTree():void
 			{
-				//populateContextMenu();
-				refreshTree();
-			}
-
-			protected function onDragExit(event:DragEvent):void
-			{
-				DragManager.showFeedback(DragManager.NONE);
-			}
-			
-			protected function isSourceDragable(event:DragEvent): Boolean
-			{
-				if (event.dragSource.hasFormat("treeItems"))
-				{
-					for each (var item:Object in event.dragSource.dataForFormat('treeItems') as Array)
-					{
-						var dragSource:InventoryBase = item as InventoryBase;
-						if (!InventoryItemRenderer.isEditEnabled(dragSource))
-							return false;
-					}
-					return true;
-				}
-				return false;
-			}
-			
-			protected function isTargetDropable(event:DragEvent): Boolean
-			{
-				var dropIndex:int = calculateDropIndex(event);
-				var renderer:IListItemRenderer = indexToItemRenderer(dropIndex);
-				var parentCategory:InventoryCategory = null;
-				if (renderer == null)
-				{
-					return true;
-				}
+				var dd:FilterDataDescriptor;
+				if(isDiscoveryTab)
+					dd = new FilterDataDescriptor(isDiscoveyItem);
 				else
-				{
-					var dropTarget:InventoryBase = renderer.data as InventoryBase;
-					if (renderer.data is InventoryCategory)
-					{
-						parentCategory = dropTarget as InventoryCategory;
-						expandItem(parentCategory, true);
-					}
-					else
-						parentCategory = dropTarget.category;
-					
-					if (InventoryItemRenderer.isAddEnabled(parentCategory))
-						return true;
-					else
-						return false;
-				}
-				return false;
-			}
-			
-			protected function onDragDrop(event:DragEvent):void
-			{
-				event.preventDefault();
-				hideDropFeedback(event);
-				
-				// TODO: This should be reflected to feedbacks
-				if (!(isSourceDragable(event) && isTargetDropable(event))) return;
-				
-				var dropIndex:int = calculateDropIndex();
-				var renderer:IListItemRenderer = indexToItemRenderer(dropIndex);
-				var parentCategory:InventoryCategory = null;
-				if (renderer == null)
-				{
-					parentCategory = null;
-				}
-				else
-				{
-					var dropTarget:InventoryBase = renderer.data as InventoryBase;
-					if (renderer.data is InventoryCategory)
-					{
-						parentCategory = dropTarget as InventoryCategory;
-						expandItem(parentCategory, true);
-					}
-					else
-						parentCategory = dropTarget.category;
-				}
-				
-				var itemsToSave:ListCollectionView = new ArrayCollection();
-				if (event.dragSource.hasFormat("treeItems"))
-					for each (var item:Object in event.dragSource.dataForFormat('treeItems') as Array)
-					{
-						var dragSource:InventoryBase = item as InventoryBase;
-						if (dragSource != parentCategory && 
-							dragSource.category != parentCategory &&
-							isValidTargetCategory(dragSource, parentCategory)
-							)
-						{
-							dragSource.category = parentCategory;
-							itemsToSave.addItem(dragSource);
-						}
-					}
-				
-				if (itemsToSave.length > 0)
-					re.saveAll(itemsToSave);
-			}
-			
-			protected function isValidTargetCategory(dragSource:InventoryBase, targetCategory:InventoryCategory): Boolean
-			{
-				if (targetCategory == null)
-					return true;
-				if (dragSource == targetCategory)
-					return false;
-				return isValidTargetCategory(dragSource, targetCategory.category);
-			}
-			
-			protected var previousSelectedItem:Object = null;
-			
-			protected function onItemClick(event:ListEvent):void
-			{
-				if (dataDescriptor.isBranch(selectedItem) && 
-							(!isItemOpen(selectedItem) || selectedItem == previousSelectedItem)
-						) {
-					expandItem(selectedItem, !isItemOpen(selectedItem), true);
-				}
-				previousSelectedItem = selectedItem;
+					dd = new FilterDataDescriptor(isPolicyItem);
+				myInventoryTree.dataDescriptor = dd;
+				myInventoryTree.saveAllFunction = saveInventoryFunction;
+				myInventoryTree.populate();
+				myInventoryTree.refreshTree();
 			}
 			
 			public function getUserDefinedCategory(): InventoryCategory
 			{
 				for each (var i:* in inventory)
-					if (i is InventoryCategory)
-					{
-						var c:InventoryCategory = i as InventoryCategory;
-						if (c.nameKey == InventoryItemRenderer.USERDEFINED_NAMEKEY)
-							return c;
-					}
+				if (i is InventoryCategory)
+				{
+					var c:InventoryCategory = i as InventoryCategory;
+					if (c.nameKey == InventoryItemRenderer.USERDEFINED_NAMEKEY)
+						return c;
+				}
 				return null;
 			}
 			
-			protected function onChange(event:ListEvent):void
+			protected function saveInventoryFunction(list:ListCollectionView):AsyncToken
 			{
-				afterRefreshSelectedIndices = selectedIndices;
+				return re.saveAll(list);
 			}
 			
+			public function refreshTree():void
+			{
+				myInventoryTree.refreshTree();
+			}
 		]]>
 	</fx:Script>
 	
 	<fx:Declarations>
-		<my:remote id="re" destination="inventoryBRS">
-			<my:method name="getInventory" result="getInventoryHandler(event)" />
-			<my:method name="saveAll" result="saveAllHandler(event)" />
-		</my:remote>
+		<my:remote id="re" destination="inventoryBRS"/>
+		<fx:Object id="inventory"/>
+		<fx:Boolean id="isDiscoveryTab"/>
 	</fx:Declarations>
-</mx:Tree>
+	<s:Group width="100%" height="100%">
+		
+		
+		<util:InventoryTree width="100%" height="100%" id="myInventoryTree" borderVisible="false" 
+							selectionColor="0xA8C6EE"
+							isDiscoveryTab="{isDiscoveryTab}"
+							folderOpenIcon="@Embed('/assets/icons/16x16/folder.png')"
+							folderClosedIcon="@Embed('/assets/icons/16x16/folder.png')"
+							change="{FlexGlobals.topLevelApplication.policyContainer.inventoryTreeChangeHandler(event)}"
+							dataProvider="@{inventory}"/>
+	</s:Group>
+</s:SkinnableContainer>

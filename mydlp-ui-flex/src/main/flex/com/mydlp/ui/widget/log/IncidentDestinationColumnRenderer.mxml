@@ -27,6 +27,10 @@
 				var labelText:String = "";
 				if (log.channel == "R")
 					labelText = LangUtil.getString("messages","log.container.column.destination.removableStorage");
+				else if(log.channel == "RD")
+				{
+					labelText += LangUtil.getString("messages","log.container.column.destination.remoteDiscovery") +": "+ log.destination;
+				}
 				else if (log.channel == "M")
 				{
 					var rcpttoList:ArrayCollection = new ArrayCollection();

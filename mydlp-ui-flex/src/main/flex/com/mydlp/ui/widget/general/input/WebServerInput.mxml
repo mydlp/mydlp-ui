@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:SkinnableContainer xmlns:fx="http://ns.adobe.com/mxml/2009" 
+					  xmlns:s="library://ns.adobe.com/flex/spark" 
+					  xmlns:my="http://www.mydlp.com/flex/my"
+					  xmlns:mx="library://ns.adobe.com/flex/mx"
+					  width="{InputLabel.VERTICAL_INPUT_WIDTH*1.2}"
+					  creationComplete="onCreationComplete(event)"
+					  xmlns:util="com.mydlp.ui.util.*" xmlns:domain="com.mydlp.ui.domain.*">
+	<fx:Script>
+		<![CDATA[
+			import com.mydlp.ui.domain.WebServer;
+			import com.mydlp.ui.widget.general.popup.InputLabel;
+			
+			import mx.collections.ArrayCollection;
+			import mx.collections.ListCollectionView;
+			import mx.events.FlexEvent;
+			
+			import spark.events.IndexChangeEvent;
+			
+			protected static var protocols:ListCollectionView = 
+				new ArrayCollection(
+					new Array(
+						WebServer.PROTO_HTTP,
+						WebServer.PROTO_HTTPS
+					)
+				);
+			
+			[Bindable]
+			public var proto:String;
+			
+			protected function onChangeProtocol(event:IndexChangeEvent):void
+			{
+				if (protocolDropDown.selectedIndex == 0)
+				{
+					proto = WebServer.PROTO_HTTP;
+					portText.text = "80";
+				}
+				else if (protocolDropDown.selectedIndex == 1)
+				{
+					proto = WebServer.PROTO_HTTPS;
+					portText.text = "443";	
+				}
+			}
+			
+			protected function onCreationComplete(event:FlexEvent):void
+			{
+				if(proto != null && proto != "")
+				{
+					protocolDropDown.selectedItem = proto;
+				}
+				else
+				{
+					protocolDropDown.selectedIndex = 0;
+					portText.text = "80";
+				}
+			}
+			
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<fx:String id="address"/>
+		<fx:String id="port"/>
+		<fx:String id="startPath"/>
+	</fx:Declarations>
+	
+	<s:layout>
+		<s:HorizontalLayout verticalAlign="middle" gap="2"/>
+	</s:layout>
+	
+	<s:Group width="100%" height="100%">
+		<s:layout>
+			<s:VerticalLayout gap="20"/>
+		</s:layout>
+		<s:Group width="100%">			
+			<s:layout>
+				<s:HorizontalLayout gap="2" verticalAlign="middle"/>
+			</s:layout>
+			
+			<s:DropDownList id="protocolDropDown" dataProvider="{protocols}"
+							change="onChangeProtocol(event)" width="17%"/>
+			<s:Label text="://" fontSize="20" width="5%"/>
+			<s:TextInput id="addressText" text="@{address}" width="34%"/>
+			<s:Label text=":" fontSize="20" width="2%"/>
+			<s:TextInput id="portText" text="@{port}" width="8%"/>
+			<s:Label text="/" fontSize="20" width="2%"/>
+			<s:TextInput id="start" text="@{startPath}" width="32%"/>
+		</s:Group>
+	</s:Group>
+	
+</s:SkinnableContainer>

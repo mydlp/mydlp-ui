@@ -10,6 +10,8 @@
 			import com.mydlp.ui.domain.DiscoveryRule;
 			import com.mydlp.ui.domain.MailRule;
 			import com.mydlp.ui.domain.RemovableStorageEncryptionRule;
+			import com.mydlp.ui.domain.RemoteStorage;
+			import com.mydlp.ui.domain.RemoteStorageRule;
 			import com.mydlp.ui.domain.RemovableStorageInboundRule;
 			import com.mydlp.ui.domain.Rule;
 			import com.mydlp.ui.domain.ScreenshotRule;
@@ -82,6 +84,15 @@
 					new Array(
 						new ActionObject(Rule.ACTION_PASS),
 						new ActionObject(Rule.ACTION_BLOCK)
+					)
+				);
+			
+			protected static var actionsRemoteStorage:ListCollectionView = 
+				new ArrayCollection(
+					new Array(
+						new ActionObject(Rule.ACTION_PASS),
+						new ActionObject(Rule.ACTION_LOG),
+						new ActionObject(Rule.ACTION_ARCHIVE)
 					)
 				);
 			
@@ -161,6 +172,8 @@
 				{
 					if (rule is DiscoveryRule)
 						return actionsCustom;
+					else if (rule is RemoteStorageRule)
+						return actionsRemoteStorage;
 					else if (rule is MailRule)
 						return actionsCustom;
 					else if (rule is RemovableStorageInboundRule)
@@ -178,6 +191,8 @@
 						return actionsInboundC;
 					else if (rule is ScreenshotRule)
 						return actionsScreenshot;
+					else if (rule is RemoteStorage)
+						return actionsRemoteStorage;
 					return actionsCommunity;
 				}
 			}
