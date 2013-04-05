@@ -308,6 +308,8 @@
 			
 		</s:VGroup>
 		
+		<s:SkinnableContainer height="2" width="100%" backgroundColor="black" backgroundAlpha="0.8"/>
+		
 		<s:VGroup width="100%">
 			<s:Label text="@Resource(bundle = 'messages', key = 'rule.availabilty.label')" fontWeight="bold"/>
 			<s:HGroup verticalAlign="middle">
