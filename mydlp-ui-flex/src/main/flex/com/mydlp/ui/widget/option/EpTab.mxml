@@ -95,15 +95,6 @@
 												   textInputWidth="150" unit="{GenericSettingsInputWidget.UNIT_MB}"
 												   optionContainer="{optionContainer}" minValue="1048575"/>
 			</s:FormItem>
-			<s:FormItem label="{discoverFSInterval.label}">
-				<input:GenericSettingsInputWidget  isSize="false" settingValue="@{discoverFSInterval.value}"
-												   textInputWidth="150" unit="{GenericSettingsInputWidget.UNIT_S}"
-												   optionContainer="{optionContainer}" minValue="3599999"/>
-			</s:FormItem>
-			<s:FormItem label="{discoverFSOnStartup.label}">
-				<s:CheckBox id="discoverFSOnStartupCheckBox" selected="{discoverFSOnStartup.value == 'true'}" 
-							change="{discoverFSOnStartup.value = discoverFSOnStartupCheckBox.selected ? 'true' : 'false'}"/>			
-			</s:FormItem>
 			<s:FormItem label="{ignoreDiscoverFSMaxSizeExceeded.label}">
 				<s:CheckBox id="ignoreDiscoverFSMaxSizeExceededCheckBox" selected="{ignoreDiscoverFSMaxSizeExceeded.value == 'true'}" 
 							change="{ignoreDiscoverFSMaxSizeExceeded.value = ignoreDiscoverFSMaxSizeExceededCheckBox.selected ? 'true' : 'false'}"/>			

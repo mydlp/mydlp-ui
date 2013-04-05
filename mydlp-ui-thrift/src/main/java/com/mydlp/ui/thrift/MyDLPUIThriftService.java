@@ -29,7 +29,7 @@ public interface MyDLPUIThriftService {
     public LicenseObject getLicense();
     
     public String apiQuery(String ipAddress, String filename, ByteBuffer data);
-    
+
     public void startDiscoveryOnDemand(int ruleId);
     
     public void stopDiscoveryOnDemand(int ruleId);

@@ -55,5 +55,4 @@ public class EndpointStatusBRSImpl implements EndpointStatusService
 	public Boolean truncateEndpointStatus() {
 		return endpointStatusDAO.truncateEndpointStatus();
 	}
-	
 }
