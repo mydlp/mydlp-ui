@@ -22,8 +22,4 @@ public interface EndpointStatusService {
 	
 	public Boolean truncateEndpointStatus();
 	
-	public void discoverEndpoint(String endpointAlias);
-	
-	public void stopDiscovery(String endpointAlias);
-	
 }

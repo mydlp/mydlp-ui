@@ -49,6 +49,7 @@ public class DiscoveryReport extends AbstractEntity {
 		this.finishDate = finishDate;
 	}
 	
+	@Index(name="groupIdIndex")
 	@Column(nullable=false)
 	public String getGroupId() {
 		return groupId;
@@ -57,7 +58,6 @@ public class DiscoveryReport extends AbstractEntity {
 		this.groupId = groupId;
 	}
 	
-	@Index(name="ruleIdIndex")
 	@Column(nullable=false)
 	public Long getRuleId() {
 		return ruleId;

@@ -56,17 +56,4 @@ public class EndpointStatusBRSImpl implements EndpointStatusService
 		return endpointStatusDAO.truncateEndpointStatus();
 	}
 
-	@Override
-	public void discoverEndpoint(String endpointAlias) {
-		String endpointId = endpointDAO.getEndpointId(endpointAlias);
-		thriftService.registerCommand(endpointId, "schedule_discovery");
-	}
-
-	@Override
-	public void stopDiscovery(String endpointAlias) {
-		String endpointId = endpointDAO.getEndpointId(endpointAlias);
-		thriftService.registerCommand(endpointId, "stop_discovery");
-	}
-	
-
 }
