@@ -233,17 +233,6 @@ public class MyDLPUIThriftServiceImpl implements MyDLPUIThriftService {
 	}
 
 	@Override
-	public void registerCommand(final String endpointId, final String command) {
-		call(new ThriftCall<Void>() {
-			@Override
-			public Void execute(MyDLPUIThriftConnection thriftConnection) throws TException {
-				thriftConnection.client.registerCommand(endpointId, command);
-				return null;
-			}
-		});
-	}
-
-	@Override
 	public void startDiscoveryOnDemand(final int ruleId) {
 		call(new ThriftCall<Void>() {
 			@Override

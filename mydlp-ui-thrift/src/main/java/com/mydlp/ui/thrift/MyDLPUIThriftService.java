@@ -30,8 +30,6 @@ public interface MyDLPUIThriftService {
     
     public String apiQuery(String ipAddress, String filename, ByteBuffer data);
     
-    public void registerCommand(String endpointId, String command);
-    
     public void startDiscoveryOnDemand(int ruleId);
     
     public void stopDiscoveryOnDemand(int ruleId);

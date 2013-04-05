@@ -107,23 +107,6 @@
 				}
 			}
 			
-			protected function endpointStatusOperationsItemRendererFunction(item:Object, column:GridColumn):ClassFactory {
-				if (item is EndpointStatus)
-				{
-					var es:EndpointStatus = item as EndpointStatus;
-					if (!es.isUpToDate)
-						return new ClassFactory(OperationsNotUpToDateItemRenderer);
-					else if (isOffline(es))
-						return new ClassFactory(OperationsOfflineItemRenderer);
-					else
-						return new ClassFactory(OperationsDefaultItemRenderer);	
-				}
-				else
-				{
-					return new ClassFactory(OperationsDefaultItemRenderer);
-				}
-			}
-			
 			protected function getSystemTimeHandler(event:ResultEvent):void
 			{
 				currentSystemTime = event.result as Date;
@@ -249,8 +232,6 @@
 								  dataField="lastUpdate" itemRendererFunction="endpointStatusItemRendererFunction"/>
 					<s:GridColumn headerText="@Resource(bundle = 'messages', key = 'endpoints.header.firstSeen')"
 								  dataField="firstAppeared" itemRendererFunction="endpointStatusItemRendererFunction"/>
-					<s:GridColumn headerText="@Resource(bundle = 'messages', key = 'endpoints.header.operations')" 
-								  itemRendererFunction="endpointStatusOperationsItemRendererFunction"/>
 				</s:ArrayList>
 			</s:columns>
 		</s:DataGrid>

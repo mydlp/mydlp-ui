@@ -551,6 +551,15 @@
 				refreshRules();
 			}
 			
+			
+			protected function getBoxSize(defaultSize:Number): Number
+			{
+				if (isDiscoveryTab)
+					return defaultSize - RuleBoxRenderer.DISCOVERY_WIDTH_DIFF;
+				
+				return defaultSize;
+			}
+			
 		]]>
 	</fx:Script>
 	<fx:Declarations>
@@ -596,54 +605,30 @@
 					 width="190"
 					 textAlign="center"
 					 styleName="fontSize16Style" fontWeight="bold"/>
-			<s:Label text="@Resource(key='rules.sources.label', bundle='messages')"
-					 width="{sourceWidth + 8}"
-					 textAlign="center"
-					 styleName="fontSize16Style" fontWeight="bold"/>
-			<s:Label text="@Resource(key='rules.destinations.label', bundle='messages')"
-					 width="{destinationWidth + 8}"
-					 textAlign="center"
-					 styleName="fontSize16Style" fontWeight="bold"/>
-			<s:Label text="@Resource(key='rules.informationTypes.label', bundle='messages')"
-					 width="{informationTypeWidth + 8}"
-					 textAlign="center"
-					 styleName="fontSize16Style" fontWeight="bold"/>
-			<s:Label text="@Resource(key='rules.action.label', bundle='messages')"
-					 width="{actionWidth}"
-					 textAlign="center"
-					 styleName="fontSize16Style" fontWeight="bold"/>
-		</s:Group>
-		
-		<s:Group includeInLayout="{isDiscoveryTab}" visible="{isDiscoveryTab}">
-			<s:layout>
-				<s:HorizontalLayout paddingLeft="4"/>
-			</s:layout>
-			
-			<s:Label text="@Resource(key='rules.type.label', bundle='messages')" 
-					 width="190"
-					 textAlign="center"
-					 styleName="fontSize16Style" fontWeight="bold"/>
 			<s:Label text="@Resource(key='rules.scheduling.label', bundle='messages')"
+					 visible="{isDiscoveryTab}"
+					 includeInLayout="{isDiscoveryTab}"
 					 width="{36 + 8 + 32 + 8}"
 					 textAlign="center"
 					 styleName="fontSize16Style" fontWeight="bold"/>
 			<s:Label text="@Resource(key='rules.sources.label', bundle='messages')"
-					 width="{sourceWidth + 8 - RuleBoxRenderer.DISCOVERY_WIDTH_DIFF}"
+					 width="{getBoxSize(sourceWidth) + 8}"
 					 textAlign="center"
 					 styleName="fontSize16Style" fontWeight="bold"/>
 			<s:Label text="@Resource(key='rules.destinations.label', bundle='messages')"
-					 width="{destinationWidth + 8 - RuleBoxRenderer.DISCOVERY_WIDTH_DIFF}"
+					 width="{getBoxSize(destinationWidth) + 8}"
 					 textAlign="center"
 					 styleName="fontSize16Style" fontWeight="bold"/>
 			<s:Label text="@Resource(key='rules.informationTypes.label', bundle='messages')"
-					 width="{informationTypeWidth + 8 - RuleBoxRenderer.DISCOVERY_WIDTH_DIFF}"
+					 width="{getBoxSize(informationTypeWidth) + 8}"
 					 textAlign="center"
 					 styleName="fontSize16Style" fontWeight="bold"/>
 			<s:Label text="@Resource(key='rules.action.label', bundle='messages')"
-					 width="{actionWidth - RuleBoxRenderer.DISCOVERY_WIDTH_DIFF}"
+					 width="{getBoxSize(actionWidth)}"
 					 textAlign="center"
 					 styleName="fontSize16Style" fontWeight="bold"/>
 		</s:Group>
+		
 		
 		<rule:RuleList id="ruleList" dataProvider="{ruleDP}" 
 					   width="100%" height="100%"
