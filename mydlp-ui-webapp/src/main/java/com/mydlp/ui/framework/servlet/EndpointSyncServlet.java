@@ -67,8 +67,10 @@ public class EndpointSyncServlet implements HttpRequestHandler {
 				}
 				ByteBuffer thriftResponse = thriftService.getRuletable(
 						syncObject.getEndpointId(),	ipAddress, userH, ruleTableUniqId);
-				syncObject.setPayload(thriftResponse);
-				responseBuffer = payloadProcessService.toByteBuffer(syncObject);
+				if (thriftResponse != null) {
+					syncObject.setPayload(thriftResponse);
+					responseBuffer = payloadProcessService.toByteBuffer(syncObject);
+				}
 			}
 			else 
 			{
