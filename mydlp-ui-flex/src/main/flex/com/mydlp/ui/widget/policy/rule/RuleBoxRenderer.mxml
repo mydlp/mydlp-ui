@@ -144,7 +144,11 @@
 				ruleObject = data;
 				icon24 = RuleIcon.getIcon24(ruleObject);
 				icon32 = RuleIcon.getIcon32(ruleObject);
+				
 				if(isDiscoveryTab)
+				{
+					re.getDiscoveryStatus((ruleObject as Rule).id)
+				}
 					
 				refresh();
 			}
@@ -188,7 +192,8 @@
 			{
 				if (ruleObject == null) return;
 				invalidateDisplayList();
-				re.getDiscoveryStatus((ruleObject as Rule).id)
+				refreshDataProviders();
+				refreshView();
 				validateNow();
 			}
 			
@@ -196,16 +201,12 @@
 			{
 				expandCollapseButtonEnabled = isExpandCollapseEnabled();
 				setNameLabel();
+				playButton.enabled = isPlayButtonEnabled();
 			}
 			
 			public function getDiscoveryStatusHandler(event:ResultEvent):void
 			{
 				discoveryReport = event.result as DiscoveryReport;
-				if(isPlayButtonEnabled())
-					playButton.enabled = true;
-				else
-					playButton.enabled = false;
-				refreshDataProviders();
 				refreshView();
 			}
 			
