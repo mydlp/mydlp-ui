@@ -61,9 +61,9 @@
 			protected function onMouseClick(event:MouseEvent):void
 			{
 				if(!itemClick && !isSelected)
-					FlexGlobals.topLevelApplication.policyContainer.ruleContainer.isSelection = false;
+					RuleContainer.isSelection = false;
 				else
-					FlexGlobals.topLevelApplication.policyContainer.ruleContainer.isSelection = true;
+					RuleContainer.isSelection = true;
 				isSelected = false;
 				itemClick = false;
 			}

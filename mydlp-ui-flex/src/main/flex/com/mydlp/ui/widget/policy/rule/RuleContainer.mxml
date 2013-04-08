@@ -50,7 +50,7 @@
 			[Bindable]
 			protected var resetRuleDP:ListCollectionView;
 			
-			public var isSelection:Boolean = false;
+			public static var isSelection:Boolean = false;
 			
 			public var collapseStates:Dictionary = new Dictionary();
 			
@@ -72,6 +72,7 @@
 			[Bindable]
 			public var totalRuleWidth:Number = 774;
 			
+			public static const DISCOVERY_WIDTH_DIFF:Number = 21;
 			
 			protected function attachWatchers():void
 			{
@@ -98,12 +99,18 @@
 					sizeRatio = (currentWidth - 820)/160;
 				}
 				
-				sourceWidth = Math.round(140 + (sizeRatio*20));
-				destinationWidth = Math.round(140 + (sizeRatio*40));
-				informationTypeWidth = Math.round(140 + (sizeRatio*80));
-				actionWidth = Math.round(140 + (sizeRatio*20));
+				var diff:Number = 0;
+				if (isDiscoveryTab)
+				{
+					diff = DISCOVERY_WIDTH_DIFF;
+				}
 				
-				totalRuleWidth = 190 + sourceWidth + destinationWidth + 8 + informationTypeWidth + 16 + actionWidth + 16; 
+				sourceWidth = Math.round(140 + (sizeRatio*20)) - diff;
+				destinationWidth = Math.round(140 + (sizeRatio*40)) - diff;
+				informationTypeWidth = Math.round(140 + (sizeRatio*80)) - diff;
+				actionWidth = Math.round(140 + (sizeRatio*20)) - diff;
+				
+				totalRuleWidth = 190 + sourceWidth + destinationWidth + 8 + informationTypeWidth + 16 + actionWidth + 16 + (4*diff); 
 				
 				resizeExecuting = false;
 			}
@@ -555,7 +562,7 @@
 			protected function getBoxSize(defaultSize:Number): Number
 			{
 				if (isDiscoveryTab)
-					return defaultSize - RuleBoxRenderer.DISCOVERY_WIDTH_DIFF;
+					return defaultSize - DISCOVERY_WIDTH_DIFF;
 				
 				return defaultSize;
 			}

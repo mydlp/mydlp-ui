@@ -69,8 +69,6 @@
 			
 			import spark.components.List;
 			
-			public static const DISCOVERY_WIDTH_DIFF:Number = 21;
-			
 			[Bindable]
 			public var ruleObject:* = null;
 			
@@ -98,7 +96,10 @@
 			protected var destinationDataProvider:ArrayCollection = new ArrayCollection();
 			
 			[Bindable]
-			protected var ruleContainer:RuleContainer = FlexGlobals.topLevelApplication.policyContainer.ruleContainer; 
+			protected var ruleContainer:RuleContainer = FlexGlobals.topLevelApplication.policyContainer.ruleContainer;
+			
+			[Bindable]
+			protected var discoveryRuleContainer:RuleContainer = FlexGlobals.topLevelApplication.discoveryContainer.ruleContainer; 
 			
 			protected var deleteList:ListCollectionView;
 			
@@ -911,15 +912,6 @@
 				else
 					return false;
 			}
-			
-			protected function getBoxSize(defaultSize:Number): Number
-			{
-				if (isDiscoveryTab)
-					return defaultSize - DISCOVERY_WIDTH_DIFF;
-				
-				return defaultSize;
-			}
-			
 		]]>
 	</fx:Script>
 	
@@ -981,7 +973,7 @@
 				<s:VerticalLayout horizontalAlign="left" verticalAlign="middle"
 								  paddingLeft="10"/>
 			</s:layout>
-			<s:Group>
+			<s:Group width="100%">
 				<s:layout>
 					<s:HorizontalLayout gap="6" verticalAlign="middle"/>
 				</s:layout>
@@ -1058,14 +1050,14 @@
 		<rule:RSpacer />
 		
 
-		<rule:RuleItemBox width="{getBoxSize(ruleContainer.sourceWidth)}"
+		<rule:RuleItemBox width="{isDiscoveryTab ? discoveryRuleContainer.sourceWidth : ruleContainer.sourceWidth}"
 						  isDiscoveryTab="{isDiscoveryTab}"
 						  listDataProvider="{sourceDataProvider}"
 						  itemLabel="@Resource(bundle = 'messages', key = 'rulebox.ruleitembox.sources.itemLabel')"
 						  currentState="{getRuleItemListState(sourceDataProvider, collapse)}" />
 		
 		
-		<s:Group width="{getBoxSize(ruleContainer.destinationWidth) + 8}" height="100%" 
+		<s:Group width="{(isDiscoveryTab ? discoveryRuleContainer.destinationWidth : ruleContainer.destinationWidth) + 8}" height="100%" 
 				 visible="{!isDestinationApplicable(ruleObject)}" 
 				 includeInLayout="{!isDestinationApplicable(ruleObject)}">
 			<s:Rect left="0" right="0" top="0" bottom="0" >
@@ -1084,14 +1076,14 @@
 			</s:layout>
 			<rule:RSpacer />
 			
-			<rule:RuleItemBox width="{getBoxSize(ruleContainer.destinationWidth)}"
+			<rule:RuleItemBox width="{isDiscoveryTab ? discoveryRuleContainer.destinationWidth : ruleContainer.destinationWidth}"
 							  isDiscoveryTab="{isDiscoveryTab}"
 							  listDataProvider="{destinationDataProvider}"
 							  itemLabel="@Resource(bundle = 'messages', key = 'rulebox.ruleitembox.destinations.itemLabel')"
 							  currentState="{getRuleItemListState(destinationDataProvider, collapse)}"/>
 		</s:Group> 
 		
-		<s:Group width="{getBoxSize(ruleContainer.informationTypeWidth) + 16}" height="100%" 
+		<s:Group width="{(isDiscoveryTab ? discoveryRuleContainer.informationTypeWidth : ruleContainer.informationTypeWidth) + 16}" height="100%" 
 				 visible="{!isMatcherApplicable(ruleObject)}" 
 				 includeInLayout="{!isMatcherApplicable(ruleObject)}">
 			<s:Rect left="0" right="0" top="0" bottom="0" >
@@ -1108,7 +1100,7 @@
 				<s:HorizontalLayout verticalAlign="middle"/>
 			</s:layout>
 			<rule:RSpacer />
-			<rule:RuleItemBox width="{getBoxSize(ruleContainer.informationTypeWidth)}"
+			<rule:RuleItemBox width="{isDiscoveryTab ? discoveryRuleContainer.informationTypeWidth : ruleContainer.informationTypeWidth}"
 							  listDataProvider="{matcherDataProvider}"
 							  isDiscoveryTab="{isDiscoveryTab}"
 							  itemLabel="@Resource(bundle = 'messages', key = 'rulebox.ruleitembox.itypes.itemLabel')"
@@ -1116,7 +1108,7 @@
 			<rule:RSpacer />
 		</s:Group>
 		
-		<rule:ActionBox id="actionBox" width="{getBoxSize(ruleContainer.actionWidth)}" 
+		<rule:ActionBox id="actionBox" width="{isDiscoveryTab ? discoveryRuleContainer.actionWidth : ruleContainer.actionWidth}" 
 						ruleObject="@{ruleObject}" 
 						currentState="{this.currentState}"/>
 		

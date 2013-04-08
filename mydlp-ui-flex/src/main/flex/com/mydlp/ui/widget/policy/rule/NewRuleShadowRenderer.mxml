@@ -53,7 +53,12 @@
 			public var ruleObject:* = null;
 			
 			[Bindable]
-			protected var ruleContainer:RuleContainer = FlexGlobals.topLevelApplication.policyContainer.ruleContainer;
+			protected var ruleContainer:RuleContainer = 
+				FlexGlobals.topLevelApplication.policyContainer.ruleContainer;
+			
+			[Bindable]
+			protected var discoveryRuleContainer:RuleContainer = 
+				FlexGlobals.topLevelApplication.discoveryContainer.ruleContainer;
 			
 			
 			public override function set data(value:Object):void
@@ -145,7 +150,8 @@
 		</s:stroke>
 	</s:Rect>
 	
-	<s:Group top="3" bottom="3" left="3" right="3" color="0xACB9CD" width="{ruleContainer.totalRuleWidth}" fontWeight="bold">
+	<s:Group top="3" bottom="3" left="3" right="3" color="0xACB9CD" 
+			 width="{isDiscoveryTab ? discoveryRuleContainer.totalRuleWidth : ruleContainer.totalRuleWidth}" fontWeight="bold">
 		<s:layout>
 			<s:VerticalLayout verticalAlign="middle" horizontalAlign="center" gap="2"
 							  paddingTop="1" paddingBottom="1"/>
