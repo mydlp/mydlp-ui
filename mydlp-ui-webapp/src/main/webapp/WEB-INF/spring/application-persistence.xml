@@ -119,6 +119,7 @@
          <value>com.mydlp.ui.domain.IncidentLogFileBlueprint</value>
          <value>com.mydlp.ui.domain.IncidentLogFileContent</value>
          <value>com.mydlp.ui.domain.IncidentLogRequeueStatus</value>
+         <value>com.mydlp.ui.domain.MatchingDetail</value>
          <value>com.mydlp.ui.domain.OperationLog</value>
          <value>com.mydlp.ui.domain.TemporaryAccessToken</value>
        </list>
