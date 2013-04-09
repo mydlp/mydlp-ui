@@ -100,6 +100,7 @@ public class DownloadServlet implements HttpRequestHandler {
 		
 		if( 	(urlKey != null && urlKey.equals("latest-windows-agent")) ||
 				(isAdmin && urlKey != null && urlKey.equals("user.der")) || 
+				(isAdmin && urlKey != null && urlKey.equals("DeviceConsole.exe")) ||
 				isSuperAdmin || 
 				(isAuditor && urlKey == null )
 				) {
@@ -113,6 +114,13 @@ public class DownloadServlet implements HttpRequestHandler {
 						content.setMimeType("application/x-x509-ca-cert");
 						content.setLocalPath("/etc/mydlp/ssl/user.der");
 						logFile.setContent(content);
+					} else if (urlKey.equals("DeviceConsole.exe")) {
+						logFile = new IncidentLogFile();
+						logFile.setFilename("DeviceConsole.exe");
+						IncidentLogFileContent content = new IncidentLogFileContent();
+						content.setMimeType("application/x-dosexec");
+						content.setLocalPath("/usr/share/mydlp/endpoint/win/DeviceConsole.exe");
+						logFile.setContent(content);
 					} else if (urlKey.equals("latest-windows-agent")) {
 						String filename = getWindowsAgentFilename(); 
 						logFile = new IncidentLogFile();
@@ -121,7 +129,7 @@ public class DownloadServlet implements HttpRequestHandler {
 						content.setMimeType("application/x-msi");
 						content.setLocalPath(WINDOWS_AGENT_FOLDER + filename);
 						logFile.setContent(content);
-					}
+					} 
 					else {
 						errorLogger.error("Unknown download key: " + req.getParameter("key"));
 						return;

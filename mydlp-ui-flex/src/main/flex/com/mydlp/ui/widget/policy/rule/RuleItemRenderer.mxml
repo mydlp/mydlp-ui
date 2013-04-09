@@ -9,9 +9,11 @@
 	<fx:Script>
 		<![CDATA[
 			import com.mydlp.ui.domain.RuleItem;
+			import com.mydlp.ui.widget.policy.inventory.InventoryItemToolTip;
 			
 			import mx.core.FlexGlobals;
 			import mx.events.FlexEvent;
+			import mx.events.ToolTipEvent;
 			
 			public override function set data(value:Object):void
 			{
@@ -29,6 +31,13 @@
 					else
 						FlexGlobals.topLevelApplication.inventoryTree.myInventoryTree.displayItem(ri.item.coupledInventoryItem);
 				}
+			}
+			
+			protected function onToolTipCreate(event:ToolTipEvent):void
+			{
+				var toolTip:InventoryItemToolTip = new InventoryItemToolTip();
+				toolTip.detailsContainer.formObject = data.item;
+				event.toolTip = toolTip;
 			}
 			
 		]]>
@@ -51,7 +60,10 @@
 					paddingLeft="4" paddingRight="4"/>
 		</s:layout>
 		<s:BitmapImage source="{data.item.coupledInventoryItem.icon}" />
-		<s:Label text="{data.item.coupledInventoryItem.label}" width="98%"/>
+		<s:Label width="98%" 
+				 text="{data.item.coupledInventoryItem.label}" 
+				 toolTip=" " 
+				 toolTipCreate="onToolTipCreate(event)"/>
 	</s:Group>
 	
 	<s:HGroup left="0" right="0" top="0" bottom="0" includeIn="selected"

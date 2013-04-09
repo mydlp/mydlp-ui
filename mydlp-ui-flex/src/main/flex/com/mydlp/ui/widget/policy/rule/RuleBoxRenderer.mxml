@@ -955,6 +955,7 @@
 		</s:stroke>
 	</s:Rect>
 	
+	
 	<s:Rect id="highlightBorder" left="0" right="0" top="0" bottom="0" visible="false">
 		<s:stroke>
 			<s:LinearGradientStroke rotation="90" weight="2">
@@ -1018,11 +1019,7 @@
 			</s:Group>
 		</s:Group>
 		
-		<s:HGroup width="24" verticalAlign="middle" horizontalAlign="center">
-			<s:Button styleName="disableButton24Style" visible="{! ruleObject.enabled}" includeInLayout="{! ruleObject.enabled}"
-					  click="{ruleObject.enabled = true; re.save(ruleObject);}" 
-					  toolTip="@Resource(bundle = 'messages', key = 'rulebox.enableButton.tooltip.label')"/>
-		</s:HGroup>
+		<s:Group width="24" height="24" />
 		
 		<s:HGroup id="discoveryGroup" visible="{isDiscoveryTab}" includeInLayout="{isDiscoveryTab}" height="100%">
 		
@@ -1114,4 +1111,19 @@
 						currentState="{this.currentState}"/>
 		
 	</s:Group>
+	
+	<s:Rect left="0" right="0" top="0" bottom="0" 
+			visible="{! ruleObject.enabled}" includeInLayout="{! ruleObject.enabled}" >
+		<s:fill>
+			<s:SolidColor color="0xBBBBBB" alpha="0.5" />
+		</s:fill>
+	</s:Rect>
+	
+	<s:HGroup top="0" bottom="0" left="162" width="24" verticalAlign="middle" horizontalAlign="center">
+		<s:Button styleName="disableButton24Style" 
+				  visible="{! ruleObject.enabled}" includeInLayout="{! ruleObject.enabled}"
+				  click="{ruleObject.enabled = true; re.save(ruleObject);}" 
+				  toolTip="@Resource(bundle = 'messages', key = 'rulebox.enableButton.tooltip.label')"/>
+	</s:HGroup>
+	
 </s:ItemRenderer>

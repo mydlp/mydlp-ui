@@ -24,11 +24,10 @@ package com.mydlp.ui.util
 		
 		protected var _pagedList:PagedList = null;
 		
-		protected var _numDBItems:Number = Number.NaN;
+		public var numberOfItems:Number = Number.NaN;
 		
 		protected var _fetchedPages:Dictionary = new Dictionary();
 		protected var _numFetchedPages:int = 0;
-		
 		
 		public function AsyncListDataProvider()
 		{
@@ -39,7 +38,7 @@ package com.mydlp.ui.util
 		
 		protected function handleCreatePendingItemFunction(index:int, ipe:ItemPendingError):Object 
 		{
-			if (isNaN(_numDBItems)) return pendingObject;
+			if (isNaN(numberOfItems)) return pendingObject;
 			if (_fetchedPages == null) return pendingObject;
 			
 			if (_numFetchedPages > MAX_FETCHED_PAGE) reset();
@@ -81,7 +80,7 @@ package com.mydlp.ui.util
 		public function reset():void{
 			_fetchedPages = new Dictionary();
 			_numFetchedPages = 0;
-			_pagedList = new PagedList(_numDBItems);
+			_pagedList = new PagedList(numberOfItems);
 			_asyncListView.list = _pagedList;
 		}
 		
@@ -91,7 +90,7 @@ package com.mydlp.ui.util
 			asyncToken.addResponder(new AsyncResponder(
 				function result(event:ResultEvent, token:Object = null):void 
 				{
-					_numDBItems = event.result as Number;
+					numberOfItems = event.result as Number;
 					reset();
 				}, 
 				function fault(event:FaultEvent, token:Object = null):void 

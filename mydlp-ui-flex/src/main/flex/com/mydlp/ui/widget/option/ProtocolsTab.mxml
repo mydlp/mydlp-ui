@@ -102,7 +102,7 @@
 			</s:FormItem>
 			<s:FormItem label="@Resource(bundle = 'messages', key = 'config.icap.download_user_der_title')" width="350">
 				<s:Button label="@Resource(bundle = 'messages', key = 'config.icap.download_user_der')"
-						  skinClass="com.mydlp.ui.skin.DownloadUserCertificate"
+						  skinClass="com.mydlp.ui.skin.DownloadBitmapLabelButton16Skin"
 						  click="{navigateToURL(new URLRequest ('download?key=user.der'), '_blank')}"/>
 			</s:FormItem>
 		</s:Form>

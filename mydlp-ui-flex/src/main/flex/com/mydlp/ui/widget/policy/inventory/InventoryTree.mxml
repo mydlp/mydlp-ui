@@ -104,8 +104,9 @@
 					dd = new FilterDataDescriptor(isPolicyItem);
 				myInventoryTree.dataDescriptor = dd;
 				myInventoryTree.saveAllFunction = saveInventoryFunction;
-				myInventoryTree.populate();
-				myInventoryTree.refreshTree();
+				var ir:ClassFactory = new ClassFactory(InventoryItemRenderer);
+				ir.properties = {isDiscoveryTab: isDiscoveryTab};
+				myInventoryTree.itemRenderer = ir;
 			}
 			
 			public function getUserDefinedCategory(): InventoryCategory

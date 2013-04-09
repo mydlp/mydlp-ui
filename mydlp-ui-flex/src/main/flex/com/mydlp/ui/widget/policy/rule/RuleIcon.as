@@ -30,7 +30,7 @@ package com.mydlp.ui.widget.policy.rule
 		[Embed('/assets/icons/32x32/print.png')]
 		public static const printerRule32Icon:Class;
 		
-		[Embed('/assets/icons/32x32/search.png')]
+		[Embed('/assets/icons/32x32/computer.png')]
 		public static const discoveryRule32Icon:Class;
 		
 		[Embed('/assets/icons/32x32/remote_storage.png')]
@@ -60,7 +60,7 @@ package com.mydlp.ui.widget.policy.rule
 		[Embed('/assets/icons/24x24/print.png')]
 		public static const printerRule24Icon:Class;
 		
-		[Embed('/assets/icons/24x24/search.png')]
+		[Embed('/assets/icons/24x24/computer.png')]
 		public static const discoveryRule24Icon:Class;
 		
 		[Embed('/assets/icons/24x24/remote_storage.png')]
@@ -90,7 +90,7 @@ package com.mydlp.ui.widget.policy.rule
 		[Embed('/assets/icons/16x16/print.png')]
 		public static const printerRule16Icon:Class;
 		
-		[Embed('/assets/icons/16x16/search.png')]
+		[Embed('/assets/icons/16x16/computer.png')]
 		public static const discoveryRule16Icon:Class;
 		
 		[Embed('/assets/icons/16x16/remote_storage.png')]

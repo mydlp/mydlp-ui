@@ -47,6 +47,7 @@
 			protected var actionSearch:ListCollectionView = 
 				new ArrayCollection(
 					new Array(
+						"",
 						Rule.ACTION_ARCHIVE,
 						Rule.ACTION_BLOCK,
 						Rule.ACTION_LOG,
@@ -57,6 +58,7 @@
 			protected static const channels:ListCollectionView = 
 				new ArrayCollection(
 					new Array(
+						{label: "", data:""},
 						{label: "Web", data:"W"},
 						{label: "Mail", data:"M"},
 						{label: "Removable Storage", data:"R"},
@@ -70,6 +72,7 @@
 			protected static const channelsCommunity:ListCollectionView = 
 				new ArrayCollection(
 					new Array(
+						{label: "", data:""},
 						{label: "Web", data:"W"},
 						{label: "Mail", data:"M"},
 						{label: "Removable Storage", data:"R"},
@@ -174,7 +177,7 @@
 					criteriaList.addItem(criteria5);
 				}
 				
-				if(actionList.selectedIndex != -1)
+				if(actionList.selectedIndex > 0)
 				{
 					var actionValue:String;
 					switch(actionSearch.getItemAt(actionList.selectedIndex))
@@ -192,7 +195,7 @@
 					criteriaList.addItem(criteria6);
 				}
 				
-				if(channelList.selectedIndex != -1)
+				if(channelList.selectedIndex > 0)
 				{
 					var channelValue:String = channelList.selectedItem.data;
 					var criteria7:ListCollectionView = new ArrayCollection();
@@ -383,8 +386,7 @@
 							contentBackgroundAlpha="1"/>
 			<s:Spacer width="1"/>
 			<s:CheckBox id="showAll" label="@Resource(bundle = 'messages', key = 'log.container.showAll.checkbox.label')" />
-		</s:HGroup>  
-				
+		</s:HGroup>
 	</s:Group>
 	
 	<s:Group width="100%" height="100%">
@@ -425,4 +427,10 @@
 			</s:columns>
 		</s:DataGrid>
 	</s:Group>
+	
+	<s:HGroup width="100%" horizontalAlign="right" paddingRight="6">
+		<s:Label text="@Resource(bundle = 'messages', key = 'log.container.search.count.label')"/>
+		<s:Label text="{logSearchDP.numberOfItems}" />
+	</s:HGroup>
+	
 </s:SkinnableContainer>

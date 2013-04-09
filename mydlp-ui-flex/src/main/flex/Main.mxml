@@ -289,10 +289,15 @@
 				else
 					currentState = "user";
 				ruleRE.getRuleLabelsAndIds();
-
-				//ruleRE.getRules();
-				//regulateVisibilty(); // TODO: inspect
-				refreshPolicyDataProviders();
+				
+			}
+			
+			public function popupulatePolicyOnCreate(): void {
+				if (discoveryContainer != null && policyContainer != null)
+				{
+					getInventoryFunction();
+					refreshPolicyDataProviders();
+				}
 			}
 			
 			protected function getLicenseHandler(event:ResultEvent):void
@@ -314,10 +319,12 @@
 			public function refresh(): void {
 				ruleRE.getRuleLabelsAndIds();
 				
-				if (policyContainer != null && policyContainer.inventoryTree != null)
-					policyContainer.inventoryTree.refreshTree();
-				if (discoveryContainer != null && discoveryContainer.inventoryTree != null)
-					discoveryContainer.inventoryTree.refreshTree();
+				if (discoveryContainer != null || policyContainer != null)
+				{
+					getInventoryFunction();
+					refreshPolicyDataProviders();
+				}
+				
 				if (optionContainer != null)
 				{
 					optionContainer.refresh();
@@ -332,14 +339,7 @@
 					objectsContainer.refreshObjects();
 				if (endpointStatusContainer != null)
 					endpointStatusContainer.refresh();
-				if (discoveryContainer != null || policyContainer != null)
-				{
-					refreshPolicyDataProviders();
-					if (discoveryContainer != null)
-						discoveryContainer.ruleContainer.refreshRules();
-					if (policyContainer != null)
-						policyContainer.ruleContainer.refreshRules();
-				}
+				
 			}
 			
 			protected function refreshPolicyDataProviders():void
@@ -396,9 +396,13 @@
 			
 			protected function getRulesHandler(event:ResultEvent):void
 			{
-				rulesList = new ArrayCollection();
 				rulesList = event.result as ListCollectionView;
-				getInventoryFunction();
+				policyContainer.rulesList = rulesList;
+				discoveryContainer.rulesList = rulesList;
+				if (discoveryContainer != null)
+					discoveryContainer.ruleContainer.refreshRules();
+				if (policyContainer != null)
+					policyContainer.ruleContainer.refreshRules();
 			}
 			
 			public function getInventoryFunction():void
@@ -412,16 +416,11 @@
 			
 			protected function getInventoryHandler(event:ResultEvent):void
 			{
-				inventoryList = new Object();
 				inventoryList = event.result as Object;
-				policyContainer.rulesList = rulesList;
 				policyContainer.inventory = inventoryList;
-				discoveryContainer.rulesList = rulesList;
 				discoveryContainer.inventory = inventoryList;
 				inventoryTree.myInventoryTree.afterRefreshOps();
 				inventoryTreeDiscovery.myInventoryTree.afterRefreshOps();
-				ruleContainer.refreshRules();
-				ruleContainerDiscovery.refreshRules();
 			}
 			
 		]]>

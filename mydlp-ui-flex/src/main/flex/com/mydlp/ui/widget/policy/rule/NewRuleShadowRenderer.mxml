@@ -101,6 +101,15 @@
 				var popup:NewRuleDialog = InteractionUtil.newPopup(NewRuleDialog) as NewRuleDialog;
 				popup.recommendedPriority = ruleObject.priority;
 				popup.isDiscoveryTab = isDiscoveryTab;
+				
+				var ruleList:List;
+				if(isDiscoveryTab)
+					ruleList = FlexGlobals.topLevelApplication.discoveryContainer.ruleContainer.ruleList;
+				else
+					ruleList = FlexGlobals.topLevelApplication.policyContainer.ruleContainer.ruleList;
+				
+				ruleList.selectedIndex = -1;
+					
 			}
 			
 			protected function cancel(event:MouseEvent):void

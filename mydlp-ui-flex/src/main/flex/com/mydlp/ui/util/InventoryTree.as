@@ -63,12 +63,6 @@ package com.mydlp.ui.util
 		
 		public function populate():void
 		{
-			getInventoryHandler(null, null);
-		}
-		
-		protected function getInventoryHandler(event:ResultEvent, token:Object):void
-		{
-			
 			invalidateList();
 			invalidateDisplayList();
 			invalidateSize();
@@ -268,7 +262,6 @@ package com.mydlp.ui.util
 		{
 			afterRefreshSelectedIndices = this.selectedIndices;
 		}
-		
 		
 		public function refreshTree():void
 		{

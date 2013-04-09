@@ -555,7 +555,7 @@
 				this.addEventListener(DragEvent.DRAG_ENTER, acceptDrop);
 				this.addEventListener(MouseEvent.CLICK, clickHandler);
 				attachWatchers();
-				refreshRules();
+				FlexGlobals.topLevelApplication.popupulatePolicyOnCreate();
 			}
 			
 			
