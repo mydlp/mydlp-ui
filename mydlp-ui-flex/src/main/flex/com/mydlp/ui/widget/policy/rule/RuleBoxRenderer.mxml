@@ -1115,7 +1115,7 @@
 	<s:Rect left="0" right="0" top="0" bottom="0" 
 			visible="{! ruleObject.enabled}" includeInLayout="{! ruleObject.enabled}" >
 		<s:fill>
-			<s:SolidColor color="0xBBBBBB" alpha="0.5" />
+			<s:SolidColor color="0xDDDDDD" alpha="0.5" />
 		</s:fill>
 	</s:Rect>
 	

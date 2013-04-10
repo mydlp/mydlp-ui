@@ -110,7 +110,7 @@
 				informationTypeWidth = Math.round(140 + (sizeRatio*80)) - diff;
 				actionWidth = Math.round(140 + (sizeRatio*20)) - diff;
 				
-				totalRuleWidth = 190 + sourceWidth + destinationWidth + 8 + informationTypeWidth + 16 + actionWidth + 16 + (4*diff); 
+				totalRuleWidth = 190 + sourceWidth + destinationWidth + 8 + informationTypeWidth + 16 + actionWidth + 16 + (4*diff) + 7; 
 				
 				resizeExecuting = false;
 			}

@@ -19,9 +19,11 @@
 			</s:FormItem>
 		</s:Form>
 		
-		<s:Button label="@Resource(bundle = 'messages', key = 'config.usbacl.download_device_console')"
-				  skinClass="com.mydlp.ui.skin.DownloadBitmapLabelButton16Skin"
-				  click="{navigateToURL(new URLRequest ('download?key=DeviceConsole.exe'), '_blank')}"/>
+		<s:HGroup width="100%" horizontalAlign="right">
+			<s:Button label="@Resource(bundle = 'messages', key = 'config.usbacl.download_device_console')"
+					  skinClass="com.mydlp.ui.skin.DownloadBitmapLabelButton16Skin"
+					  click="{navigateToURL(new URLRequest ('download?key=DeviceConsole.exe'), '_blank')}"/>
+		</s:HGroup>
 		
 		<option:USBDeviceCRUDGrid id="usbDeviceCrudGrid" width="100%" height="100%" />
 		

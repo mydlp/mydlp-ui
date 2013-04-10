@@ -54,16 +54,17 @@
 	</s:states>
 	
 	<s:Group left="0" right="0" top="0" bottom="0"
-			 minHeight="16">
+			 minHeight="16"
+			 toolTip=" " 
+			 toolTipCreate="onToolTipCreate(event)"
+			 >
 		<s:layout>
 			<s:HorizontalLayout verticalAlign="middle"
 					paddingLeft="4" paddingRight="4"/>
 		</s:layout>
 		<s:BitmapImage source="{data.item.coupledInventoryItem.icon}" />
 		<s:Label width="98%" 
-				 text="{data.item.coupledInventoryItem.label}" 
-				 toolTip=" " 
-				 toolTipCreate="onToolTipCreate(event)"/>
+				 text="{data.item.coupledInventoryItem.label}" />
 	</s:Group>
 	
 	<s:HGroup left="0" right="0" top="0" bottom="0" includeIn="selected"
