@@ -4,7 +4,7 @@
 			   xmlns:mx="library://ns.adobe.com/flex/mx"
 			   xmlns:my="http://www.mydlp.com/flex/my"
 			   xmlns:input="com.mydlp.ui.widget.general.input.*"
-			   close="{close()}"
+			   close="{close()}" maxHeight="450"
 			   title="@Resource(bundle = 'messages', key = 'feature.matcher.title.label')" xmlns:util="com.mydlp.ui.util.*" xmlns:validators="com.mydlp.ui.validators.*"
 			   >
 	
