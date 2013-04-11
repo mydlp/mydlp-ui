@@ -2,6 +2,7 @@ target/
 */target/
 */bin-debug/
 *~
+.*.swp
 Makefile
 Makefile.in
 .actionScriptProperties
