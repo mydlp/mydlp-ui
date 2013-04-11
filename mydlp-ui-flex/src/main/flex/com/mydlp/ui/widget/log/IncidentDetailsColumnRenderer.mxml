@@ -10,6 +10,7 @@
 			import com.mydlp.ui.domain.Matcher;
 			import com.mydlp.ui.domain.Rule;
 			import com.mydlp.ui.domain.RuleItem;
+			import com.mydlp.ui.util.InteractionUtil;
 			import com.mydlp.ui.util.LangUtil;
 			import com.mydlp.ui.widget.policy.rule.RuleContainer;
 			
@@ -74,13 +75,22 @@
 				return null;
 			}
 			
+			protected function detailButtonClickHandler(event:MouseEvent):void
+			{
+				var lmdp:LogMatcherDetailsPopup = InteractionUtil.newPopup(LogMatcherDetailsPopup) as LogMatcherDetailsPopup;
+				lmdp.matcherDetails = (data as IncidentLog).matchingDetails;
+				lmdp.populate();
+			}
+			
 		]]>
 	</fx:Script>
 	
 	<s:layout>
-		<s:VerticalLayout paddingBottom="4" paddingTop="4" paddingLeft="4"/>
+		<s:VerticalLayout paddingBottom="4" paddingTop="4" paddingLeft="4" horizontalAlign="center"/>
 	</s:layout>
 	
 	<s:Label id="lblData" text="{getPolicyText(data)}" width="100%"/>
+	
+	<s:Button id="matchingDetailButton" click="detailButtonClickHandler(event)" skinClass="com.mydlp.ui.skin.GenerateReportBitmapButton16Skin"/>
 	
 </s:GridItemRenderer>

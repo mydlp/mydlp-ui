@@ -1,9 +1,8 @@
 package com.mydlp.ui.domain;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
-
-import org.hibernate.annotations.Index;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 @Entity
 public class MatchingDetail extends AbstractEntity{
@@ -13,26 +12,24 @@ public class MatchingDetail extends AbstractEntity{
 	 */
 	private static final long serialVersionUID = 5811373128233949994L;
 	
-	
-	protected int matcherId;
-	protected int incidentLogId;
+	protected IncidentLog incidentLog;
 	protected String matchingData;
+	protected String matcherFunc;
 	
 	
-	public int getMatcherId() {
-		return matcherId;
+	public String getMatcherFunc() {
+		return matcherFunc;
 	}
-	public void setMatcherId(int matcherId) {
-		this.matcherId = matcherId;
+	public void setMatcherFunc(String matcherFunc) {
+		this.matcherFunc = matcherFunc;
 	}
-	
-	@Index(name="incidentLogIndex")
-	@Column(nullable=false)
-	public int getIncidentLogId() {
-		return incidentLogId;
+	@ManyToOne
+	@JoinColumn(nullable=false)
+	public IncidentLog getIncidentLog() {
+		return incidentLog;
 	}
-	public void setIncidentLogId(int incidentLogId) {
-		this.incidentLogId = incidentLogId;
+	public void setIncidentLog(IncidentLog incidentLog) {
+		this.incidentLog = incidentLog;
 	}
 	public String getMatchingData() {
 		return matchingData;

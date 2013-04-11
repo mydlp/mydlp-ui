@@ -35,6 +35,7 @@ public class IncidentLog extends AbstractEntity {
 	protected List<IncidentLogFile> files;
 	protected IncidentLogRequeueStatus requeueStatus;
 	protected String groupId;
+	protected List<MatchingDetail> matchingDetails;
 	
 	@Index(name="dateIndex")
 	@Column(nullable=false)
@@ -129,6 +130,13 @@ public class IncidentLog extends AbstractEntity {
 	}
 	public void setGroupId(String groupId) {
 		this.groupId = groupId;
+	}
+	@OneToMany(mappedBy="incidentLog", cascade={CascadeType.ALL})
+	public List<MatchingDetail> getMatchingDetails() {
+		return matchingDetails;
+	}
+	public void setMatchingDetails(List<MatchingDetail> matchingDetails) {
+		this.matchingDetails = matchingDetails;
 	}
 
 }
