@@ -151,5 +151,17 @@ public class TemporaryAccessTokenDAOImpl extends AbstractLogDAO implements
 			getHibernateTemplate().delete(temporaryAccessToken);
 		}
 	}
+
+	@Override
+	public void revokateToken(String tokenKey) {
+		DetachedCriteria criteria = 
+				DetachedCriteria.forClass(TemporaryAccessToken.class)
+					.add(Restrictions.eq("tokenKey", tokenKey));
+		@SuppressWarnings("unchecked")
+		List<TemporaryAccessToken> list = getHibernateTemplate().findByCriteria(criteria);
+		for (TemporaryAccessToken temporaryAccessToken : list) {
+			getHibernateTemplate().delete(temporaryAccessToken);
+		}
+	}
 	
 }

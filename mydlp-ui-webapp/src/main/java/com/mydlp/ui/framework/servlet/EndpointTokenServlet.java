@@ -18,6 +18,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.HttpRequestHandler;
 
 import com.mydlp.ui.dao.EndpointStatusDAO;
+import com.mydlp.ui.dao.TemporaryAccessTokenDAO;
+import com.mydlp.ui.domain.TemporaryAccessToken;
 import com.mydlp.ui.framework.util.NIOUtil;
 import com.mydlp.ui.service.EndpointSyncService;
 import com.mydlp.ui.service.PayloadProcessService;
@@ -25,22 +27,16 @@ import com.mydlp.ui.service.PayloadProcessService.ImproperPayloadEncapsulationEx
 import com.mydlp.ui.service.PayloadProcessService.SyncObject;
 import com.mydlp.ui.thrift.MyDLPUIThriftService;
 
-@Service("syncServlet")
-public class EndpointSyncServlet implements HttpRequestHandler {
+@Service("tokenServlet")
+public class EndpointTokenServlet implements HttpRequestHandler {
 
-	private static Logger logger = LoggerFactory.getLogger(EndpointSyncServlet.class);
+	private static Logger logger = LoggerFactory.getLogger(EndpointTokenServlet.class);
 	private static Logger errorLogger = LoggerFactory.getLogger("IERROR");
 	
 	protected static final int MAX_CONTENT_LENGTH = 10*1024*1024;
 
 	@Autowired
-	protected MyDLPUIThriftService thriftService;
-	
-	@Autowired
-	protected EndpointStatusDAO endpointStatusDAO;
-	
-	@Autowired
-	protected EndpointSyncService endpointSyncService;
+	protected TemporaryAccessTokenDAO temporaryAccessTokenDAO;
 	
 	@Autowired 
 	protected PayloadProcessService payloadProcessService;
@@ -54,22 +50,25 @@ public class EndpointSyncServlet implements HttpRequestHandler {
 			{
 				ByteBuffer chunk = NIOUtil.toByteBuffer(req.getInputStream());
 				SyncObject syncObject = payloadProcessService.toSyncObject(chunk);
-				
-				String ruleTableUniqId = req.getParameter("rid");
-				String userH = req.getParameter("uh");
 				String ipAddress = req.getRemoteAddr();
 				
-				try {
-					endpointSyncService.asyncRegisterEndpointMeta(
-							syncObject.getEndpointId(), ipAddress, userH, syncObject.getPayload());
-				} catch (Throwable e) {
-					logger.error("Runtime error occured when reading request payload", e);
-				}
-				ByteBuffer thriftResponse = thriftService.getRuletable(
-						syncObject.getEndpointId(),	ipAddress, userH, ruleTableUniqId);
-				if (thriftResponse != null) {
-					syncObject.setPayload(thriftResponse);
-					responseBuffer = payloadProcessService.toByteBuffer(syncObject);
+				String queryType = req.getParameter("q");
+				
+				if (queryType.equals("new")) {
+					String tokenStr = temporaryAccessTokenDAO.generateTokenKey(ipAddress, syncObject.getEndpointId(), "iecp", "print");
+					responseBuffer = getResponse(tokenStr);
+				} else if (queryType.equals("is_valid")) {
+					String tokenStr = Charset.forName("ISO-8859-1").decode(syncObject.getPayload()).toString();
+					TemporaryAccessToken tokenObj = temporaryAccessTokenDAO.getTokenObj("TOKEN: " + tokenStr);
+					if (tokenObj == null)
+					{
+						responseBuffer = getResponse("false");
+					}
+					else
+					{
+						responseBuffer = getResponse("true");
+						temporaryAccessTokenDAO.revokateToken(tokenStr);
+					}
 				}
 			}
 			else 
@@ -80,7 +79,7 @@ public class EndpointSyncServlet implements HttpRequestHandler {
 		catch (ImproperPayloadEncapsulationException e)
 		{
 			logger.error("Improper payload.",e);
-			errorLogger.error("Improper sync request received from address: " + req.getRemoteAddr() + " . Sending invalid response.");
+			errorLogger.error("Improper token request received from address: " + req.getRemoteAddr() + " . Sending invalid endpoint response.");
 			responseBuffer = getInvalidResponse();
 		}
 		catch (Throwable e) {
@@ -95,6 +94,9 @@ public class EndpointSyncServlet implements HttpRequestHandler {
         channel.close();
 	}
 
+	protected ByteBuffer getResponse(String str) {
+		return Charset.forName("ISO-8859-1").encode(CharBuffer.wrap(str));
+	}
 
 	protected ByteBuffer getErrorResponse() {
 		return Charset.forName("ISO-8859-1").encode(CharBuffer.wrap("error"));

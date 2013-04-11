@@ -158,6 +158,11 @@
     <servlet-class>org.springframework.web.context.support.HttpRequestHandlerServlet</servlet-class>
   </servlet>
   
+  <servlet>
+    <servlet-name>tokenServlet</servlet-name>
+    <servlet-class>org.springframework.web.context.support.HttpRequestHandlerServlet</servlet-class>
+  </servlet>
+  
   <!-- Spring Flex Integration 1.0  -->
   <!-- Map all /messagbroker requests to the DispatcherServlet for handling -->
   <servlet-mapping>
@@ -208,6 +213,11 @@
   <servlet-mapping>
     <servlet-name>toolsUploaderServlet</servlet-name>
     <url-pattern>/tools/uploader</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
+    <servlet-name>tokenServlet</servlet-name>
+    <url-pattern>/token</url-pattern>
   </servlet-mapping>
   
 </web-app>

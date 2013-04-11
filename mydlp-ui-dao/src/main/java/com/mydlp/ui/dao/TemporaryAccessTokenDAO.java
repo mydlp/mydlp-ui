@@ -18,4 +18,6 @@ public interface TemporaryAccessTokenDAO {
 
 	public void revokateAllTokens(String serviceName, String serviceParam);
 	
+	public void revokateToken(String tokenKey);
+	
 }

@@ -19,6 +19,7 @@
     <security:intercept-url pattern="/register" filters="none"/>
     <security:intercept-url pattern="/receive" filters="none"/>
     <security:intercept-url pattern="/sync" filters="none"/>
+    <security:intercept-url pattern="/token" filters="none"/>
     <security:intercept-url pattern="/api/query" filters="none"/>
     <security:intercept-url pattern="/tools/uploader" filters="none"/>
     <security:intercept-url pattern="/**" access="IS_AUTHENTICATED_FULLY, IS_AUTHENTICATED_REMEMBERED"/>
