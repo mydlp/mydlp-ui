@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<popup:InputLabel xmlns:fx="http://ns.adobe.com/mxml/2009" 
+				  xmlns:s="library://ns.adobe.com/flex/spark" 
+				  xmlns:mx="library://ns.adobe.com/flex/mx" 
+				  xmlns:popup="com.mydlp.ui.widget.general.popup.*">
+	
+	<fx:Script>
+		<![CDATA[
+			
+		]]>
+	</fx:Script>
+	
+	<fx:Declarations>
+		<fx:String id="matcher"/>
+		<fx:int id="count"/>
+	</fx:Declarations>
+	
+	<s:Group width="100%" height="100%">
+		<s:layout>
+			<s:HorizontalLayout verticalAlign="middle" horizontalAlign="center" paddingTop="2" gap="5"/>
+		</s:layout>
+		<s:Label id="mactherLabel" text="{matcher}" fontWeight="bold"/>
+		<s:Label id="countLabel" text="{'Count: ' + count.toString}" fontWeight="bold"/>
+	</s:Group>
+	
+</popup:InputLabel>

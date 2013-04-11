@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:TitleWindow xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			   xmlns:s="library://ns.adobe.com/flex/spark" 
+			   xmlns:mx="library://ns.adobe.com/flex/mx"
+			   xmlns:my="http://www.mydlp.com/flex/my"
+			   xmlns:input="com.mydlp.ui.widget.general.input.*"
+			   close="{close()}"
+			   width="475"
+			   title="@Resource(bundle = 'messages', key = 'feature.matcher.title.label')" xmlns:util="com.mydlp.ui.util.*" xmlns:validators="com.mydlp.ui.validators.*"
+			   >
+	
+	<fx:Script>
+		<![CDATA[
+			import com.mydlp.ui.domain.MatchingDetail;
+			import com.mydlp.ui.util.InteractionUtil;
+			import com.mydlp.ui.util.LangUtil;
+			import com.mydlp.ui.widget.general.popup.InputLabel;
+			import com.mydlp.ui.widget.general.popup.VerticalInputLabel;
+			
+			import mx.controls.Label;
+			
+			protected var countDict:Object = new Object;
+			
+			protected function close(): void
+			{
+				InteractionUtil.closePopup(this);
+			}
+	
+			public function populate():void
+			{
+				if(matcherDetails == null || matcherDetails.length == 0)
+				{
+					var l:Label = new Label();
+					l.setStyle("fontWeight", "bold");
+					l.text = "There is no matching details";
+					matchingDataGroup.addElement(l);
+				}
+				for(var i:int = 0; i < matcherDefinitions.length; i++)
+				{
+					var count:int = 0;
+					var matcherDetailLabels:ListCollectionView = new ArrayCollection;
+					for(var j:int = 0; j < matcherDetails.length; j++)
+					{
+						if((matcherDetails[j] as MatchingDetail).matcherFunc == (matcherDefinitions[i] as MatcherDefinition).data)
+						{
+							var matcherDetailsLabel:MatcherDetailsLabel = new MatcherDetailsLabel();
+							matcherDetailsLabel.data = (matcherDetails[j] as MatchingDetail).matchingData;
+							matcherDetailLabels.addItem(matcherDetailsLabel);
+							
+						}
+					}
+					if(count > 0)
+					{
+						var matcherLabel:MatcherLabel = new MatcherLabel();
+						matcherLabel.matcher = LangUtil.getString('messages', 'log.matcher.detail' + (matcherDefinitions[i] as MatcherDefinition).data + 'label');
+						matcherLabel.count = count;
+						matchingDataGroup.addElement(matcherLabel);
+						for each(var e:MatcherDetailsLabel in matcherDetailLabels)
+						{
+							matchingDataGroup.addElement(e);
+						}
+					}
+				}
+				matchingDataGroup.visible = true;
+				matchingDataGroup.includeInLayout = true;
+			}
+		]]>
+	</fx:Script>
+	
+	
+	<fx:Declarations>
+		<s:ArrayCollection id="matcherDefinitions">
+			<input:MatcherDefinition data="all" />
+			<input:MatcherDefinition data="cc_match" />
+			<input:MatcherDefinition data="ssn_match" />
+			<input:MatcherDefinition data="iban_match" />
+			<input:MatcherDefinition data="aba_match" />
+			<input:MatcherDefinition data="trid_match" />
+			<input:MatcherDefinition data="canada_sin_match" />
+			<input:MatcherDefinition data="france_insee_match" />
+			<input:MatcherDefinition data="uk_nino_match" />
+			<input:MatcherDefinition data="said_match" />
+			<input:MatcherDefinition data="keyword_match" />
+			<input:MatcherDefinition data="regex_match" />
+			<input:MatcherDefinition data="scode_match" />
+			<input:MatcherDefinition data="scode_ada_match" />
+			<input:MatcherDefinition data="keyword_group_match" />
+			<input:MatcherDefinition data="document_hash_match" />
+			<input:MatcherDefinition data="document_pdm_match" />
+			<input:MatcherDefinition data="encrypted_file_match" />
+			<input:MatcherDefinition data="encrypted_archive_match" />
+			<input:MatcherDefinition data="pan_match"/>
+			<input:MatcherDefinition data="tan_match"/>
+			<input:MatcherDefinition data="cpf_match"/>
+			<input:MatcherDefinition data="china_icn_match"/>
+			<input:MatcherDefinition data="cc_edate_match"/>
+			<input:MatcherDefinition data="birthdate_match"/>
+			<input:MatcherDefinition data="gdate_match"/>
+			<input:MatcherDefinition data="cc_track1_match"/>
+			<input:MatcherDefinition data="cc_track2_match"/>
+			<input:MatcherDefinition data="cc_track3_match"/>
+			<input:MatcherDefinition data="spain_dni_match"/>
+			<input:MatcherDefinition data="italy_fc_match"/>
+			<input:MatcherDefinition data="dna_match"/>
+			<input:MatcherDefinition data="ten_digit_match"/>
+			<input:MatcherDefinition data="nine_digit_match"/>
+			<input:MatcherDefinition data="fe_digit_match"/>
+			<input:MatcherDefinition data="ip_match"/>
+			<input:MatcherDefinition data="mac_match"/>
+			<input:MatcherDefinition data="icd10_match"/>
+		</s:ArrayCollection>
+		
+		<mx:ListCollectionView id="matcherDetails"/>
+	</fx:Declarations>
+		<s:Group id="matchingDataGroup" width="100%" height="100%" visible="false" includeInLayout="false">
+			<s:layout>
+				<s:VerticalLayout gap="2" paddingLeft="10"/>
+			</s:layout>
+		</s:Group>
+	
+	
+</s:TitleWindow>
