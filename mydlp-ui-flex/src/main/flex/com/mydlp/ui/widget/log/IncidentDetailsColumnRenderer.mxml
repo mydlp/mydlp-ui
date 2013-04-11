@@ -91,6 +91,6 @@
 	
 	<s:Label id="lblData" text="{getPolicyText(data)}" width="100%"/>
 	
-	<s:Button id="matchingDetailButton" click="detailButtonClickHandler(event)" skinClass="com.mydlp.ui.skin.GenerateReportBitmapButton16Skin"/>
+	<!--<s:Button id="matchingDetailButton" click="detailButtonClickHandler(event)" skinClass="com.mydlp.ui.skin.GenerateReportBitmapButton16Skin"/>-->
 	
 </s:GridItemRenderer>
