@@ -7,6 +7,11 @@
 	<fx:Script>
 		<![CDATA[
 			
+			protected function countText():String
+			{
+				return "Count: " + count.toString();
+			}
+			
 		]]>
 	</fx:Script>
 	
@@ -20,7 +25,7 @@
 			<s:HorizontalLayout verticalAlign="middle" horizontalAlign="center" paddingTop="2" gap="5"/>
 		</s:layout>
 		<s:Label id="mactherLabel" text="{matcher}" fontWeight="bold"/>
-		<s:Label id="countLabel" text="{'Count: ' + count.toString}" fontWeight="bold"/>
+		<s:Label id="countLabel" text="{'Count: ' + count}" fontWeight="bold"/>
 	</s:Group>
 	
 </popup:InputLabel>

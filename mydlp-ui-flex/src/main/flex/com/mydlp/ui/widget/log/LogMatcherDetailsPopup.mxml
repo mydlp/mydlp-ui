@@ -17,6 +17,7 @@
 			import com.mydlp.ui.widget.general.popup.InputLabel;
 			import com.mydlp.ui.widget.general.popup.VerticalInputLabel;
 			
+			import mx.controls.Alert;
 			import mx.controls.Label;
 			
 			protected var countDict:Object = new Object;
@@ -35,6 +36,7 @@
 					l.text = "There is no matching details";
 					matchingDataGroup.addElement(l);
 				}
+				
 				for(var i:int = 0; i < matcherDefinitions.length; i++)
 				{
 					var count:int = 0;
@@ -46,13 +48,13 @@
 							var matcherDetailsLabel:MatcherDetailsLabel = new MatcherDetailsLabel();
 							matcherDetailsLabel.data = (matcherDetails[j] as MatchingDetail).matchingData;
 							matcherDetailLabels.addItem(matcherDetailsLabel);
-							
+							count++;
 						}
 					}
 					if(count > 0)
 					{
 						var matcherLabel:MatcherLabel = new MatcherLabel();
-						matcherLabel.matcher = LangUtil.getString('messages', 'log.matcher.detail' + (matcherDefinitions[i] as MatcherDefinition).data + 'label');
+						matcherLabel.matcher = LangUtil.getString('messages', 'log.matcher.detail.' + (matcherDefinitions[i] as MatcherDefinition).data + '.label');
 						matcherLabel.count = count;
 						matchingDataGroup.addElement(matcherLabel);
 						for each(var e:MatcherDetailsLabel in matcherDetailLabels)
