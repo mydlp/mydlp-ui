@@ -5,7 +5,7 @@
 			   xmlns:my="http://www.mydlp.com/flex/my"
 			   xmlns:input="com.mydlp.ui.widget.general.input.*"
 			   close="{close()}" maxHeight="450"
-			   title="@Resource(bundle = 'messages', key = 'feature.matcher.title.label')" xmlns:util="com.mydlp.ui.util.*" xmlns:validators="com.mydlp.ui.validators.*"
+			   title="@Resource(bundle = 'messages', key = 'log.matcher.detail.title.label')" xmlns:util="com.mydlp.ui.util.*" xmlns:validators="com.mydlp.ui.validators.*"
 			   >
 	
 	<fx:Script>
