@@ -18,6 +18,7 @@ package com.mydlp.ui.util
 	import com.mydlp.ui.domain.RuleItem;
 	import com.mydlp.ui.widget.policy.inventory.InventoryItemRenderer;
 	
+	import flash.utils.ByteArray;
 	import flash.utils.describeType;
 	import flash.utils.getDefinitionByName;
 	import flash.utils.getQualifiedClassName;
@@ -200,5 +201,14 @@ package com.mydlp.ui.util
 			}
 			return targetObject;
 		}
+		
+		public static function cloneSingleItem(source:Object): *
+		{
+			var myBA:ByteArray = new ByteArray(); 
+			myBA.writeObject(source); 
+			myBA.position = 0; 
+			return(myBA.readObject());
+		}
+		
 	}
 }

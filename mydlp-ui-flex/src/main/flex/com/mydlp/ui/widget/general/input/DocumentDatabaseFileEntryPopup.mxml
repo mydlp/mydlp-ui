@@ -26,6 +26,15 @@
 			import mx.managers.DragManager;
 			import mx.rpc.events.ResultEvent;
 			
+			protected static const textFilefilter : FileFilter = new FileFilter("Text Files (*.txt, *.log)", "*.txt;*.log");
+			protected static const imgFilefilter : FileFilter = new FileFilter("Image Files (*.bmp, *.jpg, *.jpeg, *.gif, *.png, *.psd, *.tif, *.yuv)", "*.bmp;*.jpg;*.jpeg;*.gif;*.png;*.psd;*.tif;*.yuv");
+			protected static const docsFilefilter : FileFilter = new FileFilter("Document Files (*.doc, *.docx, *.wpd, *.wps, *.xlr, *.xls, *.xlsx, *.pps, *.ppt, *.pptx, *.key, *.csv, *.rtf, *.pdf)", "*.doc;*.docx;*.wpd;*.wps;*.xlr;*.xls;*.xlsx;*.pps;*.ppt;*.pptx;*.key;*.csv;*.rtf;*.pdf");
+			protected static const dbFilefilter : FileFilter = new FileFilter("Database Files (*.accdb, *.db, *.dbf, *.mdb, *.pdb, *.sql)", "*.accdb;*.db;*.dbf;*.mdb;*.pdb;*.sql");
+			protected static const compFilefilter : FileFilter = new FileFilter("Compressed Files (*.7z, *.deb, *.gz, *.pkg, *.rar, *.rpm, *.tar.gz, *.zip, *.zipx)", "*.7z;*.deb;*.gz;*.pkg;*.rar;*.rpm;*.tar.gz;*.zip;*.zipx");
+			protected static const allFilesFilter : FileFilter = new FileFilter("All files (*.*)", "*"); 
+			
+			protected static const fileFilters:Array = [ allFilesFilter, textFilefilter, imgFilefilter, docsFilefilter, dbFilefilter, compFilefilter ];
+			
 			protected var refUploadFileList:FileReferenceList;
 			
 			public var ddfeInput:DocumentDatabaseFileEntryInput = null;
@@ -41,7 +50,7 @@
 			protected function uploadButton(event:MouseEvent):void
 			{
 				refUploadFileList = new FileReferenceList();
-				refUploadFileList.browse(); 
+				refUploadFileList.browse(fileFilters); 
 				refUploadFileList.addEventListener(Event.SELECT,onFileSelect); 
 			}
 			
