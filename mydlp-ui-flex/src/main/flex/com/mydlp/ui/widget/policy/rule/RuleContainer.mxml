@@ -6,7 +6,7 @@
 					  xmlns:rule="com.mydlp.ui.widget.policy.rule.*"
 					  width="100%" height="100%"
 					  minWidth="800"
-                      xmlns:discovery="com.mydlp.ui.widget.policy.rule.discovery.*" 
+					  xmlns:discovery="com.mydlp.ui.widget.policy.rule.discovery.*" 
 					  creationComplete="onCreationComplete(event)"
 					  >
 	<fx:Script>
@@ -180,8 +180,8 @@
 			public function getRuleI(value:Number): Rule
 			{
 				for each (var rule:* in ruleDP) 
-					if (rule != null && rule is Rule && (rule as Rule).id == value)
-						return rule as Rule;
+				if (rule != null && rule is Rule && (rule as Rule).id == value)
+					return rule as Rule;
 				return null;
 			}			
 			
@@ -541,7 +541,7 @@
 				}
 				ruleList.invalidateList();
 			}
-
+			
 			protected function emptyRuleSetAddButtonClick(event:MouseEvent):void
 			{
 				//var newRuleDialog:NewRuleDialog = new NewRuleDialog;
@@ -577,96 +577,106 @@
 		<fx:Boolean id="isDiscoveryTab"/>
 	</fx:Declarations>
 	
-	<s:Group id="ruleListGroup" width="100%" height="100%"
-			 includeInLayout="false" visible="false">
+	<s:Group width="100%" height="100%">
 		<s:layout>
-			<s:VerticalLayout gap="2" paddingBottom="8"/>
+			<s:VerticalLayout/>
 		</s:layout>
 		
-		<s:HGroup width="100%" height="40" 
-				  horizontalAlign="left" verticalAlign="middle" 
-				  paddingLeft="20" paddingBottom="10" paddingRight="50">
-			<s:Button id="addRuleButtonTop" skinClass="com.mydlp.ui.skin.AddBitmapLabelButton24Skin" 
-					  label="@Resource(key='rules.addrule', bundle='messages')"
-					  click="addRuleToTop(event)" styleName="fontSize24Style"/>
-			<s:Label id="filteredLabel" visible="false" includeInLayout="false"
-					 fontWeight="bold" styleName="fontSize16Style" 
-					 text="@Resource(key='rules.filtered.message', bundle='messages')"/>
 		
-			<s:HGroup width="100%" horizontalAlign="right" verticalAlign="middle" gap="8">
-				<s:Button id="expandButton" skinClass="com.mydlp.ui.skin.ExpandBitmapLabelButton16Skin"
-						  label="@Resource(key='rules.expandAll', bundle='messages')"
-						  click="expandAllClickHandler(event)"/>
-				<s:Button id="collapseButton" skinClass="com.mydlp.ui.skin.CollapseBitmapLabelButton16Skin"
-						  label="@Resource(key='rules.collapseAll', bundle='messages')"
-						  click="collapseAllClickHandler(event)"/>
-			</s:HGroup>
-		</s:HGroup>
-		
-		<s:Group width="100%" includeInLayout="{!isDiscoveryTab}" visible="{!isDiscoveryTab}">
+		<s:Group id="ruleListGroup" width="100%" height="100%"
+				 includeInLayout="false" visible="false">
 			<s:layout>
-				<s:HorizontalLayout gap="0" paddingLeft="4"/>
+				<s:VerticalLayout gap="2" paddingBottom="8"/>
 			</s:layout>
 			
-			<s:Label text="@Resource(key='rules.type.label', bundle='messages')" 
-					 width="190"
-					 textAlign="center"
-					 styleName="fontSize16Style" fontWeight="bold"/>
-			<s:Label text="@Resource(key='rules.scheduling.label', bundle='messages')"
-					 visible="{isDiscoveryTab}"
-					 includeInLayout="{isDiscoveryTab}"
-					 width="{36 + 8 + 32 + 8}"
-					 textAlign="center"
-					 styleName="fontSize16Style" fontWeight="bold"/>
-			<s:Label text="@Resource(key='rules.sources.label', bundle='messages')"
-					 width="{getBoxSize(sourceWidth) + 8}"
-					 textAlign="center"
-					 styleName="fontSize16Style" fontWeight="bold"/>
-			<s:Label text="@Resource(key='rules.destinations.label', bundle='messages')"
-					 width="{getBoxSize(destinationWidth) + 8}"
-					 textAlign="center"
-					 styleName="fontSize16Style" fontWeight="bold"/>
-			<s:Label text="@Resource(key='rules.informationTypes.label', bundle='messages')"
-					 width="{getBoxSize(informationTypeWidth) + 8}"
-					 textAlign="center"
-					 styleName="fontSize16Style" fontWeight="bold"/>
-			<s:Label text="@Resource(key='rules.action.label', bundle='messages')"
-					 width="{getBoxSize(actionWidth)}"
-					 textAlign="center"
-					 styleName="fontSize16Style" fontWeight="bold"/>
+			<s:HGroup width="100%" height="40" 
+					  horizontalAlign="left" verticalAlign="middle" 
+					  paddingLeft="20" paddingBottom="10" paddingRight="50">
+				<s:Button id="addRuleButtonTop" skinClass="com.mydlp.ui.skin.AddBitmapLabelButton24Skin" 
+						  label="@Resource(key='rules.addrule', bundle='messages')"
+						  click="addRuleToTop(event)" styleName="fontSize24Style"/>
+				<s:Label id="filteredLabel" visible="false" includeInLayout="false"
+						 fontWeight="bold" styleName="fontSize16Style" 
+						 text="@Resource(key='rules.filtered.message', bundle='messages')"/>
+				
+				<s:HGroup width="100%" horizontalAlign="right" verticalAlign="middle" gap="8">
+					<s:Button id="expandButton" skinClass="com.mydlp.ui.skin.ExpandBitmapLabelButton16Skin"
+							  label="@Resource(key='rules.expandAll', bundle='messages')"
+							  click="expandAllClickHandler(event)"/>
+					<s:Button id="collapseButton" skinClass="com.mydlp.ui.skin.CollapseBitmapLabelButton16Skin"
+							  label="@Resource(key='rules.collapseAll', bundle='messages')"
+							  click="collapseAllClickHandler(event)"/>
+				</s:HGroup>
+			</s:HGroup>
+			
+			<s:Group width="100%" includeInLayout="{!isDiscoveryTab}" visible="{!isDiscoveryTab}">
+				<s:layout>
+					<s:HorizontalLayout gap="0" paddingLeft="4"/>
+				</s:layout>
+				
+				<s:Label text="@Resource(key='rules.type.label', bundle='messages')" 
+						 width="190"
+						 textAlign="center"
+						 styleName="fontSize16Style" fontWeight="bold"/>
+				<s:Label text="@Resource(key='rules.scheduling.label', bundle='messages')"
+						 visible="{isDiscoveryTab}"
+						 includeInLayout="{isDiscoveryTab}"
+						 width="{36 + 8 + 32 + 8}"
+						 textAlign="center"
+						 styleName="fontSize16Style" fontWeight="bold"/>
+				<s:Label text="@Resource(key='rules.sources.label', bundle='messages')"
+						 width="{getBoxSize(sourceWidth) + 8}"
+						 textAlign="center"
+						 styleName="fontSize16Style" fontWeight="bold"/>
+				<s:Label text="@Resource(key='rules.destinations.label', bundle='messages')"
+						 width="{getBoxSize(destinationWidth) + 8}"
+						 textAlign="center"
+						 styleName="fontSize16Style" fontWeight="bold"/>
+				<s:Label text="@Resource(key='rules.informationTypes.label', bundle='messages')"
+						 width="{getBoxSize(informationTypeWidth) + 8}"
+						 textAlign="center"
+						 styleName="fontSize16Style" fontWeight="bold"/>
+				<s:Label text="@Resource(key='rules.action.label', bundle='messages')"
+						 width="{getBoxSize(actionWidth)}"
+						 textAlign="center"
+						 styleName="fontSize16Style" fontWeight="bold"/>
+			</s:Group>
+			
+			
+			<rule:RuleList id="ruleList" dataProvider="{ruleDP}" 
+						   width="100%" height="100%"
+						   itemRendererFunction="ruleItemRendererFunction"/>
+			
+			<s:Group width="100%" height="50" includeInLayout="{!isDiscoveryTab}" visible="{!isDiscoveryTab}">
+				<s:layout>
+					<s:HorizontalLayout paddingTop="5" paddingBottom="5" 
+										paddingLeft="20"
+										verticalAlign="middle" horizontalAlign="left"/>
+				</s:layout>
+				<s:Button id="addRuleButtonBottom" skinClass="com.mydlp.ui.skin.AddBitmapLabelButton24Skin" 
+						  label="@Resource(key='rules.addrule', bundle='messages')"
+						  click="addRuleToBottom(event)" styleName="fontSize24Style" />
+			</s:Group>
+			
 		</s:Group>
 		
-		
-		<rule:RuleList id="ruleList" dataProvider="{ruleDP}" 
-					   width="100%" height="100%"
-					   itemRendererFunction="ruleItemRendererFunction"/>
-		
-		<s:Group width="100%" height="50" includeInLayout="{!isDiscoveryTab}" visible="{!isDiscoveryTab}">
+		<s:Group id="noRuleGroup" width="100%" height="100%">
 			<s:layout>
-				<s:HorizontalLayout paddingTop="5" paddingBottom="5" 
-									paddingLeft="20"
-									verticalAlign="middle" horizontalAlign="left"/>
+				<s:VerticalLayout horizontalAlign="center" verticalAlign="middle"/>
 			</s:layout>
-			<s:Button id="addRuleButtonBottom" skinClass="com.mydlp.ui.skin.AddBitmapLabelButton24Skin" 
-					  label="@Resource(key='rules.addrule', bundle='messages')"
-					  click="addRuleToBottom(event)" styleName="fontSize24Style" />
+			<s:Button id="addRuleButtonFirst" skinClass="com.mydlp.ui.skin.AddBitmapButton128Skin"
+					  toolTip="@Resource(bundle='messages', key='rules.addFirstRule.tooltip.label')"
+					  click="emptyRuleSetAddButtonClick(event)"/>
 		</s:Group>
+		
 		<s:Group width="100%" height="250" includeInLayout="{isDiscoveryTab}" visible="{isDiscoveryTab}">
 			<s:layout>
-				<s:HorizontalLayout paddingTop="5" paddingBottom="5" paddingLeft="20"/>
+				<s:HorizontalLayout paddingBottom="5" paddingLeft="20"/>
 			</s:layout>
 			
 			<discovery:DiscoveryReportContainer id="discoveryReportContainer"/>
 		</s:Group>
-	</s:Group>
-	
-	<s:Group id="noRuleGroup" width="100%" height="100%">
-		<s:layout>
-			<s:VerticalLayout horizontalAlign="center" verticalAlign="middle"/>
-		</s:layout>
-		<s:Button id="addRuleButtonFirst" skinClass="com.mydlp.ui.skin.AddBitmapButton128Skin"
-				  toolTip="@Resource(bundle='messages', key='rules.addFirstRule.tooltip.label')"
-				  click="emptyRuleSetAddButtonClick(event)"/>
+		
 	</s:Group>
 	
 </s:SkinnableContainer>

@@ -25,6 +25,7 @@
 			<s:HorizontalLayout verticalAlign="middle" horizontalAlign="center" paddingTop="2" gap="5"/>
 		</s:layout>
 		<s:Label id="mactherLabel" text="{matcher}" fontWeight="bold"/>
+		<s:Label text="-"/>
 		<s:Label id="countLabel" text="{'Count: ' + count}" fontWeight="bold"/>
 	</s:Group>
 	
