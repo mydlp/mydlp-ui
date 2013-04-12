@@ -61,7 +61,6 @@ public class EndpointTokenServlet implements HttpRequestHandler {
 					if (tokenObj == null)
 					{
 						syncObject.setPayload(getResponse("false"));
-						
 					}
 					else
 					{
