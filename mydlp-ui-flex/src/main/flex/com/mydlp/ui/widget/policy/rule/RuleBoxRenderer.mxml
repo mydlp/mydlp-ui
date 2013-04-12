@@ -906,6 +906,8 @@
 	
 			protected function isPlayButtonEnabled():Boolean
 			{
+				if(!(ruleObject.enabled))
+					return false;
 				if(discoveryReport == null)
 					return true;
 				else if(discoveryReport.status == DiscoveryReport.STATUS_STOPPED || discoveryReport.status == DiscoveryReport.STATUS_ERROR)
@@ -1030,7 +1032,8 @@
 					<s:VerticalLayout verticalAlign="middle" horizontalAlign="center"/>
 				</s:layout>
 				
-				<s:Button skinClass="com.mydlp.ui.skin.CalendarBitmapButton24Skin" click="scheduleButtonHandler(event)"/>
+				<s:Button skinClass="com.mydlp.ui.skin.CalendarBitmapButton24Skin" click="scheduleButtonHandler(event)"
+						  enabled="{ruleObject.enabled}"/>
 			</s:Group>
 			
 			<rule:RSpacer height="100%"/>
