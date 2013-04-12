@@ -32,7 +32,7 @@
 				{
 					var l:Label = new Label();
 					l.setStyle("fontWeight", "bold");
-					l.text = "There is no matching details";
+					l.text = LangUtil.getString('messages', 'log.matcher.detail.none.label');
 					matchingDataGroup.addElement(l);
 				}
 				
