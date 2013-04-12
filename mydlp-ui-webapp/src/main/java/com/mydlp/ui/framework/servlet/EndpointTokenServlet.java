@@ -17,15 +17,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.HttpRequestHandler;
 
-import com.mydlp.ui.dao.EndpointStatusDAO;
 import com.mydlp.ui.dao.TemporaryAccessTokenDAO;
 import com.mydlp.ui.domain.TemporaryAccessToken;
 import com.mydlp.ui.framework.util.NIOUtil;
-import com.mydlp.ui.service.EndpointSyncService;
 import com.mydlp.ui.service.PayloadProcessService;
 import com.mydlp.ui.service.PayloadProcessService.ImproperPayloadEncapsulationException;
 import com.mydlp.ui.service.PayloadProcessService.SyncObject;
-import com.mydlp.ui.thrift.MyDLPUIThriftService;
 
 @Service("tokenServlet")
 public class EndpointTokenServlet implements HttpRequestHandler {
@@ -56,19 +53,22 @@ public class EndpointTokenServlet implements HttpRequestHandler {
 				
 				if (queryType.equals("new")) {
 					String tokenStr = temporaryAccessTokenDAO.generateTokenKey(ipAddress, syncObject.getEndpointId(), "iecp", "print");
-					responseBuffer = getResponse(tokenStr);
+					syncObject.setPayload(getResponse("TOKEN: " + tokenStr));
+					responseBuffer = payloadProcessService.toByteBuffer(syncObject);
 				} else if (queryType.equals("is_valid")) {
 					String tokenStr = Charset.forName("ISO-8859-1").decode(syncObject.getPayload()).toString();
-					TemporaryAccessToken tokenObj = temporaryAccessTokenDAO.getTokenObj("TOKEN: " + tokenStr);
+					TemporaryAccessToken tokenObj = temporaryAccessTokenDAO.getTokenObj(tokenStr);
 					if (tokenObj == null)
 					{
-						responseBuffer = getResponse("false");
+						syncObject.setPayload(getResponse("false"));
+						
 					}
 					else
 					{
-						responseBuffer = getResponse("true");
+						syncObject.setPayload(getResponse("true"));
 						temporaryAccessTokenDAO.revokateToken(tokenStr);
 					}
+					responseBuffer = payloadProcessService.toByteBuffer(syncObject);
 				}
 			}
 			else 
