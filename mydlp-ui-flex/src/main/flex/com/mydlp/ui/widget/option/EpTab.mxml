@@ -15,11 +15,10 @@
 		<domain:Config id="logLevel" />
 		<domain:Config id="logLimit" />
 		<domain:Config id="syncInterval" />
-		<domain:Config id="discoverFSInterval" />
-		<domain:Config id="discoverFSOnStartup" />
 		<domain:Config id="ignoreDiscoverFSMaxSizeExceeded" />
 		<domain:Config id="spoolSoftLimit" />
 		<domain:Config id="spoolHardLimit" />
+		<domain:Config id="printerPrefix" />
 		
 		
 		<!--<validators:MyNumberValidator id="epSyncValidator"
@@ -53,6 +52,13 @@
 									  maxValue="104857600"
 									  valid="{optionContainer.validInput(event)}"
 									  invalid="{optionContainer.invalidInput(event)}"/>-->
+		
+		<mx:RegExpValidator id="printerPrefixValidator"
+							source="{printerPrefixInput}"
+							property="text"
+							expression="^[A-Za-z][A-Za-z0-9]\{1,15\}$"
+							valid="{optionContainer.validInput(event)}"
+							invalid="{optionContainer.invalidInput(event)}"/>
 		
 	</fx:Declarations>
 	
@@ -109,7 +115,9 @@
 												   textInputWidth="150" unit="{GenericSettingsInputWidget.UNIT_MB}"
 												   optionContainer="{optionContainer}" minValue="52428801" maxValue="104857600"/>
 			</s:FormItem>
-			
+			<s:FormItem label="{printerPrefix.label}" >
+				<s:TextInput id="printerPrefixInput" text="@{printerPrefix.value}" width="200"/>
+			</s:FormItem>
 		</s:Form>	
 		
 	</s:VGroup>
