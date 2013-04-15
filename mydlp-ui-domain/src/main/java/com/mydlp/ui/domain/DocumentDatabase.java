@@ -5,6 +5,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
@@ -52,7 +53,7 @@ public class DocumentDatabase extends Argument {
 		this.rdbmsInformationTarget = rdbmsInformationTarget;
 	}
 	
-	@OneToMany(cascade={CascadeType.ALL})
+	@ManyToMany
 	public List<RemoteStorage> getRemoteStorages() {
 		return remoteStorages;
 	}
