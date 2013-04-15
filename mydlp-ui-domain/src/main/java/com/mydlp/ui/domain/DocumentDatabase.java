@@ -21,6 +21,7 @@ public class DocumentDatabase extends Argument {
 	protected List<DocumentDatabaseFileEntry> fileEntries;
 	protected List<DocumentDatabaseRDBMSEntry> rdbmsEntries;
 	protected RDBMSInformationTarget rdbmsInformationTarget;
+	protected List<RemoteStorage> remoteStorages;
 
 	@OneToMany(cascade={CascadeType.ALL})
 	public List<DocumentDatabaseFileEntry> getFileEntries() {
@@ -49,6 +50,15 @@ public class DocumentDatabase extends Argument {
 	public void setRdbmsInformationTarget(
 			RDBMSInformationTarget rdbmsInformationTarget) {
 		this.rdbmsInformationTarget = rdbmsInformationTarget;
+	}
+	
+	@OneToMany(cascade={CascadeType.ALL})
+	public List<RemoteStorage> getRemoteStorages() {
+		return remoteStorages;
+	}
+
+	public void setRemoteStorages(List<RemoteStorage> remoteStorages) {
+		this.remoteStorages = remoteStorages;
 	}
 
 }
