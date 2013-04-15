@@ -23,14 +23,25 @@ public class LicenseInformationDAOImpl extends AbstractPolicyDAO implements Lice
 
 	@Override
 	public LicenseInformation saveLicense(LicenseInformation licenseInformation) {
-		invalidateLicense();
-		getHibernateTemplate().saveOrUpdate(licenseInformation);
+		invalidateOther(licenseInformation);
+		getHibernateTemplate().merge(licenseInformation);
 		return licenseInformation;
 	}
 
 	@Override
 	public void invalidateLicense() {
 		getHibernateTemplate().bulkUpdate("delete from LicenseInformation l");
+	}
+	
+	public void invalidateOther(LicenseInformation licenseInformation) {
+		if (licenseInformation.getId() == null)
+		{
+			invalidateLicense();
+		}
+		else
+		{
+			getHibernateTemplate().bulkUpdate("delete from LicenseInformation l where l.id <> ?", licenseInformation.getId());
+		}
 	}
 
 }
