@@ -123,7 +123,15 @@
 			{
 				if (ruleObject == null) 
 					return true;
-				var collapseState:* = FlexGlobals.topLevelApplication.ruleContainer.collapseStates[ruleObject.id];
+				var collapseState:* = true;
+				if (isDiscoveryTab)
+				{
+					collapseState = discoveryRuleContainer.collapseStates[ruleObject.id];
+				}
+				else
+				{
+					collapseState = ruleContainer.collapseStates[ruleObject.id];
+				}
 				if (collapseState != null){
 					return collapseState as Boolean;
 				}
@@ -136,7 +144,14 @@
 			protected function changeCollapse(): void
 			{
 				collapse = !collapse;
-				FlexGlobals.topLevelApplication.ruleContainer.collapseStates[ruleObject.id] = collapse;
+				if (isDiscoveryTab)
+				{
+					discoveryRuleContainer.collapseStates[ruleObject.id] = collapse;
+				}
+				else
+				{
+					ruleContainer.collapseStates[ruleObject.id] = collapse;
+				}
 			}
 			
 			protected function populate():void
