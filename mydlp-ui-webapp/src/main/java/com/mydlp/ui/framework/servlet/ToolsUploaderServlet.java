@@ -79,7 +79,7 @@ public class ToolsUploaderServlet implements HttpRequestHandler {
 					if (fileItem.isFormField())
 					{
 						String fieldName = fileItem.getFieldName();
-						String fieldValue = fileItem.getString();
+						String fieldValue = fileItem.getString("UTF-8");
 						
 						if (fieldName.equals("tokenKey"))
 						{
