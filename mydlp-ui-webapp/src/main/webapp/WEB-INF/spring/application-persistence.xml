@@ -32,6 +32,7 @@
          <value>com.mydlp.ui.domain.AuthUser</value>
          <value>com.mydlp.ui.domain.BundledKeywordGroup</value>
          <value>com.mydlp.ui.domain.Config</value>
+         <value>com.mydlp.ui.domain.CoupledRemoteStorage</value>
          <value>com.mydlp.ui.domain.CustomAction</value>
          <value>com.mydlp.ui.domain.CustomActionDescription</value>
          <value>com.mydlp.ui.domain.CustomActionDescriptionSeclore</value>

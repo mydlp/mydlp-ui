@@ -4,14 +4,15 @@
 			   xmlns:mx="library://ns.adobe.com/flex/mx"
 			   xmlns:my="http://www.mydlp.com/flex/my"
 			   xmlns:input="com.mydlp.ui.widget.general.input.*"
-			   width="650" height="150"
+			   width="300" height="150"
 			   creationComplete="onCreationComplete()"
 			   >
 	
 	<fx:Script>
 		<![CDATA[
+			import com.mydlp.ui.domain.CoupledRemoteStorage;
+			import com.mydlp.ui.domain.CoupledRemoteStorageBase;
 			import com.mydlp.ui.domain.RemoteStorage;
-			import com.mydlp.ui.util.InteractionUtil;
 			
 			import mx.collections.ArrayCollection;
 			import mx.collections.ListCollectionView;
@@ -22,27 +23,6 @@
 			
 			[Bindable]
 			protected var allRemoteStorages:ListCollectionView = new ArrayCollection;
-			
-			protected function getRemoteStoragesHandler(event:ResultEvent):void
-			{
-				Alert.show(remoteStorages.length.toString());
-				remoteStorageList.invalidateDisplayList();
-				allRemoteStorages = event.result as ArrayCollection;
-				//Alert.show(allRemoteStorages.length.toString());
-				if(remoteStorages == null)
-					return;
-				for each(var r:RemoteStorage in remoteStorages)
-				{
-					for each(var ra:RemoteStorage in allRemoteStorages)
-					{
-						if(ObjectUtil.compare(r, ra) == 0)
-							remoteStorageList.selectedItems.push(ra);
-					}
-				}
-				remoteStorageList.validateNow();
-				remoteStorageList.visible = true;
-				remoteStorageList.includeInLayout = true;
-			}
 
 			protected function onCreationComplete():void
 			{
@@ -50,15 +30,66 @@
 				remoteStorageList.addEventListener(ItemClickEvent.ITEM_CLICK, onItemClickHandler);
 			}
 			
+			protected function getRemoteStoragesHandler(event:ResultEvent):void
+			{
+				Alert.show(coupledRemoteStorages.length.toString());
+				remoteStorageList.invalidateDisplayList();
+				var tempResult:ListCollectionView = event.result as ListCollectionView;
+				if(coupledRemoteStorages == null)
+					return;
+				allRemoteStorages.removeAll();
+				for each(var rs:RemoteStorage in tempResult)
+				{
+					var newCrs:CoupledRemoteStorage = new CoupledRemoteStorage;
+					newCrs.remoteStorage = rs;
+					newCrs.excludeList = new ListCollectionView;
+					allRemoteStorages.addItem(newCrs);
+				}
+				for each(var crs:CoupledRemoteStorage in coupledRemoteStorages)
+				{
+					for each(var ra:CoupledRemoteStorage in allRemoteStorages)
+					{
+						if(ObjectUtil.compare(crs.remoteStorage, ra.remoteStorage) == 0)
+						{
+							ra.excludeList = crs.excludeList;
+							remoteStorageList.selectedItems.push(ra);
+						}
+					}
+				}
+				remoteStorageList.validateNow();
+			}
+			
 			protected function onItemClickHandler(event:ItemClickEvent):void
 			{
-				if(remoteStorages == null)
-					remoteStorages = new ListCollectionView;
+				if(coupledRemoteStorages == null)
+					coupledRemoteStorages = new ListCollectionView;
+				
 				if(event.index == -1)
-					remoteStorages.removeItemAt(0);
+				{
+					for(var i:int=0; i < coupledRemoteStorages.length; i++)
+					{
+						var crs:CoupledRemoteStorage = coupledRemoteStorages[i];
+						if(ObjectUtil.compare(crs.remoteStorage, event.item.remoteStorage) == 0)
+						{
+							coupledRemoteStorages.removeItemAt(i);
+							break;
+						}
+					}
+				}
 				else
-					remoteStorages.addItem(event.item as RemoteStorage);
-				//Alert.show("After: "+ remoteStorages.length.toString());
+				{
+					var flag:Boolean = false;
+					for each(var item:CoupledRemoteStorage in coupledRemoteStorages)
+					{
+						if(ObjectUtil.compare(item.remoteStorage, event.item.remoteStorage) == 0)
+						{
+							flag = true;
+							break;
+						}
+					}
+					if(!flag)
+						coupledRemoteStorages.addItem(event.item);
+				}
 			}
 			
 		]]>
@@ -69,12 +100,11 @@
 			<my:method name="getRemoteStorages" result="getRemoteStoragesHandler(event)" />
 		</my:remote>
 		
-		<mx:ListCollectionView id="remoteStorages"/>
+		<mx:ListCollectionView id="coupledRemoteStorages"/>
 	</fx:Declarations>
 	
 	<s:List id="remoteStorageList" dataProvider="{allRemoteStorages}" allowMultipleSelection="true" 
 			itemRenderer="com.mydlp.ui.widget.general.input.RemoteStorageItemRenderer"
-			includeInLayout="false"
-			visible="false" width="100%" height="100%"/>
+			width="100%" height="100%"/>
 	
 </s:SkinnableContainer>

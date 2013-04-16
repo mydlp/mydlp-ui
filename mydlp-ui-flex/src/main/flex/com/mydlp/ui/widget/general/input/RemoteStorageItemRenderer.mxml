@@ -3,11 +3,11 @@
 				xmlns:s="library://ns.adobe.com/flex/spark" 
 				xmlns:mx="library://ns.adobe.com/flex/mx" 
 				autoDrawBackground="true"
-				click="onItemClick(event)"
-				creationComplete="{checkBox.selected=this.selected}">
+				click="onItemClick(event)">
 	
 	<fx:Script>
 		<![CDATA[
+			import mx.controls.Alert;
 			import mx.events.ItemClickEvent;
 			
 			import spark.events.IndexChangeEvent;
@@ -20,12 +20,11 @@
 					checkBox.selected = true;
 				else
 					checkBox.selected = false;
-				checkBox.label = data.coupledInventoryItem.label;
+				checkBox.label = data.remoteStorage.coupledInventoryItem.label;
 			}
 			
 			protected function onItemClick(event:MouseEvent):void
 			{
-				checkBox.selected = !checkBox.selected;
 				var e:ItemClickEvent = new ItemClickEvent(ItemClickEvent.ITEM_CLICK, true);
 				e.item = data;
 				if(this.checkBox.selected)
@@ -38,17 +37,26 @@
 				
 			}
 			
-			protected function onChangeHandler(event:Event):void
+			protected function onEditClick(event:MouseEvent):void
 			{
-				var e:IndexChangeEvent = new IndexChangeEvent(IndexChangeEvent.CHANGE, true);
-				e.newIndex = itemIndex;
-				e.oldIndex = -1;
-				dispatchEvent(e);
+				Alert.show("clicked");
 			}
+			
 		]]>
 	</fx:Script>
 	
+	<s:Group width="100%">
+		<s:layout>
+			<s:HorizontalLayout/>
+		</s:layout>
+		<s:CheckBox id="checkBox"/>	
+		<s:HGroup horizontalAlign="right">
+			<s:Button styleName="editButtonStyle"
+					  includeInLayout="{checkBox.selected}"
+					  visible="{checkBox.selected}"
+					  click="onEditClick(event)"/>
+		</s:HGroup>
+	</s:Group>
 	
-	<s:CheckBox id="checkBox" />
 	
 </s:ItemRenderer>

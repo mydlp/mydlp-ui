@@ -22,7 +22,7 @@ public class DocumentDatabase extends Argument {
 	protected List<DocumentDatabaseFileEntry> fileEntries;
 	protected List<DocumentDatabaseRDBMSEntry> rdbmsEntries;
 	protected RDBMSInformationTarget rdbmsInformationTarget;
-	protected List<RemoteStorage> remoteStorages;
+	protected List<CoupledRemoteStorage> coupledRemoteStorages;
 
 	@OneToMany(cascade={CascadeType.ALL})
 	public List<DocumentDatabaseFileEntry> getFileEntries() {
@@ -53,13 +53,14 @@ public class DocumentDatabase extends Argument {
 		this.rdbmsInformationTarget = rdbmsInformationTarget;
 	}
 	
-	@ManyToMany
-	public List<RemoteStorage> getRemoteStorages() {
-		return remoteStorages;
+	@ManyToMany(cascade={CascadeType.ALL})
+	public List<CoupledRemoteStorage> getCoupledRemoteStorages() {
+		return coupledRemoteStorages;
 	}
 
-	public void setRemoteStorages(List<RemoteStorage> remoteStorages) {
-		this.remoteStorages = remoteStorages;
+	public void setCoupledRemoteStorages(
+			List<CoupledRemoteStorage> coupledRemoteStorages) {
+		this.coupledRemoteStorages = coupledRemoteStorages;
 	}
-
+	
 }
