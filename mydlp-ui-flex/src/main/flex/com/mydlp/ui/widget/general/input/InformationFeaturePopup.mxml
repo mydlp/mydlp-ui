@@ -326,6 +326,7 @@
 			<input:MatcherDefinition data="france_insee" />
 			<input:MatcherDefinition data="uk_nino" />
 			<input:MatcherDefinition data="said" />
+			<input:MatcherDefinition data="taiwan_nid" />
 			<input:MatcherDefinition data="keyword" />
 			<input:MatcherDefinition data="regex" />
 			<input:MatcherDefinition data="scode" />
@@ -417,6 +418,7 @@
 		<s:State name="spain_dni" stateGroups="matcher,distance,threshold,noargument"/>
 		<s:State name="italy_fc" stateGroups="matcher,distance,threshold,noargument"/>
 		<s:State name="said" stateGroups="matcher,distance,threshold,noargument"/>
+		<s:State name="taiwan_nid" stateGroups="matcher,distance,threshold,noargument"/>
 		<s:State name="pan" stateGroups="matcher,distance,threshold,noargument"/>
 		<s:State name="tan" stateGroups="matcher,distance,threshold,noargument"/>
 		<s:State name="cpf" stateGroups="matcher,distance,threshold,noargument"/>
