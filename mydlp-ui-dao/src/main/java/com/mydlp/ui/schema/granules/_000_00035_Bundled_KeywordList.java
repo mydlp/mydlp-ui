@@ -164,5 +164,6 @@ public class _000_00035_Bundled_KeywordList extends AbstractGranule {
 		getHibernateTemplate().saveOrUpdate(bcg16);
 		getHibernateTemplate().saveOrUpdate(bcg17);
 		getHibernateTemplate().saveOrUpdate(bcg18);
+
 	}
 }
