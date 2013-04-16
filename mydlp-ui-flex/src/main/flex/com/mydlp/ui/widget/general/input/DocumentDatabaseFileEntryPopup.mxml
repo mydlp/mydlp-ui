@@ -146,6 +146,7 @@
 				enableButtons();
 			}
 			
+			
 		]]>
 	</fx:Script>
 	
@@ -160,6 +161,7 @@
 	<s:states>
 		<s:State name="default" />
 		<s:State name="uploaderapp" />
+		<s:State name="remotestorage" />
 	</s:states>
 	
 	
@@ -219,6 +221,7 @@
 			
 			
 		</s:VGroup>
+		
 	</s:VGroup>
 	
 </s:TitleWindow>

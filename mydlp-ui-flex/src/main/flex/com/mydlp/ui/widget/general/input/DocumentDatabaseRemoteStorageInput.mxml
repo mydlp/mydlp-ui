@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:SkinnableContainer xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			   xmlns:s="library://ns.adobe.com/flex/spark" 
+			   xmlns:mx="library://ns.adobe.com/flex/mx"
+			   xmlns:my="http://www.mydlp.com/flex/my"
+			   xmlns:input="com.mydlp.ui.widget.general.input.*"
+			   width="650" height="150"
+			   creationComplete="onCreationComplete()"
+			   >
+	
+	<fx:Script>
+		<![CDATA[
+			import com.mydlp.ui.domain.RemoteStorage;
+			import com.mydlp.ui.util.InteractionUtil;
+			
+			import mx.collections.ArrayCollection;
+			import mx.collections.ListCollectionView;
+			import mx.controls.Alert;
+			import mx.events.ItemClickEvent;
+			import mx.rpc.events.ResultEvent;
+			import mx.utils.ObjectUtil;
+			
+			[Bindable]
+			protected var allRemoteStorages:ListCollectionView = new ArrayCollection;
+			
+			protected function getRemoteStoragesHandler(event:ResultEvent):void
+			{
+				Alert.show(remoteStorages.length.toString());
+				remoteStorageList.invalidateDisplayList();
+				allRemoteStorages = event.result as ArrayCollection;
+				//Alert.show(allRemoteStorages.length.toString());
+				if(remoteStorages == null)
+					return;
+				for each(var r:RemoteStorage in remoteStorages)
+				{
+					for each(var ra:RemoteStorage in allRemoteStorages)
+					{
+						if(ObjectUtil.compare(r, ra) == 0)
+							remoteStorageList.selectedItems.push(ra);
+					}
+				}
+				remoteStorageList.validateNow();
+				remoteStorageList.visible = true;
+				remoteStorageList.includeInLayout = true;
+			}
+
+			protected function onCreationComplete():void
+			{
+				re.getRemoteStorages();
+				remoteStorageList.addEventListener(ItemClickEvent.ITEM_CLICK, onItemClickHandler);
+			}
+			
+			protected function onItemClickHandler(event:ItemClickEvent):void
+			{
+				if(remoteStorages == null)
+					remoteStorages = new ListCollectionView;
+				if(event.index == -1)
+					remoteStorages.removeItemAt(0);
+				else
+					remoteStorages.addItem(event.item as RemoteStorage);
+				//Alert.show("After: "+ remoteStorages.length.toString());
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<fx:Declarations>
+		<my:remote id="re" destination="remoteStorageBRS">
+			<my:method name="getRemoteStorages" result="getRemoteStoragesHandler(event)" />
+		</my:remote>
+		
+		<mx:ListCollectionView id="remoteStorages"/>
+	</fx:Declarations>
+	
+	<s:List id="remoteStorageList" dataProvider="{allRemoteStorages}" allowMultipleSelection="true" 
+			itemRenderer="com.mydlp.ui.widget.general.input.RemoteStorageItemRenderer"
+			includeInLayout="false"
+			visible="false" width="100%" height="100%"/>
+	
+</s:SkinnableContainer>

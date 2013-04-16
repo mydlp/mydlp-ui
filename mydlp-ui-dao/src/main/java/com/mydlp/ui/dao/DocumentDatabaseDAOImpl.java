@@ -33,6 +33,7 @@ public class DocumentDatabaseDAOImpl extends AbstractPolicyDAO implements Docume
 	@Override
 	@Transactional(readOnly=false)
 	public DocumentDatabase save(DocumentDatabase d) {
+		System.out.println("length" + d.getRemoteStorages().size());
 		if (d.getRdbmsInformationTarget() == null && 
 				d.getRdbmsEntries() != null &&
 				! d.getRdbmsEntries().isEmpty() ) {
