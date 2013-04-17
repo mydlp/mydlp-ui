@@ -32,7 +32,6 @@
 			
 			protected function getRemoteStoragesHandler(event:ResultEvent):void
 			{
-				Alert.show(coupledRemoteStorages.length.toString());
 				remoteStorageList.invalidateDisplayList();
 				var tempResult:ListCollectionView = event.result as ListCollectionView;
 				if(coupledRemoteStorages == null)
@@ -45,17 +44,21 @@
 					newCrs.excludeList = new ListCollectionView;
 					allRemoteStorages.addItem(newCrs);
 				}
+				var sArray:Vector.<int> = new Vector.<int>();
 				for each(var crs:CoupledRemoteStorage in coupledRemoteStorages)
 				{
-					for each(var ra:CoupledRemoteStorage in allRemoteStorages)
+					for(var i:int = 0; i < allRemoteStorages.length;i++)
 					{
+						var ra:CoupledRemoteStorage = allRemoteStorages[i] as CoupledRemoteStorage;
 						if(ObjectUtil.compare(crs.remoteStorage, ra.remoteStorage) == 0)
 						{
 							ra.excludeList = crs.excludeList;
-							remoteStorageList.selectedItems.push(ra);
+							sArray.push(i);
+							break;
 						}
 					}
 				}
+				remoteStorageList.selectedIndices = sArray;
 				remoteStorageList.validateNow();
 			}
 			
