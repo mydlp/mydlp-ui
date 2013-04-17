@@ -94,7 +94,6 @@
 			{
 				refreshObjects();
 			}
-			
 		]]>
 	</fx:Script>
 	<fx:Declarations>

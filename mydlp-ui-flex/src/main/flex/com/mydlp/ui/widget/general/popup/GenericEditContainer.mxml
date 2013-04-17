@@ -295,8 +295,8 @@
 						inputLabel.addElement(dfInput);
 						index = 8;
 						var emptyListValidator:EmptyListValidator = new EmptyListValidator();
-						emptyListValidator.source = dfInput;
-						emptyListValidator.property = "dataFormats";
+						emptyListValidator.source = dfInput.dfList;
+						emptyListValidator.property = "dataProvider";
 						ErrorTipManager.registerValidator(emptyListValidator);
 						//nullValidator.addEventListener(ValidationResultEvent.INVALID, invalidInput);
 						//nullValidator.addEventListener(ValidationResultEvent.VALID, validInput);
@@ -420,16 +420,16 @@
 						inputLabel = new VerticalInputLabel();
 						inputLabel.addElement(ifInput);
 						var numberValidator2:NumberValidator = new NumberValidator();
-						numberValidator2.source = ifInput;
-						numberValidator2.property = "distance";
+						numberValidator2.source = ifInput.distanceValueInput;
+						numberValidator2.property = "text";
 						numberValidator2.domain = "int";
 						numberValidator2.minValue = "32";
 						numberValidator2.maxValue = "5000";
 						ErrorTipManager.registerValidator(numberValidator2);
 						validators.push(numberValidator2);
 						var emptyListValidator2:EmptyListValidator = new EmptyListValidator();
-						emptyListValidator2.source = ifInput;
-						emptyListValidator2.property = "informationFeatures";
+						emptyListValidator2.source = ifInput.ifList;
+						emptyListValidator2.property = "dataProvider";
 						ErrorTipManager.registerValidator(emptyListValidator2);
 						//nullValidator.addEventListener(ValidationResultEvent.INVALID, invalidInput);
 						//nullValidator.addEventListener(ValidationResultEvent.VALID, validInput);
@@ -1025,11 +1025,15 @@
 			
 			protected function testConnectionButtonClickHandler(event:Event): void
 			{
-				miscButton.enabled = false;
-				if (formObject is RDBMSConnection) {
-					redb.testConnection(formObject as RDBMSConnection);
-				} else if (formObject is ADDomain) {
-					read.testConnection(formObject as ADDomain);
+				var validationErrorArray:Array = Validator.validateAll(validators);
+				if(validationErrorArray.length == 0)
+				{
+					miscButton.enabled = false;
+					if (formObject is RDBMSConnection) {
+						redb.testConnection(formObject as RDBMSConnection);
+					} else if (formObject is ADDomain) {
+						read.testConnection(formObject as ADDomain);
+					}
 				}
 			}
 			
