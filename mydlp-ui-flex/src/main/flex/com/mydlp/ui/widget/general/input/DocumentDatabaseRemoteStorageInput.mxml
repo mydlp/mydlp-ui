@@ -10,8 +10,8 @@
 	
 	<fx:Script>
 		<![CDATA[
-			import com.mydlp.ui.domain.CoupledRemoteStorage;
-			import com.mydlp.ui.domain.CoupledRemoteStorageBase;
+			import com.mydlp.ui.domain.DocumentDatabaseRemoteStorage;
+			import com.mydlp.ui.domain.DocumentDatabaseRemoteStorageBase;
 			import com.mydlp.ui.domain.RemoteStorage;
 			
 			import mx.collections.ArrayCollection;
@@ -34,22 +34,22 @@
 			{
 				remoteStorageList.invalidateDisplayList();
 				var tempResult:ListCollectionView = event.result as ListCollectionView;
-				if(coupledRemoteStorages == null)
+				if(documentDatabaseRemoteStorages == null)
 					return;
 				allRemoteStorages.removeAll();
 				for each(var rs:RemoteStorage in tempResult)
 				{
-					var newCrs:CoupledRemoteStorage = new CoupledRemoteStorage;
+					var newCrs:DocumentDatabaseRemoteStorage = new DocumentDatabaseRemoteStorage;
 					newCrs.remoteStorage = rs;
 					newCrs.excludeList = new ListCollectionView;
 					allRemoteStorages.addItem(newCrs);
 				}
 				var sArray:Vector.<int> = new Vector.<int>();
-				for each(var crs:CoupledRemoteStorage in coupledRemoteStorages)
+				for each(var crs:DocumentDatabaseRemoteStorage in documentDatabaseRemoteStorages)
 				{
 					for(var i:int = 0; i < allRemoteStorages.length;i++)
 					{
-						var ra:CoupledRemoteStorage = allRemoteStorages[i] as CoupledRemoteStorage;
+						var ra:DocumentDatabaseRemoteStorage = allRemoteStorages[i] as DocumentDatabaseRemoteStorage;
 						if(ObjectUtil.compare(crs.remoteStorage, ra.remoteStorage) == 0)
 						{
 							ra.excludeList = crs.excludeList;
@@ -64,17 +64,17 @@
 			
 			protected function onItemClickHandler(event:ItemClickEvent):void
 			{
-				if(coupledRemoteStorages == null)
-					coupledRemoteStorages = new ListCollectionView;
+				if(documentDatabaseRemoteStorages == null)
+					documentDatabaseRemoteStorages = new ListCollectionView;
 				
 				if(event.index == -1)
 				{
-					for(var i:int=0; i < coupledRemoteStorages.length; i++)
+					for(var i:int=0; i < documentDatabaseRemoteStorages.length; i++)
 					{
-						var crs:CoupledRemoteStorage = coupledRemoteStorages[i];
+						var crs:DocumentDatabaseRemoteStorage = documentDatabaseRemoteStorages[i];
 						if(ObjectUtil.compare(crs.remoteStorage, event.item.remoteStorage) == 0)
 						{
-							coupledRemoteStorages.removeItemAt(i);
+							documentDatabaseRemoteStorages.removeItemAt(i);
 							break;
 						}
 					}
@@ -82,7 +82,7 @@
 				else
 				{
 					var flag:Boolean = false;
-					for each(var item:CoupledRemoteStorage in coupledRemoteStorages)
+					for each(var item:DocumentDatabaseRemoteStorage in documentDatabaseRemoteStorages)
 					{
 						if(ObjectUtil.compare(item.remoteStorage, event.item.remoteStorage) == 0)
 						{
@@ -91,7 +91,7 @@
 						}
 					}
 					if(!flag)
-						coupledRemoteStorages.addItem(event.item);
+						documentDatabaseRemoteStorages.addItem(event.item);
 				}
 			}
 			
@@ -103,7 +103,7 @@
 			<my:method name="getRemoteStorages" result="getRemoteStoragesHandler(event)" />
 		</my:remote>
 		
-		<mx:ListCollectionView id="coupledRemoteStorages"/>
+		<mx:ListCollectionView id="documentDatabaseRemoteStorages"/>
 	</fx:Declarations>
 	
 	<s:List id="remoteStorageList" dataProvider="{allRemoteStorages}" allowMultipleSelection="true" 

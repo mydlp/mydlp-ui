@@ -32,7 +32,6 @@
          <value>com.mydlp.ui.domain.AuthUser</value>
          <value>com.mydlp.ui.domain.BundledKeywordGroup</value>
          <value>com.mydlp.ui.domain.Config</value>
-         <value>com.mydlp.ui.domain.CoupledRemoteStorage</value>
          <value>com.mydlp.ui.domain.CustomAction</value>
          <value>com.mydlp.ui.domain.CustomActionDescription</value>
          <value>com.mydlp.ui.domain.CustomActionDescriptionSeclore</value>
@@ -44,6 +43,7 @@
          <value>com.mydlp.ui.domain.DocumentDatabase</value>
          <value>com.mydlp.ui.domain.DocumentDatabaseFileEntry</value>
          <value>com.mydlp.ui.domain.DocumentDatabaseRDBMSEntry</value>
+         <value>com.mydlp.ui.domain.DocumentDatabaseRemoteStorage</value>
          <value>com.mydlp.ui.domain.DocumentFingerprint</value>
          <value>com.mydlp.ui.domain.Domain</value>
          <value>com.mydlp.ui.domain.EmailNotificationItem</value>

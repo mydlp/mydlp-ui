@@ -305,14 +305,14 @@
 					}
 					
 					else if(targetObject is DocumentDatabase &&
-							classMember.name == "coupledRemoteStorages" &&
+							classMember.name == "documentDatabaseRemoteStorages" &&
 							classMember.type == ListCollectionView)
 					{
 						if(targetObject["id"] == null || isNaN(targetObject["id"]))
 							continue;
 						var ddRemoteStorages:DocumentDatabaseRemoteStorageInput = new DocumentDatabaseRemoteStorageInput();
-						ddRemoteStorages.coupledRemoteStorages = targetObject[classMember.name];
-						BindingUtils.bindProperty(targetObject, classMember.name, ddRemoteStorages, "coupledRemoteStorages");
+						ddRemoteStorages.documentDatabaseRemoteStorages = targetObject[classMember.name];
+						BindingUtils.bindProperty(targetObject, classMember.name, ddRemoteStorages, "documentDatabaseRemoteStorages");
 						inputLabel = new VerticalInputLabel();
 						inputLabel.addElement(ddRemoteStorages);
 						index = 10;
