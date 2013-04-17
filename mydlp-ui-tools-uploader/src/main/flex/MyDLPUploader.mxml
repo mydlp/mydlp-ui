@@ -2,7 +2,7 @@
 <s:WindowedApplication xmlns:fx="http://ns.adobe.com/mxml/2009" 
 					   xmlns:s="library://ns.adobe.com/flex/spark" 
 					   xmlns:mx="library://ns.adobe.com/flex/mx"
-					   width="500" height="400">
+					   width="500" height="400" xmlns:uploader="com.mydlp.ui.tools.uploader.*">
 	<fx:Script>
 		<![CDATA[
 			import com.mydlp.ui.tools.uploader.UploadStatus;
@@ -137,12 +137,16 @@
 			
 			protected function addToStatuses(uploadStatus:UploadStatus): void
 			{
-				if (uploadStatuses.length == 10)
-				{
-					uploadStatuses.removeItemAt(0);
-				}
-				uploadStatuses = new ArrayCollection(uploadStatuses.toArray());
-				uploadStatuses.addItem(uploadStatus);
+				//if (uploadStatuses.length == 10)
+				//{
+				//	uploadStatuses.removeItemAt(0);
+				//}
+				//var newUploadStatuses:ListCollectionView = new ArrayCollection(uploadStatuses.toArray());
+				//newUploadStatuses.addItem(uploadStatus);
+				//uploadStatuses = newUploadStatuses;
+				uploadStatuses.addItemAt(uploadStatus,0);
+				fileViewList.invalidateList();
+				//uploadStatus
 			}
 			
 			protected function setFile(uploadStatus:UploadStatus, f:File): UploadStatus
@@ -199,6 +203,27 @@
 				return true;
 			}
 			
+			protected function onCopyToClipboardClick(event:MouseEvent):void
+			{
+				var clipboardText:String = "";
+				for each (var us:UploadStatus in uploadStatuses)
+				{
+					if (us.viewState == "failed")
+					{
+						clipboardText += us.name + " : Failed! (" + us.serverReason + ")\r\n";
+					}
+					else if (us.viewState == "skipped")
+					{
+						clipboardText += us.name + " : Skipped (" + us.serverReason + ")\r\n";
+					}
+					else if (us.viewState == "skipped")
+					{
+						clipboardText += us.name + " : Finished (" + us.bytesTotal + " bytes are uploaded)\r\n";
+					}
+				}
+				System.setClipboard(clipboardText);
+			}
+			
 		]]>
 	</fx:Script>
 	<fx:Declarations>
@@ -233,7 +258,6 @@
 					 ' Failed: ' + itemsFailed
 					 }"
 					 text.done="{'Done...' + 
-					 ' Remaining: ' + itemsRemaining +
 					 ' Uploaded: ' + itemsUploaded +
 					 ' Skipped: ' + itemsSkipped +
 					 ' Failed: ' + itemsFailed
@@ -258,10 +282,14 @@
 					  label.done="Close"
 					  click.done="{close()}"
 					  />
+			
+			<s:Button includeIn="done"
+					  label="Copy to Clipboard"
+					  click="onCopyToClipboardClick(event)" />
 		</s:HGroup>  
 		
 		<!-- borderVisible="false" -->
-		<s:List id="fileViewList" 
+		<uploader:FileViewList id="fileViewList" 
 				width="100%" height="100%"
 				visible="true" 
 				dataProvider.selected="{fileList}"
@@ -270,6 +298,8 @@
 				itemRenderer.uploading="com.mydlp.ui.tools.uploader.UploadStatusRenderer"
 				dataProvider.done="{uploadStatuses}"
 				itemRenderer.done="com.mydlp.ui.tools.uploader.UploadStatusRenderer"
+				horizontalScrollPolicy="off"
+				verticalScrollPolicy="on"
 				/>
 		
 	</s:VGroup>

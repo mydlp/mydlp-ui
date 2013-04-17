@@ -16,6 +16,10 @@
 		]]>
 	</fx:Script>
 	
+	<fx:Declarations>
+		<fx:String id="labelVerticalAlign">middle</fx:String>
+	</fx:Declarations>
+	
 	<s:Group width="100%" height="100%">
 		<s:layout>
 			<s:HorizontalLayout verticalAlign="middle" gap="3" />
@@ -23,7 +27,7 @@
 		
 		<s:Group width="{labelWidth}" height="100%">
 			<s:layout>
-				<s:HorizontalLayout verticalAlign="middle" horizontalAlign="left" />
+				<s:HorizontalLayout verticalAlign="{labelVerticalAlign}" horizontalAlign="left" />
 			</s:layout>
 			<s:Label width="{labelWidth > 20 ? labelWidth - 10 : labelWidth}" text="{label}" fontWeight="bold"/>
 		</s:Group>

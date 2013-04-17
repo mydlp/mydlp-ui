@@ -190,15 +190,31 @@
 				installPolicyFunc();
 			}
 			
+			protected function sanityCheck(): String
+			{
+				if (FlexGlobals.topLevelApplication.hasRole(AuthSecurityRole.ROLE_CLASSIFIER)) // no need for classifiers
+				{
+					return "ok"
+				}
+				
+				var sanityReturn:String = "ok";
+				sanityReturn = FlexGlobals.topLevelApplication.ruleContainer.sanityCheck(); // for policy
+				
+				if (sanityReturn != "ok")
+				{
+					return sanityReturn;
+				}
+				
+				sanityReturn = FlexGlobals.topLevelApplication.ruleContainerDiscovery.sanityCheck(); // for discovery
+				return sanityReturn;
+			}
+			
 			protected function installPolicyFunc(): void
 			{
 				compileInProgress = true;
 				installPopup = InteractionUtil.newPopup(InstallPolicyPopup) as InstallPolicyPopup;
-				var sanityReturn:String
-				if(FlexGlobals.topLevelApplication.hasRole(AuthSecurityRole.ROLE_CLASSIFIER))
-					sanityReturn = "ok";
-				else
-					sanityReturn = FlexGlobals.topLevelApplication.ruleContainer.sanityCheck();
+				var sanityReturn:String = sanityCheck();
+				
 				if (sanityReturn == "ok")
 				{
 					pe.compilePolicy(1);

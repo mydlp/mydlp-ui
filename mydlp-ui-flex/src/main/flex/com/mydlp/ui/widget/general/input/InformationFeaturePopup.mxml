@@ -282,6 +282,13 @@
 				}
 			}
 			
+			protected function isEditingOriginalMatcher(): Boolean
+			{
+				if (isEdit == null || !isEdit) return false;
+				if (informationFeatureObject == null || informationFeatureObject.matcher == null) return false;
+				return informationFeatureObject.matcher.functionName == matcherCombobox.selectedItem.data;
+			}
+			
 			protected function refreshButtonState(): void
 			{
 				if (informationFeatureObject != null && informationFeatureInput.isExclusive())
@@ -291,7 +298,10 @@
 				else 
 				{
 					var arg:* = getNPArgument();
-					var ret:String = informationFeatureInput.validateAddFor(matcherCombobox.selectedItem.data, isEdit, arg);
+					var ret:String = informationFeatureInput.validateAddFor(
+												matcherCombobox.selectedItem.data, 
+												isEditingOriginalMatcher(), 
+												arg);
 					if (ret == "ok")
 					{
 						saveButton.enabled = true;

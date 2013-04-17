@@ -5,7 +5,7 @@
 				xmlns:general="com.mydlp.ui.widget.general.*"
 				xmlns:my="http://www.mydlp.com/flex/my" 
 				xmlns:popup="com.mydlp.ui.widget.general.popup.*"
-				width="300"
+				width="400"
 				>
 	
 	<fx:Script>
@@ -27,6 +27,7 @@
 			import mx.collections.ArrayCollection;
 			import mx.collections.ListCollectionView;
 			import mx.controls.Label;
+			import mx.controls.Text;
 			import mx.core.FlexGlobals;
 
 			protected var formItemOrder:ListCollectionView = new ArrayCollection();
@@ -177,10 +178,11 @@
 						}
 					}
 					
-					var inputLabel:InputLabel = new HorizontalInputLabel(); 
-					
-					var valueLabel:Label = new Label();
-					valueLabel.maxWidth = 150;
+					var inputLabel:HorizontalInputLabel = new HorizontalInputLabel(); 
+					inputLabel.labelVerticalAlign = "top";
+					inputLabel.percentWidth=100;
+					var valueLabel:Text = new Text();
+					valueLabel.percentWidth=100;
 					valueLabel.text = valueString;
 					inputLabel.addElement(valueLabel);
 					inputLabel.label = LangUtil.getString("messages", "generic.edit." + getObjectName(targetObject) + "." + classMember.name + ".label");

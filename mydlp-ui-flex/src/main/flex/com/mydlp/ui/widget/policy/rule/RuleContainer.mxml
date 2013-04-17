@@ -337,6 +337,11 @@
 				var retStr:String = "ok";
 				ruleLoop: for each (var r:Rule in ruleDP)
 				{
+					if (!r.enabled)
+					{
+						continue ruleLoop;
+					}
+						
 					var hasSource:Boolean = false;
 					var hasIType:Boolean = false;
 					var hasDestination:Boolean = false;

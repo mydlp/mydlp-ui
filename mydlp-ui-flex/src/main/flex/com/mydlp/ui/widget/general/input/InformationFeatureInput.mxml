@@ -6,7 +6,7 @@
 					  xmlns:domain="com.mydlp.ui.domain.*"
 					  xmlns:input="com.mydlp.ui.widget.general.input.*"
 					  xmlns:popup="com.mydlp.ui.widget.general.popup.*"
-					  width="{InputLabel.VERTICAL_INPUT_WIDTH}" height="150"
+					  width="{InputLabel.VERTICAL_INPUT_WIDTH}" height="220"
 					  creationComplete="{refreshDisplay()}" 
 					  xmlns:util="com.mydlp.ui.util.*">
 	
@@ -90,15 +90,16 @@
 			
 			protected function isDuplicateIft(ift:InformationFeature, matcherName:String, arg:* = null): Boolean
 			{
-				if(arg == null) return false;
 				if (ift.matcher.functionName == matcherName)
 				{
 					if (matcherName == "keyword" || matcherName == "regex") 
 					{
-						return (ift.matcher.matcherArguments.getItemAt(0).coupledArgument as RegularExpression).regex == arg
+						if (arg == null) return false;
+						return (ift.matcher.matcherArguments.getItemAt(0).coupledArgument as RegularExpression).regex == arg;
 					}
 					else if (matcherName == "document_hash" || matcherName == "document_pdm" || matcherName == "keyword_group" )
 					{
+						if (arg == null) return false;
 						return (ift.matcher.matcherArguments.getItemAt(0).coupledArgument as NonCascadingArgument).argument.uid == arg.uid;
 					}
 					
@@ -107,7 +108,7 @@
 				return false;
 			}
 			
-			public function validateAddFor(matcherName:String, isEdit:Boolean = false, arg:* = null): String
+			public function validateAddFor(matcherName:String, isEditingOriginal:Boolean = false, arg:* = null): String
 			{
 				if (isExclusive())
 				{
@@ -129,7 +130,7 @@
 				{
 					for each (var i:InformationFeature in informationFeatures)
 					{
-						if (!isEdit && isDuplicateIft(i, matcherName, arg))
+						if (!isEditingOriginal && isDuplicateIft(i, matcherName, arg))
 						{
 							return "error.duplicateExists";
 						}
@@ -203,7 +204,20 @@
 			{
 				addButton.enabled=(! isExclusive());
 				setDistanceInputEnabled();
+				setIfAndNoteGroupEnabled();
 				ifList.invalidateList();
+			}
+			
+			protected function setIfAndNoteGroupEnabled(): void
+			{
+				ifAndNoteGroup.visible = isIfAndNoteGroupEnabled();
+			}
+			
+			protected function isIfAndNoteGroupEnabled(): Boolean
+			{
+				if (informationFeatures == null || informationFeatures.length < 2)
+					return false;
+				return true;
 			}
 			
 			protected function setDistanceInputEnabled(): void
@@ -271,8 +285,17 @@
 		<s:layout>
 			<s:HorizontalLayout gap="2" verticalAlign="middle"/>
 		</s:layout>
-		<util:MyList id="ifList" width="87%" height="100%" dataProvider="{informationFeatures}"
-				itemRenderer="com.mydlp.ui.widget.general.input.InformationFeatureRenderer"/>
+		<s:VGroup width="87%" height="100%">
+			<util:MyList id="ifList" width="100%" height="100%" dataProvider="{informationFeatures}"
+						 itemRenderer="com.mydlp.ui.widget.general.input.InformationFeatureRenderer"/>
+			<s:HGroup id="ifAndNoteGroup" width="100%" height="12" visible="false" gap="2">
+				<s:Label fontSize="10" fontWeight="bold" 
+						 text="@Resource(bundle = 'messages', key = 'generic.edit.InformationDescription.informationFeatureList.andNote.title')"/>
+				<s:Label fontSize="10" 
+						 text="@Resource(bundle = 'messages', key = 'generic.edit.InformationDescription.informationFeatureList.andNote.message')"/>
+			</s:HGroup>
+		</s:VGroup>
+		
 		
 		<s:Group width="13%" height="100%">
 			<s:layout>
