@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.mydlp.ui.dao.RemoteStorageDAO;
 import com.mydlp.ui.domain.RemoteStorage;
+import com.mydlp.ui.thrift.MyDLPUIThriftService;
 
 @Service("remoteStorageBRS")
 @RemotingDestination
@@ -16,10 +17,19 @@ public class RemoteStorageBRSImpl implements RemoteStorageService
 	
 	@Autowired
 	protected RemoteStorageDAO remoteStorageDAO;
+	
+	@Autowired
+	protected MyDLPUIThriftService thriftService;
 
 	@Override
 	public List<RemoteStorage> getRemoteStorages() {
 		return remoteStorageDAO.getRemoteStorages();
+	}
+
+	@Override
+	public List<String> getRemoteStorageDir(int id) {
+		
+		return thriftService.getRemoteStorageDir(id);
 	}
 	
 

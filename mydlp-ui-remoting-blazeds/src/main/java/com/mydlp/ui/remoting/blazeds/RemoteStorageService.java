@@ -11,5 +11,7 @@ import com.mydlp.ui.domain.RemoteStorage;
 public interface RemoteStorageService {
 	
 	public List<RemoteStorage> getRemoteStorages();
+	
+	public List<String> getRemoteStorageDir(int id);
 
 }

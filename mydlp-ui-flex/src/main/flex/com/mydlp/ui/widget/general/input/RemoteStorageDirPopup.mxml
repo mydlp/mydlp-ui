@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:TitleWindow xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			   xmlns:s="library://ns.adobe.com/flex/spark" 
+			   xmlns:mx="library://ns.adobe.com/flex/mx"
+			   xmlns:my="http://www.mydlp.com/flex/my"
+			   xmlns:input="com.mydlp.ui.widget.general.input.*"
+			   close="{close()}" width="475"
+			   creationComplete="onCreationComplete(event)"
+			   title="@Resource(bundle = 'messages', key = 'remoteStorage.dir.popup.title.label')" xmlns:util="com.mydlp.ui.util.*" xmlns:validators="com.mydlp.ui.validators.*"
+			   >
+	
+	<fx:Script>
+		<![CDATA[
+			import com.mydlp.ui.util.InteractionUtil;
+			
+			import mx.events.FlexEvent;
+			import mx.events.ItemClickEvent;
+			import mx.rpc.events.ResultEvent;
+			
+			import spark.events.IndexChangeEvent;
+			
+			[Bindable]
+			protected var excludeListDirDP:ListCollectionView = new ListCollectionView;
+			
+			protected function close(): void
+			{
+				InteractionUtil.closePopup(this);
+			}
+			
+			
+			protected function onCreationComplete(event:FlexEvent):void
+			{
+				re.getRemoteStorageDir();
+				excludeListList..addEventListener(ItemClickEvent.ITEM_CLICK, onItemClickHandler);
+			}
+			
+			protected function getRemoteStorageDirHandler(event:ResultEvent):void
+			{
+				var sArray:Vector.<int> = new Vector.<int>();
+				excludeListList.invalidateDisplayList();
+				excludeListDirDP = event.result as ListCollectionView;
+				for (var i:int = 0; i < excludeListDirDP.length; i ++)
+				{
+					if(!excludeList.contains(excludeListDirDP[i]))
+						sArray.push(i);
+				}
+				excludeListList.selectedIndices = sArray;
+				excludeListList.validateNow();
+			}
+			
+			protected function onItemClickHandler(event:ItemClickEvent):void
+			{
+				if(event.index == -1)
+				{
+					var flag:Boolean = false;
+					for(var i:int = 0; i < excludeList.length; i++)
+					{
+						if(excludeList[i] == event.item)
+						{
+							flag = true;
+							break;
+						}
+						if(!flag)
+							excludeList.addItem(event.item);
+					}
+				}
+				else
+				{
+					for(var j:int=0; j < excludeList.length; j++)
+					{
+						if(excludeList[j] == event.item)
+						{
+							excludeList.removeItemAt(i);
+							break;
+						}
+					}
+				}
+			}
+			
+		]]>
+	</fx:Script>
+			
+	<fx:Declarations>
+		<mx:ListCollectionView id="excludeList"/>
+		
+		<my:remote id="re" destination="remoteStorageBRS">
+			<my:method name="getRemoteStorageDir" result="getRemoteStorageDirHandler(event)" />
+		</my:remote>
+	</fx:Declarations>
+	
+	<s:List id="excludeListList" dataProvider="{excludeList}"
+			allowMultipleSelection="true" 
+			itemRenderer="com.mydlp.ui.widget.general.input.RemoteStorageDirListItemRenderer"/>
+</s:TitleWindow>

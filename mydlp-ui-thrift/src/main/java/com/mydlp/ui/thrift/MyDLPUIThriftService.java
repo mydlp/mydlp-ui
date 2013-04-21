@@ -1,6 +1,7 @@
 package com.mydlp.ui.thrift;
 
 import java.nio.ByteBuffer;
+import java.util.List;
 import java.util.Map;
 
 public interface MyDLPUIThriftService {
@@ -35,5 +36,7 @@ public interface MyDLPUIThriftService {
     public void stopDiscoveryOnDemand(int ruleId);
     
     public void pauseDiscoveryOnDemand(int ruleId);
+    
+    public List<String> getRemoteStorageDir(int id);
 
 }

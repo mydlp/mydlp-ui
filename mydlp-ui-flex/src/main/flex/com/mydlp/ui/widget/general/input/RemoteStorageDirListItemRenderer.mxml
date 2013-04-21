@@ -40,27 +40,9 @@
 				
 			}
 			
-			protected function onEditClick(event:MouseEvent):void
-			{
-				var rsdp:RemoteStorageDirPopup = InteractionUtil.newPopup(RemoteStorageDirPopup) as RemoteStorageDirPopup;
-				rsdp.excludeList = data.excludeList;
-			}
-			
 		]]>
 	</fx:Script>
 	
-	<s:Group width="100%">
-		<s:layout>
-			<s:HorizontalLayout/>
-		</s:layout>
 		<s:CheckBox id="checkBox"/>	
-		<s:HGroup horizontalAlign="right">
-			<s:Button styleName="editButtonStyle"
-					  includeInLayout="{checkBox.selected}"
-					  visible="{checkBox.selected}"
-					  click="onEditClick(event)"/>
-		</s:HGroup>
-	</s:Group>
-	
 	
 </s:ItemRenderer>

@@ -1,6 +1,7 @@
 package com.mydlp.ui.thrift;
 
 import java.nio.ByteBuffer;
+import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
@@ -263,6 +264,16 @@ public class MyDLPUIThriftServiceImpl implements MyDLPUIThriftService {
 			public Void execute(MyDLPUIThriftConnection thriftConnection) throws TException {
 				thriftConnection.client.pauseDiscoveryOnDemand(ruleId);
 				return null;
+			}
+		});
+	}
+
+	@Override
+	public List<String> getRemoteStorageDir(final int id) {
+		return call(new ThriftCall<List<String>>() {
+			@Override
+			public List<String> execute(MyDLPUIThriftConnection thriftConnection) throws TException {
+				return thriftConnection.client.getRemoteStorageDir(id);
 			}
 		});
 	}
