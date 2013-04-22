@@ -30,7 +30,6 @@
 			
 			public function populate(id:Number):void
 			{
-				//Alert.show(id.toString());
 				re.getRemoteStorageDir(id);
 				excludeListList..addEventListener(ItemClickEvent.ITEM_CLICK, onItemClickHandler);
 			}
