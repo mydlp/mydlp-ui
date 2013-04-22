@@ -41,7 +41,6 @@
 				excludeListDirDP = event.result as ListCollectionView;
 				if(excludeListDirDP == null )
 					return;
-				label.text = "size: " +excludeListDirDP.length.toString();
 				for (var i:int = 0; i < excludeListDirDP.length; i++)
 				{
 					if(excludeList != null && !excludeList.contains(excludeListDirDP[i]))
@@ -82,7 +81,7 @@
 			
 		]]>
 	</fx:Script>
-			
+	
 	<fx:Declarations>
 		<mx:ListCollectionView id="excludeList"/>
 		
@@ -91,13 +90,8 @@
 		</my:remote>
 	</fx:Declarations>
 	
-	<s:Group>
-		<s:layout>
-			<s:VerticalLayout gap="5"/>
-		</s:layout>
-		<s:Label id="label"/>
-		<s:List id="excludeListList" dataProvider="{excludeListDirDP}"
-				allowMultipleSelection="true" 
-				itemRenderer="com.mydlp.ui.widget.general.input.RemoteStorageDirListItemRenderer"/>
-	</s:Group>
+	<s:List id="excludeListList" dataProvider="{excludeListDirDP}"
+			allowMultipleSelection="true" 
+			itemRenderer="com.mydlp.ui.widget.general.input.RemoteStorageDirListItemRenderer"/>
+	
 </s:TitleWindow>

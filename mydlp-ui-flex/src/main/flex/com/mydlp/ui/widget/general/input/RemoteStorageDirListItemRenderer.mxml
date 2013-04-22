@@ -23,7 +23,7 @@
 					checkBox.selected = true;
 				else
 					checkBox.selected = false;
-				checkBox.label = data.remoteStorage.coupledInventoryItem.label;
+				checkBox.label = data;
 			}
 			
 			protected function onItemClick(event:MouseEvent):void
