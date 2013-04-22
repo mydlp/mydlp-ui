@@ -31,7 +31,7 @@
 			public function populate(id:Number):void
 			{
 				re.getRemoteStorageDir(id);
-				excludeListList..addEventListener(ItemClickEvent.ITEM_CLICK, onItemClickHandler);
+				excludeListList.addEventListener(ItemClickEvent.ITEM_CLICK, onItemClickHandler);
 			}
 			
 			protected function getRemoteStorageDirHandler(event:ResultEvent):void
@@ -41,9 +41,10 @@
 				excludeListDirDP = event.result as ListCollectionView;
 				if(excludeListDirDP == null )
 					return;
+				label.text = "size: " +excludeListDirDP.length.toString();
 				for (var i:int = 0; i < excludeListDirDP.length; i++)
 				{
-					if(!excludeList.contains(excludeListDirDP[i]))
+					if(excludeList != null && !excludeList.contains(excludeListDirDP[i]))
 						sArray.push(i);
 				}
 				excludeListList.selectedIndices = sArray;
@@ -90,7 +91,13 @@
 		</my:remote>
 	</fx:Declarations>
 	
-	<s:List id="excludeListList" dataProvider="{excludeListDirDP}"
-			allowMultipleSelection="true" 
-			itemRenderer="com.mydlp.ui.widget.general.input.RemoteStorageDirListItemRenderer"/>
+	<s:Group>
+		<s:layout>
+			<s:VerticalLayout gap="5"/>
+		</s:layout>
+		<s:Label id="label"/>
+		<s:List id="excludeListList" dataProvider="{excludeListDirDP}"
+				allowMultipleSelection="true" 
+				itemRenderer="com.mydlp.ui.widget.general.input.RemoteStorageDirListItemRenderer"/>
+	</s:Group>
 </s:TitleWindow>
