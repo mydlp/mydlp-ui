@@ -28,6 +28,7 @@ public class EndpointStatus extends AbstractEntity {
 	protected String version;
 	protected String osName;
 	protected String computerName;
+	protected String hostname;
 	protected Boolean discoverInProg;
 	
 	@Index(name="endpointAliasIndex")
@@ -95,4 +96,11 @@ public class EndpointStatus extends AbstractEntity {
 	public void setDiscoverInProg(Boolean discoverInProg) {
 		this.discoverInProg = discoverInProg;
 	}
+	public String getHostname() {
+		return hostname;
+	}
+	public void setHostname(String hostname) {
+		this.hostname = hostname;
+	}
+	
 }

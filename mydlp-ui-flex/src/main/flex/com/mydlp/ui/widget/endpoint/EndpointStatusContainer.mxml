@@ -224,6 +224,8 @@
 								  dataField="endpointAlias" itemRendererFunction="endpointStatusItemRendererFunction"/>
 					<s:GridColumn headerText="@Resource(bundle = 'messages', key = 'endpoints.header.ipAddress')"
 								  dataField="ipAddress" itemRendererFunction="endpointStatusItemRendererFunction"/>
+					<s:GridColumn headerText="@Resource(bundle = 'messages', key = 'endpoints.header.hostname')"
+								  dataField="hostname" itemRendererFunction="endpointStatusItemRendererFunction"/>
 					<s:GridColumn headerText="@Resource(bundle = 'messages', key = 'endpoints.header.username')"
 								  dataField="username" itemRendererFunction="endpointStatusItemRendererFunction"/>
 					<s:GridColumn headerText="@Resource(bundle = 'messages', key = 'endpoints.header.agentVersion')"

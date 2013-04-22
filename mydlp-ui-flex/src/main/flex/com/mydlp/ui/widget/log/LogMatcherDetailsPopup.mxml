@@ -94,6 +94,7 @@
 			<input:MatcherDefinition data="tan_match"/>
 			<input:MatcherDefinition data="cpf_match"/>
 			<input:MatcherDefinition data="china_icn_match"/>
+			<input:MatcherDefinition data="chinese_name_match"/>
 			<input:MatcherDefinition data="cc_edate_match"/>
 			<input:MatcherDefinition data="birthdate_match"/>
 			<input:MatcherDefinition data="gdate_match"/>
