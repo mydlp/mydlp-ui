@@ -90,7 +90,7 @@
 		</my:remote>
 	</fx:Declarations>
 	
-	<s:List id="excludeListList" dataProvider="{excludeList}"
+	<s:List id="excludeListList" dataProvider="{excludeListDirDP}"
 			allowMultipleSelection="true" 
 			itemRenderer="com.mydlp.ui.widget.general.input.RemoteStorageDirListItemRenderer"/>
 </s:TitleWindow>
