@@ -23,7 +23,7 @@
 					checkBox.selected = true;
 				else
 					checkBox.selected = false;
-				checkBox.label = data;
+				checkBox.label = data.toString();
 			}
 			
 			protected function onItemClick(event:MouseEvent):void
