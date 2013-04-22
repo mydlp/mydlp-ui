@@ -97,10 +97,10 @@
 							  paddingTop="5" paddingBottom="5"/>
 		</s:layout>
 		
-		<s:List id="excludeListList" dataProvider="{excludeListDirDP}"
+		<s:List width="100%" id="excludeListList" dataProvider="{excludeListDirDP}"
 				allowMultipleSelection="true" 
 				itemRenderer="com.mydlp.ui.widget.general.input.RemoteStorageDirListItemRenderer"/>
-		<s:Group>
+		<s:Group width="100%">
 			<s:layout>
 				<s:HorizontalLayout gap="5" horizontalAlign="center"/>
 			</s:layout>
