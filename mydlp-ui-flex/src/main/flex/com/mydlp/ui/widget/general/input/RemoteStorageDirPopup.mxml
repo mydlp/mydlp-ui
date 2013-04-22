@@ -4,8 +4,7 @@
 			   xmlns:mx="library://ns.adobe.com/flex/mx"
 			   xmlns:my="http://www.mydlp.com/flex/my"
 			   xmlns:input="com.mydlp.ui.widget.general.input.*"
-			   close="{close()}" width="475"
-			   creationComplete="onCreationComplete(event)"
+			   close="{close()}" width="250"
 			   title="@Resource(bundle = 'messages', key = 'remoteStorage.dir.popup.title.label')" xmlns:util="com.mydlp.ui.util.*" xmlns:validators="com.mydlp.ui.validators.*"
 			   >
 	
@@ -13,6 +12,7 @@
 		<![CDATA[
 			import com.mydlp.ui.util.InteractionUtil;
 			
+			import mx.controls.Alert;
 			import mx.events.FlexEvent;
 			import mx.events.ItemClickEvent;
 			import mx.rpc.events.ResultEvent;
@@ -28,9 +28,10 @@
 			}
 			
 			
-			protected function onCreationComplete(event:FlexEvent):void
+			public function populate(id:Number):void
 			{
-				re.getRemoteStorageDir();
+				//Alert.show(id.toString());
+				re.getRemoteStorageDir(id);
 				excludeListList..addEventListener(ItemClickEvent.ITEM_CLICK, onItemClickHandler);
 			}
 			
@@ -39,7 +40,9 @@
 				var sArray:Vector.<int> = new Vector.<int>();
 				excludeListList.invalidateDisplayList();
 				excludeListDirDP = event.result as ListCollectionView;
-				for (var i:int = 0; i < excludeListDirDP.length; i ++)
+				if(excludeListDirDP == null )
+					return;
+				for (var i:int = 0; i < excludeListDirDP.length; i++)
 				{
 					if(!excludeList.contains(excludeListDirDP[i]))
 						sArray.push(i);

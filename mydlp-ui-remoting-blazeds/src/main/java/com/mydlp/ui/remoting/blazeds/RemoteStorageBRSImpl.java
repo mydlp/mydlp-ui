@@ -28,7 +28,6 @@ public class RemoteStorageBRSImpl implements RemoteStorageService
 
 	@Override
 	public List<String> getRemoteStorageDir(int id) {
-		
 		return thriftService.getRemoteStorageDir(id);
 	}
 	

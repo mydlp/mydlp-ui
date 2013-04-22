@@ -7,13 +7,9 @@
 	
 	<fx:Script>
 		<![CDATA[
-			import com.mydlp.ui.domain.RemoteStorage;
 			import com.mydlp.ui.util.InteractionUtil;
 			
-			import mx.controls.Alert;
 			import mx.events.ItemClickEvent;
-			
-			import spark.events.IndexChangeEvent;
 			
 			public override function set data(value:Object):void
 			{
@@ -44,6 +40,7 @@
 			{
 				var rsdp:RemoteStorageDirPopup = InteractionUtil.newPopup(RemoteStorageDirPopup) as RemoteStorageDirPopup;
 				rsdp.excludeList = data.excludeList;
+				rsdp.populate(data.remoteStorage.id);
 			}
 			
 		]]>
