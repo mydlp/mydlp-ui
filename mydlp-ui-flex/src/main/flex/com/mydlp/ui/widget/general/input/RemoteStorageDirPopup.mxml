@@ -52,6 +52,8 @@
 			
 			protected function onItemClickHandler(event:ItemClickEvent):void
 			{
+				if(excludeList == null)
+					excludeList = new ListCollectionView;
 				if(event.index == -1)
 				{
 					var flag:Boolean = false;
@@ -89,9 +91,21 @@
 			<my:method name="getRemoteStorageDir" result="getRemoteStorageDirHandler(event)" />
 		</my:remote>
 	</fx:Declarations>
-	
-	<s:List id="excludeListList" dataProvider="{excludeListDirDP}"
-			allowMultipleSelection="true" 
-			itemRenderer="com.mydlp.ui.widget.general.input.RemoteStorageDirListItemRenderer"/>
+	<s:Group>
+		<s:layout >
+			<s:VerticalLayout gap="10" paddingLeft="5" paddingRight="5"
+							  paddingTop="5" paddingBottom="5"/>
+		</s:layout>
+		
+		<s:List id="excludeListList" dataProvider="{excludeListDirDP}"
+				allowMultipleSelection="true" 
+				itemRenderer="com.mydlp.ui.widget.general.input.RemoteStorageDirListItemRenderer"/>
+		<s:Group>
+			<s:layout>
+				<s:HorizontalLayout gap="5" horizontalAlign="center"/>
+			</s:layout>
+			<s:Button id="okButton" click="close()" label="@Resource(bundle = 'messages', key = 'remoteStorage.dir.popup.title.okButton.label')"/>
+		</s:Group>
+	</s:Group>
 	
 </s:TitleWindow>

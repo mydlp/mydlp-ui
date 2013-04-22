@@ -23,7 +23,7 @@
 					checkBox.selected = true;
 				else
 					checkBox.selected = false;
-				checkBox.label = data.toString();
+				checkBox.label = data as String;
 			}
 			
 			protected function onItemClick(event:MouseEvent):void
@@ -43,6 +43,6 @@
 		]]>
 	</fx:Script>
 	
-		<s:CheckBox id="checkBox"/>	
+	<s:CheckBox id="checkBox"/>	
 	
 </s:ItemRenderer>
