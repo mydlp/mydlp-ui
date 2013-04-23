@@ -137,37 +137,28 @@
 		<s:State name="selected" />
 	</s:states>
 	
-	<s:Group>
-		
+	
+	<s:VGroup width="100%"
+			  paddingBottom="4" paddingTop="4" paddingLeft="4" paddingRight="4">
+		<s:Label id="lblData" text="{getPolicyText(data)}"/>
+	</s:VGroup>
+	
+	<s:Group includeIn="selected"
+			 top="0" bottom="0" right="2" width="16" >
 		<s:layout>
-			<s:HorizontalLayout gap="5" paddingBottom="4" paddingTop="4" paddingLeft="4" paddingRight="4"/>
+			<s:VerticalLayout verticalAlign="middle" horizontalAlign="left" gap="4"/>
 		</s:layout>
+		<s:Button  id="gotoRuleButton" skinClass="com.mydlp.ui.skin.GotoButton16Skin"
+				   toolTip="@Resource(bundle = 'messages', key = 'log.gotoRule.tooltip')"
+				   includeInLayout="{isGotoVisible(data)}"
+				   visible="{isGotoVisible(data)}"
+				   click="goToRuleButtonClickHandler(event)" />
 		
-		<s:Group width="100%">
-			
-			<s:layout>
-				<s:VerticalLayout />
-			</s:layout>
-			
-			<s:Label id="lblData" text="{getPolicyText(data)}"/>
-		</s:Group>
-		
-		<s:Group height="100%" width="16">
-			<s:layout>
-				<s:VerticalLayout verticalAlign="middle" horizontalAlign="left"/>
-			</s:layout>
-			
-			<s:Button  id="gotoRuleButton" skinClass="com.mydlp.ui.skin.GotoButton16Skin"
-					  toolTip="@Resource(bundle = 'messages', key = 'log.gotoRule.tooltip')"
-					  includeInLayout="{isGotoVisible(data)}"
-					  click="goToRuleButtonClickHandler(event)" />
-			
-			<s:Button id="requeueButton" skinClass="com.mydlp.ui.skin.RequeueBitmapButton16Skin"
-					  toolTip="@Resource(bundle = 'messages', key = 'log.requeue.tooltip')"
-					  includeInLayout="{isRequeueVisible(data)}"
-					  click="requeueButtonClickHandler(event)" />
-		</s:Group>
-		
+		<s:Button id="requeueButton" skinClass="com.mydlp.ui.skin.RequeueBitmapButton16Skin"
+				  toolTip="@Resource(bundle = 'messages', key = 'log.requeue.tooltip')"
+				  includeInLayout="{isRequeueVisible(data)}"
+				  visible="{isRequeueVisible(data)}"
+				  click="requeueButtonClickHandler(event)" />
 	</s:Group>
 	
 </s:GridItemRenderer>

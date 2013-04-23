@@ -93,28 +93,20 @@
 		<s:State name="selected" />
 	</s:states>
 	
-	<s:layout>
-		<s:HorizontalLayout gap="5" paddingBottom="4" paddingTop="4" paddingLeft="4" paddingRight="4"/>
-	</s:layout>
-	
-	<s:Group width="100%">
-		<s:layout>
-			<s:VerticalLayout />
-		</s:layout>
-		
+	<s:VGroup width="100%"
+			  paddingBottom="4" paddingTop="4" paddingLeft="4" paddingRight="4">
 		<s:Label id="lblData" text="{getPolicyText(data)}"/>
-	</s:Group>
+	</s:VGroup>
 	
-	<s:Group height="100%" width="16">
+	<s:Group includeIn="selected"
+			 top="0" bottom="0" right="2" width="16" >
 		<s:layout>
 			<s:VerticalLayout verticalAlign="middle" horizontalAlign="left"/>
 		</s:layout>
-		<s:HGroup includeIn="selected">
-			<s:Button id="matchingDetailButton" 
-					  click="detailButtonClickHandler(event)" 
-					  skinClass="com.mydlp.ui.skin.GenerateReportBitmapButton16Skin"
-					  toolTip="@Resource(bundle = 'messages', key = 'log.matchingDetails.tooltip')"/>
-		</s:HGroup>
+		<s:Button id="matchingDetailButton" 
+				  click="detailButtonClickHandler(event)" 
+				  skinClass="com.mydlp.ui.skin.GenerateReportBitmapButton16Skin"
+				  toolTip="@Resource(bundle = 'messages', key = 'log.matchingDetails.tooltip')"/>
 	</s:Group>
 	
 </s:GridItemRenderer>
