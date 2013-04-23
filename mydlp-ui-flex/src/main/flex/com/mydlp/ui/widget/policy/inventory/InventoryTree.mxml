@@ -30,7 +30,7 @@
 			import mx.rpc.events.ResultEvent;
 			
 			
-			protected function isDiscoveyItem(item:*):Boolean
+			protected function isDiscoveryItem(item:*):Boolean
 			{
 				/*if(item is InventoryCategory && item.name != null)
 					return true;
@@ -73,16 +73,18 @@
 			
 			protected function traverse(list:ArrayCollection):Boolean
 			{
-				var retVal:Boolean = false;
 				for(var i:int = 0; i < list.length; i++)
 				{
 					if(list[i] is InventoryCategory)
-						retVal =  traverse(list[i].children)
+					{
+						if (traverse(list[i].children))
+							return true;
+					}
 					else if(list[i] is InventoryItem)
 					{
 						if(isDiscoveryTab)
 						{
-							if(isDiscoveyItem(list[i]))
+							if(isDiscoveryItem(list[i]))
 								return true;
 						}
 						else
@@ -92,14 +94,14 @@
 						}	
 					}
 				}
-				return retVal;
+				return false;
 			}
 			
 			protected function populateTree():void
 			{
 				var dd:FilterDataDescriptor;
 				if(isDiscoveryTab)
-					dd = new FilterDataDescriptor(isDiscoveyItem);
+					dd = new FilterDataDescriptor(isDiscoveryItem);
 				else
 					dd = new FilterDataDescriptor(isPolicyItem);
 				myInventoryTree.dataDescriptor = dd;

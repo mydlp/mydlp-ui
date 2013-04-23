@@ -7,16 +7,15 @@ public class _001_00240_Bundled_KeywordList_2 extends AbstractGranule {
 
 	@Override
 	protected void callback() {
-		
-		BundledKeywordGroup bcg = new BundledKeywordGroup();
-		bcg.setFilename("chinese_names.txt");
-		bcg.setNameKey("chinese.names.keywordList");
-		bcg.setDescriptionKey("ChineseNames");
+		BundledKeywordGroup bcg0 = new BundledKeywordGroup();
+		bcg0.setFilename("chinese_lastnames.txt");
+		bcg0.setNameKey("chinese.lastnames.keywordList");
+		bcg0.setDescriptionKey("ChineseSurnames");
 		
 		BundledKeywordGroup bcg1 = new BundledKeywordGroup();
-		bcg1.setFilename("chinese_surnames.txt");
-		bcg1.setNameKey("chinese.surnames.keywordList");
-		bcg1.setDescriptionKey("ChineseSurnames");
+		bcg1.setFilename("taiwanese_lastnames.txt");
+		bcg1.setNameKey("taiwanese.lastnames.keywordList");
+		bcg1.setDescriptionKey("TaiwaneseSurnames");
 		
 		BundledKeywordGroup bcg2 = new BundledKeywordGroup();
 		bcg2.setFilename("cities_china.txt");
@@ -28,10 +27,33 @@ public class _001_00240_Bundled_KeywordList_2 extends AbstractGranule {
 		bcg3.setNameKey("cities.taiwan.keywordList");
 		bcg3.setDescriptionKey("CitiesTaiwan");
 		
-		getHibernateTemplate().saveOrUpdate(bcg);
+		BundledKeywordGroup bcg4 = new BundledKeywordGroup();
+		bcg4.setFilename("cities_hongkong.txt");
+		bcg4.setNameKey("cities.hongkong.keywordList");
+		bcg4.setDescriptionKey("CitiesHongkong");
+		
+		BundledKeywordGroup bcg5 = new BundledKeywordGroup();
+		bcg5.setFilename("regions_china.txt");
+		bcg5.setNameKey("regions.china.keywordList");
+		bcg5.setDescriptionKey("RegionsChina");
+		
+		BundledKeywordGroup bcg6 = new BundledKeywordGroup();
+		bcg6.setFilename("regions_taiwan.txt");
+		bcg6.setNameKey("regions.taiwan.keywordList");
+		bcg6.setDescriptionKey("RegionsTaiwan");
+		
+		BundledKeywordGroup bcg7 = new BundledKeywordGroup();
+		bcg7.setFilename("regions_hongkong.txt");
+		bcg7.setNameKey("regions.hongkong.keywordList");
+		bcg7.setDescriptionKey("RegionsHongkong");
+		
+		getHibernateTemplate().saveOrUpdate(bcg0);
 		getHibernateTemplate().saveOrUpdate(bcg1);
 		getHibernateTemplate().saveOrUpdate(bcg2);
 		getHibernateTemplate().saveOrUpdate(bcg3);
-		
+		getHibernateTemplate().saveOrUpdate(bcg4);
+		getHibernateTemplate().saveOrUpdate(bcg5);
+		getHibernateTemplate().saveOrUpdate(bcg6);
+		getHibernateTemplate().saveOrUpdate(bcg7);
 	}
 }

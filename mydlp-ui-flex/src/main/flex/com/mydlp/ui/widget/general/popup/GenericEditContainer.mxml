@@ -403,7 +403,7 @@
 						{
 							targetObject["distance"] = 100;
 						}
-						else if (targetObject["distance"] < 32)
+						else if (targetObject["distance"] <= 0)
 						{
 							targetObject["distance"] = 100;
 							targetObject["distanceEnabled"] = false;
@@ -423,7 +423,7 @@
 						numberValidator2.source = ifInput.distanceValueInput;
 						numberValidator2.property = "text";
 						numberValidator2.domain = "int";
-						numberValidator2.minValue = "32";
+						numberValidator2.minValue = "8";
 						numberValidator2.maxValue = "5000";
 						ErrorTipManager.registerValidator(numberValidator2);
 						validators.push(numberValidator2);

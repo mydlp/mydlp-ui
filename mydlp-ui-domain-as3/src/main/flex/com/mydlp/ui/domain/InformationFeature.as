@@ -20,6 +20,8 @@ package com.mydlp.ui.domain {
 			if (this.matcher == null || this.matcher.functionName == null )
 				return "";
 			
+			var retVal:String = ""; 
+			
 			var generatedNameKey:String = new String("matchers.");
 			
 			generatedNameKey += this.matcher.functionName + ".label";
@@ -27,10 +29,22 @@ package com.mydlp.ui.domain {
 			var resourceVal:String = ResourceManager.getInstance().getString("messages", generatedNameKey);
 			if (resourceVal == null || resourceVal.length == 0)
 				return "Custom" + " - " + this.threshold.toString();
-			else if(this.matcher.functionName == "keyword")
-				return resourceVal + " - " + removeEscapeCharacter(this.matcher.matcherArguments.getItemAt(0).coupledArgument.regex) + " - " + this.threshold.toString();
-			else 
-				return resourceVal + " - " + this.threshold.toString();
+			
+			retVal += resourceVal;
+			
+			if(this.matcher.functionName == "keyword")
+			{
+				retVal += " - " + removeEscapeCharacter(this.matcher.matcherArguments.getItemAt(0).coupledArgument.regex);
+			}
+			else if(this.matcher.functionName == "keyword_group" ||
+					this.matcher.functionName == "document_hash" || 
+					this.matcher.functionName == "document_pdm" )
+			{
+				retVal += " - " + this.matcher.matcherArguments.getItemAt(0).coupledArgument.argument.label;
+			}
+			
+			retVal += " - " + this.threshold.toString();
+			return retVal;
 		}
 		
 		public static function removeEscapeCharacter(string:String):String
