@@ -12,12 +12,8 @@
 		<![CDATA[
 			import com.mydlp.ui.util.InteractionUtil;
 			
-			import mx.controls.Alert;
-			import mx.events.FlexEvent;
 			import mx.events.ItemClickEvent;
 			import mx.rpc.events.ResultEvent;
-			
-			import spark.events.IndexChangeEvent;
 			
 			[Bindable]
 			protected var excludeListDirDP:ListCollectionView = new ListCollectionView;
@@ -94,7 +90,7 @@
 					{
 						if(excludeList[j] == event.item)
 						{
-							excludeList.removeItemAt(i);
+							excludeList.removeItemAt(j);
 							break;
 						}
 					}

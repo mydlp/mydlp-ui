@@ -41,7 +41,7 @@
 				{
 					var newCrs:DocumentDatabaseRemoteStorage = new DocumentDatabaseRemoteStorage;
 					newCrs.remoteStorage = rs;
-					newCrs.excludeList = new ListCollectionView;
+					newCrs.excludeList = new ArrayCollection;
 					allRemoteStorages.addItem(newCrs);
 				}
 				var sArray:Vector.<int> = new Vector.<int>();
