@@ -37,6 +37,13 @@ public class _001_00270_PII_Taiwan extends AbstractGranule {
 		List<DataFormat> list2 = getHibernateTemplate().findByCriteria(criteria2);
 		DataFormat df = DAOUtil.getSingleResult(list2);
 		
+		DetachedCriteria criteria0 = 
+				DetachedCriteria.forClass(BundledKeywordGroup.class)
+					.add(Restrictions.eq("nameKey", "chinese.addressTerms.keywordList"));
+		@SuppressWarnings("unchecked")
+		List<BundledKeywordGroup> list0 = getHibernateTemplate().findByCriteria(criteria0);
+		BundledKeywordGroup keywordGroupChineseAddressTerms = DAOUtil.getSingleResult(list0);
+		
 		DetachedCriteria criteria3 = 
 				DetachedCriteria.forClass(BundledKeywordGroup.class)
 					.add(Restrictions.eq("nameKey", "taiwanese.lastnames.keywordList"));
@@ -177,6 +184,25 @@ public class _001_00270_PII_Taiwan extends AbstractGranule {
 			informationFeatureCR.setMatcher(matcherKGTaiwaneseRegions);
 			matcherKGTaiwaneseRegions.setCoupledInformationFeature(informationFeatureCR);
 			
+			Matcher matcherKGChineseAddressTerms = new Matcher();
+			matcherKGChineseAddressTerms.setFunctionName("keyword_group");
+			
+			NonCascadingArgument nonCascadingArgumentChineseAddressTerms = new NonCascadingArgument(); 	
+			{
+				MatcherArgument matcherArgument = new MatcherArgument();
+				nonCascadingArgumentChineseAddressTerms.setArgument(keywordGroupChineseAddressTerms);
+				matcherArgument.setCoupledMatcher(matcherKGChineseAddressTerms);
+				matcherArgument.setCoupledArgument(nonCascadingArgumentChineseAddressTerms);
+				List<MatcherArgument> matcherArguments = new ArrayList<MatcherArgument>();
+				matcherArguments.add(matcherArgument);
+				matcherKGChineseAddressTerms.setMatcherArguments(matcherArguments);
+			}
+			
+			InformationFeature informationFeatureCAT = new InformationFeature();
+			informationFeatureCAT.setThreshold(new Long(1));
+			informationFeatureCAT.setMatcher(matcherKGChineseAddressTerms);
+			matcherKGChineseAddressTerms.setCoupledInformationFeature(informationFeatureCAT);
+			
 			InformationDescription informationDescription = new InformationDescription();
 			List<InformationFeature> ifts = new ArrayList<InformationFeature>();
 			informationDescription.setDistanceEnabled(true);
@@ -185,6 +211,7 @@ public class _001_00270_PII_Taiwan extends AbstractGranule {
 			ifts.add(informationFeatureCLN);
 			ifts.add(informationFeatureCC);
 			ifts.add(informationFeatureCR);
+			ifts.add(informationFeatureCAT);
 			informationDescription.setFeatures(ifts);
 			
 			InformationType informationType = new InformationType();
