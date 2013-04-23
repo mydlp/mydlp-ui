@@ -5,7 +5,8 @@
 		  xmlns:mx="library://ns.adobe.com/flex/mx" 
 		  xmlns:domain="com.mydlp.ui.domain.*" 
 		  xmlns:input="com.mydlp.ui.widget.general.input.*" 
-		  width="{InputLabel.VERTICAL_INPUT_WIDTH}" height="50">
+		  width="{InputLabel.VERTICAL_INPUT_WIDTH}" 
+		  creationComplete="onCreationComplete(event)">
 	
 	<fx:Script>
 		<![CDATA[
@@ -15,6 +16,7 @@
 			import com.mydlp.ui.widget.general.popup.InputLabel;
 			
 			import mx.collections.ListCollectionView;
+			import mx.events.FlexEvent;
 
 			[Bindable]
 			public var informationTarget:RDBMSInformationTarget = null;
@@ -26,9 +28,16 @@
 				label.text = getText(informationTarget);
 			}
 			
-			protected function getText(i:RDBMSInformationTarget): String 
+			protected function isNull(i:RDBMSInformationTarget) : Boolean
 			{
 				if (i == null || i.rdbmsConnection == null || i.tableName == null || i.columnName == null)
+					return true;
+				return false;
+			}
+			
+			protected function getText(i:RDBMSInformationTarget): String 
+			{
+				if (isNull(i))
 					return LangUtil.getString("messages","rdbmsInformationTarget.input.null.message");
 				else
 				{
@@ -61,13 +70,32 @@
 				informationTarget = null;
 			}
 			
+			protected function onCreationComplete(event:FlexEvent):void
+			{
+				if (isNull(informationTarget))
+				{
+					enableViewCheckbox.selected = false;
+				}
+				else
+				{
+					enableViewCheckbox.selected = true;
+				}
+			}
+			
 		]]>
 	</fx:Script>
 	
 	<fx:Declarations>
 	</fx:Declarations>
-
-	<s:HGroup verticalAlign="middle">
+	<s:layout>
+		<s:VerticalLayout gap="4" paddingBottom="8"/>
+	</s:layout>
+	
+	<s:CheckBox id="enableViewCheckbox" width="100%" selected="false" 
+				label="@Resource(bundle = 'messages', key = 'documentdatabase.rdbmsinformationtarget.enabled.checkbox.label')" />
+	
+	<s:HGroup verticalAlign="middle" 
+			  includeInLayout="{enableViewCheckbox.selected}" visible="{enableViewCheckbox.selected}">
 		<s:Label id="label" text="{getText(informationTarget)}" width="240"/>
 		<s:Spacer width="10" />
 		<s:Button label="@Resource(bundle = 'messages', key = 'rdbmsInformationTarget.input.configureButton.label')"

@@ -4,7 +4,7 @@
 			   xmlns:mx="library://ns.adobe.com/flex/mx"
 			   xmlns:my="http://www.mydlp.com/flex/my"
 			   xmlns:input="com.mydlp.ui.widget.general.input.*"
-			   width="300" height="150"
+			   width="{InputLabel.VERTICAL_INPUT_WIDTH}"
 			   creationComplete="onCreationComplete()"
 			   >
 	
@@ -13,6 +13,7 @@
 			import com.mydlp.ui.domain.DocumentDatabaseRemoteStorage;
 			import com.mydlp.ui.domain.DocumentDatabaseRemoteStorageBase;
 			import com.mydlp.ui.domain.RemoteStorage;
+			import com.mydlp.ui.widget.general.popup.InputLabel;
 			
 			import mx.collections.ArrayCollection;
 			import mx.collections.ListCollectionView;
@@ -22,50 +23,71 @@
 			import mx.utils.ObjectUtil;
 			
 			[Bindable]
-			protected var allRemoteStorages:ListCollectionView = new ArrayCollection;
+			protected var allRemoteStorages:ListCollectionView = new ArrayCollection();
+			
+			[Bindable]
+			protected var enableList:Boolean = true;
 
 			protected function onCreationComplete():void
 			{
 				re.getRemoteStorages();
 				remoteStorageList.addEventListener(ItemClickEvent.ITEM_CLICK, onItemClickHandler);
+				if (documentDatabaseRemoteStorages == null || documentDatabaseRemoteStorages.length == 0)
+				{
+					enableViewCheckbox.selected = false;
+				}
+				else
+				{
+					enableViewCheckbox.selected = true;
+				}
 			}
 			
 			protected function getRemoteStoragesHandler(event:ResultEvent):void
 			{
 				remoteStorageList.invalidateDisplayList();
-				var tempResult:ListCollectionView = event.result as ListCollectionView;
-				if(documentDatabaseRemoteStorages == null)
-					return;
 				allRemoteStorages.removeAll();
-				for each(var rs:RemoteStorage in tempResult)
+				
+				for each(var rs:RemoteStorage in (event.result as ListCollectionView))
 				{
 					var newCrs:DocumentDatabaseRemoteStorage = new DocumentDatabaseRemoteStorage;
 					newCrs.remoteStorage = rs;
 					newCrs.excludeList = new ArrayCollection;
 					allRemoteStorages.addItem(newCrs);
 				}
-				var sArray:Vector.<int> = new Vector.<int>();
-				for each(var crs:DocumentDatabaseRemoteStorage in documentDatabaseRemoteStorages)
+				
+				if (allRemoteStorages.length == 0)
 				{
-					for(var i:int = 0; i < allRemoteStorages.length;i++)
+					enableList = false;
+				}
+				else
+				{
+					var sArray:Vector.<int> = new Vector.<int>();
+					if (documentDatabaseRemoteStorages != null)
 					{
-						var ra:DocumentDatabaseRemoteStorage = allRemoteStorages[i] as DocumentDatabaseRemoteStorage;
-						if(ObjectUtil.compare(crs.remoteStorage, ra.remoteStorage) == 0)
+						for each(var crs:DocumentDatabaseRemoteStorage in documentDatabaseRemoteStorages)
 						{
-							ra.excludeList = crs.excludeList;
-							sArray.push(i);
-							break;
+							for(var i:int = 0; i < allRemoteStorages.length;i++)
+							{
+								var ra:DocumentDatabaseRemoteStorage = allRemoteStorages[i] as DocumentDatabaseRemoteStorage;
+								if(ObjectUtil.compare(crs.remoteStorage, ra.remoteStorage) == 0)
+								{
+									ra.excludeList = crs.excludeList;
+									sArray.push(i);
+									break;
+								}
+							}
 						}
 					}
+					enableList = true;
+					remoteStorageList.selectedIndices = sArray;
 				}
-				remoteStorageList.selectedIndices = sArray;
 				remoteStorageList.validateNow();
 			}
 			
 			protected function onItemClickHandler(event:ItemClickEvent):void
 			{
 				if(documentDatabaseRemoteStorages == null)
-					documentDatabaseRemoteStorages = new ListCollectionView;
+					documentDatabaseRemoteStorages = new ArrayCollection();;
 				
 				if(event.index == -1)
 				{
@@ -108,8 +130,24 @@
 		<mx:ListCollectionView id="documentDatabaseRemoteStorages"/>
 	</fx:Declarations>
 	
-	<s:List id="remoteStorageList" dataProvider="{allRemoteStorages}" allowMultipleSelection="true" 
+	<s:layout>
+		<s:VerticalLayout gap="4" paddingBottom="8"/>
+	</s:layout>
+	
+	<s:CheckBox id="enableViewCheckbox" width="100%" selected="false"
+				label="@Resource(bundle = 'messages', key = 'documentdatabase.remotestorage.enabled.checkbox.label')" />
+	
+	<s:Label id="noremotestorageMessage" width="100%" height="150" 
+			 includeInLayout="{(!enableList) &amp;&amp; enableViewCheckbox.selected}" 
+			 visible="{(!enableList) &amp;&amp; enableViewCheckbox.selected}"
+			 verticalAlign="middle" textAlign="center"
+			 text="@Resource(bundle = 'messages', key = 'documentdatabase.noremotestorage.message')"/>
+	
+	<s:List id="remoteStorageList" 
+			includeInLayout="{enableList &amp;&amp; enableViewCheckbox.selected}" 
+			visible="{enableList &amp;&amp; enableViewCheckbox.selected}"
+			dataProvider="{allRemoteStorages}" allowMultipleSelection="true" 
 			itemRenderer="com.mydlp.ui.widget.general.input.RemoteStorageItemRenderer"
-			width="100%" height="100%"/>
+			width="100%" height="150"/>
 	
 </s:SkinnableContainer>
