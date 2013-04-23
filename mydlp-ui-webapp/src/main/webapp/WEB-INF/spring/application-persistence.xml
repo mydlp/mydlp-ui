@@ -43,6 +43,7 @@
          <value>com.mydlp.ui.domain.DocumentDatabase</value>
          <value>com.mydlp.ui.domain.DocumentDatabaseFileEntry</value>
          <value>com.mydlp.ui.domain.DocumentDatabaseRDBMSEntry</value>
+         <value>com.mydlp.ui.domain.DocumentDatabaseRemoteStorage</value>
          <value>com.mydlp.ui.domain.DocumentFingerprint</value>
          <value>com.mydlp.ui.domain.Domain</value>
          <value>com.mydlp.ui.domain.EmailNotificationItem</value>

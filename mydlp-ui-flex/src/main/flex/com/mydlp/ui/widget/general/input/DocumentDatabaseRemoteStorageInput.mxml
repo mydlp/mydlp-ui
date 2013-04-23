@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:SkinnableContainer xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			   xmlns:s="library://ns.adobe.com/flex/spark" 
+			   xmlns:mx="library://ns.adobe.com/flex/mx"
+			   xmlns:my="http://www.mydlp.com/flex/my"
+			   xmlns:input="com.mydlp.ui.widget.general.input.*"
+			   width="300" height="150"
+			   creationComplete="onCreationComplete()"
+			   >
+	
+	<fx:Script>
+		<![CDATA[
+			import com.mydlp.ui.domain.DocumentDatabaseRemoteStorage;
+			import com.mydlp.ui.domain.DocumentDatabaseRemoteStorageBase;
+			import com.mydlp.ui.domain.RemoteStorage;
+			
+			import mx.collections.ArrayCollection;
+			import mx.collections.ListCollectionView;
+			import mx.controls.Alert;
+			import mx.events.ItemClickEvent;
+			import mx.rpc.events.ResultEvent;
+			import mx.utils.ObjectUtil;
+			
+			[Bindable]
+			protected var allRemoteStorages:ListCollectionView = new ArrayCollection;
+
+			protected function onCreationComplete():void
+			{
+				re.getRemoteStorages();
+				remoteStorageList.addEventListener(ItemClickEvent.ITEM_CLICK, onItemClickHandler);
+			}
+			
+			protected function getRemoteStoragesHandler(event:ResultEvent):void
+			{
+				remoteStorageList.invalidateDisplayList();
+				var tempResult:ListCollectionView = event.result as ListCollectionView;
+				if(documentDatabaseRemoteStorages == null)
+					return;
+				allRemoteStorages.removeAll();
+				for each(var rs:RemoteStorage in tempResult)
+				{
+					var newCrs:DocumentDatabaseRemoteStorage = new DocumentDatabaseRemoteStorage;
+					newCrs.remoteStorage = rs;
+					newCrs.excludeList = new ListCollectionView;
+					allRemoteStorages.addItem(newCrs);
+				}
+				var sArray:Vector.<int> = new Vector.<int>();
+				for each(var crs:DocumentDatabaseRemoteStorage in documentDatabaseRemoteStorages)
+				{
+					for(var i:int = 0; i < allRemoteStorages.length;i++)
+					{
+						var ra:DocumentDatabaseRemoteStorage = allRemoteStorages[i] as DocumentDatabaseRemoteStorage;
+						if(ObjectUtil.compare(crs.remoteStorage, ra.remoteStorage) == 0)
+						{
+							ra.excludeList = crs.excludeList;
+							sArray.push(i);
+							break;
+						}
+					}
+				}
+				remoteStorageList.selectedIndices = sArray;
+				remoteStorageList.validateNow();
+			}
+			
+			protected function onItemClickHandler(event:ItemClickEvent):void
+			{
+				if(documentDatabaseRemoteStorages == null)
+					documentDatabaseRemoteStorages = new ListCollectionView;
+				
+				if(event.index == -1)
+				{
+					for(var i:int=0; i < documentDatabaseRemoteStorages.length; i++)
+					{
+						var crs:DocumentDatabaseRemoteStorage = documentDatabaseRemoteStorages[i];
+						if(ObjectUtil.compare(crs.remoteStorage, event.item.remoteStorage) == 0)
+						{
+							documentDatabaseRemoteStorages.removeItemAt(i);
+							break;
+						}
+					}
+				}
+				else
+				{
+					var flag:Boolean = false;
+					for each(var item:DocumentDatabaseRemoteStorage in documentDatabaseRemoteStorages)
+					{
+						if(ObjectUtil.compare(item.remoteStorage, event.item.remoteStorage) == 0)
+						{
+							flag = true;
+							break;
+						}
+					}
+					if(!flag)
+					{
+						documentDatabaseRemoteStorages.addItem(event.item);
+					}
+				}
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<fx:Declarations>
+		<my:remote id="re" destination="remoteStorageBRS">
+			<my:method name="getRemoteStorages" result="getRemoteStoragesHandler(event)" />
+		</my:remote>
+		
+		<mx:ListCollectionView id="documentDatabaseRemoteStorages"/>
+	</fx:Declarations>
+	
+	<s:List id="remoteStorageList" dataProvider="{allRemoteStorages}" allowMultipleSelection="true" 
+			itemRenderer="com.mydlp.ui.widget.general.input.RemoteStorageItemRenderer"
+			width="100%" height="100%"/>
+	
+</s:SkinnableContainer>

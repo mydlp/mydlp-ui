@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:TitleWindow xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			   xmlns:s="library://ns.adobe.com/flex/spark" 
+			   xmlns:mx="library://ns.adobe.com/flex/mx"
+			   xmlns:my="http://www.mydlp.com/flex/my"
+			   xmlns:input="com.mydlp.ui.widget.general.input.*"
+			   close="{close()}" width="250"
+			   title="@Resource(bundle = 'messages', key = 'remoteStorage.dir.popup.title.label')" xmlns:util="com.mydlp.ui.util.*" xmlns:validators="com.mydlp.ui.validators.*"
+			   >
+	
+	<fx:Script>
+		<![CDATA[
+			import com.mydlp.ui.util.InteractionUtil;
+			
+			import mx.controls.Alert;
+			import mx.events.FlexEvent;
+			import mx.events.ItemClickEvent;
+			import mx.rpc.events.ResultEvent;
+			
+			import spark.events.IndexChangeEvent;
+			
+			[Bindable]
+			protected var excludeListDirDP:ListCollectionView = new ListCollectionView;
+			
+			protected function close(): void
+			{
+				InteractionUtil.closePopup(this);
+			}
+			
+			
+			public function populate(id:Number):void
+			{
+				re.getRemoteStorageDir(id);
+				excludeListList.addEventListener(ItemClickEvent.ITEM_CLICK, onItemClickHandler);
+			}
+			
+			protected function getRemoteStorageDirHandler(event:ResultEvent):void
+			{
+				var sArray:Vector.<int> = new Vector.<int>();
+				excludeListList.invalidateDisplayList();
+				waitLabel.includeInLayout = false;
+				waitLabel.visible = false;
+				excludeListDirDP = event.result as ListCollectionView;
+				if(excludeListDirDP == null || excludeListDirDP.length == 0)
+				{
+					excludeListList.includeInLayout = false;
+					excludeListList.visible = false;
+					noneLabel.includeInLayout = true;
+					noneLabel.visible = true;
+					return;
+				}
+				else
+				{
+					excludeListList.includeInLayout = true;
+					excludeListList.visible = true;
+					noneLabel.includeInLayout = false;
+					noneLabel.visible = false;
+				}
+				for (var i:int = 0; i < excludeListDirDP.length; i++)
+				{
+					var s:String = excludeListDirDP[i] as String;
+					if(excludeList == null)
+						sArray.push(i);
+					else if(excludeList.length == 0)
+						sArray.push(i);
+					else if(!(excludeList.contains(s)))
+						sArray.push(i);
+				}
+				excludeListList.selectedIndices = sArray;
+				excludeListList.validateNow();
+			}
+			
+			protected function onItemClickHandler(event:ItemClickEvent):void
+			{
+				if(excludeList == null)
+					excludeList = new ListCollectionView;
+				if(event.index == -1)
+				{
+					var flag:Boolean = false;
+					for(var i:int = 0; i < excludeList.length; i++)
+					{
+						if(excludeList[i] == event.item as String)
+						{
+							flag = true;
+							break;
+						}
+					}
+					if(!flag)
+						excludeList.addItem(event.item);
+				}
+				else
+				{
+					for(var j:int=0; j < excludeList.length; j++)
+					{
+						if(excludeList[j] == event.item)
+						{
+							excludeList.removeItemAt(i);
+							break;
+						}
+					}
+				}
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<fx:Declarations>
+		<mx:ListCollectionView id="excludeList"/>
+		
+		<my:remote id="re" destination="remoteStorageBRS">
+			<my:method name="getRemoteStorageDir" result="getRemoteStorageDirHandler(event)" />
+		</my:remote>
+	</fx:Declarations>
+	<s:Group>
+		<s:layout >
+			<s:VerticalLayout gap="10" paddingLeft="5" paddingRight="5"
+							  paddingTop="5" paddingBottom="5"/>
+		</s:layout>
+		
+		<s:List width="100%" id="excludeListList" dataProvider="{excludeListDirDP}"
+				allowMultipleSelection="true" 
+				itemRenderer="com.mydlp.ui.widget.general.input.RemoteStorageDirListItemRenderer"
+				includeInLayout="false" visible="false"/>
+		<s:Label id="noneLabel" text="@Resource(bundle = 'messages', key = 'remoteStorage.dir.popup.none.label')"
+				 includeInLayout="false" visible="false"/>
+		<s:Label id="waitLabel" text="@Resource(bundle = 'messages', key = 'remoteStorage.dir.popup.wait.label')"
+				 includeInLayout="true" visible="true"/>
+		<s:Group width="100%">
+			<s:layout>
+				<s:HorizontalLayout gap="5" horizontalAlign="center"/>
+			</s:layout>
+			<s:Button id="okButton" click="close()" label="@Resource(bundle = 'messages', key = 'remoteStorage.dir.popup.title.okButton.label')"/>
+		</s:Group>
+	</s:Group>
+	
+</s:TitleWindow>
