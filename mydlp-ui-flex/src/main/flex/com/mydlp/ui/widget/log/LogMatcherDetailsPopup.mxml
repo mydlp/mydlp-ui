@@ -4,7 +4,9 @@
 			   xmlns:mx="library://ns.adobe.com/flex/mx"
 			   xmlns:my="http://www.mydlp.com/flex/my"
 			   xmlns:input="com.mydlp.ui.widget.general.input.*"
-			   close="{close()}" maxHeight="450"
+			   close="{close()}" 
+			   width="450"
+			   maxHeight="450"
 			   title="@Resource(bundle = 'messages', key = 'log.matcher.detail.title.label')" xmlns:util="com.mydlp.ui.util.*" xmlns:validators="com.mydlp.ui.validators.*"
 			   >
 	
@@ -114,10 +116,12 @@
 		
 		<mx:ListCollectionView id="matcherDetails"/>
 	</fx:Declarations>
-	<s:Group id="matchingDataGroup" width="475" height="100%" >
-		<s:layout>
-			<s:VerticalLayout gap="2" paddingLeft="10"/>
-		</s:layout>
-	</s:Group>
-	<s:Scroller viewport="{matchingDataGroup}"/>	
+	
+	<s:Scroller width="100%" height="100%" verticalScrollPolicy="auto" horizontalScrollPolicy="off">
+		<s:Group id="matchingDataGroup" width="100%">
+			<s:layout>
+				<s:VerticalLayout gap="2" paddingLeft="10"/>
+			</s:layout>
+		</s:Group>
+	</s:Scroller>
 </s:TitleWindow>
