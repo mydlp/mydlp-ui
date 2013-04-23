@@ -113,17 +113,20 @@
 	
 	<s:VGroup paddingLeft="40" paddingTop="40" width="100%" height="100%" gap="15">
 		<s:HGroup id="documentDatabaseTokenGroup"
+				  width="100%"
 				  paddingLeft="12"
 				  includeInLayout="false" visible="false"
 				  gap="10">
 			<s:BitmapImage source="@Embed('/assets/icons/16x16/warning.png')" />
 			<s:Label text="@Resource(key='documentDatabase.hasValidToken.message', bundle='messages')" width="450"/>
-			<s:Button label="@Resource(key='documentDatabase.hasValidToken.refresh.label', bundle='messages')" 
+			<s:Button label="@Resource(key='documentDatabase.hasValidToken.refresh.label', bundle='messages')"
 					  click="onRefreshClick(event)"/>
-			<s:Button label="@Resource(key='documentDatabase.hasValidToken.revokateAllTokens.label', bundle='messages')" 
+			<s:Button label="@Resource(key='documentDatabase.hasValidToken.revokateAllTokens.label', bundle='messages')"
 					  click="onRevokateClick(event)"/>
 		</s:HGroup>
-		<s:VGroup id="editFormContainer" />
+		<s:Scroller height="100%" width="100%">
+			<s:VGroup id="editFormContainer" left="0" right="0" top="0" bottom="0" />
+		</s:Scroller>
 	</s:VGroup>
 	
 	

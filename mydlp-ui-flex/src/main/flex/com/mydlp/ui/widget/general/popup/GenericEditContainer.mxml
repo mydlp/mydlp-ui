@@ -34,12 +34,12 @@
 			import com.mydlp.ui.domain.RDBMSConnection;
 			import com.mydlp.ui.domain.RDBMSInformationTarget;
 			import com.mydlp.ui.domain.RegularExpressionGroup;
-			import com.mydlp.ui.domain.RemovableStorageEncryptionRule;
 			import com.mydlp.ui.domain.RemoteStorageCIFS;
 			import com.mydlp.ui.domain.RemoteStorageDFS;
 			import com.mydlp.ui.domain.RemoteStorageFTPFS;
 			import com.mydlp.ui.domain.RemoteStorageNFS;
 			import com.mydlp.ui.domain.RemoteStorageSSHFS;
+			import com.mydlp.ui.domain.RemovableStorageEncryptionRule;
 			import com.mydlp.ui.domain.RemovableStorageInboundRule;
 			import com.mydlp.ui.domain.Rule;
 			import com.mydlp.ui.domain.RuleSchedule;
@@ -68,6 +68,7 @@
 			import com.mydlp.ui.widget.general.input.DataFormatInput;
 			import com.mydlp.ui.widget.general.input.DocumentClassifierItemInput;
 			import com.mydlp.ui.widget.general.input.DocumentDatabaseFileEntryInput;
+			import com.mydlp.ui.widget.general.input.DocumentDatabaseRemoteStorageInput;
 			import com.mydlp.ui.widget.general.input.InformationFeatureInput;
 			import com.mydlp.ui.widget.general.input.IpAddressInput;
 			import com.mydlp.ui.widget.general.input.MimeTypeInput;
@@ -304,6 +305,20 @@
 					}
 					
 					else if(targetObject is DocumentDatabase &&
+							classMember.name == "documentDatabaseRemoteStorages" &&
+							classMember.type == ListCollectionView)
+					{
+						if(targetObject["id"] == null || isNaN(targetObject["id"]))
+							continue;
+						var ddRemoteStorages:DocumentDatabaseRemoteStorageInput = new DocumentDatabaseRemoteStorageInput();
+						ddRemoteStorages.documentDatabaseRemoteStorages = targetObject[classMember.name];
+						BindingUtils.bindProperty(targetObject, classMember.name, ddRemoteStorages, "documentDatabaseRemoteStorages");
+						inputLabel = new VerticalInputLabel();
+						inputLabel.addElement(ddRemoteStorages);
+						index = 10;
+					}
+					
+					else if(targetObject is DocumentDatabase &&
 							classMember.name == "fileEntries" &&
 							classMember.type == ListCollectionView)
 					{
@@ -316,7 +331,7 @@
 						BindingUtils.bindProperty(targetObject, classMember.name, ddInput, "fileEntries");
 						inputLabel = new VerticalInputLabel();
 						inputLabel.addElement(ddInput);
-						index = 8;
+						index = 7;
 					}
 					
 					else if (targetObject is RegularExpressionGroup &&
@@ -329,7 +344,7 @@
 						BindingUtils.bindProperty(targetObject, classMember.name, regInput, "entries");
 						inputLabel = new VerticalInputLabel();
 						inputLabel.addElement(regInput);
-						index = 8;
+						index = 6;
 					}
 					
 					else if(targetObject is DataFormat &&
@@ -663,7 +678,7 @@
 						BindingUtils.bindProperty(targetObject, classMember.name, rdbmsitInput, "informationTarget");
 						inputLabel = new VerticalInputLabel();
 						inputLabel.addElement(rdbmsitInput);
-						index = 8;
+						index = 5;
 					}
 					
 					else if(classMember.type == Boolean)
