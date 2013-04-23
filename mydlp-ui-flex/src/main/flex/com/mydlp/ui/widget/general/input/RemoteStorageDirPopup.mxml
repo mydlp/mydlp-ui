@@ -38,12 +38,32 @@
 			{
 				var sArray:Vector.<int> = new Vector.<int>();
 				excludeListList.invalidateDisplayList();
+				waitLabel.includeInLayout = false;
+				waitLabel.visible = false;
 				excludeListDirDP = event.result as ListCollectionView;
-				if(excludeListDirDP == null )
+				if(excludeListDirDP == null || excludeListDirDP.length == 0)
+				{
+					excludeListList.includeInLayout = false;
+					excludeListList.visible = false;
+					noneLabel.includeInLayout = true;
+					noneLabel.visible = true;
 					return;
+				}
+				else
+				{
+					excludeListList.includeInLayout = true;
+					excludeListList.visible = true;
+					noneLabel.includeInLayout = false;
+					noneLabel.visible = false;
+				}
 				for (var i:int = 0; i < excludeListDirDP.length; i++)
 				{
-					if(excludeList != null && !excludeList.contains(excludeListDirDP[i]))
+					var s:String = excludeListDirDP[i] as String;
+					if(excludeList == null)
+						sArray.push(i);
+					else if(excludeList.length == 0)
+						sArray.push(i);
+					else if(!(excludeList.contains(s)))
 						sArray.push(i);
 				}
 				excludeListList.selectedIndices = sArray;
@@ -59,14 +79,14 @@
 					var flag:Boolean = false;
 					for(var i:int = 0; i < excludeList.length; i++)
 					{
-						if(excludeList[i] == event.item)
+						if(excludeList[i] == event.item as String)
 						{
 							flag = true;
 							break;
 						}
-						if(!flag)
-							excludeList.addItem(event.item);
 					}
+					if(!flag)
+						excludeList.addItem(event.item);
 				}
 				else
 				{
@@ -99,7 +119,12 @@
 		
 		<s:List width="100%" id="excludeListList" dataProvider="{excludeListDirDP}"
 				allowMultipleSelection="true" 
-				itemRenderer="com.mydlp.ui.widget.general.input.RemoteStorageDirListItemRenderer"/>
+				itemRenderer="com.mydlp.ui.widget.general.input.RemoteStorageDirListItemRenderer"
+				includeInLayout="false" visible="false"/>
+		<s:Label id="noneLabel" text="@Resource(bundle = 'messages', key = 'remoteStorage.dir.popup.none.label')"
+				 includeInLayout="false" visible="false"/>
+		<s:Label id="waitLabel" text="@Resource(bundle = 'messages', key = 'remoteStorage.dir.popup.wait.label')"
+				 includeInLayout="true" visible="true"/>
 		<s:Group width="100%">
 			<s:layout>
 				<s:HorizontalLayout gap="5" horizontalAlign="center"/>

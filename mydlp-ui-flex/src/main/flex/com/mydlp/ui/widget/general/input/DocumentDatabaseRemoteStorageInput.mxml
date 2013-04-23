@@ -91,7 +91,9 @@
 						}
 					}
 					if(!flag)
+					{
 						documentDatabaseRemoteStorages.addItem(event.item);
+					}
 				}
 			}
 			
