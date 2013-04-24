@@ -46,8 +46,10 @@ public class GenericDAOImpl extends AbstractPolicyDAO implements GenericDAO {
 		DetachedCriteria criteria = 
 				DetachedCriteria.forClass(namedEntity.getClass())
 					.setProjection(Projections.rowCount())
-					.add(Restrictions.ne("id", namedEntity.getId()))
 					.add(Restrictions.eq("name", namedEntity.getName()));
+		
+		if (namedEntity.getId() != null)
+			criteria = criteria.add(Restrictions.ne("id", namedEntity.getId()));
 		
 		@SuppressWarnings("unchecked")
 		List<Long> returnList = getHibernateTemplate().findByCriteria(criteria);
