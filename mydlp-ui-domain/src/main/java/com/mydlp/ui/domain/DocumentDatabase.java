@@ -23,6 +23,7 @@ public class DocumentDatabase extends Argument {
 	protected List<DocumentDatabaseRDBMSEntry> rdbmsEntries;
 	protected RDBMSInformationTarget rdbmsInformationTarget;
 	protected List<DocumentDatabaseRemoteStorage> documentDatabaseRemoteStorages;
+	protected Boolean currentlyFingerprinting;
 
 	@OneToMany(cascade={CascadeType.ALL})
 	public List<DocumentDatabaseFileEntry> getFileEntries() {
@@ -63,7 +64,12 @@ public class DocumentDatabase extends Argument {
 		this.documentDatabaseRemoteStorages = documentDatabaseRemoteStorages;
 	}
 
+	public Boolean getCurrentlyFingerprinting() {
+		return currentlyFingerprinting;
+	}
 
-	
-	
+	public void setCurrentlyFingerprinting(Boolean currentlyFingerprinting) {
+		this.currentlyFingerprinting = currentlyFingerprinting;
+	}
+
 }

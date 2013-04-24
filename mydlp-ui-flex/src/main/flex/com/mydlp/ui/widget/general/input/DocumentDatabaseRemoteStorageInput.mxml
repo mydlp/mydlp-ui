@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:SkinnableContainer xmlns:fx="http://ns.adobe.com/mxml/2009" 
-			   xmlns:s="library://ns.adobe.com/flex/spark" 
-			   xmlns:mx="library://ns.adobe.com/flex/mx"
-			   xmlns:my="http://www.mydlp.com/flex/my"
-			   xmlns:input="com.mydlp.ui.widget.general.input.*"
-			   width="{InputLabel.VERTICAL_INPUT_WIDTH}"
-			   creationComplete="onCreationComplete()"
-			   >
+					  xmlns:s="library://ns.adobe.com/flex/spark" 
+					  xmlns:mx="library://ns.adobe.com/flex/mx"
+					  xmlns:my="http://www.mydlp.com/flex/my"
+					  xmlns:input="com.mydlp.ui.widget.general.input.*"
+					  width="{InputLabel.VERTICAL_INPUT_WIDTH}"
+					  creationComplete="onCreationComplete()" xmlns:domain="com.mydlp.ui.domain.*"
+					  >
 	
 	<fx:Script>
 		<![CDATA[
+			import com.mydlp.ui.domain.DocumentBase;
 			import com.mydlp.ui.domain.DocumentDatabaseRemoteStorage;
 			import com.mydlp.ui.domain.DocumentDatabaseRemoteStorageBase;
 			import com.mydlp.ui.domain.RemoteStorage;
@@ -27,7 +28,7 @@
 			
 			[Bindable]
 			protected var enableList:Boolean = true;
-
+			
 			protected function onCreationComplete():void
 			{
 				re.getRemoteStorages();
@@ -119,35 +120,56 @@
 				}
 			}
 			
+			protected function startButtonClickHandler(event:MouseEvent):void
+			{
+				re.startRemoteFingerprint(documentDatabase.id);
+				documentDatabase.currentlyFingerprinting = true;
+			}
+			
+			
 		]]>
 	</fx:Script>
 	
 	<fx:Declarations>
 		<my:remote id="re" destination="remoteStorageBRS">
 			<my:method name="getRemoteStorages" result="getRemoteStoragesHandler(event)" />
+			<my:method name="startRemoteFingerprint"/>
 		</my:remote>
 		
 		<mx:ListCollectionView id="documentDatabaseRemoteStorages"/>
+		<domain:DocumentDatabase id="documentDatabase"/>
 	</fx:Declarations>
 	
 	<s:layout>
 		<s:VerticalLayout gap="4" paddingBottom="8"/>
 	</s:layout>
 	
-	<s:CheckBox id="enableViewCheckbox" width="100%" selected="false"
-				label="@Resource(bundle = 'messages', key = 'documentdatabase.remotestorage.enabled.checkbox.label')" />
-	
-	<s:Label id="noremotestorageMessage" width="100%" height="150" 
-			 includeInLayout="{(!enableList) &amp;&amp; enableViewCheckbox.selected}" 
-			 visible="{(!enableList) &amp;&amp; enableViewCheckbox.selected}"
-			 verticalAlign="middle" textAlign="center"
-			 text="@Resource(bundle = 'messages', key = 'documentdatabase.noremotestorage.message')"/>
-	
-	<s:List id="remoteStorageList" 
-			includeInLayout="{enableList &amp;&amp; enableViewCheckbox.selected}" 
-			visible="{enableList &amp;&amp; enableViewCheckbox.selected}"
-			dataProvider="{allRemoteStorages}" allowMultipleSelection="true" 
-			itemRenderer="com.mydlp.ui.widget.general.input.RemoteStorageItemRenderer"
-			width="100%" height="150"/>
+	<s:VGroup horizontalAlign="right">
+		
+		<s:CheckBox id="enableViewCheckbox" width="100%" selected="false"
+					label="@Resource(bundle = 'messages', key = 'documentdatabase.remotestorage.enabled.checkbox.label')" />
+		
+		<s:Label id="noremotestorageMessage" width="100%" height="150" 
+				 includeInLayout="{(!enableList) &amp;&amp; enableViewCheckbox.selected}" 
+				 visible="{(!enableList) &amp;&amp; enableViewCheckbox.selected}"
+				 verticalAlign="middle" textAlign="center"
+				 text="@Resource(bundle = 'messages', key = 'documentdatabase.noremotestorage.message')"/>
+		
+		<s:List id="remoteStorageList" 
+				includeInLayout="{enableList &amp;&amp; enableViewCheckbox.selected}" 
+				visible="{enableList &amp;&amp; enableViewCheckbox.selected}"
+				dataProvider="{allRemoteStorages}" allowMultipleSelection="true" 
+				itemRenderer="com.mydlp.ui.widget.general.input.RemoteStorageItemRenderer"
+				width="100%" height="150"/>
+		<s:Button id="startButton" click="startButtonClickHandler(event)" 
+				  label="@Resource(bundle = 'messages', key = 'documentdatabase.button.start.label')"
+				  skinClass="com.mydlp.ui.skin.StartBitmapLabelButton16Skin"
+				  includeInLayout="{enableList &amp;&amp; enableViewCheckbox.selected &amp;&amp; !documentDatabase.currentlyFingerprinting} "
+				  visible="{enableList &amp;&amp; enableViewCheckbox.selected &amp;&amp; !documentDatabase.currentlyFingerprinting} "/>
+		<mx:ProgressBar indeterminate="true" width="100" height="10"
+						labelPlacement="center" label="" labelWidth="0"
+						includeInLayout="{enableList &amp;&amp; enableViewCheckbox.selected &amp;&amp; documentDatabase.currentlyFingerprinting}"
+						visible="{enableList &amp;&amp; enableViewCheckbox.selected &amp;&amp; documentDatabase.currentlyFingerprinting}"/>
+	</s:VGroup>
 	
 </s:SkinnableContainer>

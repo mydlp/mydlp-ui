@@ -194,7 +194,8 @@
 							(targetObject is CustomAction && classMember.name == "typeKey" && classMember.type == String) ||
 							(targetObject is WebServer && classMember.name == "address") ||
 							(targetObject is WebServer && classMember.name == "port") ||
-							(targetObject is WebServer && classMember.name == "startPath")
+							(targetObject is WebServer && classMember.name == "startPath") ||
+							(targetObject is DocumentDatabase && classMember.name == "currentlyFingerprinting")
 						)
 					{
 						continue;
@@ -312,6 +313,7 @@
 							continue;
 						var ddRemoteStorages:DocumentDatabaseRemoteStorageInput = new DocumentDatabaseRemoteStorageInput();
 						ddRemoteStorages.documentDatabaseRemoteStorages = targetObject[classMember.name];
+						ddRemoteStorages.documentDatabase = targetObject as DocumentDatabase;
 						BindingUtils.bindProperty(targetObject, classMember.name, ddRemoteStorages, "documentDatabaseRemoteStorages");
 						inputLabel = new VerticalInputLabel();
 						inputLabel.addElement(ddRemoteStorages);

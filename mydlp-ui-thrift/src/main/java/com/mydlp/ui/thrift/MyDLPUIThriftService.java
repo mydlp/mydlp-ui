@@ -38,5 +38,7 @@ public interface MyDLPUIThriftService {
     public void pauseDiscoveryOnDemand(int ruleId);
     
     public List<String> getRemoteStorageDir(int id);
+    
+    public void startFingerprinting(int id);
 
 }
