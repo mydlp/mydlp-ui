@@ -87,10 +87,10 @@
 			<input:MatcherDefinition data="scode_match" />
 			<input:MatcherDefinition data="scode_ada_match" />
 			<input:MatcherDefinition data="keyword_group_match" />
-			<input:MatcherDefinition data="document_hash_match" />
-			<input:MatcherDefinition data="document_pdm_match" />
-			<input:MatcherDefinition data="encrypted_file_match" />
-			<input:MatcherDefinition data="encrypted_archive_match" />
+			<input:MatcherDefinition data="md5_match" />
+			<input:MatcherDefinition data="pdm_match" />
+			<input:MatcherDefinition data="e_file_match" />
+			<input:MatcherDefinition data="e_archive_match" />
 			<input:MatcherDefinition data="pan_match"/>
 			<input:MatcherDefinition data="tan_match"/>
 			<input:MatcherDefinition data="cpf_match"/>
