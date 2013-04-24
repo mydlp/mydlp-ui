@@ -139,7 +139,7 @@
 		<s:VerticalLayout paddingTop="10" />
 	</s:layout>
 	
-	<s:Button id="resetButton" click="onResetClickHandler(event)" label="@Resource(bundle = 'messages', key = 'log.container.search.reset.label')"/>
+	<s:Button id="resetButton" click="onResetClickHandler(event)" label="@Resource(bundle = 'messages', key = 'discovery.container.search.refresh.label')"/>
 	
 	<s:Group width="100%" height="100%">
 		<s:layout>

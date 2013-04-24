@@ -32,6 +32,9 @@
 			[Embed('/assets/icons/16x16/briefcase.png')]
 			public static const archieveIcon:Class;
 			
+			[Embed('/assets/icons/16x16/lock.png')]
+			public static const encryptIcon:Class;
+			
 			[Embed('/assets/icons/16x16/record.png')]
 			public static const customIcon:Class;
 			
@@ -47,6 +50,8 @@
 					return quarantineIcon;
 				else if(actionValue == Rule.ACTION_ARCHIVE)
 					return archieveIcon;
+				else if (actionValue == Rule.ACTION_ENCRYPT)
+					return encryptIcon;
 				else if (actionValue == Rule.ACTION_CUSTOM)
 					return customIcon;
 				
