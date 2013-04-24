@@ -41,7 +41,7 @@
 				for(var i:int = 0; i < matcherDefinitions.length; i++)
 				{
 					var count:int = 0;
-					var matcherDetailLabels:ListCollectionView = new ArrayCollection;
+					var matcherDetailLabels:ListCollectionView = new ArrayCollection();
 					for(var j:int = 0; j < matcherDetails.length; j++)
 					{
 						if((matcherDetails[j] as MatchingDetail).matcherFunc == (matcherDefinitions[i] as MatcherDefinition).data)
@@ -56,7 +56,14 @@
 					{
 						var matcherLabel:MatcherLabel = new MatcherLabel();
 						matcherLabel.matcher = LangUtil.getString('messages', 'log.matcher.detail.' + (matcherDefinitions[i] as MatcherDefinition).data + '.label');
-						matcherLabel.count = count;
+						if ((matcherDefinitions[i] as MatcherDefinition).data == "pdm_match")
+						{
+							matcherLabel.count = -1;
+						}
+						else
+						{
+							matcherLabel.count = count;
+						}
 						matchingDataGroup.addElement(matcherLabel);
 						for each(var e:MatcherDetailsLabel in matcherDetailLabels)
 						{
