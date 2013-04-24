@@ -278,4 +278,15 @@ public class MyDLPUIThriftServiceImpl implements MyDLPUIThriftService {
 		});
 	}
 
+	@Override
+	public void startFingerprinting(final int id) {
+		call(new ThriftCall<Void>() {
+			@Override
+			public Void execute(MyDLPUIThriftConnection thriftConnection) throws TException {
+				thriftConnection.client.startFingerprinting(id);
+				return null;
+			}
+		});
+	}
+
 }

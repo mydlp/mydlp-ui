@@ -9,6 +9,7 @@
 			import com.mydlp.ui.domain.AbstractEntity;
 			import com.mydlp.ui.domain.AuthSecurityRole;
 			import com.mydlp.ui.domain.AuthUser;
+			import com.mydlp.ui.domain.DocumentDatabase;
 			import com.mydlp.ui.util.InteractionUtil;
 			import com.mydlp.ui.util.SessionUtil;
 			
@@ -16,8 +17,10 @@
 			
 			protected function clickAddButton(event:MouseEvent):void
 			{
-				var objectType:Class = treeListData.item.classType; 
+				var objectType:Class = treeListData.item.classType;
 				var newObject:* = new objectType();
+				if(objectType is DocumentDatabase)
+					objectType.currentlyEnumerating = false;				
 				InteractionUtil.newEditDialog(newObject);
 				event.stopPropagation();
 			}

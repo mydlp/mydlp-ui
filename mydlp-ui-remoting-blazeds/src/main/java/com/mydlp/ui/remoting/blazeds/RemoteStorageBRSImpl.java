@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.flex.remoting.RemotingDestination;
 import org.springframework.stereotype.Service;
 
+import com.mydlp.ui.dao.DocumentDatabaseDAO;
 import com.mydlp.ui.dao.RemoteStorageDAO;
 import com.mydlp.ui.domain.RemoteStorage;
 import com.mydlp.ui.thrift.MyDLPUIThriftService;
@@ -19,6 +20,9 @@ public class RemoteStorageBRSImpl implements RemoteStorageService
 	protected RemoteStorageDAO remoteStorageDAO;
 	
 	@Autowired
+	protected DocumentDatabaseDAO documentDatabaseDAO;
+	
+	@Autowired
 	protected MyDLPUIThriftService thriftService;
 
 	@Override
@@ -30,6 +34,10 @@ public class RemoteStorageBRSImpl implements RemoteStorageService
 	public List<String> getRemoteStorageDir(int id) {
 		return thriftService.getRemoteStorageDir(id);
 	}
-	
 
+	@Override
+	public void startRemoteFingerprint(int id) {
+		thriftService.startFingerprinting(id);
+	}
+	
 }
