@@ -85,5 +85,5 @@ INSERT INTO ENDPOINTSTATUS VALUES (1, 'E0000001', '2012-12-19 11:21:00.000000007
 INSERT INTO ENDPOINTSTATUS VALUES (2, 'E0000002', '2012-02-20 12:12:12.000000007', '10.0.0.2', '0.9.58','test@mydlp.com', TRUE, '2012-05-28 17:12:12.000000007', TRUE)
 INSERT INTO ENDPOINTSTATUS VALUES (3, 'E0000003', '2012-02-20 12:12:12.000000007', '10.0.0.3', NULL, 'test2@mydlp.com', TRUE, '2012-05-28 17:19:27.000000007', FALSE)
 INSERT INTO ENDPOINTSTATUS VALUES (4, 'E0000004', '2012-02-20 12:12:12.000000007', '10.0.0.4', '0.9.58', 'test3@mydlp.com', TRUE, '2012-05-28 17:29:17.000000007', TRUE)
-INSERT INTO MATCHINGDETAIL VALUES(1,'pdm_match','hedddeeddededededededed sdf sdf sdf sdf sdf ede', 23)
+INSERT INTO MATCHINGDETAIL VALUES(1,'pdm_match','hedddeeddeded dededed ededededededed ededededededed sdf sdf sdf sdf sdfdededededededed sdf sdf sdf sdf sdfded sdf sdf sdf sdf sdf ede', 23)
 DISCONNECT
