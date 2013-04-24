@@ -5,7 +5,7 @@
 			   xmlns:my="http://www.mydlp.com/flex/my"
 			   xmlns:input="com.mydlp.ui.widget.general.input.*"
 			   close="{close()}" 
-			   width="400" height="450" maxHeight="450"
+			   width="400" maxHeight="500"
 			   title="@Resource(bundle = 'messages', key = 'log.matcher.detail.title.label')" xmlns:util="com.mydlp.ui.util.*" xmlns:validators="com.mydlp.ui.validators.*"
 			   visible="false"
 			   >
@@ -20,6 +20,7 @@
 			
 			import mx.controls.Alert;
 			import mx.controls.Label;
+			import mx.managers.PopUpManager;
 			
 			protected var countDict:Object = new Object;
 			
@@ -71,6 +72,7 @@
 						}
 					}
 				}
+				PopUpManager.centerPopUp(this);
 				this.visible = true;
 			}
 		]]>
