@@ -216,7 +216,7 @@
 					{
 						clipboardText += us.name + " : Skipped (" + us.serverReason + ")\r\n";
 					}
-					else if (us.viewState == "skipped")
+					else if (us.viewState == "finished")
 					{
 						clipboardText += us.name + " : Finished (" + us.bytesTotal + " bytes are uploaded)\r\n";
 					}
