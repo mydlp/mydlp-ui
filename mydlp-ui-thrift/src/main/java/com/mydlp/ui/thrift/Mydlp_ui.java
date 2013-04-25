@@ -7261,15 +7261,15 @@ public class Mydlp_ui {
           case 0: // SUCCESS
             if (field.type == org.apache.thrift.protocol.TType.MAP) {
               {
-                org.apache.thrift.protocol.TMap _map0 = iprot.readMapBegin();
-                this.success = new HashMap<String,String>(2*_map0.size);
-                for (int _i1 = 0; _i1 < _map0.size; ++_i1)
+                org.apache.thrift.protocol.TMap _map4 = iprot.readMapBegin();
+                this.success = new HashMap<String,String>(2*_map4.size);
+                for (int _i5 = 0; _i5 < _map4.size; ++_i5)
                 {
-                  String _key2; // required
-                  String _val3; // required
-                  _key2 = iprot.readString();
-                  _val3 = iprot.readString();
-                  this.success.put(_key2, _val3);
+                  String _key6; // required
+                  String _val7; // required
+                  _key6 = iprot.readString();
+                  _val7 = iprot.readString();
+                  this.success.put(_key6, _val7);
                 }
                 iprot.readMapEnd();
               }
@@ -7295,10 +7295,10 @@ public class Mydlp_ui {
         oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
         {
           oprot.writeMapBegin(new org.apache.thrift.protocol.TMap(org.apache.thrift.protocol.TType.STRING, org.apache.thrift.protocol.TType.STRING, this.success.size()));
-          for (Map.Entry<String, String> _iter4 : this.success.entrySet())
+          for (Map.Entry<String, String> _iter8 : this.success.entrySet())
           {
-            oprot.writeString(_iter4.getKey());
-            oprot.writeString(_iter4.getValue());
+            oprot.writeString(_iter8.getKey());
+            oprot.writeString(_iter8.getValue());
           }
           oprot.writeMapEnd();
         }
@@ -10398,8 +10398,6 @@ public class Mydlp_ui {
 
     private void readObject(java.io.ObjectInputStream in) throws java.io.IOException, ClassNotFoundException {
       try {
-        // it doesn't seem like you should have to do this, but java serialization is wacky, and doesn't call the default constructor.
-        __isset_bit_vector = new BitSet(1);
         read(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(in)));
       } catch (org.apache.thrift.TException te) {
         throw new java.io.IOException(te);
@@ -10659,13 +10657,13 @@ public class Mydlp_ui {
           case 0: // SUCCESS
             if (field.type == org.apache.thrift.protocol.TType.LIST) {
               {
-                org.apache.thrift.protocol.TList _list5 = iprot.readListBegin();
-                this.success = new ArrayList<String>(_list5.size);
-                for (int _i6 = 0; _i6 < _list5.size; ++_i6)
+                org.apache.thrift.protocol.TList _list9 = iprot.readListBegin();
+                this.success = new ArrayList<String>(_list9.size);
+                for (int _i10 = 0; _i10 < _list9.size; ++_i10)
                 {
-                  String _elem7; // required
-                  _elem7 = iprot.readString();
-                  this.success.add(_elem7);
+                  String _elem11; // required
+                  _elem11 = iprot.readString();
+                  this.success.add(_elem11);
                 }
                 iprot.readListEnd();
               }
@@ -10691,9 +10689,9 @@ public class Mydlp_ui {
         oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
         {
           oprot.writeListBegin(new org.apache.thrift.protocol.TList(org.apache.thrift.protocol.TType.STRING, this.success.size()));
-          for (String _iter8 : this.success)
+          for (String _iter12 : this.success)
           {
-            oprot.writeString(_iter8);
+            oprot.writeString(_iter12);
           }
           oprot.writeListEnd();
         }
