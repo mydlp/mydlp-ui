@@ -177,11 +177,15 @@
 				  includeInLayout="{enableList &amp;&amp; enableViewCheckbox.selected &amp;&amp; !documentDatabase.currentlyFingerprinting
 				  &amp;&amp; enableButton}"
 				  visible="{enableList &amp;&amp; enableViewCheckbox.selected &amp;&amp; !documentDatabase.currentlyFingerprinting
-				  &amp;&amp; enableButton} "/>
-		<mx:ProgressBar indeterminate="true" width="100" height="10" label="@Resource(bundle = 'messages', key = 'documentdatabase.progressBar.label')"
-						labelPlacement="center" labelWidth="0"
-						includeInLayout="{enableList &amp;&amp; enableViewCheckbox.selected &amp;&amp; documentDatabase.currentlyFingerprinting}"
-						visible="{enableList &amp;&amp; enableViewCheckbox.selected &amp;&amp; documentDatabase.currentlyFingerprinting}"/>
+				  &amp;&amp; enableButton} "/>	
+		<s:HGroup includeInLayout="{enableList &amp;&amp; enableViewCheckbox.selected &amp;&amp; documentDatabase.currentlyFingerprinting}"
+				  visible="{enableList &amp;&amp; enableViewCheckbox.selected &amp;&amp; documentDatabase.currentlyFingerprinting}">
+			
+			<s:Label text="@Resource(bundle = 'messages', key = 'documentdatabase.progressBar.label')"/>
+			<mx:ProgressBar indeterminate="true" width="100" height="10"
+							labelPlacement="center" labelWidth="0"
+							/>
+		</s:HGroup>
 	</s:VGroup>
 	
 </s:SkinnableContainer>
