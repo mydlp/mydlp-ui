@@ -15,5 +15,7 @@ public interface RemoteStorageService {
 	public List<String> getRemoteStorageDir(int id);
 	
 	public void startRemoteFingerprint(int id);
+	
+	public String testConnection(RemoteStorage rs);
 
 }

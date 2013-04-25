@@ -34,6 +34,7 @@
 			import com.mydlp.ui.domain.RDBMSConnection;
 			import com.mydlp.ui.domain.RDBMSInformationTarget;
 			import com.mydlp.ui.domain.RegularExpressionGroup;
+			import com.mydlp.ui.domain.RemoteStorage;
 			import com.mydlp.ui.domain.RemoteStorageCIFS;
 			import com.mydlp.ui.domain.RemoteStorageDFS;
 			import com.mydlp.ui.domain.RemoteStorageFTPFS;
@@ -938,7 +939,8 @@
 					buttonGroup.addElement(miscButton);
 				}
 				else */ 
-				if (formObject is RDBMSConnection || formObject is ADDomain)
+				if (formObject is RDBMSConnection || formObject is ADDomain || 
+					(formObject is InventoryItem && (formObject as InventoryItem).item is RemoteStorage))
 				{
 					miscButton.label = LangUtil.getString("messages", "generic.edit." + getSimpleName() + ".testButton.label");
 					miscButton.addEventListener(MouseEvent.CLICK, testConnectionButtonClickHandler);
@@ -1050,6 +1052,9 @@
 						redb.testConnection(formObject as RDBMSConnection);
 					} else if (formObject is ADDomain) {
 						read.testConnection(formObject as ADDomain);
+					}
+					else if (formObject is RemoteStorage) {
+						
 					}
 				}
 			}
@@ -1180,6 +1185,9 @@
 		<my:remote id="redb" destination="rdbmsConnectionBRS" >
 			<my:method name="testConnection" result="testConnectionHandler(event)"/>
 			<my:method name="schedule" result="enumerateHandler(event)"/>
+		</my:remote>
+		<my:remote id="rers" destination="remoteStorageBRS">
+			<my:method name="testConnection" result="testConnectionHandler(event)"/>
 		</my:remote>
 	</fx:Declarations>
 	

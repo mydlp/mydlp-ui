@@ -39,5 +39,10 @@ public class RemoteStorageBRSImpl implements RemoteStorageService
 	public void startRemoteFingerprint(int id) {
 		thriftService.startFingerprinting(id);
 	}
+
+	@Override
+	public String testConnection(RemoteStorage rs) {
+		return "OK";
+	}
 	
 }
