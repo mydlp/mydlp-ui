@@ -52,6 +52,11 @@ public class _001_00240_Bundled_KeywordList_2 extends AbstractGranule {
 		bcg8.setNameKey("chinese.addressTerms.keywordList");
 		bcg8.setDescriptionKey("ChineseAddressTerms");
 		
+		BundledKeywordGroup bcg9 = new BundledKeywordGroup();
+		bcg9.setFilename("chinese_common_names.txt");
+		bcg9.setNameKey("chinese.commonnames.keywordList");
+		bcg9.setDescriptionKey("ChineseCommonNames");
+		
 		getHibernateTemplate().saveOrUpdate(bcg0);
 		getHibernateTemplate().saveOrUpdate(bcg1);
 		getHibernateTemplate().saveOrUpdate(bcg2);
@@ -61,5 +66,6 @@ public class _001_00240_Bundled_KeywordList_2 extends AbstractGranule {
 		getHibernateTemplate().saveOrUpdate(bcg6);
 		getHibernateTemplate().saveOrUpdate(bcg7);
 		getHibernateTemplate().saveOrUpdate(bcg8);
+		getHibernateTemplate().saveOrUpdate(bcg9);
 	}
 }

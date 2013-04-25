@@ -79,10 +79,36 @@ public class _001_00260_PII_China extends AbstractGranule {
 		List<BundledKeywordGroup> list7 = getHibernateTemplate().findByCriteria(criteria7);
 		BundledKeywordGroup keywordGroupHongkongRegions = DAOUtil.getSingleResult(list7);
 		
+		DetachedCriteria criteria8 = 
+				DetachedCriteria.forClass(BundledKeywordGroup.class)
+					.add(Restrictions.eq("nameKey", "chinese.commonnames.keywordList"));
+		@SuppressWarnings("unchecked")
+		List<BundledKeywordGroup> list8 = getHibernateTemplate().findByCriteria(criteria8);
+		BundledKeywordGroup keywordGroupChineseCommonNames = DAOUtil.getSingleResult(list8);
+		
 		// Chinese Name with Lastname
 		{
 			Matcher matcherCN = new Matcher();
 			matcherCN.setFunctionName("chinese_name");
+			
+			Matcher matcherKGChineseCommonNames = new Matcher();
+			matcherKGChineseCommonNames.setFunctionName("keyword_group");
+			
+			NonCascadingArgument nonCascadingArgumentChineseCommonNames = new NonCascadingArgument(); 
+			{
+				MatcherArgument matcherArgument = new MatcherArgument();
+				nonCascadingArgumentChineseCommonNames.setArgument(keywordGroupChineseCommonNames);
+				matcherArgument.setCoupledMatcher(matcherKGChineseCommonNames);
+				matcherArgument.setCoupledArgument(nonCascadingArgumentChineseCommonNames);
+				List<MatcherArgument> matcherArguments = new ArrayList<MatcherArgument>();
+				matcherArguments.add(matcherArgument);
+				matcherKGChineseCommonNames.setMatcherArguments(matcherArguments);
+			}
+			
+			InformationFeature informationFeatureCCN = new InformationFeature();
+			informationFeatureCCN.setThreshold(new Long(1));
+			informationFeatureCCN.setMatcher(matcherKGChineseCommonNames);
+			matcherKGChineseCommonNames.setCoupledInformationFeature(informationFeatureCCN);
 			
 			Matcher matcherKGChineseLastnames = new Matcher();
 			matcherKGChineseLastnames.setFunctionName("keyword_group");
@@ -112,6 +138,7 @@ public class _001_00260_PII_China extends AbstractGranule {
 			informationDescription.setDistanceEnabled(true);
 			informationDescription.setDistance(8);
 			ifts.add(informationFeatureCN);
+			ifts.add(informationFeatureCCN);
 			ifts.add(informationFeatureCLN);
 			informationDescription.setFeatures(ifts);
 			
@@ -140,6 +167,25 @@ public class _001_00260_PII_China extends AbstractGranule {
 			informationFeatureCN.setThreshold(new Long(1));
 			informationFeatureCN.setMatcher(matcherCN);
 			matcherCN.setCoupledInformationFeature(informationFeatureCN);
+			
+			Matcher matcherKGChineseCommonNames = new Matcher();
+			matcherKGChineseCommonNames.setFunctionName("keyword_group");
+			
+			NonCascadingArgument nonCascadingArgumentChineseCommonNames = new NonCascadingArgument(); 
+			{
+				MatcherArgument matcherArgument = new MatcherArgument();
+				nonCascadingArgumentChineseCommonNames.setArgument(keywordGroupChineseCommonNames);
+				matcherArgument.setCoupledMatcher(matcherKGChineseCommonNames);
+				matcherArgument.setCoupledArgument(nonCascadingArgumentChineseCommonNames);
+				List<MatcherArgument> matcherArguments = new ArrayList<MatcherArgument>();
+				matcherArguments.add(matcherArgument);
+				matcherKGChineseCommonNames.setMatcherArguments(matcherArguments);
+			}
+			
+			InformationFeature informationFeatureCCN = new InformationFeature();
+			informationFeatureCCN.setThreshold(new Long(1));
+			informationFeatureCCN.setMatcher(matcherKGChineseCommonNames);
+			matcherKGChineseCommonNames.setCoupledInformationFeature(informationFeatureCCN);
 			
 			Matcher matcherKGChineseLastnames = new Matcher();
 			matcherKGChineseLastnames.setFunctionName("keyword_group");
@@ -222,6 +268,7 @@ public class _001_00260_PII_China extends AbstractGranule {
 			informationDescription.setDistanceEnabled(true);
 			informationDescription.setDistance(24);
 			ifts.add(informationFeatureCN);
+			ifts.add(informationFeatureCCN);
 			ifts.add(informationFeatureCLN);
 			ifts.add(informationFeatureCC);
 			ifts.add(informationFeatureCR);
@@ -253,6 +300,25 @@ public class _001_00260_PII_China extends AbstractGranule {
 			informationFeatureCN.setThreshold(new Long(1));
 			informationFeatureCN.setMatcher(matcherCN);
 			matcherCN.setCoupledInformationFeature(informationFeatureCN);
+			
+			Matcher matcherKGChineseCommonNames = new Matcher();
+			matcherKGChineseCommonNames.setFunctionName("keyword_group");
+			
+			NonCascadingArgument nonCascadingArgumentChineseCommonNames = new NonCascadingArgument(); 
+			{
+				MatcherArgument matcherArgument = new MatcherArgument();
+				nonCascadingArgumentChineseCommonNames.setArgument(keywordGroupChineseCommonNames);
+				matcherArgument.setCoupledMatcher(matcherKGChineseCommonNames);
+				matcherArgument.setCoupledArgument(nonCascadingArgumentChineseCommonNames);
+				List<MatcherArgument> matcherArguments = new ArrayList<MatcherArgument>();
+				matcherArguments.add(matcherArgument);
+				matcherKGChineseCommonNames.setMatcherArguments(matcherArguments);
+			}
+			
+			InformationFeature informationFeatureCCN = new InformationFeature();
+			informationFeatureCCN.setThreshold(new Long(1));
+			informationFeatureCCN.setMatcher(matcherKGChineseCommonNames);
+			matcherKGChineseCommonNames.setCoupledInformationFeature(informationFeatureCCN);
 			
 			Matcher matcherKGChineseLastnames = new Matcher();
 			matcherKGChineseLastnames.setFunctionName("keyword_group");
@@ -335,6 +401,7 @@ public class _001_00260_PII_China extends AbstractGranule {
 			informationDescription.setDistanceEnabled(true);
 			informationDescription.setDistance(24);
 			ifts.add(informationFeatureCN);
+			ifts.add(informationFeatureCCN);
 			ifts.add(informationFeatureCLN);
 			ifts.add(informationFeatureHC);
 			ifts.add(informationFeatureHR);
