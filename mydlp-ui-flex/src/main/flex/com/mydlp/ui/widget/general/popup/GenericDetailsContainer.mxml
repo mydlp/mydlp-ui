@@ -5,7 +5,7 @@
 				xmlns:general="com.mydlp.ui.widget.general.*"
 				xmlns:my="http://www.mydlp.com/flex/my" 
 				xmlns:popup="com.mydlp.ui.widget.general.popup.*"
-				width="400"
+				width="450"
 				>
 	
 	<fx:Script>

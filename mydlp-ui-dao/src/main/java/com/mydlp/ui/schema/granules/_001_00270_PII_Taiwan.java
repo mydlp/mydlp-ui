@@ -65,6 +65,13 @@ public class _001_00270_PII_Taiwan extends AbstractGranule {
 		List<BundledKeywordGroup> list5 = getHibernateTemplate().findByCriteria(criteria5);
 		BundledKeywordGroup keywordGroupTaiwaneseRegions = DAOUtil.getSingleResult(list5);
 		
+		DetachedCriteria criteria6 = 
+				DetachedCriteria.forClass(BundledKeywordGroup.class)
+					.add(Restrictions.eq("nameKey", "chinese.commonnames.keywordList"));
+		@SuppressWarnings("unchecked")
+		List<BundledKeywordGroup> list6 = getHibernateTemplate().findByCriteria(criteria6);
+		BundledKeywordGroup keywordGroupChineseCommonNames = DAOUtil.getSingleResult(list6);
+		
 		// Taiwanese Name with Lastname
 		{
 			Matcher matcherCN = new Matcher();
@@ -74,30 +81,51 @@ public class _001_00270_PII_Taiwan extends AbstractGranule {
 			matcherKGTaiwaneseLastnames.setFunctionName("keyword_group");
 			
 			NonCascadingArgument nonCascadingArgumentTaiwaneseLastNames = new NonCascadingArgument(); 	
-			MatcherArgument matcherArgument = new MatcherArgument();
-			nonCascadingArgumentTaiwaneseLastNames.setArgument(keywordGroupTaiwaneseLastNames);
-			matcherArgument.setCoupledMatcher(matcherKGTaiwaneseLastnames);
-			matcherArgument.setCoupledArgument(nonCascadingArgumentTaiwaneseLastNames);
-			List<MatcherArgument> matcherArguments = new ArrayList<MatcherArgument>();
-			matcherArguments.add(matcherArgument);
-			matcherKGTaiwaneseLastnames.setMatcherArguments(matcherArguments);
+			{
+				MatcherArgument matcherArgument = new MatcherArgument();
+				nonCascadingArgumentTaiwaneseLastNames.setArgument(keywordGroupTaiwaneseLastNames);
+				matcherArgument.setCoupledMatcher(matcherKGTaiwaneseLastnames);
+				matcherArgument.setCoupledArgument(nonCascadingArgumentTaiwaneseLastNames);
+				List<MatcherArgument> matcherArguments = new ArrayList<MatcherArgument>();
+				matcherArguments.add(matcherArgument);
+				matcherKGTaiwaneseLastnames.setMatcherArguments(matcherArguments);
+			}
 			
 			InformationFeature informationFeatureCN = new InformationFeature();
 			informationFeatureCN.setThreshold(new Long(1));
 			informationFeatureCN.setMatcher(matcherCN);
 			matcherCN.setCoupledInformationFeature(informationFeatureCN);
 			
-			
 			InformationFeature informationFeatureCLN = new InformationFeature();
 			informationFeatureCLN.setThreshold(new Long(1));
 			informationFeatureCLN.setMatcher(matcherKGTaiwaneseLastnames);
 			matcherKGTaiwaneseLastnames.setCoupledInformationFeature(informationFeatureCLN);
+			
+			Matcher matcherKGChineseCommonNames = new Matcher();
+			matcherKGChineseCommonNames.setFunctionName("keyword_group");
+			
+			NonCascadingArgument nonCascadingArgumentChineseCommonNames = new NonCascadingArgument(); 
+			{
+				MatcherArgument matcherArgument = new MatcherArgument();
+				nonCascadingArgumentChineseCommonNames.setArgument(keywordGroupChineseCommonNames);
+				matcherArgument.setCoupledMatcher(matcherKGChineseCommonNames);
+				matcherArgument.setCoupledArgument(nonCascadingArgumentChineseCommonNames);
+				List<MatcherArgument> matcherArguments = new ArrayList<MatcherArgument>();
+				matcherArguments.add(matcherArgument);
+				matcherKGChineseCommonNames.setMatcherArguments(matcherArguments);
+			}
+			
+			InformationFeature informationFeatureCCN = new InformationFeature();
+			informationFeatureCCN.setThreshold(new Long(1));
+			informationFeatureCCN.setMatcher(matcherKGChineseCommonNames);
+			matcherKGChineseCommonNames.setCoupledInformationFeature(informationFeatureCCN);
 			
 			InformationDescription informationDescription = new InformationDescription();
 			List<InformationFeature> ifts = new ArrayList<InformationFeature>();
 			informationDescription.setDistanceEnabled(true);
 			informationDescription.setDistance(8);
 			ifts.add(informationFeatureCN);
+			ifts.add(informationFeatureCCN);
 			ifts.add(informationFeatureCLN);
 			informationDescription.setFeatures(ifts);
 			
@@ -126,6 +154,25 @@ public class _001_00270_PII_Taiwan extends AbstractGranule {
 			informationFeatureCN.setThreshold(new Long(1));
 			informationFeatureCN.setMatcher(matcherCN);
 			matcherCN.setCoupledInformationFeature(informationFeatureCN);
+			
+			Matcher matcherKGChineseCommonNames = new Matcher();
+			matcherKGChineseCommonNames.setFunctionName("keyword_group");
+			
+			NonCascadingArgument nonCascadingArgumentChineseCommonNames = new NonCascadingArgument(); 
+			{
+				MatcherArgument matcherArgument = new MatcherArgument();
+				nonCascadingArgumentChineseCommonNames.setArgument(keywordGroupChineseCommonNames);
+				matcherArgument.setCoupledMatcher(matcherKGChineseCommonNames);
+				matcherArgument.setCoupledArgument(nonCascadingArgumentChineseCommonNames);
+				List<MatcherArgument> matcherArguments = new ArrayList<MatcherArgument>();
+				matcherArguments.add(matcherArgument);
+				matcherKGChineseCommonNames.setMatcherArguments(matcherArguments);
+			}
+			
+			InformationFeature informationFeatureCCN = new InformationFeature();
+			informationFeatureCCN.setThreshold(new Long(1));
+			informationFeatureCCN.setMatcher(matcherKGChineseCommonNames);
+			matcherKGChineseCommonNames.setCoupledInformationFeature(informationFeatureCCN);
 			
 			Matcher matcherKGTaiwaneseLastnames = new Matcher();
 			matcherKGTaiwaneseLastnames.setFunctionName("keyword_group");
@@ -208,6 +255,7 @@ public class _001_00270_PII_Taiwan extends AbstractGranule {
 			informationDescription.setDistanceEnabled(true);
 			informationDescription.setDistance(24);
 			ifts.add(informationFeatureCN);
+			ifts.add(informationFeatureCCN);
 			ifts.add(informationFeatureCLN);
 			ifts.add(informationFeatureCC);
 			ifts.add(informationFeatureCR);
