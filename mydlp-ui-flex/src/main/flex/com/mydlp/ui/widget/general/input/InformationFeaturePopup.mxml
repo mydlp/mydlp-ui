@@ -284,7 +284,7 @@
 			
 			protected function isEditingOriginalMatcher(): Boolean
 			{
-				if (isEdit == null || !isEdit) return false;
+				if (!isEdit) return false;
 				if (informationFeatureObject == null || informationFeatureObject.matcher == null) return false;
 				return informationFeatureObject.matcher.functionName == matcherCombobox.selectedItem.data;
 			}
@@ -294,6 +294,11 @@
 				if (informationFeatureObject != null && informationFeatureInput.isExclusive())
 				{
 					saveButton.enabled = true;
+				}
+				else if (matcherCombobox.selectedItem == null)
+				{
+					saveButton.enabled = false;
+					msgLabel.text = LangUtil.getString("messages", "informationFeature.popup.add.selectMatcher.message");
 				}
 				else 
 				{

@@ -84,6 +84,15 @@
 				lmdp.populate();
 			}
 			
+			protected function hasMatchingDetails(value:*): Boolean
+			{
+				if (value == null) return false;
+				var log:IncidentLog = value as IncidentLog;
+				if (log == null) return false;
+				if (log.matchingDetails != null && log.matchingDetails.length > 0) return true;
+				return false;
+			}
+			
 		]]>
 	</fx:Script>
 	
@@ -98,7 +107,8 @@
 		<s:Label id="lblData" text="{getPolicyText(data)}"/>
 	</s:VGroup>
 	
-	<s:Group includeIn="selected"
+	<s:Group includeIn="selected" 
+			 includeInLayout="{hasMatchingDetails(data)}" visible="{hasMatchingDetails(data)}"
 			 top="0" bottom="0" right="2" width="16" >
 		<s:layout>
 			<s:VerticalLayout verticalAlign="middle" horizontalAlign="left"/>

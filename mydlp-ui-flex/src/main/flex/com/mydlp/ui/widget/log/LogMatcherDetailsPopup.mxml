@@ -5,7 +5,7 @@
 			   xmlns:my="http://www.mydlp.com/flex/my"
 			   xmlns:input="com.mydlp.ui.widget.general.input.*"
 			   close="{close()}" 
-			   width="400" height="450" maxHeight="450"
+			   width="400" maxHeight="500"
 			   title="@Resource(bundle = 'messages', key = 'log.matcher.detail.title.label')" xmlns:util="com.mydlp.ui.util.*" xmlns:validators="com.mydlp.ui.validators.*"
 			   visible="false"
 			   >
@@ -20,6 +20,7 @@
 			
 			import mx.controls.Alert;
 			import mx.controls.Label;
+			import mx.managers.PopUpManager;
 			
 			protected var countDict:Object = new Object;
 			
@@ -41,7 +42,7 @@
 				for(var i:int = 0; i < matcherDefinitions.length; i++)
 				{
 					var count:int = 0;
-					var matcherDetailLabels:ListCollectionView = new ArrayCollection;
+					var matcherDetailLabels:ListCollectionView = new ArrayCollection();
 					for(var j:int = 0; j < matcherDetails.length; j++)
 					{
 						if((matcherDetails[j] as MatchingDetail).matcherFunc == (matcherDefinitions[i] as MatcherDefinition).data)
@@ -56,7 +57,14 @@
 					{
 						var matcherLabel:MatcherLabel = new MatcherLabel();
 						matcherLabel.matcher = LangUtil.getString('messages', 'log.matcher.detail.' + (matcherDefinitions[i] as MatcherDefinition).data + '.label');
-						matcherLabel.count = count;
+						if ((matcherDefinitions[i] as MatcherDefinition).data == "pdm_match")
+						{
+							matcherLabel.count = -1;
+						}
+						else
+						{
+							matcherLabel.count = count;
+						}
 						matchingDataGroup.addElement(matcherLabel);
 						for each(var e:MatcherDetailsLabel in matcherDetailLabels)
 						{
@@ -64,8 +72,8 @@
 						}
 					}
 				}
+				PopUpManager.centerPopUp(this);
 				this.visible = true;
-				this.height = Number.NaN;
 			}
 		]]>
 	</fx:Script>
@@ -88,10 +96,10 @@
 			<input:MatcherDefinition data="scode_match" />
 			<input:MatcherDefinition data="scode_ada_match" />
 			<input:MatcherDefinition data="keyword_group_match" />
-			<input:MatcherDefinition data="document_hash_match" />
-			<input:MatcherDefinition data="document_pdm_match" />
-			<input:MatcherDefinition data="encrypted_file_match" />
-			<input:MatcherDefinition data="encrypted_archive_match" />
+			<input:MatcherDefinition data="md5_match" />
+			<input:MatcherDefinition data="pdm_match" />
+			<input:MatcherDefinition data="e_file_match" />
+			<input:MatcherDefinition data="e_archive_match" />
 			<input:MatcherDefinition data="pan_match"/>
 			<input:MatcherDefinition data="tan_match"/>
 			<input:MatcherDefinition data="cpf_match"/>
@@ -120,7 +128,7 @@
 	<s:Scroller width="100%" height="100%" verticalScrollPolicy="auto" horizontalScrollPolicy="off">
 		<s:Group id="matchingDataGroup" width="100%">
 			<s:layout>
-				<s:VerticalLayout gap="2" paddingLeft="10"/>
+				<s:VerticalLayout gap="2" paddingLeft="10" verticalAlign="middle"/>
 			</s:layout>
 		</s:Group>
 	</s:Scroller>
