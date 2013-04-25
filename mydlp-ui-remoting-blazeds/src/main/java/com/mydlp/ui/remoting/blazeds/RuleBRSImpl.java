@@ -73,7 +73,6 @@ public class RuleBRSImpl implements RuleService
 	@Override
 	public Map<String, String> getRuleLabelsAndIds() {
 		return ruleDAO.getRuleLabelsAndIds();
-			
 	}
 
 	@Override

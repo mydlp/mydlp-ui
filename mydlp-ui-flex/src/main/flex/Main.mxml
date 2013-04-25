@@ -67,6 +67,7 @@
 			public var notifiedUsers:ArrayCollection = new ArrayCollection;
 			
 			public var ruleLabels:Object = new Object();
+			public var itypeLabels:Object = new Object();
 			
 			protected var rulesList:ListCollectionView;
 			
@@ -288,8 +289,9 @@
 					currentState = "nolicense";
 				else
 					currentState = "user";
-				ruleRE.getRuleLabelsAndIds();
 				
+				ruleRE.getRuleLabelsAndIds();
+				itypeRE.getITypeLabelsAndIds();
 			}
 			
 			public function popupulatePolicyOnCreate(): void {
@@ -372,6 +374,23 @@
 				}
 			}
 			
+			protected function getITypeLabelsAndIdsHandler(event:ResultEvent):void
+			{
+				var returnList:ListCollectionView = event.result as ListCollectionView;
+				var labelMap:Object = new Object();
+				for each (var obj:* in returnList)
+				{
+					var id:String = obj["id"];
+					var label:String = LangUtil.getString("messages", obj["nameKey"]);
+					if (label == obj["nameKey"])
+					{
+						label = obj["name"];
+					}
+					labelMap[id] = label;
+				}
+				itypeLabels = labelMap;
+			}
+			
 			public function getRuleLabel(value:Number):String
 			{
 				var ruleLabelsAndIds:Object = ruleLabels as Object;
@@ -391,6 +410,23 @@
 						labelText += "id(" + value + ")";
 					}
 				}
+				return labelText;
+			}
+			
+			public function getITypeLabel(value:Number):String
+			{
+				var itypeLabelsAndIds:Object = itypeLabels as Object;
+				var labelText:String = "";
+				
+				if (itypeLabelsAndIds[value] != null)
+				{
+					labelText +=  itypeLabelsAndIds[value];
+				}
+				else
+				{
+					labelText += "id(" + value + ")";
+				}
+			
 				return labelText;
 			}
 			
@@ -445,6 +481,9 @@
 		<my:remote id="ruleRE" destination="ruleBRS" >
 			<my:method name="getRuleLabelsAndIds" result="getRuleLabelsAndIdsHandler(event)"/>
 			<my:method name="getRules" result="getRulesHandler(event)"/>
+		</my:remote>
+		<my:remote id="itypeRE" destination="informationTypeBRS" >
+			<my:method name="getITypeLabelsAndIds" result="getITypeLabelsAndIdsHandler(event)"/>
 		</my:remote>
 		<my:remote id="inventoryRE" destination="inventoryBRS">
 			<my:method name="getInventory" result="getInventoryHandler(event)"/>

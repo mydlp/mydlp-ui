@@ -26,14 +26,8 @@
 				
 				if (log.informationTypeId != -1)
 				{
-					var rule:Rule = RuleContainer.getRule(log.ruleId, false);
-					var informationType:InformationType = findInformationType(rule, log.informationTypeId);
-					
 					labelText += LangUtil.getString("messages","log.container.column.policy.informationType") + ": ";
-					if (informationType != null)
-						labelText += informationType.coupledInventoryItem.label;
-					else
-						labelText += "id(" + log.informationTypeId + ")";
+					labelText += FlexGlobals.topLevelApplication.getITypeLabel(log.informationTypeId);
 				}
 				
 				if (log.matcherMessage != null && log.matcherMessage.length > 0 )

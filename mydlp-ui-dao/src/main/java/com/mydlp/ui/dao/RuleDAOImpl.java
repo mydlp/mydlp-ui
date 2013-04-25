@@ -127,6 +127,7 @@ public class RuleDAOImpl extends AbstractPolicyDAO implements RuleDAO {
 	}
 
 	@Override
+	@Transactional(readOnly=true)
 	public Map<String, String> getRuleLabelsAndIds() {
 		Map<String, String> returnMap = new HashMap<String, String>();
 
