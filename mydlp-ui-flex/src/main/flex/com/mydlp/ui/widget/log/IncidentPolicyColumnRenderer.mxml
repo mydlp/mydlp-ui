@@ -16,6 +16,7 @@
 			import mx.core.FlexGlobals;
 			
 			protected var selectedRule:Rule = null;
+			protected var isDiscovery:Boolean = false;
 			
 			protected function isGotoVisible(value:*): Boolean
 			{
@@ -23,7 +24,21 @@
 				var log:IncidentLog = value as IncidentLog;
 				if (! (log.ruleId == -1))
 				{
-					var rule:Rule = RuleContainer.getRule(log.ruleId, false);
+					switch (log.channel)
+					{
+						case "W": isDiscovery = false; break;
+						case "R": isDiscovery = false; break;
+						case "I": isDiscovery = false; break;
+						case "M": isDiscovery = false; break;
+						case "P": isDiscovery = false; break;
+						case "D": isDiscovery = true; break;
+						case "A": isDiscovery = false; break;
+						case "RD": isDiscovery = true; break;
+						default: isDiscovery = false; break;
+					}
+					
+					var rule:Rule = RuleContainer.getRule(log.ruleId, isDiscovery);
+					
 					if (rule != null)
 					{
 						selectedRule = rule;
@@ -115,7 +130,14 @@
 			
 			protected function goToRuleButtonClickHandler(event:MouseEvent):void
 			{
-				FlexGlobals.topLevelApplication.policyContainer.ruleContainer.gotoRule(selectedRule);
+				if (isDiscovery)
+				{
+					FlexGlobals.topLevelApplication.discoveryContainer.ruleContainer.gotoRule(selectedRule);
+				}
+				else
+				{
+					FlexGlobals.topLevelApplication.ruleContainer.gotoRule(selectedRule);
+				}
 			}
 			
 			protected function requeueButtonClickHandler(event:MouseEvent):void

@@ -20,7 +20,7 @@ public class InformationTypeDAOImpl extends AbstractPolicyDAO implements Informa
 		List<Map<String, String>> returnList = new ArrayList<Map<String,String>>();
 
 		Query query = getSession().createQuery(
-				"select r.id, r.name, r.nameKey from InformationType r ");
+				"select t.id, i.name, i.nameKey from InformationType t, InventoryItem i where i.item=t ");
 		for (@SuppressWarnings("unchecked")
 		Iterator<Object[]> iterator = query.list().iterator(); iterator.hasNext();) {
 			Map<String, String> returnMap = new HashMap<String, String>();

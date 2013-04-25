@@ -290,8 +290,8 @@
 				else
 					currentState = "user";
 				
-				ruleRE.getRuleLabelsAndIds();
 				itypeRE.getITypeLabelsAndIds();
+				ruleRE.getRuleLabelsAndIds();
 			}
 			
 			public function popupulatePolicyOnCreate(): void {
@@ -483,7 +483,7 @@
 			<my:method name="getRules" result="getRulesHandler(event)"/>
 		</my:remote>
 		<my:remote id="itypeRE" destination="informationTypeBRS" >
-			<my:method name="getITypeLabelsAndIds" result="getITypeLabelsAndIdsHandler(event)"/>
+			<my:method name="getITypeLabelsAndIds" result="getITypeLabelsAndIdsHandler(event)" fault="faultHandler(event)"/>
 		</my:remote>
 		<my:remote id="inventoryRE" destination="inventoryBRS">
 			<my:method name="getInventory" result="getInventoryHandler(event)"/>

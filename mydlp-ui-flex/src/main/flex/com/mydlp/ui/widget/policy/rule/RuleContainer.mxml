@@ -412,7 +412,10 @@
 			public function gotoRuleIndex(i:int): void 
 			{
 				ruleList.selectedIndex = i;
-				FlexGlobals.topLevelApplication.tapBar.selectedIndex = 1; // index of policy tab
+				if(isDiscoveryTab)
+					FlexGlobals.topLevelApplication.tapBar.selectedIndex = 2; // index of discovery tab
+				else
+					FlexGlobals.topLevelApplication.tapBar.selectedIndex = 1; // index of policy tab
 			}
 			
 			protected function faultHandler(event:FaultEvent):void
@@ -563,15 +566,6 @@
 				FlexGlobals.topLevelApplication.popupulatePolicyOnCreate();
 			}
 			
-			
-			protected function getBoxSize(defaultSize:Number): Number
-			{
-				if (isDiscoveryTab)
-					return defaultSize - DISCOVERY_WIDTH_DIFF;
-				
-				return defaultSize;
-			}
-			
 		]]>
 	</fx:Script>
 	<fx:Declarations>
@@ -614,7 +608,7 @@
 				</s:HGroup>
 			</s:HGroup>
 			
-			<s:Group width="100%" includeInLayout="{!isDiscoveryTab}" visible="{!isDiscoveryTab}">
+			<s:Group width="100%">
 				<s:layout>
 					<s:HorizontalLayout gap="0" paddingLeft="4"/>
 				</s:layout>
@@ -630,19 +624,19 @@
 						 textAlign="center"
 						 styleName="fontSize16Style" fontWeight="bold"/>
 				<s:Label text="@Resource(key='rules.sources.label', bundle='messages')"
-						 width="{getBoxSize(sourceWidth) + 8}"
+						 width="{sourceWidth + 8}"
 						 textAlign="center"
 						 styleName="fontSize16Style" fontWeight="bold"/>
 				<s:Label text="@Resource(key='rules.destinations.label', bundle='messages')"
-						 width="{getBoxSize(destinationWidth) + 8}"
+						 width="{destinationWidth + 8}"
 						 textAlign="center"
 						 styleName="fontSize16Style" fontWeight="bold"/>
 				<s:Label text="@Resource(key='rules.informationTypes.label', bundle='messages')"
-						 width="{getBoxSize(informationTypeWidth) + 8}"
+						 width="{informationTypeWidth + 8}"
 						 textAlign="center"
 						 styleName="fontSize16Style" fontWeight="bold"/>
 				<s:Label text="@Resource(key='rules.action.label', bundle='messages')"
-						 width="{getBoxSize(actionWidth)}"
+						 width="{actionWidth}"
 						 textAlign="center"
 						 styleName="fontSize16Style" fontWeight="bold"/>
 			</s:Group>
