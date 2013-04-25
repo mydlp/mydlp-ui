@@ -5,12 +5,6 @@
 				  xmlns:popup="com.mydlp.ui.widget.general.popup.*"
 				  width="100%">
 	
-	<fx:Script>
-		<![CDATA[
-			
-			
-		]]>
-	</fx:Script>
 	<fx:Declarations>
 		<fx:String id="data"/>
 	</fx:Declarations>
