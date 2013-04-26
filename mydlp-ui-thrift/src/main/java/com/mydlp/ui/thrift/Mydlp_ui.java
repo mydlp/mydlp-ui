@@ -58,7 +58,7 @@ public class Mydlp_ui {
 
     public void startFingerprinting(int DDId) throws org.apache.thrift.TException;
 
-    public String testConnection(RemoteStorage rs) throws org.apache.thrift.TException;
+    public String testConnection(Map<String,String> RemoteStorage) throws org.apache.thrift.TException;
 
   }
 
@@ -98,7 +98,7 @@ public class Mydlp_ui {
 
     public void startFingerprinting(int DDId, org.apache.thrift.async.AsyncMethodCallback<AsyncClient.startFingerprinting_call> resultHandler) throws org.apache.thrift.TException;
 
-    public void testConnection(RemoteStorage rs, org.apache.thrift.async.AsyncMethodCallback<AsyncClient.testConnection_call> resultHandler) throws org.apache.thrift.TException;
+    public void testConnection(Map<String,String> RemoteStorage, org.apache.thrift.async.AsyncMethodCallback<AsyncClient.testConnection_call> resultHandler) throws org.apache.thrift.TException;
 
   }
 
@@ -463,16 +463,16 @@ public class Mydlp_ui {
       sendBase("startFingerprinting", args);
     }
 
-    public String testConnection(RemoteStorage rs) throws org.apache.thrift.TException
+    public String testConnection(Map<String,String> RemoteStorage) throws org.apache.thrift.TException
     {
-      send_testConnection(rs);
+      send_testConnection(RemoteStorage);
       return recv_testConnection();
     }
 
-    public void send_testConnection(RemoteStorage rs) throws org.apache.thrift.TException
+    public void send_testConnection(Map<String,String> RemoteStorage) throws org.apache.thrift.TException
     {
       testConnection_args args = new testConnection_args();
-      args.setRs(rs);
+      args.setRemoteStorage(RemoteStorage);
       sendBase("testConnection", args);
     }
 
@@ -1085,24 +1085,24 @@ public class Mydlp_ui {
       }
     }
 
-    public void testConnection(RemoteStorage rs, org.apache.thrift.async.AsyncMethodCallback<testConnection_call> resultHandler) throws org.apache.thrift.TException {
+    public void testConnection(Map<String,String> RemoteStorage, org.apache.thrift.async.AsyncMethodCallback<testConnection_call> resultHandler) throws org.apache.thrift.TException {
       checkReady();
-      testConnection_call method_call = new testConnection_call(rs, resultHandler, this, ___protocolFactory, ___transport);
+      testConnection_call method_call = new testConnection_call(RemoteStorage, resultHandler, this, ___protocolFactory, ___transport);
       this.___currentMethod = method_call;
       ___manager.call(method_call);
     }
 
     public static class testConnection_call extends org.apache.thrift.async.TAsyncMethodCall {
-      private RemoteStorage rs;
-      public testConnection_call(RemoteStorage rs, org.apache.thrift.async.AsyncMethodCallback<testConnection_call> resultHandler, org.apache.thrift.async.TAsyncClient client, org.apache.thrift.protocol.TProtocolFactory protocolFactory, org.apache.thrift.transport.TNonblockingTransport transport) throws org.apache.thrift.TException {
+      private Map<String,String> RemoteStorage;
+      public testConnection_call(Map<String,String> RemoteStorage, org.apache.thrift.async.AsyncMethodCallback<testConnection_call> resultHandler, org.apache.thrift.async.TAsyncClient client, org.apache.thrift.protocol.TProtocolFactory protocolFactory, org.apache.thrift.transport.TNonblockingTransport transport) throws org.apache.thrift.TException {
         super(client, protocolFactory, transport, resultHandler, false);
-        this.rs = rs;
+        this.RemoteStorage = RemoteStorage;
       }
 
       public void write_args(org.apache.thrift.protocol.TProtocol prot) throws org.apache.thrift.TException {
         prot.writeMessageBegin(new org.apache.thrift.protocol.TMessage("testConnection", org.apache.thrift.protocol.TMessageType.CALL, 0));
         testConnection_args args = new testConnection_args();
-        args.setRs(rs);
+        args.setRemoteStorage(RemoteStorage);
         args.write(prot);
         prot.writeMessageEnd();
       }
@@ -1429,7 +1429,7 @@ public class Mydlp_ui {
 
       protected testConnection_result getResult(I iface, testConnection_args args) throws org.apache.thrift.TException {
         testConnection_result result = new testConnection_result();
-        result.success = iface.testConnection(args.rs);
+        result.success = iface.testConnection(args.RemoteStorage);
         return result;
       }
     }
@@ -7337,15 +7337,15 @@ public class Mydlp_ui {
           case 0: // SUCCESS
             if (field.type == org.apache.thrift.protocol.TType.MAP) {
               {
-                org.apache.thrift.protocol.TMap _map4 = iprot.readMapBegin();
-                this.success = new HashMap<String,String>(2*_map4.size);
-                for (int _i5 = 0; _i5 < _map4.size; ++_i5)
+                org.apache.thrift.protocol.TMap _map0 = iprot.readMapBegin();
+                this.success = new HashMap<String,String>(2*_map0.size);
+                for (int _i1 = 0; _i1 < _map0.size; ++_i1)
                 {
-                  String _key6; // required
-                  String _val7; // required
-                  _key6 = iprot.readString();
-                  _val7 = iprot.readString();
-                  this.success.put(_key6, _val7);
+                  String _key2; // required
+                  String _val3; // required
+                  _key2 = iprot.readString();
+                  _val3 = iprot.readString();
+                  this.success.put(_key2, _val3);
                 }
                 iprot.readMapEnd();
               }
@@ -7371,10 +7371,10 @@ public class Mydlp_ui {
         oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
         {
           oprot.writeMapBegin(new org.apache.thrift.protocol.TMap(org.apache.thrift.protocol.TType.STRING, org.apache.thrift.protocol.TType.STRING, this.success.size()));
-          for (Map.Entry<String, String> _iter8 : this.success.entrySet())
+          for (Map.Entry<String, String> _iter4 : this.success.entrySet())
           {
-            oprot.writeString(_iter8.getKey());
-            oprot.writeString(_iter8.getValue());
+            oprot.writeString(_iter4.getKey());
+            oprot.writeString(_iter4.getValue());
           }
           oprot.writeMapEnd();
         }
@@ -10177,6 +10177,8 @@ public class Mydlp_ui {
 
     private void readObject(java.io.ObjectInputStream in) throws java.io.IOException, ClassNotFoundException {
       try {
+        // it doesn't seem like you should have to do this, but java serialization is wacky, and doesn't call the default constructor.
+        __isset_bit_vector = new BitSet(1);
         read(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(in)));
       } catch (org.apache.thrift.TException te) {
         throw new java.io.IOException(te);
@@ -10733,13 +10735,13 @@ public class Mydlp_ui {
           case 0: // SUCCESS
             if (field.type == org.apache.thrift.protocol.TType.LIST) {
               {
-                org.apache.thrift.protocol.TList _list9 = iprot.readListBegin();
-                this.success = new ArrayList<String>(_list9.size);
-                for (int _i10 = 0; _i10 < _list9.size; ++_i10)
+                org.apache.thrift.protocol.TList _list5 = iprot.readListBegin();
+                this.success = new ArrayList<String>(_list5.size);
+                for (int _i6 = 0; _i6 < _list5.size; ++_i6)
                 {
-                  String _elem11; // required
-                  _elem11 = iprot.readString();
-                  this.success.add(_elem11);
+                  String _elem7; // required
+                  _elem7 = iprot.readString();
+                  this.success.add(_elem7);
                 }
                 iprot.readListEnd();
               }
@@ -10765,9 +10767,9 @@ public class Mydlp_ui {
         oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
         {
           oprot.writeListBegin(new org.apache.thrift.protocol.TList(org.apache.thrift.protocol.TType.STRING, this.success.size()));
-          for (String _iter12 : this.success)
+          for (String _iter8 : this.success)
           {
-            oprot.writeString(_iter12);
+            oprot.writeString(_iter8);
           }
           oprot.writeListEnd();
         }
@@ -11102,8 +11104,6 @@ public class Mydlp_ui {
 
     private void readObject(java.io.ObjectInputStream in) throws java.io.IOException, ClassNotFoundException {
       try {
-        // it doesn't seem like you should have to do this, but java serialization is wacky, and doesn't call the default constructor.
-        __isset_bit_vector = new BitSet(1);
         read(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(in)));
       } catch (org.apache.thrift.TException te) {
         throw new java.io.IOException(te);
@@ -11115,13 +11115,13 @@ public class Mydlp_ui {
   public static class testConnection_args implements org.apache.thrift.TBase<testConnection_args, testConnection_args._Fields>, java.io.Serializable, Cloneable   {
     private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("testConnection_args");
 
-    private static final org.apache.thrift.protocol.TField RS_FIELD_DESC = new org.apache.thrift.protocol.TField("rs", org.apache.thrift.protocol.TType.STRUCT, (short)1);
+    private static final org.apache.thrift.protocol.TField REMOTE_STORAGE_FIELD_DESC = new org.apache.thrift.protocol.TField("RemoteStorage", org.apache.thrift.protocol.TType.MAP, (short)1);
 
-    public RemoteStorage rs; // required
+    public Map<String,String> RemoteStorage; // required
 
     /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
     public enum _Fields implements org.apache.thrift.TFieldIdEnum {
-      RS((short)1, "rs");
+      REMOTE_STORAGE((short)1, "RemoteStorage");
 
       private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
 
@@ -11136,8 +11136,8 @@ public class Mydlp_ui {
        */
       public static _Fields findByThriftId(int fieldId) {
         switch(fieldId) {
-          case 1: // RS
-            return RS;
+          case 1: // REMOTE_STORAGE
+            return REMOTE_STORAGE;
           default:
             return null;
         }
@@ -11182,8 +11182,10 @@ public class Mydlp_ui {
     public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
     static {
       Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
-      tmpMap.put(_Fields.RS, new org.apache.thrift.meta_data.FieldMetaData("rs", org.apache.thrift.TFieldRequirementType.DEFAULT, 
-          new org.apache.thrift.meta_data.StructMetaData(org.apache.thrift.protocol.TType.STRUCT, RemoteStorage.class)));
+      tmpMap.put(_Fields.REMOTE_STORAGE, new org.apache.thrift.meta_data.FieldMetaData("RemoteStorage", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+          new org.apache.thrift.meta_data.MapMetaData(org.apache.thrift.protocol.TType.MAP, 
+              new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING), 
+              new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING))));
       metaDataMap = Collections.unmodifiableMap(tmpMap);
       org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(testConnection_args.class, metaDataMap);
     }
@@ -11192,18 +11194,30 @@ public class Mydlp_ui {
     }
 
     public testConnection_args(
-      RemoteStorage rs)
+      Map<String,String> RemoteStorage)
     {
       this();
-      this.rs = rs;
+      this.RemoteStorage = RemoteStorage;
     }
 
     /**
      * Performs a deep copy on <i>other</i>.
      */
     public testConnection_args(testConnection_args other) {
-      if (other.isSetRs()) {
-        this.rs = new RemoteStorage(other.rs);
+      if (other.isSetRemoteStorage()) {
+        Map<String,String> __this__RemoteStorage = new HashMap<String,String>();
+        for (Map.Entry<String, String> other_element : other.RemoteStorage.entrySet()) {
+
+          String other_element_key = other_element.getKey();
+          String other_element_value = other_element.getValue();
+
+          String __this__RemoteStorage_copy_key = other_element_key;
+
+          String __this__RemoteStorage_copy_value = other_element_value;
+
+          __this__RemoteStorage.put(__this__RemoteStorage_copy_key, __this__RemoteStorage_copy_value);
+        }
+        this.RemoteStorage = __this__RemoteStorage;
       }
     }
 
@@ -11213,40 +11227,51 @@ public class Mydlp_ui {
 
     @Override
     public void clear() {
-      this.rs = null;
+      this.RemoteStorage = null;
     }
 
-    public RemoteStorage getRs() {
-      return this.rs;
+    public int getRemoteStorageSize() {
+      return (this.RemoteStorage == null) ? 0 : this.RemoteStorage.size();
     }
 
-    public testConnection_args setRs(RemoteStorage rs) {
-      this.rs = rs;
+    public void putToRemoteStorage(String key, String val) {
+      if (this.RemoteStorage == null) {
+        this.RemoteStorage = new HashMap<String,String>();
+      }
+      this.RemoteStorage.put(key, val);
+    }
+
+    public Map<String,String> getRemoteStorage() {
+      return this.RemoteStorage;
+    }
+
+    public testConnection_args setRemoteStorage(Map<String,String> RemoteStorage) {
+      this.RemoteStorage = RemoteStorage;
       return this;
     }
 
-    public void unsetRs() {
-      this.rs = null;
+    public void unsetRemoteStorage() {
+      this.RemoteStorage = null;
     }
 
-    /** Returns true if field rs is set (has been assigned a value) and false otherwise */
-    public boolean isSetRs() {
-      return this.rs != null;
+    /** Returns true if field RemoteStorage is set (has been assigned a value) and false otherwise */
+    public boolean isSetRemoteStorage() {
+      return this.RemoteStorage != null;
     }
 
-    public void setRsIsSet(boolean value) {
+    public void setRemoteStorageIsSet(boolean value) {
       if (!value) {
-        this.rs = null;
+        this.RemoteStorage = null;
       }
     }
 
     public void setFieldValue(_Fields field, Object value) {
       switch (field) {
-      case RS:
+      case REMOTE_STORAGE:
         if (value == null) {
-          unsetRs();
+          unsetRemoteStorage();
         } else {
-          setRs((RemoteStorage)value);
+          setRemoteStorage((Map<String,String>)value);
         }
         break;
 
@@ -11255,8 +11280,8 @@ public class Mydlp_ui {
 
     public Object getFieldValue(_Fields field) {
       switch (field) {
-      case RS:
-        return getRs();
+      case REMOTE_STORAGE:
+        return getRemoteStorage();
 
       }
       throw new IllegalStateException();
@@ -11269,8 +11294,8 @@ public class Mydlp_ui {
       }
 
       switch (field) {
-      case RS:
-        return isSetRs();
+      case REMOTE_STORAGE:
+        return isSetRemoteStorage();
       }
       throw new IllegalStateException();
     }
@@ -11288,12 +11313,12 @@ public class Mydlp_ui {
       if (that == null)
         return false;
 
-      boolean this_present_rs = true && this.isSetRs();
-      boolean that_present_rs = true && that.isSetRs();
-      if (this_present_rs || that_present_rs) {
-        if (!(this_present_rs && that_present_rs))
+      boolean this_present_RemoteStorage = true && this.isSetRemoteStorage();
+      boolean that_present_RemoteStorage = true && that.isSetRemoteStorage();
+      if (this_present_RemoteStorage || that_present_RemoteStorage) {
+        if (!(this_present_RemoteStorage && that_present_RemoteStorage))
           return false;
-        if (!this.rs.equals(that.rs))
+        if (!this.RemoteStorage.equals(that.RemoteStorage))
           return false;
       }
 
@@ -11313,12 +11338,12 @@ public class Mydlp_ui {
       int lastComparison = 0;
       testConnection_args typedOther = (testConnection_args)other;
 
-      lastComparison = Boolean.valueOf(isSetRs()).compareTo(typedOther.isSetRs());
+      lastComparison = Boolean.valueOf(isSetRemoteStorage()).compareTo(typedOther.isSetRemoteStorage());
       if (lastComparison != 0) {
         return lastComparison;
       }
-      if (isSetRs()) {
-        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.rs, typedOther.rs);
+      if (isSetRemoteStorage()) {
+        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.RemoteStorage, typedOther.RemoteStorage);
         if (lastComparison != 0) {
           return lastComparison;
         }
@@ -11340,10 +11365,21 @@ public class Mydlp_ui {
           break;
         }
         switch (field.id) {
-          case 1: // RS
-            if (field.type == org.apache.thrift.protocol.TType.STRUCT) {
-              this.rs = new RemoteStorage();
-              this.rs.read(iprot);
+          case 1: // REMOTE_STORAGE
+            if (field.type == org.apache.thrift.protocol.TType.MAP) {
+              {
+                org.apache.thrift.protocol.TMap _map9 = iprot.readMapBegin();
+                this.RemoteStorage = new HashMap<String,String>(2*_map9.size);
+                for (int _i10 = 0; _i10 < _map9.size; ++_i10)
+                {
+                  String _key11; // required
+                  String _val12; // required
+                  _key11 = iprot.readString();
+                  _val12 = iprot.readString();
+                  this.RemoteStorage.put(_key11, _val12);
+                }
+                iprot.readMapEnd();
+              }
             } else { 
               org.apache.thrift.protocol.TProtocolUtil.skip(iprot, field.type);
             }
@@ -11363,9 +11399,17 @@ public class Mydlp_ui {
       validate();
 
       oprot.writeStructBegin(STRUCT_DESC);
-      if (this.rs != null) {
-        oprot.writeFieldBegin(RS_FIELD_DESC);
-        this.rs.write(oprot);
+      if (this.RemoteStorage != null) {
+        oprot.writeFieldBegin(REMOTE_STORAGE_FIELD_DESC);
+        {
+          oprot.writeMapBegin(new org.apache.thrift.protocol.TMap(org.apache.thrift.protocol.TType.STRING, org.apache.thrift.protocol.TType.STRING, this.RemoteStorage.size()));
+          for (Map.Entry<String, String> _iter13 : this.RemoteStorage.entrySet())
+          {
+            oprot.writeString(_iter13.getKey());
+            oprot.writeString(_iter13.getValue());
+          }
+          oprot.writeMapEnd();
+        }
         oprot.writeFieldEnd();
       }
       oprot.writeFieldStop();
@@ -11377,11 +11421,11 @@ public class Mydlp_ui {
       StringBuilder sb = new StringBuilder("testConnection_args(");
       boolean first = true;
 
-      sb.append("rs:");
-      if (this.rs == null) {
+      sb.append("RemoteStorage:");
+      if (this.RemoteStorage == null) {
         sb.append("null");
       } else {
-        sb.append(this.rs);
+        sb.append(this.RemoteStorage);
       }
       first = false;
       sb.append(")");
