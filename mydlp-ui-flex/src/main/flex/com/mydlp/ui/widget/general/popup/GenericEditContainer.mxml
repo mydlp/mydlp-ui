@@ -1054,7 +1054,7 @@
 						read.testConnection(formObject as ADDomain);
 					}
 					else if (formObject is InventoryItem && (formObject as InventoryItem).item is RemoteStorage) {
-						rers.testConnection(formObject as RemoteStorage)
+						rers.testConnection((formObject.item) as RemoteStorage)
 					}
 				}
 			}
