@@ -57,6 +57,7 @@
 			import com.mydlp.ui.util.ReflectionUtil;
 			import com.mydlp.ui.util.SessionUtil;
 			import com.mydlp.ui.validators.EmptyListValidator;
+			import com.mydlp.ui.validators.MyRegExValidator;
 			import com.mydlp.ui.validators.NullValidator;
 			import com.mydlp.ui.widget.general.input.ADDomainAliasInput;
 			import com.mydlp.ui.widget.general.input.ADDomainItemInput;
@@ -381,7 +382,7 @@
 						var regExpValidatorP:RegExpValidator = new RegExpValidator();
 						regExpValidatorP.source = wsi;
 						regExpValidatorP.property = "address";
-						regExpValidatorP.expression = "^(www\.){0,1}[a-zA-Z0-9\.\-]*[\.]{0,1}[a-zA-Z]{0,5}[\.]{0,1}$";
+						regExpValidatorP.expression = MyRegExValidator.domainNameOrIpRegex();
 						ErrorTipManager.registerValidator(regExpValidatorP);
 						validators.push(regExpValidatorP);
 						
@@ -392,6 +393,16 @@
 						regExpValidatorPt.expression = "^([a-zA-Z-]+\/)*[a-zA-Z-]*$";
 						ErrorTipManager.registerValidator(regExpValidatorPt);
 						validators.push(regExpValidatorPt);
+						
+						var numberValidator4:NumberValidator = new NumberValidator;
+						numberValidator4.source = wsi.portText;
+						numberValidator4.property = "text";
+						numberValidator4.domain = "int";
+						numberValidator4.required = true;
+						numberValidator4.minValue = "1";
+						numberValidator4.maxValue = "65535";
+						ErrorTipManager.registerValidator(numberValidator4);
+						validators.push(numberValidator4);
 					}
 					
 					else if (targetObject is AuthUser && classMember.name == "role")

@@ -13,6 +13,7 @@
 			
 			import mx.collections.ArrayCollection;
 			import mx.collections.ListCollectionView;
+			import mx.controls.Alert;
 			import mx.events.FlexEvent;
 			
 			import spark.events.IndexChangeEvent;
@@ -49,9 +50,10 @@
 					protocolDropDown.selectedItem = proto;
 				}
 				else
-				{
+				{	
 					protocolDropDown.selectedIndex = 0;
-					portText.text = "80";
+					if(port == "0")
+						portText.text = "80";
 				}
 			}
 			
