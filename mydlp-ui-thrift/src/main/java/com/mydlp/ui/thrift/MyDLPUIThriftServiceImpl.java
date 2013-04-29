@@ -289,4 +289,14 @@ public class MyDLPUIThriftServiceImpl implements MyDLPUIThriftService {
 		});
 	}
 
+	@Override
+	public String testConnection(final Map<String, String> remoteStorage) {
+		return call(new ThriftCall<String>() {
+			@Override
+			public String execute(MyDLPUIThriftConnection thriftConnection) throws TException {
+				return thriftConnection.client.testConnection(remoteStorage);
+			}
+		});
+	}
+
 }
