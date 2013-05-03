@@ -395,8 +395,8 @@
 						validators.push(regExpValidatorPt);
 						
 						var numberValidator4:NumberValidator = new NumberValidator;
-						numberValidator4.source = wsi.portText;
-						numberValidator4.property = "text";
+						numberValidator4.source = wsi;
+						numberValidator4.property = "port";
 						numberValidator4.domain = "int";
 						numberValidator4.required = true;
 						numberValidator4.minValue = "1";

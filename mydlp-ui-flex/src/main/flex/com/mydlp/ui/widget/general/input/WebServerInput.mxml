@@ -17,6 +17,8 @@
 			import mx.events.FlexEvent;
 			
 			import spark.events.IndexChangeEvent;
+			import spark.events.TextOperationEvent;
+
 			
 			protected static var protocols:ListCollectionView = 
 				new ArrayCollection(
@@ -29,7 +31,7 @@
 			[Bindable]
 			public var proto:String;
 			
-			protected function onChangeProtocol(event:IndexChangeEvent):void
+		/*	protected function onChangeProtocol(event:IndexChangeEvent):void
 			{
 				if (protocolDropDown.selectedIndex == 0)
 				{
@@ -41,20 +43,63 @@
 					proto = WebServer.PROTO_HTTPS;
 					portText.text = "443";	
 				}
-			}
+			}*/
 			
 			protected function onCreationComplete(event:FlexEvent):void
 			{
-				if(proto != null && proto != "")
+				if(proto != null && address != null && startPath != null)
+					addressText.text = proto + "://" + address + "/" + startPath;
+				else if(proto != null && proto != "")
 				{
-					protocolDropDown.selectedItem = proto;
+					addressText.text = proto + "://";
 				}
 				else
 				{	
-					protocolDropDown.selectedIndex = 0;
-					if(port == "0")
-						portText.text = "80";
+					addressText.text = "http://";
 				}
+				
+				if(port != null &&  port != "" && port != "0")
+				{
+					addressText.text  +=  ":" + port;
+				}
+			}
+			
+			protected function genericSplitUrl(delimeter:String, source:String):Array
+			{
+				var sArray:Array = source.split(delimeter);
+				var result:Array = new Array;
+				var first:String = sArray[0];
+				var sArray2:Array = new Array;
+				for(var i:int = 1; i < sArray.length; i++)
+				{
+					sArray2.push(sArray[i]);
+				}
+				var second:String = sArray2.join(delimeter);
+				result.push(first);
+				if(sArray.length == 1)
+					result.push("");
+				else
+					result.push(second);
+				return result;
+			}
+			
+			protected function onChangeHandler(event:TextOperationEvent):void
+			{
+				var pArray:Array = genericSplitUrl("://", addressText.text);
+				proto = pArray[0];
+				var aArray:Array = genericSplitUrl("/", pArray[1]);
+				address = aArray[0];
+				var sArray = genericSplitUrl(":", aArray[1]);
+				startPath = sArray[0];
+				if(sArray[1] == null || sArray[1] == "")
+				{
+					if(proto == "http")
+						port = "80";
+					else
+						port = "443";
+				}
+				else
+					port = sArray[1];
 			}
 			
 		]]>
@@ -77,15 +122,7 @@
 			<s:layout>
 				<s:HorizontalLayout gap="2" verticalAlign="middle"/>
 			</s:layout>
-			
-			<s:DropDownList id="protocolDropDown" dataProvider="{protocols}"
-							change="onChangeProtocol(event)" width="17%"/>
-			<s:Label text="://" fontSize="20" width="5%"/>
-			<s:TextInput id="addressText" text="@{address}" width="34%"/>
-			<s:Label text=":" fontSize="20" width="2%"/>
-			<s:TextInput id="portText" text="@{port}" width="8%"/>
-			<s:Label text="/" fontSize="20" width="2%"/>
-			<s:TextInput id="start" text="@{startPath}" width="32%"/>
+			<s:TextInput id="addressText" width="100%" change="onChangeHandler(event)"/>
 		</s:Group>
 	</s:Group>
 	

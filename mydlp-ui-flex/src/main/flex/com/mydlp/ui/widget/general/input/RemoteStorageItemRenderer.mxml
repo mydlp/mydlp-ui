@@ -51,12 +51,12 @@
 			<s:HorizontalLayout paddingLeft="4" paddingTop="1" paddingBottom="1" gap="4"/>
 		</s:layout>
 		<s:CheckBox id="checkBox"/>	
-		<s:HGroup horizontalAlign="right" width="100%">
+		<!--<s:HGroup horizontalAlign="right" width="100%">
 			<s:Button styleName="editButtonStyle"
 					  includeInLayout="{checkBox.selected}"
 					  visible="{checkBox.selected}"
 					  click="onEditClick(event)"/>
-		</s:HGroup>
+		</s:HGroup>-->
 	</s:Group>
 	
 	
