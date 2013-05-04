@@ -8,12 +8,12 @@
 package com.mydlp.ui.domain {
 
     [Managed]
-    [RemoteClass(alias="com.mydlp.ui.domain.ADDomainRoot")]
-    public class ADDomainRoot extends ADDomainRootBase {
+    [RemoteClass(alias="com.mydlp.ui.domain.ADDomainItem")]
+    public class ADDomainItem extends ADDomainItemBase {
 		
-		override public function get sortPriority(): Number
+		public function get sortPriority(): Number
 		{
-			return 1;
+			return 7;
 		}
 		
     }

@@ -15,8 +15,6 @@ package com.mydlp.ui.domain {
 		[Embed("../../../../../../../../mydlp-ui-flex/src/main/flex/assets/icons/16x16/users.png")]
 		public static const ICON_CLASS:Class;
 		
-		public var sortPriority:Number = 5;
-		
 		public function get icon(): Object
 		{
 			return ICON_CLASS;
@@ -27,5 +25,9 @@ package com.mydlp.ui.domain {
 			return this.name;
 		}
 		
+		override public function get sortPriority(): Number
+		{
+			return 5;
+		}
     }
 }
