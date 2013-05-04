@@ -31,7 +31,9 @@
 			import com.mydlp.ui.domain.CustomAction;
 			import com.mydlp.ui.domain.DataFormat;
 			import com.mydlp.ui.domain.DocumentDatabase;
+			import com.mydlp.ui.domain.InformationType;
 			import com.mydlp.ui.domain.InventoryBase;
+			import com.mydlp.ui.domain.InventoryItem;
 			import com.mydlp.ui.domain.LicenseInformation;
 			import com.mydlp.ui.domain.RDBMSConnection;
 			import com.mydlp.ui.domain.RegularExpressionGroup;
@@ -337,6 +339,15 @@
 				if (entity == null || entity is Rule)
 				{
 					ruleRE.getRuleLabelsAndIds();
+				}
+				
+				if (entity == null || 
+					(
+						entity is InventoryItem && (entity as InventoryItem).item is InformationType
+					)
+				)
+				{
+					itypeRE.getITypeLabelsAndIds();
 				}
 				
 				
