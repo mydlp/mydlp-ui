@@ -58,6 +58,8 @@ public class Mydlp_ui {
 
     public void startFingerprinting(int DDId) throws org.apache.thrift.TException;
 
+    public String testConnection(Map<String,String> RemoteStorage) throws org.apache.thrift.TException;
+
   }
 
   public interface AsyncIface {
@@ -95,6 +97,8 @@ public class Mydlp_ui {
     public void getRemoteStorageDir(int RSId, org.apache.thrift.async.AsyncMethodCallback<AsyncClient.getRemoteStorageDir_call> resultHandler) throws org.apache.thrift.TException;
 
     public void startFingerprinting(int DDId, org.apache.thrift.async.AsyncMethodCallback<AsyncClient.startFingerprinting_call> resultHandler) throws org.apache.thrift.TException;
+
+    public void testConnection(Map<String,String> RemoteStorage, org.apache.thrift.async.AsyncMethodCallback<AsyncClient.testConnection_call> resultHandler) throws org.apache.thrift.TException;
 
   }
 
@@ -457,6 +461,29 @@ public class Mydlp_ui {
       startFingerprinting_args args = new startFingerprinting_args();
       args.setDDId(DDId);
       sendBase("startFingerprinting", args);
+    }
+
+    public String testConnection(Map<String,String> RemoteStorage) throws org.apache.thrift.TException
+    {
+      send_testConnection(RemoteStorage);
+      return recv_testConnection();
+    }
+
+    public void send_testConnection(Map<String,String> RemoteStorage) throws org.apache.thrift.TException
+    {
+      testConnection_args args = new testConnection_args();
+      args.setRemoteStorage(RemoteStorage);
+      sendBase("testConnection", args);
+    }
+
+    public String recv_testConnection() throws org.apache.thrift.TException
+    {
+      testConnection_result result = new testConnection_result();
+      receiveBase(result, "testConnection");
+      if (result.isSetSuccess()) {
+        return result.success;
+      }
+      throw new org.apache.thrift.TApplicationException(org.apache.thrift.TApplicationException.MISSING_RESULT, "testConnection failed: unknown result");
     }
 
   }
@@ -1058,6 +1085,38 @@ public class Mydlp_ui {
       }
     }
 
+    public void testConnection(Map<String,String> RemoteStorage, org.apache.thrift.async.AsyncMethodCallback<testConnection_call> resultHandler) throws org.apache.thrift.TException {
+      checkReady();
+      testConnection_call method_call = new testConnection_call(RemoteStorage, resultHandler, this, ___protocolFactory, ___transport);
+      this.___currentMethod = method_call;
+      ___manager.call(method_call);
+    }
+
+    public static class testConnection_call extends org.apache.thrift.async.TAsyncMethodCall {
+      private Map<String,String> RemoteStorage;
+      public testConnection_call(Map<String,String> RemoteStorage, org.apache.thrift.async.AsyncMethodCallback<testConnection_call> resultHandler, org.apache.thrift.async.TAsyncClient client, org.apache.thrift.protocol.TProtocolFactory protocolFactory, org.apache.thrift.transport.TNonblockingTransport transport) throws org.apache.thrift.TException {
+        super(client, protocolFactory, transport, resultHandler, false);
+        this.RemoteStorage = RemoteStorage;
+      }
+
+      public void write_args(org.apache.thrift.protocol.TProtocol prot) throws org.apache.thrift.TException {
+        prot.writeMessageBegin(new org.apache.thrift.protocol.TMessage("testConnection", org.apache.thrift.protocol.TMessageType.CALL, 0));
+        testConnection_args args = new testConnection_args();
+        args.setRemoteStorage(RemoteStorage);
+        args.write(prot);
+        prot.writeMessageEnd();
+      }
+
+      public String getResult() throws org.apache.thrift.TException {
+        if (getState() != org.apache.thrift.async.TAsyncMethodCall.State.RESPONSE_READ) {
+          throw new IllegalStateException("Method call not finished!");
+        }
+        org.apache.thrift.transport.TMemoryInputTransport memoryTransport = new org.apache.thrift.transport.TMemoryInputTransport(getFrameBuffer().array());
+        org.apache.thrift.protocol.TProtocol prot = client.getProtocolFactory().getProtocol(memoryTransport);
+        return (new Client(prot)).recv_testConnection();
+      }
+    }
+
   }
 
   public static class Processor<I extends Iface> extends org.apache.thrift.TBaseProcessor implements org.apache.thrift.TProcessor {
@@ -1088,6 +1147,7 @@ public class Mydlp_ui {
       processMap.put("pauseDiscoveryOnDemand", new pauseDiscoveryOnDemand());
       processMap.put("getRemoteStorageDir", new getRemoteStorageDir());
       processMap.put("startFingerprinting", new startFingerprinting());
+      processMap.put("testConnection", new testConnection());
       return processMap;
     }
 
@@ -1355,6 +1415,22 @@ public class Mydlp_ui {
       protected org.apache.thrift.TBase getResult(I iface, startFingerprinting_args args) throws org.apache.thrift.TException {
         iface.startFingerprinting(args.DDId);
         return null;
+      }
+    }
+
+    private static class testConnection<I extends Iface> extends org.apache.thrift.ProcessFunction<I, testConnection_args> {
+      public testConnection() {
+        super("testConnection");
+      }
+
+      protected testConnection_args getEmptyArgsInstance() {
+        return new testConnection_args();
+      }
+
+      protected testConnection_result getResult(I iface, testConnection_args args) throws org.apache.thrift.TException {
+        testConnection_result result = new testConnection_result();
+        result.success = iface.testConnection(args.RemoteStorage);
+        return result;
       }
     }
 
@@ -11028,8 +11104,644 @@ public class Mydlp_ui {
 
     private void readObject(java.io.ObjectInputStream in) throws java.io.IOException, ClassNotFoundException {
       try {
-        // it doesn't seem like you should have to do this, but java serialization is wacky, and doesn't call the default constructor.
-        __isset_bit_vector = new BitSet(1);
+        read(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(in)));
+      } catch (org.apache.thrift.TException te) {
+        throw new java.io.IOException(te);
+      }
+    }
+
+  }
+
+  public static class testConnection_args implements org.apache.thrift.TBase<testConnection_args, testConnection_args._Fields>, java.io.Serializable, Cloneable   {
+    private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("testConnection_args");
+
+    private static final org.apache.thrift.protocol.TField REMOTE_STORAGE_FIELD_DESC = new org.apache.thrift.protocol.TField("RemoteStorage", org.apache.thrift.protocol.TType.MAP, (short)1);
+
+    public Map<String,String> RemoteStorage; // required
+
+    /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
+    public enum _Fields implements org.apache.thrift.TFieldIdEnum {
+      REMOTE_STORAGE((short)1, "RemoteStorage");
+
+      private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+
+      static {
+        for (_Fields field : EnumSet.allOf(_Fields.class)) {
+          byName.put(field.getFieldName(), field);
+        }
+      }
+
+      /**
+       * Find the _Fields constant that matches fieldId, or null if its not found.
+       */
+      public static _Fields findByThriftId(int fieldId) {
+        switch(fieldId) {
+          case 1: // REMOTE_STORAGE
+            return REMOTE_STORAGE;
+          default:
+            return null;
+        }
+      }
+
+      /**
+       * Find the _Fields constant that matches fieldId, throwing an exception
+       * if it is not found.
+       */
+      public static _Fields findByThriftIdOrThrow(int fieldId) {
+        _Fields fields = findByThriftId(fieldId);
+        if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+        return fields;
+      }
+
+      /**
+       * Find the _Fields constant that matches name, or null if its not found.
+       */
+      public static _Fields findByName(String name) {
+        return byName.get(name);
+      }
+
+      private final short _thriftId;
+      private final String _fieldName;
+
+      _Fields(short thriftId, String fieldName) {
+        _thriftId = thriftId;
+        _fieldName = fieldName;
+      }
+
+      public short getThriftFieldId() {
+        return _thriftId;
+      }
+
+      public String getFieldName() {
+        return _fieldName;
+      }
+    }
+
+    // isset id assignments
+
+    public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
+    static {
+      Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
+      tmpMap.put(_Fields.REMOTE_STORAGE, new org.apache.thrift.meta_data.FieldMetaData("RemoteStorage", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+          new org.apache.thrift.meta_data.MapMetaData(org.apache.thrift.protocol.TType.MAP, 
+              new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING), 
+              new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING))));
+      metaDataMap = Collections.unmodifiableMap(tmpMap);
+      org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(testConnection_args.class, metaDataMap);
+    }
+
+    public testConnection_args() {
+    }
+
+    public testConnection_args(
+      Map<String,String> RemoteStorage)
+    {
+      this();
+      this.RemoteStorage = RemoteStorage;
+    }
+
+    /**
+     * Performs a deep copy on <i>other</i>.
+     */
+    public testConnection_args(testConnection_args other) {
+      if (other.isSetRemoteStorage()) {
+        Map<String,String> __this__RemoteStorage = new HashMap<String,String>();
+        for (Map.Entry<String, String> other_element : other.RemoteStorage.entrySet()) {
+
+          String other_element_key = other_element.getKey();
+          String other_element_value = other_element.getValue();
+
+          String __this__RemoteStorage_copy_key = other_element_key;
+
+          String __this__RemoteStorage_copy_value = other_element_value;
+
+          __this__RemoteStorage.put(__this__RemoteStorage_copy_key, __this__RemoteStorage_copy_value);
+        }
+        this.RemoteStorage = __this__RemoteStorage;
+      }
+    }
+
+    public testConnection_args deepCopy() {
+      return new testConnection_args(this);
+    }
+
+    @Override
+    public void clear() {
+      this.RemoteStorage = null;
+    }
+
+    public int getRemoteStorageSize() {
+      return (this.RemoteStorage == null) ? 0 : this.RemoteStorage.size();
+    }
+
+    public void putToRemoteStorage(String key, String val) {
+      if (this.RemoteStorage == null) {
+        this.RemoteStorage = new HashMap<String,String>();
+      }
+      this.RemoteStorage.put(key, val);
+    }
+
+    public Map<String,String> getRemoteStorage() {
+      return this.RemoteStorage;
+    }
+
+    public testConnection_args setRemoteStorage(Map<String,String> RemoteStorage) {
+      this.RemoteStorage = RemoteStorage;
+      return this;
+    }
+
+    public void unsetRemoteStorage() {
+      this.RemoteStorage = null;
+    }
+
+    /** Returns true if field RemoteStorage is set (has been assigned a value) and false otherwise */
+    public boolean isSetRemoteStorage() {
+      return this.RemoteStorage != null;
+    }
+
+    public void setRemoteStorageIsSet(boolean value) {
+      if (!value) {
+        this.RemoteStorage = null;
+      }
+    }
+
+    public void setFieldValue(_Fields field, Object value) {
+      switch (field) {
+      case REMOTE_STORAGE:
+        if (value == null) {
+          unsetRemoteStorage();
+        } else {
+          setRemoteStorage((Map<String,String>)value);
+        }
+        break;
+
+      }
+    }
+
+    public Object getFieldValue(_Fields field) {
+      switch (field) {
+      case REMOTE_STORAGE:
+        return getRemoteStorage();
+
+      }
+      throw new IllegalStateException();
+    }
+
+    /** Returns true if field corresponding to fieldID is set (has been assigned a value) and false otherwise */
+    public boolean isSet(_Fields field) {
+      if (field == null) {
+        throw new IllegalArgumentException();
+      }
+
+      switch (field) {
+      case REMOTE_STORAGE:
+        return isSetRemoteStorage();
+      }
+      throw new IllegalStateException();
+    }
+
+    @Override
+    public boolean equals(Object that) {
+      if (that == null)
+        return false;
+      if (that instanceof testConnection_args)
+        return this.equals((testConnection_args)that);
+      return false;
+    }
+
+    public boolean equals(testConnection_args that) {
+      if (that == null)
+        return false;
+
+      boolean this_present_RemoteStorage = true && this.isSetRemoteStorage();
+      boolean that_present_RemoteStorage = true && that.isSetRemoteStorage();
+      if (this_present_RemoteStorage || that_present_RemoteStorage) {
+        if (!(this_present_RemoteStorage && that_present_RemoteStorage))
+          return false;
+        if (!this.RemoteStorage.equals(that.RemoteStorage))
+          return false;
+      }
+
+      return true;
+    }
+
+    @Override
+    public int hashCode() {
+      return 0;
+    }
+
+    public int compareTo(testConnection_args other) {
+      if (!getClass().equals(other.getClass())) {
+        return getClass().getName().compareTo(other.getClass().getName());
+      }
+
+      int lastComparison = 0;
+      testConnection_args typedOther = (testConnection_args)other;
+
+      lastComparison = Boolean.valueOf(isSetRemoteStorage()).compareTo(typedOther.isSetRemoteStorage());
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+      if (isSetRemoteStorage()) {
+        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.RemoteStorage, typedOther.RemoteStorage);
+        if (lastComparison != 0) {
+          return lastComparison;
+        }
+      }
+      return 0;
+    }
+
+    public _Fields fieldForId(int fieldId) {
+      return _Fields.findByThriftId(fieldId);
+    }
+
+    public void read(org.apache.thrift.protocol.TProtocol iprot) throws org.apache.thrift.TException {
+      org.apache.thrift.protocol.TField field;
+      iprot.readStructBegin();
+      while (true)
+      {
+        field = iprot.readFieldBegin();
+        if (field.type == org.apache.thrift.protocol.TType.STOP) { 
+          break;
+        }
+        switch (field.id) {
+          case 1: // REMOTE_STORAGE
+            if (field.type == org.apache.thrift.protocol.TType.MAP) {
+              {
+                org.apache.thrift.protocol.TMap _map9 = iprot.readMapBegin();
+                this.RemoteStorage = new HashMap<String,String>(2*_map9.size);
+                for (int _i10 = 0; _i10 < _map9.size; ++_i10)
+                {
+                  String _key11; // required
+                  String _val12; // required
+                  _key11 = iprot.readString();
+                  _val12 = iprot.readString();
+                  this.RemoteStorage.put(_key11, _val12);
+                }
+                iprot.readMapEnd();
+              }
+            } else { 
+              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, field.type);
+            }
+            break;
+          default:
+            org.apache.thrift.protocol.TProtocolUtil.skip(iprot, field.type);
+        }
+        iprot.readFieldEnd();
+      }
+      iprot.readStructEnd();
+
+      // check for required fields of primitive type, which can't be checked in the validate method
+      validate();
+    }
+
+    public void write(org.apache.thrift.protocol.TProtocol oprot) throws org.apache.thrift.TException {
+      validate();
+
+      oprot.writeStructBegin(STRUCT_DESC);
+      if (this.RemoteStorage != null) {
+        oprot.writeFieldBegin(REMOTE_STORAGE_FIELD_DESC);
+        {
+          oprot.writeMapBegin(new org.apache.thrift.protocol.TMap(org.apache.thrift.protocol.TType.STRING, org.apache.thrift.protocol.TType.STRING, this.RemoteStorage.size()));
+          for (Map.Entry<String, String> _iter13 : this.RemoteStorage.entrySet())
+          {
+            oprot.writeString(_iter13.getKey());
+            oprot.writeString(_iter13.getValue());
+          }
+          oprot.writeMapEnd();
+        }
+        oprot.writeFieldEnd();
+      }
+      oprot.writeFieldStop();
+      oprot.writeStructEnd();
+    }
+
+    @Override
+    public String toString() {
+      StringBuilder sb = new StringBuilder("testConnection_args(");
+      boolean first = true;
+
+      sb.append("RemoteStorage:");
+      if (this.RemoteStorage == null) {
+        sb.append("null");
+      } else {
+        sb.append(this.RemoteStorage);
+      }
+      first = false;
+      sb.append(")");
+      return sb.toString();
+    }
+
+    public void validate() throws org.apache.thrift.TException {
+      // check for required fields
+    }
+
+    private void writeObject(java.io.ObjectOutputStream out) throws java.io.IOException {
+      try {
+        write(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(out)));
+      } catch (org.apache.thrift.TException te) {
+        throw new java.io.IOException(te);
+      }
+    }
+
+    private void readObject(java.io.ObjectInputStream in) throws java.io.IOException, ClassNotFoundException {
+      try {
+        read(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(in)));
+      } catch (org.apache.thrift.TException te) {
+        throw new java.io.IOException(te);
+      }
+    }
+
+  }
+
+  public static class testConnection_result implements org.apache.thrift.TBase<testConnection_result, testConnection_result._Fields>, java.io.Serializable, Cloneable   {
+    private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("testConnection_result");
+
+    private static final org.apache.thrift.protocol.TField SUCCESS_FIELD_DESC = new org.apache.thrift.protocol.TField("success", org.apache.thrift.protocol.TType.STRING, (short)0);
+
+    public String success; // required
+
+    /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
+    public enum _Fields implements org.apache.thrift.TFieldIdEnum {
+      SUCCESS((short)0, "success");
+
+      private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+
+      static {
+        for (_Fields field : EnumSet.allOf(_Fields.class)) {
+          byName.put(field.getFieldName(), field);
+        }
+      }
+
+      /**
+       * Find the _Fields constant that matches fieldId, or null if its not found.
+       */
+      public static _Fields findByThriftId(int fieldId) {
+        switch(fieldId) {
+          case 0: // SUCCESS
+            return SUCCESS;
+          default:
+            return null;
+        }
+      }
+
+      /**
+       * Find the _Fields constant that matches fieldId, throwing an exception
+       * if it is not found.
+       */
+      public static _Fields findByThriftIdOrThrow(int fieldId) {
+        _Fields fields = findByThriftId(fieldId);
+        if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+        return fields;
+      }
+
+      /**
+       * Find the _Fields constant that matches name, or null if its not found.
+       */
+      public static _Fields findByName(String name) {
+        return byName.get(name);
+      }
+
+      private final short _thriftId;
+      private final String _fieldName;
+
+      _Fields(short thriftId, String fieldName) {
+        _thriftId = thriftId;
+        _fieldName = fieldName;
+      }
+
+      public short getThriftFieldId() {
+        return _thriftId;
+      }
+
+      public String getFieldName() {
+        return _fieldName;
+      }
+    }
+
+    // isset id assignments
+
+    public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
+    static {
+      Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
+      tmpMap.put(_Fields.SUCCESS, new org.apache.thrift.meta_data.FieldMetaData("success", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+          new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
+      metaDataMap = Collections.unmodifiableMap(tmpMap);
+      org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(testConnection_result.class, metaDataMap);
+    }
+
+    public testConnection_result() {
+    }
+
+    public testConnection_result(
+      String success)
+    {
+      this();
+      this.success = success;
+    }
+
+    /**
+     * Performs a deep copy on <i>other</i>.
+     */
+    public testConnection_result(testConnection_result other) {
+      if (other.isSetSuccess()) {
+        this.success = other.success;
+      }
+    }
+
+    public testConnection_result deepCopy() {
+      return new testConnection_result(this);
+    }
+
+    @Override
+    public void clear() {
+      this.success = null;
+    }
+
+    public String getSuccess() {
+      return this.success;
+    }
+
+    public testConnection_result setSuccess(String success) {
+      this.success = success;
+      return this;
+    }
+
+    public void unsetSuccess() {
+      this.success = null;
+    }
+
+    /** Returns true if field success is set (has been assigned a value) and false otherwise */
+    public boolean isSetSuccess() {
+      return this.success != null;
+    }
+
+    public void setSuccessIsSet(boolean value) {
+      if (!value) {
+        this.success = null;
+      }
+    }
+
+    public void setFieldValue(_Fields field, Object value) {
+      switch (field) {
+      case SUCCESS:
+        if (value == null) {
+          unsetSuccess();
+        } else {
+          setSuccess((String)value);
+        }
+        break;
+
+      }
+    }
+
+    public Object getFieldValue(_Fields field) {
+      switch (field) {
+      case SUCCESS:
+        return getSuccess();
+
+      }
+      throw new IllegalStateException();
+    }
+
+    /** Returns true if field corresponding to fieldID is set (has been assigned a value) and false otherwise */
+    public boolean isSet(_Fields field) {
+      if (field == null) {
+        throw new IllegalArgumentException();
+      }
+
+      switch (field) {
+      case SUCCESS:
+        return isSetSuccess();
+      }
+      throw new IllegalStateException();
+    }
+
+    @Override
+    public boolean equals(Object that) {
+      if (that == null)
+        return false;
+      if (that instanceof testConnection_result)
+        return this.equals((testConnection_result)that);
+      return false;
+    }
+
+    public boolean equals(testConnection_result that) {
+      if (that == null)
+        return false;
+
+      boolean this_present_success = true && this.isSetSuccess();
+      boolean that_present_success = true && that.isSetSuccess();
+      if (this_present_success || that_present_success) {
+        if (!(this_present_success && that_present_success))
+          return false;
+        if (!this.success.equals(that.success))
+          return false;
+      }
+
+      return true;
+    }
+
+    @Override
+    public int hashCode() {
+      return 0;
+    }
+
+    public int compareTo(testConnection_result other) {
+      if (!getClass().equals(other.getClass())) {
+        return getClass().getName().compareTo(other.getClass().getName());
+      }
+
+      int lastComparison = 0;
+      testConnection_result typedOther = (testConnection_result)other;
+
+      lastComparison = Boolean.valueOf(isSetSuccess()).compareTo(typedOther.isSetSuccess());
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+      if (isSetSuccess()) {
+        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.success, typedOther.success);
+        if (lastComparison != 0) {
+          return lastComparison;
+        }
+      }
+      return 0;
+    }
+
+    public _Fields fieldForId(int fieldId) {
+      return _Fields.findByThriftId(fieldId);
+    }
+
+    public void read(org.apache.thrift.protocol.TProtocol iprot) throws org.apache.thrift.TException {
+      org.apache.thrift.protocol.TField field;
+      iprot.readStructBegin();
+      while (true)
+      {
+        field = iprot.readFieldBegin();
+        if (field.type == org.apache.thrift.protocol.TType.STOP) { 
+          break;
+        }
+        switch (field.id) {
+          case 0: // SUCCESS
+            if (field.type == org.apache.thrift.protocol.TType.STRING) {
+              this.success = iprot.readString();
+            } else { 
+              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, field.type);
+            }
+            break;
+          default:
+            org.apache.thrift.protocol.TProtocolUtil.skip(iprot, field.type);
+        }
+        iprot.readFieldEnd();
+      }
+      iprot.readStructEnd();
+
+      // check for required fields of primitive type, which can't be checked in the validate method
+      validate();
+    }
+
+    public void write(org.apache.thrift.protocol.TProtocol oprot) throws org.apache.thrift.TException {
+      oprot.writeStructBegin(STRUCT_DESC);
+
+      if (this.isSetSuccess()) {
+        oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
+        oprot.writeString(this.success);
+        oprot.writeFieldEnd();
+      }
+      oprot.writeFieldStop();
+      oprot.writeStructEnd();
+    }
+
+    @Override
+    public String toString() {
+      StringBuilder sb = new StringBuilder("testConnection_result(");
+      boolean first = true;
+
+      sb.append("success:");
+      if (this.success == null) {
+        sb.append("null");
+      } else {
+        sb.append(this.success);
+      }
+      first = false;
+      sb.append(")");
+      return sb.toString();
+    }
+
+    public void validate() throws org.apache.thrift.TException {
+      // check for required fields
+    }
+
+    private void writeObject(java.io.ObjectOutputStream out) throws java.io.IOException {
+      try {
+        write(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(out)));
+      } catch (org.apache.thrift.TException te) {
+        throw new java.io.IOException(te);
+      }
+    }
+
+    private void readObject(java.io.ObjectInputStream in) throws java.io.IOException, ClassNotFoundException {
+      try {
         read(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(in)));
       } catch (org.apache.thrift.TException te) {
         throw new java.io.IOException(te);

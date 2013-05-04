@@ -1,6 +1,7 @@
 package com.mydlp.ui.remoting.blazeds;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.security.access.annotation.Secured;
 
@@ -15,5 +16,7 @@ public interface RemoteStorageService {
 	public List<String> getRemoteStorageDir(int id);
 	
 	public void startRemoteFingerprint(int id);
+	
+	public String testConnection(RemoteStorage remoteStorage);
 
 }
