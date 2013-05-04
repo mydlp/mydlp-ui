@@ -14,6 +14,8 @@ package com.mydlp.ui.domain {
 		[Embed("../../../../../../../../mydlp-ui-flex/src/main/flex/assets/icons/16x16/user.png")]
 		public static const ICON_CLASS:Class;
 		
+		public var sortPriority:Number = 7;
+		
 		public function get icon(): Object
 		{
 			return ICON_CLASS;

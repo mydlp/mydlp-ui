@@ -41,6 +41,8 @@ package com.mydlp.ui.domain {
 		[Embed("../../../../../../../../mydlp-ui-flex/src/main/flex/assets/icons/16x16/windows_storage.png")]
 		public static const WINDOWS_STORAGE:Class;
 		
+		public var sortPriority:Number = 7;
+		
 		private var _icon:Object = null;
 		
 		public function get icon(): Object

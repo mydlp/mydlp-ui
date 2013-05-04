@@ -36,5 +36,4 @@ public class DocumentDatabaseFileEntry extends Document {
 	public void setCreatedDate(Date createdDate) {
 		this.createdDate = createdDate;
 	}
-	
 }

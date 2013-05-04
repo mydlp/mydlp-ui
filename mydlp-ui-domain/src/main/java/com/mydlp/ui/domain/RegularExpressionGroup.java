@@ -6,6 +6,8 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.OrderBy;
+
 
 @Entity
 public class RegularExpressionGroup extends Argument {
@@ -19,6 +21,7 @@ public class RegularExpressionGroup extends Argument {
 	protected RDBMSInformationTarget rdbmsInformationTarget;
 
 	@OneToMany(cascade={CascadeType.ALL})
+	@OrderBy("regex")
 	public List<RegularExpressionGroupEntry> getEntries() {
 		return entries;
 	}

@@ -11,6 +11,8 @@ package com.mydlp.ui.domain {
     [RemoteClass(alias="com.mydlp.ui.domain.ADDomainOU")]
     public class ADDomainOU extends ADDomainOUBase {
 		
+		public var sortPriority:Number = 1;
+		
 		[Embed("../../../../../../../../mydlp-ui-flex/src/main/flex/assets/icons/16x16/user_ou.png")]
 		public static const ICON_CLASS:Class;
 		
