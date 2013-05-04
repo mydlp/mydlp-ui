@@ -21,14 +21,26 @@
 	
 	<fx:Script>
 		<![CDATA[
+			import com.mydlp.ui.domain.ADDomain;
+			import com.mydlp.ui.domain.ADDomainAlias;
+			import com.mydlp.ui.domain.ADDomainItem;
+			import com.mydlp.ui.domain.ADDomainUserAlias;
 			import com.mydlp.ui.domain.AuthSecurityRole;
 			import com.mydlp.ui.domain.AuthUser;
+			import com.mydlp.ui.domain.Config;
+			import com.mydlp.ui.domain.CustomAction;
+			import com.mydlp.ui.domain.DataFormat;
+			import com.mydlp.ui.domain.DocumentDatabase;
+			import com.mydlp.ui.domain.InventoryBase;
 			import com.mydlp.ui.domain.LicenseInformation;
+			import com.mydlp.ui.domain.RDBMSConnection;
+			import com.mydlp.ui.domain.RegularExpressionGroup;
+			import com.mydlp.ui.domain.Rule;
+			import com.mydlp.ui.domain.USBDevice;
 			import com.mydlp.ui.util.LangUtil;
 			import com.mydlp.ui.util.SessionUtil;
 			import com.mydlp.ui.widget.dashboard.DashboardContainer;
 			import com.mydlp.ui.widget.dashboard.NoLicenseDashboardContainer;
-			import com.mydlp.ui.widget.discovery.DiscoveryContainer;
 			import com.mydlp.ui.widget.endpoint.EndpointStatusContainer;
 			import com.mydlp.ui.widget.log.LogContainer;
 			import com.mydlp.ui.widget.objects.ObjectsContainer;
@@ -36,7 +48,6 @@
 			import com.mydlp.ui.widget.policy.PolicyContainer;
 			import com.mydlp.ui.widget.policy.inventory.InventoryTree;
 			import com.mydlp.ui.widget.policy.rule.RuleContainer;
-			import com.mydlp.ui.widget.policy.rule.RuleList;
 			import com.mydlp.ui.widget.revision.RevisionContainer;
 			
 			import mx.collections.ArrayCollection;
@@ -44,6 +55,8 @@
 			import mx.controls.Alert;
 			import mx.core.FlexGlobals;
 			import mx.events.FlexEvent;
+			import mx.rpc.AsyncResponder;
+			import mx.rpc.AsyncToken;
 			import mx.rpc.events.FaultEvent;
 			import mx.rpc.events.ResultEvent;
 			
@@ -318,29 +331,58 @@
 					LangUtil.getString("messages", "inventory.delete.error." + errorString + ".title"));
 			}
 			
-			public function refresh(): void {
-				ruleRE.getRuleLabelsAndIds();
+			protected function refresh(entity:* = null): void {
+				
+				if (entity == null || entity is Rule)
+				{
+					ruleRE.getRuleLabelsAndIds();
+				}
+				
 				
 				if (discoveryContainer != null || policyContainer != null)
 				{
-					getInventoryFunction();
-					refreshPolicyDataProviders();
+					if (entity == null || entity is InventoryBase)
+					{
+						getInventoryFunction();
+					}
+					if (entity == null || entity is Rule)
+					{
+						refreshPolicyDataProviders();
+					}
 				}
 				
 				if (optionContainer != null)
 				{
-					optionContainer.refresh();
-					if (optionContainer.userManagerTab != null)
-						optionContainer.userManagerTab.refreshUsers();
-					if (optionContainer.usbAclTab != null)
-						optionContainer.usbAclTab.usbDeviceCrudGrid.refresh();
-					if (optionContainer.irmTab != null)
-						optionContainer.irmTab.refresh();
+					if (entity == null || 
+						entity is Config ||
+						entity is USBDevice ||
+						entity is CustomAction ||
+						entity is AuthUser)
+					{
+						optionContainer.refresh();
+						if (optionContainer.userManagerTab != null)
+							optionContainer.userManagerTab.refreshUsers();
+						if (optionContainer.usbAclTab != null)
+							optionContainer.usbAclTab.usbDeviceCrudGrid.refresh();
+						if (optionContainer.irmTab != null)
+							optionContainer.irmTab.refresh();
+					}
 				}
 				if (objectsContainer != null)
-					objectsContainer.refreshObjects();
-				if (endpointStatusContainer != null)
-					endpointStatusContainer.refresh();
+				{
+					if (entity == null || 
+						entity is DataFormat ||
+						entity is DocumentDatabase ||
+						entity is ADDomain ||
+						entity is ADDomainItem ||
+						entity is ADDomainAlias ||
+						entity is ADDomainUserAlias ||
+						entity is RDBMSConnection ||
+						entity is RegularExpressionGroup)
+					{
+						objectsContainer.refreshObjects();
+					}
+				}
 				
 			}
 			
@@ -353,12 +395,6 @@
 			{
 				if (dashboardContainer != null)
 					dashboardContainer.refreshDashboard();
-			}
-			
-			protected function genericResultHandler(event:ResultEvent):void
-			{
-				FlexGlobals.topLevelApplication.topToolbar.policyInstallationState = false;
-				refresh();
 			}
 			
 			protected function getRuleLabelsAndIdsHandler(event:ResultEvent):void
@@ -459,6 +495,44 @@
 				inventoryTreeDiscovery.myInventoryTree.afterRefreshOps();
 			}
 			
+			public function saveEntity(entity:*): void
+			{
+				var asyncToken:AsyncToken = genericRE.save(entity);
+				asyncToken.addResponder(new AsyncResponder(
+					function result(event:ResultEvent, token:Object = null):void 
+					{
+						refreshRespectively(token);
+					}, 
+					function fault(event:FaultEvent, token:Object = null):void 
+					{
+						trace(event.fault.faultString);
+						faultHandler(event);
+					}
+				, entity ));
+			}
+			
+			public function removeEntity(entity:*): void
+			{
+				var asyncToken:AsyncToken = genericRE.remove(entity);
+				asyncToken.addResponder(new AsyncResponder(
+					function result(event:ResultEvent, token:Object = null):void 
+					{
+						refreshRespectively(token);
+					}, 
+					function fault(event:FaultEvent, token:Object = null):void 
+					{
+						trace(event.fault.faultString);
+						faultHandler(event);
+					}
+					, entity ));
+			}
+			
+			public function refreshRespectively(entity:* = null): void
+			{
+				FlexGlobals.topLevelApplication.topToolbar.policyInstallationState = false;
+				refresh(entity);
+			}
+			
 		]]>
 	</fx:Script>
 	
@@ -468,8 +542,6 @@
 		
 		<my:remote id="dataAccessService" destination="dataAccessService" fault="faultHandler(event)"/>
 		<my:remote id="genericRE" destination="genericBRS" fault="faultHandler(event)" >
-			<my:method name="save" result="genericResultHandler(event)" fault="faultHandler(event)"/>
-			<my:method name="remove" result="genericResultHandler(event)" fault="faultHandler(event)"/>
 			<my:method name="sync" result="{syncTimeIntervalHandler();}"/>
 		</my:remote>
 		<my:remote id="re" destination="userBRS" >

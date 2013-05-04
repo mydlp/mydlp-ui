@@ -41,12 +41,12 @@ package com.mydlp.ui.domain {
 		
 		override public function deleteRecord(responder:IResponder=null):AsyncToken
 		{
-			return FlexGlobals.topLevelApplication.genericRE.remove(this);
+			return FlexGlobals.topLevelApplication.removeEntity(this);
 		}
 		
 		override public function save(responder:IResponder=null):AsyncToken
 		{
-			return FlexGlobals.topLevelApplication.genericRE.save(this);
+			return FlexGlobals.topLevelApplication.saveEntity(this);
 		}
    }
 }

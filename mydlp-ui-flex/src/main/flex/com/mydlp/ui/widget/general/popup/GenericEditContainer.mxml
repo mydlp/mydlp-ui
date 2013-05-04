@@ -164,6 +164,7 @@
 					
 					if (
 							classMember.name == "id" ||
+							classMember.name == "sortPriority" ||
 							classMember.name == "optimisticLockVersion" ||
 							classMember.name == "nameKey" ||
 							classMember.name == "icon" ||
@@ -1134,7 +1135,7 @@
 				{
 					FlexGlobals.topLevelApplication.topToolbar.policyInstallationState = false;
 					InteractionUtil.closeCurrentPopup();
-					FlexGlobals.topLevelApplication.refresh();
+					FlexGlobals.topLevelApplication.refreshRespectively(formObject);
 				}
 				else if (returnCode.substring(0,6) == "error.")
 				{

@@ -815,19 +815,20 @@
 				ruleObject.ruleItems.addItem(newItem);
 			}
 			
-			protected function changeHandler(event:ResultEvent):void
-			{
-				FlexGlobals.topLevelApplication.topToolbar.policyInstallationState = false;
-				FlexGlobals.topLevelApplication.refresh();
-			}
-			
 			protected function saveHandler(event:ResultEvent):void
 			{
 				FlexGlobals.topLevelApplication.topToolbar.policyInstallationState = false;
 				if(deleteList == null || deleteList.length == 0)
 				{
 					highlightOff();
-					FlexGlobals.topLevelApplication.refresh();
+					if (isDiscoveryTab)
+					{
+						discoveryRuleContainer.refreshRules();
+					}
+					else
+					{
+						ruleContainer.refreshRules();
+					}
 				}
 				else
 					re.removeRuleItems(deleteList);
@@ -837,7 +838,14 @@
 			{
 				FlexGlobals.topLevelApplication.topToolbar.policyInstallationState = false;
 				highlightOff();
-				FlexGlobals.topLevelApplication.refresh();
+				if (isDiscoveryTab)
+				{
+					discoveryRuleContainer.refreshRules();
+				}
+				else
+				{
+					ruleContainer.refreshRules();
+				}
 			}
 			
 			protected function onItemClickHandler(event:MouseEvent):void
@@ -916,7 +924,10 @@
 			protected function startButtonClickHandler(event:MouseEvent):void
 			{
 				de.startDiscoveryOnDemand(ruleObject.id);
-				FlexGlobals.topLevelApplication.refresh();
+				if (isDiscoveryTab)
+				{
+					discoveryRuleContainer.refreshRules();
+				}
 			}
 	
 			protected function isPlayButtonEnabled():Boolean
