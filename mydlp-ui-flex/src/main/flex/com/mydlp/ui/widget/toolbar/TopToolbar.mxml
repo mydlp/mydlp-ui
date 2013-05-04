@@ -64,7 +64,8 @@
 			
 			protected function compilePolicyHandler(event:ResultEvent): void
 			{
-				fetchCompileStatus();
+				timerInterval = 1500;
+				scheduleCompileStatusTimer();
 			}
 			
 			protected function fetchCompileStatus(): void
