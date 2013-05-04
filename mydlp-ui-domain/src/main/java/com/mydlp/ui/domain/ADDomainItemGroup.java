@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 
 @Entity
 @Inheritance(strategy=InheritanceType.JOINED)
@@ -20,6 +21,7 @@ public class ADDomainItemGroup extends ADDomainItem {
 	protected List<ADDomainItem> children;
 	
 	@OneToMany(mappedBy="parent", cascade={CascadeType.ALL})
+	@OrderBy("distinguishedName")
 	public List<ADDomainItem> getChildren() {
 		return children;
 	}

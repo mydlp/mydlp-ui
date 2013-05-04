@@ -25,10 +25,5 @@ package com.mydlp.ui.domain {
 				return this.displayName;
 			return this.sAMAccountName;
 		}
-		
-		override public function get sortPriority(): Number
-		{
-			return 7;
-		}
     }
 }

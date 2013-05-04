@@ -200,6 +200,7 @@
 				for(var i:int = 0; i < 8; i++)
 				{
 					var navigatorContent:NavigatorContent = new NavigatorContent();
+					navigatorContent.creationPolicy = "none";
 					navigatorContent.percentHeight = 100;
 					navigatorContent.percentWidth = 100;
 					var element:* = null;
