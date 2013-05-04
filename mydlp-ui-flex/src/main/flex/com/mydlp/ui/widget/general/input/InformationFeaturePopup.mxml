@@ -18,6 +18,7 @@
 			import com.mydlp.ui.domain.MatcherArgument;
 			import com.mydlp.ui.domain.NonCascadingArgument;
 			import com.mydlp.ui.domain.RegularExpression;
+			import com.mydlp.ui.domain.StringArgument;
 			import com.mydlp.ui.util.CastListUtil;
 			import com.mydlp.ui.util.InteractionUtil;
 			import com.mydlp.ui.util.LangUtil;
@@ -83,9 +84,10 @@
 				
 				m.functionName = matcherCombobox.selectedItem.data;
 				
-				if (matcherCombobox.selectedItem.data == "keyword" || matcherCombobox.selectedItem.data == "regex")
+				if (matcherCombobox.selectedItem.data == "keyword")
 				{
 					var r:RegularExpression = null;
+					var o:StringArgument = null;
 					if (m.matcherArguments == null || m.matcherArguments.length == 0)
 					{
 						r = new RegularExpression();
@@ -94,10 +96,27 @@
 						ma.coupledMatcher = m;
 						ma.coupledArgument = r;
 						m.matcherArguments.addItem(ma);
+						
+						o = new StringArgument();
+						var ma2:MatcherArgument = new MatcherArgument();
+						ma2.coupledMatcher = m;
+						ma2.coupledArgument = o;
+						m.matcherArguments.addItem(ma2);
+					}
+					else if (m.matcherArguments.length == 1)
+					{
+						r = m.matcherArguments.getItemAt(0).coupledArgument as RegularExpression;
+						
+						o = new StringArgument();
+						var ma3:MatcherArgument = new MatcherArgument();
+						ma3.coupledMatcher = m;
+						ma3.coupledArgument = o;
+						m.matcherArguments.addItem(ma3);
 					}
 					else
 					{
 						r = m.matcherArguments.getItemAt(0).coupledArgument as RegularExpression;
+						o = m.matcherArguments.getItemAt(1).coupledArgument as StringArgument;
 					}
 					
 					// TODO: there should be regex validation. escaping special characters.
@@ -105,6 +124,39 @@
 						closePopup = false;
 					
 					r.regex = regexValue.text;
+					
+					if (matchWholeWordCheckbox.selected)
+					{
+						o.argument = "whole_word";
+					}
+					else
+					{
+						o.argument = "partial";
+					}
+					
+				}
+				else if (matcherCombobox.selectedItem.data == "regex")
+				{
+					var r2:RegularExpression = null;
+					if (m.matcherArguments == null || m.matcherArguments.length == 0)
+					{
+						r2 = new RegularExpression();
+						var ma0:MatcherArgument = new MatcherArgument();
+						m.matcherArguments = new ArrayCollection();
+						ma0.coupledMatcher = m;
+						ma0.coupledArgument = r2;
+						m.matcherArguments.addItem(ma0);
+					}
+					else
+					{
+						r2 = m.matcherArguments.getItemAt(0).coupledArgument as RegularExpression;
+					}
+					
+					// TODO: there should be regex validation. escaping special characters.
+					if(regexValue.text == "")
+						closePopup = false;
+					
+					r2.regex = regexValue.text;
 				}
 				else if(matcherCombobox.selectedItem.data == "document_hash" ||
 					matcherCombobox.selectedItem.data == "document_pdm")
@@ -131,18 +183,48 @@
 				else if(matcherCombobox.selectedItem.data == "keyword_group")
 				{
 					var ncar:NonCascadingArgument = null;
+					var o2:StringArgument = null;
 					if(m.matcherArguments == null || m.matcherArguments.length == 0)
 					{
+						ncar = new NonCascadingArgument();
 						var marg:MatcherArgument = new MatcherArgument();
 						m.matcherArguments = new ArrayCollection();
 						marg.coupledMatcher = m;
-						marg.coupledArgument = new NonCascadingArgument();
+						marg.coupledArgument = ncar;
 						m.matcherArguments.addItem(marg);
+						
+						o2 = new StringArgument();
+						var ma5:MatcherArgument = new MatcherArgument();
+						ma5.coupledMatcher = m;
+						ma5.coupledArgument = o2;
+						m.matcherArguments.addItem(ma5);
+					}
+					else if (m.matcherArguments.length == 1)
+					{
+						ncar = m.matcherArguments.getItemAt(0).coupledArgument as NonCascadingArgument;
+						
+						o2 = new StringArgument();
+						var ma6:MatcherArgument = new MatcherArgument();
+						ma6.coupledMatcher = m;
+						ma6.coupledArgument = o2;
+						m.matcherArguments.addItem(ma6);
+					}
+					else
+					{
+						ncar = m.matcherArguments.getItemAt(0).coupledArgument as NonCascadingArgument;
+						o2 = m.matcherArguments.getItemAt(1).coupledArgument as StringArgument;
 					}
 					
-					ncar = m.matcherArguments.getItemAt(0).coupledArgument as NonCascadingArgument;
-					
 					ncar.argument = keywordGroupComboBox.selectedItem;
+					
+					if (matchWholeWordCheckbox.selected)
+					{
+						o2.argument = "whole_word";
+					}
+					else
+					{
+						o2.argument = "partial";
+					}
 				}
 				
 				if (isAtState("threshold"))
@@ -186,30 +268,30 @@
 				visible = true;
 			}
 			
-			protected function getNCArgument(): Argument
+			protected function getNCArgument(idx:uint = 0): Argument
 			{
 				if (informationFeatureObject != null && 
 					informationFeatureObject.matcher != null &&
 					informationFeatureObject.matcher.matcherArguments != null &&
-					informationFeatureObject.matcher.matcherArguments.length > 0)
-					return informationFeatureObject.matcher.matcherArguments.getItemAt(0).coupledArgument.argument;
+					informationFeatureObject.matcher.matcherArguments.length > idx)
+					return informationFeatureObject.matcher.matcherArguments.getItemAt(idx).coupledArgument.argument;
 				return null;
 			}
 			
-			protected function getArgument(): Argument
+			protected function getArgument(idx:uint = 0): Argument
 			{
 				
 				if (informationFeatureObject != null && 
 					informationFeatureObject.matcher != null &&
 					informationFeatureObject.matcher.matcherArguments != null &&
-					informationFeatureObject.matcher.matcherArguments.length > 0)
-					return informationFeatureObject.matcher.matcherArguments.getItemAt(0).coupledArgument;
+					informationFeatureObject.matcher.matcherArguments.length > idx)
+					return informationFeatureObject.matcher.matcherArguments.getItemAt(idx).coupledArgument;
 				return null;
 			}
 			
 			protected function regexValueCreationCompleteHandler(event:FlexEvent):void
 			{
-				var r:RegularExpression = getArgument() as RegularExpression;
+				var r:RegularExpression = getArgument(0) as RegularExpression;
 				if(r == null)
 					regexValue.text = "";
 				else
@@ -220,6 +302,24 @@
 						regexValue.text = r.regex;
 				}
 				refreshButtonState();
+			}
+			
+			protected function matchWholeWordCreationCompleteHandler(event:FlexEvent):void
+			{
+				var o:StringArgument = getArgument(1) as StringArgument;
+				if(o == null)
+					matchWholeWordCheckbox.selected = false;
+				else
+				{
+					if (o.argument == "whole_word")
+					{
+						matchWholeWordCheckbox.selected = true;
+					}
+					else if (o.argument == "partial")
+					{
+						matchWholeWordCheckbox.selected = false;
+					}
+				}
 			}
 			
 			protected function onToolTipCreate(event:ToolTipEvent):void
@@ -492,6 +592,10 @@
 		<s:FormItem includeIn="keyword_group" label="@Resource(bundle = 'messages', key = 'matcher.keywordGroup.label')">
 			<s:ComboBox id="keywordGroupComboBox" labelField="label" width="100%" dataProvider="{keywordGroupComboboxDP}"
 						creationComplete="{rek.getRegularExpressions()}" change="refreshButtonState();"/>
+		</s:FormItem>
+		<s:FormItem label="@Resource(bundle = 'messages', key = 'matcher.matchWholeWord.label')" 
+					includeIn="keyword,keyword_group">
+			<s:CheckBox id="matchWholeWordCheckbox" creationComplete="matchWholeWordCreationCompleteHandler(event)"/>
 		</s:FormItem>
 	</s:Form>			
 	
