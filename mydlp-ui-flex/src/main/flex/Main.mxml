@@ -531,7 +531,7 @@
 			</s:Rect>
 			<s:VGroup left="0" right="0" top="25" bottom="0"
 					  paddingTop="6" paddingBottom="6" paddingLeft="6" paddingRight="6" >
-				<mx:ViewStack id="vs" width="100%" height="100%" creationPolicy="all">
+				<mx:ViewStack id="vs" width="100%" height="100%" creationPolicy="auto">
 				</mx:ViewStack>
 			</s:VGroup>
 			
