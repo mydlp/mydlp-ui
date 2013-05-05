@@ -128,9 +128,9 @@
 				workingMessage.visible=true;
 				workingMessage.includeInLayout=true;
 				
-				if (disableScreenTimer == null)
+				if (!greyoutLayer.visible && disableScreenTimer == null)
 				{
-					disableScreenTimer = new Timer(800, 1);
+					disableScreenTimer = new Timer(1500, 1);
 					disableScreenTimer.addEventListener(TimerEvent.TIMER_COMPLETE, onDisableScreenTimerComplete);
 					disableScreenTimer.start();
 				}
@@ -148,17 +148,22 @@
 					disableScreenTimer.stop();
 					disableScreenTimer = null;
 				}
-				if (enableScreenTimer == null)
+				if (enableScreenTimer != null)
 				{
-					enableScreenTimer = new Timer(1200, 1);
-					enableScreenTimer.addEventListener(TimerEvent.TIMER_COMPLETE, onEnableScreenTimerComplete);
-					enableScreenTimer.start();
+					enableScreenTimer.stop();
+					enableScreenTimer = null;
 				}
+				enableScreenTimer = new Timer(500, 1);
+				enableScreenTimer.addEventListener(TimerEvent.TIMER_COMPLETE, onEnableScreenTimerComplete);
+				enableScreenTimer.start();
 				
-				this.enabled = true;
-				this.mouseEnabled = true;
-				workingMessage.visible=false;
-				workingMessage.includeInLayout=false;
+				if (! greyoutLayer.visible )
+				{
+					this.enabled = true;
+					this.mouseEnabled = true;
+					workingMessage.visible=false;
+					workingMessage.includeInLayout=false;
+				}
 			}
 			
 			public function onDisableScreenTimerComplete(event:TimerEvent):void
@@ -169,6 +174,10 @@
 			
 			public function onEnableScreenTimerComplete(event:TimerEvent):void
 			{
+				this.enabled = true;
+				this.mouseEnabled = true;
+				workingMessage.visible=false;
+				workingMessage.includeInLayout=false;
 				greyoutLayer.visible=false;
 				greyoutLayer.includeInLayout=false;
 			}

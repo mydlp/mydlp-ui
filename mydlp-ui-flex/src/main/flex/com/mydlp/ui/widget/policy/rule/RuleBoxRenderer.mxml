@@ -184,19 +184,46 @@
 				var destinationDataProvider1:ArrayCollection = new ArrayCollection();
 				
 				var ruleItems:ListCollectionView = ruleObject.ruleItems;
-				for each (var ruleItem:* in ruleItems)
+				outer: for each (var ruleItem:* in ruleItems)
 				{
 					if (ruleItem.item is Network ||
 						ruleItem.item is RuleUser ||
 						ruleItem.item is SourceDomainName ||
 						isRemoteStorageRuleItem(ruleItem.item))
+					{
+						for each (var ri:* in sourceDataProvider1)
+						{
+							if (ri.item.id == ruleItem.id)
+							{
+								continue outer;
+							}
+						}
 						sourceDataProvider1.addItem(ruleItem);
+					}
 					else if (ruleItem.item is InformationType)
+					{
+						for each (var ri2:* in matcherDataProvider1)
+						{
+							if (ri2.item.id == ruleItem.id)
+							{
+								continue outer;
+							}
+						}
 						matcherDataProvider1.addItem(ruleItem);
+					}
 					else if (ruleItem.item is Domain ||
 						ruleItem.item is FileSystemDirectory ||
 						ruleItem.item is ApplicationName)
+					{
+						for each (var ri3:* in destinationDataProvider1)
+						{
+							if (ri3.item.id == ruleItem.id)
+							{
+								continue outer;
+							}
+						}
 						destinationDataProvider1.addItem(ruleItem);
+					}
 				}
 				sourceDataProvider = sourceDataProvider1;
 				matcherDataProvider = matcherDataProvider1;
@@ -701,12 +728,11 @@
 					else
 						inventoryObjects = FlexGlobals.topLevelApplication.policyContainer.inventoryTree.myInventoryTree.selectedItems;
 					for each (var o:* in inventoryObjects)
-					addDroppedObject(o as InventoryBase);
+						addDroppedObject(o as InventoryBase);
 					
-					invalidateProperties();
-					refresh();
-					
-					re.save(ruleObject);
+					re.saveChanges(ruleObject,deleteList);
+					//invalidateProperties();
+					//refresh();
 				}
 				else if (dragEvent.dragInitiator is RuleList)
 				{
@@ -721,7 +747,7 @@
 				if (inventoryObject is InventoryItem)
 				{
 					var inventoryItem:InventoryItem = inventoryObject as InventoryItem;
-					addRuleItemObject(inventoryItem.item);
+					addItemToRuleObject(inventoryItem.item);
 				}
 				else if (inventoryObject is InventoryCategory)
 				{
@@ -729,7 +755,7 @@
 					for each (var o:* in inventoryItems)
 					{
 						var inventoryItem2:InventoryItem = o as InventoryItem;
-						addRuleItemObject(inventoryItem2.item);
+						addItemToRuleObject(inventoryItem2.item);
 					}
 				}
 				else
@@ -751,7 +777,7 @@
 				return itemList;
 			}
 			
-			protected function addRuleItemObject(sourceItem:Item):void
+			protected function addItemToRuleObject(sourceItem:Item):void
 			{
 				
 				if(isSourceRuleItem(sourceItem))
@@ -815,26 +841,7 @@
 				ruleObject.ruleItems.addItem(newItem);
 			}
 			
-			protected function saveHandler(event:ResultEvent):void
-			{
-				FlexGlobals.topLevelApplication.topToolbar.policyInstallationState = false;
-				if(deleteList == null || deleteList.length == 0)
-				{
-					highlightOff();
-					if (isDiscoveryTab)
-					{
-						discoveryRuleContainer.refreshRules();
-					}
-					else
-					{
-						ruleContainer.refreshRules();
-					}
-				}
-				else
-					re.removeRuleItems(deleteList);
-			}
-			
-			protected function deleteRuleItemsHandler(event:ResultEvent):void
+			protected function saveChangesHandler(event:ResultEvent):void
 			{
 				FlexGlobals.topLevelApplication.topToolbar.policyInstallationState = false;
 				highlightOff();
@@ -951,8 +958,7 @@
 		<fx:Class id="icon24" />
 		<fx:Class id="icon32" />
 		<my:remote id="re" destination="ruleBRS">
-			<my:method name="save" result="saveHandler(event)"/>
-			<my:method name="removeRuleItems" result="deleteRuleItemsHandler(event)"/>
+			<my:method name="saveChanges" result="saveChangesHandler(event)"/>
 			<my:method name="getDiscoveryStatus" result="getDiscoveryStatusHandler(event)"/>
 		</my:remote>
 		<my:remote id="de" destination="discoveryBRS" >
@@ -1043,7 +1049,7 @@
 				<s:Button styleName="disableButton16Style" 
 						  toolTip="@Resource(bundle = 'messages', key = 'rulebox.disableButton.tooltip.label')"
 						  visible="{ruleObject.enabled}"
-						  click="{ruleObject.enabled = false; re.save(ruleObject);}"/>
+						  click="{ruleObject.enabled = false; ruleObject.save();}"/>
 			</s:Group>
 		</s:Group>
 		
@@ -1151,7 +1157,7 @@
 	<s:HGroup top="0" bottom="0" left="162" width="24" verticalAlign="middle" horizontalAlign="center">
 		<s:Button styleName="disableButton24Style" 
 				  visible="{! ruleObject.enabled}" includeInLayout="{! ruleObject.enabled}"
-				  click="{ruleObject.enabled = true; re.save(ruleObject);}" 
+				  click="{ruleObject.enabled = true; ruleObject.save();}" 
 				  toolTip="@Resource(bundle = 'messages', key = 'rulebox.enableButton.tooltip.label')"/>
 	</s:HGroup>
 	

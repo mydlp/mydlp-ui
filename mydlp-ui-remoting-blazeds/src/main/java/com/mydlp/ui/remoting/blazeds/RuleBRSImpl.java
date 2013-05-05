@@ -101,4 +101,11 @@ public class RuleBRSImpl implements RuleService
 		return discoveryReportDAO.getDiscoveryStatus(ruleId);
 	}
 
+	@Override
+	public void saveChanges(Rule rule, List<RuleItem> ruleItems) {
+		rule.getRuleItems().removeAll(ruleItems);
+		save(rule);
+		removeRuleItems(ruleItems);
+	}
+
 }

@@ -16,6 +16,8 @@ public interface RuleService {
 	public List<Rule> getRules();
 	
 	public Rule save(Rule rule);
+	
+	public void saveChanges(Rule rule, List<RuleItem> ruleItems);
 
 	public void remove(Rule rule);
 	
