@@ -703,7 +703,7 @@
 	<s:HGroup id="workingMessage" visible="false" includeInLayout="false"
 			  left="0" right="0" top="0" height="50"
 			  horizontalAlign="center" verticalAlign="middle">
-		<s:BorderContainer width="180" height="30" 
+		<s:BorderContainer width="216" height="36" 
 						   borderVisible="true" borderStyle="solid" borderColor="0x666666"
 						   backgroundColor="0x000000" backgroundAlpha="0.25">
 			<s:layout>

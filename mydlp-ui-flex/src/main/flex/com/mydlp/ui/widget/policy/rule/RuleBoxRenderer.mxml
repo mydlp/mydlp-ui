@@ -193,7 +193,7 @@
 					{
 						for each (var ri:* in sourceDataProvider1)
 						{
-							if (ri.item.id == ruleItem.id)
+							if (ri.item.id == ruleItem.item.id)
 							{
 								continue outer;
 							}
@@ -204,7 +204,7 @@
 					{
 						for each (var ri2:* in matcherDataProvider1)
 						{
-							if (ri2.item.id == ruleItem.id)
+							if (ri2.item.id == ruleItem.item.id)
 							{
 								continue outer;
 							}
@@ -217,7 +217,7 @@
 					{
 						for each (var ri3:* in destinationDataProvider1)
 						{
-							if (ri3.item.id == ruleItem.id)
+							if (ri3.item.id == ruleItem.item.id)
 							{
 								continue outer;
 							}
