@@ -38,6 +38,7 @@
 			import com.mydlp.ui.domain.RDBMSConnection;
 			import com.mydlp.ui.domain.RegularExpressionGroup;
 			import com.mydlp.ui.domain.Rule;
+			import com.mydlp.ui.domain.RuleItem;
 			import com.mydlp.ui.domain.USBDevice;
 			import com.mydlp.ui.util.LangUtil;
 			import com.mydlp.ui.util.SessionUtil;
@@ -357,7 +358,7 @@
 					{
 						getInventoryFunction();
 					}
-					if (entity == null || entity is Rule)
+					if (entity == null || entity is Rule || entity is RuleItem)
 					{
 						refreshPolicyDataProviders();
 					}
