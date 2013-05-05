@@ -86,7 +86,7 @@
 				if (compileStatusTimer != null)
 				{
 					compileStatusTimer.stop();
-					compileStatusTimer == null;
+					compileStatusTimer = null;
 				}
 				compileStatusTimer = new Timer(timerInterval, 1);
 				compileStatusTimer.addEventListener(TimerEvent.TIMER_COMPLETE, onCompileStatusTimerComplete);

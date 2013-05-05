@@ -117,6 +117,62 @@
 			[Bindable] 
 			public var revisionContainer:RevisionContainer = null;
 			
+			protected var disableScreenTimer:Timer = null;
+			
+			protected var enableScreenTimer:Timer = null;
+			
+			public function disableScreen(): void
+			{
+				this.enabled = false;
+				this.mouseEnabled = false;
+				workingMessage.visible=true;
+				workingMessage.includeInLayout=true;
+				
+				if (disableScreenTimer == null)
+				{
+					disableScreenTimer = new Timer(800, 1);
+					disableScreenTimer.addEventListener(TimerEvent.TIMER_COMPLETE, onDisableScreenTimerComplete);
+					disableScreenTimer.start();
+				}
+				if (enableScreenTimer != null)
+				{
+					enableScreenTimer.stop();
+					enableScreenTimer = null;
+				}
+			}
+			
+			public function enableScreen(): void
+			{
+				if (disableScreenTimer != null)
+				{
+					disableScreenTimer.stop();
+					disableScreenTimer = null;
+				}
+				if (enableScreenTimer == null)
+				{
+					enableScreenTimer = new Timer(1200, 1);
+					enableScreenTimer.addEventListener(TimerEvent.TIMER_COMPLETE, onEnableScreenTimerComplete);
+					enableScreenTimer.start();
+				}
+				
+				this.enabled = true;
+				this.mouseEnabled = true;
+				workingMessage.visible=false;
+				workingMessage.includeInLayout=false;
+			}
+			
+			public function onDisableScreenTimerComplete(event:TimerEvent):void
+			{
+				greyoutLayer.visible=true;
+				greyoutLayer.includeInLayout=true;
+			}
+			
+			public function onEnableScreenTimerComplete(event:TimerEvent):void
+			{
+				greyoutLayer.visible=false;
+				greyoutLayer.includeInLayout=false;
+			}
+			
 			protected function resetAutoLogout():void
 			{
 				clearTimeout(activityTimeout);
@@ -627,5 +683,27 @@
 			</s:HGroup>
 		</s:Group>
 	</s:Group>
+	
+	<s:Rect id="greyoutLayer" visible="false" includeInLayout="false"
+			top="0" bottom="0" left="0" right="0">
+		<s:fill>
+			<s:SolidColor color="0x00000" alpha="0.2"/>
+		</s:fill>
+	</s:Rect>
+	
+	<s:HGroup id="workingMessage" visible="false" includeInLayout="false"
+			  left="0" right="0" top="0" height="50"
+			  horizontalAlign="center" verticalAlign="middle">
+		<s:BorderContainer width="180" height="30" 
+						   borderVisible="true" borderStyle="solid" borderColor="0x666666"
+						   backgroundColor="0x000000" backgroundAlpha="0.25">
+			<s:layout>
+				<s:HorizontalLayout horizontalAlign="center" verticalAlign="middle" gap="16"/>
+			</s:layout>
+			<s:Label text="@Resource(bundle = 'messages', key = 'main.working.message')" />
+			<mx:ProgressBar indeterminate="true" width="64"
+							label="" labelPlacement="right" labelWidth="0" horizontalGap="0"/>
+		</s:BorderContainer>
+	</s:HGroup>
 	
 </s:Application>

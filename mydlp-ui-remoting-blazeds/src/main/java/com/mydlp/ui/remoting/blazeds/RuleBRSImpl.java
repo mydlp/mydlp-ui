@@ -1,5 +1,6 @@
 package com.mydlp.ui.remoting.blazeds;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -27,9 +28,29 @@ public class RuleBRSImpl implements RuleService
 	public List<Rule> getRules() {
 		return ruleDAO.getRules();
 	}
+	
+	protected Rule removeDuplicateRuleItems(Rule rule) {
+		List<RuleItem> deleteList = new ArrayList<RuleItem>();
+		for (RuleItem ruleItem: rule.getRuleItems()) {
+			for (RuleItem ruleItemIter: rule.getRuleItems()) {
+				if (!deleteList.contains(ruleItem) &&
+					ruleItem != ruleItemIter &&
+					ruleItem.getItem().getId().equals(ruleItemIter.getItem().getId()) &&
+					!(ruleItem.getId() == null && ruleItemIter.getId() != null)
+					)
+				{
+					deleteList.add(ruleItemIter);
+				}
+			}
+		}
+		rule.getRuleItems().removeAll(deleteList);
+		removeRuleItems(deleteList);
+		return rule;
+	}
 
 	@Override
 	public Rule save(Rule rule) {
+		rule = removeDuplicateRuleItems(rule);
 		rule = ruleDAO.save(rule);
 		ruleDAO.balanceRulePriority();
 		return rule;
