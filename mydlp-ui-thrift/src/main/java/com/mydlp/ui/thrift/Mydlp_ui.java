@@ -60,6 +60,8 @@ public class Mydlp_ui {
 
     public String testConnection(Map<String,String> RemoteStorage) throws org.apache.thrift.TException;
 
+    public String testWebServer(Map<String,String> WebServer) throws org.apache.thrift.TException;
+
   }
 
   public interface AsyncIface {
@@ -99,6 +101,8 @@ public class Mydlp_ui {
     public void startFingerprinting(int DDId, org.apache.thrift.async.AsyncMethodCallback<AsyncClient.startFingerprinting_call> resultHandler) throws org.apache.thrift.TException;
 
     public void testConnection(Map<String,String> RemoteStorage, org.apache.thrift.async.AsyncMethodCallback<AsyncClient.testConnection_call> resultHandler) throws org.apache.thrift.TException;
+
+    public void testWebServer(Map<String,String> WebServer, org.apache.thrift.async.AsyncMethodCallback<AsyncClient.testWebServer_call> resultHandler) throws org.apache.thrift.TException;
 
   }
 
@@ -484,6 +488,29 @@ public class Mydlp_ui {
         return result.success;
       }
       throw new org.apache.thrift.TApplicationException(org.apache.thrift.TApplicationException.MISSING_RESULT, "testConnection failed: unknown result");
+    }
+
+    public String testWebServer(Map<String,String> WebServer) throws org.apache.thrift.TException
+    {
+      send_testWebServer(WebServer);
+      return recv_testWebServer();
+    }
+
+    public void send_testWebServer(Map<String,String> WebServer) throws org.apache.thrift.TException
+    {
+      testWebServer_args args = new testWebServer_args();
+      args.setWebServer(WebServer);
+      sendBase("testWebServer", args);
+    }
+
+    public String recv_testWebServer() throws org.apache.thrift.TException
+    {
+      testWebServer_result result = new testWebServer_result();
+      receiveBase(result, "testWebServer");
+      if (result.isSetSuccess()) {
+        return result.success;
+      }
+      throw new org.apache.thrift.TApplicationException(org.apache.thrift.TApplicationException.MISSING_RESULT, "testWebServer failed: unknown result");
     }
 
   }
@@ -1117,6 +1144,38 @@ public class Mydlp_ui {
       }
     }
 
+    public void testWebServer(Map<String,String> WebServer, org.apache.thrift.async.AsyncMethodCallback<testWebServer_call> resultHandler) throws org.apache.thrift.TException {
+      checkReady();
+      testWebServer_call method_call = new testWebServer_call(WebServer, resultHandler, this, ___protocolFactory, ___transport);
+      this.___currentMethod = method_call;
+      ___manager.call(method_call);
+    }
+
+    public static class testWebServer_call extends org.apache.thrift.async.TAsyncMethodCall {
+      private Map<String,String> WebServer;
+      public testWebServer_call(Map<String,String> WebServer, org.apache.thrift.async.AsyncMethodCallback<testWebServer_call> resultHandler, org.apache.thrift.async.TAsyncClient client, org.apache.thrift.protocol.TProtocolFactory protocolFactory, org.apache.thrift.transport.TNonblockingTransport transport) throws org.apache.thrift.TException {
+        super(client, protocolFactory, transport, resultHandler, false);
+        this.WebServer = WebServer;
+      }
+
+      public void write_args(org.apache.thrift.protocol.TProtocol prot) throws org.apache.thrift.TException {
+        prot.writeMessageBegin(new org.apache.thrift.protocol.TMessage("testWebServer", org.apache.thrift.protocol.TMessageType.CALL, 0));
+        testWebServer_args args = new testWebServer_args();
+        args.setWebServer(WebServer);
+        args.write(prot);
+        prot.writeMessageEnd();
+      }
+
+      public String getResult() throws org.apache.thrift.TException {
+        if (getState() != org.apache.thrift.async.TAsyncMethodCall.State.RESPONSE_READ) {
+          throw new IllegalStateException("Method call not finished!");
+        }
+        org.apache.thrift.transport.TMemoryInputTransport memoryTransport = new org.apache.thrift.transport.TMemoryInputTransport(getFrameBuffer().array());
+        org.apache.thrift.protocol.TProtocol prot = client.getProtocolFactory().getProtocol(memoryTransport);
+        return (new Client(prot)).recv_testWebServer();
+      }
+    }
+
   }
 
   public static class Processor<I extends Iface> extends org.apache.thrift.TBaseProcessor implements org.apache.thrift.TProcessor {
@@ -1148,6 +1207,7 @@ public class Mydlp_ui {
       processMap.put("getRemoteStorageDir", new getRemoteStorageDir());
       processMap.put("startFingerprinting", new startFingerprinting());
       processMap.put("testConnection", new testConnection());
+      processMap.put("testWebServer", new testWebServer());
       return processMap;
     }
 
@@ -1430,6 +1490,22 @@ public class Mydlp_ui {
       protected testConnection_result getResult(I iface, testConnection_args args) throws org.apache.thrift.TException {
         testConnection_result result = new testConnection_result();
         result.success = iface.testConnection(args.RemoteStorage);
+        return result;
+      }
+    }
+
+    private static class testWebServer<I extends Iface> extends org.apache.thrift.ProcessFunction<I, testWebServer_args> {
+      public testWebServer() {
+        super("testWebServer");
+      }
+
+      protected testWebServer_args getEmptyArgsInstance() {
+        return new testWebServer_args();
+      }
+
+      protected testWebServer_result getResult(I iface, testWebServer_args args) throws org.apache.thrift.TException {
+        testWebServer_result result = new testWebServer_result();
+        result.success = iface.testWebServer(args.WebServer);
         return result;
       }
     }
@@ -10474,8 +10550,6 @@ public class Mydlp_ui {
 
     private void readObject(java.io.ObjectInputStream in) throws java.io.IOException, ClassNotFoundException {
       try {
-        // it doesn't seem like you should have to do this, but java serialization is wacky, and doesn't call the default constructor.
-        __isset_bit_vector = new BitSet(1);
         read(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(in)));
       } catch (org.apache.thrift.TException te) {
         throw new java.io.IOException(te);
@@ -11104,6 +11178,8 @@ public class Mydlp_ui {
 
     private void readObject(java.io.ObjectInputStream in) throws java.io.IOException, ClassNotFoundException {
       try {
+        // it doesn't seem like you should have to do this, but java serialization is wacky, and doesn't call the default constructor.
+        __isset_bit_vector = new BitSet(1);
         read(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(in)));
       } catch (org.apache.thrift.TException te) {
         throw new java.io.IOException(te);
@@ -11715,6 +11791,644 @@ public class Mydlp_ui {
     @Override
     public String toString() {
       StringBuilder sb = new StringBuilder("testConnection_result(");
+      boolean first = true;
+
+      sb.append("success:");
+      if (this.success == null) {
+        sb.append("null");
+      } else {
+        sb.append(this.success);
+      }
+      first = false;
+      sb.append(")");
+      return sb.toString();
+    }
+
+    public void validate() throws org.apache.thrift.TException {
+      // check for required fields
+    }
+
+    private void writeObject(java.io.ObjectOutputStream out) throws java.io.IOException {
+      try {
+        write(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(out)));
+      } catch (org.apache.thrift.TException te) {
+        throw new java.io.IOException(te);
+      }
+    }
+
+    private void readObject(java.io.ObjectInputStream in) throws java.io.IOException, ClassNotFoundException {
+      try {
+        read(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(in)));
+      } catch (org.apache.thrift.TException te) {
+        throw new java.io.IOException(te);
+      }
+    }
+
+  }
+
+  public static class testWebServer_args implements org.apache.thrift.TBase<testWebServer_args, testWebServer_args._Fields>, java.io.Serializable, Cloneable   {
+    private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("testWebServer_args");
+
+    private static final org.apache.thrift.protocol.TField WEB_SERVER_FIELD_DESC = new org.apache.thrift.protocol.TField("WebServer", org.apache.thrift.protocol.TType.MAP, (short)1);
+
+    public Map<String,String> WebServer; // required
+
+    /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
+    public enum _Fields implements org.apache.thrift.TFieldIdEnum {
+      WEB_SERVER((short)1, "WebServer");
+
+      private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+
+      static {
+        for (_Fields field : EnumSet.allOf(_Fields.class)) {
+          byName.put(field.getFieldName(), field);
+        }
+      }
+
+      /**
+       * Find the _Fields constant that matches fieldId, or null if its not found.
+       */
+      public static _Fields findByThriftId(int fieldId) {
+        switch(fieldId) {
+          case 1: // WEB_SERVER
+            return WEB_SERVER;
+          default:
+            return null;
+        }
+      }
+
+      /**
+       * Find the _Fields constant that matches fieldId, throwing an exception
+       * if it is not found.
+       */
+      public static _Fields findByThriftIdOrThrow(int fieldId) {
+        _Fields fields = findByThriftId(fieldId);
+        if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+        return fields;
+      }
+
+      /**
+       * Find the _Fields constant that matches name, or null if its not found.
+       */
+      public static _Fields findByName(String name) {
+        return byName.get(name);
+      }
+
+      private final short _thriftId;
+      private final String _fieldName;
+
+      _Fields(short thriftId, String fieldName) {
+        _thriftId = thriftId;
+        _fieldName = fieldName;
+      }
+
+      public short getThriftFieldId() {
+        return _thriftId;
+      }
+
+      public String getFieldName() {
+        return _fieldName;
+      }
+    }
+
+    // isset id assignments
+
+    public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
+    static {
+      Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
+      tmpMap.put(_Fields.WEB_SERVER, new org.apache.thrift.meta_data.FieldMetaData("WebServer", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+          new org.apache.thrift.meta_data.MapMetaData(org.apache.thrift.protocol.TType.MAP, 
+              new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING), 
+              new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING))));
+      metaDataMap = Collections.unmodifiableMap(tmpMap);
+      org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(testWebServer_args.class, metaDataMap);
+    }
+
+    public testWebServer_args() {
+    }
+
+    public testWebServer_args(
+      Map<String,String> WebServer)
+    {
+      this();
+      this.WebServer = WebServer;
+    }
+
+    /**
+     * Performs a deep copy on <i>other</i>.
+     */
+    public testWebServer_args(testWebServer_args other) {
+      if (other.isSetWebServer()) {
+        Map<String,String> __this__WebServer = new HashMap<String,String>();
+        for (Map.Entry<String, String> other_element : other.WebServer.entrySet()) {
+
+          String other_element_key = other_element.getKey();
+          String other_element_value = other_element.getValue();
+
+          String __this__WebServer_copy_key = other_element_key;
+
+          String __this__WebServer_copy_value = other_element_value;
+
+          __this__WebServer.put(__this__WebServer_copy_key, __this__WebServer_copy_value);
+        }
+        this.WebServer = __this__WebServer;
+      }
+    }
+
+    public testWebServer_args deepCopy() {
+      return new testWebServer_args(this);
+    }
+
+    @Override
+    public void clear() {
+      this.WebServer = null;
+    }
+
+    public int getWebServerSize() {
+      return (this.WebServer == null) ? 0 : this.WebServer.size();
+    }
+
+    public void putToWebServer(String key, String val) {
+      if (this.WebServer == null) {
+        this.WebServer = new HashMap<String,String>();
+      }
+      this.WebServer.put(key, val);
+    }
+
+    public Map<String,String> getWebServer() {
+      return this.WebServer;
+    }
+
+    public testWebServer_args setWebServer(Map<String,String> WebServer) {
+      this.WebServer = WebServer;
+      return this;
+    }
+
+    public void unsetWebServer() {
+      this.WebServer = null;
+    }
+
+    /** Returns true if field WebServer is set (has been assigned a value) and false otherwise */
+    public boolean isSetWebServer() {
+      return this.WebServer != null;
+    }
+
+    public void setWebServerIsSet(boolean value) {
+      if (!value) {
+        this.WebServer = null;
+      }
+    }
+
+    public void setFieldValue(_Fields field, Object value) {
+      switch (field) {
+      case WEB_SERVER:
+        if (value == null) {
+          unsetWebServer();
+        } else {
+          setWebServer((Map<String,String>)value);
+        }
+        break;
+
+      }
+    }
+
+    public Object getFieldValue(_Fields field) {
+      switch (field) {
+      case WEB_SERVER:
+        return getWebServer();
+
+      }
+      throw new IllegalStateException();
+    }
+
+    /** Returns true if field corresponding to fieldID is set (has been assigned a value) and false otherwise */
+    public boolean isSet(_Fields field) {
+      if (field == null) {
+        throw new IllegalArgumentException();
+      }
+
+      switch (field) {
+      case WEB_SERVER:
+        return isSetWebServer();
+      }
+      throw new IllegalStateException();
+    }
+
+    @Override
+    public boolean equals(Object that) {
+      if (that == null)
+        return false;
+      if (that instanceof testWebServer_args)
+        return this.equals((testWebServer_args)that);
+      return false;
+    }
+
+    public boolean equals(testWebServer_args that) {
+      if (that == null)
+        return false;
+
+      boolean this_present_WebServer = true && this.isSetWebServer();
+      boolean that_present_WebServer = true && that.isSetWebServer();
+      if (this_present_WebServer || that_present_WebServer) {
+        if (!(this_present_WebServer && that_present_WebServer))
+          return false;
+        if (!this.WebServer.equals(that.WebServer))
+          return false;
+      }
+
+      return true;
+    }
+
+    @Override
+    public int hashCode() {
+      return 0;
+    }
+
+    public int compareTo(testWebServer_args other) {
+      if (!getClass().equals(other.getClass())) {
+        return getClass().getName().compareTo(other.getClass().getName());
+      }
+
+      int lastComparison = 0;
+      testWebServer_args typedOther = (testWebServer_args)other;
+
+      lastComparison = Boolean.valueOf(isSetWebServer()).compareTo(typedOther.isSetWebServer());
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+      if (isSetWebServer()) {
+        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.WebServer, typedOther.WebServer);
+        if (lastComparison != 0) {
+          return lastComparison;
+        }
+      }
+      return 0;
+    }
+
+    public _Fields fieldForId(int fieldId) {
+      return _Fields.findByThriftId(fieldId);
+    }
+
+    public void read(org.apache.thrift.protocol.TProtocol iprot) throws org.apache.thrift.TException {
+      org.apache.thrift.protocol.TField field;
+      iprot.readStructBegin();
+      while (true)
+      {
+        field = iprot.readFieldBegin();
+        if (field.type == org.apache.thrift.protocol.TType.STOP) { 
+          break;
+        }
+        switch (field.id) {
+          case 1: // WEB_SERVER
+            if (field.type == org.apache.thrift.protocol.TType.MAP) {
+              {
+                org.apache.thrift.protocol.TMap _map14 = iprot.readMapBegin();
+                this.WebServer = new HashMap<String,String>(2*_map14.size);
+                for (int _i15 = 0; _i15 < _map14.size; ++_i15)
+                {
+                  String _key16; // required
+                  String _val17; // required
+                  _key16 = iprot.readString();
+                  _val17 = iprot.readString();
+                  this.WebServer.put(_key16, _val17);
+                }
+                iprot.readMapEnd();
+              }
+            } else { 
+              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, field.type);
+            }
+            break;
+          default:
+            org.apache.thrift.protocol.TProtocolUtil.skip(iprot, field.type);
+        }
+        iprot.readFieldEnd();
+      }
+      iprot.readStructEnd();
+
+      // check for required fields of primitive type, which can't be checked in the validate method
+      validate();
+    }
+
+    public void write(org.apache.thrift.protocol.TProtocol oprot) throws org.apache.thrift.TException {
+      validate();
+
+      oprot.writeStructBegin(STRUCT_DESC);
+      if (this.WebServer != null) {
+        oprot.writeFieldBegin(WEB_SERVER_FIELD_DESC);
+        {
+          oprot.writeMapBegin(new org.apache.thrift.protocol.TMap(org.apache.thrift.protocol.TType.STRING, org.apache.thrift.protocol.TType.STRING, this.WebServer.size()));
+          for (Map.Entry<String, String> _iter18 : this.WebServer.entrySet())
+          {
+            oprot.writeString(_iter18.getKey());
+            oprot.writeString(_iter18.getValue());
+          }
+          oprot.writeMapEnd();
+        }
+        oprot.writeFieldEnd();
+      }
+      oprot.writeFieldStop();
+      oprot.writeStructEnd();
+    }
+
+    @Override
+    public String toString() {
+      StringBuilder sb = new StringBuilder("testWebServer_args(");
+      boolean first = true;
+
+      sb.append("WebServer:");
+      if (this.WebServer == null) {
+        sb.append("null");
+      } else {
+        sb.append(this.WebServer);
+      }
+      first = false;
+      sb.append(")");
+      return sb.toString();
+    }
+
+    public void validate() throws org.apache.thrift.TException {
+      // check for required fields
+    }
+
+    private void writeObject(java.io.ObjectOutputStream out) throws java.io.IOException {
+      try {
+        write(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(out)));
+      } catch (org.apache.thrift.TException te) {
+        throw new java.io.IOException(te);
+      }
+    }
+
+    private void readObject(java.io.ObjectInputStream in) throws java.io.IOException, ClassNotFoundException {
+      try {
+        read(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(in)));
+      } catch (org.apache.thrift.TException te) {
+        throw new java.io.IOException(te);
+      }
+    }
+
+  }
+
+  public static class testWebServer_result implements org.apache.thrift.TBase<testWebServer_result, testWebServer_result._Fields>, java.io.Serializable, Cloneable   {
+    private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("testWebServer_result");
+
+    private static final org.apache.thrift.protocol.TField SUCCESS_FIELD_DESC = new org.apache.thrift.protocol.TField("success", org.apache.thrift.protocol.TType.STRING, (short)0);
+
+    public String success; // required
+
+    /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
+    public enum _Fields implements org.apache.thrift.TFieldIdEnum {
+      SUCCESS((short)0, "success");
+
+      private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+
+      static {
+        for (_Fields field : EnumSet.allOf(_Fields.class)) {
+          byName.put(field.getFieldName(), field);
+        }
+      }
+
+      /**
+       * Find the _Fields constant that matches fieldId, or null if its not found.
+       */
+      public static _Fields findByThriftId(int fieldId) {
+        switch(fieldId) {
+          case 0: // SUCCESS
+            return SUCCESS;
+          default:
+            return null;
+        }
+      }
+
+      /**
+       * Find the _Fields constant that matches fieldId, throwing an exception
+       * if it is not found.
+       */
+      public static _Fields findByThriftIdOrThrow(int fieldId) {
+        _Fields fields = findByThriftId(fieldId);
+        if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+        return fields;
+      }
+
+      /**
+       * Find the _Fields constant that matches name, or null if its not found.
+       */
+      public static _Fields findByName(String name) {
+        return byName.get(name);
+      }
+
+      private final short _thriftId;
+      private final String _fieldName;
+
+      _Fields(short thriftId, String fieldName) {
+        _thriftId = thriftId;
+        _fieldName = fieldName;
+      }
+
+      public short getThriftFieldId() {
+        return _thriftId;
+      }
+
+      public String getFieldName() {
+        return _fieldName;
+      }
+    }
+
+    // isset id assignments
+
+    public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
+    static {
+      Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
+      tmpMap.put(_Fields.SUCCESS, new org.apache.thrift.meta_data.FieldMetaData("success", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+          new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
+      metaDataMap = Collections.unmodifiableMap(tmpMap);
+      org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(testWebServer_result.class, metaDataMap);
+    }
+
+    public testWebServer_result() {
+    }
+
+    public testWebServer_result(
+      String success)
+    {
+      this();
+      this.success = success;
+    }
+
+    /**
+     * Performs a deep copy on <i>other</i>.
+     */
+    public testWebServer_result(testWebServer_result other) {
+      if (other.isSetSuccess()) {
+        this.success = other.success;
+      }
+    }
+
+    public testWebServer_result deepCopy() {
+      return new testWebServer_result(this);
+    }
+
+    @Override
+    public void clear() {
+      this.success = null;
+    }
+
+    public String getSuccess() {
+      return this.success;
+    }
+
+    public testWebServer_result setSuccess(String success) {
+      this.success = success;
+      return this;
+    }
+
+    public void unsetSuccess() {
+      this.success = null;
+    }
+
+    /** Returns true if field success is set (has been assigned a value) and false otherwise */
+    public boolean isSetSuccess() {
+      return this.success != null;
+    }
+
+    public void setSuccessIsSet(boolean value) {
+      if (!value) {
+        this.success = null;
+      }
+    }
+
+    public void setFieldValue(_Fields field, Object value) {
+      switch (field) {
+      case SUCCESS:
+        if (value == null) {
+          unsetSuccess();
+        } else {
+          setSuccess((String)value);
+        }
+        break;
+
+      }
+    }
+
+    public Object getFieldValue(_Fields field) {
+      switch (field) {
+      case SUCCESS:
+        return getSuccess();
+
+      }
+      throw new IllegalStateException();
+    }
+
+    /** Returns true if field corresponding to fieldID is set (has been assigned a value) and false otherwise */
+    public boolean isSet(_Fields field) {
+      if (field == null) {
+        throw new IllegalArgumentException();
+      }
+
+      switch (field) {
+      case SUCCESS:
+        return isSetSuccess();
+      }
+      throw new IllegalStateException();
+    }
+
+    @Override
+    public boolean equals(Object that) {
+      if (that == null)
+        return false;
+      if (that instanceof testWebServer_result)
+        return this.equals((testWebServer_result)that);
+      return false;
+    }
+
+    public boolean equals(testWebServer_result that) {
+      if (that == null)
+        return false;
+
+      boolean this_present_success = true && this.isSetSuccess();
+      boolean that_present_success = true && that.isSetSuccess();
+      if (this_present_success || that_present_success) {
+        if (!(this_present_success && that_present_success))
+          return false;
+        if (!this.success.equals(that.success))
+          return false;
+      }
+
+      return true;
+    }
+
+    @Override
+    public int hashCode() {
+      return 0;
+    }
+
+    public int compareTo(testWebServer_result other) {
+      if (!getClass().equals(other.getClass())) {
+        return getClass().getName().compareTo(other.getClass().getName());
+      }
+
+      int lastComparison = 0;
+      testWebServer_result typedOther = (testWebServer_result)other;
+
+      lastComparison = Boolean.valueOf(isSetSuccess()).compareTo(typedOther.isSetSuccess());
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+      if (isSetSuccess()) {
+        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.success, typedOther.success);
+        if (lastComparison != 0) {
+          return lastComparison;
+        }
+      }
+      return 0;
+    }
+
+    public _Fields fieldForId(int fieldId) {
+      return _Fields.findByThriftId(fieldId);
+    }
+
+    public void read(org.apache.thrift.protocol.TProtocol iprot) throws org.apache.thrift.TException {
+      org.apache.thrift.protocol.TField field;
+      iprot.readStructBegin();
+      while (true)
+      {
+        field = iprot.readFieldBegin();
+        if (field.type == org.apache.thrift.protocol.TType.STOP) { 
+          break;
+        }
+        switch (field.id) {
+          case 0: // SUCCESS
+            if (field.type == org.apache.thrift.protocol.TType.STRING) {
+              this.success = iprot.readString();
+            } else { 
+              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, field.type);
+            }
+            break;
+          default:
+            org.apache.thrift.protocol.TProtocolUtil.skip(iprot, field.type);
+        }
+        iprot.readFieldEnd();
+      }
+      iprot.readStructEnd();
+
+      // check for required fields of primitive type, which can't be checked in the validate method
+      validate();
+    }
+
+    public void write(org.apache.thrift.protocol.TProtocol oprot) throws org.apache.thrift.TException {
+      oprot.writeStructBegin(STRUCT_DESC);
+
+      if (this.isSetSuccess()) {
+        oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
+        oprot.writeString(this.success);
+        oprot.writeFieldEnd();
+      }
+      oprot.writeFieldStop();
+      oprot.writeStructEnd();
+    }
+
+    @Override
+    public String toString() {
+      StringBuilder sb = new StringBuilder("testWebServer_result(");
       boolean first = true;
 
       sb.append("success:");
