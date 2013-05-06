@@ -60,7 +60,7 @@ public class Mydlp_ui {
 
     public String testConnection(Map<String,String> RemoteStorage) throws org.apache.thrift.TException;
 
-    public String testWebServer(Map<String,String> WebServer) throws org.apache.thrift.TException;
+    public String testWebServer(String URL) throws org.apache.thrift.TException;
 
   }
 
@@ -102,7 +102,7 @@ public class Mydlp_ui {
 
     public void testConnection(Map<String,String> RemoteStorage, org.apache.thrift.async.AsyncMethodCallback<AsyncClient.testConnection_call> resultHandler) throws org.apache.thrift.TException;
 
-    public void testWebServer(Map<String,String> WebServer, org.apache.thrift.async.AsyncMethodCallback<AsyncClient.testWebServer_call> resultHandler) throws org.apache.thrift.TException;
+    public void testWebServer(String URL, org.apache.thrift.async.AsyncMethodCallback<AsyncClient.testWebServer_call> resultHandler) throws org.apache.thrift.TException;
 
   }
 
@@ -490,16 +490,16 @@ public class Mydlp_ui {
       throw new org.apache.thrift.TApplicationException(org.apache.thrift.TApplicationException.MISSING_RESULT, "testConnection failed: unknown result");
     }
 
-    public String testWebServer(Map<String,String> WebServer) throws org.apache.thrift.TException
+    public String testWebServer(String URL) throws org.apache.thrift.TException
     {
-      send_testWebServer(WebServer);
+      send_testWebServer(URL);
       return recv_testWebServer();
     }
 
-    public void send_testWebServer(Map<String,String> WebServer) throws org.apache.thrift.TException
+    public void send_testWebServer(String URL) throws org.apache.thrift.TException
     {
       testWebServer_args args = new testWebServer_args();
-      args.setWebServer(WebServer);
+      args.setURL(URL);
       sendBase("testWebServer", args);
     }
 
@@ -1144,24 +1144,24 @@ public class Mydlp_ui {
       }
     }
 
-    public void testWebServer(Map<String,String> WebServer, org.apache.thrift.async.AsyncMethodCallback<testWebServer_call> resultHandler) throws org.apache.thrift.TException {
+    public void testWebServer(String URL, org.apache.thrift.async.AsyncMethodCallback<testWebServer_call> resultHandler) throws org.apache.thrift.TException {
       checkReady();
-      testWebServer_call method_call = new testWebServer_call(WebServer, resultHandler, this, ___protocolFactory, ___transport);
+      testWebServer_call method_call = new testWebServer_call(URL, resultHandler, this, ___protocolFactory, ___transport);
       this.___currentMethod = method_call;
       ___manager.call(method_call);
     }
 
     public static class testWebServer_call extends org.apache.thrift.async.TAsyncMethodCall {
-      private Map<String,String> WebServer;
-      public testWebServer_call(Map<String,String> WebServer, org.apache.thrift.async.AsyncMethodCallback<testWebServer_call> resultHandler, org.apache.thrift.async.TAsyncClient client, org.apache.thrift.protocol.TProtocolFactory protocolFactory, org.apache.thrift.transport.TNonblockingTransport transport) throws org.apache.thrift.TException {
+      private String URL;
+      public testWebServer_call(String URL, org.apache.thrift.async.AsyncMethodCallback<testWebServer_call> resultHandler, org.apache.thrift.async.TAsyncClient client, org.apache.thrift.protocol.TProtocolFactory protocolFactory, org.apache.thrift.transport.TNonblockingTransport transport) throws org.apache.thrift.TException {
         super(client, protocolFactory, transport, resultHandler, false);
-        this.WebServer = WebServer;
+        this.URL = URL;
       }
 
       public void write_args(org.apache.thrift.protocol.TProtocol prot) throws org.apache.thrift.TException {
         prot.writeMessageBegin(new org.apache.thrift.protocol.TMessage("testWebServer", org.apache.thrift.protocol.TMessageType.CALL, 0));
         testWebServer_args args = new testWebServer_args();
-        args.setWebServer(WebServer);
+        args.setURL(URL);
         args.write(prot);
         prot.writeMessageEnd();
       }
@@ -1505,7 +1505,7 @@ public class Mydlp_ui {
 
       protected testWebServer_result getResult(I iface, testWebServer_args args) throws org.apache.thrift.TException {
         testWebServer_result result = new testWebServer_result();
-        result.success = iface.testWebServer(args.WebServer);
+        result.success = iface.testWebServer(args.URL);
         return result;
       }
     }
@@ -11829,13 +11829,13 @@ public class Mydlp_ui {
   public static class testWebServer_args implements org.apache.thrift.TBase<testWebServer_args, testWebServer_args._Fields>, java.io.Serializable, Cloneable   {
     private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("testWebServer_args");
 
-    private static final org.apache.thrift.protocol.TField WEB_SERVER_FIELD_DESC = new org.apache.thrift.protocol.TField("WebServer", org.apache.thrift.protocol.TType.MAP, (short)1);
+    private static final org.apache.thrift.protocol.TField URL_FIELD_DESC = new org.apache.thrift.protocol.TField("URL", org.apache.thrift.protocol.TType.STRING, (short)1);
 
-    public Map<String,String> WebServer; // required
+    public String URL; // required
 
     /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
     public enum _Fields implements org.apache.thrift.TFieldIdEnum {
-      WEB_SERVER((short)1, "WebServer");
+      URL((short)1, "URL");
 
       private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
 
@@ -11850,8 +11850,8 @@ public class Mydlp_ui {
        */
       public static _Fields findByThriftId(int fieldId) {
         switch(fieldId) {
-          case 1: // WEB_SERVER
-            return WEB_SERVER;
+          case 1: // URL
+            return URL;
           default:
             return null;
         }
@@ -11896,10 +11896,8 @@ public class Mydlp_ui {
     public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
     static {
       Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
-      tmpMap.put(_Fields.WEB_SERVER, new org.apache.thrift.meta_data.FieldMetaData("WebServer", org.apache.thrift.TFieldRequirementType.DEFAULT, 
-          new org.apache.thrift.meta_data.MapMetaData(org.apache.thrift.protocol.TType.MAP, 
-              new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING), 
-              new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING))));
+      tmpMap.put(_Fields.URL, new org.apache.thrift.meta_data.FieldMetaData("URL", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+          new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
       metaDataMap = Collections.unmodifiableMap(tmpMap);
       org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(testWebServer_args.class, metaDataMap);
     }
@@ -11908,30 +11906,18 @@ public class Mydlp_ui {
     }
 
     public testWebServer_args(
-      Map<String,String> WebServer)
+      String URL)
     {
       this();
-      this.WebServer = WebServer;
+      this.URL = URL;
     }
 
     /**
      * Performs a deep copy on <i>other</i>.
      */
     public testWebServer_args(testWebServer_args other) {
-      if (other.isSetWebServer()) {
-        Map<String,String> __this__WebServer = new HashMap<String,String>();
-        for (Map.Entry<String, String> other_element : other.WebServer.entrySet()) {
-
-          String other_element_key = other_element.getKey();
-          String other_element_value = other_element.getValue();
-
-          String __this__WebServer_copy_key = other_element_key;
-
-          String __this__WebServer_copy_value = other_element_value;
-
-          __this__WebServer.put(__this__WebServer_copy_key, __this__WebServer_copy_value);
-        }
-        this.WebServer = __this__WebServer;
+      if (other.isSetURL()) {
+        this.URL = other.URL;
       }
     }
 
@@ -11941,51 +11927,40 @@ public class Mydlp_ui {
 
     @Override
     public void clear() {
-      this.WebServer = null;
+      this.URL = null;
     }
 
-    public int getWebServerSize() {
-      return (this.WebServer == null) ? 0 : this.WebServer.size();
+    public String getURL() {
+      return this.URL;
     }
 
-    public void putToWebServer(String key, String val) {
-      if (this.WebServer == null) {
-        this.WebServer = new HashMap<String,String>();
-      }
-      this.WebServer.put(key, val);
-    }
-
-    public Map<String,String> getWebServer() {
-      return this.WebServer;
-    }
-
-    public testWebServer_args setWebServer(Map<String,String> WebServer) {
-      this.WebServer = WebServer;
+    public testWebServer_args setURL(String URL) {
+      this.URL = URL;
       return this;
     }
 
-    public void unsetWebServer() {
-      this.WebServer = null;
+    public void unsetURL() {
+      this.URL = null;
     }
 
-    /** Returns true if field WebServer is set (has been assigned a value) and false otherwise */
-    public boolean isSetWebServer() {
-      return this.WebServer != null;
+    /** Returns true if field URL is set (has been assigned a value) and false otherwise */
+    public boolean isSetURL() {
+      return this.URL != null;
     }
 
-    public void setWebServerIsSet(boolean value) {
+    public void setURLIsSet(boolean value) {
       if (!value) {
-        this.WebServer = null;
+        this.URL = null;
       }
     }
 
     public void setFieldValue(_Fields field, Object value) {
       switch (field) {
-      case WEB_SERVER:
+      case URL:
         if (value == null) {
-          unsetWebServer();
+          unsetURL();
         } else {
-          setWebServer((Map<String,String>)value);
+          setURL((String)value);
         }
         break;
 
@@ -11994,8 +11969,8 @@ public class Mydlp_ui {
 
     public Object getFieldValue(_Fields field) {
       switch (field) {
-      case WEB_SERVER:
-        return getWebServer();
+      case URL:
+        return getURL();
 
       }
       throw new IllegalStateException();
@@ -12008,8 +11983,8 @@ public class Mydlp_ui {
       }
 
       switch (field) {
-      case WEB_SERVER:
-        return isSetWebServer();
+      case URL:
+        return isSetURL();
       }
       throw new IllegalStateException();
     }
@@ -12027,12 +12002,12 @@ public class Mydlp_ui {
       if (that == null)
         return false;
 
-      boolean this_present_WebServer = true && this.isSetWebServer();
-      boolean that_present_WebServer = true && that.isSetWebServer();
-      if (this_present_WebServer || that_present_WebServer) {
-        if (!(this_present_WebServer && that_present_WebServer))
+      boolean this_present_URL = true && this.isSetURL();
+      boolean that_present_URL = true && that.isSetURL();
+      if (this_present_URL || that_present_URL) {
+        if (!(this_present_URL && that_present_URL))
           return false;
-        if (!this.WebServer.equals(that.WebServer))
+        if (!this.URL.equals(that.URL))
           return false;
       }
 
@@ -12052,12 +12027,12 @@ public class Mydlp_ui {
       int lastComparison = 0;
       testWebServer_args typedOther = (testWebServer_args)other;
 
-      lastComparison = Boolean.valueOf(isSetWebServer()).compareTo(typedOther.isSetWebServer());
+      lastComparison = Boolean.valueOf(isSetURL()).compareTo(typedOther.isSetURL());
       if (lastComparison != 0) {
         return lastComparison;
       }
-      if (isSetWebServer()) {
-        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.WebServer, typedOther.WebServer);
+      if (isSetURL()) {
+        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.URL, typedOther.URL);
         if (lastComparison != 0) {
           return lastComparison;
         }
@@ -12079,21 +12054,9 @@ public class Mydlp_ui {
           break;
         }
         switch (field.id) {
-          case 1: // WEB_SERVER
-            if (field.type == org.apache.thrift.protocol.TType.MAP) {
-              {
-                org.apache.thrift.protocol.TMap _map14 = iprot.readMapBegin();
-                this.WebServer = new HashMap<String,String>(2*_map14.size);
-                for (int _i15 = 0; _i15 < _map14.size; ++_i15)
-                {
-                  String _key16; // required
-                  String _val17; // required
-                  _key16 = iprot.readString();
-                  _val17 = iprot.readString();
-                  this.WebServer.put(_key16, _val17);
-                }
-                iprot.readMapEnd();
-              }
+          case 1: // URL
+            if (field.type == org.apache.thrift.protocol.TType.STRING) {
+              this.URL = iprot.readString();
             } else { 
               org.apache.thrift.protocol.TProtocolUtil.skip(iprot, field.type);
             }
@@ -12113,17 +12076,9 @@ public class Mydlp_ui {
       validate();
 
       oprot.writeStructBegin(STRUCT_DESC);
-      if (this.WebServer != null) {
-        oprot.writeFieldBegin(WEB_SERVER_FIELD_DESC);
-        {
-          oprot.writeMapBegin(new org.apache.thrift.protocol.TMap(org.apache.thrift.protocol.TType.STRING, org.apache.thrift.protocol.TType.STRING, this.WebServer.size()));
-          for (Map.Entry<String, String> _iter18 : this.WebServer.entrySet())
-          {
-            oprot.writeString(_iter18.getKey());
-            oprot.writeString(_iter18.getValue());
-          }
-          oprot.writeMapEnd();
-        }
+      if (this.URL != null) {
+        oprot.writeFieldBegin(URL_FIELD_DESC);
+        oprot.writeString(this.URL);
         oprot.writeFieldEnd();
       }
       oprot.writeFieldStop();
@@ -12135,11 +12090,11 @@ public class Mydlp_ui {
       StringBuilder sb = new StringBuilder("testWebServer_args(");
       boolean first = true;
 
-      sb.append("WebServer:");
-      if (this.WebServer == null) {
+      sb.append("URL:");
+      if (this.URL == null) {
         sb.append("null");
       } else {
-        sb.append(this.WebServer);
+        sb.append(this.URL);
       }
       first = false;
       sb.append(")");
