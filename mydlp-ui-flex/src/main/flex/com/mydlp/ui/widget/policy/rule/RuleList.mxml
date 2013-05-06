@@ -286,7 +286,7 @@
 			protected function changeHandler(event:ResultEvent):void
 			{
 				FlexGlobals.topLevelApplication.topToolbar.policyInstallationState = false;
-				FlexGlobals.topLevelApplication.refresh();
+				FlexGlobals.topLevelApplication.refreshRespectively(new Rule());
 			}
 			
 		]]>

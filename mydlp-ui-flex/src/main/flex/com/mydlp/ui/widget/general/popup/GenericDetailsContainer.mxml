@@ -15,6 +15,7 @@
 			import com.mydlp.ui.domain.InformationFeature;
 			import com.mydlp.ui.domain.InformationType;
 			import com.mydlp.ui.domain.InventoryCategory;
+			import com.mydlp.ui.domain.InventoryGroup;
 			import com.mydlp.ui.domain.InventoryItem;
 			import com.mydlp.ui.domain.Item;
 			import com.mydlp.ui.domain.Matcher;
@@ -54,14 +55,18 @@
 					else */ 
 					if 
 						(
+							classMember.name.charAt(0) == '_' ||
 							classMember.name == "id" ||
 							(classMember.name == "category" && classMember.type == InventoryCategory) ||
+							(classMember.name == "group" && classMember.type == InventoryGroup) ||
 							classMember.name == "optimisticLockVersion" ||
 							classMember.name == "nameKey" ||
 							classMember.name == "icon" ||
 							(classMember.name == "ruleItems" && classMember.type == ListCollectionView) ||
+							(classMember.name == "ruleItemGroups" && classMember.type == ListCollectionView) ||
 							classMember.name == "enabled" ||
 							classMember.name == "priority" ||
+							classMember.name == "sortPriority" ||
 							classMember.name == "password" ||
 							classMember.name == "action" ||
 							(classMember.name == "children" && classMember.type == ListCollectionView)||						

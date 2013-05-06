@@ -4,7 +4,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 
 @Entity
-public class RegularExpressionGroupEntry extends AbstractEntity{
+public class RegularExpressionGroupEntry extends AbstractEntity {
 	
 	/**
 	 * 

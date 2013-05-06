@@ -24,6 +24,7 @@
 			import com.mydlp.ui.domain.InformationType;
 			import com.mydlp.ui.domain.InventoryBase;
 			import com.mydlp.ui.domain.InventoryCategory;
+			import com.mydlp.ui.domain.InventoryGroup;
 			import com.mydlp.ui.domain.InventoryItem;
 			import com.mydlp.ui.domain.Item;
 			import com.mydlp.ui.domain.MailRule;
@@ -41,6 +42,7 @@
 			import com.mydlp.ui.domain.RemovableStorageRule;
 			import com.mydlp.ui.domain.Rule;
 			import com.mydlp.ui.domain.RuleItem;
+			import com.mydlp.ui.domain.RuleItemGroup;
 			import com.mydlp.ui.domain.RuleUser;
 			import com.mydlp.ui.domain.ScreenshotRule;
 			import com.mydlp.ui.domain.SourceDomainName;
@@ -184,20 +186,64 @@
 				var destinationDataProvider1:ArrayCollection = new ArrayCollection();
 				
 				var ruleItems:ListCollectionView = ruleObject.ruleItems;
-				for each (var ruleItem:* in ruleItems)
+				outer: for each (var ruleItem:* in ruleItems)
 				{
 					if (ruleItem.item is Network ||
 						ruleItem.item is RuleUser ||
 						ruleItem.item is SourceDomainName ||
 						isRemoteStorageRuleItem(ruleItem.item))
+					{
+						for each (var ri:* in sourceDataProvider1)
+						{
+							if (ri is RuleItem && ri.item.id == ruleItem.item.id)
+							{
+								continue outer;
+							}
+						}
 						sourceDataProvider1.addItem(ruleItem);
+					}
 					else if (ruleItem.item is InformationType)
+					{
+						for each (var ri2:* in matcherDataProvider1)
+						{
+							if (ri2 is RuleItem && ri2.item.id == ruleItem.item.id)
+							{
+								continue outer;
+							}
+						}
 						matcherDataProvider1.addItem(ruleItem);
+					}
 					else if (ruleItem.item is Domain ||
 						ruleItem.item is FileSystemDirectory ||
 						ruleItem.item is ApplicationName)
+					{
+						for each (var ri3:* in destinationDataProvider1)
+						{
+							if (ri3 is RuleItem && ri3.item.id == ruleItem.item.id)
+							{
+								continue outer;
+							}
+						}
 						destinationDataProvider1.addItem(ruleItem);
+					}
 				}
+				
+				var ruleItemGroups:ListCollectionView = ruleObject.ruleItemGroups;
+				outer2: for each (var ruleItemGroup:* in ruleItemGroups)
+				{
+					if (ruleItemGroup.group.itemType == InventoryGroup.TYPE_ITYPE)
+					{
+						for each (var rig:* in matcherDataProvider1)
+						{
+							if (rig is RuleItemGroup && rig.group.id == ruleItemGroup.group.id)
+							{
+								continue outer2;
+							}
+						}
+						matcherDataProvider1.addItem(ruleItemGroup);
+					}
+				}
+				
 				sourceDataProvider = sourceDataProvider1;
 				matcherDataProvider = matcherDataProvider1;
 				destinationDataProvider = destinationDataProvider1;
@@ -503,7 +549,6 @@
 				if(isConsistentForSources() && isConsistentForMatchers() && isConsistentForDestinations())
 					return true;
 				return false;
-				
 			}
 			
 			protected function isConsistentForDestinations():Boolean // Controls whether dropped items consist both "All Network" and specific network
@@ -529,9 +574,9 @@
 			
 			protected function isConsistentForMatchers():Boolean //Controls whether dropped items consist both "All Information Types" and specific information types
 			{
-				for each(var ri:InventoryItem in droppedMatchers)
+				for each(var ri:* in droppedMatchers)
 				{
-					if(ri.item.coupledInventoryItem.nameKey == ITYPE_ALL && droppedMatchers.length > 1)
+					if (ri is InventoryItem && ri.item.coupledInventoryItem.nameKey == ITYPE_ALL && droppedMatchers.length > 1)
 						return false;
 				}
 				return true;
@@ -540,7 +585,7 @@
 			protected function groupDroppedItems(droppedItems:*):void // Group dropped items as Sources and matchers with the help of
 			{															// "groupDroppedItem" function.
 				for each(var item:* in droppedItems)
-				groupDroppedItem(item);
+					groupDroppedItem(item);
 			}
 			
 			protected function groupDroppedItem(droppedItem:*):void
@@ -555,6 +600,13 @@
 						droppedDestinations.addItem(droppedItem);
 					else
 						throw new Error("unexpected type of item dropped");
+				}
+				else if (droppedItem is InventoryGroup)
+				{
+					if (droppedItem.itemType == InventoryGroup.TYPE_ITYPE)
+					{
+						droppedMatchers.addItem(droppedItem);
+					}
 				}
 				else if(droppedItem is InventoryCategory)
 				{
@@ -660,6 +712,20 @@
 					else if (isDroppableForRemoteStorage(treeItem.item))
 						return true;
 				}
+				else if (treeItem is InventoryGroup)
+				{
+					if ( treeItem.itemType == InventoryGroup.TYPE_ITYPE )
+					{
+						if(ruleObject is RemovableStorageRule ||
+							ruleObject is WebRule ||
+							ruleObject is MailRule ||
+							ruleObject is ApiRule ||
+							ruleObject is PrinterRule ||
+							ruleObject is DiscoveryRule ||
+							ruleObject is RemoteStorageRule)
+							return true;
+					}
+				}
 				else if (treeItem is InventoryCategory)
 				{
 					var inventoryCategory:InventoryCategory = treeItem as InventoryCategory;
@@ -701,12 +767,15 @@
 					else
 						inventoryObjects = FlexGlobals.topLevelApplication.policyContainer.inventoryTree.myInventoryTree.selectedItems;
 					for each (var o:* in inventoryObjects)
-					addDroppedObject(o as InventoryBase);
+						addDroppedObject(o as InventoryBase);
 					
-					invalidateProperties();
-					refresh();
+					droppedMatchers = new ArrayCollection();
+					droppedSources = new ArrayCollection();
+					droppedDestinations = new ArrayCollection();
 					
-					re.save(ruleObject);
+					re.saveChanges(ruleObject,deleteList);
+					//invalidateProperties();
+					//refresh();
 				}
 				else if (dragEvent.dragInitiator is RuleList)
 				{
@@ -721,7 +790,12 @@
 				if (inventoryObject is InventoryItem)
 				{
 					var inventoryItem:InventoryItem = inventoryObject as InventoryItem;
-					addRuleItemObject(inventoryItem.item);
+					addItemToRuleObject(inventoryItem.item);
+				}
+				else if (inventoryObject is InventoryGroup)
+				{
+					var inventoryGroup:InventoryGroup = inventoryObject as InventoryGroup;
+					addGroupToRuleObject(inventoryGroup);
 				}
 				else if (inventoryObject is InventoryCategory)
 				{
@@ -729,7 +803,7 @@
 					for each (var o:* in inventoryItems)
 					{
 						var inventoryItem2:InventoryItem = o as InventoryItem;
-						addRuleItemObject(inventoryItem2.item);
+						addItemToRuleObject(inventoryItem2.item);
 					}
 				}
 				else
@@ -751,7 +825,27 @@
 				return itemList;
 			}
 			
-			protected function addRuleItemObject(sourceItem:Item):void
+			protected function addGroupToRuleObject(sourceGroup:InventoryGroup):void
+			{
+				if (sourceGroup.itemType == InventoryGroup.TYPE_ITYPE)
+				{
+					if(hasAllIType())//if ruleObject has "All Information Types"
+					{
+							removeAllITypeItem();
+					}
+				}
+				
+				for each (var rig:RuleItemGroup in ruleObject.ruleItemGroups)
+				if (rig.group.id == sourceGroup.id)
+					return;
+				
+				var newItemGroup:RuleItemGroup = new RuleItemGroup();
+				newItemGroup.group = sourceGroup;
+				newItemGroup.rule = ruleObject;
+				ruleObject.ruleItemGroups.addItem(newItemGroup);
+			}
+			
+			protected function addItemToRuleObject(sourceItem:Item):void
 			{
 				
 				if(isSourceRuleItem(sourceItem))
@@ -815,29 +909,18 @@
 				ruleObject.ruleItems.addItem(newItem);
 			}
 			
-			protected function changeHandler(event:ResultEvent):void
-			{
-				FlexGlobals.topLevelApplication.topToolbar.policyInstallationState = false;
-				FlexGlobals.topLevelApplication.refresh();
-			}
-			
-			protected function saveHandler(event:ResultEvent):void
-			{
-				FlexGlobals.topLevelApplication.topToolbar.policyInstallationState = false;
-				if(deleteList == null || deleteList.length == 0)
-				{
-					highlightOff();
-					FlexGlobals.topLevelApplication.refresh();
-				}
-				else
-					re.removeRuleItems(deleteList);
-			}
-			
-			protected function deleteRuleItemsHandler(event:ResultEvent):void
+			protected function saveChangesHandler(event:ResultEvent):void
 			{
 				FlexGlobals.topLevelApplication.topToolbar.policyInstallationState = false;
 				highlightOff();
-				FlexGlobals.topLevelApplication.refresh();
+				if (isDiscoveryTab)
+				{
+					discoveryRuleContainer.refreshRules();
+				}
+				else
+				{
+					ruleContainer.refreshRules();
+				}
 			}
 			
 			protected function onItemClickHandler(event:MouseEvent):void
@@ -916,7 +999,10 @@
 			protected function startButtonClickHandler(event:MouseEvent):void
 			{
 				de.startDiscoveryOnDemand(ruleObject.id);
-				FlexGlobals.topLevelApplication.refresh();
+				if (isDiscoveryTab)
+				{
+					discoveryRuleContainer.refreshRules();
+				}
 			}
 	
 			protected function isPlayButtonEnabled():Boolean
@@ -940,8 +1026,7 @@
 		<fx:Class id="icon24" />
 		<fx:Class id="icon32" />
 		<my:remote id="re" destination="ruleBRS">
-			<my:method name="save" result="saveHandler(event)"/>
-			<my:method name="removeRuleItems" result="deleteRuleItemsHandler(event)"/>
+			<my:method name="saveChanges" result="saveChangesHandler(event)"/>
 			<my:method name="getDiscoveryStatus" result="getDiscoveryStatusHandler(event)"/>
 		</my:remote>
 		<my:remote id="de" destination="discoveryBRS" >
@@ -1032,7 +1117,7 @@
 				<s:Button styleName="disableButton16Style" 
 						  toolTip="@Resource(bundle = 'messages', key = 'rulebox.disableButton.tooltip.label')"
 						  visible="{ruleObject.enabled}"
-						  click="{ruleObject.enabled = false; re.save(ruleObject);}"/>
+						  click="{ruleObject.enabled = false; ruleObject.save();}"/>
 			</s:Group>
 		</s:Group>
 		
@@ -1140,7 +1225,7 @@
 	<s:HGroup top="0" bottom="0" left="162" width="24" verticalAlign="middle" horizontalAlign="center">
 		<s:Button styleName="disableButton24Style" 
 				  visible="{! ruleObject.enabled}" includeInLayout="{! ruleObject.enabled}"
-				  click="{ruleObject.enabled = true; re.save(ruleObject);}" 
+				  click="{ruleObject.enabled = true; ruleObject.save();}" 
 				  toolTip="@Resource(bundle = 'messages', key = 'rulebox.enableButton.tooltip.label')"/>
 	</s:HGroup>
 	

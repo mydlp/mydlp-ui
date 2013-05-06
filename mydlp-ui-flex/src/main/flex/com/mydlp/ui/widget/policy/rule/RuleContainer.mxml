@@ -14,6 +14,7 @@
 			import com.mydlp.ui.domain.ApiRule;
 			import com.mydlp.ui.domain.CustomActionDescriptionSeclore;
 			import com.mydlp.ui.domain.DiscoveryRule;
+			import com.mydlp.ui.domain.InventoryGroup;
 			import com.mydlp.ui.domain.MailRule;
 			import com.mydlp.ui.domain.PrinterRule;
 			import com.mydlp.ui.domain.RemoteStorageRule;
@@ -22,6 +23,7 @@
 			import com.mydlp.ui.domain.RemovableStorageRule;
 			import com.mydlp.ui.domain.Rule;
 			import com.mydlp.ui.domain.RuleItem;
+			import com.mydlp.ui.domain.RuleItemGroup;
 			import com.mydlp.ui.domain.ScreenshotRule;
 			import com.mydlp.ui.domain.WebRule;
 			import com.mydlp.ui.util.InteractionUtil;
@@ -345,6 +347,16 @@
 					var hasSource:Boolean = false;
 					var hasIType:Boolean = false;
 					var hasDestination:Boolean = false;
+					
+					ruleItemGroupLoop: for each (var rig:RuleItemGroup in r.ruleItemGroups)
+					{
+						if (hasIType == false && rig.group.itemType == InventoryGroup.TYPE_ITYPE)
+							hasIType = true;
+						
+						if (hasIType)
+							break ruleItemGroupLoop;
+					}
+					
 					ruleItemLoop: for each (var ri:RuleItem in r.ruleItems)
 					{
 						if (hasSource == false && RuleBoxRenderer.isSourceRuleItem(ri.item))
@@ -356,6 +368,7 @@
 						if (hasSource && hasIType && hasDestination)
 							break ruleItemLoop;
 					}
+					
 					if (!hasSource)
 					{
 						retStr = "error.ruleHasNoMatchers";

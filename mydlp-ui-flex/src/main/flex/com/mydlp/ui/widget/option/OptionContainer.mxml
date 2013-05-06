@@ -172,7 +172,8 @@
 			{
 				saveButton.enabled = true;
 				// TODO: may be a local refresh
-				FlexGlobals.topLevelApplication.refresh();
+				//FlexGlobals.topLevelApplication.refreshRespectively(new Config);
+				refresh();
 			}
 			
 			public function invalidInput(event:ValidationResultEvent):void

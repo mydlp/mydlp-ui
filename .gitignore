@@ -27,7 +27,9 @@ mydlp-ui-domain-as3/src/main/flex/com/mydlp/ui/domain/*.as
 !mydlp-ui-domain-as3/src/main/flex/com/mydlp/ui/domain/EndpointStatus.as
 !mydlp-ui-domain-as3/src/main/flex/com/mydlp/ui/domain/RDBMSConnection.as
 !mydlp-ui-domain-as3/src/main/flex/com/mydlp/ui/domain/Rule.as
+!mydlp-ui-domain-as3/src/main/flex/com/mydlp/ui/domain/InventoryCategory.as
 !mydlp-ui-domain-as3/src/main/flex/com/mydlp/ui/domain/InventoryItem.as
+!mydlp-ui-domain-as3/src/main/flex/com/mydlp/ui/domain/InventoryGroup.as
 !mydlp-ui-domain-as3/src/main/flex/com/mydlp/ui/domain/InformationFeature.as
 !mydlp-ui-domain-as3/src/main/flex/com/mydlp/ui/domain/LicenseInformation.as
 !mydlp-ui-domain-as3/src/main/flex/com/mydlp/ui/domain/WebServer.as

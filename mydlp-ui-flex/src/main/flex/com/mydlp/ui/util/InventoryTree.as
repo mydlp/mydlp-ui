@@ -1,7 +1,9 @@
 package com.mydlp.ui.util
 {
+	import com.mydlp.ui.domain.InformationType;
 	import com.mydlp.ui.domain.InventoryBase;
 	import com.mydlp.ui.domain.InventoryCategory;
+	import com.mydlp.ui.domain.InventoryGroup;
 	import com.mydlp.ui.domain.InventoryItem;
 	import com.mydlp.ui.skin.FolderBitmapLabelButton16Skin;
 	import com.mydlp.ui.widget.policy.inventory.InventoryItemRenderer;
@@ -89,9 +91,9 @@ package com.mydlp.ui.util
 			trace(event.fault.faultString);
 		}
 		
-		public function displayItem(item:InventoryItem):void
+		public function displayItem(item:InventoryBase):void
 		{
-			var ii:InventoryItem;
+			var ii:InventoryBase;
 			for(var i:int = 0; i < dataProvider.length; i++)
 			{
 				ii = traverse(dataProvider[i], item);
@@ -103,19 +105,32 @@ package com.mydlp.ui.util
 		}
 		
 		
-		protected function traverse(iitem:*, searcehedItem:InventoryItem):InventoryItem
+		protected function traverse(iitem:*, searchedItem:InventoryBase):InventoryBase
 		{
 			if(iitem is InventoryCategory)
 			{
 				for(var i:int = 0; i < iitem.children.length;i++)
 				{
-					var retItem:InventoryItem = traverse(iitem.children[i], searcehedItem);
+					var retItem:InventoryBase = traverse(iitem.children[i], searchedItem);
 					if(retItem != null)
 						return retItem;
 				}
 				return null;
 			}
-			else if(iitem is InventoryItem && (iitem.uid == searcehedItem.uid))
+			else if (iitem is InventoryGroup)
+			{
+				if (iitem.uid == searchedItem.uid)
+					return iitem;
+				
+				for(var i2:int = 0; i2 < iitem.children.length;i2++)
+				{
+					var retItem2:InventoryBase = traverse(iitem.children[i2], searchedItem);
+					if(retItem2 != null)
+						return retItem2;
+				}
+				return null;
+			}
+			else if(iitem is InventoryItem && (iitem.uid == searchedItem.uid))
 			{
 				return iitem;
 			}
@@ -130,6 +145,13 @@ package com.mydlp.ui.util
 				if(!isItemOpen(item.category))
 					expandItem(item.category, true);
 				expandCategories(item.category);
+			}
+			if (item is InventoryItem && (item as InventoryItem).group != null)
+			{
+				var itemGroup:InventoryGroup = (item as InventoryItem).group; 
+				if(!isItemOpen(itemGroup))
+					expandItem(itemGroup, true);
+				expandCategories(itemGroup);
 			}
 		}
 		
@@ -154,9 +176,11 @@ package com.mydlp.ui.util
 			var dropIndex:int = calculateDropIndex();
 			var renderer:IListItemRenderer = indexToItemRenderer(dropIndex);
 			var parentCategory:InventoryCategory = null;
+			var parentGroup:InventoryGroup = null;
 			if (renderer == null)
 			{
 				parentCategory = null;
+				parentGroup = null;
 			}
 			else
 			{
@@ -165,6 +189,11 @@ package com.mydlp.ui.util
 				{
 					parentCategory = dropTarget as InventoryCategory;
 					expandItem(parentCategory, true);
+				}
+				else if (renderer.data is InventoryGroup)
+				{
+					parentGroup = dropTarget as InventoryGroup;
+					expandItem(parentGroup, true);
 				}
 				else
 					parentCategory = dropTarget.category;
@@ -175,13 +204,30 @@ package com.mydlp.ui.util
 				for each (var item:Object in event.dragSource.dataForFormat('treeItems') as Array)
 			{
 				var dragSource:InventoryBase = item as InventoryBase;
-				if (dragSource != parentCategory && 
-					dragSource.category != parentCategory &&
-					isValidTargetCategory(dragSource, parentCategory)
-				)
+				if (parentGroup != null)
 				{
-					dragSource.category = parentCategory;
-					itemsToSave.addItem(dragSource);
+					if (isValidTargetGroup(dragSource, parentGroup)
+					)
+					{
+						dragSource.category = null;
+						(dragSource as InventoryItem).group = parentGroup;
+						itemsToSave.addItem(dragSource);
+					}
+				}
+				else
+				{
+					if (dragSource != parentCategory && 
+						dragSource.category != parentCategory &&
+						isValidTargetCategory(dragSource, parentCategory)
+					)
+					{
+						dragSource.category = parentCategory;
+						if (dragSource is InventoryItem)
+						{
+							(dragSource as InventoryItem).group = null;
+						}
+						itemsToSave.addItem(dragSource);
+					}
 				}
 			}
 			
@@ -222,6 +268,7 @@ package com.mydlp.ui.util
 			var dropIndex:int = calculateDropIndex(event);
 			var renderer:IListItemRenderer = indexToItemRenderer(dropIndex);
 			var parentCategory:InventoryCategory = null;
+			var parentGroup:InventoryGroup = null;
 			if (renderer == null)
 			{
 				return false;
@@ -238,11 +285,22 @@ package com.mydlp.ui.util
 					parentCategory = dropTarget as InventoryCategory;
 					expandItem(parentCategory, true);
 				}
+				else if (renderer.data is InventoryGroup)
+				{
+					parentGroup = dropTarget as InventoryGroup;
+					expandItem(parentGroup, true);
+				}
 				else
 					parentCategory = dropTarget.category;
 				
-				if (InventoryItemRenderer.isAddEnabled(parentCategory))
+				if (parentGroup != null && InventoryItemRenderer.isAddEnabled(parentGroup))
+				{
 					return true;
+				}
+				else if (parentCategory != null && InventoryItemRenderer.isAddEnabled(parentCategory))
+				{
+					return true;
+				}
 				else
 					return false;
 			}
@@ -256,6 +314,20 @@ package com.mydlp.ui.util
 			if (dragSource == targetCategory)
 				return false;
 			return isValidTargetCategory(dragSource, targetCategory.category);
+		}
+		
+		protected function isValidTargetGroup(dragSource:InventoryBase, targetGroup:InventoryGroup): Boolean
+		{
+			if (targetGroup == null)
+				return false;
+			if (dragSource == targetGroup)
+				return false;
+			if (!dragSource is InventoryItem)
+				return false;
+			if ((dragSource as InventoryItem).group == targetGroup)
+				return false;
+			return true;
+			
 		}
 		
 		protected function onChangeHandler(event:ListEvent):void

@@ -158,7 +158,7 @@
 				}
 				FlexGlobals.topLevelApplication.topToolbar.policyInstallationState = false;
 				InteractionUtil.closeCurrentPopup();
-				FlexGlobals.topLevelApplication.refresh();
+				FlexGlobals.topLevelApplication.refreshRespectively(formObject);
 			}
 			
 			protected function faultHandler(event:FaultEvent):void

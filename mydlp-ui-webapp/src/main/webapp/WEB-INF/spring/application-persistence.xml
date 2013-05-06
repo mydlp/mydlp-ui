@@ -54,6 +54,7 @@
          <value>com.mydlp.ui.domain.InformationType</value>
          <value>com.mydlp.ui.domain.InventoryBase</value>
          <value>com.mydlp.ui.domain.InventoryCategory</value>
+         <value>com.mydlp.ui.domain.InventoryGroup</value>
          <value>com.mydlp.ui.domain.InventoryItem</value>
          <value>com.mydlp.ui.domain.Item</value>
          <value>com.mydlp.ui.domain.LicenseInformation</value>
@@ -84,6 +85,7 @@
          <value>com.mydlp.ui.domain.Revision</value>
          <value>com.mydlp.ui.domain.Rule</value>
          <value>com.mydlp.ui.domain.RuleItem</value>
+         <value>com.mydlp.ui.domain.RuleItemGroup</value>
          <value>com.mydlp.ui.domain.RuleSchedule</value>
          <value>com.mydlp.ui.domain.RuleUser</value>
          <value>com.mydlp.ui.domain.RuleUserAD</value>
@@ -93,6 +95,7 @@
          <value>com.mydlp.ui.domain.ScheduleIntervals</value>
          <value>com.mydlp.ui.domain.ScreenshotRule</value>
          <value>com.mydlp.ui.domain.SourceDomainName</value>
+         <value>com.mydlp.ui.domain.StringArgument</value>
          <value>com.mydlp.ui.domain.USBDevice</value>
          <value>com.mydlp.ui.domain.UserSettings</value>
          <value>com.mydlp.ui.domain.WebRule</value>

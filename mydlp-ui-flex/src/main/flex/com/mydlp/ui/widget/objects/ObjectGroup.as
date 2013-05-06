@@ -1,11 +1,12 @@
 package com.mydlp.ui.widget.objects
 {
 	import mx.collections.ListCollectionView;
+	import mx.collections.Sort;
+	import mx.collections.SortField;
 
 	[Bindable]
 	public class ObjectGroup
 	{
-		
 		protected var _label:String;
 		protected var _children:ListCollectionView;
 		protected var _classType:Class;
@@ -22,6 +23,11 @@ package com.mydlp.ui.widget.objects
 		
 		public function set children(value:ListCollectionView): void
 		{
+			var sortLabel:Sort = new Sort();
+			sortLabel.fields=[new SortField("label")];
+			value.sort = sortLabel;
+			value.refresh();
+			
 			_children = value;
 		}
 		

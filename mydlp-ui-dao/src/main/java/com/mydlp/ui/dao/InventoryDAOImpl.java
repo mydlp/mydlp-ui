@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.mydlp.ui.domain.InventoryBase;
+import com.mydlp.ui.domain.InventoryCategory;
 import com.mydlp.ui.domain.InventoryItem;
 
 @Repository("inventoryDAO")
@@ -17,7 +18,7 @@ public class InventoryDAOImpl extends AbstractPolicyDAO implements InventoryDAO 
 	@SuppressWarnings("unchecked")
 	public List<InventoryBase> getInventory() {
 		DetachedCriteria criteria = 
-				DetachedCriteria.forClass(InventoryBase.class)
+				DetachedCriteria.forClass(InventoryCategory.class)
 					.add(Restrictions.isNull("category"));
 		return getHibernateTemplate().findByCriteria(criteria);
 	}

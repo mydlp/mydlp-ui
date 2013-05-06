@@ -24,6 +24,5 @@ package com.mydlp.ui.domain {
 		{
 			return this.name;
 		}
-		
     }
 }

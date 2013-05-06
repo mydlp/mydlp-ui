@@ -4,8 +4,11 @@ package com.mydlp.ui.mxml
 	import flash.net.navigateToURL;
 	import flash.utils.flash_proxy;
 	
+	import mx.core.FlexGlobals;
 	import mx.rpc.AbstractOperation;
 	import mx.rpc.events.FaultEvent;
+	import mx.rpc.events.InvokeEvent;
+	import mx.rpc.events.ResultEvent;
 	
 	import org.dphibernate.rpc.HibernateRemoteObject;
 	import org.dphibernate.rpc.IOperationBufferFactory;
@@ -17,6 +20,7 @@ package com.mydlp.ui.mxml
 
 	public dynamic class RemoteObject extends HibernateRemoteObject
 	{
+		protected static var operationCounter:uint = 0;
 		
 		public function RemoteObject(destination:String=null, operationBufferFactory:IOperationBufferFactory=null)
 		{
@@ -24,6 +28,9 @@ package com.mydlp.ui.mxml
 			//this.bufferProxyLoadRequests = true;
 			this.showBusyCursor=true;
 			this.operationBufferFactory = new LoadDPProxyOperationBufferFactory();
+			addEventListener(InvokeEvent.INVOKE, screenInvokeHandler);
+			addEventListener(ResultEvent.RESULT, screenResultHandler);
+			addEventListener(FaultEvent.FAULT, screenFaultHandler);
 			addEventListener(FaultEvent.FAULT, defaultFaultHandler);
 		}
 		
@@ -31,6 +38,42 @@ package com.mydlp.ui.mxml
 			if (event.fault.faultCode == "Client.Error.DeliveryInDoubt")
 				navigateToURL(new URLRequest('j_spring_security_logout'), '_self');
 		}
+		
+		protected function screenInvokeHandler(event:InvokeEvent): void
+		{
+			disableScreen();
+		}
+		
+		protected function screenResultHandler(event:ResultEvent): void
+		{
+			enableScreen();
+		}
+		
+		protected function screenFaultHandler(event:FaultEvent): void
+		{
+			enableScreen();
+		}
+		
+		public static function disableScreen(): void
+		{
+			if (RemoteObject.operationCounter <= 0)
+			{
+				FlexGlobals.topLevelApplication.disableScreen();
+				RemoteObject.operationCounter = 0;
+			}
+			RemoteObject.operationCounter++;
+		}
+		
+		public static function enableScreen(): void
+		{
+			RemoteObject.operationCounter--;
+			if (RemoteObject.operationCounter <= 0)
+			{
+				FlexGlobals.topLevelApplication.enableScreen();
+				RemoteObject.operationCounter = 0;
+			}
+		}
+		
 
 		/*
 		override flash_proxy function callProperty(name:*, ... args:Array):*

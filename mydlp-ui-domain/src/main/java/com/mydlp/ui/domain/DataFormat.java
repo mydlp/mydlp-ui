@@ -5,6 +5,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 
 @Entity
 public class DataFormat extends AbstractNamedEntity {
@@ -17,6 +18,7 @@ public class DataFormat extends AbstractNamedEntity {
 	protected List<MIMEType> mimeTypes;
 
 	@OneToMany(cascade={CascadeType.ALL})
+	@OrderBy("mimeType")
 	public List<MIMEType> getMimeTypes() {
 		return mimeTypes;
 	}

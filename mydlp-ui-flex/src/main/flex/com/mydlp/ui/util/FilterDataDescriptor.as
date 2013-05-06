@@ -1,6 +1,7 @@
 package com.mydlp.ui.util
 {
 	import com.mydlp.ui.domain.InventoryCategory;
+	import com.mydlp.ui.domain.InventoryGroup;
 	import com.mydlp.ui.domain.InventoryItem;
 	
 	import mx.collections.ArrayCollection;
@@ -35,6 +36,11 @@ package com.mydlp.ui.util
 					if(_filterFunction(node.children[i]))
 						children.addItem(node.children[i]);
 				}
+			}
+			else if (node is InventoryGroup)
+			{
+				if (_filterFunction(node))
+					children.addAll(node.children);
 			}
 			return children;
 		}
