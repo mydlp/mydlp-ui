@@ -6,6 +6,7 @@
  */
 
 package com.mydlp.ui.domain {
+	import mx.states.OverrideBase;
 
     [Managed]
     [RemoteClass(alias="com.mydlp.ui.domain.InventoryItem")]

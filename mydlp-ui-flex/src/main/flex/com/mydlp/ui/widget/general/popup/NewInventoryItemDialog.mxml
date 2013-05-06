@@ -13,6 +13,7 @@
 			import com.mydlp.ui.domain.FileSystemDirectory;
 			import com.mydlp.ui.domain.InformationType;
 			import com.mydlp.ui.domain.InventoryCategory;
+			import com.mydlp.ui.domain.InventoryGroup;
 			import com.mydlp.ui.domain.InventoryItem;
 			import com.mydlp.ui.domain.Network;
 			import com.mydlp.ui.domain.SourceDomainName;
@@ -46,6 +47,17 @@
 					c.category = FlexGlobals.topLevelApplication.policyContainer.inventoryTree.myInventoryTree.selectedItem;
 				c.editable = true;
 				InteractionUtil.newEditDialog(c);
+			}
+			protected function informationTypeGroupHandler():void
+			{
+				close();
+				var g:InventoryGroup = new InventoryGroup();
+				g.itemType = InventoryGroup.TYPE_ITYPE;
+				if(isDiscoveryTab)
+					g.category = FlexGlobals.topLevelApplication.discoveryContainer.inventoryTree.myInventoryTree.selectedItem;
+				else
+					g.category = FlexGlobals.topLevelApplication.policyContainer.inventoryTree.myInventoryTree.selectedItem;
+				InteractionUtil.newEditDialog(g);
 			}
 			protected function networkHandler():void
 			{
@@ -119,6 +131,9 @@
 			<s:Button skinClass="com.mydlp.ui.skin.InformationTypeBitmapLabelButton16Skin" 
 					  label="@Resource(bundle = 'messages', key = 'inventory.newdialog.informationType')" 
 					  click="informationTypeHandler()"/>
+			<s:Button skinClass="com.mydlp.ui.skin.InformationTypeGroupBitmapLabelButton16Skin" 
+					  label="@Resource(bundle = 'messages', key = 'inventory.newdialog.informationTypeGroup')" 
+					  click="informationTypeGroupHandler()"/>
 			<s:Button skinClass="com.mydlp.ui.skin.DomainBitmapLabelButton16Skin" 
 					  label="@Resource(bundle = 'messages', key = 'inventory.newdialog.domain')"
 					  includeInLayout="{SessionUtil.isEnterprise() &amp;&amp; !isDiscoveryTab}"

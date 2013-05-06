@@ -9,6 +9,7 @@
 	<fx:Script>
 		<![CDATA[
 			import com.mydlp.ui.domain.RuleItem;
+			import com.mydlp.ui.domain.RuleItemGroup;
 			import com.mydlp.ui.widget.policy.inventory.InventoryItemToolTip;
 			
 			import mx.core.FlexGlobals;
@@ -17,7 +18,10 @@
 			
 			public override function set data(value:Object):void
 			{
-				super.data = value as RuleItem;
+				if (value is RuleItem)
+					super.data = value as RuleItem;
+				else if (value is RuleItemGroup)
+					super.data = value as RuleItemGroup;
 				dispatchEvent(new FlexEvent(FlexEvent.DATA_CHANGE));
 			}
 			
@@ -25,11 +29,22 @@
 			{
 				if(this.selected)//This item is also selected. Show this item in 'Inventory Tree'
 				{
-					var ri:RuleItem = this.data as RuleItem;
-					if(isDiscoveryTab)
-						FlexGlobals.topLevelApplication.inventoryTreeDiscovery.myInventoryTree.displayItem(ri.item.coupledInventoryItem);
-					else
-						FlexGlobals.topLevelApplication.inventoryTree.myInventoryTree.displayItem(ri.item.coupledInventoryItem);
+					if (this.data is RuleItem)
+					{
+						var ri:RuleItem = this.data as RuleItem;
+						if(isDiscoveryTab)
+							FlexGlobals.topLevelApplication.inventoryTreeDiscovery.myInventoryTree.displayItem(ri.item.coupledInventoryItem);
+						else
+							FlexGlobals.topLevelApplication.inventoryTree.myInventoryTree.displayItem(ri.item.coupledInventoryItem);
+					}
+					else if (this.data is RuleItemGroup)
+					{
+						var rig:RuleItemGroup = this.data as RuleItemGroup;
+						if(isDiscoveryTab)
+							FlexGlobals.topLevelApplication.inventoryTreeDiscovery.myInventoryTree.displayItem(rig.group);
+						else
+							FlexGlobals.topLevelApplication.inventoryTree.myInventoryTree.displayItem(rig.group);
+					} 
 				}
 			}
 			
@@ -38,6 +53,34 @@
 				var toolTip:InventoryItemToolTip = new InventoryItemToolTip();
 				toolTip.detailsContainer.formObject = data.item;
 				event.toolTip = toolTip;
+			}
+			
+			protected function getLabel(item:*): String
+			{
+				if (item == null) return "";
+				if (item is RuleItem)
+				{
+					return item.item.coupledInventoryItem.label;
+				}
+				if (item is RuleItemGroup)
+				{
+					return item.group.label;
+				}
+				throw new Error("unexpected type for renderer");
+			}
+			
+			protected function getIcon(item:*): Class
+			{
+				if (item == null) return null;
+				if (item is RuleItem)
+				{
+					return item.item.coupledInventoryItem.icon;
+				}
+				if (item is RuleItemGroup)
+				{
+					return item.group.icon;
+				}
+				throw new Error("unexpected type for renderer");
 			}
 			
 		]]>
@@ -62,9 +105,9 @@
 			<s:HorizontalLayout verticalAlign="middle"
 					paddingLeft="4" paddingRight="4"/>
 		</s:layout>
-		<s:BitmapImage source="{data.item.coupledInventoryItem.icon}" />
+		<s:BitmapImage source="{getIcon(data)}" />
 		<s:Label width="98%" 
-				 text="{data.item.coupledInventoryItem.label}" />
+				 text="{getLabel(data)}" />
 	</s:Group>
 	
 	<s:HGroup left="0" right="0" top="0" bottom="0" includeIn="selected"

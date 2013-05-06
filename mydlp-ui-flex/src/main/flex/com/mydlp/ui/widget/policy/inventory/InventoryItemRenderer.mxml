@@ -7,8 +7,10 @@
 		<![CDATA[
 			import avmplus.getQualifiedClassName;
 			
+			import com.mydlp.ui.domain.InformationType;
 			import com.mydlp.ui.domain.InventoryBase;
 			import com.mydlp.ui.domain.InventoryCategory;
+			import com.mydlp.ui.domain.InventoryGroup;
 			import com.mydlp.ui.domain.InventoryItem;
 			import com.mydlp.ui.domain.Rule;
 			import com.mydlp.ui.util.InteractionUtil;
@@ -37,6 +39,10 @@
 					if (category.nameKey != null && category.nameKey == USERDEFINED_NAMEKEY)
 						return true;
 					return category.editable;
+				} 
+				if (i is InventoryGroup)
+				{
+					return isAddEnabled((i as InventoryGroup).category);
 				}
 				return false;
 			}
@@ -47,16 +53,27 @@
 					return false;
 				if (i is InventoryCategory)
 					return (i as InventoryCategory).editable;
+				
+				var c:InventoryCategory = null;
+				
 				if (i is InventoryItem)
 				{
-					var c:InventoryCategory = (i as InventoryItem).category;
-					if (c == null)
-						return true;
-					if (c.nameKey != null && c.nameKey == USERDEFINED_NAMEKEY)
-						return true;
-					return c.editable;
+					if ((i as InventoryItem).group != null)
+					{
+						return isEditEnabled((i as InventoryItem).group);
+					}
+					c = (i as InventoryItem).category;
 				}
-				return false;
+				if (i is InventoryGroup)
+				{
+					c = (i as InventoryGroup).category;
+				}
+				if (c == null)
+					return false;
+				
+				if (c.nameKey != null && c.nameKey == USERDEFINED_NAMEKEY)
+					return true;
+				return c.editable;
 			}
 			
 			protected function onToolTipCreate(event:ToolTipEvent):void
@@ -68,9 +85,24 @@
 			
 			protected function addButtonClickHandler(event:MouseEvent):void
 			{
-				var popup:NewInventoryItemDialog = InteractionUtil.newPopup(NewInventoryItemDialog) as NewInventoryItemDialog;
-				popup.isDiscoveryTab = isDiscoveryTab
-				event.stopPropagation();
+				if (treeListData.item is InventoryCategory)
+				{
+					var popup:NewInventoryItemDialog = InteractionUtil.newPopup(NewInventoryItemDialog) as NewInventoryItemDialog;
+					popup.isDiscoveryTab = isDiscoveryTab
+					event.stopPropagation();
+					return;
+				} 
+				if (treeListData.item is InventoryGroup && treeListData.item.itemType == InventoryGroup.TYPE_ITYPE)
+				{
+					var i:InventoryItem = new InventoryItem;
+					i.group = treeListData.item as InventoryGroup;
+					i.category = null;
+					i.item = new InformationType();
+					InteractionUtil.newEditDialog(i);
+					
+					event.stopPropagation();
+					return;
+				}
 			}
 			
 		]]>
@@ -98,7 +130,7 @@
 		</s:Group>
 		<s:HGroup toolTip="{treeListData.item is InventoryItem ? ' ': null}" 
 				  toolTipCreate="onToolTipCreate(event)" width="100%">
-			<s:BitmapImage source="{treeListData.icon}" />
+			<s:BitmapImage source="{treeListData.item.icon}" />
 			<s:Label id="labelField" text="{treeListData.label}" paddingTop="2" width="100%"/>
 		</s:HGroup>
 	</s:HGroup>

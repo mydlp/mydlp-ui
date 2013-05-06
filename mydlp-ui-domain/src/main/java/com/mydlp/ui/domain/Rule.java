@@ -44,6 +44,8 @@ public abstract class Rule extends AbstractNamedEntity {
 	
 	protected List<RuleItem> ruleItems;
 	
+	protected List<RuleItemGroup> ruleItemGroups;
+	
 	protected List<NotificationItem> notificationItems;
 	
 	protected Boolean notificationEnabled;
@@ -138,4 +140,14 @@ public abstract class Rule extends AbstractNamedEntity {
 	public void setRuleSchedule(RuleSchedule ruleSchedule) {
 		this.ruleSchedule = ruleSchedule;
 	}
+
+	@OneToMany(mappedBy="rule", cascade={CascadeType.ALL})
+	public List<RuleItemGroup> getRuleItemGroups() {
+		return ruleItemGroups;
+	}
+
+	public void setRuleItemGroups(List<RuleItemGroup> ruleItemGroups) {
+		this.ruleItemGroups = ruleItemGroups;
+	}
+	
 }

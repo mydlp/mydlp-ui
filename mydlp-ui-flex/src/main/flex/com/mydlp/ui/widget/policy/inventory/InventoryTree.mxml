@@ -14,6 +14,7 @@
 			import com.mydlp.ui.domain.Domain;
 			import com.mydlp.ui.domain.FileSystemDirectory;
 			import com.mydlp.ui.domain.InventoryCategory;
+			import com.mydlp.ui.domain.InventoryGroup;
 			import com.mydlp.ui.domain.InventoryItem;
 			import com.mydlp.ui.domain.RemoteStorageCIFS;
 			import com.mydlp.ui.domain.RemoteStorageDFS;
@@ -43,6 +44,12 @@
 					else
 						return true;
 				}
+				else if (item is InventoryGroup)
+				{
+					if (item.children.length == 0)
+						return true;
+					return traverse(item.children);
+				}
 				else if(item.item is SourceDomainName || item.item is Domain || 
 					item.item is ApplicationName)
 					return false;
@@ -63,6 +70,12 @@
 					else 
 						return true;
 				}
+				else if (item is InventoryGroup)
+				{
+					if (item.children.length == 0)
+						return true;
+					return traverse(item.children);
+				}
 				else if(item.item is FileSystemDirectory || item.item is RemoteStorageCIFS ||
 					item.item is RemoteStorageDFS || item.item is RemoteStorageFTPFS ||
 					item.item is RemoteStorageNFS || item.item is RemoteStorageSSHFS)
@@ -77,6 +90,13 @@
 				{
 					if(list[i] is InventoryCategory)
 					{
+						if (traverse(list[i].children))
+							return true;
+					}
+					else if(list[i] is InventoryGroup)
+					{
+						if(list[i].children.length == 0)
+							return true;
 						if (traverse(list[i].children))
 							return true;
 					}

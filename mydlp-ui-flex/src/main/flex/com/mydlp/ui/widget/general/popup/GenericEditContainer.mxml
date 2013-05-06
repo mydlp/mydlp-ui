@@ -27,6 +27,7 @@
 			import com.mydlp.ui.domain.InformationType;
 			import com.mydlp.ui.domain.InventoryBase;
 			import com.mydlp.ui.domain.InventoryCategory;
+			import com.mydlp.ui.domain.InventoryGroup;
 			import com.mydlp.ui.domain.InventoryItem;
 			import com.mydlp.ui.domain.Item;
 			import com.mydlp.ui.domain.MailRule;
@@ -162,13 +163,15 @@
 					var inputLabel:InputLabel = null;
 					
 					
-					if (
+					if (	classMember.name.charAt(0) == '_' ||
 							classMember.name == "id" ||
 							classMember.name == "sortPriority" ||
 							classMember.name == "optimisticLockVersion" ||
 							classMember.name == "nameKey" ||
 							classMember.name == "icon" ||
+							(classMember.name == "group" && classMember.type == InventoryGroup) ||
 							(classMember.name == "ruleItems" && classMember.type == ListCollectionView) ||
+							(classMember.name == "ruleItemGroups" && classMember.type == ListCollectionView) ||
 							(targetObject is Rule && classMember.name == "customAction" && classMember.type == CustomAction) ||
 							classMember.name == "enabled" ||
 							classMember.name == "priority" ||
@@ -198,7 +201,8 @@
 							(targetObject is WebServer && classMember.name == "address") ||
 							(targetObject is WebServer && classMember.name == "port") ||
 							(targetObject is WebServer && classMember.name == "startPath") ||
-							(targetObject is DocumentDatabase && classMember.name == "currentlyFingerprinting")
+							(targetObject is DocumentDatabase && classMember.name == "currentlyFingerprinting") ||
+							(targetObject is InventoryGroup && classMember.name == "itemType")
 						)
 					{
 						continue;
@@ -211,6 +215,8 @@
 					
 					if (classMember.name == "category" && classMember.type == InventoryCategory)//should be revised because we have two tab now
 					{
+						if (targetObject is InventoryItem && targetObject.group != null) // means that this an item of a group
+							continue;
 						if (targetObject.id == null || isNaN(targetObject.id) ) // means that this is a new object
 							if (targetObject[classMember.name] != null)
 								continue;

@@ -24,6 +24,7 @@
 			import com.mydlp.ui.domain.InformationType;
 			import com.mydlp.ui.domain.InventoryBase;
 			import com.mydlp.ui.domain.InventoryCategory;
+			import com.mydlp.ui.domain.InventoryGroup;
 			import com.mydlp.ui.domain.InventoryItem;
 			import com.mydlp.ui.domain.Item;
 			import com.mydlp.ui.domain.MailRule;
@@ -41,6 +42,7 @@
 			import com.mydlp.ui.domain.RemovableStorageRule;
 			import com.mydlp.ui.domain.Rule;
 			import com.mydlp.ui.domain.RuleItem;
+			import com.mydlp.ui.domain.RuleItemGroup;
 			import com.mydlp.ui.domain.RuleUser;
 			import com.mydlp.ui.domain.ScreenshotRule;
 			import com.mydlp.ui.domain.SourceDomainName;
@@ -193,7 +195,7 @@
 					{
 						for each (var ri:* in sourceDataProvider1)
 						{
-							if (ri.item.id == ruleItem.item.id)
+							if (ri is RuleItem && ri.item.id == ruleItem.item.id)
 							{
 								continue outer;
 							}
@@ -204,7 +206,7 @@
 					{
 						for each (var ri2:* in matcherDataProvider1)
 						{
-							if (ri2.item.id == ruleItem.item.id)
+							if (ri2 is RuleItem && ri2.item.id == ruleItem.item.id)
 							{
 								continue outer;
 							}
@@ -217,7 +219,7 @@
 					{
 						for each (var ri3:* in destinationDataProvider1)
 						{
-							if (ri3.item.id == ruleItem.item.id)
+							if (ri3 is RuleItem && ri3.item.id == ruleItem.item.id)
 							{
 								continue outer;
 							}
@@ -225,6 +227,23 @@
 						destinationDataProvider1.addItem(ruleItem);
 					}
 				}
+				
+				var ruleItemGroups:ListCollectionView = ruleObject.ruleItemGroups;
+				outer2: for each (var ruleItemGroup:* in ruleItemGroups)
+				{
+					if (ruleItemGroup.group.itemType == InventoryGroup.TYPE_ITYPE)
+					{
+						for each (var rig:* in matcherDataProvider1)
+						{
+							if (rig is RuleItemGroup && rig.group.id == ruleItemGroup.group.id)
+							{
+								continue outer2;
+							}
+						}
+						matcherDataProvider1.addItem(ruleItemGroup);
+					}
+				}
+				
 				sourceDataProvider = sourceDataProvider1;
 				matcherDataProvider = matcherDataProvider1;
 				destinationDataProvider = destinationDataProvider1;
@@ -530,7 +549,6 @@
 				if(isConsistentForSources() && isConsistentForMatchers() && isConsistentForDestinations())
 					return true;
 				return false;
-				
 			}
 			
 			protected function isConsistentForDestinations():Boolean // Controls whether dropped items consist both "All Network" and specific network
@@ -556,9 +574,9 @@
 			
 			protected function isConsistentForMatchers():Boolean //Controls whether dropped items consist both "All Information Types" and specific information types
 			{
-				for each(var ri:InventoryItem in droppedMatchers)
+				for each(var ri:* in droppedMatchers)
 				{
-					if(ri.item.coupledInventoryItem.nameKey == ITYPE_ALL && droppedMatchers.length > 1)
+					if (ri is InventoryItem && ri.item.coupledInventoryItem.nameKey == ITYPE_ALL && droppedMatchers.length > 1)
 						return false;
 				}
 				return true;
@@ -567,7 +585,7 @@
 			protected function groupDroppedItems(droppedItems:*):void // Group dropped items as Sources and matchers with the help of
 			{															// "groupDroppedItem" function.
 				for each(var item:* in droppedItems)
-				groupDroppedItem(item);
+					groupDroppedItem(item);
 			}
 			
 			protected function groupDroppedItem(droppedItem:*):void
@@ -582,6 +600,13 @@
 						droppedDestinations.addItem(droppedItem);
 					else
 						throw new Error("unexpected type of item dropped");
+				}
+				else if (droppedItem is InventoryGroup)
+				{
+					if (droppedItem.itemType == InventoryGroup.TYPE_ITYPE)
+					{
+						droppedMatchers.addItem(droppedItem);
+					}
 				}
 				else if(droppedItem is InventoryCategory)
 				{
@@ -687,6 +712,20 @@
 					else if (isDroppableForRemoteStorage(treeItem.item))
 						return true;
 				}
+				else if (treeItem is InventoryGroup)
+				{
+					if ( treeItem.itemType == InventoryGroup.TYPE_ITYPE )
+					{
+						if(ruleObject is RemovableStorageRule ||
+							ruleObject is WebRule ||
+							ruleObject is MailRule ||
+							ruleObject is ApiRule ||
+							ruleObject is PrinterRule ||
+							ruleObject is DiscoveryRule ||
+							ruleObject is RemoteStorageRule)
+							return true;
+					}
+				}
 				else if (treeItem is InventoryCategory)
 				{
 					var inventoryCategory:InventoryCategory = treeItem as InventoryCategory;
@@ -730,6 +769,10 @@
 					for each (var o:* in inventoryObjects)
 						addDroppedObject(o as InventoryBase);
 					
+					droppedMatchers = new ArrayCollection();
+					droppedSources = new ArrayCollection();
+					droppedDestinations = new ArrayCollection();
+					
 					re.saveChanges(ruleObject,deleteList);
 					//invalidateProperties();
 					//refresh();
@@ -748,6 +791,11 @@
 				{
 					var inventoryItem:InventoryItem = inventoryObject as InventoryItem;
 					addItemToRuleObject(inventoryItem.item);
+				}
+				else if (inventoryObject is InventoryGroup)
+				{
+					var inventoryGroup:InventoryGroup = inventoryObject as InventoryGroup;
+					addGroupToRuleObject(inventoryGroup);
 				}
 				else if (inventoryObject is InventoryCategory)
 				{
@@ -775,6 +823,26 @@
 						throw new Error("Unexpected inventory object");
 				}
 				return itemList;
+			}
+			
+			protected function addGroupToRuleObject(sourceGroup:InventoryGroup):void
+			{
+				if (sourceGroup.itemType == InventoryGroup.TYPE_ITYPE)
+				{
+					if(hasAllIType())//if ruleObject has "All Information Types"
+					{
+							removeAllITypeItem();
+					}
+				}
+				
+				for each (var rig:RuleItemGroup in ruleObject.ruleItemGroups)
+				if (rig.group.id == sourceGroup.id)
+					return;
+				
+				var newItemGroup:RuleItemGroup = new RuleItemGroup();
+				newItemGroup.group = sourceGroup;
+				newItemGroup.rule = ruleObject;
+				ruleObject.ruleItemGroups.addItem(newItemGroup);
 			}
 			
 			protected function addItemToRuleObject(sourceItem:Item):void

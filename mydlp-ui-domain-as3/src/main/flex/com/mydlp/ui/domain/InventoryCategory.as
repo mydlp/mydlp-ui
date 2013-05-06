@@ -20,6 +20,14 @@ package com.mydlp.ui.domain {
 		
 		public var sortPriority:Number = 3;
 		
+		[Embed("../../../../../../../../mydlp-ui-flex/src/main/flex/assets/icons/16x16/folder.png")]
+		public static const INFORMATION_CATEGORY_ICON:Class;
+		
+		public function get icon(): Object
+		{
+			return INFORMATION_CATEGORY_ICON;
+		}
+		
 		override public function get children():ListCollectionView
 		{
 			if (_isChildrenSorted == false && super.children != null)

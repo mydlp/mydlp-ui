@@ -125,6 +125,7 @@
 			{
 				this.enabled = false;
 				this.mouseEnabled = false;
+				this.mouseChildren = false;
 				workingMessage.visible=true;
 				workingMessage.includeInLayout=true;
 				
@@ -161,6 +162,7 @@
 				{
 					this.enabled = true;
 					this.mouseEnabled = true;
+					this.mouseChildren = true;
 					workingMessage.visible=false;
 					workingMessage.includeInLayout=false;
 				}
@@ -176,6 +178,7 @@
 			{
 				this.enabled = true;
 				this.mouseEnabled = true;
+				this.mouseChildren = true;
 				workingMessage.visible=false;
 				workingMessage.includeInLayout=false;
 				greyoutLayer.visible=false;
@@ -705,7 +708,7 @@
 			  horizontalAlign="center" verticalAlign="middle">
 		<s:BorderContainer width="216" height="36" 
 						   borderVisible="true" borderStyle="solid" borderColor="0x666666"
-						   backgroundColor="0x000000" backgroundAlpha="0.25">
+						   backgroundColor="0x000000" backgroundAlpha="{greyoutLayer.visible ? 0.05 : 0.25}">
 			<s:layout>
 				<s:HorizontalLayout horizontalAlign="center" verticalAlign="middle" gap="16"/>
 			</s:layout>

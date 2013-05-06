@@ -16,6 +16,7 @@ package com.mydlp.ui.util
 	import com.mydlp.ui.domain.RegularExpressionGroup;
 	import com.mydlp.ui.domain.Rule;
 	import com.mydlp.ui.domain.RuleItem;
+	import com.mydlp.ui.domain.RuleItemGroup;
 	import com.mydlp.ui.widget.policy.inventory.InventoryItemRenderer;
 	
 	import flash.utils.ByteArray;
@@ -146,6 +147,20 @@ package com.mydlp.ui.util
 							ris.addItem(ri);
 						}
 						targetObject[classMember.name] = ris;
+					}
+					else if (	sourceObject is Rule && 
+						classMember.name == "ruleItemGroups" && 
+						classMember.type == ListCollectionView)
+					{
+						var rigs:ListCollectionView = new ArrayCollection();
+						for each (var o2:Object in sourceObject[classMember.name] as ListCollectionView)
+						{
+							var rig:RuleItemGroup = new RuleItemGroup();
+							rig.rule = targetObject as Rule;
+							rig.group= (o2 as RuleItemGroup).group;
+							rigs.addItem(rig);
+						}
+						targetObject[classMember.name] = rigs;
 					}
 					else if (sourceObject is InformationFeature && classMember.name == "matcher" && classMember.type == Matcher)
 					{
