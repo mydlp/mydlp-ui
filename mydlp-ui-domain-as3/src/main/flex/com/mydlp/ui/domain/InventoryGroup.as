@@ -12,7 +12,7 @@ package com.mydlp.ui.domain {
     public class InventoryGroup extends InventoryGroupBase {
 		public static const TYPE_ITYPE:String = "ITYPE";
 		
-		[Embed("../../../../../../../../mydlp-ui-flex/src/main/flex/assets/icons/16x16/notebook.png")]
+		[Embed("../../../../../../../../mydlp-ui-flex/src/main/flex/assets/icons/16x16/triple_page.png")]
 		public static const INFORMATION_TYPE_GROUP_ICON:Class;
 		
 		public var sortPriority:Number = 5;

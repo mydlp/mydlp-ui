@@ -88,9 +88,8 @@
 			protected function deleteClickHandler(event:MouseEvent):void
 			{
 				if (data == null) return;
-				if (data is RuleItem) (data as RuleItem).deleteRecord();
-				else if (data is RuleItemGroup) (data as RuleItemGroup).deleteRecord();
-				else data.deleteRecord();
+				this.focusManager.deactivate();
+				data.deleteRecord();
 			}
 			
 		]]>
