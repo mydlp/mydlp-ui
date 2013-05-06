@@ -18,37 +18,14 @@
 			
 			import spark.events.IndexChangeEvent;
 			import spark.events.TextOperationEvent;
-
-			
-			protected static var protocols:ListCollectionView = 
-				new ArrayCollection(
-					new Array(
-						WebServer.PROTO_HTTP,
-						WebServer.PROTO_HTTPS
-					)
-				);
-			
-			[Bindable]
-			public var proto:String;
-			
-		/*	protected function onChangeProtocol(event:IndexChangeEvent):void
-			{
-				if (protocolDropDown.selectedIndex == 0)
-				{
-					proto = WebServer.PROTO_HTTP;
-					portText.text = "80";
-				}
-				else if (protocolDropDown.selectedIndex == 1)
-				{
-					proto = WebServer.PROTO_HTTPS;
-					portText.text = "443";	
-				}
-			}*/
 			
 			protected function onCreationComplete(event:FlexEvent):void
 			{
-				if(proto != null && address != null && startPath != null)
-					addressText.text = proto + "://" + address + "/" + startPath;
+				if(proto != null && address != null && port != null && port != "0" && port != "")
+				{
+					uri = proto + "://" + address + ":" + port;
+					addressText.text = uri;
+				}
 				else if(proto != null && proto != "")
 				{
 					addressText.text = proto + "://";
@@ -58,9 +35,9 @@
 					addressText.text = "http://";
 				}
 				
-				if(port != null &&  port != "" && port != "0")
+				if(startPath != null &&  startPath != "")
 				{
-					addressText.text  +=  ":" + port;
+					addressText.text  +=  "/" + startPath;
 				}
 			}
 			
@@ -76,9 +53,7 @@
 				}
 				var second:String = sArray2.join(delimeter);
 				result.push(first);
-				if(sArray.length == 1)
-					result.push("");
-				else
+				if(sArray.length != 1)
 					result.push(second);
 				return result;
 			}
@@ -86,28 +61,51 @@
 			protected function onChangeHandler(event:TextOperationEvent):void
 			{
 				var pArray:Array = genericSplitUrl("://", addressText.text);
-				proto = pArray[0];
-				var aArray:Array = genericSplitUrl("/", pArray[1]);
-				address = aArray[0];
-				var sArray = genericSplitUrl(":", aArray[1]);
-				startPath = sArray[0];
-				if(sArray[1] == null || sArray[1] == "")
+				if(pArray.length > 1)
 				{
-					if(proto == "http")
-						port = "80";
+					proto = pArray[0];
+					var aArray:Array = genericSplitUrl(":", pArray[1]);
+					if(aArray.length == 1)
+					{
+						if(proto == "http")
+							port = "80";
+						else
+							port = "443";
+						var sArray:Array = genericSplitUrl("/", pArray[1]);
+						address = sArray[0];
+						if(sArray.length == 1)
+							startPath = "";
+						else
+							startPath = sArray[1];
+					}
 					else
-						port = "443";
+					{
+						address = aArray[0];
+						var sArray1:Array = genericSplitUrl("/", aArray[1]);
+						port = sArray1[0];
+						if(sArray1.length == 1)
+							startPath = "";
+						else
+							startPath = sArray1[1];
+					}
 				}
 				else
-					port = sArray[1];
+				{
+					proto = "";
+					address = "";
+					startPath = "";
+					//port = "0";
+				}
 			}
 			
 		]]>
 	</fx:Script>
 	<fx:Declarations>
+		<fx:String id="proto"/>
 		<fx:String id="address"/>
 		<fx:String id="port"/>
 		<fx:String id="startPath"/>
+		<fx:String id="uri"/>
 	</fx:Declarations>
 	
 	<s:layout>
