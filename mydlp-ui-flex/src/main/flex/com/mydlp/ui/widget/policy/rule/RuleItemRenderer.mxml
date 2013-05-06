@@ -50,8 +50,9 @@
 			
 			protected function onToolTipCreate(event:ToolTipEvent):void
 			{
+				if (data == null) return;
 				var toolTip:InventoryItemToolTip = new InventoryItemToolTip();
-				toolTip.detailsContainer.formObject = data.item;
+				toolTip.detailsContainer.formObject = data;
 				event.toolTip = toolTip;
 			}
 			

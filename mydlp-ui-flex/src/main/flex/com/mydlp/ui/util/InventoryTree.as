@@ -117,6 +117,19 @@ package com.mydlp.ui.util
 				}
 				return null;
 			}
+			else if (iitem is InventoryGroup)
+			{
+				if (iitem.uid == searchedItem.uid)
+					return iitem;
+				
+				for(var i2:int = 0; i2 < iitem.children.length;i2++)
+				{
+					var retItem2:InventoryBase = traverse(iitem.children[i2], searchedItem);
+					if(retItem2 != null)
+						return retItem2;
+				}
+				return null;
+			}
 			else if(iitem is InventoryItem && (iitem.uid == searchedItem.uid))
 			{
 				return iitem;
@@ -132,6 +145,13 @@ package com.mydlp.ui.util
 				if(!isItemOpen(item.category))
 					expandItem(item.category, true);
 				expandCategories(item.category);
+			}
+			if (item is InventoryItem && (item as InventoryItem).group != null)
+			{
+				var itemGroup:InventoryGroup = (item as InventoryItem).group; 
+				if(!isItemOpen(itemGroup))
+					expandItem(itemGroup, true);
+				expandCategories(itemGroup);
 			}
 		}
 		
