@@ -12,9 +12,9 @@
 			import com.mydlp.ui.domain.DiscoveryRule;
 			import com.mydlp.ui.domain.MailRule;
 			import com.mydlp.ui.domain.PrinterRule;
-			import com.mydlp.ui.domain.RemovableStorageEncryptionRule;
 			import com.mydlp.ui.domain.RemoteStorage;
 			import com.mydlp.ui.domain.RemoteStorageRule;
+			import com.mydlp.ui.domain.RemovableStorageEncryptionRule;
 			import com.mydlp.ui.domain.RemovableStorageInboundRule;
 			import com.mydlp.ui.domain.RemovableStorageRule;
 			import com.mydlp.ui.domain.Rule;
@@ -76,7 +76,12 @@
 				close();
 				rule.priority = recommendedPriority;
 				rule.enabled = true;
-				rule.action = Rule.ACTION_PASS;
+				if(rule is RemoteStorageRule)
+					rule.action = Rule.ACTION_LOG;
+				else if(rule is DiscoveryRule)
+					rule.action = Rule.ACTION_BLOCK;
+				else
+					rule.action = Rule.ACTION_PASS;
 				rule.ruleItems = new ArrayCollection();
 				InteractionUtil.newEditDialog(rule);
 			}
