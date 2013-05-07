@@ -32,12 +32,16 @@
 			public static function generateCustomActions(customActionsList:ListCollectionView): void
 			{
 				var newActionsList:ListCollectionView = new ArrayCollection();
+				var newActionsListD:ListCollectionView = new ArrayCollection();
 				newActionsList.addAll(actionsDefault);
+				newActionsListD.addAll(actionsDiscovery);
 				for each (var ca:CustomAction in customActionsList)
 				{
 					newActionsList.addItem(new ActionObject(Rule.ACTION_CUSTOM, ca));
+					newActionsListD.addItem(new ActionObject(Rule.ACTION_CUSTOM, ca));
 				}
 				actionsCustom = newActionsList;
+				actionsCustomDiscovery = newActionsListD;
 			}
 
 			[Bindable]
@@ -47,6 +51,16 @@
 				new ArrayCollection(
 					new Array(
 						new ActionObject(Rule.ACTION_PASS),
+						new ActionObject(Rule.ACTION_BLOCK),
+						new ActionObject(Rule.ACTION_LOG),
+						new ActionObject(Rule.ACTION_QUARANTINE),
+						new ActionObject(Rule.ACTION_ARCHIVE)
+					)
+				);
+			
+			protected static var actionsDiscovery:ListCollectionView = 
+				new ArrayCollection(
+					new Array(
 						new ActionObject(Rule.ACTION_BLOCK),
 						new ActionObject(Rule.ACTION_LOG),
 						new ActionObject(Rule.ACTION_QUARANTINE),
@@ -100,6 +114,9 @@
 			
 			[Bindable]
 			protected static var actionsCustom:ListCollectionView = new ArrayCollection();
+			
+			[Bindable]
+			protected static var actionsCustomDiscovery:ListCollectionView = new ArrayCollection();
 			
 			[Bindable]
 			protected static var actionsCommunity:ListCollectionView = 
@@ -170,7 +187,7 @@
 				if (SessionUtil.isEnterprise())
 				{
 					if (rule is DiscoveryRule)
-						return actionsCustom;
+						return actionsCustomDiscovery;
 					else if (rule is RemoteStorageRule)
 						return actionsRemoteStorage;
 					else if (rule is MailRule)
