@@ -299,4 +299,14 @@ public class MyDLPUIThriftServiceImpl implements MyDLPUIThriftService {
 		});
 	}
 
+	@Override
+	public String testWebServer(final String url) {
+		return call(new ThriftCall<String>() {
+			@Override
+			public String execute(MyDLPUIThriftConnection thriftConnection) throws TException {
+				return thriftConnection.client.testWebServer(url);
+			}
+		});
+	}
+
 }

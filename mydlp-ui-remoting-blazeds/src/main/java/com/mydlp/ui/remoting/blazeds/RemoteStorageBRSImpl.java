@@ -16,6 +16,7 @@ import com.mydlp.ui.domain.RemoteStorageDFS;
 import com.mydlp.ui.domain.RemoteStorageFTPFS;
 import com.mydlp.ui.domain.RemoteStorageNFS;
 import com.mydlp.ui.domain.RemoteStorageSSHFS;
+import com.mydlp.ui.domain.WebServer;
 import com.mydlp.ui.thrift.MyDLPUIThriftService;
 
 @Service("remoteStorageBRS")
@@ -95,6 +96,12 @@ public class RemoteStorageBRSImpl implements RemoteStorageService
 			rs.put("path", temp.getPath());
 		}
 		return thriftService.testConnection(rs);
+	}
+
+	@Override
+	public String testWebServer(WebServer webServer) {
+		String url = webServer.getProto() + "://" + webServer.getAddress() + ":" + Integer.toString(webServer.getPort()) + "/" + webServer.getStartPath();
+		return thriftService.testWebServer(url);	
 	}
 	
 }

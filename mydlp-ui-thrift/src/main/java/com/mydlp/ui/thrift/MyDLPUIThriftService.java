@@ -42,5 +42,7 @@ public interface MyDLPUIThriftService {
     public void startFingerprinting(int id);
     
     public String testConnection(Map<String, String> remoteStorage);
+    
+    public String testWebServer(String remoteStorage);
 
 }

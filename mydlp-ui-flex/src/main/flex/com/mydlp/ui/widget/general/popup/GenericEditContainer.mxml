@@ -388,8 +388,11 @@
 						
 						var regExpValidatorP:RegExpValidator = new RegExpValidator();
 						regExpValidatorP.source = wsi;
+						regExpValidatorP.required=true;
 						regExpValidatorP.property = "address";
 						regExpValidatorP.expression = MyRegExValidator.domainNameOrIpRegex();
+						regExpValidatorP.noMatchError = "Invalid URI for web server!";
+						regExpValidatorP.noExpressionError = "Invalid URI for web server!";
 						ErrorTipManager.registerValidator(regExpValidatorP);
 						validators.push(regExpValidatorP);
 						
@@ -397,7 +400,8 @@
 						regExpValidatorPt.source = wsi;
 						regExpValidatorPt.required=false;
 						regExpValidatorPt.property = "startPath";
-						regExpValidatorPt.expression = "^([a-zA-Z-]+\/)*[a-zA-Z-]*$";
+						regExpValidatorPt.expression = MyRegExValidator.domainNameOrIpRegex();
+						//regExpValidatorPt.expression = "^([a-zA-Z-]+\/)*[a-zA-Z-]*$";
 						ErrorTipManager.registerValidator(regExpValidatorPt);
 						validators.push(regExpValidatorPt);
 						
@@ -405,9 +409,12 @@
 						numberValidator4.source = wsi;
 						numberValidator4.property = "port";
 						numberValidator4.domain = "int";
-						numberValidator4.required = true;
+						numberValidator4.required = false;
 						numberValidator4.minValue = "1";
 						numberValidator4.maxValue = "65535";
+						numberValidator4.exceedsMaxError = LangUtil.getString('messages', 'webServer.port.max.error.message');
+						numberValidator4.lowerThanMinError = LangUtil.getString('messages', 'webServer.port.min.error.message');
+						numberValidator4.integerError = LangUtil.getString('messages', 'webServer.port.int.error.message');
 						ErrorTipManager.registerValidator(numberValidator4);
 						validators.push(numberValidator4);
 					}
@@ -1000,7 +1007,15 @@
 					}
 					
 					cButton.enabled = false;
-				} 
+				}
+				if (formObject is InventoryItem && (formObject as InventoryItem).item is WebServer)
+				{
+					miscButton.label = LangUtil.getString("messages", "generic.edit." + getSimpleName() + ".testAndValidateButton.label");
+					miscButton.addEventListener(MouseEvent.CLICK, testAndValidateButtonClickHandler);
+					miscButton.addEventListener(KeyboardEvent.KEY_DOWN, keyPressed);
+					buttonGroup.addElement(miscButton);
+					cButton.enabled = false;
+				}
 				if (!isNaN(formObject.id) &&
 							(
 								formObject is ADDomain ||
@@ -1104,6 +1119,17 @@
 					else if (formObject is InventoryItem && (formObject as InventoryItem).item is RemoteStorage) {
 						rers.testConnection((formObject.item) as RemoteStorage)
 					}
+				}
+			}
+			
+			protected function testAndValidateButtonClickHandler(event:Event):void
+			{
+				var validationErrorArray:Array = Validator.validateAll(validators);
+				var ws:WebServer = (formObject.item) as WebServer;
+				if(validationErrorArray.length == 0)
+				{
+					rers.testWebServer((formObject.item) as WebServer);
+					miscButton.enabled = false;
 				}
 			}
 			
@@ -1236,6 +1262,7 @@
 		</my:remote>
 		<my:remote id="rers" destination="remoteStorageBRS">
 			<my:method name="testConnection" result="testConnectionHandler(event)"/>
+			<my:method name="testWebServer" result="testConnectionHandler(event)"/>
 		</my:remote>
 	</fx:Declarations>
 	
