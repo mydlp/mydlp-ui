@@ -212,13 +212,13 @@
 			
 			protected function installPolicyFunc(): void
 			{
-				compileInProgress = true;
-				compileProgress = "compile";
 				installPopup = InteractionUtil.newPopup(InstallPolicyPopup) as InstallPolicyPopup;
 				var sanityReturn:String = sanityCheck();
 				
 				if (sanityReturn == "ok")
 				{
+					compileInProgress = true;
+					compileProgress = "compile";
 					pe.compilePolicy(1);
 					//fetchCompileStatus();
 				}

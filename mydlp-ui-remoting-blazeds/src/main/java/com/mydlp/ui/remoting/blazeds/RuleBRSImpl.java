@@ -35,9 +35,12 @@ public class RuleBRSImpl implements RuleService
 			for (RuleItem ruleItemIter: rule.getRuleItems()) {
 				if (!deleteList.contains(ruleItem) &&
 					ruleItem != ruleItemIter &&
-					ruleItem.getItem().getId().equals(ruleItemIter.getItem().getId()) &&
-					!(ruleItem.getId() == null && ruleItemIter.getId() != null)
-					)
+					// to be consider equal
+					ruleItem.getItem().getId().equals(ruleItemIter.getItem().getId()) && // need to have save item_id
+					( (ruleItem.getRuleColumn() == null && ruleItemIter.getRuleColumn() == null ) ||
+							ruleItem.getRuleColumn().equals(ruleItemIter.getRuleColumn()) ) && //need to have same ruleColumn
+					!(ruleItem.getId() == null && ruleItemIter.getId() != null) 
+				)
 				{
 					deleteList.add(ruleItemIter);
 				}
