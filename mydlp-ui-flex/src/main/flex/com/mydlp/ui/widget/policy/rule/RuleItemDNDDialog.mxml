@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<popup:ClosableTitleWindow xmlns:fx="http://ns.adobe.com/mxml/2009" 
+				xmlns:s="library://ns.adobe.com/flex/spark" 
+				xmlns:mx="library://ns.adobe.com/flex/mx" 
+				xmlns:general="com.mydlp.ui.widget.general.*"
+				title="@Resource(bundle = 'messages', key = 'inventory.fieldselection.title')" 
+				xmlns:popup="com.mydlp.ui.widget.general.popup.*" xmlns:domain="com.mydlp.ui.domain.*"
+				visible="false" xmlns:rule="com.mydlp.ui.widget.policy.rule.*"
+				close="{closeClick()}"
+				>
+	<fx:Script>
+		<![CDATA[
+			import com.mydlp.ui.domain.RuleItem;
+			import com.mydlp.ui.util.InteractionUtil;
+			
+			protected function closeClick():void
+			{
+				close();
+				parentRuleBox.canceledPopup();
+			}
+			
+			protected function close():void
+			{
+				InteractionUtil.closePopup(this);
+			}
+			
+			public function populate(): void
+			{
+				if (sourceItem == null){
+					close();
+				}
+				if (selectionOption != null)
+				{
+					if (selectionOption == "source_destination")
+					{
+						isSourceEnabled = true;
+						isDesinationEnabled = true;
+					}
+				}
+				visible = true;
+			}
+			
+			protected function saveRuleItem(field:String): void
+			{
+				parentRuleBox.saveRuleItemWithFieldSelection(field, sourceItem);
+				close();
+			}
+			
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<rule:RuleBoxRenderer id="parentRuleBox" />
+		<domain:Item id="sourceItem"/>
+		<fx:String id="selectionOption" /> 
+		<fx:Boolean id="isSourceEnabled">false</fx:Boolean>
+		<fx:Boolean id="isDesinationEnabled">false</fx:Boolean>
+	</fx:Declarations>
+	
+	<s:VGroup paddingBottom="10" paddingLeft="10" paddingRight="10" paddingTop="10"
+			  horizontalAlign="center">	
+		<s:Label text="@Resource(bundle = 'messages', key = 'inventory.fieldselection.message')"/>
+		<s:VGroup horizontalAlign="left" >
+			<s:Button visible="{isSourceEnabled}" includeInLayout="{isSourceEnabled}"
+					  skinClass="com.mydlp.ui.skin.ArrowRightBitmapLabelButton16Skin" 
+					  label="@Resource(bundle = 'messages', key = 'inventory.sourcefield.title')" 
+					  click="saveRuleItem(RuleItem.COLUMN_NAME_SOURCE)"/>
+			<s:Button visible="{isDesinationEnabled}" includeInLayout="{isDesinationEnabled}"
+					  skinClass="com.mydlp.ui.skin.ArrowLeftBitmapLabelButton16Skin" 
+					  label="@Resource(bundle = 'messages', key = 'inventory.destinationfield.title')" 
+					  click="saveRuleItem(RuleItem.COLUMN_NAME_DESTINATION)"/>
+		</s:VGroup>
+	</s:VGroup>
+	
+</popup:ClosableTitleWindow>

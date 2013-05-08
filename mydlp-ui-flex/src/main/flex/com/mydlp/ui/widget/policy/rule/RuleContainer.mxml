@@ -359,11 +359,11 @@
 					
 					ruleItemLoop: for each (var ri:RuleItem in r.ruleItems)
 					{
-						if (hasSource == false && RuleBoxRenderer.isSourceRuleItem(ri.item))
+						if (hasSource == false && RuleBoxRenderer.isSourceRuleItem(ri))
 							hasSource = true;
-						if (hasIType == false && RuleBoxRenderer.isITypeRuleItem(ri.item))
+						if (hasIType == false && RuleBoxRenderer.isITypeRuleItem(ri))
 							hasIType = true;
-						if (hasDestination == false && RuleBoxRenderer.isDestinationRuleItem(ri.item))
+						if (hasDestination == false && RuleBoxRenderer.isDestinationRuleItem(ri))
 							hasDestination = true;
 						if (hasSource && hasIType && hasDestination)
 							break ruleItemLoop;

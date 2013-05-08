@@ -45,7 +45,6 @@
 			import com.mydlp.ui.domain.RuleItemGroup;
 			import com.mydlp.ui.domain.RuleUser;
 			import com.mydlp.ui.domain.ScreenshotRule;
-			import com.mydlp.ui.domain.SourceDomainName;
 			import com.mydlp.ui.domain.WebRule;
 			import com.mydlp.ui.domain.WebServer;
 			import com.mydlp.ui.util.InteractionUtil;
@@ -169,16 +168,7 @@
 					
 				refresh();
 			}
-			
-			protected function isRemoteStorageRuleItem(item:*):Boolean
-			{
-				if(item is RemoteStorageCIFS || item is RemoteStorageDFS || item is RemoteStorageFTPFS ||
-					item is RemoteStorageNFS || item is RemoteStorageSSHFS || item is WebServer)
-					return true;
-				else
-					return false;
-			}
-			
+		
 			public function refreshDataProviders(): void
 			{
 				var sourceDataProvider1:ArrayCollection = new ArrayCollection();
@@ -188,10 +178,7 @@
 				var ruleItems:ListCollectionView = ruleObject.ruleItems;
 				outer: for each (var ruleItem:* in ruleItems)
 				{
-					if (ruleItem.item is Network ||
-						ruleItem.item is RuleUser ||
-						ruleItem.item is SourceDomainName ||
-						isRemoteStorageRuleItem(ruleItem.item))
+					if (isSourceRuleItem(ruleItem))
 					{
 						for each (var ri:* in sourceDataProvider1)
 						{
@@ -202,7 +189,7 @@
 						}
 						sourceDataProvider1.addItem(ruleItem);
 					}
-					else if (ruleItem.item is InformationType)
+					else if (isITypeRuleItem(ruleItem))
 					{
 						for each (var ri2:* in matcherDataProvider1)
 						{
@@ -213,9 +200,7 @@
 						}
 						matcherDataProvider1.addItem(ruleItem);
 					}
-					else if (ruleItem.item is Domain ||
-						ruleItem.item is FileSystemDirectory ||
-						ruleItem.item is ApplicationName)
+					else if (isDestinationRuleItem(ruleItem))
 					{
 						for each (var ri3:* in destinationDataProvider1)
 						{
@@ -271,13 +256,28 @@
 				refreshView();
 			}
 			
-			public static function isSourceRuleItem(item:Item):Boolean
+			public static function isSourceRuleItem(ruleItem:RuleItem): Boolean
+			{
+				if (ruleItem.item is Domain)
+				{
+					return (ruleItem.ruleColumn ==  RuleItem.COLUMN_NAME_SOURCE);
+				}
+				else if (ruleItem.item is RuleUser)
+				{
+					return (ruleItem.ruleColumn == null ||
+							ruleItem.ruleColumn == RuleItem.COLUMN_NAME_SOURCE);
+				}
+				else
+				{
+					return isSourceItem(ruleItem.item);
+				}
+			}
+			
+			protected static function isSourceItem(item:Item):Boolean
 			{
 				if(item is Network)
 					return true;
 				else if(item is RuleUser)
-					return true;
-				else if(item is SourceDomainName)
 					return true;
 				else if(item is RemoteStorageCIFS || item is RemoteStorageDFS || item is RemoteStorageFTPFS ||
 					item is RemoteStorageNFS || item is RemoteStorageSSHFS || item is WebServer)
@@ -318,7 +318,12 @@
 				return false;
 			}
 			
-			public static function isITypeRuleItem(item:Item):Boolean
+			public static function isITypeRuleItem(ruleItem:RuleItem):Boolean
+			{
+				return isITypeItem(ruleItem.item);
+			}
+			
+			protected static function isITypeItem(item:Item):Boolean
 			{
 				if(item is InformationType)
 					return true;
@@ -326,9 +331,29 @@
 					return false;
 			}
 			
-			public static function isDestinationRuleItem(item:Item):Boolean
+			public static function isDestinationRuleItem(ruleItem:RuleItem):Boolean
 			{
-				if(item is Domain || item is FileSystemDirectory || item is ApplicationName)
+				if(ruleItem.item is RuleUser)
+				{
+					return (ruleItem.ruleColumn == RuleItem.COLUMN_NAME_DESTINATION);
+				}
+				else if (ruleItem.item is Domain)
+				{
+					return (ruleItem.ruleColumn == null ||
+							ruleItem.ruleColumn == RuleItem.COLUMN_NAME_DESTINATION);
+				}
+				else
+				{
+					return isDestinationItem(ruleItem.item);
+				}
+			}
+			
+			
+			protected static function isDestinationItem(item:Item):Boolean
+			{
+				if(item is FileSystemDirectory ||
+						item is ApplicationName ||
+						item is Domain)
 					return true;
 				else
 					return false;
@@ -363,7 +388,7 @@
 					loop = false;
 					for(var i:int = 0; i < ruleItems.length; i++)
 					{
-						if(isSourceRuleItem(ruleItems[i].item))
+						if(isSourceRuleItem(ruleItems[i]))
 						{
 							deleteList.addItem(ruleObject.ruleItems[i]);
 							ruleItems.removeItemAt(i);
@@ -405,11 +430,9 @@
 					loop = false;
 					for(var i:int = 0; i < ruleItems.length; i++)
 					{
-						if(ruleItems[i].item is Domain || 
-							ruleItems[i].item is FileSystemDirectory ||
-							ruleItems[i].item is ApplicationName)
+						if(isDestinationRuleItem(ruleItems[i]))
 						{
-							deleteList.addItem(ruleObject.ruleItems[i]);
+							deleteList.addItem(ruleItems[i]);
 							ruleItems.removeItemAt(i);
 							loop = true;
 							break;
@@ -462,7 +485,7 @@
 					loop = false;
 					for(var i:int = 0; i < ruleItems.length; i++)
 					{
-						if(ruleItems[i].item is InformationType)
+						if(isITypeRuleItem(ruleItems[i]))
 						{
 							deleteList.addItem(ruleItems[i]);
 							ruleItems.removeItemAt(i);
@@ -592,7 +615,7 @@
 			{
 				if(droppedItem is InventoryItem)
 				{
-					if(isSourceRuleItem(droppedItem.item))
+					if(isSourceItem(droppedItem.item))
 						droppedSources.addItem(droppedItem);
 					else if(droppedItem.item is InformationType)
 						droppedMatchers.addItem(droppedItem);
@@ -702,13 +725,6 @@
 					{
 						return true;
 					}
-					else if ( treeItem.item is SourceDomainName )
-					{
-						if(ruleObject is MailRule)
-						{
-							return true;
-						}
-					}
 					else if (isDroppableForRemoteStorage(treeItem.item))
 						return true;
 				}
@@ -754,28 +770,28 @@
 				rejectDrop();
 			}
 			
+			protected var inventoryObjects:* = null;
+			protected var inventoryObjectsIdx:uint = 0;
+			protected var selectedFieldType:String = null;
+			
 			protected function onDragDrop(dragEvent:DragEvent):void
 			{
+				inventoryObjects = null;
+				inventoryObjectsIdx = 0;
+				selectedFieldType = null;
+				
 				if (dragEvent.dragInitiator is com.mydlp.ui.util.InventoryTree)
 				{
 					ruleContainer.ruleList.setAfterRefreshSelected(ruleObject);
 					
 					deleteList = new ArrayCollection();
-					var inventoryObjects:*;
+					
 					if(isDiscoveryTab)
 						inventoryObjects = FlexGlobals.topLevelApplication.discoveryContainer.inventoryTree.myInventoryTree.selectedItems;
 					else
 						inventoryObjects = FlexGlobals.topLevelApplication.policyContainer.inventoryTree.myInventoryTree.selectedItems;
-					for each (var o:* in inventoryObjects)
-						addDroppedObject(o as InventoryBase);
 					
-					droppedMatchers = new ArrayCollection();
-					droppedSources = new ArrayCollection();
-					droppedDestinations = new ArrayCollection();
-					
-					re.saveChanges(ruleObject,deleteList);
-					//invalidateProperties();
-					//refresh();
+					continueDragDrop();
 				}
 				else if (dragEvent.dragInitiator is RuleList)
 				{
@@ -783,9 +799,47 @@
 				}
 			}
 			
+			protected function continueDragDrop(): void
+			{
+				callLater(continueDragDropF);
+			}
+			
+			protected function continueDragDropF(): void
+			{
+				if (inventoryObjects == null || 
+					inventoryObjectsIdx >= inventoryObjects.length)
+				{
+					finalizeDragDrop();
+				}
+				else
+				{
+					addDroppedObject(inventoryObjects[inventoryObjectsIdx] as InventoryBase);
+					inventoryObjectsIdx++;
+				}
+			}
+			
+			protected function finalizeDragDrop(): void
+			{
+				inventoryObjects = null;
+				inventoryObjectsIdx = 0;
+				selectedFieldType = null;
+				droppedMatchers = new ArrayCollection();
+				droppedSources = new ArrayCollection();
+				droppedDestinations = new ArrayCollection();
+				
+				
+				re.saveChanges(ruleObject,deleteList);
+				//invalidateProperties();
+				//refresh();
+			}
+			
 			protected function addDroppedObject(inventoryObject:InventoryBase):void
 			{
-				if (!isDroppable(inventoryObject)) return;
+				if (inventoryObject is InventoryItem && !isDroppable(inventoryObject)) 
+				{
+					continueDragDrop();
+					return;
+				}
 				
 				if (inventoryObject is InventoryItem)
 				{
@@ -802,9 +856,9 @@
 					var inventoryItems:ListCollectionView = resolveInvetoryItems(inventoryObject as InventoryCategory);
 					for each (var o:* in inventoryItems)
 					{
-						var inventoryItem2:InventoryItem = o as InventoryItem;
-						addItemToRuleObject(inventoryItem2.item);
+						inventoryObjects.push(o);
 					}
+					continueDragDrop();
 				}
 				else
 					throw new Error("Unexpected inventory object");
@@ -817,6 +871,8 @@
 				{
 					if (o is InventoryItem)
 						itemList.addItem(o as InventoryItem);
+					else if (o is InventoryGroup)
+						itemList.addItem(o as InventoryGroup);
 					else if (o is InventoryCategory)
 						itemList.addAll(resolveInvetoryItems(o as InventoryCategory));
 					else
@@ -836,77 +892,194 @@
 				}
 				
 				for each (var rig:RuleItemGroup in ruleObject.ruleItemGroups)
-				if (rig.group.id == sourceGroup.id)
-					return;
+					if (rig.group.id == sourceGroup.id)
+					{
+						continueDragDrop();
+						return;
+					}
 				
 				var newItemGroup:RuleItemGroup = new RuleItemGroup();
 				newItemGroup.group = sourceGroup;
 				newItemGroup.rule = ruleObject;
 				ruleObject.ruleItemGroups.addItem(newItemGroup);
+				continueDragDrop();				
+			}
+			
+			protected function doesNeedFieldSelection(sourceItem:Item): Boolean
+			{
+				return ruleObject is MailRule &&
+					(
+						(sourceItem is Domain && sourceItem.coupledInventoryItem.nameKey != DOMAIN_ALL)|| 
+						sourceItem is RuleUser
+					);
 			}
 			
 			protected function addItemToRuleObject(sourceItem:Item):void
 			{
+				var selectionPopupOption:String = "none";
 				
-				if(isSourceRuleItem(sourceItem))
+				if (doesNeedFieldSelection(sourceItem))
 				{
-					if(hasAllSources())//if ruleObject has "All Networks"
+					selectionPopupOption = "source_destination";
+				}
+				
+				if ( selectionPopupOption == "none" )
+				{
+					saveRuleItem(sourceItem);
+				}
+				else
+				{
+					if (selectedFieldType == null)
 					{
-						if(sourceItem.coupledInventoryItem.nameKey == SOURCES_ALL)//if dropped item is "All Networks"
-							return;
-						else
-							removeAllSourcesItem();
+						var popup:RuleItemDNDDialog = InteractionUtil.newPopup(RuleItemDNDDialog) as RuleItemDNDDialog;
+						popup.parentRuleBox = this;
+						popup.sourceItem = sourceItem;
+						popup.selectionOption = selectionPopupOption;
+						popup.populate();
 					}
 					else
 					{
-						if(sourceItem.coupledInventoryItem.nameKey == SOURCES_ALL)
-							removeOtherSources();
+						saveRuleItemWithFieldSelection(selectedFieldType, sourceItem);
 					}
 				}
-				else if(isITypeRuleItem(sourceItem))
-				{
-					if(hasAllIType())//if ruleObject has "All Information Types"
-					{
-						if(sourceItem.coupledInventoryItem.nameKey == ITYPE_ALL) //if dropped item is "All Information Types"
-							return;
-						else
-							removeAllITypeItem();
-					}
-					else
-					{
-						if(sourceItem.coupledInventoryItem.nameKey == ITYPE_ALL)
-							removeOtherITypes();
-					}
-				}
-				else if(isDestinationRuleItem(sourceItem))
-				{
-					if(hasAllDestination())//if ruleObject has "All Destinations"
-					{
-						if(sourceItem.coupledInventoryItem.nameKey == DOMAIN_ALL ||
-							sourceItem.coupledInventoryItem.nameKey == DIRECTORY_ALL ||
-							sourceItem.coupledInventoryItem.nameKey == APPLICATION_ALL)//if dropped item is "All Destinations"
-							return;
-						else
-							removeAllDestinationItem();
-					}
-					else
-					{
-						if(sourceItem.coupledInventoryItem.nameKey == DOMAIN_ALL ||
-							sourceItem.coupledInventoryItem.nameKey == DIRECTORY_ALL ||
-							sourceItem.coupledInventoryItem.nameKey == APPLICATION_ALL)
-							removeOtherDestinations();
-					}
-				}
-				
-				
+			}
+			
+			public function saveRuleItem(sourceItem:Item): void
+			{
 				for each (var ri:RuleItem in ruleObject.ruleItems)
-				if (ri.item.id == sourceItem.id)
-					return;
+				{
+					if (ri.item.id == sourceItem.id)
+					{
+						continueDragDrop();
+						return;
+					}
+				}
+				
+				if(isSourceItem(sourceItem))
+				{
+					preDropSourceItem(sourceItem);
+				}
+				else if(isITypeItem(sourceItem))
+				{
+					preDropITypeItem(sourceItem);
+				}
+				else if(isDestinationItem(sourceItem))
+				{
+					preDropDestinationItem(sourceItem);
+				}
 				
 				var newItem:RuleItem = new RuleItem();
 				newItem.item = sourceItem;
 				newItem.rule = ruleObject;
+				
+				// if we are here no selection required and happened, applying defaults
+				if (sourceItem is Domain)
+				{
+					newItem.ruleColumn = RuleItem.COLUMN_NAME_DESTINATION;
+				} 
+				else if (sourceItem is RuleUser)
+				{
+					newItem.ruleColumn = RuleItem.COLUMN_NAME_SOURCE;
+				}
+				
 				ruleObject.ruleItems.addItem(newItem);
+				continueDragDrop();
+			}
+			
+			public function canceledPopup(): void
+			{
+				finalizeDragDrop();
+			}
+			
+			public function saveRuleItemWithFieldSelection(fieldType:String, sourceItem:Item): void
+			{
+				if (fieldType == RuleItem.COLUMN_NAME_SOURCE)
+				{
+					preDropSourceItem(sourceItem);
+				}
+				else if (fieldType == RuleItem.COLUMN_NAME_DESTINATION)
+				{
+					preDropDestinationItem(sourceItem);
+				}
+				else
+				{
+					throw new Error("Unexpected field type");
+				}
+				
+				if (selectedFieldType == null)
+				{
+					selectedFieldType = fieldType;
+				}
+				
+				for each (var ri:RuleItem in ruleObject.ruleItems)
+				{
+					if (ri.item.id == sourceItem.id && 
+						doesNeedFieldSelection(sourceItem) &&
+						ri.ruleColumn == fieldType)
+					{
+						continueDragDrop();
+						return;
+					}
+				}
+				
+				var newItem:RuleItem = new RuleItem();
+				newItem.item = sourceItem;
+				newItem.rule = ruleObject;
+				newItem.ruleColumn = fieldType;
+				ruleObject.ruleItems.addItem(newItem);
+				continueDragDrop();
+			}
+			
+			protected function preDropSourceItem(sourceItem:Item): void
+			{
+				if(hasAllSources())//if ruleObject has "All Networks"
+				{
+					if(sourceItem.coupledInventoryItem.nameKey == SOURCES_ALL)//if dropped item is "All Networks"
+						return;
+					else
+						removeAllSourcesItem();
+				}
+				else
+				{
+					if(sourceItem.coupledInventoryItem.nameKey == SOURCES_ALL)
+						removeOtherSources();
+				}
+			}
+			
+			protected function preDropITypeItem(sourceItem:Item): void
+			{
+				if(hasAllIType())//if ruleObject has "All Information Types"
+				{
+					if(sourceItem.coupledInventoryItem.nameKey == ITYPE_ALL) //if dropped item is "All Information Types"
+						return;
+					else
+						removeAllITypeItem();
+				}
+				else
+				{
+					if(sourceItem.coupledInventoryItem.nameKey == ITYPE_ALL)
+						removeOtherITypes();
+				}
+			}
+			
+			protected function preDropDestinationItem(sourceItem:Item): void
+			{
+				if(hasAllDestination())//if ruleObject has "All Destinations"
+				{
+					if(sourceItem.coupledInventoryItem.nameKey == DOMAIN_ALL ||
+						sourceItem.coupledInventoryItem.nameKey == DIRECTORY_ALL ||
+						sourceItem.coupledInventoryItem.nameKey == APPLICATION_ALL)//if dropped item is "All Destinations"
+						return;
+					else
+						removeAllDestinationItem();
+				}
+				else
+				{
+					if(sourceItem.coupledInventoryItem.nameKey == DOMAIN_ALL ||
+						sourceItem.coupledInventoryItem.nameKey == DIRECTORY_ALL ||
+						sourceItem.coupledInventoryItem.nameKey == APPLICATION_ALL)
+						removeOtherDestinations();
+				}
 			}
 			
 			protected function saveChangesHandler(event:ResultEvent):void

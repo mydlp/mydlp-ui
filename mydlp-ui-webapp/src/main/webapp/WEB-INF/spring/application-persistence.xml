@@ -94,7 +94,6 @@
          <value>com.mydlp.ui.domain.ScheduleDayInterval</value>
          <value>com.mydlp.ui.domain.ScheduleIntervals</value>
          <value>com.mydlp.ui.domain.ScreenshotRule</value>
-         <value>com.mydlp.ui.domain.SourceDomainName</value>
          <value>com.mydlp.ui.domain.StringArgument</value>
          <value>com.mydlp.ui.domain.USBDevice</value>
          <value>com.mydlp.ui.domain.UserSettings</value>

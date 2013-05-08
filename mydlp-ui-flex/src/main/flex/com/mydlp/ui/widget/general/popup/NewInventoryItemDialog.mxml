@@ -16,7 +16,6 @@
 			import com.mydlp.ui.domain.InventoryGroup;
 			import com.mydlp.ui.domain.InventoryItem;
 			import com.mydlp.ui.domain.Network;
-			import com.mydlp.ui.domain.SourceDomainName;
 			import com.mydlp.ui.util.InteractionUtil;
 			import com.mydlp.ui.util.SessionUtil;
 			
@@ -97,14 +96,6 @@
 				InteractionUtil.newEditDialog(i);
 			}
 			
-			protected function sourceDomainHandler():void
-			{
-				close();
-				var i:InventoryItem = generateInventoryItem();
-				i.item = new SourceDomainName();
-				InteractionUtil.newEditDialog(i);	
-			}
-			
 			protected function addUserClickHandler(event:MouseEvent):void
 			{
 				close(); 
@@ -149,11 +140,6 @@
 					  includeInLayout="{SessionUtil.isEnterprise() &amp;&amp; isDiscoveryTab}"
 					  visible="{SessionUtil.isEnterprise() &amp;&amp; isDiscoveryTab}"
 					  click="{close(); InteractionUtil.newPopup(NewInventoryRemoteDiscoveryDialog);}"/>
-			<s:Button skinClass="com.mydlp.ui.skin.SourceDomainBitmapLabelButton16Skin" 
-					  label="@Resource(bundle = 'messages', key = 'inventory.newdialog.sourceDomain')"
-					  includeInLayout="{SessionUtil.isEnterprise() &amp;&amp; !isDiscoveryTab}"
-					  visible="{SessionUtil.isEnterprise() &amp;&amp; !isDiscoveryTab}"
-					  click="sourceDomainHandler()"/>
 			<s:Button skinClass="com.mydlp.ui.skin.ApplicationNameBitmapLabelButton16Skin" 
 					  label="@Resource(bundle = 'messages', key = 'inventory.newdialog.applicationName')" 
 					  includeInLayout="{SessionUtil.isEnterprise() &amp;&amp; !isDiscoveryTab}"

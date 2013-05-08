@@ -21,7 +21,6 @@
 			import com.mydlp.ui.domain.RemoteStorageFTPFS;
 			import com.mydlp.ui.domain.RemoteStorageNFS;
 			import com.mydlp.ui.domain.RemoteStorageSSHFS;
-			import com.mydlp.ui.domain.SourceDomainName;
 			import com.mydlp.ui.util.FilterDataDescriptor;
 			
 			import mx.collections.ArrayCollection;
@@ -50,7 +49,8 @@
 						return true;
 					return traverse(item.children);
 				}
-				else if(item.item is SourceDomainName || item.item is Domain || 
+				else if(
+					item.item is Domain || 
 					item.item is ApplicationName)
 					return false;
 				else
@@ -161,8 +161,6 @@
 		<fx:Boolean id="isDiscoveryTab"/>
 	</fx:Declarations>
 	<s:Group width="100%" height="100%">
-		
-		
 		<util:InventoryTree width="100%" height="100%" id="myInventoryTree" borderVisible="false" 
 							selectionColor="0xA8C6EE"
 							isDiscoveryTab="{isDiscoveryTab}"
