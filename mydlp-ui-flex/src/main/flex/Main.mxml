@@ -132,7 +132,7 @@
 				
 				if (!greyoutLayer.visible && disableScreenTimer == null)
 				{
-					disableScreenTimer = new Timer(1500, 1);
+					disableScreenTimer = new Timer(5000, 1);
 					disableScreenTimer.addEventListener(TimerEvent.TIMER_COMPLETE, onDisableScreenTimerComplete);
 					disableScreenTimer.start();
 				}
@@ -155,7 +155,7 @@
 					enableScreenTimer.stop();
 					enableScreenTimer = null;
 				}
-				enableScreenTimer = new Timer(500, 1);
+				enableScreenTimer = new Timer(300, 1);
 				enableScreenTimer.addEventListener(TimerEvent.TIMER_COMPLETE, onEnableScreenTimerComplete);
 				enableScreenTimer.start();
 				

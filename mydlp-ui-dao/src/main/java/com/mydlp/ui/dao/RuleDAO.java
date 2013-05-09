@@ -3,6 +3,7 @@ package com.mydlp.ui.dao;
 import java.util.List;
 import java.util.Map;
 
+import com.mydlp.ui.domain.CustomAction;
 import com.mydlp.ui.domain.Rule;
 import com.mydlp.ui.domain.RuleItem;
 
@@ -28,4 +29,5 @@ public interface RuleDAO {
 	
 	public Map<String, String> getRuleLabelsAndIds();
 	
+	public void changeRuleAction(Integer ruleId, String ruleAction, CustomAction ruleCustomAction);
 }

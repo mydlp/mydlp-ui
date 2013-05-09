@@ -12,6 +12,7 @@ import org.hibernate.criterion.Order;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.mydlp.ui.domain.CustomAction;
 import com.mydlp.ui.domain.Rule;
 import com.mydlp.ui.domain.RuleItem;
 
@@ -45,6 +46,8 @@ public class RuleDAOImpl extends AbstractPolicyDAO implements RuleDAO {
 	@Override
 	@Transactional(readOnly=false)
 	public void removeRuleItem(RuleItem ri) {
+		if (ri == null || ri.getId() == null) return;
+		
 		getHibernateTemplate().delete(ri);
 	}
 
@@ -142,5 +145,13 @@ public class RuleDAOImpl extends AbstractPolicyDAO implements RuleDAO {
 		return returnMap;
 	}
 
+	@Override
+	public void changeRuleAction(Integer ruleId, String ruleAction,
+			CustomAction ruleCustomAction) {
+		Rule rule = getHibernateTemplate().get(Rule.class, ruleId);
+		rule.setAction(ruleAction);
+		rule.setCustomAction(ruleCustomAction);
+		save(rule);
+	}
 
 }

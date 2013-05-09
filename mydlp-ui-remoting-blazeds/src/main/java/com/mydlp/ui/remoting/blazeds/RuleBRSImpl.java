@@ -1,8 +1,10 @@
 package com.mydlp.ui.remoting.blazeds;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.flex.remoting.RemotingDestination;
@@ -10,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import com.mydlp.ui.dao.DiscoveryReportDAO;
 import com.mydlp.ui.dao.RuleDAO;
+import com.mydlp.ui.domain.CustomAction;
 import com.mydlp.ui.domain.DiscoveryReport;
 import com.mydlp.ui.domain.Rule;
 import com.mydlp.ui.domain.RuleItem;
@@ -29,31 +32,37 @@ public class RuleBRSImpl implements RuleService
 		return ruleDAO.getRules();
 	}
 	
-	protected Rule removeDuplicateRuleItems(Rule rule) {
-		List<RuleItem> deleteList = new ArrayList<RuleItem>();
+	protected Rule removeDuplicateRuleItems(Rule rule, List<RuleItem> initialDeleteList) {
+		Set<RuleItem> deleteSet = new HashSet<RuleItem>();
+		if (initialDeleteList != null && initialDeleteList.size() > 0)
+			deleteSet.addAll(initialDeleteList);
+		
 		for (RuleItem ruleItem: rule.getRuleItems()) {
 			for (RuleItem ruleItemIter: rule.getRuleItems()) {
-				if (!deleteList.contains(ruleItem) &&
-					ruleItem != ruleItemIter &&
+				if (!deleteSet.contains(ruleItem) &&
+					ruleItem != ruleItemIter && // should not be that same item
 					// to be consider equal
 					ruleItem.getItem().getId().equals(ruleItemIter.getItem().getId()) && // need to have save item_id
 					( (ruleItem.getRuleColumn() == null && ruleItemIter.getRuleColumn() == null ) ||
-							ruleItem.getRuleColumn().equals(ruleItemIter.getRuleColumn()) ) && //need to have same ruleColumn
-					!(ruleItem.getId() == null && ruleItemIter.getId() != null) 
+							ruleItem.getRuleColumn().equals(ruleItemIter.getRuleColumn()) )  //need to have same ruleColumn value
 				)
 				{
-					deleteList.add(ruleItemIter);
+					deleteSet.add(ruleItemIter);
 				}
 			}
 		}
-		rule.getRuleItems().removeAll(deleteList);
-		removeRuleItems(deleteList);
+		rule.getRuleItems().removeAll(deleteSet);
+		removeRuleItems(deleteSet);
 		return rule;
 	}
 
 	@Override
 	public Rule save(Rule rule) {
-		rule = removeDuplicateRuleItems(rule);
+		return save(rule, null);
+	}
+	
+	protected Rule save(Rule rule, List<RuleItem> deleteList) {
+		rule = removeDuplicateRuleItems(rule, deleteList);
 		rule = ruleDAO.save(rule);
 		ruleDAO.balanceRulePriority();
 		return rule;
@@ -72,6 +81,12 @@ public class RuleBRSImpl implements RuleService
 	@Override
 	public void removeRuleItems(List<RuleItem> ruleItems) {
 		ruleDAO.removeRuleItems(ruleItems);
+	}
+	
+	protected void removeRuleItems(Set<RuleItem> ruleItems) {
+		List<RuleItem> list = new ArrayList<RuleItem>();
+		list.addAll(ruleItems);
+		removeRuleItems(list);
 	}
 
 	@Override
@@ -106,9 +121,13 @@ public class RuleBRSImpl implements RuleService
 
 	@Override
 	public void saveChanges(Rule rule, List<RuleItem> ruleItems) {
-		rule.getRuleItems().removeAll(ruleItems);
-		save(rule);
-		removeRuleItems(ruleItems);
+		save(rule, ruleItems);
+	}
+
+	@Override
+	public void changeRuleAction(Integer ruleId, String ruleAction,
+			CustomAction ruleCustomAction) {
+		ruleDAO.changeRuleAction(ruleId, ruleAction,ruleCustomAction);
 	}
 
 }

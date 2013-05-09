@@ -114,9 +114,11 @@
 			public override function set data(value:Object):void
 			{
 				super.data = value;
+				originalRuleItems = null;
+				originalRuleItemGroups = null;
+				
 				if(value == null) return;
 				populate();
-				collapse = getCollapseState();
 				dispatchEvent(new FlexEvent(FlexEvent.DATA_CHANGE));
 			}
 			
@@ -160,6 +162,7 @@
 				ruleObject = data;
 				icon24 = RuleIcon.getIcon24(ruleObject);
 				icon32 = RuleIcon.getIcon32(ruleObject);
+				collapse = getCollapseState();
 				
 				if(isDiscoveryTab)
 				{
@@ -184,6 +187,7 @@
 						{
 							if (ri is RuleItem && ri.item.id == ruleItem.item.id)
 							{
+								trace("W: Encountered duplicate item in source: " + ruleItem.item.coupledInventoryItem.label );
 								continue outer;
 							}
 						}
@@ -195,6 +199,7 @@
 						{
 							if (ri2 is RuleItem && ri2.item.id == ruleItem.item.id)
 							{
+								trace("W: Encountered duplicate item in itype: " + ruleItem.item.coupledInventoryItem.label );
 								continue outer;
 							}
 						}
@@ -206,6 +211,7 @@
 						{
 							if (ri3 is RuleItem && ri3.item.id == ruleItem.item.id)
 							{
+								trace("W: Encountered duplicate item in destonation: " + ruleItem.item.coupledInventoryItem.label );
 								continue outer;
 							}
 						}
@@ -234,9 +240,23 @@
 				destinationDataProvider = destinationDataProvider1;
 			}
 			
+			protected var originalRuleItems:ListCollectionView = null;
+			protected var originalRuleItemGroups:ListCollectionView = null;
+			
+			protected function initializeOriginalCopies(): void
+			{
+				originalRuleItems = new ArrayCollection();
+				originalRuleItems.addAll(ruleObject.ruleItems);
+				
+				originalRuleItemGroups  = new ArrayCollection();
+				originalRuleItemGroups.addAll(ruleObject.ruleItemGroups);
+			}
+			
 			public function refresh():void
 			{
 				if (ruleObject == null) return;
+				initializeOriginalCopies();
+				
 				invalidateDisplayList();
 				refreshDataProviders();
 				refreshView();
@@ -827,10 +847,65 @@
 				droppedSources = new ArrayCollection();
 				droppedDestinations = new ArrayCollection();
 				
+				if (isPersistentObjectChanged(ruleObject,deleteList))
+				{
+					re.saveChanges(ruleObject,deleteList);
+					//invalidateProperties();
+					//refresh();
+				}
+				else
+				{
+					saveChangesHandler(null);
+				}
+			}
+			
+			protected function isPersistentObjectChanged(rule:Rule, deleteList:ListCollectionView): Boolean
+			{
+				if (deleteList != null && deleteList.length > 0)
+				{
+					return true;
+				}
 				
-				re.saveChanges(ruleObject,deleteList);
-				//invalidateProperties();
-				//refresh();
+				if (!areListsEqual(rule.ruleItems, originalRuleItems))
+				{
+					return true;
+				}
+				
+				if (!areListsEqual(rule.ruleItemGroups, originalRuleItemGroups))
+				{
+					return true;
+				}
+				
+				return false;
+			}
+			
+			protected static function areListsEqual(list1:ListCollectionView, list2:ListCollectionView): Boolean // sort of equal :)
+			{
+				if (list1 == null && list2 == null) return true;
+				if (list1 == null || list2 == null) return false;
+				
+				if (list1.length != list2.length)
+				{
+					return false;
+				}
+				
+				var targetList:ListCollectionView = new ArrayCollection();
+				targetList.addAll(list2);
+				
+				for each (var o:* in list1)
+				{
+					if (!targetList.contains(o))
+					{
+						return false;
+					}
+					else
+					{
+						var idx:uint = targetList.getItemIndex(o);
+						targetList.removeItemAt(idx);
+					}
+				}
+			
+				return true;
 			}
 			
 			protected function addDroppedObject(inventoryObject:InventoryBase):void
