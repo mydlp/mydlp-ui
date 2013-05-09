@@ -1,8 +1,10 @@
 package com.mydlp.ui.remoting.blazeds;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.flex.remoting.RemotingDestination;
@@ -30,24 +32,23 @@ public class RuleBRSImpl implements RuleService
 	}
 	
 	protected Rule removeDuplicateRuleItems(Rule rule) {
-		List<RuleItem> deleteList = new ArrayList<RuleItem>();
+		Set<RuleItem> deleteSet = new HashSet<RuleItem>();
 		for (RuleItem ruleItem: rule.getRuleItems()) {
 			for (RuleItem ruleItemIter: rule.getRuleItems()) {
-				if (!deleteList.contains(ruleItem) &&
-					ruleItem != ruleItemIter &&
+				if (!deleteSet.contains(ruleItem) &&
+					ruleItem != ruleItemIter && // should not be that same item
 					// to be consider equal
 					ruleItem.getItem().getId().equals(ruleItemIter.getItem().getId()) && // need to have save item_id
 					( (ruleItem.getRuleColumn() == null && ruleItemIter.getRuleColumn() == null ) ||
-							ruleItem.getRuleColumn().equals(ruleItemIter.getRuleColumn()) ) && //need to have same ruleColumn
-					!(ruleItem.getId() == null && ruleItemIter.getId() != null) 
+							ruleItem.getRuleColumn().equals(ruleItemIter.getRuleColumn()) )  //need to have same ruleColumn value
 				)
 				{
-					deleteList.add(ruleItemIter);
+					deleteSet.add(ruleItemIter);
 				}
 			}
 		}
-		rule.getRuleItems().removeAll(deleteList);
-		removeRuleItems(deleteList);
+		rule.getRuleItems().removeAll(deleteSet);
+		removeRuleItems(deleteSet);
 		return rule;
 	}
 
@@ -72,6 +73,12 @@ public class RuleBRSImpl implements RuleService
 	@Override
 	public void removeRuleItems(List<RuleItem> ruleItems) {
 		ruleDAO.removeRuleItems(ruleItems);
+	}
+	
+	protected void removeRuleItems(Set<RuleItem> ruleItems) {
+		List<RuleItem> list = new ArrayList<RuleItem>();
+		list.addAll(ruleItems);
+		removeRuleItems(list);
 	}
 
 	@Override
