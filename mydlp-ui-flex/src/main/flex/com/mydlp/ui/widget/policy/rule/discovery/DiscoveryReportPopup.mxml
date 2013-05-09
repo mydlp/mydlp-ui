@@ -110,9 +110,9 @@
 		<s:layout>
 			<s:VerticalLayout horizontalAlign="center" />
 		</s:layout>
-		<s:HGroup>
+		<s:HGroup verticalAlign="middle" width="100%" horizontalAlign="left" gap="10">
 			
-			<s:HGroup width="100%" horizontalAlign="left" paddingLeft="6">
+			<s:HGroup width="44%" horizontalAlign="left" paddingLeft="6" verticalAlign="middle">
 				<s:Label text="@Resource(bundle = 'messages', key = 'log.container.search.count.label')"/>
 				<s:Label text="{logSearchDP.numberOfItems}" />
 			</s:HGroup>

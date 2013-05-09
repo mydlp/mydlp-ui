@@ -22,6 +22,7 @@
 			
 			import mx.collections.ArrayCollection;
 			import mx.collections.ListCollectionView;
+			import mx.core.FlexGlobals;
 			import mx.events.FlexEvent;
 			import mx.events.ToolTipEvent;
 			import mx.rpc.AsyncToken;
@@ -124,6 +125,7 @@
 			protected function onResetClickHandler(event:MouseEvent):void
 			{
 				refresh();
+				FlexGlobals.topLevelApplication.refreshRespectively(new Rule());
 			}
 			
 			protected function onToolTipCreate(event:ToolTipEvent):void
