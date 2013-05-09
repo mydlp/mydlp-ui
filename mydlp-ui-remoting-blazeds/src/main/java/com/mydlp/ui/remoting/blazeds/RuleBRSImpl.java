@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import com.mydlp.ui.dao.DiscoveryReportDAO;
 import com.mydlp.ui.dao.RuleDAO;
+import com.mydlp.ui.domain.CustomAction;
 import com.mydlp.ui.domain.DiscoveryReport;
 import com.mydlp.ui.domain.Rule;
 import com.mydlp.ui.domain.RuleItem;
@@ -31,8 +32,11 @@ public class RuleBRSImpl implements RuleService
 		return ruleDAO.getRules();
 	}
 	
-	protected Rule removeDuplicateRuleItems(Rule rule) {
+	protected Rule removeDuplicateRuleItems(Rule rule, List<RuleItem> initialDeleteList) {
 		Set<RuleItem> deleteSet = new HashSet<RuleItem>();
+		if (initialDeleteList != null && initialDeleteList.size() > 0)
+			deleteSet.addAll(initialDeleteList);
+		
 		for (RuleItem ruleItem: rule.getRuleItems()) {
 			for (RuleItem ruleItemIter: rule.getRuleItems()) {
 				if (!deleteSet.contains(ruleItem) &&
@@ -54,7 +58,11 @@ public class RuleBRSImpl implements RuleService
 
 	@Override
 	public Rule save(Rule rule) {
-		rule = removeDuplicateRuleItems(rule);
+		return save(rule, null);
+	}
+	
+	protected Rule save(Rule rule, List<RuleItem> deleteList) {
+		rule = removeDuplicateRuleItems(rule, deleteList);
 		rule = ruleDAO.save(rule);
 		ruleDAO.balanceRulePriority();
 		return rule;
@@ -113,9 +121,13 @@ public class RuleBRSImpl implements RuleService
 
 	@Override
 	public void saveChanges(Rule rule, List<RuleItem> ruleItems) {
-		rule.getRuleItems().removeAll(ruleItems);
-		save(rule);
-		removeRuleItems(ruleItems);
+		save(rule, ruleItems);
+	}
+
+	@Override
+	public void changeRuleAction(Integer ruleId, String ruleAction,
+			CustomAction ruleCustomAction) {
+		ruleDAO.changeRuleAction(ruleId, ruleAction,ruleCustomAction);
 	}
 
 }

@@ -6,6 +6,7 @@ import java.util.Map;
 import org.springframework.security.access.annotation.Secured;
 
 import com.mydlp.ui.domain.AuthSecurityRole;
+import com.mydlp.ui.domain.CustomAction;
 import com.mydlp.ui.domain.DiscoveryReport;
 import com.mydlp.ui.domain.Rule;
 import com.mydlp.ui.domain.RuleItem;
@@ -37,5 +38,7 @@ public interface RuleService {
 	public Map<String, String> getRuleLabelsAndIds();
 	
 	public DiscoveryReport getDiscoveryStatus(Long ruleId);
+	
+	public void changeRuleAction(Integer ruleId, String ruleAction, CustomAction ruleCustomAction);
 	
 }
