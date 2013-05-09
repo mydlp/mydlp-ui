@@ -21,6 +21,7 @@
 			import com.mydlp.ui.domain.RemoteStorageFTPFS;
 			import com.mydlp.ui.domain.RemoteStorageNFS;
 			import com.mydlp.ui.domain.RemoteStorageSSHFS;
+			import com.mydlp.ui.domain.WebServer;
 			import com.mydlp.ui.util.FilterDataDescriptor;
 			
 			import mx.collections.ArrayCollection;
@@ -78,7 +79,8 @@
 				}
 				else if(item.item is FileSystemDirectory || item.item is RemoteStorageCIFS ||
 					item.item is RemoteStorageDFS || item.item is RemoteStorageFTPFS ||
-					item.item is RemoteStorageNFS || item.item is RemoteStorageSSHFS)
+					item.item is RemoteStorageNFS || item.item is RemoteStorageSSHFS ||
+					item.item is WebServer)
 					return false;
 				else
 					return true;
