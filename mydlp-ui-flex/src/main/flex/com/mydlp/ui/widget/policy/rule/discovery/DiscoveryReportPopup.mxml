@@ -72,7 +72,7 @@
 				refresh();
 			}
 			
-
+			
 			protected function refresh(): void
 			{
 				generateCriteriaList();
@@ -110,10 +110,16 @@
 		<s:layout>
 			<s:VerticalLayout horizontalAlign="center" />
 		</s:layout>
-		
-		<s:Button label="@Resource(bundle = 'messages', key = 'log.container.export.button.label')" 
-				  id="exportButton"
-				  click="onExportClick(event)"/>
+		<s:HGroup>
+			
+			<s:HGroup width="100%" horizontalAlign="left" paddingLeft="6">
+				<s:Label text="@Resource(bundle = 'messages', key = 'log.container.search.count.label')"/>
+				<s:Label text="{logSearchDP.numberOfItems}" />
+			</s:HGroup>
+			<s:Button label="@Resource(bundle = 'messages', key = 'log.container.export.button.label')" 
+					  id="exportButton"
+					  click="onExportClick(event)"/>
+		</s:HGroup>
 		
 		<s:DataGrid id="logList" dataProvider="{logSearchDP.asyncListView}" width="100%" height="95%" variableRowHeight="true">
 			<s:columns>
