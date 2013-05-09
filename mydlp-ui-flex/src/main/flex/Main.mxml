@@ -29,6 +29,7 @@
 			import com.mydlp.ui.domain.AuthUser;
 			import com.mydlp.ui.domain.Config;
 			import com.mydlp.ui.domain.CustomAction;
+			import com.mydlp.ui.domain.DashboardItem;
 			import com.mydlp.ui.domain.DataFormat;
 			import com.mydlp.ui.domain.DocumentDatabase;
 			import com.mydlp.ui.domain.InformationType;
@@ -465,7 +466,14 @@
 						objectsContainer.refreshObjects();
 					}
 				}
-				
+				if (dashboardContainer != null)
+				{
+					if (entity == null ||
+						entity is DashboardItem)
+					{
+						dashboardContainer.refreshDashboard();
+					}
+				}
 			}
 			
 			protected function refreshPolicyDataProviders():void
