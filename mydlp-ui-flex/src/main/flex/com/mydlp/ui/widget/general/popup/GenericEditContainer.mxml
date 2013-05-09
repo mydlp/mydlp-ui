@@ -788,8 +788,8 @@
 							var regExpValidator9:RegExpValidator = new RegExpValidator();
 							regExpValidator9.source = textInput;
 							regExpValidator9.property = "text";
-							regExpValidator9.expression = "^([a-zA-Z-\.]+\/)*[a-zA-Z-]*$";
-							regExpValidator9.required = true;
+							regExpValidator9.expression = MyRegExValidator.domainNameOrIpRegex();
+							regExpValidator9.required = false;
 							ErrorTipManager.registerValidator(regExpValidator9);
 							validators.push(regExpValidator9);
 							index = 3;
