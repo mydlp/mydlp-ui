@@ -3,8 +3,11 @@ package com.mydlp.ui.domain;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 @Entity
+@Table(uniqueConstraints={@UniqueConstraint(name="ruleItemGroupDetailIndex", columnNames={"group_id", "rule_id"})})
 public class RuleItemGroup extends AbstractEntity {
 
 	/**

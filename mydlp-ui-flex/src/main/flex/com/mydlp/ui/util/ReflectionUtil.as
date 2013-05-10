@@ -17,6 +17,7 @@ package com.mydlp.ui.util
 	import com.mydlp.ui.domain.Rule;
 	import com.mydlp.ui.domain.RuleItem;
 	import com.mydlp.ui.domain.RuleItemGroup;
+	import com.mydlp.ui.domain.RuleSchedule;
 	import com.mydlp.ui.widget.policy.inventory.InventoryItemRenderer;
 	
 	import flash.utils.ByteArray;
@@ -106,6 +107,7 @@ package com.mydlp.ui.util
 							(classMember.name == "nameKey" && classMember.type == String) ||
 							(classMember.name == "label" && classMember.type == String) ||
 							(classMember.name == "coupledInventoryItem" && classMember.type == InventoryItem) ||
+							(sourceObject is RuleSchedule && classMember.name == "rule" && classMember.type == Rule) ||
 							(sourceObject is Matcher && classMember.name == "coupledInformationFeature" && classMember.type == InformationFeature)
 						)
 					{
@@ -161,6 +163,13 @@ package com.mydlp.ui.util
 							rigs.addItem(rig);
 						}
 						targetObject[classMember.name] = rigs;
+					}
+					else if (sourceObject is Rule &&
+						classMember.name == "ruleSchedule" && 
+						classMember.type == RuleSchedule)
+					{
+						targetObject.ruleSchedule = cloneDomainObject(sourceObject.ruleSchedule);
+						(targetObject.ruleSchedule as RuleSchedule).rule = targetObject as Rule;
 					}
 					else if (sourceObject is InformationFeature && classMember.name == "matcher" && classMember.type == Matcher)
 					{
