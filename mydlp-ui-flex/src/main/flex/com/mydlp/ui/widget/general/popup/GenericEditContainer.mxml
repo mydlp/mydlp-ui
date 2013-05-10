@@ -829,6 +829,13 @@
 							validators.push(regExpValidator5);
 						}
 						else if(classMember.name == "destinationString") {
+							var regExpValidator10:RegExpValidator = new RegExpValidator();
+							regExpValidator10.source = textInput;
+							regExpValidator10.property = "text";
+							regExpValidator10.expression = MyRegExValidator.domainNameOrIpRegex();
+							regExpValidator10.required = true;
+							ErrorTipManager.registerValidator(regExpValidator10);
+							validators.push(regExpValidator10);
 							index = 1;
 						}
 						
