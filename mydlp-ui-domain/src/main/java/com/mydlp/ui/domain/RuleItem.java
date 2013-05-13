@@ -103,5 +103,5 @@ public class RuleItem extends AbstractEntity {
 			return false;
 		return true;
 	}
-	
+
 }

@@ -57,6 +57,8 @@
 			import mx.binding.utils.ChangeWatcher;
 			import mx.collections.ArrayCollection;
 			import mx.collections.ListCollectionView;
+			import mx.collections.Sort;
+			import mx.collections.SortField;
 			import mx.controls.Alert;
 			import mx.core.FlexGlobals;
 			import mx.core.IUIComponent;
@@ -65,6 +67,7 @@
 			import mx.events.ItemClickEvent;
 			import mx.managers.DragManager;
 			import mx.rpc.events.ResultEvent;
+			import mx.utils.ObjectUtil;
 			
 			import org.alivepdf.events.ProcessingEvent;
 			
@@ -171,12 +174,42 @@
 					
 				refresh();
 			}
+			
+			public function sortRI(a:Object, b:Object, fields:Array = null):int {
+				if (a is RuleItem && b is RuleItemGroup)
+				{
+					return 1;
+				}
+				if (a is RuleItemGroup && b is RuleItem)
+				{
+					return -1;
+				}
+				if (a is RuleItem && b is RuleItem)
+				{
+					return ObjectUtil.compare(a.item.coupledInventoryItem.label, b.item.coupledInventoryItem.label);
+				}
+				if (a is RuleItemGroup && b is RuleItemGroup)
+				{
+					return ObjectUtil.compare(a.group.label, b.group.label);
+				}
+				return 0;
+			};
+			
+			public function newDataProvider(): ArrayCollection
+			{
+				var sortItem:Sort = new Sort();
+				sortItem.compareFunction = sortRI;
+				var col:ArrayCollection = new ArrayCollection();
+				col.sort = sortItem;
+				col.refresh();
+				return col;
+			}
 		
 			public function refreshDataProviders(): void
 			{
-				var sourceDataProvider1:ArrayCollection = new ArrayCollection();
-				var matcherDataProvider1:ArrayCollection = new ArrayCollection();
-				var destinationDataProvider1:ArrayCollection = new ArrayCollection();
+				var sourceDataProvider1:ArrayCollection = newDataProvider();
+				var matcherDataProvider1:ArrayCollection = newDataProvider();
+				var destinationDataProvider1:ArrayCollection = newDataProvider();
 				
 				var ruleItems:ListCollectionView = ruleObject.ruleItems;
 				outer: for each (var ruleItem:* in ruleItems)
@@ -234,6 +267,10 @@
 						matcherDataProvider1.addItem(ruleItemGroup);
 					}
 				}
+				
+				sourceDataProvider1.refresh();
+				matcherDataProvider1.refresh();
+				destinationDataProvider1.refresh();
 				
 				sourceDataProvider = sourceDataProvider1;
 				matcherDataProvider = matcherDataProvider1;
@@ -1228,10 +1265,15 @@
 				}
 			}
 			
-			protected function saveChangesHandler(event:ResultEvent):void
+			protected function saveChangesHandlerI(event:ResultEvent):void
+			{
+				highlightOff();
+				RuleBoxRenderer.saveChangesHandler(event);
+			}
+			
+			public static function saveChangesHandler(event:ResultEvent):void
 			{
 				FlexGlobals.topLevelApplication.topToolbar.policyInstallationState = false;
-				highlightOff();
 				var resultRule:Rule = null;
 				if (event != null)
 				{
@@ -1315,10 +1357,19 @@
 			
 			protected function startButtonClickHandler(event:MouseEvent):void
 			{
-				de.startDiscoveryOnDemand(ruleObject.id);
-				if (isDiscoveryTab)
+				if (!FlexGlobals.topLevelApplication.topToolbar.policyInstallationState)
 				{
-					discoveryRuleContainer.refreshRules();
+					Alert.show(
+						LangUtil.getString("messages","playbutton.installPolicyBeforePlay.message"),
+						LangUtil.getString("messages","playbutton.installPolicyBeforePlay.title"));
+				}
+				else
+				{
+					de.startDiscoveryOnDemand(ruleObject.id);
+					if (isDiscoveryTab)
+					{
+						discoveryRuleContainer.refreshRules();
+					}
 				}
 			}
 	
@@ -1345,6 +1396,7 @@
 		<my:remote id="re" destination="ruleBRS">
 			<my:method name="saveRuleItemChanges" result="saveChangesHandler(event)"/>
 			<my:method name="getDiscoveryStatus" result="getDiscoveryStatusHandler(event)"/>
+			<my:method name="changeRuleState" result="saveChangesHandler(event)"/>
 		</my:remote>
 		<my:remote id="de" destination="discoveryBRS" >
 			<my:method name="startDiscoveryOnDemand"/>
@@ -1434,7 +1486,7 @@
 				<s:Button styleName="disableButton16Style" 
 						  toolTip="@Resource(bundle = 'messages', key = 'rulebox.disableButton.tooltip.label')"
 						  visible="{ruleObject.enabled}"
-						  click="{ruleObject.enabled = false; ruleObject.save();}"/>
+						  click="{re.changeRuleState(ruleObject.id, false);}"/>
 			</s:Group>
 		</s:Group>
 		
@@ -1460,7 +1512,8 @@
 					<s:HorizontalLayout gap="5" horizontalAlign="center" verticalAlign="middle"/>
 				</s:layout>
 				
-				<s:Button id="playButton" skinClass="com.mydlp.ui.skin.PlayBitmapButton16Skin" click="startButtonClickHandler(event)"/>
+				<s:Button id="playButton" skinClass="com.mydlp.ui.skin.PlayBitmapButton16Skin" 
+						  click="startButtonClickHandler(event)"/>
 			</s:Group>
 			
 		</s:HGroup>
@@ -1542,7 +1595,7 @@
 	<s:HGroup top="0" bottom="0" left="162" width="24" verticalAlign="middle" horizontalAlign="center">
 		<s:Button styleName="disableButton24Style" 
 				  visible="{! ruleObject.enabled}" includeInLayout="{! ruleObject.enabled}"
-				  click="{ruleObject.enabled = true; ruleObject.save();}" 
+				  click="{re.changeRuleState(ruleObject.id, true);}" 
 				  toolTip="@Resource(bundle = 'messages', key = 'rulebox.enableButton.tooltip.label')"/>
 	</s:HGroup>
 	

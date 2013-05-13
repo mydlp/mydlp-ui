@@ -1,5 +1,7 @@
 package com.mydlp.ui.remoting.blazeds;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -98,6 +100,28 @@ public class RuleBRSImpl implements RuleService
 			List<Map<String, Object>> itemsToDelete) {
 		Rule rule = ruleDAO.getRuleById(ruleId);
 		return save(rule, itemsToAdd, itemsToDelete);
+	}
+
+
+	@Override
+	public Rule changeRuleState(Integer ruleId, Boolean isEnabled) {
+		Rule rule = ruleDAO.getRuleById(ruleId);
+		rule.setEnabled(isEnabled);
+		return save(rule);
+	}
+
+
+	@Override
+	public Rule removeItemOfRule(Integer ruleId, String type,
+			Integer idOfitemOfRule) {
+		Map<String,Object> item = new HashMap<String,Object>();
+		item.put("type", type);
+		item.put("id", idOfitemOfRule);
+		
+		List<Map<String,Object>> list = new ArrayList<Map<String,Object>>();
+		list.add(item);
+		
+		return saveRuleItemChanges(ruleId, null, list);
 	}
 
 }

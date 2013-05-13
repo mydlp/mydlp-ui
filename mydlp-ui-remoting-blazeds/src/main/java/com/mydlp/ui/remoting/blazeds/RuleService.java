@@ -43,4 +43,8 @@ public interface RuleService {
 	
 	public Rule changeRuleAction(Integer ruleId, String ruleAction, CustomAction ruleCustomAction);
 	
+	public Rule changeRuleState(Integer ruleId, Boolean isEnabled);
+	
+	public Rule removeItemOfRule(Integer ruleId, String type, Integer idOfitemOfRule);
+	
 }

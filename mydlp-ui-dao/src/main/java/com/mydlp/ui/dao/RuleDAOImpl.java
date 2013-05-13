@@ -190,6 +190,9 @@ public class RuleDAOImpl extends AbstractPolicyDAO implements RuleDAO {
 		Set<RuleItem> deleteSetRI = new HashSet<RuleItem>();
 		Set<RuleItemGroup> deleteSetRIG = new HashSet<RuleItemGroup>();
 		
+		Set<RuleItem> addSetRI = new HashSet<RuleItem>();
+		Set<RuleItemGroup> addSetRIG = new HashSet<RuleItemGroup>();
+		
 		// load delete items
 		if (initialDeleteList != null && initialDeleteList.size() > 0)
 		{
@@ -216,9 +219,6 @@ public class RuleDAOImpl extends AbstractPolicyDAO implements RuleDAO {
 				}
 			}
 		}
-		
-		Set<RuleItem> addSetRI = new HashSet<RuleItem>();
-		Set<RuleItemGroup> addSetRIG = new HashSet<RuleItemGroup>();
 		
 		//load add items
 		if (addList != null && addList.size() > 0)
@@ -274,6 +274,22 @@ public class RuleDAOImpl extends AbstractPolicyDAO implements RuleDAO {
 					errorLogger.error("Ignoring unexpected object: " + iai.toString());
 				}
 			}
+		}
+		else
+		{
+			// we must have add list. So we should generate
+				
+			if (rule.getRuleItems() != null)
+			{
+				addSetRI.addAll(rule.getRuleItems());
+			}
+			addSetRI.removeAll(deleteSetRI);
+			
+			if (rule.getRuleItemGroups() != null)
+			{
+				addSetRIG.addAll(rule.getRuleItemGroups());
+			}
+			addSetRIG.removeAll(deleteSetRIG);
 		}
 		
 		// collection magic
