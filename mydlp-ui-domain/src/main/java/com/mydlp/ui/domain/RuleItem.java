@@ -1,5 +1,6 @@
 package com.mydlp.ui.domain;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -56,6 +57,7 @@ public class RuleItem extends AbstractEntity {
 		this.rule = rule;
 	}
 
+	@Column(length=16)
 	public String getRuleColumn() {
 		return ruleColumn;
 	}
