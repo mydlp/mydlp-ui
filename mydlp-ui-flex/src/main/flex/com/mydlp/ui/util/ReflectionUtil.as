@@ -169,7 +169,10 @@ package com.mydlp.ui.util
 						classMember.type == RuleSchedule)
 					{
 						targetObject.ruleSchedule = cloneDomainObject(sourceObject.ruleSchedule);
-						(targetObject.ruleSchedule as RuleSchedule).rule = targetObject as Rule;
+						if (targetObject.ruleSchedule != null)
+						{
+							(targetObject.ruleSchedule as RuleSchedule).rule = targetObject as Rule;
+						}
 					}
 					else if (sourceObject is InformationFeature && classMember.name == "matcher" && classMember.type == Matcher)
 					{
