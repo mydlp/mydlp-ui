@@ -1,10 +1,7 @@
 package com.mydlp.ui.remoting.blazeds;
 
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.flex.remoting.RemotingDestination;
@@ -32,38 +29,14 @@ public class RuleBRSImpl implements RuleService
 		return ruleDAO.getRules();
 	}
 	
-	protected Rule removeDuplicateRuleItems(Rule rule, List<RuleItem> initialDeleteList) {
-		Set<RuleItem> deleteSet = new HashSet<RuleItem>();
-		if (initialDeleteList != null && initialDeleteList.size() > 0)
-			deleteSet.addAll(initialDeleteList);
-		
-		for (RuleItem ruleItem: rule.getRuleItems()) {
-			for (RuleItem ruleItemIter: rule.getRuleItems()) {
-				if (!deleteSet.contains(ruleItem) &&
-					ruleItem != ruleItemIter && // should not be that same item
-					// to be consider equal
-					ruleItem.getItem().getId().equals(ruleItemIter.getItem().getId()) && // need to have save item_id
-					( (ruleItem.getRuleColumn() == null && ruleItemIter.getRuleColumn() == null ) ||
-							ruleItem.getRuleColumn().equals(ruleItemIter.getRuleColumn()) )  //need to have same ruleColumn value
-				)
-				{
-					deleteSet.add(ruleItemIter);
-				}
-			}
-		}
-		rule.getRuleItems().removeAll(deleteSet);
-		removeRuleItems(deleteSet);
-		return rule;
-	}
 
 	@Override
 	public Rule save(Rule rule) {
-		return save(rule, null);
+		return save(rule, null, null);
 	}
 	
-	protected Rule save(Rule rule, List<RuleItem> deleteList) {
-		rule = removeDuplicateRuleItems(rule, deleteList);
-		rule = ruleDAO.save(rule);
+	protected Rule save(Rule rule, List<Map<String,Object>> addList, List<Map<String,Object>> deleteList) {
+		rule = ruleDAO.removeDuplicateItems(rule, addList, deleteList);
 		ruleDAO.balanceRulePriority();
 		return rule;
 	}
@@ -83,12 +56,6 @@ public class RuleBRSImpl implements RuleService
 		ruleDAO.removeRuleItems(ruleItems);
 	}
 	
-	protected void removeRuleItems(Set<RuleItem> ruleItems) {
-		List<RuleItem> list = new ArrayList<RuleItem>();
-		list.addAll(ruleItems);
-		removeRuleItems(list);
-	}
-
 	@Override
 	public void ruleUp(Rule r) {
 		ruleDAO.ruleUp(r);
@@ -120,14 +87,17 @@ public class RuleBRSImpl implements RuleService
 	}
 
 	@Override
-	public void saveChanges(Rule rule, List<RuleItem> ruleItems) {
-		save(rule, ruleItems);
+	public Rule changeRuleAction(Integer ruleId, String ruleAction,
+			CustomAction ruleCustomAction) {
+		return ruleDAO.changeRuleAction(ruleId, ruleAction,ruleCustomAction);
 	}
 
 	@Override
-	public void changeRuleAction(Integer ruleId, String ruleAction,
-			CustomAction ruleCustomAction) {
-		ruleDAO.changeRuleAction(ruleId, ruleAction,ruleCustomAction);
+	public Rule saveRuleItemChanges(Integer ruleId,
+			List<Map<String, Object>> itemsToAdd,
+			List<Map<String, Object>> itemsToDelete) {
+		Rule rule = ruleDAO.getRuleById(ruleId);
+		return save(rule, itemsToAdd, itemsToDelete);
 	}
 
 }

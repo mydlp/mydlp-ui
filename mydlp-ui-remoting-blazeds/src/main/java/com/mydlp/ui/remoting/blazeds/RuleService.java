@@ -18,7 +18,9 @@ public interface RuleService {
 	
 	public Rule save(Rule rule);
 	
-	public void saveChanges(Rule rule, List<RuleItem> ruleItems);
+	public Rule saveRuleItemChanges(Integer ruleId, 
+									List<Map<String,Object>> itemsToAdd, 
+									List<Map<String, Object>> itemsToDelete);
 
 	public void remove(Rule rule);
 	
@@ -39,6 +41,6 @@ public interface RuleService {
 	
 	public DiscoveryReport getDiscoveryStatus(Long ruleId);
 	
-	public void changeRuleAction(Integer ruleId, String ruleAction, CustomAction ruleCustomAction);
+	public Rule changeRuleAction(Integer ruleId, String ruleAction, CustomAction ruleCustomAction);
 	
 }

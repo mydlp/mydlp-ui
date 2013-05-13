@@ -66,4 +66,42 @@ public class RuleItem extends AbstractEntity {
 		this.ruleColumn = ruleColumn;
 	}
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + ((item == null) ? 0 : item.hashCode());
+		result = prime * result + ((rule == null) ? 0 : rule.hashCode());
+		result = prime * result
+				+ ((ruleColumn == null) ? 0 : ruleColumn.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!super.equals(obj))
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		RuleItem other = (RuleItem) obj;
+		if (item == null) {
+			if (other.item != null)
+				return false;
+		} else if (!item.equals(other.item))
+			return false;
+		if (rule == null) {
+			if (other.rule != null)
+				return false;
+		} else if (!rule.equals(other.rule))
+			return false;
+		if (ruleColumn == null) {
+			if (other.ruleColumn != null)
+				return false;
+		} else if (!ruleColumn.equals(other.ruleColumn))
+			return false;
+		return true;
+	}
+	
 }

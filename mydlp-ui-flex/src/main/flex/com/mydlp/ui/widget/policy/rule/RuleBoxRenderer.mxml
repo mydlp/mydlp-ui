@@ -838,6 +838,8 @@
 				}
 			}
 			
+			protected var saveRuleItemInProg:Boolean = false;
+			
 			protected function finalizeDragDrop(): void
 			{
 				inventoryObjects = null;
@@ -847,16 +849,91 @@
 				droppedSources = new ArrayCollection();
 				droppedDestinations = new ArrayCollection();
 				
-				if (isPersistentObjectChanged(ruleObject,deleteList))
+				if (isPersistentObjectChanged(ruleObject, deleteList))
 				{
-					re.saveChanges(ruleObject,deleteList);
-					//invalidateProperties();
-					//refresh();
+					if (!saveRuleItemInProg)
+					{
+						re.saveRuleItemChanges(	
+										ruleObject.id, 
+										ruleToAddRefs(ruleObject),
+										itemsToDelRefs(deleteList)
+									);
+						//invalidateProperties();
+						//refresh();
+						saveRuleItemInProg = true;
+					}
 				}
 				else
 				{
 					saveChangesHandler(null);
 				}
+			}
+			
+			protected static function ruleToAddRefs(rule:Rule):ListCollectionView
+			{
+				var ret:ListCollectionView = new ArrayCollection();
+				
+				for each (var i:RuleItem in rule.ruleItems)
+				{
+					var o:Object = new Object();
+					o["type"] = "RuleItem";
+					if (isNaN((i as RuleItem).id))
+					{
+						o["id"] = null;
+					}
+					else
+					{
+						o["id"] = (i as RuleItem).id;
+					}
+					o["item_id"] = (i as RuleItem).item.id;
+					o["ruleColumn"] = (i as RuleItem).ruleColumn;
+					ret.addItem(o);
+				}
+				
+				for each (var i2:RuleItemGroup in rule.ruleItemGroups)
+				{
+					var o2:Object = new Object();
+					o2["type"] = "RuleItemGroup";
+					if (isNaN((i2 as RuleItemGroup).id))
+					{
+						o2["id"] = null;
+					}
+					else
+					{
+						o2["id"] = (i2 as RuleItemGroup).id;
+					}
+					o2["group_id"] = (i2 as RuleItemGroup).group.id;
+					ret.addItem(o2);
+				}
+				
+				return ret;
+			}
+			
+			protected static function itemsToDelRefs(list:ListCollectionView): ListCollectionView
+			{
+				var ret:ListCollectionView = new ArrayCollection();
+				
+				for each (var i:* in list)
+				{
+					var o:Object = new Object();
+					if (i is RuleItem && !isNaN((i as RuleItem).id))
+					{
+						o["type"] = "RuleItem";
+						o["id"] = (i as RuleItem).id;
+					}
+					else if (i is RuleItemGroup && !isNaN((i as RuleItemGroup).id))
+					{
+						o["type"] = "RuleItemGroup";
+						o["id"] = (i as RuleItemGroup).id;
+					}
+					else
+					{
+						throw new Error("Unexpected type");
+					}
+					ret.addItem(o);
+				}
+				
+				return ret;
 			}
 			
 			protected function isPersistentObjectChanged(rule:Rule, deleteList:ListCollectionView): Boolean
@@ -1159,16 +1236,15 @@
 			
 			protected function saveChangesHandler(event:ResultEvent):void
 			{
+				saveRuleItemInProg = false;
 				FlexGlobals.topLevelApplication.topToolbar.policyInstallationState = false;
 				highlightOff();
-				if (isDiscoveryTab)
+				var resultRule:Rule = null;
+				if (event != null)
 				{
-					discoveryRuleContainer.refreshRules();
+					resultRule = event.result as Rule;
 				}
-				else
-				{
-					ruleContainer.refreshRules();
-				}
+				FlexGlobals.topLevelApplication.refreshRespectivelyRule(resultRule);
 			}
 			
 			protected function onItemClickHandler(event:MouseEvent):void
@@ -1274,7 +1350,7 @@
 		<fx:Class id="icon24" />
 		<fx:Class id="icon32" />
 		<my:remote id="re" destination="ruleBRS">
-			<my:method name="saveChanges" result="saveChangesHandler(event)"/>
+			<my:method name="saveRuleItemChanges" result="saveChangesHandler(event)"/>
 			<my:method name="getDiscoveryStatus" result="getDiscoveryStatusHandler(event)"/>
 		</my:remote>
 		<my:remote id="de" destination="discoveryBRS" >

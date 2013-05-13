@@ -476,6 +476,31 @@
 				}
 			}
 			
+			public function refreshRespectivelyRule(resultRule:Rule): void
+			{
+				if (resultRule == null || isNaN(resultRule.id))
+				{
+					refreshPolicyDataProviders();
+				}
+				else
+				{
+					var newRulesList:ListCollectionView = new ArrayCollection();
+					for each (var r:Rule in policyContainer.rulesList)
+					{
+						if (r.id == resultRule.id)
+						{
+							newRulesList.addItem(resultRule);
+						}
+						else
+						{
+							newRulesList.addItem(r);
+						}
+					}
+					var resultEvent:ResultEvent = new ResultEvent(ResultEvent.RESULT, false, true, newRulesList);
+					getRulesHandler(resultEvent);
+				}
+			}
+			
 			protected function refreshPolicyDataProviders():void
 			{
 				ruleRE.getRules();

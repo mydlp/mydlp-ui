@@ -240,7 +240,7 @@
 			
 			protected function changeRuleActionHandler(event:ResultEvent):void
 			{
-				FlexGlobals.topLevelApplication.refreshRespectively(new Rule());
+				FlexGlobals.topLevelApplication.refreshRespectivelyRule(event.result as Rule);
 			}
 			
 		]]>

@@ -185,7 +185,8 @@
 				if (rule != null && rule is Rule && (rule as Rule).id == value)
 					return rule as Rule;
 				return null;
-			}			
+			}
+			
 			
 			public function refreshRules():void
 			{
