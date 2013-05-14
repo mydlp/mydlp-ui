@@ -428,7 +428,7 @@
 					{
 						getInventoryFunction();
 					}
-					if (entity == null || entity is Rule || entity is RuleItem || entity is RuleItemGroup)
+					if (entity == null || entity is CustomAction || entity is Rule || entity is RuleItem || entity is RuleItemGroup)
 					{
 						refreshPolicyDataProviders();
 					}
