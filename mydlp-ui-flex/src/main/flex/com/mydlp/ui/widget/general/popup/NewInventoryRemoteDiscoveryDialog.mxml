@@ -9,13 +9,10 @@
 	<fx:Script>
 		<![CDATA[
 			import com.mydlp.ui.domain.InventoryItem;
-			import com.mydlp.ui.domain.RemoteStorageCIFS;
-			import com.mydlp.ui.domain.RemoteStorageDFS;
 			import com.mydlp.ui.domain.RemoteStorageFTPFS;
 			import com.mydlp.ui.domain.RemoteStorageNFS;
 			import com.mydlp.ui.domain.RemoteStorageSSHFS;
-			import com.mydlp.ui.domain.RuleUserAD;
-			import com.mydlp.ui.domain.RuleUserStatic;
+			import com.mydlp.ui.domain.RemoteStorageWindowsShare;
 			import com.mydlp.ui.domain.WebServer;
 			import com.mydlp.ui.util.InteractionUtil;
 			
@@ -49,19 +46,12 @@
 				InteractionUtil.newEditDialog(i);
 			}
 			
-			protected function cifsHandler(event:MouseEvent):void
-			{
-				close();
-				var i:InventoryItem = generateInventoryItem();
-				i.item = new RemoteStorageCIFS();
-				InteractionUtil.newEditDialog(i);
-			}
 			
-			protected function dfsHandler(event:MouseEvent):void
+			protected function windowsShareHandler(event:MouseEvent):void
 			{
 				close();
 				var i:InventoryItem = generateInventoryItem();
-				i.item = new RemoteStorageDFS();
+				i.item = new RemoteStorageWindowsShare();
 				InteractionUtil.newEditDialog(i);
 			}
 			
@@ -98,11 +88,8 @@
 					  label="@Resource(bundle = 'messages', key = 'inventory.newremotediscoverydialog.ftpfs.label')" 
 					  click="ftpfsHandler(event)"/>
 			<s:Button skinClass="com.mydlp.ui.skin.WindowsRemoteStorageBitmapLabelButton16Skin" 
-					  label="@Resource(bundle = 'messages', key = 'inventory.newremotediscoverydialog.cifs.label')" 
-					  click="cifsHandler(event)"/>
-			<s:Button skinClass="com.mydlp.ui.skin.WindowsRemoteStorageBitmapLabelButton16Skin" 
-					  label="@Resource(bundle = 'messages', key = 'inventory.newremotediscoverydialog.dfs.label')" 
-					  click="dfsHandler(event)"/>
+					  label="@Resource(bundle = 'messages', key = 'inventory.newremotediscoverydialog.windowsShare.label')" 
+					  click="windowsShareHandler(event)"/>
 			<s:Button skinClass="com.mydlp.ui.skin.RemoteStorageBitmapLabelButton16Skin" 
 					  label="@Resource(bundle = 'messages', key = 'inventory.newremotediscoverydialog.nfs.label')" 
 					  click="nfsHandler(event)"/>

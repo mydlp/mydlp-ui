@@ -37,11 +37,10 @@
 			import com.mydlp.ui.domain.RDBMSInformationTarget;
 			import com.mydlp.ui.domain.RegularExpressionGroup;
 			import com.mydlp.ui.domain.RemoteStorage;
-			import com.mydlp.ui.domain.RemoteStorageCIFS;
-			import com.mydlp.ui.domain.RemoteStorageDFS;
 			import com.mydlp.ui.domain.RemoteStorageFTPFS;
 			import com.mydlp.ui.domain.RemoteStorageNFS;
 			import com.mydlp.ui.domain.RemoteStorageSSHFS;
+			import com.mydlp.ui.domain.RemoteStorageWindowsShare;
 			import com.mydlp.ui.domain.RemovableStorageEncryptionRule;
 			import com.mydlp.ui.domain.RemovableStorageInboundRule;
 			import com.mydlp.ui.domain.Rule;
@@ -146,7 +145,7 @@
 			
 			protected function isRemoteStorageObject(obj:*):Boolean
 			{
-				if(obj is RemoteStorageCIFS || obj is RemoteStorageDFS ||
+				if(obj is RemoteStorageWindowsShare ||
 					obj is RemoteStorageFTPFS || obj is RemoteStorageNFS ||
 					obj is RemoteStorageSSHFS)
 					return true;
@@ -768,7 +767,7 @@
 							validators.push(regExpValidator8);
 							index = 1;
 						}
-						else if(classMember.name == "windowsShare")
+						else if(classMember.name == "uncPath")
 						{	
 							index = 1;
 						}
@@ -789,7 +788,7 @@
 							var regExpValidator9:RegExpValidator = new RegExpValidator();
 							regExpValidator9.source = textInput;
 							regExpValidator9.property = "text";
-							regExpValidator9.expression = "^[a-zA-Z0-9-\.\/_]*$";
+							regExpValidator9.expression = "^[a-zA-Z0-9-\.\/_\\\\ ]*$";
 							regExpValidator9.required = false;
 							ErrorTipManager.registerValidator(regExpValidator9);
 							validators.push(regExpValidator9);

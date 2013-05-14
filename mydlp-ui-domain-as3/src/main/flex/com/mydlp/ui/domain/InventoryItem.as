@@ -79,9 +79,7 @@ package com.mydlp.ui.domain {
 						_icon = REMOTE_STORAGE;
 					else if(iitem is RemoteStorageNFS)
 						_icon = REMOTE_STORAGE;
-					else if(iitem is RemoteStorageCIFS)
-						_icon = WINDOWS_STORAGE;
-					else if(iitem is RemoteStorageDFS)
+					else if(iitem is RemoteStorageWindowsShare)
 						_icon = WINDOWS_STORAGE;
 					else if(iitem is WebServer)
 						_icon = WEB_DISCOVERY;

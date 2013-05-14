@@ -16,11 +16,10 @@
 			import com.mydlp.ui.domain.InventoryCategory;
 			import com.mydlp.ui.domain.InventoryGroup;
 			import com.mydlp.ui.domain.InventoryItem;
-			import com.mydlp.ui.domain.RemoteStorageCIFS;
-			import com.mydlp.ui.domain.RemoteStorageDFS;
 			import com.mydlp.ui.domain.RemoteStorageFTPFS;
 			import com.mydlp.ui.domain.RemoteStorageNFS;
 			import com.mydlp.ui.domain.RemoteStorageSSHFS;
+			import com.mydlp.ui.domain.RemoteStorageWindowsShare;
 			import com.mydlp.ui.domain.WebServer;
 			import com.mydlp.ui.util.FilterDataDescriptor;
 			
@@ -77,8 +76,8 @@
 						return true;
 					return traverse(item.children);
 				}
-				else if(item.item is FileSystemDirectory || item.item is RemoteStorageCIFS ||
-					item.item is RemoteStorageDFS || item.item is RemoteStorageFTPFS ||
+				else if(item.item is FileSystemDirectory || item.item is RemoteStorageWindowsShare ||
+					item.item is RemoteStorageFTPFS ||
 					item.item is RemoteStorageNFS || item.item is RemoteStorageSSHFS ||
 					item.item is WebServer)
 					return false;
