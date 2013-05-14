@@ -587,9 +587,9 @@
 				policyContainer.rulesList = rulesList;
 				discoveryContainer.rulesList = rulesList;
 				if (discoveryContainer != null)
-					discoveryContainer.ruleContainer.refreshRules();
+					discoveryContainer.ruleContainer.refreshRulesView();
 				if (policyContainer != null)
-					policyContainer.ruleContainer.refreshRules();
+					policyContainer.ruleContainer.refreshRulesView();
 			}
 			
 			public function getInventoryFunction():void

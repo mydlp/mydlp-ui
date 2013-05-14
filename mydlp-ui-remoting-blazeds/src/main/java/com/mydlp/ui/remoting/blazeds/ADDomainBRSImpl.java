@@ -45,7 +45,11 @@ public class ADDomainBRSImpl implements ADDomainService
 
 	@Override
 	public List<ADDomain> getADDomains() {
-		return adDomainDAO.getADDomains();
+		List<ADDomain> list = adDomainDAO.getADDomains();
+		for (ADDomain adDomain : list) {
+			adDomain.setRoot(null);
+		}
+		return list;
 	}
 
 	@Override

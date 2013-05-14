@@ -37,6 +37,7 @@ package com.mydlp.ui.mxml
 		protected function defaultFaultHandler(event:FaultEvent):void {
 			if (event.fault.faultCode == "Client.Error.DeliveryInDoubt")
 				navigateToURL(new URLRequest('j_spring_security_logout'), '_self');
+			trace("re fault: " + event.fault.faultCode);
 		}
 		
 		protected function screenInvokeHandler(event:InvokeEvent): void

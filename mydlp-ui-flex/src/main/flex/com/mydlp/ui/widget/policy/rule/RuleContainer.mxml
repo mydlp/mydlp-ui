@@ -233,7 +233,7 @@
 				return filteredRules;
 			}
 			
-			protected function populateRules(): void
+			public function refreshRulesView(): void
 			{
 				var ruleDP2:ArrayCollection = filterRulesTab();
 				for each (var rule:* in ruleDP2) 
@@ -312,6 +312,12 @@
 						callLater(showIndex, [oldAfterRefreshSelectedIndex]);
 					}
 				}
+			}
+			
+			protected function populateRules(): void
+			{
+				refreshRulesView();
+				
 				if(isDiscoveryTab)
 					discoveryReportContainer.refresh();
 			}
