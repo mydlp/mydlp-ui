@@ -73,7 +73,7 @@ public class RemoteStorageBRSImpl implements RemoteStorageService
 		else if(remoteStorage instanceof RemoteStorageWindowsShare)
 		{
 			RemoteStorageWindowsShare temp = (RemoteStorageWindowsShare)remoteStorage;
-			rs.put("type", "dfs");
+			rs.put("type", "windows");
 			rs.put("address", temp.getUncPath());
 			rs.put("username", temp.getUsername());
 			rs.put("password", temp.getPassword());
