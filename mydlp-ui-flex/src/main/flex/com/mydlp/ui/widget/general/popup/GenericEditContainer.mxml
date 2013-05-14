@@ -884,6 +884,16 @@
 								ErrorTipManager.registerValidator(regExpValidator7);
 								validators.push(regExpValidator7);
 							}
+							else if (targetObject is RemoteStorageSSHFS)
+							{
+								var regExpValidator11:RegExpValidator = new RegExpValidator();
+								regExpValidator11.source = textInput;
+								regExpValidator11.property = "text";
+								regExpValidator11.expression = "^[a-zA-Z0-9_/\.\ ]+$";
+								regExpValidator11.required = true;
+								ErrorTipManager.registerValidator(regExpValidator11);
+								validators.push(regExpValidator11);
+							}
 							index = 4;
 						}
 						else if(classMember.name == "deviceId"){
