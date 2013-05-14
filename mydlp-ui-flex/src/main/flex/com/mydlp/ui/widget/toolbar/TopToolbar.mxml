@@ -42,6 +42,8 @@
 			
 			protected var compileStatusTimer:Timer = null;
 			
+			protected var disableTimer:Boolean = false;
+			
 			protected function onCreationComplete(event:FlexEvent):void
 			{
 				getCurrentUserHandler();
@@ -64,6 +66,7 @@
 			
 			protected function compilePolicyHandler(event:ResultEvent): void
 			{
+				disableTimer = false;				
 				timerInterval = 1500;
 				scheduleCompileStatusTimer();
 			}
@@ -81,16 +84,25 @@
 				}
 			}
 			
-			protected function scheduleCompileStatusTimer(): void
+			protected function nullifyTimers(): void
 			{
 				if (compileStatusTimer != null)
 				{
 					compileStatusTimer.stop();
 					compileStatusTimer = null;
 				}
-				compileStatusTimer = new Timer(timerInterval, 1);
-				compileStatusTimer.addEventListener(TimerEvent.TIMER_COMPLETE, onCompileStatusTimerComplete);
-				compileStatusTimer.start();
+			}
+			
+			protected function scheduleCompileStatusTimer(): void
+			{
+				nullifyTimers();
+				
+				if (!disableTimer)
+				{
+					compileStatusTimer = new Timer(timerInterval, 1);
+					compileStatusTimer.addEventListener(TimerEvent.TIMER_COMPLETE, onCompileStatusTimerComplete);
+					compileStatusTimer.start();
+				}
 			}
 			
 			public function onCompileStatusTimerComplete(event:TimerEvent):void
@@ -219,6 +231,8 @@
 				{
 					compileInProgress = true;
 					compileProgress = "compile";
+					disableTimer = true;
+					nullifyTimers();
 					pe.compilePolicy(1);
 					//fetchCompileStatus();
 				}
