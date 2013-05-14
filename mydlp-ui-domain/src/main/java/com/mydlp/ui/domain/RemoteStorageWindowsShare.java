@@ -3,7 +3,7 @@ package com.mydlp.ui.domain;
 import javax.persistence.Entity;
 
 @Entity
-public class RemoteStorageCIFS extends RemoteStorage {
+public class RemoteStorageWindowsShare extends RemoteStorage {
 
 
 	
@@ -11,29 +11,20 @@ public class RemoteStorageCIFS extends RemoteStorage {
 	 * 
 	 */
 	private static final long serialVersionUID = -3325261606210877942L;
-
-	protected String windowsShare;
 	
-	protected String path;
+	protected String uncPath;
 
 	protected String username;
 
 	protected String password;
 	
-	public String getWindowsShare() {
-		return windowsShare;
+
+	public String getUncPath() {
+		return uncPath;
 	}
 
-	public void setWindowsShare(String windowsShare) {
-		this.windowsShare = windowsShare;
-	}
-
-	public String getPath() {
-		return path;
-	}
-
-	public void setPath(String path) {
-		this.path = path;
+	public void setUncPath(String uncPath) {
+		this.uncPath = uncPath;
 	}
 
 	public String getUsername() {

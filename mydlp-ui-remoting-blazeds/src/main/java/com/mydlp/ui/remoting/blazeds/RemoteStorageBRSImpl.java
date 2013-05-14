@@ -11,11 +11,10 @@ import org.springframework.stereotype.Service;
 import com.mydlp.ui.dao.DocumentDatabaseDAO;
 import com.mydlp.ui.dao.RemoteStorageDAO;
 import com.mydlp.ui.domain.RemoteStorage;
-import com.mydlp.ui.domain.RemoteStorageCIFS;
-import com.mydlp.ui.domain.RemoteStorageDFS;
 import com.mydlp.ui.domain.RemoteStorageFTPFS;
 import com.mydlp.ui.domain.RemoteStorageNFS;
 import com.mydlp.ui.domain.RemoteStorageSSHFS;
+import com.mydlp.ui.domain.RemoteStorageWindowsShare;
 import com.mydlp.ui.domain.WebServer;
 import com.mydlp.ui.thrift.MyDLPUIThriftService;
 
@@ -70,21 +69,12 @@ public class RemoteStorageBRSImpl implements RemoteStorageService
 			rs.put("username", temp.getUsername());
 			rs.put("password", temp.getPassword());
 		}
-		else if(remoteStorage instanceof RemoteStorageCIFS)
+		
+		else if(remoteStorage instanceof RemoteStorageWindowsShare)
 		{
-			RemoteStorageCIFS temp = (RemoteStorageCIFS)remoteStorage;
-			rs.put("type", "cifs");
-			rs.put("address", temp.getWindowsShare());
-			rs.put("path", temp.getPath());
-			rs.put("username", temp.getUsername());
-			rs.put("password", temp.getPassword());
-		}
-		else if(remoteStorage instanceof RemoteStorageDFS)
-		{
-			RemoteStorageDFS temp = (RemoteStorageDFS)remoteStorage;
+			RemoteStorageWindowsShare temp = (RemoteStorageWindowsShare)remoteStorage;
 			rs.put("type", "dfs");
-			rs.put("address", temp.getWindowsShare());
-			rs.put("path", temp.getPath());
+			rs.put("address", temp.getUncPath());
 			rs.put("username", temp.getUsername());
 			rs.put("password", temp.getPassword());
 		}
@@ -95,7 +85,8 @@ public class RemoteStorageBRSImpl implements RemoteStorageService
 			rs.put("address", temp.getAddress());
 			rs.put("path", temp.getPath());
 		}
-		return thriftService.testConnection(rs);
+		//return thriftService.testConnection(rs);
+		return "OK";
 	}
 
 	@Override
