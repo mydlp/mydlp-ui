@@ -31,11 +31,20 @@ package com.mydlp.ui.mxml
 			addEventListener(InvokeEvent.INVOKE, screenInvokeHandler);
 			addEventListener(ResultEvent.RESULT, screenResultHandler);
 			addEventListener(FaultEvent.FAULT, screenFaultHandler);
-			addEventListener(FaultEvent.FAULT, defaultFaultHandler);
+			addEventListener(FaultEvent.FAULT, defaultFaultHandlerInt);
 		}
 		
-		protected function defaultFaultHandler(event:FaultEvent):void {
-			if (event.fault.faultCode == "Client.Error.DeliveryInDoubt")
+		protected function defaultFaultHandlerInt(event:FaultEvent):void {
+			defaultFaultHandler(event);
+		}
+		
+		public static function defaultFaultHandler(event:FaultEvent):void {
+			if (
+				event.fault.faultCode == "Client.Error.DeliveryInDoubt" ||
+				event.fault.faultCode == "Channel.Call.Failed" ||
+				event.fault.faultCode == "Channel.Connect.Failed" ||
+				event.fault.faultCode == "Client.Error.MessageSend" 
+			)
 				navigateToURL(new URLRequest('j_spring_security_logout'), '_self');
 			trace("re fault: " + event.fault.faultCode);
 		}

@@ -14,13 +14,11 @@ package com.mydlp.ui.mxml
 			super(remoteObject, name);
 			addEventListener(ResultEvent.RESULT, screenResultHandler);
 			addEventListener(FaultEvent.FAULT, screenFaultHandler);
-			addEventListener(FaultEvent.FAULT, defaultFaultHandler);
+			addEventListener(FaultEvent.FAULT, defaultFaultHandlerInt);
 		}
 		
-		protected function defaultFaultHandler(event:FaultEvent):void {
-			if (event.fault.faultCode == "Client.Error.DeliveryInDoubt")
-				navigateToURL(new URLRequest('j_spring_security_logout'), '_self');
-			trace("re fault: " + event.fault.faultCode);
+		protected function defaultFaultHandlerInt(event:FaultEvent):void {
+			RemoteObject.defaultFaultHandler(event);
 		}
 		
 		protected function screenResultHandler(event:ResultEvent): void
