@@ -85,8 +85,7 @@ public class RemoteStorageBRSImpl implements RemoteStorageService
 			rs.put("address", temp.getAddress());
 			rs.put("path", temp.getPath());
 		}
-		//return thriftService.testConnection(rs);
-		return "OK";
+		return thriftService.testConnection(rs);
 	}
 
 	@Override
