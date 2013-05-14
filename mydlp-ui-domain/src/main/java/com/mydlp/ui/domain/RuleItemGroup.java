@@ -1,5 +1,7 @@
 package com.mydlp.ui.domain;
 
+import java.util.ArrayList;
+
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -19,13 +21,15 @@ public class RuleItemGroup extends AbstractEntity {
 	
 	protected Rule rule;
 
-	@ManyToOne
+	@ManyToOne(cascade={})
 	@JoinColumn(nullable=false)
 	public InventoryGroup getGroup() {
 		return group;
 	}
 
+	//we don't want bulk items to be serialized to client
 	public void setGroup(InventoryGroup group) {
+		group.setChildren(new ArrayList<InventoryItem>());
 		this.group = group;
 	}
 

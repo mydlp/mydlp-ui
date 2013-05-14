@@ -18,6 +18,7 @@ package com.mydlp.ui.util
 	import com.mydlp.ui.domain.RuleItem;
 	import com.mydlp.ui.domain.RuleItemGroup;
 	import com.mydlp.ui.domain.RuleSchedule;
+	import com.mydlp.ui.domain.RuleUserAD;
 	import com.mydlp.ui.widget.policy.inventory.InventoryItemRenderer;
 	
 	import flash.utils.ByteArray;
@@ -206,6 +207,11 @@ package com.mydlp.ui.util
 					}
 					else if (	sourceObject is NonCascadingArgument && 
 						classMember.name == "argument" )
+					{
+						targetObject[classMember.name] = sourceObject[classMember.name];
+					}
+					else if (	sourceObject is RuleUserAD && 
+						classMember.name == "domainItem" )
 					{
 						targetObject[classMember.name] = sourceObject[classMember.name];
 					}
