@@ -769,6 +769,13 @@
 						}
 						else if(classMember.name == "uncPath")
 						{	
+							var regExpValidator12:RegExpValidator = new RegExpValidator();
+							regExpValidator12.source = textInput;
+							regExpValidator12.property = "text";
+							regExpValidator12.expression = "^\\\\\\\\[a-zA-Z0-9\.\/\\\\ ]*$";
+							regExpValidator12.required = false;
+							ErrorTipManager.registerValidator(regExpValidator12);
+							validators.push(regExpValidator12);
 							index = 1;
 						}
 						else if(classMember.name == "port")
