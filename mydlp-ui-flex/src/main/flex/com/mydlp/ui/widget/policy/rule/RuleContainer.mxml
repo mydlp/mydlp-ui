@@ -235,6 +235,13 @@
 			
 			public function refreshRulesView(): void
 			{
+				if (!ActionBox.isCustomActionsInitialized)
+				{
+					ActionBox.isCustomActionsInitialized = true;
+					callLater(refreshRules);
+					return;
+				}
+				
 				var ruleDP2:ArrayCollection = filterRulesTab();
 				for each (var rule:* in ruleDP2) 
 				{
@@ -583,7 +590,7 @@
 				this.addEventListener(DragEvent.DRAG_ENTER, acceptDrop);
 				this.addEventListener(MouseEvent.CLICK, clickHandler);
 				attachWatchers();
-				FlexGlobals.topLevelApplication.popupulatePolicyOnCreate();
+				FlexGlobals.topLevelApplication.populatePolicyOnCreate();
 			}
 			
 		]]>

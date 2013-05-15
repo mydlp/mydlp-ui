@@ -52,6 +52,7 @@
 			import com.mydlp.ui.widget.option.OptionContainer;
 			import com.mydlp.ui.widget.policy.PolicyContainer;
 			import com.mydlp.ui.widget.policy.inventory.InventoryTree;
+			import com.mydlp.ui.widget.policy.rule.ActionBox;
 			import com.mydlp.ui.widget.policy.rule.RuleContainer;
 			import com.mydlp.ui.widget.revision.RevisionContainer;
 			
@@ -223,8 +224,6 @@
 			
 			protected function onCreationComplete(event:FlexEvent):void
 			{
-				
-				
 				HibernateManaged.defaultHibernateService = this.dataAccessService;
 				
 				if(stage != null)
@@ -381,7 +380,7 @@
 				ruleRE.getRuleLabelsAndIds();
 			}
 			
-			public function popupulatePolicyOnCreate(): void {
+			public function populatePolicyOnCreate(): void {
 				if (discoveryContainer != null && policyContainer != null)
 				{
 					getInventoryFunction();
@@ -427,6 +426,10 @@
 					if (entity == null || entity is InventoryBase)
 					{
 						getInventoryFunction();
+					}
+					if (entity is CustomAction)
+					{
+						ActionBox.isCustomActionsInitialized=false;
 					}
 					if (entity == null || entity is CustomAction || entity is Rule || entity is RuleItem || entity is RuleItemGroup)
 					{
