@@ -29,6 +29,8 @@
 			import mx.core.FlexGlobals;
 			import mx.core.IVisualElement;
 			
+			import spark.events.TextOperationEvent;
+			
 			public var deleteList:ListCollectionView = null;
 			
 			protected static const distancesMatchers:ListCollectionView = new ArrayCollection(new Array(
@@ -261,6 +263,55 @@
 				ifList.validateDisplayList();
 			}
 			
+			public function isDistanceChecked(): Boolean
+			{
+				return distanceEnabledInput.selected;
+			}
+			
+			public function getDistanceValue(): Number
+			{
+				return Number(distanceValueInput.text);
+			}
+			
+			
+			protected function distanceChangeHandler(event:TextOperationEvent = null):void
+			{
+				if (informationFeatures == null || informationFeatures.length != 1) return;
+				var f:InformationFeature = informationFeatures.getItemAt(0) as InformationFeature;
+				if (f == null) return;
+				if (!distanceEnabled) return;
+				if (f.matcher == null || isNaN(f.threshold) ||
+					f.matcher == null || f.matcher.functionName != "document_pdm") return;
+				
+				var minD:Number = ( f.threshold - 3 ) * 250;
+				if (minD < 500) minD = 500;
+				var maxD:Number = (f.threshold - 1) * 600;
+				if (maxD > 5000) maxD = 5000;
+				if (minD > maxD)
+				{
+					minD = 500;
+					maxD = 5000;
+				}
+				var d:Number = Number.NaN;
+				d = Number(distanceValueInput.text);
+				if (isNaN(d) || d < minD || d > maxD)
+				{
+					d = minD + ((maxD - minD)/3);
+					distanceValueInput.text = Math.round(d).toString();
+					Alert.show(
+						LangUtil.getString("messages","informationFeature.popup.add.error.pdmDistanceShouldBeBetween.message") + " " + 
+						Math.round(minD).toString() + " " +
+						LangUtil.getString("messages","informationFeature.popup.error.between.and") + " " + 
+						Math.round(maxD).toString() + "."
+						,
+						LangUtil.getString("messages","informationFeature.popup.add.error.pdmDistanceShouldBeBetween.title"));
+				}
+				else
+				{
+					return;
+				}
+			}
+			
 		]]>
 	</fx:Script>
 	
@@ -276,11 +327,12 @@
 	
 	<s:HGroup id="distanceGroup" gap="3" verticalAlign="middle" 
 			  includeInLayout="{SessionUtil.isEnterprise()}" visible="{SessionUtil.isEnterprise()}">
-		<s:CheckBox id="distanceEnabledInput" selected="@{distanceEnabled}" width="15" />
+		<s:CheckBox id="distanceEnabledInput" selected="@{distanceEnabled}" width="15" 
+					change="{distanceChangeHandler()}"/>
 		<s:Label width="120" text="@Resource(bundle = 'messages', key = 'generic.edit.InformationDescription.distance.label')"  
 				 fontWeight="bold" />
 		<s:TextInput id="distanceValueInput" width="{InputLabel.HORIZONTAL_INPUT_WIDTH - 18}" text="@{distance}" 
-					 enabled="{distanceEnabledInput.selected}" />
+					 enabled="{distanceEnabledInput.selected}" focusOut="{distanceChangeHandler()}"/>
 	</s:HGroup>
 	
 	<s:Group width="100%" height="100%">
