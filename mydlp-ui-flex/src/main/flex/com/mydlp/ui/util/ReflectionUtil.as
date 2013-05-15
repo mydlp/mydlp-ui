@@ -147,6 +147,7 @@ package com.mydlp.ui.util
 							var ri:RuleItem = new RuleItem();
 							ri.rule = targetObject as Rule;
 							ri.item = (o as RuleItem).item;
+							ri.ruleColumn = (o as RuleItem).ruleColumn;
 							ris.addItem(ri);
 						}
 						targetObject[classMember.name] = ris;
