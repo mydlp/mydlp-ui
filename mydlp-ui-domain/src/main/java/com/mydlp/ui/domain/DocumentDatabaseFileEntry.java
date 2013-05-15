@@ -28,7 +28,7 @@ public class DocumentDatabaseFileEntry extends Document {
 		return md5Hash;
 	}
 	public void setMd5Hash(String md5Hash) {
-		this.md5Hash = md5Hash;
+		this.md5Hash = md5Hash.toLowerCase();
 	}
 	public Date getCreatedDate() {
 		return createdDate;
