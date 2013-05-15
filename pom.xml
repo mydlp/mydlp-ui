@@ -64,7 +64,7 @@
 
     <amf.protocol>http</amf.protocol>
     <amf.channelType>mx.messaging.channels.AMFChannel</amf.channelType>
-    <amf.endpointType>flex.messaging.endpoints.AMFEndpoint</amf.endpointType>
+    <amf.endpointType>com.mydlp.ui.framework.blazeds3.AMFEndpoint</amf.endpointType>
 
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
@@ -127,7 +127,7 @@
 
         <amf.protocol>https</amf.protocol>
         <amf.channelType>mx.messaging.channels.SecureAMFChannel</amf.channelType>
-        <amf.endpointType>flex.messaging.endpoints.SecureAMFEndpoint</amf.endpointType>
+        <amf.endpointType>com.mydlp.ui.framework.blazeds3.SecureAMFEndpoint</amf.endpointType>
 
 	<session_util.key>Production</session_util.key>
 
