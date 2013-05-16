@@ -79,7 +79,7 @@
 							for(var i:int = 0; i < allRemoteStorages.length;i++)
 							{
 								var ra:DocumentDatabaseRemoteStorage = allRemoteStorages[i] as DocumentDatabaseRemoteStorage;
-								if(ObjectUtil.compare(crs.remoteStorage, ra.remoteStorage) == 0)
+								if(crs.remoteStorage.id == ra.remoteStorage.id)
 								{
 									ra.excludeList = crs.excludeList;
 									sArray.push(i);
