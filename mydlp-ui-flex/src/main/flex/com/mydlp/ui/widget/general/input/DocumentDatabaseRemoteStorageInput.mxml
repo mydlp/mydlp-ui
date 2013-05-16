@@ -23,7 +23,6 @@
 			import mx.events.FlexEvent;
 			import mx.events.ItemClickEvent;
 			import mx.rpc.events.ResultEvent;
-			import mx.utils.ObjectUtil;
 			
 			[Bindable]
 			protected var allRemoteStorages:ListCollectionView = new ArrayCollection();
@@ -104,7 +103,7 @@
 					for(var i:int=0; i < documentDatabaseRemoteStorages.length; i++)
 					{
 						var crs:DocumentDatabaseRemoteStorage = documentDatabaseRemoteStorages[i];
-						if(ObjectUtil.compare(crs.remoteStorage, event.item.remoteStorage) == 0)
+						if(crs.remoteStorage.id == event.item.remoteStorage.id)
 						{
 							documentDatabaseRemoteStorages.removeItemAt(i);
 							break;
@@ -116,7 +115,7 @@
 					var flag:Boolean = false;
 					for each(var item:DocumentDatabaseRemoteStorage in documentDatabaseRemoteStorages)
 					{
-						if(ObjectUtil.compare(item.remoteStorage, event.item.remoteStorage) == 0)
+						if(item.remoteStorage.id == event.item.remoteStorage.id)
 						{
 							flag = true;
 							break;
