@@ -25,7 +25,7 @@ public class DocumentDatabase extends Argument {
 	protected List<DocumentDatabaseRemoteStorage> documentDatabaseRemoteStorages;
 	protected Boolean currentlyFingerprinting;
 
-	@OneToMany(cascade={CascadeType.ALL})
+	@ManyToMany(cascade={CascadeType.ALL})
 	public List<DocumentDatabaseFileEntry> getFileEntries() {
 		return fileEntries;
 	}
