@@ -862,6 +862,7 @@
 							numberValidatorP.domain = "int";
 							numberValidatorP.minValue = "1";
 							numberValidatorP.maxValue = "16";
+							numberValidatorP.exceedsMaxError = LangUtil.getString('messages', 'webserver.depth.max.error.message');
 							ErrorTipManager.registerValidator(numberValidatorP);
 							validators.push(numberValidatorP);
 							index = 3;
