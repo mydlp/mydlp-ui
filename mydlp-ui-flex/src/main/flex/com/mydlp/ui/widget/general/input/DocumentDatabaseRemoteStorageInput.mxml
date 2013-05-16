@@ -136,6 +136,12 @@
 			
 			
 			
+			protected function stopButtonClickHandler(event:MouseEvent):void
+			{
+				re.stopFingerprinting(documentDatabase.id);
+				documentDatabase.currentlyFingerprinting = false;
+			}
+			
 		]]>
 	</fx:Script>
 	
@@ -143,6 +149,7 @@
 		<my:remote id="re" destination="remoteStorageBRS">
 			<my:method name="getRemoteStorages" result="getRemoteStoragesHandler(event)" />
 			<my:method name="startRemoteFingerprint"/>
+			<my:method name="stopFingerprinting"/>
 		</my:remote>
 		
 		<mx:ListCollectionView id="documentDatabaseRemoteStorages"/>
@@ -178,12 +185,16 @@
 				  visible="{enableList &amp;&amp; enableViewCheckbox.selected &amp;&amp; !documentDatabase.currentlyFingerprinting
 				  &amp;&amp; enableButton} "/>	
 		<s:HGroup includeInLayout="{enableList &amp;&amp; enableViewCheckbox.selected &amp;&amp; documentDatabase.currentlyFingerprinting}"
-				  visible="{enableList &amp;&amp; enableViewCheckbox.selected &amp;&amp; documentDatabase.currentlyFingerprinting}">
+				  visible="{enableList &amp;&amp; enableViewCheckbox.selected &amp;&amp; documentDatabase.currentlyFingerprinting}"
+				  verticalAlign="middle">
 			
 			<s:Label text="@Resource(bundle = 'messages', key = 'documentdatabase.progressBar.label')"/>
 			<mx:ProgressBar indeterminate="true" width="100" height="10"
 							labelPlacement="center" labelWidth="0"
 							/>
+			<s:Button id="stopButton" click="stopButtonClickHandler(event)"
+					  label="@Resource(bundle = 'messages', key = 'documentdatabase.button.stop.label')"
+					  skinClass="com.mydlp.ui.skin.StopBitmapLabelButton16Skin"/>
 		</s:HGroup>
 	</s:VGroup>
 	

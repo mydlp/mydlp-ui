@@ -46,6 +46,11 @@ public class RemoteStorageBRSImpl implements RemoteStorageService
 	public void startRemoteFingerprint(int id) {
 		thriftService.startFingerprinting(id);
 	}
+	
+	@Override
+	public void stopFingerprinting(int id) {
+		thriftService.stopFingerprinting(id);
+	}
 
 	@Override
 	public String testConnection(RemoteStorage remoteStorage) {
@@ -93,5 +98,7 @@ public class RemoteStorageBRSImpl implements RemoteStorageService
 		String url = webServer.getProto() + "://" + webServer.getAddress() + ":" + Integer.toString(webServer.getPort()) + "/" + webServer.getStartPath();
 		return thriftService.testWebServer(url);	
 	}
+
+	
 	
 }

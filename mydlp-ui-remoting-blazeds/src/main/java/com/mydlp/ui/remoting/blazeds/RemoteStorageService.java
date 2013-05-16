@@ -17,6 +17,8 @@ public interface RemoteStorageService {
 	
 	public void startRemoteFingerprint(int id);
 	
+	public void stopFingerprinting(int id);
+	
 	public String testConnection(RemoteStorage remoteStorage);
 	
 	public String testWebServer(WebServer webServer);
