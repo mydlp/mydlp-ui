@@ -58,7 +58,7 @@ public class Mydlp_ui {
 
     public void startFingerprinting(int DDId) throws org.apache.thrift.TException;
 
-    public void stopingerprinting(int DDId) throws org.apache.thrift.TException;
+    public void stopFingerprinting(int DDId) throws org.apache.thrift.TException;
 
     public String testConnection(Map<String,String> RemoteStorage) throws org.apache.thrift.TException;
 
@@ -102,7 +102,7 @@ public class Mydlp_ui {
 
     public void startFingerprinting(int DDId, org.apache.thrift.async.AsyncMethodCallback<AsyncClient.startFingerprinting_call> resultHandler) throws org.apache.thrift.TException;
 
-    public void stopingerprinting(int DDId, org.apache.thrift.async.AsyncMethodCallback<AsyncClient.stopingerprinting_call> resultHandler) throws org.apache.thrift.TException;
+    public void stopFingerprinting(int DDId, org.apache.thrift.async.AsyncMethodCallback<AsyncClient.stopFingerprinting_call> resultHandler) throws org.apache.thrift.TException;
 
     public void testConnection(Map<String,String> RemoteStorage, org.apache.thrift.async.AsyncMethodCallback<AsyncClient.testConnection_call> resultHandler) throws org.apache.thrift.TException;
 
@@ -471,16 +471,16 @@ public class Mydlp_ui {
       sendBase("startFingerprinting", args);
     }
 
-    public void stopingerprinting(int DDId) throws org.apache.thrift.TException
+    public void stopFingerprinting(int DDId) throws org.apache.thrift.TException
     {
-      send_stopingerprinting(DDId);
+      send_stopFingerprinting(DDId);
     }
 
-    public void send_stopingerprinting(int DDId) throws org.apache.thrift.TException
+    public void send_stopFingerprinting(int DDId) throws org.apache.thrift.TException
     {
-      stopingerprinting_args args = new stopingerprinting_args();
+      stopFingerprinting_args args = new stopFingerprinting_args();
       args.setDDId(DDId);
-      sendBase("stopingerprinting", args);
+      sendBase("stopFingerprinting", args);
     }
 
     public String testConnection(Map<String,String> RemoteStorage) throws org.apache.thrift.TException
@@ -1128,23 +1128,23 @@ public class Mydlp_ui {
       }
     }
 
-    public void stopingerprinting(int DDId, org.apache.thrift.async.AsyncMethodCallback<stopingerprinting_call> resultHandler) throws org.apache.thrift.TException {
+    public void stopFingerprinting(int DDId, org.apache.thrift.async.AsyncMethodCallback<stopFingerprinting_call> resultHandler) throws org.apache.thrift.TException {
       checkReady();
-      stopingerprinting_call method_call = new stopingerprinting_call(DDId, resultHandler, this, ___protocolFactory, ___transport);
+      stopFingerprinting_call method_call = new stopFingerprinting_call(DDId, resultHandler, this, ___protocolFactory, ___transport);
       this.___currentMethod = method_call;
       ___manager.call(method_call);
     }
 
-    public static class stopingerprinting_call extends org.apache.thrift.async.TAsyncMethodCall {
+    public static class stopFingerprinting_call extends org.apache.thrift.async.TAsyncMethodCall {
       private int DDId;
-      public stopingerprinting_call(int DDId, org.apache.thrift.async.AsyncMethodCallback<stopingerprinting_call> resultHandler, org.apache.thrift.async.TAsyncClient client, org.apache.thrift.protocol.TProtocolFactory protocolFactory, org.apache.thrift.transport.TNonblockingTransport transport) throws org.apache.thrift.TException {
+      public stopFingerprinting_call(int DDId, org.apache.thrift.async.AsyncMethodCallback<stopFingerprinting_call> resultHandler, org.apache.thrift.async.TAsyncClient client, org.apache.thrift.protocol.TProtocolFactory protocolFactory, org.apache.thrift.transport.TNonblockingTransport transport) throws org.apache.thrift.TException {
         super(client, protocolFactory, transport, resultHandler, true);
         this.DDId = DDId;
       }
 
       public void write_args(org.apache.thrift.protocol.TProtocol prot) throws org.apache.thrift.TException {
-        prot.writeMessageBegin(new org.apache.thrift.protocol.TMessage("stopingerprinting", org.apache.thrift.protocol.TMessageType.CALL, 0));
-        stopingerprinting_args args = new stopingerprinting_args();
+        prot.writeMessageBegin(new org.apache.thrift.protocol.TMessage("stopFingerprinting", org.apache.thrift.protocol.TMessageType.CALL, 0));
+        stopFingerprinting_args args = new stopFingerprinting_args();
         args.setDDId(DDId);
         args.write(prot);
         prot.writeMessageEnd();
@@ -1253,7 +1253,7 @@ public class Mydlp_ui {
       processMap.put("pauseDiscoveryOnDemand", new pauseDiscoveryOnDemand());
       processMap.put("getRemoteStorageDir", new getRemoteStorageDir());
       processMap.put("startFingerprinting", new startFingerprinting());
-      processMap.put("stopingerprinting", new stopingerprinting());
+      processMap.put("stopFingerprinting", new stopFingerprinting());
       processMap.put("testConnection", new testConnection());
       processMap.put("testWebServer", new testWebServer());
       return processMap;
@@ -1526,17 +1526,17 @@ public class Mydlp_ui {
       }
     }
 
-    private static class stopingerprinting<I extends Iface> extends org.apache.thrift.ProcessFunction<I, stopingerprinting_args> {
-      public stopingerprinting() {
-        super("stopingerprinting");
+    private static class stopFingerprinting<I extends Iface> extends org.apache.thrift.ProcessFunction<I, stopFingerprinting_args> {
+      public stopFingerprinting() {
+        super("stopFingerprinting");
       }
 
-      protected stopingerprinting_args getEmptyArgsInstance() {
-        return new stopingerprinting_args();
+      protected stopFingerprinting_args getEmptyArgsInstance() {
+        return new stopFingerprinting_args();
       }
 
-      protected org.apache.thrift.TBase getResult(I iface, stopingerprinting_args args) throws org.apache.thrift.TException {
-        iface.stopingerprinting(args.DDId);
+      protected org.apache.thrift.TBase getResult(I iface, stopFingerprinting_args args) throws org.apache.thrift.TException {
+        iface.stopFingerprinting(args.DDId);
         return null;
       }
     }
@@ -11251,8 +11251,8 @@ public class Mydlp_ui {
 
   }
 
-  public static class stopingerprinting_args implements org.apache.thrift.TBase<stopingerprinting_args, stopingerprinting_args._Fields>, java.io.Serializable, Cloneable   {
-    private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("stopingerprinting_args");
+  public static class stopFingerprinting_args implements org.apache.thrift.TBase<stopFingerprinting_args, stopFingerprinting_args._Fields>, java.io.Serializable, Cloneable   {
+    private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("stopFingerprinting_args");
 
     private static final org.apache.thrift.protocol.TField DDID_FIELD_DESC = new org.apache.thrift.protocol.TField("DDId", org.apache.thrift.protocol.TType.I32, (short)1);
 
@@ -11326,13 +11326,13 @@ public class Mydlp_ui {
       tmpMap.put(_Fields.DDID, new org.apache.thrift.meta_data.FieldMetaData("DDId", org.apache.thrift.TFieldRequirementType.DEFAULT, 
           new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.I32)));
       metaDataMap = Collections.unmodifiableMap(tmpMap);
-      org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(stopingerprinting_args.class, metaDataMap);
+      org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(stopFingerprinting_args.class, metaDataMap);
     }
 
-    public stopingerprinting_args() {
+    public stopFingerprinting_args() {
     }
 
-    public stopingerprinting_args(
+    public stopFingerprinting_args(
       int DDId)
     {
       this();
@@ -11343,14 +11343,14 @@ public class Mydlp_ui {
     /**
      * Performs a deep copy on <i>other</i>.
      */
-    public stopingerprinting_args(stopingerprinting_args other) {
+    public stopFingerprinting_args(stopFingerprinting_args other) {
       __isset_bit_vector.clear();
       __isset_bit_vector.or(other.__isset_bit_vector);
       this.DDId = other.DDId;
     }
 
-    public stopingerprinting_args deepCopy() {
-      return new stopingerprinting_args(this);
+    public stopFingerprinting_args deepCopy() {
+      return new stopFingerprinting_args(this);
     }
 
     @Override
@@ -11363,7 +11363,7 @@ public class Mydlp_ui {
       return this.DDId;
     }
 
-    public stopingerprinting_args setDDId(int DDId) {
+    public stopFingerprinting_args setDDId(int DDId) {
       this.DDId = DDId;
       setDDIdIsSet(true);
       return this;
@@ -11421,12 +11421,12 @@ public class Mydlp_ui {
     public boolean equals(Object that) {
       if (that == null)
         return false;
-      if (that instanceof stopingerprinting_args)
-        return this.equals((stopingerprinting_args)that);
+      if (that instanceof stopFingerprinting_args)
+        return this.equals((stopFingerprinting_args)that);
       return false;
     }
 
-    public boolean equals(stopingerprinting_args that) {
+    public boolean equals(stopFingerprinting_args that) {
       if (that == null)
         return false;
 
@@ -11447,13 +11447,13 @@ public class Mydlp_ui {
       return 0;
     }
 
-    public int compareTo(stopingerprinting_args other) {
+    public int compareTo(stopFingerprinting_args other) {
       if (!getClass().equals(other.getClass())) {
         return getClass().getName().compareTo(other.getClass().getName());
       }
 
       int lastComparison = 0;
-      stopingerprinting_args typedOther = (stopingerprinting_args)other;
+      stopFingerprinting_args typedOther = (stopFingerprinting_args)other;
 
       lastComparison = Boolean.valueOf(isSetDDId()).compareTo(typedOther.isSetDDId());
       if (lastComparison != 0) {
@@ -11514,7 +11514,7 @@ public class Mydlp_ui {
 
     @Override
     public String toString() {
-      StringBuilder sb = new StringBuilder("stopingerprinting_args(");
+      StringBuilder sb = new StringBuilder("stopFingerprinting_args(");
       boolean first = true;
 
       sb.append("DDId:");
