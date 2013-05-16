@@ -10,6 +10,7 @@
 		<![CDATA[
 			import com.mydlp.ui.domain.ApplicationName;
 			import com.mydlp.ui.domain.Domain;
+			import com.mydlp.ui.domain.EndpointHostname;
 			import com.mydlp.ui.domain.FileSystemDirectory;
 			import com.mydlp.ui.domain.InformationType;
 			import com.mydlp.ui.domain.InventoryCategory;
@@ -103,6 +104,14 @@
 				popup.isDiscoveryTab = isDiscoveryTab;
 			}
 			
+			protected function endpointHostnameHandler(event:MouseEvent):void
+			{
+				close();
+				var i:InventoryItem = generateInventoryItem();
+				i.item = new EndpointHostname();
+				InteractionUtil.newEditDialog(i);
+			}
+			
 		]]>
 	</fx:Script>
 	<fx:Declarations>
@@ -130,6 +139,11 @@
 					  includeInLayout="{SessionUtil.isEnterprise() &amp;&amp; !isDiscoveryTab}"
 					  visible="{SessionUtil.isEnterprise() &amp;&amp; !isDiscoveryTab}"
 					  click="domainHandler()"/>
+			<s:Button skinClass="com.mydlp.ui.skin.DomainBitmapLabelButton16Skin" 
+					  label="@Resource(bundle = 'messages', key = 'inventory.newdialog.endpointHostname')"
+					  includeInLayout="{SessionUtil.isEnterprise() &amp;&amp; isDiscoveryTab}"
+					  visible="{SessionUtil.isEnterprise() &amp;&amp; isDiscoveryTab}"
+					  click="endpointHostnameHandler(event)"/>
 			<s:Button skinClass="com.mydlp.ui.skin.FileSystemDirectoryBitmapLabelButton16Skin" 
 					  label="@Resource(bundle = 'messages', key = 'inventory.newdialog.fileSystemDirectory')" 
 					  includeInLayout="{SessionUtil.isEnterprise() &amp;&amp; isDiscoveryTab}"

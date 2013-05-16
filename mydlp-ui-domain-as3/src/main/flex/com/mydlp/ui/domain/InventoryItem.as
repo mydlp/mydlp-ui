@@ -83,6 +83,8 @@ package com.mydlp.ui.domain {
 						_icon = WINDOWS_STORAGE;
 					else if(iitem is WebServer)
 						_icon = WEB_DISCOVERY;
+					else if(iitem is EndpointHostname)
+						_icon = ICON_DESTINATION_DOMAIN
 				}
 			}
 			return _icon;

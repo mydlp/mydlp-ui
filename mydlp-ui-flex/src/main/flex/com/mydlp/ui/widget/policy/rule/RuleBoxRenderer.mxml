@@ -20,6 +20,7 @@
 			import com.mydlp.ui.domain.DiscoveryReport;
 			import com.mydlp.ui.domain.DiscoveryRule;
 			import com.mydlp.ui.domain.Domain;
+			import com.mydlp.ui.domain.EndpointHostname;
 			import com.mydlp.ui.domain.FileSystemDirectory;
 			import com.mydlp.ui.domain.InformationType;
 			import com.mydlp.ui.domain.InventoryBase;
@@ -88,6 +89,9 @@
 			protected static const DIRECTORY_ALL:String = "inventory.fileSystemDirectory.all";
 			
 			protected static const APPLICATION_ALL:String = "inventory.applicationName.all";
+			
+			protected static const ENDPOINT_ALL:String = "inventory.endpointHostname.all";
+			
 			
 			[Bindable]
 			protected var sourceDataProvider:ArrayCollection = new ArrayCollection();
@@ -338,6 +342,8 @@
 				else if(item is RemoteStorageWindowsShare || item is RemoteStorageFTPFS ||
 					item is RemoteStorageNFS || item is RemoteStorageSSHFS || item is WebServer)
 					return true;
+				else if(item is EndpointHostname)
+					return true;
 				else
 					return false;
 			}
@@ -351,7 +357,8 @@
 			{
 				for each(var o:RuleItem in r.ruleItems)
 				{
-					if(o.item.coupledInventoryItem.nameKey == SOURCES_ALL)
+					if(o.item.coupledInventoryItem.nameKey == SOURCES_ALL ||
+					o.item.coupledInventoryItem.nameKey == ENDPOINT_ALL)
 						return true;
 				}
 				return false;
@@ -424,7 +431,8 @@
 					loop = false;
 					for(var i:int = 0; i < ruleItems.length; i++)
 					{
-						if(ruleItems[i].item.coupledInventoryItem.nameKey == SOURCES_ALL)
+						if(ruleItems[i].item.coupledInventoryItem.nameKey == SOURCES_ALL ||
+							ruleItems[i].item.coupledInventoryItem.nameKey == ENDPOINT_ALL)
 						{
 							deleteList.addItem(ruleObject.ruleItems[i]);
 							ruleObject.ruleItems.removeItemAt(i);
@@ -645,7 +653,8 @@
 			{
 				for each(var ri:InventoryItem in droppedSources)
 				{
-					if(ri.item.coupledInventoryItem.nameKey == SOURCES_ALL && droppedSources.length > 1)
+					if((ri.item.coupledInventoryItem.nameKey == SOURCES_ALL || ri.item.coupledInventoryItem.nameKey == ENDPOINT_ALL) 
+						&& droppedSources.length > 1)
 						return false;
 				}
 				return true;
@@ -770,6 +779,13 @@
 							return true;
 						}
 					}
+					else if (treeItem.item is EndpointHostname)
+					{
+						if(ruleObject is DiscoveryRule)
+						{
+							return true;
+						}
+					}
 					else if (treeItem.item is ApplicationName)
 					{
 						if(ruleObject is ScreenshotRule)
@@ -777,7 +793,8 @@
 							return true;
 						}
 					}
-					else if ( treeItem.item is RuleUser  && !(ruleObject is RemoteStorageRule))
+					else if ( treeItem.item is RuleUser  && 
+						!(ruleObject is RemoteStorageRule) && !(ruleObject is DiscoveryRule))
 					{
 						return true;
 					}
@@ -1216,14 +1233,16 @@
 			{
 				if(hasAllSources())//if ruleObject has "All Networks"
 				{
-					if(sourceItem.coupledInventoryItem.nameKey == SOURCES_ALL)//if dropped item is "All Networks"
+					if(sourceItem.coupledInventoryItem.nameKey == SOURCES_ALL ||
+						sourceItem.coupledInventoryItem.nameKey == ENDPOINT_ALL)//if dropped item is "All Networks"
 						return;
 					else
 						removeAllSourcesItem();
 				}
 				else
 				{
-					if(sourceItem.coupledInventoryItem.nameKey == SOURCES_ALL)
+					if(sourceItem.coupledInventoryItem.nameKey == SOURCES_ALL ||
+						sourceItem.coupledInventoryItem.nameKey == ENDPOINT_ALL)
 						removeOtherSources();
 				}
 			}

@@ -12,6 +12,7 @@
 		<![CDATA[
 			import com.mydlp.ui.domain.ApplicationName;
 			import com.mydlp.ui.domain.Domain;
+			import com.mydlp.ui.domain.EndpointHostname;
 			import com.mydlp.ui.domain.FileSystemDirectory;
 			import com.mydlp.ui.domain.InventoryCategory;
 			import com.mydlp.ui.domain.InventoryGroup;
@@ -79,7 +80,7 @@
 				else if(item.item is FileSystemDirectory || item.item is RemoteStorageWindowsShare ||
 					item.item is RemoteStorageFTPFS ||
 					item.item is RemoteStorageNFS || item.item is RemoteStorageSSHFS ||
-					item.item is WebServer)
+					item.item is WebServer || item.item is EndpointHostname)
 					return false;
 				else
 					return true;
