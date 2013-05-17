@@ -120,7 +120,7 @@ public class EndpointDAOImpl extends AbstractPolicyDAO implements
 		disjunction.add(Restrictions.ilike("endpointAlias", "%" + searchString + "%"));
 		disjunction.add(Restrictions.ilike("endpointId", "%" + searchString + "%"));
 		criteria = criteria.add(disjunction);
-
+		
 		return getHibernateTemplate().findByCriteria(criteria);
 	}
 

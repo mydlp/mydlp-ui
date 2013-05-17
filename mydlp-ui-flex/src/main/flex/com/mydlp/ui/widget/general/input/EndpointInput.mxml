@@ -93,7 +93,7 @@
 			
 		</s:Group>
 			<s:List id="filteredEndpoints" width="100%" height="70%"
-					itemRenderer="com.mydlp.ui.widget.general.input.ADDomainItemGroupRenderer" 
+					itemRenderer="com.mydlp.ui.widget.general.input.EndpointRenderer" 
 					dataProvider="{endpoints}"
 					allowMultipleSelection="false"
 					change="onSelectionChange(event)"
