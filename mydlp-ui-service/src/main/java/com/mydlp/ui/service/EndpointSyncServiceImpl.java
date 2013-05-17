@@ -1,6 +1,5 @@
 package com.mydlp.ui.service;
 
-import java.nio.ByteBuffer;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -38,19 +37,16 @@ public class EndpointSyncServiceImpl implements EndpointSyncService {
 	@Async
 	@Override
 	public void asyncRegisterEndpointMeta(final Map<String,String> endpointMeta,
-			final String endpointId, final String ipAddress,
-			final String usernameHash, final ByteBuffer payload) {
-		
+			final String endpointId, final String ipAddress, final String usernameHash) {
 		transactionTemplate.execute(new TransactionCallbackWithoutResult() {
 			@Override
 			protected void doInTransactionWithoutResult(TransactionStatus arg0) {
-				asyncRegisterEndpointMetaFun(endpointMeta, endpointId, ipAddress, usernameHash, payload);
+				asyncRegisterEndpointMetaFun(endpointMeta, endpointId, ipAddress, usernameHash);
 			}
 		});
 	}
 	
-	public void asyncRegisterEndpointMetaFun(Map<String,String> endpointMeta, String endpointId, String ipAddress,
-			String usernameHash, ByteBuffer payload) {
+	public void asyncRegisterEndpointMetaFun(Map<String,String> endpointMeta, String endpointId, String ipAddress, String usernameHash) {
 		try {
 			final String endpointAlias = endpointDAO.getEndpointAlias(endpointId);
 			if (endpointAlias == null) return;
