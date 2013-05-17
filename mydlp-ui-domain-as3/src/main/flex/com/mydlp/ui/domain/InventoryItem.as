@@ -14,10 +14,10 @@ package com.mydlp.ui.domain {
 		[Embed("../../../../../../../../mydlp-ui-flex/src/main/flex/assets/icons/16x16/wired.png")]
 		public static const ICON_NETWORK:Class;
 		
-		[Embed("../../../../../../../../mydlp-ui-flex/src/main/flex/assets/icons/16x16/record.png")]
+		[Embed("../../../../../../../../mydlp-ui-flex/src/main/flex/assets/icons/16x16/workstation.png")]
 		public static const ICON_HOSTNAME:Class;
 		
-		[Embed("../../../../../../../../mydlp-ui-flex/src/main/flex/assets/icons/16x16/target.png")]
+		[Embed("../../../../../../../../mydlp-ui-flex/src/main/flex/assets/icons/16x16/shield.png")]
 		public static const ICON_ENDPOINT_ITEM:Class;
 		
 		[Embed("../../../../../../../../mydlp-ui-flex/src/main/flex/assets/icons/16x16/page.png")]
