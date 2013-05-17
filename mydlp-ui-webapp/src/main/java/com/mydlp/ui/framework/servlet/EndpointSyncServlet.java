@@ -63,10 +63,10 @@ public class EndpointSyncServlet implements HttpRequestHandler {
 				try {
 					Map<String,String> endpointMeta = 
 							thriftService.registerUserAddress(
-									syncObject.getEndpointId(), ipAddress, userH, 
+									syncObject.getEndpointId(), 
+									ipAddress, userH, 
 									syncObject.getPayload());
-					endpointSyncService.asyncRegisterEndpointMeta(endpointMeta,
-							syncObject.getEndpointId(), ipAddress, userH, syncObject.getPayload());
+					endpointSyncService.asyncRegisterEndpointMeta(endpointMeta, syncObject.getEndpointId(), ipAddress, userH);
 				} catch (Throwable e) {
 					logger.error("Runtime error occured when reading request payload", e);
 				}
