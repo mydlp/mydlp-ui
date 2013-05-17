@@ -404,8 +404,8 @@
 					LangUtil.getString("messages", "inventory.delete.error." + errorString + ".title"));
 			}
 			
-			protected function refresh(entity:* = null): void {
-				
+			public function refreshRespectively(entity:* = null): void 
+			{
 				if (entity == null || entity is Rule)
 				{
 					ruleRE.getRuleLabelsAndIds();
@@ -619,6 +619,7 @@
 				asyncToken.addResponder(new AsyncResponder(
 					function result(event:ResultEvent, token:Object = null):void 
 					{
+						topToolbar.policyInstallationState = false;
 						refreshRespectively(token);
 					}, 
 					function fault(event:FaultEvent, token:Object = null):void 
@@ -635,6 +636,7 @@
 				asyncToken.addResponder(new AsyncResponder(
 					function result(event:ResultEvent, token:Object = null):void 
 					{
+						topToolbar.policyInstallationState = false;
 						refreshRespectively(token);
 					}, 
 					function fault(event:FaultEvent, token:Object = null):void 
@@ -644,13 +646,7 @@
 					}
 					, entity ));
 			}
-			
-			public function refreshRespectively(entity:* = null): void
-			{
-				FlexGlobals.topLevelApplication.topToolbar.policyInstallationState = false;
-				refresh(entity);
-			}
-			
+						
 		]]>
 	</fx:Script>
 	

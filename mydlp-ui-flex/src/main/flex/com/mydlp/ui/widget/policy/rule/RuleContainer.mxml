@@ -321,7 +321,7 @@
 				}
 			}
 			
-			protected function populateRules(): void
+			public function refreshRulesExtView(): void
 			{
 				refreshRulesView();
 				
@@ -345,7 +345,7 @@
 					customActions = new ArrayCollection();
 				customActions = event.result as ListCollectionView;
 				ActionBox.generateCustomActions(customActions);
-				populateRules();
+				refreshRulesExtView();
 			}
 			
 			public function sanityCheck(): String
