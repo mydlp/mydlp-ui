@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.security.access.annotation.Secured;
 
 import com.mydlp.ui.domain.AuthSecurityRole;
+import com.mydlp.ui.domain.Endpoint;
 import com.mydlp.ui.domain.EndpointStatus;
 
 @Secured({AuthSecurityRole.ROLE_ADMIN, AuthSecurityRole.ROLE_SUPER_ADMIN})
@@ -21,5 +22,7 @@ public interface EndpointStatusService {
 	public Long getEndpointNotUpToDateCount(String searchString);
 	
 	public Boolean truncateEndpointStatus();
+	
+	public List<Endpoint> getFilteredEndpoints(String searchString);
 	
 }

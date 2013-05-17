@@ -1,5 +1,9 @@
 package com.mydlp.ui.dao;
 
+import java.util.List;
+
+import com.mydlp.ui.domain.Endpoint;
+
 public interface EndpointDAO {
 
 	public String registerNewEndpoint() throws RandomExhaustedException;
@@ -9,6 +13,8 @@ public interface EndpointDAO {
 	public String getEndpointAlias(String endpointId);
 	
 	public String getEndpointId(String endpointAlias);
+	
+	public List<Endpoint> getFilteredEndpoints(String searchString);
 	
 	public class RandomExhaustedException extends Throwable {
 

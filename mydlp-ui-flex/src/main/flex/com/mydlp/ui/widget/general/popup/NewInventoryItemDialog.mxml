@@ -10,7 +10,9 @@
 		<![CDATA[
 			import com.mydlp.ui.domain.ApplicationName;
 			import com.mydlp.ui.domain.Domain;
+			import com.mydlp.ui.domain.EndpointItem;
 			import com.mydlp.ui.domain.FileSystemDirectory;
+			import com.mydlp.ui.domain.Hostname;
 			import com.mydlp.ui.domain.InformationType;
 			import com.mydlp.ui.domain.InventoryCategory;
 			import com.mydlp.ui.domain.InventoryGroup;
@@ -63,6 +65,20 @@
 				close();
 				var i:InventoryItem = generateInventoryItem();
 				i.item = new Network();
+				InteractionUtil.newEditDialog(i);
+			}
+			protected function hostnameHandler():void
+			{
+				close();
+				var i:InventoryItem = generateInventoryItem();
+				i.item = new Hostname();
+				InteractionUtil.newEditDialog(i);
+			}
+			protected function endpointItemHandler():void
+			{
+				close();
+				var i:InventoryItem = generateInventoryItem();
+				i.item = new EndpointItem();
 				InteractionUtil.newEditDialog(i);
 			}
 			protected function informationTypeHandler():void
@@ -119,6 +135,12 @@
 			<s:Button skinClass="com.mydlp.ui.skin.NetworkBitmapLabelButton16Skin" 
 					  label="@Resource(bundle = 'messages', key = 'inventory.newdialog.network')" 
 					  click="networkHandler()"/>
+			<s:Button skinClass="com.mydlp.ui.skin.HostnameBitmapLabelButton16Skin" 
+					  label="@Resource(bundle = 'messages', key = 'inventory.newdialog.hostname')" 
+					  click="hostnameHandler()"/>
+			<s:Button skinClass="com.mydlp.ui.skin.EndpointItemBitmapLabelButton16Skin" 
+					  label="@Resource(bundle = 'messages', key = 'inventory.newdialog.endpointItem')" 
+					  click="endpointItemHandler()"/>
 			<s:Button skinClass="com.mydlp.ui.skin.InformationTypeBitmapLabelButton16Skin" 
 					  label="@Resource(bundle = 'messages', key = 'inventory.newdialog.informationType')" 
 					  click="informationTypeHandler()"/>

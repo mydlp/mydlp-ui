@@ -20,7 +20,9 @@
 			import com.mydlp.ui.domain.DiscoveryReport;
 			import com.mydlp.ui.domain.DiscoveryRule;
 			import com.mydlp.ui.domain.Domain;
+			import com.mydlp.ui.domain.EndpointItem;
 			import com.mydlp.ui.domain.FileSystemDirectory;
+			import com.mydlp.ui.domain.Hostname;
 			import com.mydlp.ui.domain.InformationType;
 			import com.mydlp.ui.domain.InventoryBase;
 			import com.mydlp.ui.domain.InventoryCategory;
@@ -331,7 +333,7 @@
 			
 			protected static function isSourceItem(item:Item):Boolean
 			{
-				if(item is Network)
+				if(item is Network || item is Hostname || item is EndpointItem)
 					return true;
 				else if(item is RuleUser)
 					return true;
@@ -729,12 +731,22 @@
 							ruleObject is PrinterRule ||
 							ruleObject is DiscoveryRule ||
 							ruleObject is RemoteStorageRule)
+						{
 							return true;
+						}
 					}
-					else if ( treeItem.item is Network )
+					else if ( 	treeItem.item is Network ||
+								treeItem.item is Hostname ||
+								treeItem.item is EndpointItem )
 					{
-						if (treeItem.nameKey == SOURCES_ALL && !(ruleObject is RemoteStorageRule))
+						if (ruleObject is RemoteStorageRule)
+						{
+							return false;
+						}
+						else if (treeItem.nameKey == SOURCES_ALL)
+						{
 							return true;
+						}
 						else if(ruleObject is WebRule ||
 							ruleObject is RemovableStorageRule ||
 							ruleObject is PrinterRule ||
@@ -743,7 +755,9 @@
 							ruleObject is RemovableStorageInboundRule ||
 							ruleObject is RemovableStorageEncryptionRule ||
 							ruleObject is ScreenshotRule)
+						{
 							return true;
+						}
 					}
 					else if (treeItem.item is Domain)
 					{
@@ -777,9 +791,17 @@
 							return true;
 						}
 					}
-					else if ( treeItem.item is RuleUser  && !(ruleObject is RemoteStorageRule))
+					else if ( treeItem.item is RuleUser )
 					{
-						return true;
+						if (ruleObject is DiscoveryRule || 
+							ruleObject is RemoteStorageRule)
+						{
+							return false;
+						}
+						else
+						{
+							return true;
+						}
 					}
 					else if (isDroppableForRemoteStorage(treeItem.item))
 						return true;

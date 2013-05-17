@@ -37,22 +37,21 @@ public class EndpointSyncServiceImpl implements EndpointSyncService {
 	
 	@Async
 	@Override
-	public void asyncRegisterEndpointMeta(final String endpointId, final String ipAddress,
+	public void asyncRegisterEndpointMeta(final Map<String,String> endpointMeta,
+			final String endpointId, final String ipAddress,
 			final String usernameHash, final ByteBuffer payload) {
 		
 		transactionTemplate.execute(new TransactionCallbackWithoutResult() {
 			@Override
 			protected void doInTransactionWithoutResult(TransactionStatus arg0) {
-				asyncRegisterEndpointMetaFun(endpointId, ipAddress, usernameHash, payload);
+				asyncRegisterEndpointMetaFun(endpointMeta, endpointId, ipAddress, usernameHash, payload);
 			}
 		});
 	}
 	
-	public void asyncRegisterEndpointMetaFun(String endpointId, String ipAddress,
+	public void asyncRegisterEndpointMetaFun(Map<String,String> endpointMeta, String endpointId, String ipAddress,
 			String usernameHash, ByteBuffer payload) {
 		try {
-			Map<String,String> endpointMeta = thriftService.registerUserAddress(endpointId, ipAddress, usernameHash, payload);
-			
 			final String endpointAlias = endpointDAO.getEndpointAlias(endpointId);
 			if (endpointAlias == null) return;
 			

@@ -14,6 +14,12 @@ package com.mydlp.ui.domain {
 		[Embed("../../../../../../../../mydlp-ui-flex/src/main/flex/assets/icons/16x16/wired.png")]
 		public static const ICON_NETWORK:Class;
 		
+		[Embed("../../../../../../../../mydlp-ui-flex/src/main/flex/assets/icons/16x16/record.png")]
+		public static const ICON_HOSTNAME:Class;
+		
+		[Embed("../../../../../../../../mydlp-ui-flex/src/main/flex/assets/icons/16x16/target.png")]
+		public static const ICON_ENDPOINT_ITEM:Class;
+		
 		[Embed("../../../../../../../../mydlp-ui-flex/src/main/flex/assets/icons/16x16/page.png")]
 		public static const ICON_INFORMATION_TYPE:Class;
 		
@@ -54,6 +60,10 @@ package com.mydlp.ui.domain {
 						_icon = ICON_INFORMATION_TYPE;
 					else if (iitem is Network)
 						_icon = ICON_NETWORK;
+					else if (iitem is Hostname)
+						_icon = ICON_HOSTNAME;
+					else if (iitem is EndpointItem)
+						_icon = ICON_ENDPOINT_ITEM;
 					else if (iitem is Domain)
 						_icon = ICON_DESTINATION_DOMAIN;
 					else if (iitem is FileSystemDirectory)

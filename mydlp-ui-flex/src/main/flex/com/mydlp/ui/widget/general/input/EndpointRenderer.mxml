@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:ItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009" 
+				xmlns:s="library://ns.adobe.com/flex/spark" 
+				xmlns:mx="library://ns.adobe.com/flex/mx" 
+				autoDrawBackground="true" 
+				creationComplete="{data = data as Endpoint;}"
+				height="20">
+	<fx:Script>
+		<![CDATA[
+			import com.mydlp.ui.domain.Endpoint;
+			import com.mydlp.ui.domain.InventoryItem;
+			protected function getLabel(item:*): String
+			{
+				if (item == null) return "";
+				if (!item is Endpoint) return "";
+				var e:Endpoint = item as Endpoint;
+				if (e.endpointAlias == null) return e.endpointId;
+				return e.endpointAlias;
+			}
+		]]>
+	</fx:Script>
+	
+	<s:states>
+		<s:State name="normal" />
+		<s:State name="hovered" />
+		<s:State name="selected" />
+	</s:states>
+	
+	<s:HGroup left="5" right="0" top="0" bottom="0" verticalAlign="middle"
+			  paddingTop="2" paddingBottom="2" toolTip="{data.distinguishedName}">
+		<s:BitmapImage source="{InventoryItem.ICON_ENDPOINT_ITEM}" />
+		<s:Label id="labelField" text="{getLabel(data)}" paddingTop="2" width="100%"/>
+	</s:HGroup>
+	
+</s:ItemRenderer>

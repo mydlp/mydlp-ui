@@ -23,6 +23,7 @@
 			import com.mydlp.ui.domain.CustomActionDescription;
 			import com.mydlp.ui.domain.DataFormat;
 			import com.mydlp.ui.domain.DocumentDatabase;
+			import com.mydlp.ui.domain.Endpoint;
 			import com.mydlp.ui.domain.FileSystemDirectory;
 			import com.mydlp.ui.domain.InformationDescription;
 			import com.mydlp.ui.domain.InformationType;
@@ -72,6 +73,7 @@
 			import com.mydlp.ui.widget.general.input.DocumentClassifierItemInput;
 			import com.mydlp.ui.widget.general.input.DocumentDatabaseFileEntryInput;
 			import com.mydlp.ui.widget.general.input.DocumentDatabaseRemoteStorageInput;
+			import com.mydlp.ui.widget.general.input.EndpointInput;
 			import com.mydlp.ui.widget.general.input.InformationFeatureInput;
 			import com.mydlp.ui.widget.general.input.IpAddressInput;
 			import com.mydlp.ui.widget.general.input.MimeTypeInput;
@@ -358,13 +360,31 @@
 						index = 6;
 					}
 					
+					else if(classMember.name == "endpoint" &&
+						classMember.type == Endpoint)
+					{
+						var epInput:EndpointInput = new EndpointInput();
+						epInput.endpoint = targetObject[classMember.name];
+						BindingUtils.bindProperty(targetObject, classMember.name, epInput, "endpoint");
+						inputLabel = new VerticalInputLabel();
+						inputLabel.addElement(epInput);
+						index = 8;
+						
+						var nullValidator2:NullValidator = new NullValidator();
+						nullValidator2.source = epInput;
+						nullValidator2.property = "endpoint";
+						ErrorTipManager.registerValidator(nullValidator2);
+						//nullValidator.addEventListener(ValidationResultEvent.INVALID, invalidInput);
+						//nullValidator.addEventListener(ValidationResultEvent.VALID, validInput);
+						validators.push(nullValidator2);
+					}
 					else if(targetObject is DataFormat &&
-							classMember.name == "mimeTypes" &&
-							classMember.type == ListCollectionView)
+						classMember.name == "mimeTypes" &&
+						classMember.type == ListCollectionView)
+					
 					{
 						var mtInput:MimeTypeInput = new MimeTypeInput();
-						mtInput.deleteList = this.deleteList;
-						mtInput.mimeTypes = targetObject[classMember.name];
+						
 						BindingUtils.bindProperty(targetObject, classMember.name, mtInput, "mimeTypes");
 						inputLabel = new VerticalInputLabel();
 						inputLabel.addElement(mtInput);
@@ -848,7 +868,16 @@
 							}
 							index = 1;
 						}
-						
+						if(classMember.name == "hostname"){
+							index = 3;
+							var regExpValidator13:RegExpValidator = new RegExpValidator();
+							regExpValidator13.source = textInput;
+							regExpValidator13.property = "text";
+							regExpValidator13.expression = "^[a-zA-Z0-9_/\.\*]+$";
+							regExpValidator13.required = true;
+							ErrorTipManager.registerValidator(regExpValidator13);
+							validators.push(regExpValidator13);
+						}
 						else if(classMember.name == "sourceDomain") {
 							index = 1;
 						}

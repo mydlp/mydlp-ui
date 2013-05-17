@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:SkinnableContainer xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		  xmlns:s="library://ns.adobe.com/flex/spark" 
+		  xmlns:my="http://www.mydlp.com/flex/my"
+		  xmlns:mx="library://ns.adobe.com/flex/mx"
+		  width="{InputLabel.VERTICAL_INPUT_WIDTH}"
+		  height="150" creationComplete="{refresh()}" xmlns:domain="com.mydlp.ui.domain.*">
+	<fx:Script>
+		<![CDATA[
+			import com.mydlp.ui.util.LangUtil;
+			import com.mydlp.ui.widget.general.popup.InputLabel;
+			
+			import mx.collections.ArrayCollection;
+			import mx.collections.ListCollectionView;
+			import mx.controls.Alert;
+			import mx.rpc.events.ResultEvent;
+			
+			import spark.events.IndexChangeEvent;
+			
+			[Bindable]
+			protected var endpoints:ListCollectionView = new ArrayCollection();
+			
+			protected function getFilteredEndpointsHandler(event:ResultEvent): void
+			{
+				endpoints.removeAll();
+				endpoints = event.result as ListCollectionView;
+				if(endpoints.length > 75)
+					Alert.show(LangUtil.getString("messages", "inventory.endpoints.maxWarningMessage"),
+								LangUtil.getString("messages", "inventory.endpoints.warning"));
+			}
+			
+			public function refresh(): void
+			{
+				endpoints.removeAll();
+				if(endpoint == null || endpoint.endpointAlias == null)
+					return;
+				
+				searchInput.text = endpoint.endpointAlias;
+				
+				filteredEndpoints.selectedIndex = 0;
+			}
+			
+			
+			protected function onClickSearchButton(event:MouseEvent):void
+			{
+				re.getFilteredEndpoints(searchInput.text);
+			}
+			
+			protected function onSelectionChange(event:IndexChangeEvent):void
+			{
+				if(filteredEndpoints.selectedIndex == -1)
+				{
+					endpoint = null;
+					return;
+				}
+				if(filteredEndpoints.selectedItem is Endpoint)
+				{
+					endpoint = filteredEndpoints.selectedItem as Endpoint;
+				} 
+				else
+					endpoint = null;
+			}
+			
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<domain:Endpoint id="endpoint" />
+		
+		<my:remote id="re" destination="endpointStatusBRS">
+			<my:method name="getFilteredEndpoints" result="getFilteredEndpointsHandler(event)" />
+		</my:remote>
+	</fx:Declarations>
+	
+	<s:layout>
+		<s:HorizontalLayout verticalAlign="middle" gap="2"/>
+	</s:layout>
+	
+	<s:Group width="100%" height="100%">
+		<s:layout>
+			<s:VerticalLayout gap="10"/>
+		</s:layout>
+		
+		<s:Group width="100%" id="searchGroup">
+			<s:layout>
+				<s:HorizontalLayout gap="5" verticalAlign="middle"/>
+			</s:layout>
+					
+			<s:Label text="@Resource(bundle = 'messages', key = 'inventory.endpoints.search.label')"/>
+			<s:TextInput id="searchInput"/>
+			
+			<s:Button id="searchButton" click="onClickSearchButton(event)" enabled="{searchInput.text.length &gt; 2}"
+					  label="@Resource(bundle = 'messages', key = 'inventory.endpoints.search.button.label')"/>
+			
+		</s:Group>
+			<s:List id="filteredEndpoints" width="100%" height="70%"
+					itemRenderer="com.mydlp.ui.widget.general.input.ADDomainItemGroupRenderer" 
+					dataProvider="{endpoints}"
+					allowMultipleSelection="false"
+					change="onSelectionChange(event)"
+					/>
+	</s:Group>
+	
+</s:SkinnableContainer>

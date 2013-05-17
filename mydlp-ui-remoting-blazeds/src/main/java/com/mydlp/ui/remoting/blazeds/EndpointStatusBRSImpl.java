@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.mydlp.ui.dao.EndpointDAO;
 import com.mydlp.ui.dao.EndpointStatusDAO;
+import com.mydlp.ui.domain.Endpoint;
 import com.mydlp.ui.domain.EndpointStatus;
 import com.mydlp.ui.thrift.MyDLPUIThriftService;
 
@@ -54,5 +55,10 @@ public class EndpointStatusBRSImpl implements EndpointStatusService
 	@Override
 	public Boolean truncateEndpointStatus() {
 		return endpointStatusDAO.truncateEndpointStatus();
+	}
+
+	@Override
+	public List<Endpoint> getFilteredEndpoints(String searchString) {
+		return endpointDAO.getFilteredEndpoints(searchString);
 	}
 }

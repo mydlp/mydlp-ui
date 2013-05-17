@@ -118,11 +118,11 @@ public class MyDLPUIThriftServiceImpl implements MyDLPUIThriftService {
 	}
 
 	@Override
-	public ByteBuffer getRuletable(final String endpointId, final String ipAddress, final String userH, final String revisionId) {
+	public ByteBuffer getRuletable(final String endpointId, final String revisionId) {
 		return call(new ThriftCall<ByteBuffer>() {
 			@Override
 			public ByteBuffer execute(MyDLPUIThriftConnection thriftConnection) throws TException {
-				return thriftConnection.client.getRuletable(endpointId, ipAddress, userH, revisionId);
+				return thriftConnection.client.getRuletable(endpointId, revisionId);
 			}
 		});
 	}

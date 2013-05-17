@@ -48,7 +48,9 @@
          <value>com.mydlp.ui.domain.Domain</value>
          <value>com.mydlp.ui.domain.EmailNotificationItem</value>
          <value>com.mydlp.ui.domain.Endpoint</value>
+         <value>com.mydlp.ui.domain.EndpointItem</value>
          <value>com.mydlp.ui.domain.FileSystemDirectory</value>
+         <value>com.mydlp.ui.domain.Hostname</value>
          <value>com.mydlp.ui.domain.InformationDescription</value>
          <value>com.mydlp.ui.domain.InformationFeature</value>
          <value>com.mydlp.ui.domain.InformationType</value>

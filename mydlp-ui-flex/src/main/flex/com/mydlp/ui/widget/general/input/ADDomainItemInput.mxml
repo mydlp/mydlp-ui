@@ -155,7 +155,8 @@
 					allowMultipleSelection="false"
 					change="onSelectionChange(event)"
 					/>
-			<s:Label id="warningMessage" text="@Resource(bundle = 'messages', key = 'inventory.adDomainItem.warningMessage')" 
+			<s:Label id="warningMessage" text="@Resource(bundle = 'messages', key = 'inventory.adDomainItem.warningMessage')"
+					 includeInLayout="false" visible="false"
 					 fontSize="12" color="red"/>
 	</s:Group>
 	

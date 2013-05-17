@@ -6,6 +6,7 @@ import java.nio.CharBuffer;
 import java.nio.channels.Channels;
 import java.nio.channels.WritableByteChannel;
 import java.nio.charset.Charset;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -60,13 +61,17 @@ public class EndpointSyncServlet implements HttpRequestHandler {
 				String ipAddress = req.getRemoteAddr();
 				
 				try {
-					endpointSyncService.asyncRegisterEndpointMeta(
+					Map<String,String> endpointMeta = 
+							thriftService.registerUserAddress(
+									syncObject.getEndpointId(), ipAddress, userH, 
+									syncObject.getPayload());
+					endpointSyncService.asyncRegisterEndpointMeta(endpointMeta,
 							syncObject.getEndpointId(), ipAddress, userH, syncObject.getPayload());
 				} catch (Throwable e) {
 					logger.error("Runtime error occured when reading request payload", e);
 				}
 				ByteBuffer thriftResponse = thriftService.getRuletable(
-						syncObject.getEndpointId(),	ipAddress, userH, ruleTableUniqId);
+						syncObject.getEndpointId(),	ruleTableUniqId);
 				if (thriftResponse != null) {
 					syncObject.setPayload(thriftResponse);
 					responseBuffer = payloadProcessService.toByteBuffer(syncObject);

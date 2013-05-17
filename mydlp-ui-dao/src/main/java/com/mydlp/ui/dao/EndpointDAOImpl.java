@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -107,6 +108,20 @@ public class EndpointDAOImpl extends AbstractPolicyDAO implements
 		List<Endpoint> l = getHibernateTemplate().findByCriteria(criteria);
 		Endpoint e = DAOUtil.getSingleResult(l);
 		return e.getEndpointId();
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Endpoint> getFilteredEndpoints(String searchString) {
+		DetachedCriteria criteria = DetachedCriteria
+				.forClass(Endpoint.class);
+		Disjunction disjunction = Restrictions.disjunction();
+		disjunction.add(Restrictions.sqlRestriction("(1=0)")); // defaults to false
+		disjunction.add(Restrictions.ilike("endpointAlias", "%" + searchString + "%"));
+		disjunction.add(Restrictions.ilike("endpointId", "%" + searchString + "%"));
+		criteria = criteria.add(disjunction);
+
+		return getHibernateTemplate().findByCriteria(criteria);
 	}
 
 }

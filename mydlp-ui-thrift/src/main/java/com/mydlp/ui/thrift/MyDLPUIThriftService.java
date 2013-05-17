@@ -10,7 +10,7 @@ public interface MyDLPUIThriftService {
 	
 	public String getCompileStatus();
 	
-	public ByteBuffer getRuletable(String endpointId, String ipAddress, String userH, String revisionId);
+	public ByteBuffer getRuletable(String endpointId, String revisionId);
 	
     public String receiveBegin(String ipAddress);
 
