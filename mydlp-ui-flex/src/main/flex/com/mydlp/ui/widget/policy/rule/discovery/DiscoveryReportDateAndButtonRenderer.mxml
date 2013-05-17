@@ -80,7 +80,7 @@
 				isStartEnabled = false;
 				isStopEnabled = true;
 				isPauseEnabled = true;
-				discoveryRuleContainer.refreshRules();
+				discoveryRuleContainer.refreshRulesView();
 			}
 			
 			protected function stopButtonClickHandler(event:MouseEvent):void
@@ -89,7 +89,7 @@
 				isStartEnabled = false;
 				isStopEnabled = false;
 				isPauseEnabled = false;
-				discoveryRuleContainer.refreshRules();
+				discoveryRuleContainer.refreshRulesView();
 			}
 			
 			protected function pauseButtonClickHandler(event:MouseEvent):void
@@ -98,7 +98,7 @@
 				isStartEnabled = true;
 				isStopEnabled = true;
 				isPauseEnabled = false;
-				discoveryRuleContainer.refreshRules();
+				discoveryRuleContainer.refreshRulesView();
 			}
 			
 			protected function isStartButtonEnabled():Boolean
