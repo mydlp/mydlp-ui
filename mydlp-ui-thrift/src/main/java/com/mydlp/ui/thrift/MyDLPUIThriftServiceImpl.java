@@ -128,22 +128,22 @@ public class MyDLPUIThriftServiceImpl implements MyDLPUIThriftService {
 	}
 
 	@Override
-	public String receiveBegin(final String ipAddress) {
+	public String receiveBegin(final String endpointId) {
 		return call(new ThriftCall<String>() {
 			@Override
 			public String execute(MyDLPUIThriftConnection thriftConnection) throws TException {
-				return thriftConnection.client.receiveBegin(ipAddress);
+				return thriftConnection.client.receiveBegin(endpointId);
 			}
 		});
 	}
 
 	@Override
-	public String receiveChunk(final String ipAddress, final long itemId,
+	public String receiveChunk(final String endpointId, final long itemId,
 			final ByteBuffer chunkData, final int chunkNum, final int chunkNumTotal) {
 		return call(new ThriftCall<String>() {
 			@Override
 			public String execute(MyDLPUIThriftConnection thriftConnection) throws TException {
-				return thriftConnection.client.receiveChunk(ipAddress, itemId, chunkData, chunkNum, chunkNumTotal);
+				return thriftConnection.client.receiveChunk(endpointId, itemId, chunkData, chunkNum, chunkNumTotal);
 			}
 		});
 	}

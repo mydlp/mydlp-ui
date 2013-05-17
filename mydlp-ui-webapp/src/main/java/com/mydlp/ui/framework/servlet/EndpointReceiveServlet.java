@@ -51,15 +51,15 @@ public class EndpointReceiveServlet implements HttpRequestHandler {
 				SyncObject syncObject = payloadProcessService.toSyncObject(chunk);
 				ByteBuffer chunkData = syncObject.getPayload();
 				String operation = req.getParameter("o");
-				String ipAddress = req.getRemoteAddr();
 				String thriftResponse = null;
 				if (operation.equals("begin")) {
-					thriftResponse = thriftService.receiveBegin(ipAddress);
+					thriftResponse = thriftService.receiveBegin(syncObject.getEndpointId());
 				} else if (operation.equals("push")) {
 					Long itemId = Long.parseLong(req.getParameter("i"));
 					Integer chunkNum = Integer.parseInt(req.getParameter("c"));
 					Integer chunkNumTotal = Integer.parseInt(req.getParameter("t"));
-					thriftResponse = thriftService.receiveChunk(ipAddress, itemId, chunkData, chunkNum, chunkNumTotal);
+					thriftResponse = thriftService.receiveChunk(syncObject.getEndpointId(), 
+							itemId, chunkData, chunkNum, chunkNumTotal);
 				}
 				if (thriftResponse != null) {
 					ByteBuffer payloadBuffer = charset.encode(CharBuffer.wrap(thriftResponse));

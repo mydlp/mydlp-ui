@@ -12,9 +12,9 @@ public interface MyDLPUIThriftService {
 	
 	public ByteBuffer getRuletable(String endpointId, String revisionId);
 	
-    public String receiveBegin(String ipAddress);
+    public String receiveBegin(String endpointId);
 
-    public String receiveChunk(String ipAddress, long itemId, 
+    public String receiveChunk(String endpointId, long itemId, 
     			ByteBuffer chunkData, int chunkNum, int chunkNumTotal);
     
     public void generateFingerprints(long documentId, String filename, ByteBuffer data);
