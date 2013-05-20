@@ -169,6 +169,8 @@
 					  click="applicationNameHandler()"/>
 			<s:Button skinClass="com.mydlp.ui.skin.UserBitmapLabelButton16Skin" 
 					  label="@Resource(bundle = 'messages', key = 'inventory.newdialog.userObject')" 
+					  includeInLayout="{SessionUtil.isEnterprise() &amp;&amp; !isDiscoveryTab}"
+					  visible="{SessionUtil.isEnterprise() &amp;&amp; !isDiscoveryTab}"
 					  click="addUserClickHandler(event)"/>
 			
 		</s:VGroup>

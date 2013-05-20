@@ -20,6 +20,8 @@
 			import com.mydlp.ui.domain.RemoteStorageNFS;
 			import com.mydlp.ui.domain.RemoteStorageSSHFS;
 			import com.mydlp.ui.domain.RemoteStorageWindowsShare;
+			import com.mydlp.ui.domain.RuleUserAD;
+			import com.mydlp.ui.domain.RuleUserStatic;
 			import com.mydlp.ui.domain.WebServer;
 			import com.mydlp.ui.util.FilterDataDescriptor;
 			
@@ -51,7 +53,9 @@
 				}
 				else if(
 					item.item is Domain || 
-					item.item is ApplicationName)
+					item.item is ApplicationName ||
+					item.item is RuleUserAD ||
+					item.item is RuleUserStatic)
 					return false;
 				else
 					return true;
