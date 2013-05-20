@@ -120,6 +120,7 @@
 			<input:MatcherDefinition data="ip_match"/>
 			<input:MatcherDefinition data="mac_match"/>
 			<input:MatcherDefinition data="icd10_match"/>
+			<input:MatcherDefinition data="taiwan_nid_match"/>
 		</s:ArrayCollection>
 		
 		<mx:ListCollectionView id="matcherDetails"/>
