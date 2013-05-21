@@ -23,6 +23,8 @@
 			import com.mydlp.ui.util.InteractionUtil;
 			import com.mydlp.ui.util.LangUtil;
 			
+			import flash.net.sendToURL;
+			
 			import mx.collections.ListCollectionView;
 			import mx.controls.Alert;
 			import mx.events.FlexEvent;
@@ -442,39 +444,34 @@
 			{
 				if (matcherCombobox.selectedItem.data == "document_pdm")
 				{
-					
-					var d:Number = Number.NaN;
-					
-					if (informationFeatureInput.isDistanceChecked())
+					var p:Number = Number.NaN;
+					if (pdmPageStepper != null)
 					{
-						d = informationFeatureInput.getDistanceValue();
+						p = pdmPageStepper.value;
 					}
-					else
+					if (isNaN(p)) p = 1;
+					if (p < 1) p = 1;
+					if (p > 3) p = 3;
+					
+					var pdmSentenceMin:Number = p * 3;
+					var pdmSentenceMax:Number = p * 25;
+					var pdmSentenceDefault:Number = p * 10;
+					
+					var s:Number = Number(featureThreshold);
+					
+					if (pdmSentenceStepper != null)
 					{
-						d = 2500;
+						pdmSentenceStepper.minimum = pdmSentenceMin;
+						pdmSentenceStepper.maximum = pdmSentenceMax;
 					}
 					
-					if (isNaN(d) || d < 500)
-					{
-						return "error.pdmDistanceShouldBeAtLeast500";
-					}
+					if (isNaN(s)) s = pdmSentenceDefault;
+					if (s < pdmSentenceMin) s = pdmSentenceMin;
+					if (s > pdmSentenceMax) s = pdmSentenceMax;
 					
-					if (thresholdSlider != null)
-					{
-						var minT:Number = 1 + Math.floor( d / 600 );
-						if (minT < 3) minT = 3;
-						var maxT:Number = 3 + Math.ceil( d / 250 );
-						
-						var t:Number = Math.round(
-											minT +
-											(
-												( (maxT - minT) / 100) // 100 for HSlider range
-												*
-												thresholdSlider.value
-											));
-						
-						featureThreshold = t.toString();
-					}
+					featureThreshold = s.toString();
+					informationFeatureInput.distanceEnabled = true;
+					informationFeatureInput.distance = p * 2000;
 				}
 				
 				return "ok";
@@ -643,13 +640,16 @@
 						 includeInLayout.document_pdm="false"
 						 visible.document_pdm="false"
 						 text="@{featureThreshold}"
-						 change="{refreshButtonState();}"/>
+						 change="{refreshButtonState();}" />
 			<s:HGroup width="100%" includeIn="document_pdm" gap="8" 
 					  horizontalAlign="left" verticalAlign="middle">
-				<mx:Text width="22" text="{featureThreshold}" fontWeight="bold" fontSize="13"/>
-				<s:HSlider id="thresholdSlider" width="160" minimum="1" maximum="100" 
-						   liveDragging="false" showDataTip="false"
-						   change="{refreshButtonState();}"/>
+				<s:NumericStepper id="pdmSentenceStepper" stepSize="1" 
+								  change="{refreshButtonState()}"
+								  value="{featureThreshold}"/>
+				<s:Label text="@Resource(bundle = 'messages', key = 'matcher.threshold.pdm.message2')"/>
+				<s:NumericStepper id="pdmPageStepper" minimum="1" maximum="3" stepSize="1" 
+								  change="{refreshButtonState()}" />
+				<s:Label text="@Resource(bundle = 'messages', key = 'matcher.threshold.pdm.message3')"/>
 			</s:HGroup>
 		</s:FormItem>
 		<s:FormItem includeIn="keyword,regex" 

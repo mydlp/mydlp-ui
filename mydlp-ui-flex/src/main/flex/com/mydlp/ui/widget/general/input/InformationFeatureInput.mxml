@@ -28,6 +28,7 @@
 			import mx.controls.Alert;
 			import mx.core.FlexGlobals;
 			import mx.core.IVisualElement;
+			import mx.events.FlexEvent;
 			
 			import spark.events.TextOperationEvent;
 			
@@ -206,6 +207,17 @@
 			
 			public function refreshDisplay(): void
 			{
+				var iFeatures:ListCollectionView = null;
+				if (informationFeatures == null)
+				{
+					iFeatures = new ArrayCollection();
+				}
+				else
+				{
+					iFeatures = new ArrayCollection(informationFeatures.toArray())
+				}
+				informationFeatures = iFeatures;
+				
 				addButton.enabled=(! isExclusive());
 				setDistanceInputEnabled();
 				setIfAndNoteGroupEnabled();
@@ -273,43 +285,49 @@
 				return Number(distanceValueInput.text);
 			}
 			
-			
-			protected function distanceChangeHandler(event:TextOperationEvent = null):void
+			protected function isPDM(iFeatures:ListCollectionView): Boolean
 			{
-				if (informationFeatures == null || informationFeatures.length != 1) return;
+				if (informationFeatures == null || informationFeatures.length != 1) return false;
 				var f:InformationFeature = informationFeatures.getItemAt(0) as InformationFeature;
-				if (f == null) return;
-				if (!distanceEnabled) return;
-				if (f.matcher == null || isNaN(f.threshold) ||
-					f.matcher == null || f.matcher.functionName != "document_pdm") return;
+				if (f == null) return false;
+				if (f.matcher != null && f.matcher.functionName == "document_pdm") return true;
+				return false;
+			}
+			
+			protected function showDistance(iFeatures:ListCollectionView): Boolean
+			{
+				if (!SessionUtil.isEnterprise()) return false;
+				if (isPDM(iFeatures)) return false;
+				return true;
+			}
+			
+			protected function distanceChangeHandler():void
+			{
+				if (distanceUnitInput.selectedIndex == -1) return;
+				var unit:Number = distanceUnitInput.selectedItem.@unit;
+				var d:Number = Number(distanceText);
+				if (isNaN(d)) return;
+				distance = d * unit;
+			}
+			
+			protected function initDistance(event:FlexEvent):void
+			{
+				var arr:Array = distanceUnitDP.toArray();
+				for (var i:uint = arr.length - 1 ; i >= 0 ; i--)
+				{
+					var unit:Number = arr[i].@unit;
+					if (distance > unit)
+					{
+						distanceText = Math.round(distance/unit).toString();
+						distanceUnitInput.selectedItem = arr[i];
+						distanceChangeHandler();
+						return;
+					}
+				}
 				
-				var minD:Number = ( f.threshold - 3 ) * 250;
-				if (minD < 500) minD = 500;
-				var maxD:Number = (f.threshold - 1) * 600;
-				if (maxD > 5000) maxD = 5000;
-				if (minD > maxD)
-				{
-					minD = 500;
-					maxD = 5000;
-				}
-				var d:Number = Number.NaN;
-				d = Number(distanceValueInput.text);
-				if (isNaN(d) || d < minD || d > maxD)
-				{
-					d = minD + ((maxD - minD)/3);
-					distanceValueInput.text = Math.round(d).toString();
-					Alert.show(
-						LangUtil.getString("messages","informationFeature.popup.add.error.pdmDistanceShouldBeBetween.message") + " " + 
-						Math.round(minD).toString() + " " +
-						LangUtil.getString("messages","informationFeature.popup.error.between.and") + " " + 
-						Math.round(maxD).toString() + "."
-						,
-						LangUtil.getString("messages","informationFeature.popup.add.error.pdmDistanceShouldBeBetween.title"));
-				}
-				else
-				{
-					return;
-				}
+				distanceText = "1";
+				distanceUnitInput.selectedIndex = -1;
+				distanceChangeHandler();
 			}
 			
 		]]>
@@ -317,8 +335,20 @@
 	
 	<fx:Declarations>
 		<mx:ListCollectionView id="informationFeatures"/>
-		<fx:String id="distance"/>
+		<fx:Number id="distance"/>
+		<fx:String id="distanceText" />
 		<fx:Boolean id="distanceEnabled"/>
+		
+		<s:XMLListCollection id="distanceUnitDP">
+			<fx:XMLList>
+				<item label="Characters" unit="1"/>
+				<item label="~ Words" unit="7"/>
+				<item label="~ Sentences" unit="40"/>
+				<item label="~ Paragraphs" unit="250"/>
+				<item label="~ Pages" unit="2000"/>
+			</fx:XMLList>
+		</s:XMLListCollection>
+		
 	</fx:Declarations>
 
 	<s:layout>
@@ -326,13 +356,20 @@
 	</s:layout>
 	
 	<s:HGroup id="distanceGroup" gap="3" verticalAlign="middle" 
-			  includeInLayout="{SessionUtil.isEnterprise()}" visible="{SessionUtil.isEnterprise()}">
-		<s:CheckBox id="distanceEnabledInput" selected="@{distanceEnabled}" width="15" 
-					change="{distanceChangeHandler()}"/>
-		<s:Label width="120" text="@Resource(bundle = 'messages', key = 'generic.edit.InformationDescription.distance.label')"  
+			  includeInLayout="{showDistance(informationFeatures)}" visible="{showDistance(informationFeatures)}">
+		<s:CheckBox id="distanceEnabledInput" selected="@{distanceEnabled}" width="15" />
+		<s:Label width="120" 
+				 text="@Resource(bundle = 'messages', key = 'generic.edit.InformationDescription.distance.label')"  
 				 fontWeight="bold" />
-		<s:TextInput id="distanceValueInput" width="{InputLabel.HORIZONTAL_INPUT_WIDTH - 18}" text="@{distance}" 
-					 enabled="{distanceEnabledInput.selected}" focusOut="{distanceChangeHandler()}"/>
+		<s:TextInput id="distanceValueInput" width="{InputLabel.HORIZONTAL_INPUT_WIDTH - 18 - 103}" 
+					 text="@{distanceText}" 
+					 enabled="{distanceEnabledInput.selected}" 
+					 change="{distanceChangeHandler()}"
+					 creationComplete="initDistance(event)"/>
+		<s:ComboBox id="distanceUnitInput" width="100" 
+					dataProvider="{distanceUnitDP}" labelField="@label" 
+					enabled="{distanceEnabledInput.selected}"
+					change="{distanceChangeHandler()}"/>
 	</s:HGroup>
 	
 	<s:Group width="100%" height="100%">

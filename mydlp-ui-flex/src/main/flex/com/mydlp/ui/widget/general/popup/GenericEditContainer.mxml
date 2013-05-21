@@ -464,7 +464,7 @@
 						}
 						if (isNaN(targetObject["distance"]))
 						{
-							targetObject["distance"] = 100;
+							targetObject["distance"] = 120;
 						}
 						else if (targetObject["distance"] <= 0)
 						{
@@ -486,7 +486,7 @@
 						numberValidator2.source = ifInput.distanceValueInput;
 						numberValidator2.property = "text";
 						numberValidator2.domain = "int";
-						numberValidator2.minValue = "8";
+						numberValidator2.minValue = "1";
 						numberValidator2.maxValue = "5000";
 						ErrorTipManager.registerValidator(numberValidator2);
 						validators.push(numberValidator2);
