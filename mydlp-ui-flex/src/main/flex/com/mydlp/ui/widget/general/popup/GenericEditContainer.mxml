@@ -873,7 +873,7 @@
 							var regExpValidator13:RegExpValidator = new RegExpValidator();
 							regExpValidator13.source = textInput;
 							regExpValidator13.property = "text";
-							regExpValidator13.expression = "^[a-zA-Z0-9_/\.\*]+$";
+							regExpValidator13.expression = "^([a-zA-Z0-9*]|[a-zA-Z0-9*][a-zA-Z0-9\-*]*[a-zA-Z0-9*])(\.([a-zA-Z0-9*]|[a-zA-Z0-9*][a-zA-Z0-9\-*]*[a-zA-Z0-9*]))*$";
 							regExpValidator13.required = true;
 							ErrorTipManager.registerValidator(regExpValidator13);
 							validators.push(regExpValidator13);
