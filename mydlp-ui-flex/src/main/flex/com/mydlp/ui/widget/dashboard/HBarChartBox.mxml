@@ -38,7 +38,7 @@
 					return ruleLabel;
 				}
 				if (itemKey == DashboardItem.TOP_5_ITYPES_1H || itemKey == DashboardItem.TOP_5_ITYPES_24H || itemKey == DashboardItem.TOP_5_ITYPES_1W)
-					return "Itype: " + (value as Number).toString();
+					return FlexGlobals.topLevelApplication.getITypeLabel(value as Number) as String;
 				return 	LangUtil.getString("messages", "dashboardItem." + itemKey + "." + value.toString());
 			}
 			
