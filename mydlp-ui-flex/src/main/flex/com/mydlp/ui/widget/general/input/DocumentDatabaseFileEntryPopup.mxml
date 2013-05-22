@@ -33,7 +33,7 @@
 			protected static const compFilefilter : FileFilter = new FileFilter("Compressed Files", "*.7z;*.deb;*.gz;*.pkg;*.rar;*.rpm;*.tar.gz;*.zip;*.zipx");
 			protected static const allFilesFilter : FileFilter = new FileFilter("All files", "*"); 
 			
-			protected static const fileFilters:Array = [ allFilesFilter, textFilefilter, imgFilefilter, docsFilefilter, dbFilefilter, compFilefilter ];
+			protected static const fileFilters:Array = [allFilesFilter, textFilefilter, imgFilefilter, docsFilefilter, compFilefilter, dbFilefilter];
 			
 			protected var refUploadFileList:FileReferenceList;
 			
