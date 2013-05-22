@@ -76,10 +76,8 @@
 				close();
 				rule.priority = recommendedPriority;
 				rule.enabled = true;
-				if(rule is RemoteStorageRule)
+				if(rule is RemoteStorageRule || rule is DiscoveryRule)
 					rule.action = Rule.ACTION_LOG;
-				else if(rule is DiscoveryRule)
-					rule.action = Rule.ACTION_BLOCK;
 				else
 					rule.action = Rule.ACTION_PASS;
 				rule.ruleItems = new ArrayCollection();
