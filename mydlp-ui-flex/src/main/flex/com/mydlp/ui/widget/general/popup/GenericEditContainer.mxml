@@ -771,7 +771,7 @@
 							var regExpValidator2:RegExpValidator = new RegExpValidator();
 							regExpValidator2.source = textInput;
 							regExpValidator2.property = "text";
-							regExpValidator2.expression = "^[a-zA-Z0-9_/\.\ ]+$";
+							regExpValidator2.expression = "^[a-zA-Z0-9-_/\.\ ]+$";
 							regExpValidator2.required = true;
 							ErrorTipManager.registerValidator(regExpValidator2);
 							validators.push(regExpValidator2);
