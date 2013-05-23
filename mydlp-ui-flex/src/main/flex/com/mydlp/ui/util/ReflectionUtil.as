@@ -5,6 +5,7 @@ package com.mydlp.ui.util
 	import com.mydlp.ui.domain.AbstractEntity;
 	import com.mydlp.ui.domain.Argument;
 	import com.mydlp.ui.domain.DocumentDatabase;
+	import com.mydlp.ui.domain.EmailNotificationItem;
 	import com.mydlp.ui.domain.InformationFeature;
 	import com.mydlp.ui.domain.InformationType;
 	import com.mydlp.ui.domain.InventoryCategory;
@@ -13,6 +14,7 @@ package com.mydlp.ui.util
 	import com.mydlp.ui.domain.Matcher;
 	import com.mydlp.ui.domain.MatcherArgument;
 	import com.mydlp.ui.domain.NonCascadingArgument;
+	import com.mydlp.ui.domain.NotificationItem;
 	import com.mydlp.ui.domain.RegularExpressionGroup;
 	import com.mydlp.ui.domain.Rule;
 	import com.mydlp.ui.domain.RuleItem;
@@ -165,6 +167,24 @@ package com.mydlp.ui.util
 							rigs.addItem(rig);
 						}
 						targetObject[classMember.name] = rigs;
+					}
+					else if (	sourceObject is Rule && 
+						classMember.name == "notificationItems" && 
+						classMember.type == ListCollectionView)
+					{
+						var nis:ListCollectionView = new ArrayCollection();
+						for each (var o3:Object in sourceObject[classMember.name] as ListCollectionView)
+						{
+							var ni:NotificationItem = null;
+							if (o3 is EmailNotificationItem)
+							{
+								ni = new EmailNotificationItem();
+							}
+							ni.rule = targetObject as Rule;
+							ni.authUser = (o3 as NotificationItem).authUser;
+							nis.addItem(ni);
+						}
+						targetObject[classMember.name] = nis;
 					}
 					else if (sourceObject is Rule &&
 						classMember.name == "ruleSchedule" && 
