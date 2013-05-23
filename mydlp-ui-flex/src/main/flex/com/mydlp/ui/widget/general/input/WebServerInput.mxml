@@ -30,10 +30,10 @@
 				{
 					addressText.text = proto + "://";
 				}
-				else
+				/*else
 				{	
-					addressText.text = "http://";
-				}
+					addressText.text = "";
+				}*/
 				
 				if(startPath != null &&  startPath != "")
 				{

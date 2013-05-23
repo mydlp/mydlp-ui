@@ -407,36 +407,16 @@
 						index = 2;
 						
 						var regExpValidatorP:RegExpValidator = new RegExpValidator();
-						regExpValidatorP.source = wsi;
+						regExpValidatorP.source = wsi.addressText;
 						regExpValidatorP.required=true;
-						regExpValidatorP.property = "address";
-						regExpValidatorP.expression = MyRegExValidator.domainNameOrIpRegex();
+						regExpValidatorP.property = "text";
+						regExpValidatorP.expression =
+						"^(http(s?)://[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z]{2,6}(/?|(/[\w-]+)*)(/?|/\w+\.[a-zA-Z]{2,4}(/?[\w]+\=[\w\-]+)?)?(?:\&[\w]+=[\w-]+)*)$";
+						//"^([a-z0-9\+\.-]+):(?://(?:((?:[a-z0-9-_\.~!$&'()*+,;=:]|%[0-9A-F]{2})*)@)?((?:[a-z0-9-._~!$&'()*+,;=]|%[0-9A-F]{2})*)(?::(\d*))?(/(?:[a-z0-9-._~!$&'()*+,;=:@/]|%[0-9A-F]{2})*)?|(/?(?:[a-z0-9-._~!$&'()*+,;=:@]|%[0-9A-F]{2})+(?:[a-z0-9-._~!$&'()*+,;=:@/]|%[0-9A-F]{2})*)?)(?:\?((?:[a-z0-9-._~!$&'()*+,;=:/?@]|%[0-9A-F]{2})*))?(?:#((?:[a-z0-9-._~!$&'()*+,;=:/?@]|%[0-9A-F]{2})*))?$"
 						regExpValidatorP.noMatchError = "Invalid URI for web server!";
 						regExpValidatorP.noExpressionError = "Invalid URI for web server!";
 						ErrorTipManager.registerValidator(regExpValidatorP);
 						validators.push(regExpValidatorP);
-						
-						var regExpValidatorPt:RegExpValidator = new RegExpValidator();
-						regExpValidatorPt.source = wsi;
-						regExpValidatorPt.required=false;
-						regExpValidatorPt.property = "startPath";
-						regExpValidatorPt.expression = MyRegExValidator.domainNameOrIpRegex();
-						//regExpValidatorPt.expression = "^([a-zA-Z-]+\/)*[a-zA-Z-]*$";
-						ErrorTipManager.registerValidator(regExpValidatorPt);
-						validators.push(regExpValidatorPt);
-						
-						var numberValidator4:NumberValidator = new NumberValidator;
-						numberValidator4.source = wsi;
-						numberValidator4.property = "port";
-						numberValidator4.domain = "int";
-						numberValidator4.required = false;
-						numberValidator4.minValue = "1";
-						numberValidator4.maxValue = "65535";
-						numberValidator4.exceedsMaxError = LangUtil.getString('messages', 'webServer.port.max.error.message');
-						numberValidator4.lowerThanMinError = LangUtil.getString('messages', 'webServer.port.min.error.message');
-						numberValidator4.integerError = LangUtil.getString('messages', 'webServer.port.int.error.message');
-						ErrorTipManager.registerValidator(numberValidator4);
-						validators.push(numberValidator4);
 					}
 					
 					else if (targetObject is AuthUser && classMember.name == "role")
