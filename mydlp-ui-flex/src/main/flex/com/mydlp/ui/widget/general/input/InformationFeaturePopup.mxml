@@ -538,7 +538,7 @@
 		<validators:MyNumberValidator id="thresholdValidator"
 									  source="{featureThresholdInput}"
 									  minValue="1"
-									  valid="{saveButton.enabled = true}"
+									  valid="{refreshButtonState()}"
 									  invalid="{saveButton.enabled = false}"
 										/>
 		
@@ -682,7 +682,8 @@
 			<s:layout>
 				<s:HorizontalLayout horizontalAlign="right" verticalAlign="middle" gap="10"/>
 			</s:layout>
-			<s:Button id="saveButton" label="@Resource(bundle = 'messages', key = 'matcher.button.save.label')" click="addNewFeature(event)"/>
+			<s:Button id="saveButton" label="@Resource(bundle = 'messages', key = 'matcher.button.save.label')" click="addNewFeature(event)"
+					  enabled="false"/>
 			<s:Button label="@Resource(bundle = 'messages', key = 'matcher.button.cancel.label')" click="{close()}"/>
 		</s:Group>
 	</s:VGroup>

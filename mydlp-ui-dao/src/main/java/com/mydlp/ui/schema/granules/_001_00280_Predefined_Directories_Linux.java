@@ -42,7 +42,6 @@ public class _001_00280_Predefined_Directories_Linux extends AbstractGranule {
 		
 		generateDirectories(directories, "/home/", "inventory.destinations.all.directories.linux");
 		
-		
 		getHibernateTemplate().saveOrUpdate(directories);
 	}
 
