@@ -89,7 +89,9 @@
 				if (matcherCombobox.selectedItem.data == "keyword")
 				{
 					var r:RegularExpression = null;
-					var o:StringArgument = null;
+					var o:StringArgument = null;  // whole word
+					var s:StringArgument = null; // scramble word
+					
 					if (m.matcherArguments == null || m.matcherArguments.length == 0)
 					{
 						r = new RegularExpression();
@@ -104,6 +106,12 @@
 						ma2.coupledMatcher = m;
 						ma2.coupledArgument = o;
 						m.matcherArguments.addItem(ma2);
+						
+						s = new StringArgument();
+						var ma4:MatcherArgument = new MatcherArgument();
+						ma4.coupledMatcher = m;
+						ma4.coupledArgument = s;
+						m.matcherArguments.addItem(ma4);
 					}
 					else if (m.matcherArguments.length == 1)
 					{
@@ -114,11 +122,29 @@
 						ma3.coupledMatcher = m;
 						ma3.coupledArgument = o;
 						m.matcherArguments.addItem(ma3);
+						
+						s = new StringArgument();
+						var ma5:MatcherArgument = new MatcherArgument();
+						ma5.coupledMatcher = m;
+						ma5.coupledArgument = s;
+						m.matcherArguments.addItem(ma5);
+					}
+					else if (m.matcherArguments.length == 2)
+					{
+						r = m.matcherArguments.getItemAt(0).coupledArgument as RegularExpression;
+						o = m.matcherArguments.getItemAt(1).coupledArgument as StringArgument;
+						
+						s = new StringArgument();
+						var ma6:MatcherArgument = new MatcherArgument();
+						ma6.coupledMatcher = m;
+						ma6.coupledArgument = s;
+						m.matcherArguments.addItem(ma6);
 					}
 					else
 					{
 						r = m.matcherArguments.getItemAt(0).coupledArgument as RegularExpression;
 						o = m.matcherArguments.getItemAt(1).coupledArgument as StringArgument;
+						s = m.matcherArguments.getItemAt(2).coupledArgument as StringArgument;
 					}
 					
 					// TODO: there should be regex validation. escaping special characters.
@@ -134,6 +160,15 @@
 					else
 					{
 						o.argument = "partial";
+					}
+					
+					if (scrambleWordCheckbox.selected)
+					{
+						s.argument = "scrambled";
+					}
+					else
+					{
+						s.argument = "ordered";
 					}
 					
 				}
@@ -185,7 +220,9 @@
 				else if(matcherCombobox.selectedItem.data == "keyword_group")
 				{
 					var ncar:NonCascadingArgument = null;
-					var o2:StringArgument = null;
+					var o2:StringArgument = null; // whole word
+					var s2:StringArgument = null; // scramble word
+					
 					if(m.matcherArguments == null || m.matcherArguments.length == 0)
 					{
 						ncar = new NonCascadingArgument();
@@ -196,25 +233,49 @@
 						m.matcherArguments.addItem(marg);
 						
 						o2 = new StringArgument();
-						var ma5:MatcherArgument = new MatcherArgument();
-						ma5.coupledMatcher = m;
-						ma5.coupledArgument = o2;
-						m.matcherArguments.addItem(ma5);
+						var ma7:MatcherArgument = new MatcherArgument();
+						ma7.coupledMatcher = m;
+						ma7.coupledArgument = o2;
+						m.matcherArguments.addItem(ma7);
+						
+						s2 = new StringArgument();
+						var ma8:MatcherArgument = new MatcherArgument();
+						ma8.coupledMatcher = m;
+						ma8.coupledArgument = s2;
+						m.matcherArguments.addItem(ma8);
 					}
 					else if (m.matcherArguments.length == 1)
 					{
 						ncar = m.matcherArguments.getItemAt(0).coupledArgument as NonCascadingArgument;
 						
 						o2 = new StringArgument();
-						var ma6:MatcherArgument = new MatcherArgument();
-						ma6.coupledMatcher = m;
-						ma6.coupledArgument = o2;
-						m.matcherArguments.addItem(ma6);
+						var ma11:MatcherArgument = new MatcherArgument();
+						ma11.coupledMatcher = m;
+						ma11.coupledArgument = o2;
+						m.matcherArguments.addItem(ma11);
+						
+						s2 = new StringArgument();
+						var ma9:MatcherArgument = new MatcherArgument();
+						ma9.coupledMatcher = m;
+						ma9.coupledArgument = s2;
+						m.matcherArguments.addItem(ma9);
+					}
+					else if (m.matcherArguments.length == 2)
+					{
+						ncar = m.matcherArguments.getItemAt(0).coupledArgument as NonCascadingArgument;
+						o2 = m.matcherArguments.getItemAt(1).coupledArgument as StringArgument;
+						
+						s2 = new StringArgument();
+						var ma10:MatcherArgument = new MatcherArgument();
+						ma10.coupledMatcher = m;
+						ma10.coupledArgument = s2;
+						m.matcherArguments.addItem(ma10);
 					}
 					else
 					{
 						ncar = m.matcherArguments.getItemAt(0).coupledArgument as NonCascadingArgument;
 						o2 = m.matcherArguments.getItemAt(1).coupledArgument as StringArgument;
+						s2 = m.matcherArguments.getItemAt(2).coupledArgument as StringArgument;
 					}
 					
 					ncar.argument = keywordGroupComboBox.selectedItem;
@@ -226,6 +287,15 @@
 					else
 					{
 						o2.argument = "partial";
+					}
+					
+					if (scrambleWordCheckbox.selected)
+					{
+						s2.argument = "scrambled";
+					}
+					else
+					{
+						s2.argument = "ordered";
 					}
 				}
 				
@@ -322,6 +392,24 @@
 					else if (o.argument == "partial")
 					{
 						matchWholeWordCheckbox.selected = false;
+					}
+				}
+			}
+			
+			protected function scrambleWordCreationCompleteHandler(event:FlexEvent):void
+			{
+				var o:StringArgument = getArgument(2) as StringArgument;
+				if(o == null)
+					scrambleWordCheckbox.selected = false;
+				else
+				{
+					if (o.argument == "scrambled")
+					{
+						scrambleWordCheckbox.selected = true;
+					}
+					else if (o.argument == "ordered")
+					{
+						scrambleWordCheckbox.selected = false;
 					}
 				}
 			}
@@ -669,6 +757,10 @@
 		<s:FormItem label="@Resource(bundle = 'messages', key = 'matcher.matchWholeWord.label')" 
 					includeIn="keyword,keyword_group">
 			<s:CheckBox id="matchWholeWordCheckbox" creationComplete="matchWholeWordCreationCompleteHandler(event)"/>
+		</s:FormItem>
+		<s:FormItem label="@Resource(bundle = 'messages', key = 'matcher.scrambleWord.label')" 
+					includeIn="keyword,keyword_group">
+			<s:CheckBox id="scrambleWordCheckbox" creationComplete="scrambleWordCreationCompleteHandler(event)"/>
 		</s:FormItem>
 	</s:Form>			
 	
