@@ -42,6 +42,10 @@ package com.mydlp.ui.validators
 			return "^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])$"; 
 		}
 		
+		public static function  uriRegex():String {
+			return "^(http(s?)://[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z]{2,6}(/?|(/[\w-]+)*)(/?|/\w+\.[a-zA-Z]{2,4}(/?[\w]+\=[\w\-]+)?)?(?:\&[\w]+=[\w-]+)*)$"; 
+		}
+		
 		public static function  ipRegex():String {
 			return "^([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])$";
 		}

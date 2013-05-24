@@ -410,9 +410,7 @@
 						regExpValidatorP.source = wsi.addressText;
 						regExpValidatorP.required=true;
 						regExpValidatorP.property = "text";
-						regExpValidatorP.expression =
-						"^(http(s?)://[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z]{2,6}(/?|(/[\w-]+)*)(/?|/\w+\.[a-zA-Z]{2,4}(/?[\w]+\=[\w\-]+)?)?(?:\&[\w]+=[\w-]+)*)$";
-						//"^([a-z0-9\+\.-]+):(?://(?:((?:[a-z0-9-_\.~!$&'()*+,;=:]|%[0-9A-F]{2})*)@)?((?:[a-z0-9-._~!$&'()*+,;=]|%[0-9A-F]{2})*)(?::(\d*))?(/(?:[a-z0-9-._~!$&'()*+,;=:@/]|%[0-9A-F]{2})*)?|(/?(?:[a-z0-9-._~!$&'()*+,;=:@]|%[0-9A-F]{2})+(?:[a-z0-9-._~!$&'()*+,;=:@/]|%[0-9A-F]{2})*)?)(?:\?((?:[a-z0-9-._~!$&'()*+,;=:/?@]|%[0-9A-F]{2})*))?(?:#((?:[a-z0-9-._~!$&'()*+,;=:/?@]|%[0-9A-F]{2})*))?$"
+						regExpValidatorP.expression = MyRegExValidator.uriRegex();
 						regExpValidatorP.noMatchError = "Invalid URI for web server!";
 						regExpValidatorP.noExpressionError = "Invalid URI for web server!";
 						ErrorTipManager.registerValidator(regExpValidatorP);
@@ -424,7 +422,7 @@
 						var srInput:AuthSecurityRolesInput = new AuthSecurityRolesInput();
 						srInput.authSecurityRole = targetObject[classMember.name];
 						srInput.targetUser = targetObject as AuthUser;
-						BindingUtils.bindProperty(targetObject, classMember.name, srInput, "authSecurityRole");
+						BindingUtils.bindProperty(targetObject, classMember.name, srInput, "autgithSecurityRole");
 						inputLabel = new VerticalInputLabel();
 						inputLabel.addElement(srInput);
 						this.addEventListener(ItemClickEvent.ITEM_CLICK, itemClickHandler);
