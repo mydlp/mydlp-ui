@@ -24,7 +24,7 @@ public class RemoteStorageWindowsShare extends RemoteStorage {
 	}
 
 	public void setUncPath(String uncPath) {
-		this.uncPath = uncPath;
+		this.uncPath = uncPath.trim();
 	}
 
 	public String getUsername() {
@@ -32,7 +32,7 @@ public class RemoteStorageWindowsShare extends RemoteStorage {
 	}
 
 	public void setUsername(String username) {
-		this.username = username;
+		this.username = username.trim();
 	}
 
 	public String getPassword() {

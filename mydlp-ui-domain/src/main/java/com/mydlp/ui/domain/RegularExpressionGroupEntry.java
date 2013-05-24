@@ -19,6 +19,6 @@ public class RegularExpressionGroupEntry extends AbstractEntity {
 	}
 
 	public void setRegex(String regex) {
-		this.regex = regex;
+		this.regex = regex.trim();
 	}
 }

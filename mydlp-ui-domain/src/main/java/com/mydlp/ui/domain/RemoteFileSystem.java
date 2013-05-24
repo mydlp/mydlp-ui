@@ -11,8 +11,4 @@ public class RemoteFileSystem extends Item {
 	 */
 	private static final long serialVersionUID = -3293617107443481191L;
 	
-	protected String type;
-
-
-
 }

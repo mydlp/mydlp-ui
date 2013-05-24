@@ -34,14 +34,14 @@ public class RDBMSConnection extends AbstractNamedEntity {
 		return jdbcUrl;
 	}
 	public void setJdbcUrl(String jdbcUrl) {
-		this.jdbcUrl = jdbcUrl;
+		this.jdbcUrl = jdbcUrl.trim();
 	}
 	@Column(nullable=false)
 	public String getLoginUsername() {
 		return loginUsername;
 	}
 	public void setLoginUsername(String loginUsername) {
-		this.loginUsername = loginUsername;
+		this.loginUsername = loginUsername.trim();
 	}
 	@Column(nullable=false)
 	public String getLoginPassword() {

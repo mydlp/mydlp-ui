@@ -23,7 +23,7 @@ public class CustomAction extends AbstractNamedEntity {
 	}
 
 	public void setTypeKey(String typeKey) {
-		this.typeKey = typeKey;
+		this.typeKey = typeKey.trim();
 	}
 
 	@OneToOne(mappedBy="coupledCustomAction", cascade={CascadeType.ALL})

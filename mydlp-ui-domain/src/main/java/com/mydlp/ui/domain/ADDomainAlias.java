@@ -19,7 +19,7 @@ public class ADDomainAlias extends AbstractEntity {
 	}
 	
 	public void setDomainAlias(String domainAlias) {
-		this.domainAlias = domainAlias;
+		this.domainAlias = domainAlias.trim();
 	}
 
 }

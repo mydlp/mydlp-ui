@@ -27,7 +27,7 @@ public class RemoteStorageFTPFS extends RemoteStorage {
 	}
 
 	public void setAddress(String address) {
-		this.address = address;
+		this.address = address.trim();
 	}
 
 	public String getUsername() {
@@ -35,7 +35,7 @@ public class RemoteStorageFTPFS extends RemoteStorage {
 	}
 
 	public void setUsername(String username) {
-		this.username = username;
+		this.username = username.trim();
 	}
 
 	public String getPassword() {
@@ -51,6 +51,6 @@ public class RemoteStorageFTPFS extends RemoteStorage {
 	}
 
 	public void setPath(String path) {
-		this.path = path;
+		this.path = path.trim();
 	}
 }

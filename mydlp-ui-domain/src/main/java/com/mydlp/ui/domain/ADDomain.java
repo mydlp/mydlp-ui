@@ -41,7 +41,7 @@ public class ADDomain extends AbstractEntity {
 	}
 
 	public void setDomainName(String domainName) {
-		this.domainName = domainName;
+		this.domainName = domainName.trim();
 	}
 
 	@Column(nullable=false, length=1024)
@@ -61,7 +61,7 @@ public class ADDomain extends AbstractEntity {
 	}
 
 	public void setBaseDistinguishedName(String baseDistinguishedName) {
-		this.baseDistinguishedName = baseDistinguishedName;
+		this.baseDistinguishedName = baseDistinguishedName.trim();
 	}
 
 	public String getNetbiosName() {
@@ -69,7 +69,7 @@ public class ADDomain extends AbstractEntity {
 	}
 
 	public void setNetbiosName(String netbiosName) {
-		this.netbiosName = netbiosName;
+		this.netbiosName = netbiosName.trim();
 	}
 
 	@Column(nullable=false)
@@ -78,7 +78,7 @@ public class ADDomain extends AbstractEntity {
 	}
 
 	public void setServerIp(String serverIp) {
-		this.serverIp = serverIp;
+		this.serverIp = serverIp.trim();
 	}
 
 	@Column(nullable=false)
@@ -87,7 +87,7 @@ public class ADDomain extends AbstractEntity {
 	}
 
 	public void setLoginUsername(String loginUsername) {
-		this.loginUsername = loginUsername;
+		this.loginUsername = loginUsername.trim();
 	}
 
 	@Column(nullable=false)

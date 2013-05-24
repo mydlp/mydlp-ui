@@ -21,7 +21,7 @@ public class USBDevice extends AbstractEntity {
 		return deviceId;
 	}
 	public void setDeviceId(String deviceId) {
-		this.deviceId = deviceId;
+		this.deviceId = deviceId.trim();
 	}
 	
 	@Column(nullable=false)
@@ -29,7 +29,7 @@ public class USBDevice extends AbstractEntity {
 		return uniqId;
 	}
 	public void setUniqId(String uniqId) {
-		this.uniqId = uniqId;
+		this.uniqId = uniqId.trim();
 	}
 	
 	@Column(nullable=false)

@@ -21,7 +21,7 @@ public class RemoteStorageNFS extends RemoteStorage {
 	}
 
 	public void setAddress(String address) {
-		this.address = address;
+		this.address = address.trim();
 	}
 
 	public String getPath() {
@@ -29,7 +29,7 @@ public class RemoteStorageNFS extends RemoteStorage {
 	}
 
 	public void setPath(String path) {
-		this.path = path;
+		this.path = path.trim();
 	}
 
 

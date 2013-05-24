@@ -27,7 +27,7 @@ public class AuthSecurityRole extends AbstractEntity {
 	}
 
 	public void setRoleName(String roleName) {
-		this.roleName = roleName;
+		this.roleName = roleName.trim();
 	}
 		
 }

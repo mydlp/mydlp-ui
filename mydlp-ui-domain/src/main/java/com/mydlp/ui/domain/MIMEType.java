@@ -19,7 +19,7 @@ public class MIMEType extends AbstractEntity {
 	}
 
 	public void setMimeType(String mimeType) {
-		this.mimeType = mimeType;
+		this.mimeType = mimeType.trim();
 	}
 	
 }

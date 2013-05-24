@@ -19,7 +19,7 @@ public class BundledKeywordGroup extends Argument {
 		return filename;
 	}
 	public void setFilename(String filename) {
-		this.filename = filename;
+		this.filename = filename.trim();
 	}
 	@Column(nullable=false)
 	public String getDescriptionKey() {

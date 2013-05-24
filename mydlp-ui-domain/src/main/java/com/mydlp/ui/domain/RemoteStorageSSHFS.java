@@ -26,7 +26,7 @@ public class RemoteStorageSSHFS extends RemoteStorage {
 	}
 
 	public void setAddress(String address) {
-		this.address = address;
+		this.address = address.trim();
 	}
 
 	public int getPort() {
@@ -42,7 +42,7 @@ public class RemoteStorageSSHFS extends RemoteStorage {
 	}
 
 	public void setPath(String path) {
-		this.path = path;
+		this.path = path.trim();
 	}
 
 	public String getUsername() {
@@ -50,7 +50,7 @@ public class RemoteStorageSSHFS extends RemoteStorage {
 	}
 
 	public void setUsername(String username) {
-		this.username = username;
+		this.username = username.trim();
 	}
 
 	public String getPassword() {

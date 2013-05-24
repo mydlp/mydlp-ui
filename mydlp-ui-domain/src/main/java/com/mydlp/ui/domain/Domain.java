@@ -19,7 +19,7 @@ public class Domain extends Item {
 	}
 
 	public void setDestinationString(String destinationString) {
-		this.destinationString = destinationString;
+		this.destinationString = destinationString.trim();
 	}
 
 }

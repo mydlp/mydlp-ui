@@ -19,7 +19,7 @@ public class RuleUserStatic extends RuleUser {
 	}
 
 	public void setUsername(String username) {
-		this.username = username;
+		this.username = username.trim();
 	}
 	
 }

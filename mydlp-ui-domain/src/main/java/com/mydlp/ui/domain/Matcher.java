@@ -26,7 +26,7 @@ public class Matcher extends AbstractEntity {
 	}
 
 	public void setFunctionName(String functionName) {
-		this.functionName = functionName;
+		this.functionName = functionName.trim();
 	}
 
 	@OneToMany(mappedBy="coupledMatcher", cascade={CascadeType.ALL})

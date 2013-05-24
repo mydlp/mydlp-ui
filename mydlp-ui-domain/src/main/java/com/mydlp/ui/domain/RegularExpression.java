@@ -19,7 +19,7 @@ public class RegularExpression extends Argument {
 	}
 
 	public void setRegex(String regex) {
-		this.regex = regex;
+		this.regex = regex.trim();
 	}
 	
 }

@@ -28,7 +28,7 @@ public class WebServer extends Item {
 	}
 
 	public void setProto(String proto) {
-		this.proto = proto;
+		this.proto = proto.trim();
 	}
 
 	public String getAddress() {
@@ -36,7 +36,7 @@ public class WebServer extends Item {
 	}
 
 	public void setAddress(String address) {
-		this.address = address;
+		this.address = address.trim();
 	}
 
 	public int getPort() {
@@ -60,7 +60,7 @@ public class WebServer extends Item {
 	}
 
 	public void setStartPath(String startPath) {
-		this.startPath = startPath;
+		this.startPath = startPath.trim();
 	}
 	
 	

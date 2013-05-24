@@ -22,7 +22,7 @@ public class Config extends AbstractNamedEntity{
 	}
 
 	public void setKey(String key) {
-		this.key = key;
+		this.key = key.trim();
 	}
 
 	@Lob
@@ -31,7 +31,7 @@ public class Config extends AbstractNamedEntity{
 	}
 
 	public void setValue(String value) {
-		this.value = value;
+		this.value = value.trim();
 	}
 	
 }

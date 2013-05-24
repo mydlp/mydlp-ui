@@ -19,6 +19,6 @@ public class Hostname extends Item {
 	}
 
 	public void setHostname(String hostname) {
-		this.hostname = hostname;
+		this.hostname = hostname.trim();
 	}
 }

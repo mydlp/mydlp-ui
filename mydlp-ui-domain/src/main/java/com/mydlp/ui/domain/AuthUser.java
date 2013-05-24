@@ -50,7 +50,7 @@ public class AuthUser extends AbstractEntity {
 		return username;
 	}
 	public void setUsername(String username) {
-		this.username = username;
+		this.username = username.trim();
 	}
 	@NeverSerialize
 	public String getPassword() {
@@ -63,8 +63,9 @@ public class AuthUser extends AbstractEntity {
 		return email;
 	}
 	public void setEmail(String email) {
-		this.emailHashCode = email.hashCode();
-		this.email = email;
+		String normalizedEmail = email.trim().toLowerCase();
+		this.emailHashCode = normalizedEmail.hashCode();
+		this.email = normalizedEmail;
 	}
 	@Column(nullable=false, unique=true)
 	@Index(name="emailHashCode")
@@ -118,7 +119,7 @@ public class AuthUser extends AbstractEntity {
 	public Boolean hasRole(String roleName) {
 		if (role == null)
 			return false;
-		if (role.getRoleName().equals(roleName))
+		if (role.getRoleName().equals(roleName.trim()))
 			return true;
 		
 		return false;
