@@ -58,7 +58,7 @@
 		</s:layout>
 		<s:BitmapImage source="{bitmapSource}" width="{bitmapSize}" height="{bitmapSize}" />
 		<s:Label id="labelDisplay" color.over="0x000000" color.down="0x000000"
-				 verticalAlign="bottom" maxDisplayedLines="1" />
+				 verticalAlign="bottom" maxDisplayedLines="1"/>
 	</s:Group>
 	
 </s:SparkButtonSkin>

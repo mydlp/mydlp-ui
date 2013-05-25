@@ -80,11 +80,15 @@
 		<s:layout>
 			<s:VerticalLayout gap="10"/>
 		</s:layout>
-		<s:Group height="3%" width="100%">
+		<s:Group height="32" width="100%">
 			<s:layout>
 				<s:HorizontalLayout paddingRight="3"
-									horizontalAlign="right"/>
+									horizontalAlign="right"
+									gap="0"/>
 			</s:layout>
+			<s:Button id="collapseButton" skinClass="com.mydlp.ui.skin.CollapseBitmapLabelButton16Skin"
+					  label="@Resource(key='inventory.collapseAll', bundle='messages')"
+					  click="{inventoryTree.collapseAll();}"/>
 			<s:Button id="findButton"
 					  fontWeight="bold"
 					  skinClass.default="com.mydlp.ui.skin.FindInRulesBitmapLabelButton16Skin"
@@ -94,10 +98,11 @@
 					  click.default="findButtonClickHandler(event)"
 					  click.filtered="resetButtonClickHandler(event)"
 					  enabled="{isConsistent(inventoryTree.myInventoryTree.selectedItems)}"
+					  
 					  />
 		</s:Group>
 		
-		<inventory:InventoryTree id="inventoryTree" height="97%" width="100%" 
+		<inventory:InventoryTree id="inventoryTree" height="100%" width="100%" 
 								 isDiscoveryTab="{isDiscoveryTab}" inventory="{inventory}"/>
 	</s:Group>
 	<rule:RSpacer/>

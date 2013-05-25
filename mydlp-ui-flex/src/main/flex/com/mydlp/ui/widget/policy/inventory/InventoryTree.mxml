@@ -157,6 +157,15 @@
 			{
 				myInventoryTree.refreshTree();
 			}
+			
+			public function collapseAll(): void
+			{
+				for each (var i:* in inventory)
+				{
+					myInventoryTree.expandChildrenOf(i, false);
+				}
+			}
+			
 		]]>
 	</fx:Script>
 	
