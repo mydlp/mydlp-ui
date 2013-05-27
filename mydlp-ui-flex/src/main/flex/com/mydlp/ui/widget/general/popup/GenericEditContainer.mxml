@@ -422,7 +422,7 @@
 						var srInput:AuthSecurityRolesInput = new AuthSecurityRolesInput();
 						srInput.authSecurityRole = targetObject[classMember.name];
 						srInput.targetUser = targetObject as AuthUser;
-						BindingUtils.bindProperty(targetObject, classMember.name, srInput, "autgithSecurityRole");
+						BindingUtils.bindProperty(targetObject, classMember.name, srInput, "authSecurityRole");
 						inputLabel = new VerticalInputLabel();
 						inputLabel.addElement(srInput);
 						this.addEventListener(ItemClickEvent.ITEM_CLICK, itemClickHandler);
