@@ -3,8 +3,8 @@
 		  xmlns:s="library://ns.adobe.com/flex/spark" 
 		  xmlns:my="http://www.mydlp.com/flex/my"
 		  xmlns:mx="library://ns.adobe.com/flex/mx"
-		  width="{InputLabel.VERTICAL_INPUT_WIDTH}"
 		  creationComplete="{re.getRoles()}"
+		  width="{InputLabel.VERTICAL_INPUT_WIDTH}"
 		  xmlns:util="com.mydlp.ui.util.*" xmlns:domain="com.mydlp.ui.domain.*">
 	<fx:Script>
 		<![CDATA[
@@ -124,6 +124,8 @@
 						if(allAuthSecurity[l].roleName == "ROLE_NONE")
 						{
 							FlexGlobals.topLevelApplication.temporaryWorkaroundSelectedUserRole = allAuthSecurity[l];
+							targetUser.role = allAuthSecurity[l];
+							authSecurityRole = allAuthSecurity[l];
 							srList.selectedIndex = l;
 							break;
 						}
