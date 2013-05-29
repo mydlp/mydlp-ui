@@ -8,7 +8,7 @@ import org.hibernate.criterion.DetachedCriteria;
 import com.mydlp.ui.domain.ADDomain;
 import com.mydlp.ui.schema.AbstractGranule;
 
-public class _001_00300_GenerateEmptyADDomainBaseDN extends AbstractGranule {
+public class _001_00310_GenerateEmptyADDomainBaseDN extends AbstractGranule {
 
 	@SuppressWarnings("unchecked")
 	@Override
