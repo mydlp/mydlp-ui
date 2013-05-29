@@ -203,40 +203,12 @@ public class ADEnumServiceImpl implements ADEnumService {
 				}
 				userGroups.add(groupObject);
 				
-				Set<ADDomainUser> groupUsers = transactionTemplate.execute(new TransactionCallback<Set<ADDomainUser>>() {
+				transactionTemplate.execute(new TransactionCallbackWithoutResult() {
 					@Override
-					public Set<ADDomainUser> doInTransaction(
-							TransactionStatus arg0) {
-						return groupObject.getUsers();
+					protected void doInTransactionWithoutResult(TransactionStatus arg0) {
+						adDomainDAO.saveDomainItem(userObject);
 					}
 				});
-				
-				if (groupUsers == null)
-				{
-					groupUsers = new HashSet<ADDomainUser>();
-					groupObject.setUsers(groupUsers);
-				}
-				
-				groupUsers.add(userObject);
-				{
-					final ADDomainGroup groupObjectF = groupObject;
-					transactionTemplate.execute(new TransactionCallbackWithoutResult() {
-						@Override
-						protected void doInTransactionWithoutResult(TransactionStatus arg0) {
-							adDomainDAO.saveDomainItem(groupObjectF);
-						}
-					});
-				}
-				{
-					final ADDomainUser userObjectF = userObject;
-					transactionTemplate.execute(new TransactionCallbackWithoutResult() {
-						@Override
-						protected void doInTransactionWithoutResult(TransactionStatus arg0) {
-							adDomainDAO.saveDomainItem(userObjectF);
-						}
-					});
-				}
-				
 			}
 		}
 		
@@ -245,18 +217,11 @@ public class ADEnumServiceImpl implements ADEnumService {
 			userObject.getGroups().remove(exGroup);
 			{
 				final ADDomainGroup groupObjectF = exGroup;
-				transactionTemplate.execute(new TransactionCallbackWithoutResult() {
-					@Override
-					protected void doInTransactionWithoutResult(TransactionStatus arg0) {
-						adDomainDAO.saveDomainItem(groupObjectF);
-					}
-				});
-			}
-			{
 				final ADDomainUser userObjectF = userObject;
 				transactionTemplate.execute(new TransactionCallbackWithoutResult() {
 					@Override
 					protected void doInTransactionWithoutResult(TransactionStatus arg0) {
+						adDomainDAO.saveDomainItem(groupObjectF);
 						adDomainDAO.saveDomainItem(userObjectF);
 					}
 				});
