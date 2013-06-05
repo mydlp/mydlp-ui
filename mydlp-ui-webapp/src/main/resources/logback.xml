@@ -26,7 +26,7 @@
     <facility>LOCAL6</facility>
     <suffixPattern>[%thread]: [ui] %msg</suffixPattern>
   </appender>
-  <root level="error">
+  <root level="info">
     <appender-ref ref="${log.root.appender}"/>
   </root>
   <logger name="AUDIT" level="debug">
