@@ -228,7 +228,10 @@ public class ADEnumServiceImpl implements ADEnumService {
 					public ADDomainUser doInTransaction(TransactionStatus arg0) {
 						ADDomainUser u = (ADDomainUser) adDomainDAO
 								.findByDistinguishedName(domain, userDN);
-						dummy.addAll(u.getGroups());
+						if (u != null)
+						{
+							dummy.addAll(u.getGroups());
+						}
 						return u;
 					}
 				});
