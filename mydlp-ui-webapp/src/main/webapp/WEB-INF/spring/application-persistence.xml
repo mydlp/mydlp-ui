@@ -3,6 +3,7 @@
  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
  xmlns:context="http://www.springframework.org/schema/context"
  xmlns:tx="http://www.springframework.org/schema/tx"
+ xmlns:util="http://www.springframework.org/schema/util"
  xsi:schemaLocation="
   http://www.springframework.org/schema/beans
   http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
@@ -10,6 +11,8 @@
   http://www.springframework.org/schema/context/spring-context-3.0.xsd
   http://www.springframework.org/schema/tx
   http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+  http://www.springframework.org/schema/util
+  http://www.springframework.org/schema/util/spring-util-3.0.xsd
   ">
   
    <bean id="policySessionFactory" class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
@@ -190,14 +193,23 @@
   
   <bean id="policyTransactionTemplate" class="org.springframework.transaction.support.TransactionTemplate">
     <property name="transactionManager" ref="policyTransactionManager"/>
+    <property name="propagationBehavior">
+    	<util:constant static-field="org.springframework.transaction.TransactionDefinition.PROPAGATION_REQUIRED"/>
+    </property>
   </bean>
   
   <bean id="logTransactionTemplate" class="org.springframework.transaction.support.TransactionTemplate">
     <property name="transactionManager" ref="logTransactionManager"/>
+    <property name="propagationBehavior">
+    	<util:constant static-field="org.springframework.transaction.TransactionDefinition.PROPAGATION_REQUIRED"/>
+    </property>
   </bean>
   
   <bean id="reportTransactionTemplate" class="org.springframework.transaction.support.TransactionTemplate">
     <property name="transactionManager" ref="reportTransactionManager"/>
+    <property name="propagationBehavior">
+    	<util:constant static-field="org.springframework.transaction.TransactionDefinition.PROPAGATION_REQUIRED"/>
+    </property>
   </bean>
   
   <tx:annotation-driven transaction-manager="policyTransactionManager"/>

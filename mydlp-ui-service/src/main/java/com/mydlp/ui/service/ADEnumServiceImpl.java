@@ -4,12 +4,17 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Hashtable;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
+import java.util.TreeSet;
 
+import javax.annotation.PostConstruct;
+import javax.naming.CompositeName;
 import javax.naming.Context;
+import javax.naming.InvalidNameException;
+import javax.naming.Name;
 import javax.naming.NamingEnumeration;
 import javax.naming.NamingException;
 import javax.naming.directory.Attribute;
@@ -48,6 +53,10 @@ public class ADEnumServiceImpl implements ADEnumService {
 	private static Logger logger = LoggerFactory
 			.getLogger(ADEnumServiceImpl.class);
 
+	protected static final String AD_KEY_USER = "user";
+	protected static final String AD_KEY_OU = "ou";
+	protected static final String AD_KEY_GROUP = "group";
+
 	@Autowired
 	protected ADDomainDAO adDomainDAO;
 
@@ -73,6 +82,11 @@ public class ADEnumServiceImpl implements ADEnumService {
 		public String toString() {
 			return "ADEnumService_" + domainId;
 		}
+	}
+
+	@PostConstruct
+	public void init() {
+		adDomainDAO.finalizeAll();
 	}
 
 	@Scheduled(cron = "0 0 4 * * ?")
@@ -143,12 +157,21 @@ public class ADEnumServiceImpl implements ADEnumService {
 				return;
 			}
 			Map<String, Set<String>> memberships = initMemberships();
+			final Map<String, Set<Integer>> itemsToRemove = initItemsToRemove();
 			logger.info("Starting querying LDAP server.",
 					domain.getDomainName());
 			enumerateDN(domain, domain.getRoot(),
-					domain.getBaseDistinguishedName(), memberships);
+					domain.getBaseDistinguishedName(), memberships,
+					itemsToRemove);
 			logger.info("Starting populating groups.", domain.getDomainName());
 			enumerateMemberships(domain, memberships);
+			transactionTemplate.execute(new TransactionCallbackWithoutResult() {
+				@Override
+				protected void doInTransactionWithoutResult(
+						TransactionStatus arg0) {
+					adDomainDAO.removeDomainItems(itemsToRemove);
+				}
+			});
 			logger.info("Finalizing process.", domain.getDomainName());
 		} catch (Throwable e) {
 			logger.error("Error occured", e);
@@ -157,6 +180,14 @@ public class ADEnumServiceImpl implements ADEnumService {
 			logger.info("Removing domain from enumeration queue list.",
 					domain.getDomainName());
 		}
+	}
+
+	protected Map<String, Set<Integer>> initItemsToRemove() {
+		Map<String, Set<Integer>> itemsToRemove = new TreeMap<String, Set<Integer>>();
+		itemsToRemove.put(AD_KEY_USER, new TreeSet<Integer>());
+		itemsToRemove.put(AD_KEY_OU, new TreeSet<Integer>());
+		itemsToRemove.put(AD_KEY_GROUP, new TreeSet<Integer>());
+		return itemsToRemove;
 	}
 
 	protected Map<String, Set<String>> initMemberships() {
@@ -246,22 +277,15 @@ public class ADEnumServiceImpl implements ADEnumService {
 			}
 		}
 
-		for (ADDomainGroup exGroup : dummy) {
-			exGroup.getUsers().remove(userObject);
-			userObject.getGroups().remove(exGroup);
-			{
-				final ADDomainGroup groupObjectF = exGroup;
-				final ADDomainUser userObjectF = userObject;
-				transactionTemplate
-						.execute(new TransactionCallbackWithoutResult() {
-							@Override
-							protected void doInTransactionWithoutResult(
-									TransactionStatus arg0) {
-								adDomainDAO.saveDomainItem(groupObjectF);
-								adDomainDAO.saveDomainItem(userObjectF);
-							}
-						});
-			}
+		for (final ADDomainGroup exGroup : dummy) {
+			transactionTemplate.execute(new TransactionCallbackWithoutResult() {
+				@Override
+				protected void doInTransactionWithoutResult(
+						TransactionStatus arg0) {
+					adDomainDAO.removeGroupMember(exGroup.getId(),
+							userObject.getId());
+				}
+			});
 		}
 	}
 
@@ -278,9 +302,11 @@ public class ADEnumServiceImpl implements ADEnumService {
 	}
 
 	protected void enumerateDN(ADDomain domain, final ADDomainItemGroup parent,
-			String distinguishedName, Map<String, Set<String>> memberships)
+			String distinguishedName, Map<String, Set<String>> memberships,
+			final Map<String, Set<Integer>> itemsToRemove)
 			throws NamingException {
-		logger.info("Enumerating objects under  dn '" + distinguishedName + "'.");
+		logger.info("Enumerating objects under  dn '" + distinguishedName
+				+ "'.");
 		List<ADDomainItem> children = transactionTemplate
 				.execute(new TransactionCallback<List<ADDomainItem>>() {
 					@Override
@@ -289,30 +315,48 @@ public class ADEnumServiceImpl implements ADEnumService {
 						return adDomainDAO.getChildrenOf(parent);
 					}
 				});
-		List<ADDomainItem> enumeratedUsers = searchDNforUsers(domain, parent,
-				distinguishedName, memberships);
-		List<ADDomainItem> enumeratedGroups = searchDNforGroups(domain, parent,
-				distinguishedName);
-		List<ADDomainItem> enumeratedOUs = searchDNforOU(domain, parent,
-				distinguishedName, memberships);
 
-		List<ADDomainItem> dummy = new ArrayList<ADDomainItem>();
+		final List<ADDomainItem> dummy = new ArrayList<ADDomainItem>();
 		dummy.addAll(children);
 
-		dummy.removeAll(enumeratedUsers);
-		dummy.removeAll(enumeratedGroups);
-		dummy.removeAll(enumeratedOUs);
+		try {
+			List<ADDomainItem> enumeratedUsers = searchDNforUsers(domain,
+					parent, distinguishedName, memberships);
+			dummy.removeAll(enumeratedUsers);
+		} catch (Throwable e) {
+			logger.error(
+					"Error occurred when trying to enumerate users under dn: "
+							+ distinguishedName, e);
+		}
+
+		try {
+			List<ADDomainItem> enumeratedGroups = searchDNforGroups(domain,
+					parent, distinguishedName);
+			dummy.removeAll(enumeratedGroups);
+		} catch (Throwable e) {
+			logger.error(
+					"Error occurred when trying to enumerate groups under dn: "
+							+ distinguishedName, e);
+		}
+
+		try {
+			List<ADDomainItem> enumeratedOUs = searchDNforOU(domain, parent,
+					distinguishedName, memberships, itemsToRemove);
+			dummy.removeAll(enumeratedOUs);
+		} catch (Throwable e) {
+			logger.error(
+					"Error occurred when trying to enumerate organizational units under dn: "
+							+ distinguishedName, e);
+		}
 
 		{
-			final List<ADDomainItem> dummyF = dummy;
 			transactionTemplate.execute(new TransactionCallbackWithoutResult() {
 				@Override
 				protected void doInTransactionWithoutResult(
 						TransactionStatus arg0) {
-					for (ADDomainItem adDomainItem : dummyF) {
+					for (ADDomainItem adDomainItem : dummy) {
 						try {
-							removeDomainItem(adDomainItem, parent);
-							parent.getChildren().remove(adDomainItem);
+							removeDomainItem(adDomainItem, itemsToRemove);
 							adDomainDAO.saveDomainItem(parent);
 						} catch (UncategorizedSQLException e) {
 							logger.error(
@@ -330,78 +374,30 @@ public class ADEnumServiceImpl implements ADEnumService {
 
 	}
 
-	protected void removeDomainItem(final ADDomainItem adDomainItem,
-			final ADDomainItemGroup parent) {
-
-		if (adDomainItem instanceof ADDomainGroup) {
-			final ADDomainGroup adDomainGroup = (ADDomainGroup) adDomainItem;
-
-			for (final ADDomainUser adDomainUser : adDomainGroup.getUsers()) {
-				transactionTemplate
-						.execute(new TransactionCallbackWithoutResult() {
-							@Override
-							protected void doInTransactionWithoutResult(
-									TransactionStatus arg0) {
-								adDomainUser.getGroups().remove(adDomainGroup);
-								adDomainGroup.getUsers().remove(adDomainUser);
-								adDomainDAO.saveDomainItem(adDomainGroup);
-								adDomainDAO.saveDomainItem(adDomainUser);
-							}
-						});
-			}
-
-		} else if (adDomainItem instanceof ADDomainUser) {
-			final ADDomainUser adDomainUser = (ADDomainUser) adDomainItem;
-			for (final ADDomainGroup adDomainGroup : adDomainUser.getGroups()) {
-				transactionTemplate
-						.execute(new TransactionCallbackWithoutResult() {
-							@Override
-							protected void doInTransactionWithoutResult(
-									TransactionStatus arg0) {
-								adDomainGroup.getUsers().remove(adDomainUser);
-								adDomainUser.getGroups().remove(adDomainGroup);
-								adDomainDAO.saveDomainItem(adDomainGroup);
-								adDomainDAO.saveDomainItem(adDomainUser);
-							}
-						});
-			}
-
+	protected void removeDomainItem(ADDomainItem adDomainItem,
+			Map<String, Set<Integer>> itemsToRemove) {
+		Set<Integer> groupSet = null;
+		if (adDomainItem instanceof ADDomainUser) {
+			groupSet = itemsToRemove.get(AD_KEY_USER);
+		} else if (adDomainItem instanceof ADDomainGroup) {
+			groupSet = itemsToRemove.get(AD_KEY_GROUP);
 		} else if (adDomainItem instanceof ADDomainOU) {
-			final ADDomainOU adDomainOU = (ADDomainOU) adDomainItem;
-
-			List<ADDomainItem> dummy = new LinkedList<ADDomainItem>();
-			dummy.addAll(adDomainOU.getChildren());
-			for (final ADDomainItem innerItem : dummy) {
-				try {
-					removeDomainItem(innerItem, adDomainOU);
-					transactionTemplate
-							.execute(new TransactionCallbackWithoutResult() {
-								@Override
-								protected void doInTransactionWithoutResult(
-										TransactionStatus arg0) {
-									adDomainOU.getChildren().remove(innerItem);
-									adDomainDAO.saveDomainItem(adDomainOU);
-								}
-							});
-				} catch (UncategorizedSQLException e) {
-					logger.error(
-							"Does not removing ADDomainItem, because item is used in inventory: ",
-							adDomainItem.getId());
-				} catch (Throwable e) {
-					logger.error(
-							"Error occurred when trying to remove domain item",
-							e);
-				}
-			}
-
+			groupSet = itemsToRemove.get(AD_KEY_OU);
 		}
-		transactionTemplate.execute(new TransactionCallbackWithoutResult() {
-			@Override
-			protected void doInTransactionWithoutResult(TransactionStatus arg0) {
-				adDomainDAO.remove(adDomainItem);
-			}
-		});
 
+		if (groupSet != null) {
+			groupSet.add(adDomainItem.getId());
+		} else {
+			logger.error("Cannot remove domain category for item. Clazz: "
+					+ adDomainItem.getClass().getSimpleName());
+		}
+	}
+
+	protected Name strToName(String distinguishedName)
+			throws InvalidNameException {
+		String escapedDistinguishedName = new String(distinguishedName);
+		Name composite = new CompositeName().add(escapedDistinguishedName);
+		return composite;
 	}
 
 	protected List<ADDomainItem> searchDNforUsers(ADDomain domain,
@@ -416,14 +412,15 @@ public class ADEnumServiceImpl implements ADEnumService {
 
 		ctls.setSearchScope(SearchControls.ONELEVEL_SCOPE);
 		NamingEnumeration<SearchResult> queryResults = ctx.search(
-				distinguishedName,
+				strToName(distinguishedName),
 				"(&(objectCategory=person)(objectClass=user))", ctls);
 		return saveUsers(domain, parent, queryResults, memberships);
 	}
 
 	protected List<ADDomainItem> searchDNforOU(ADDomain domain,
 			ADDomainItemGroup parent, String distinguishedName,
-			Map<String, Set<String>> memberships) throws NamingException {
+			Map<String, Set<String>> memberships,
+			Map<String, Set<Integer>> itemsToRemove) throws NamingException {
 		DirContext ctx = context(domain);
 		SearchControls ctls = new SearchControls();
 		String[] attrIDs = { "name", "distinguishedName" };
@@ -432,11 +429,11 @@ public class ADEnumServiceImpl implements ADEnumService {
 		ctls.setSearchScope(SearchControls.ONELEVEL_SCOPE);
 
 		NamingEnumeration<SearchResult> queryResults = ctx
-				.search(distinguishedName,
+				.search(strToName(distinguishedName),
 						"(&(objectClass=organizationalUnit)(!(isCriticalSystemObject=TRUE))(!(msExchVersion=*)))",
 						ctls);
 
-		return saveOUs(domain, parent, queryResults, memberships);
+		return saveOUs(domain, parent, queryResults, memberships, itemsToRemove);
 	}
 
 	protected List<ADDomainItem> searchDNforGroups(ADDomain domain,
@@ -450,7 +447,7 @@ public class ADEnumServiceImpl implements ADEnumService {
 		ctls.setSearchScope(SearchControls.ONELEVEL_SCOPE);
 
 		NamingEnumeration<SearchResult> queryResults = ctx.search(
-				distinguishedName, "(&(objectClass=group))", ctls);
+				strToName(distinguishedName), "(&(objectClass=group))", ctls);
 
 		return saveGroups(domain, parent, queryResults);
 	}
@@ -603,7 +600,8 @@ public class ADEnumServiceImpl implements ADEnumService {
 	protected List<ADDomainItem> saveOUs(final ADDomain domain,
 			ADDomainItemGroup parent,
 			NamingEnumeration<SearchResult> queryResults,
-			Map<String, Set<String>> memberships) throws NamingException {
+			Map<String, Set<String>> memberships,
+			Map<String, Set<Integer>> itemsToRemove) throws NamingException {
 		List<ADDomainItem> resultList = new ArrayList<ADDomainItem>();
 
 		while (queryResults.hasMoreElements()) {
@@ -672,7 +670,7 @@ public class ADEnumServiceImpl implements ADEnumService {
 				}
 
 				enumerateDN(domain, domainOU, domainOU.getDistinguishedName(),
-						memberships);
+						memberships, itemsToRemove);
 				resultList.add(domainOU);
 			}
 		}
@@ -769,7 +767,7 @@ public class ADEnumServiceImpl implements ADEnumService {
 			ctls.setReturningAttributes(attrIDs);
 			ctls.setSearchScope(SearchControls.ONELEVEL_SCOPE);
 			queryResults = ctx
-					.search(domain.getBaseDistinguishedName(),
+					.search(strToName(domain.getBaseDistinguishedName()),
 							"(&(objectClass=organizationalUnit)(!(isCriticalSystemObject=TRUE))(!(msExchVersion=*)))",
 							ctls);
 			return "OK";

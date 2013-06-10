@@ -1,6 +1,8 @@
 package com.mydlp.ui.dao;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import com.mydlp.ui.domain.ADDomain;
 import com.mydlp.ui.domain.ADDomainItem;
@@ -31,8 +33,15 @@ public interface ADDomainDAO {
 	
 	public void startProcess(Integer domainId);
 	
+	public void finalizeAll();
+	
 	public AbstractEntity merge(AbstractEntity domainObj);
 	
 	public ADDomainRoot getDomainRoot(Integer domainId);
 	
+	public ADDomainItem reloadDomainItem(ADDomainItem item);
+	
+	public void removeDomainItems(Map<String, Set<Integer>> itemsToRemove);
+
+	public void removeGroupMember(Integer groupId, Integer userId);
 }

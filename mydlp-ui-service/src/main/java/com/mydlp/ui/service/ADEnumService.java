@@ -11,4 +11,7 @@ public interface ADEnumService {
 	
 	public String testConnection(ADDomain adDomain);
 	
+	public void dailySchedule();
+	
+	public void enumerateFun(final Integer domainId);
 }

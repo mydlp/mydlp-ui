@@ -26,9 +26,12 @@
     <facility>LOCAL6</facility>
     <suffixPattern>[%thread]: [ui] %msg</suffixPattern>
   </appender>
-  <root level="info">
+  <root level="error">
     <appender-ref ref="${log.root.appender}"/>
   </root>
+  <logger name="com.mydlp" level="info">
+    <appender-ref ref="${log.root.appender}"/>
+  </logger>
   <logger name="AUDIT" level="debug">
 	<appender-ref ref="${log.audit.appender}"/>  
   </logger>
