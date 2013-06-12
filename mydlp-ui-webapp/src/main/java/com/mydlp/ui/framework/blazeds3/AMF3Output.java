@@ -52,13 +52,18 @@ public class AMF3Output extends flex.messaging.io.amf.Amf3Output {
 				
 				if (ru.getDomainItem() instanceof ADDomainItemGroup)
 				{
-					ADDomainItemGroup g = (ADDomainItemGroup) ru.getDomainItem();
-					g.setChildren(new ArrayList<ADDomainItem>());
+					ADDomainItemGroup ig = (ADDomainItemGroup) ru.getDomainItem();
+					ig.setChildren(new ArrayList<ADDomainItem>());
 				}
 				else if (ru.getDomainItem() instanceof ADDomainGroup)
 				{
 					ADDomainGroup g = (ADDomainGroup) ru.getDomainItem();
 					g.setUsers(new HashSet<ADDomainUser>());
+				}
+				else if (ru.getDomainItem() instanceof ADDomainUser)
+				{
+					ADDomainUser u = (ADDomainUser) ru.getDomainItem();
+					u.setGroups(new HashSet<ADDomainGroup>());
 				}
 			}
 		}

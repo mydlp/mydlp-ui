@@ -5,12 +5,15 @@ import javax.persistence.Entity;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import javax.persistence.Transient;
+import javax.persistence.UniqueConstraint;
 
 import org.hibernate.annotations.Index;
 
 @Entity
 @Inheritance(strategy=InheritanceType.JOINED)
+@Table(uniqueConstraints={@UniqueConstraint(name="domainItemDetailIndex", columnNames={"domainId", "distinguishedNameHash"})})
 public class ADDomainItem extends AbstractEntity {
 	
 	/**
@@ -28,7 +31,7 @@ public class ADDomainItem extends AbstractEntity {
 	}
 	
 	@Index(name="distinguishedNameIndex")
-	@Column(nullable=false)
+	@Column(nullable=false, unique=true)
 	public Integer getDistinguishedNameHash() {
 		if (distinguishedName != null)
 			return distinguishedName.hashCode();
