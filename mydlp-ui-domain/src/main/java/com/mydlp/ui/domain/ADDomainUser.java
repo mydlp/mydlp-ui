@@ -48,7 +48,7 @@ public class ADDomainUser extends ADDomainItem {
 		this.aliases = aliases;
 	}
 	
-	@ManyToMany
+	@ManyToMany(fetch=FetchType.LAZY)
 	public Set<ADDomainGroup> getGroups() {
 		return groups;
 	}

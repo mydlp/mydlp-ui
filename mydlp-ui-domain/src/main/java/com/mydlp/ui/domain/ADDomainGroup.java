@@ -4,6 +4,7 @@ import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.ManyToMany;
 
 @Entity
@@ -26,7 +27,7 @@ public class ADDomainGroup extends ADDomainItem {
 		this.name = name;
 	}
 
-	@ManyToMany(mappedBy="groups")
+	@ManyToMany(mappedBy="groups", fetch=FetchType.LAZY)
 	public Set<ADDomainUser> getUsers() {
 		return users;
 	}

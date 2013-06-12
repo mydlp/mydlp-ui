@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.OneToMany;
@@ -20,7 +21,7 @@ public class ADDomainItemGroup extends ADDomainItem {
 	
 	protected List<ADDomainItem> children;
 	
-	@OneToMany(mappedBy="parent", cascade={CascadeType.ALL})
+	@OneToMany(mappedBy="parent", cascade={CascadeType.ALL}, fetch=FetchType.LAZY)
 	@OrderBy("distinguishedName")
 	public List<ADDomainItem> getChildren() {
 		return children;
