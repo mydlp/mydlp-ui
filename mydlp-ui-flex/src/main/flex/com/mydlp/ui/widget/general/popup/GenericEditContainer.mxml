@@ -323,6 +323,7 @@
 						if(targetObject["id"] == null || isNaN(targetObject["id"]))
 							continue;
 						var ddRemoteStorages:DocumentDatabaseRemoteStorageInput = new DocumentDatabaseRemoteStorageInput();
+						ddRemoteStorages.deleteList = deleteList;
 						ddRemoteStorages.documentDatabaseRemoteStorages = targetObject[classMember.name];
 						ddRemoteStorages.documentDatabase = targetObject as DocumentDatabase;
 						BindingUtils.bindProperty(targetObject, classMember.name, ddRemoteStorages, "documentDatabaseRemoteStorages");
