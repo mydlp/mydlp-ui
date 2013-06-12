@@ -97,8 +97,5 @@ public class RemoteStorageBRSImpl implements RemoteStorageService
 	public String testWebServer(WebServer webServer) {
 		String url = webServer.getProto() + "://" + webServer.getAddress() + ":" + Integer.toString(webServer.getPort()) + "/" + webServer.getStartPath();
 		return thriftService.testWebServer(url);	
-	}
-
-	
-	
+	}	
 }

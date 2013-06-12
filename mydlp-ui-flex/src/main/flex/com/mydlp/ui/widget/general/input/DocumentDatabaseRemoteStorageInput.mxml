@@ -33,6 +33,8 @@
 			[Bindable]
 			protected var enableButton:Boolean = false;
 			
+			public var deleteList:ListCollectionView = null;
+			
 			protected function onCreationComplete():void
 			{
 				re.getRemoteStorages();
@@ -105,6 +107,7 @@
 						var crs:DocumentDatabaseRemoteStorage = documentDatabaseRemoteStorages[i];
 						if(crs.remoteStorage.id == event.item.remoteStorage.id)
 						{
+							deleteList.addItem(crs);
 							documentDatabaseRemoteStorages.removeItemAt(i);
 							break;
 						}
@@ -124,6 +127,20 @@
 					if(!flag)
 					{
 						documentDatabaseRemoteStorages.addItem(event.item);
+						removeFromDeleteListIfExists(event.item as DocumentDatabaseRemoteStorage);
+					}
+				}
+			}
+			
+			protected function removeFromDeleteListIfExists(item:DocumentDatabaseRemoteStorage):void
+			{
+				for(var i:int = 0; i < deleteList.length; i++)
+				{
+					var item:DocumentDatabaseRemoteStorage = deleteList[i] as DocumentDatabaseRemoteStorage;
+					if(item.remoteStorage.id == item.remoteStorage.id)
+					{
+						deleteList.removeItemAt(i);
+						break;
 					}
 				}
 			}

@@ -14,14 +14,17 @@ import com.mydlp.ui.domain.ADDomain;
 import com.mydlp.ui.domain.AbstractEntity;
 import com.mydlp.ui.domain.AbstractNamedEntity;
 import com.mydlp.ui.domain.DashboardItem;
+import com.mydlp.ui.domain.DiscoveryRule;
 import com.mydlp.ui.domain.Document;
 import com.mydlp.ui.domain.DocumentDatabase;
 import com.mydlp.ui.domain.InventoryBase;
 import com.mydlp.ui.domain.RDBMSConnection;
 import com.mydlp.ui.domain.RDBMSInformationTarget;
 import com.mydlp.ui.domain.RegularExpressionGroup;
+import com.mydlp.ui.domain.RemoteStorageRule;
 import com.mydlp.ui.domain.Rule;
 import com.mydlp.ui.service.VersionService;
+import com.mydlp.ui.thrift.MyDLPUIThriftService;
 
 @Service("genericBRS")
 @RemotingDestination
@@ -55,6 +58,9 @@ public class GenericBRSImpl implements GenericService
 	
 	@Autowired
 	protected VersionService versionService;
+	
+	@Autowired
+	protected MyDLPUIThriftService thriftService;
 
 	@Override
 	public AbstractEntity save(AbstractEntity item) {
@@ -83,7 +89,11 @@ public class GenericBRSImpl implements GenericService
 		if (item instanceof InventoryBase)
 			inventoryService.remove((InventoryBase) item);
 		else if (item instanceof Rule)
+		{
+			if(item instanceof DiscoveryRule || item instanceof RemoteStorageRule)
+				thriftService.stopReportBeforeRemoveRule(item.getId());
 			ruleService.remove((Rule) item);
+		}
 		else if (item instanceof DashboardItem)
 			dashboardService.remove((DashboardItem) item);
 		else if (item instanceof ADDomain)

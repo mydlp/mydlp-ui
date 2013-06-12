@@ -22,5 +22,4 @@ public interface RemoteStorageService {
 	public String testConnection(RemoteStorage remoteStorage);
 	
 	public String testWebServer(WebServer webServer);
-
 }

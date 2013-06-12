@@ -320,4 +320,14 @@ public class MyDLPUIThriftServiceImpl implements MyDLPUIThriftService {
 		});
 	}
 
+	@Override
+	public void stopReportBeforeRemoveRule(final int ruleId) {
+		call(new ThriftCall<Void>() {
+			@Override
+			public Void execute(MyDLPUIThriftConnection thriftConnection) throws TException {
+				thriftConnection.client.stopReportBeforeRemoveRule(ruleId);
+				return null;
+			}
+		});
+	}
 }

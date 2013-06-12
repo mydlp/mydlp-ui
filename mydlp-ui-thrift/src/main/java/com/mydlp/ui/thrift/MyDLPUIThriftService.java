@@ -46,5 +46,7 @@ public interface MyDLPUIThriftService {
     public String testConnection(Map<String, String> remoteStorage);
     
     public String testWebServer(String remoteStorage);
+    
+    public void stopReportBeforeRemoveRule(int id);
 
 }
