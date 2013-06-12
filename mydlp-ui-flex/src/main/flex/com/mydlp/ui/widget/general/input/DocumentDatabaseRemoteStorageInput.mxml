@@ -127,7 +127,7 @@
 					if(!flag)
 					{
 						documentDatabaseRemoteStorages.addItem(event.item);
-						removeFromDeleteListIfExists(event.item);
+						removeFromDeleteListIfExists(event.item as DocumentDatabaseRemoteStorage);
 					}
 				}
 			}
