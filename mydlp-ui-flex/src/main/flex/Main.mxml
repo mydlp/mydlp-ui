@@ -311,7 +311,7 @@
 						ruleContainer = policyContainer.ruleContainer;
 						inventoryTree = policyContainer.inventoryTree;						
 					}
-					else if(i == 2 && hasAnyAdminRole())
+					else if(i == 2 && hasAnyAdminRole() && SessionUtil.isEnterprise())
 					{
 						navigatorContent.label = LangUtil.getString("messages", "maintab.discovery");
 						element = new PolicyContainer();

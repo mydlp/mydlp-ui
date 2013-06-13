@@ -64,7 +64,7 @@
 						{label: "Removable Storage", data:"R"},
 						{label: "Removable Storage Inbound", data:"I"},
 						{label: "Printer", data:"P"},
-						{label: "Discovery", data:"D"},
+						{label: "Endpoint Discovery", data:"D"},
 						{label: "Remote Storage Discovery", data:"RD"},
 						{label: "API", data:"A"}
 					)
@@ -77,9 +77,7 @@
 						{label: "Web", data:"W"},
 						{label: "Mail", data:"M"},
 						{label: "Removable Storage", data:"R"},
-						{label: "Printer", data:"P"},
-						{label: "Discovery", data:"D"},
-						{label: "Remote Storage Discovery", data:"RD"}
+						{label: "Printer", data:"P"}
 					)
 				);
 			
