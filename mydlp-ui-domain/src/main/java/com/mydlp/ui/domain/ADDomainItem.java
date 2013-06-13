@@ -31,7 +31,7 @@ public class ADDomainItem extends AbstractEntity {
 	}
 	
 	@Index(name="distinguishedNameIndex")
-	@Column(nullable=false, unique=true)
+	@Column(nullable=false)
 	public Integer getDistinguishedNameHash() {
 		if (distinguishedName != null)
 			return distinguishedName.hashCode();
