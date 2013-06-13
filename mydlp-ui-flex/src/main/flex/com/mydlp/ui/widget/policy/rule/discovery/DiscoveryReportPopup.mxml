@@ -5,7 +5,7 @@
 			   xmlns:log="com.mydlp.ui.widget.log.*"
 			   title="@Resource(bundle = 'messages', key = 'discovery.report.popup.title')"
 			   close="{close();}"
-			   x="10" y="10" 
+			   x="20" y="20" 
 			   creationComplete="onCreationComplete(event)"
 			   >
 	<fx:Script>
@@ -56,8 +56,8 @@
 			
 			protected function handleResize():void
 			{
-				this.width = FlexGlobals.topLevelApplication.width - 20;
-				this.height = FlexGlobals.topLevelApplication.height - 20;
+				this.width = FlexGlobals.topLevelApplication.width - 40;
+				this.height = FlexGlobals.topLevelApplication.height - 40;
 				resizeExecuting = false;
 			}
 			
