@@ -8,9 +8,10 @@ import org.springframework.stereotype.Service;
 
 import com.mydlp.ui.dao.DataFormatDAO;
 import com.mydlp.ui.domain.DataFormat;
+import com.mydlp.ui.domain.MIMEType;
 
 @Service("dataFormatBRS")
-@RemotingDestination(serviceAdapter="dpHibernateRemotingAdapter")
+@RemotingDestination
 public class DataFormatBRSImpl implements DataFormatService
 {
 	@Autowired
@@ -24,5 +25,10 @@ public class DataFormatBRSImpl implements DataFormatService
 	@Override
 	public DataFormat save(DataFormat d) {
 		return dataFormatDAO.save(d);
+	}
+
+	@Override
+	public List<MIMEType> getMimes(Integer dataFormatId) {
+		return dataFormatDAO.getMimes(dataFormatId);
 	}
 }

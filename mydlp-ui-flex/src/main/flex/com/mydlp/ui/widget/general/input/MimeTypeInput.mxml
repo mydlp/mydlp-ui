@@ -3,7 +3,10 @@
 					  xmlns:s="library://ns.adobe.com/flex/spark" 
 					  xmlns:my="http://www.mydlp.com/flex/my"
 					  xmlns:mx="library://ns.adobe.com/flex/mx"
-					  width="{InputLabel.VERTICAL_INPUT_WIDTH}" height="150">
+					  width="{InputLabel.VERTICAL_INPUT_WIDTH}"
+					  enabled="false"
+					  creationComplete="onCreationComplete(event)"
+					  height="150">
 	<fx:Script>
 		<![CDATA[
 			import com.mydlp.ui.domain.DataFormat;
@@ -13,6 +16,7 @@
 			
 			import mx.collections.ArrayCollection;
 			import mx.events.DragEvent;
+			import mx.events.FlexEvent;
 			import mx.rpc.events.ResultEvent;
 			
 			[Bindable]
@@ -52,10 +56,34 @@
 				mtp.populate();
 			}
 			
+			protected function onCreationComplete(event:FlexEvent):void
+			{
+				if (isNaN(dataFormatId))
+				{
+					mimeTypes = new ArrayCollection();
+					this.enabled=true;
+				}
+				else
+				{
+					re.getMimes(dataFormatId);
+				}
+			}
+			
+			protected function getMimesHandler(event:ResultEvent):void
+			{
+				mimeTypes = event.result as ListCollectionView;
+				this.enabled=true;
+			}
+			
 		]]>
 	</fx:Script>
 	
 	<fx:Declarations>
+		<my:remote id="re" destination="dataFormatBRS">
+			<my:method name="getMimes" result="getMimesHandler(event)" />
+		</my:remote>
+		
+		<fx:Number id="dataFormatId" />
 		<mx:ListCollectionView id="mimeTypes" />
 	</fx:Declarations>
 	

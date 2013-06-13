@@ -10,7 +10,9 @@ import com.mydlp.ui.domain.ADDomainItem;
 import com.mydlp.ui.domain.ADDomainItemGroup;
 import com.mydlp.ui.domain.ADDomainUser;
 import com.mydlp.ui.domain.ADDomainUserAlias;
+import com.mydlp.ui.domain.DataFormat;
 import com.mydlp.ui.domain.InventoryItem;
+import com.mydlp.ui.domain.MIMEType;
 import com.mydlp.ui.domain.RuleItem;
 import com.mydlp.ui.domain.RuleItemGroup;
 import com.mydlp.ui.domain.RuleUserAD;
@@ -27,7 +29,16 @@ public class AMF3Output extends flex.messaging.io.amf.Amf3Output {
 	
 	protected void dropRedundant(Object value)
 	{
+		if (value == null)
+		{
+			return;
+		}
+		
 		if (value instanceof RuleItem) {
+			DataFormat df = (DataFormat) value;
+			df.setMimeTypes(new ArrayList<MIMEType>());
+		}
+		else if (value instanceof RuleItem) {
 			RuleItem ri = (RuleItem) value;
 			if (ri.getItem() != null)
 			{
@@ -57,8 +68,7 @@ public class AMF3Output extends flex.messaging.io.amf.Amf3Output {
 		{
 			ADDomain d = (ADDomain) value;
 			d.setRoot(null);
-		}
-		
+		}		
 		else if (value instanceof ADDomainItemGroup)
 		{
 			ADDomainItemGroup ig = (ADDomainItemGroup) value;

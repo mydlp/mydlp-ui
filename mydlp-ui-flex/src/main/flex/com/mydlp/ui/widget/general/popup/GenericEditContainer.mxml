@@ -385,6 +385,8 @@
 					
 					{
 						var mtInput:MimeTypeInput = new MimeTypeInput();
+						mtInput.mimeTypes = targetObject[classMember.name];
+						mtInput.dataFormatId = targetObject["id"];
 						
 						BindingUtils.bindProperty(targetObject, classMember.name, mtInput, "mimeTypes");
 						inputLabel = new VerticalInputLabel();

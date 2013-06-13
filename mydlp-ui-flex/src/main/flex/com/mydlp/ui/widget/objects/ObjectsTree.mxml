@@ -91,7 +91,7 @@
 				
 				for each(var item:* in _objects)
 				{
-					if (item is DataFormat )
+					if (item is DataFormat)
 						dataFormats.addItem(item);
 					else if(item is RegularExpressionGroup)
 						regularExpressionGroups.addItem(item);
@@ -113,36 +113,6 @@
 						adDomains.addItem(item);
 					else if(item is RDBMSConnection)
 						rdbmsConnections.addItem(item);
-				}
-				if(FlexGlobals.topLevelApplication.hasRole(AuthSecurityRole.ROLE_ADMIN) ||
-					FlexGlobals.topLevelApplication.hasRole(AuthSecurityRole.ROLE_SUPER_ADMIN))
-					redf.getDataFormats();
-			}
-			
-			protected function getDataFormatsHandler(event:ResultEvent): void
-			{
-				var _objects:ListCollectionView = event.result as ListCollectionView;
-				
-				dataFormats.removeAll();
-				
-				for each(var item:* in _objects)
-				{
-					if (item is DataFormat )
-						dataFormats.addItem(item);
-				}
-				read.getADDomains();
-			}
-			
-			protected function getADDomainsHandler(event:ResultEvent): void
-			{
-				var _objects:ListCollectionView = event.result as ListCollectionView;
-				
-				adDomains.removeAll();
-				
-				for each(var item:* in _objects)
-				{
-					if(item is ADDomain)
-						adDomains.addItem(item);
 				}
 				
 				openItems = tempOpenItems;
@@ -233,12 +203,6 @@
 	<fx:Declarations>
 		<my:remote id="re" destination="objectsBRS">
 			<my:method name="getObjects" result="getObjectsHandler(event)" />
-		</my:remote>
-		<my:remote id="read" destination="adDomainBRS">
-			<my:method name="getADDomains" result="getADDomainsHandler(event)" />
-		</my:remote>
-		<my:remote id="redf" destination="dataFormatBRS">
-			<my:method name="getDataFormats" result="getDataFormatsHandler(event)" />
 		</my:remote>
 	</fx:Declarations>
 </mx:Tree>

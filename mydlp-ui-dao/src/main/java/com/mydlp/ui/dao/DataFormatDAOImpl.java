@@ -1,5 +1,6 @@
 package com.mydlp.ui.dao;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.criterion.DetachedCriteria;
@@ -7,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.mydlp.ui.domain.DataFormat;
+import com.mydlp.ui.domain.MIMEType;
 
 @Repository("dataFormatDAO")
 @Transactional
@@ -24,6 +26,19 @@ public class DataFormatDAOImpl extends AbstractPolicyDAO implements DataFormatDA
 	public DataFormat save(DataFormat d) {
 		getHibernateTemplate().saveOrUpdate(d);
 		return d;
+	}
+
+	@Override
+	public List<MIMEType> getMimes(Integer dataFormatId) {
+		DataFormat df = getHibernateTemplate().get(DataFormat.class, dataFormatId);
+		if (df == null)
+		{
+			return new ArrayList<MIMEType>();
+		}
+		else
+		{
+			return df.getMimeTypes();
+		}
 	}
 	
 }
