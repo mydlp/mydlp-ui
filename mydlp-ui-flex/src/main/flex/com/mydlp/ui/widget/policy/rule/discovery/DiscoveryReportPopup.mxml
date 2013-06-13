@@ -2,19 +2,30 @@
 <s:TitleWindow xmlns:fx="http://ns.adobe.com/mxml/2009" 
 			   xmlns:s="library://ns.adobe.com/flex/spark" 
 			   xmlns:mx="library://ns.adobe.com/flex/mx"
-			   close="{close();}"
+			   xmlns:log="com.mydlp.ui.widget.log.*"
 			   title="@Resource(bundle = 'messages', key = 'discovery.report.popup.title')"
-			   top="10" bottom="10" left="10" right="10" xmlns:log="com.mydlp.ui.widget.log.*"
+			   close="{close();}"
+			   x="10" y="10" 
+			   creationComplete="onCreationComplete(event)"
 			   >
 	<fx:Script>
 		<![CDATA[
 			import com.mydlp.ui.util.InteractionUtil;
 			
+			import mx.binding.utils.ChangeWatcher;
 			import mx.collections.ArrayCollection;
 			import mx.collections.ListCollectionView;
+			import mx.core.FlexGlobals;
+			import mx.events.FlexEvent;
+			
+			protected var resizeExecuting:Boolean = false;
+			protected var widthWatch:ChangeWatcher;
+			protected var heightWatch:ChangeWatcher;
 			
 			protected function close(): void
 			{
+				widthWatch.unwatch();
+				heightWatch.unwatch();
 				InteractionUtil.closePopup(this);
 			}
 			
@@ -27,6 +38,27 @@
 				criteriaGId.addItem(groupId);
 				cl.addItem(cl);
 				return cl;
+			}
+			
+			protected function onCreationComplete(event:FlexEvent):void
+			{
+				widthWatch = ChangeWatcher.watch(FlexGlobals.topLevelApplication,'width',onSizeChange);
+				heightWatch = ChangeWatcher.watch(FlexGlobals.topLevelApplication,'height',onSizeChange);
+				onSizeChange(null);
+			}
+			
+			protected function onSizeChange(event:Event):void
+			{
+				if(!resizeExecuting)
+					callLater(handleResize);
+				resizeExecuting = true;
+			}
+			
+			protected function handleResize():void
+			{
+				this.width = FlexGlobals.topLevelApplication.width - 20;
+				this.height = FlexGlobals.topLevelApplication.height - 20;
+				resizeExecuting = false;
 			}
 			
 		]]>
