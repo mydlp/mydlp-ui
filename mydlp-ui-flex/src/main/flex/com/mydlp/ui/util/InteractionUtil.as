@@ -18,10 +18,13 @@ package com.mydlp.ui.util
 	public class InteractionUtil
 	{
 		
-		public static function newPopup(className:Class): IFlexDisplayObject
+		public static function newPopup(className:Class, centerPopup:Boolean = true): IFlexDisplayObject
 		{
 			var popup:IFlexDisplayObject = PopUpManager.createPopUp(FlexGlobals.topLevelApplication as DisplayObject , className, true);
-			PopUpManager.centerPopUp(popup);
+			if (centerPopup)
+			{
+				PopUpManager.centerPopUp(popup);
+			}
 			popup.addEventListener(CloseEvent.CLOSE, closeHandlerFunction);
 			return popup;
 		}

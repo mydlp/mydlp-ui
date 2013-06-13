@@ -125,9 +125,14 @@
 				return re.getLogContents(searchString, offset, count);
 			}
 			
+			public var defaultCriteriaGeneratorFunction:Function = function(): ListCollectionView
+			{
+				return new ArrayCollection();
+			}
+			
 			protected function generateCriteriaList():void
 			{
-				criteriaList = new ArrayCollection();
+				criteriaList = defaultCriteriaGeneratorFunction();
 				if (startDate.selectedDate != null && endDate.selectedDate != null)
 				{
 					var criteria:ListCollectionView = new ArrayCollection();

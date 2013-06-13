@@ -127,9 +127,8 @@
 			
 			protected function generateReport(event:MouseEvent):void
 			{
-				var drp:DiscoveryReportPopup = InteractionUtil.newPopup(DiscoveryReportPopup) as DiscoveryReportPopup;
+				var drp:DiscoveryReportPopup = InteractionUtil.newPopup(DiscoveryReportPopup, false) as DiscoveryReportPopup;
 				drp.groupId = data.groupId;
-				drp.populate();
 			}
 			
 		]]>

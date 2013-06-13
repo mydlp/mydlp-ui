@@ -5,97 +5,23 @@
 			   xmlns:my="http://www.mydlp.com/flex/my"
 			   close="{close();}"
 			   title="@Resource(bundle = 'messages', key = 'discovery.report.popup.title')"
-			   width="640" height="350">
+			   top="10" bottom="10" left="10" right="10" xmlns:log="com.mydlp.ui.widget.log.*"
+			   >
 	<fx:Script>
 		<![CDATA[
-			import com.mydlp.ui.util.AsyncListDataProvider;
-			import com.mydlp.ui.util.InteractionUtil;
-			import com.mydlp.ui.util.LangUtil;
-			
 			import mx.collections.ArrayCollection;
 			import mx.collections.ListCollectionView;
-			import mx.events.FlexEvent;
-			import mx.rpc.AsyncToken;
-			import mx.rpc.events.ResultEvent;
 			
-			[Bindable]
-			protected var logSearchDP:AsyncListDataProvider = null;
-			
-			protected var criteriaList:ListCollectionView = new ArrayCollection();
-			
-			protected const LOG_PENDING_OBJECT:Object = 
-				{date: LangUtil.getString("messages", "log.container.search.pending.message")};
-			
-			protected const CONTENT_PENDING_OBJECT:Object = 
-				{message: LangUtil.getString("messages", "log.container.search.pending.message")};
-			
-			protected function close(): void
+			public function generateDefaultCriteriaList(): ListCollectionView
 			{
-				InteractionUtil.closePopup(this);
+				var cl:ListCollectionView = new ArrayCollection();
+				var criteriaGId:ListCollectionView = new ArrayCollection();
+				criteriaGId.addItem("groupId");
+				criteriaGId.addItem("eq");
+				criteriaGId.addItem(groupId);
+				cl.addItem(cl);
+				return cl;
 			}
-			
-			protected function onCreationComplete(event:FlexEvent):void
-			{
-				
-			}
-			
-			protected function countLogSearch(): AsyncToken
-			{
-				return re.getLogCount(criteriaList);
-			}
-			
-			protected function fetchLogSearch(offset:Number, count:Number): AsyncToken
-			{
-				return re.getLogs(criteriaList, offset, count);
-			}
-			
-			
-			protected function generateCriteriaList():void
-			{
-				criteriaList = new ArrayCollection();
-				
-				var criteriaSA:ListCollectionView = new ArrayCollection();
-				criteriaSA.addItem("groupId");
-				criteriaSA.addItem("eq");
-				criteriaSA.addItem(groupId);
-				
-				criteriaList.addItem(criteriaSA);
-			}
-			
-			public function populate():void
-			{
-				logSearchDP = new AsyncListDataProvider();
-				logSearchDP.countFunction = countLogSearch;
-				logSearchDP.fetchFunction = fetchLogSearch;
-				logSearchDP.pendingObject = LOG_PENDING_OBJECT;
-				
-				refresh();
-			}
-			
-			
-			protected function refresh(): void
-			{
-				generateCriteriaList();
-				logSearchDP.init();
-			}
-			
-			
-			protected function onExportClick(event:MouseEvent):void
-			{
-				exportButton.enabled=false;
-				generateCriteriaList();
-				re.exportExcel(criteriaList);
-			}
-			
-			protected function exportHandler(event:ResultEvent): void
-			{
-				var exportId:String = event.result as String;
-				if (exportId != null)
-					navigateToURL(new URLRequest("export?id="+exportId), '_blank');
-				exportButton.enabled=true;
-			}
-			
-			
 			
 		]]>
 	</fx:Script>
@@ -106,40 +32,6 @@
 		
 		<fx:String id="groupId"/>
 	</fx:Declarations>
-	<s:Group id="searchBar" width="100%" height="100%">
-		<s:layout>
-			<s:VerticalLayout horizontalAlign="center" />
-		</s:layout>
-		<s:HGroup verticalAlign="middle" width="100%" horizontalAlign="left" gap="10">
-			
-			<s:HGroup width="44%" horizontalAlign="left" paddingLeft="6" verticalAlign="middle">
-				<s:Label text="@Resource(bundle = 'messages', key = 'log.container.search.count.label')"/>
-				<s:Label text="{logSearchDP.numberOfItems}" />
-			</s:HGroup>
-			<s:Button label="@Resource(bundle = 'messages', key = 'log.container.export.button.label')" 
-					  id="exportButton"
-					  click="onExportClick(event)"/>
-		</s:HGroup>
-		
-		<s:DataGrid id="logList" dataProvider="{logSearchDP.asyncListView}" width="100%" height="95%" variableRowHeight="true">
-			<s:columns>
-				<s:ArrayList>
-					<s:GridColumn headerText="@Resource(bundle = 'messages', key = 'log.container.header.date')"
-								  dataField="date"/>
-					<s:GridColumn headerText="@Resource(bundle = 'messages', key = 'log.container.header.source')" 
-								  itemRenderer="com.mydlp.ui.widget.log.IncidentSourceColumnRenderer"/>
-					<s:GridColumn headerText="@Resource(bundle = 'messages', key = 'log.container.header.destination')"
-								  itemRenderer="com.mydlp.ui.widget.log.IncidentDestinationColumnRenderer"/>
-					<s:GridColumn headerText="@Resource(bundle = 'messages', key = 'log.container.header.policy')"
-								  itemRenderer="com.mydlp.ui.widget.policy.rule.discovery.DiscoveryPolicyColumnRenderer"/>
-					<s:GridColumn headerText="@Resource(bundle = 'messages', key = 'log.container.header.details')"
-								  itemRenderer="com.mydlp.ui.widget.log.IncidentDetailsColumnRenderer"/>
-					<s:GridColumn headerText="@Resource(bundle = 'messages', key = 'log.container.header.files')"
-								  itemRenderer="com.mydlp.ui.widget.log.IncidentFilesColumnRenderer"/>
-				</s:ArrayList>
-			</s:columns>
-		</s:DataGrid>
-		
-	</s:Group>
-	
+	<log:LogContainer id="logContiner" width="100%" height="100%"
+					  defaultCriteriaGeneratorFunction="{generateDefaultCriteriaList}"/>
 </s:TitleWindow>
