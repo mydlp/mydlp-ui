@@ -32,8 +32,15 @@
 			
 			protected const CONTENT_PENDING_OBJECT:Object = 
 				{message: LangUtil.getString("messages", "log.container.search.pending.message")};
+			
+			public var defaultCriteriaGeneratorFunction:Function = function(): ListCollectionView
+			{
+				return new ArrayCollection();
+			}
+				
+			public var isDiscovery:Boolean = false;
 
-			protected var criteriaList:ListCollectionView = new ArrayCollection();
+			protected var criteriaList:ListCollectionView = defaultCriteriaGeneratorFunction();
 			protected var searchString:String = "";
 			protected var contentId:Number = Number.NaN;
 			
@@ -70,6 +77,15 @@
 					)
 				);
 			
+			protected static const channelsDiscovery:ListCollectionView = 
+				new ArrayCollection(
+					new Array(
+						{label: "", data:""},
+						{label: "Endpoint Discovery", data:"D"},
+						{label: "Remote Storage Discovery", data:"RD"}
+					)
+				);
+			
 			protected static const channelsCommunity:ListCollectionView = 
 				new ArrayCollection(
 					new Array(
@@ -85,7 +101,14 @@
 			{
 				if (SessionUtil.isEnterprise())
 				{
-					channelList.dataProvider = channels;
+					if (isDiscovery)
+					{
+						channelList.dataProvider = channelsDiscovery;
+					}
+					else
+					{
+						channelList.dataProvider = channels;
+					}
 				}
 				else
 				{
@@ -123,11 +146,6 @@
 			protected function fetchContentSearch(offset:Number, count:Number): AsyncToken
 			{
 				return re.getLogContents(searchString, offset, count);
-			}
-			
-			public var defaultCriteriaGeneratorFunction:Function = function(): ListCollectionView
-			{
-				return new ArrayCollection();
 			}
 			
 			protected function generateCriteriaList():void
@@ -226,7 +244,7 @@
 			protected function resetHandler(event:MouseEvent):void
 			{
 				// reset search keys
-				criteriaList = new ArrayCollection();
+				criteriaList = defaultCriteriaGeneratorFunction();
 				searchString = "";
 				contentId = Number.NaN;
 				showAll.selected = false;

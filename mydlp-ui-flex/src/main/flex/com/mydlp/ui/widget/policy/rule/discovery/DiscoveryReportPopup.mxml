@@ -2,15 +2,21 @@
 <s:TitleWindow xmlns:fx="http://ns.adobe.com/mxml/2009" 
 			   xmlns:s="library://ns.adobe.com/flex/spark" 
 			   xmlns:mx="library://ns.adobe.com/flex/mx"
-			   xmlns:my="http://www.mydlp.com/flex/my"
 			   close="{close();}"
 			   title="@Resource(bundle = 'messages', key = 'discovery.report.popup.title')"
 			   top="10" bottom="10" left="10" right="10" xmlns:log="com.mydlp.ui.widget.log.*"
 			   >
 	<fx:Script>
 		<![CDATA[
+			import com.mydlp.ui.util.InteractionUtil;
+			
 			import mx.collections.ArrayCollection;
 			import mx.collections.ListCollectionView;
+			
+			protected function close(): void
+			{
+				InteractionUtil.closePopup(this);
+			}
 			
 			public function generateDefaultCriteriaList(): ListCollectionView
 			{
@@ -26,12 +32,9 @@
 		]]>
 	</fx:Script>
 	<fx:Declarations>
-		<my:remote id="re" destination="logBRS" >
-			<my:method name="exportExcel" result="exportHandler(event)" />
-		</my:remote>
-		
 		<fx:String id="groupId"/>
 	</fx:Declarations>
 	<log:LogContainer id="logContiner" width="100%" height="100%"
+					  isDiscovery="true"
 					  defaultCriteriaGeneratorFunction="{generateDefaultCriteriaList}"/>
 </s:TitleWindow>
