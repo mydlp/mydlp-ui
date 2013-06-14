@@ -54,6 +54,7 @@
 			import com.mydlp.ui.widget.policy.inventory.InventoryTree;
 			import com.mydlp.ui.widget.policy.rule.ActionBox;
 			import com.mydlp.ui.widget.policy.rule.RuleContainer;
+			import com.mydlp.ui.widget.policy.rule.discovery.DiscoveryNAContainer;
 			import com.mydlp.ui.widget.revision.RevisionContainer;
 			
 			import mx.collections.ArrayCollection;
@@ -311,14 +312,25 @@
 						ruleContainer = policyContainer.ruleContainer;
 						inventoryTree = policyContainer.inventoryTree;						
 					}
-					else if(i == 2 && hasAnyAdminRole() && SessionUtil.isEnterprise())
+					else if(i == 2 && hasAnyAdminRole())
 					{
 						navigatorContent.label = LangUtil.getString("messages", "maintab.discovery");
-						element = new PolicyContainer();
-						discoveryContainer = element;
-						discoveryContainer.isDiscoveryTab = true;
-						ruleContainerDiscovery = discoveryContainer.ruleContainer;
-						inventoryTreeDiscovery = discoveryContainer.inventoryTree;						
+						if (SessionUtil.isEnterprise())
+						{
+							element = new PolicyContainer();
+							discoveryContainer = element;
+							discoveryContainer.isDiscoveryTab = true;
+							ruleContainerDiscovery = discoveryContainer.ruleContainer;
+							inventoryTreeDiscovery = discoveryContainer.inventoryTree;
+						}
+						else
+						{
+							element = new DiscoveryNAContainer();
+							discoveryContainer = new PolicyContainer();
+							discoveryContainer.isDiscoveryTab = true;
+							ruleContainerDiscovery = discoveryContainer.ruleContainer;
+							inventoryTreeDiscovery = discoveryContainer.inventoryTree;
+						}
 					}
 					else if(i == 3 && ( hasAnyAdminRole() || hasRole(AuthSecurityRole.ROLE_CLASSIFIER) ) )
 					{
@@ -381,7 +393,7 @@
 			}
 			
 			public function populatePolicyOnCreate(): void {
-				if (discoveryContainer != null && policyContainer != null)
+				if (discoveryContainer != null || policyContainer != null)
 				{
 					getInventoryFunction();
 					refreshPolicyDataProviders();
@@ -589,7 +601,7 @@
 				rulesList = event.result as ListCollectionView;
 				policyContainer.rulesList = rulesList;
 				discoveryContainer.rulesList = rulesList;
-				if (discoveryContainer != null)
+				if (SessionUtil.isEnterprise() && discoveryContainer != null)
 					discoveryContainer.ruleContainer.refreshRulesView();
 				if (policyContainer != null)
 					policyContainer.ruleContainer.refreshRulesView();
@@ -599,7 +611,7 @@
 			{
 				if (policyContainer != null && policyContainer.inventoryTree != null)
 					policyContainer.inventoryTree.refreshTree();
-				if (discoveryContainer != null && discoveryContainer.inventoryTree != null)
+				if (SessionUtil.isEnterprise() && discoveryContainer != null && discoveryContainer.inventoryTree != null)
 					discoveryContainer.inventoryTree.refreshTree();
 				inventoryRE.getInventory();
 			}
@@ -609,8 +621,14 @@
 				inventoryList = event.result as Object;
 				policyContainer.inventory = inventoryList;
 				discoveryContainer.inventory = inventoryList;
-				inventoryTree.myInventoryTree.afterRefreshOps();
-				inventoryTreeDiscovery.myInventoryTree.afterRefreshOps();
+				if (inventoryTree != null)
+				{
+					inventoryTree.myInventoryTree.afterRefreshOps();
+				}
+				if (SessionUtil.isEnterprise() && inventoryTreeDiscovery != null)
+				{
+					inventoryTreeDiscovery.myInventoryTree.afterRefreshOps();
+				}
 			}
 			
 			public function saveEntity(entity:*): void

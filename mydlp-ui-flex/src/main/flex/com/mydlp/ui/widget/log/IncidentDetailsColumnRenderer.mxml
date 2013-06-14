@@ -14,6 +14,7 @@
 			import com.mydlp.ui.domain.RuleItem;
 			import com.mydlp.ui.util.InteractionUtil;
 			import com.mydlp.ui.util.LangUtil;
+			import com.mydlp.ui.util.SessionUtil;
 			import com.mydlp.ui.widget.policy.rule.RuleContainer;
 			
 			import mx.core.FlexGlobals;
@@ -73,9 +74,16 @@
 			
 			protected function detailButtonClickHandler(event:MouseEvent):void
 			{
-				var lmdp:LogMatcherDetailsPopup = InteractionUtil.newPopup(LogMatcherDetailsPopup) as LogMatcherDetailsPopup;
-				lmdp.matcherDetails = (data as IncidentLog).matchingDetails;
-				lmdp.populate();
+				if (SessionUtil.isEnterprise())
+				{
+					var lmdp:LogMatcherDetailsPopup = InteractionUtil.newPopup(LogMatcherDetailsPopup) as LogMatcherDetailsPopup;
+					lmdp.matcherDetails = (data as IncidentLog).matchingDetails;
+					lmdp.populate();
+				}
+				else
+				{
+					InteractionUtil.newPopup(LogMatcherDetailsNAPopup);
+				}
 			}
 			
 			protected function hasMatchingDetails(value:*): Boolean
