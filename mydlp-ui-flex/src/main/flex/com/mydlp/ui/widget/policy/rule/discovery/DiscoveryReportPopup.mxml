@@ -36,7 +36,7 @@
 				criteriaGId.addItem("groupId");
 				criteriaGId.addItem("eq");
 				criteriaGId.addItem(groupId);
-				cl.addItem(cl);
+				cl.addItem(criteriaGId);
 				return cl;
 			}
 			
