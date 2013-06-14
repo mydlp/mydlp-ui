@@ -38,7 +38,7 @@
 				return new ArrayCollection();
 			}
 				
-			public var isDiscovery:Boolean = false;
+			public var isDiscoveryReport:Boolean = false;
 
 			protected var criteriaList:ListCollectionView = defaultCriteriaGeneratorFunction();
 			protected var searchString:String = "";
@@ -92,7 +92,7 @@
 			{
 				if (SessionUtil.isEnterprise())
 				{
-					if (isDiscovery)
+					if (isDiscoveryReport)
 					{
 						channelInputGroup.includeInLayout=false;
 						channelInputGroup.visible=false;

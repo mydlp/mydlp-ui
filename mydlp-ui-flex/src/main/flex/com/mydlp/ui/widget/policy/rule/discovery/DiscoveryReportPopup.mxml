@@ -67,6 +67,6 @@
 		<fx:String id="groupId"/>
 	</fx:Declarations>
 	<log:LogContainer id="logContiner" width="100%" height="100%"
-					  isDiscovery="true"
+					  isDiscoveryReport="true"
 					  defaultCriteriaGeneratorFunction="{generateDefaultCriteriaList}"/>
 </s:TitleWindow>
