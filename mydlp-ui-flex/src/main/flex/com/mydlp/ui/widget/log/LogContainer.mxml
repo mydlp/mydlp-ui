@@ -77,15 +77,6 @@
 					)
 				);
 			
-			protected static const channelsDiscovery:ListCollectionView = 
-				new ArrayCollection(
-					new Array(
-						{label: "", data:""},
-						{label: "Endpoint Discovery", data:"D"},
-						{label: "Remote Storage Discovery", data:"RD"}
-					)
-				);
-			
 			protected static const channelsCommunity:ListCollectionView = 
 				new ArrayCollection(
 					new Array(
@@ -103,16 +94,25 @@
 				{
 					if (isDiscovery)
 					{
-						channelList.dataProvider = channelsDiscovery;
+						channelInputGroup.includeInLayout=false;
+						channelInputGroup.visible=false;
+						actionInputGroup.includeInLayout=false;
+						actionInputGroup.visible=false;
+						contentSearchGroup.includeInLayout=false;
+						contentSearchGroup.visible=false;	
 					}
 					else
 					{
 						channelList.dataProvider = channels;
+						contentSearchGroup.includeInLayout=true;
+						contentSearchGroup.visible=true;
 					}
 				}
 				else
 				{
 					channelList.dataProvider = channelsCommunity;
+					contentSearchGroup.includeInLayout=false;
+					contentSearchGroup.visible=false;
 				}
 				
 				logSearchDP = new AsyncListDataProvider();
@@ -375,7 +375,8 @@
 					  id="exportButton"
 					  click="onExportClick(event)"/>
 		</s:HGroup>
-		<s:HGroup width="30%" height="100%" verticalAlign="middle" includeInLayout="{SessionUtil.isEnterprise()}">
+		<s:HGroup id="contentSearchGroup" width="30%" height="100%" verticalAlign="middle" 
+				  includeInLayout="false" visible="false">
 			<s:Button label="@Resource(bundle = 'messages', key = 'log.container.search.fulltext.label')"
 					  click="searchContentHandler(event)" enabled="{fulltextInput.text.length > 3}"/>
 			<s:TextInput id="fulltextInput" width="100%"/>
@@ -399,15 +400,19 @@
 			<s:TextInput id="destinationField" width="120"
 						 enabled="{isDestinationEnabled(channelList.selectedItem)}"/>
 			<s:Spacer width="2"/>
-			<s:Label text="@Resource(bundle = 'messages', key = 'log.container.search.actionList.label')"/>
-			<s:DropDownList id="actionList" width="90"
-							contentBackgroundAlpha="1"
-							dataProvider="{actionSearch}"/>
-			<s:Spacer width="2"/>
-			<s:Label text="@Resource(bundle = 'messages', key = 'log.container.search.channelList.label')"/>
-			<s:DropDownList id="channelList" width="180"
-							contentBackgroundAlpha="1"/>
-			<s:Spacer width="1"/>
+			<s:HGroup id="actionInputGroup" verticalAlign="middle">
+				<s:Label text="@Resource(bundle = 'messages', key = 'log.container.search.actionList.label')"/>
+				<s:DropDownList id="actionList" width="90"
+								contentBackgroundAlpha="1"
+								dataProvider="{actionSearch}"/>
+				<s:Spacer width="2"/>
+			</s:HGroup>
+			<s:HGroup id="channelInputGroup" verticalAlign="middle" >
+				<s:Label text="@Resource(bundle = 'messages', key = 'log.container.search.channelList.label')"/>
+				<s:DropDownList id="channelList" width="180"
+								contentBackgroundAlpha="1"/>
+				<s:Spacer width="1"/>
+			</s:HGroup>
 			<s:CheckBox id="showAll" label="@Resource(bundle = 'messages', key = 'log.container.showAll.checkbox.label')" />
 		</s:HGroup>
 	</s:Group>
