@@ -338,7 +338,8 @@
 				if (item == null ||
 					item.data == "D" ||
 					item.data == "W" ||
-					item.data == "M"
+					item.data == "M" ||
+					item.data == ""
 					)
 				{
 					return true;
