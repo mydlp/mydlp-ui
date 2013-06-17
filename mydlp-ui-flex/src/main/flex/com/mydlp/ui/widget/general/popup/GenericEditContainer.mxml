@@ -320,7 +320,7 @@
 							classMember.name == "documentDatabaseRemoteStorages" &&
 							classMember.type == ListCollectionView)
 					{
-						if(targetObject["id"] == null || isNaN(targetObject["id"]))
+						if((targetObject["id"] == null || isNaN(targetObject["id"])) || !SessionUtil.isEnterprise())
 							continue;
 						var ddRemoteStorages:DocumentDatabaseRemoteStorageInput = new DocumentDatabaseRemoteStorageInput();
 						ddRemoteStorages.deleteList = deleteList;
