@@ -61,6 +61,16 @@
 						Rule.ACTION_QUARANTINE
 					)
 				);
+			
+			[Bindable]
+			protected var actionSearchCommunity:ListCollectionView = 
+				new ArrayCollection(
+					new Array(
+						"",
+						Rule.ACTION_BLOCK,
+						Rule.ACTION_LOG
+					)
+				);
 				
 			protected static const channels:ListCollectionView = 
 				new ArrayCollection(
@@ -104,6 +114,7 @@
 					else
 					{
 						channelList.dataProvider = channels;
+						actionList.dataProvider = actionSearch;
 						contentSearchGroup.includeInLayout=true;
 						contentSearchGroup.visible=true;
 					}
@@ -111,6 +122,7 @@
 				else
 				{
 					channelList.dataProvider = channelsCommunity;
+					actionList.dataProvider = actionSearchCommunity;
 					contentSearchGroup.includeInLayout=false;
 					contentSearchGroup.visible=false;
 				}
@@ -403,8 +415,7 @@
 			<s:HGroup id="actionInputGroup" verticalAlign="middle">
 				<s:Label text="@Resource(bundle = 'messages', key = 'log.container.search.actionList.label')"/>
 				<s:DropDownList id="actionList" width="90"
-								contentBackgroundAlpha="1"
-								dataProvider="{actionSearch}"/>
+								contentBackgroundAlpha="1"/>
 				<s:Spacer width="2"/>
 			</s:HGroup>
 			<s:HGroup id="channelInputGroup" verticalAlign="middle" >
