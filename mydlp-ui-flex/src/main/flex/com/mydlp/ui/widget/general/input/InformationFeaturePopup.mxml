@@ -705,7 +705,7 @@
 						  paddingLeft="8" paddingRight="2"
 						  paddingTop="5" paddingBottom="5"/>
 	</s:layout>
-	<s:Form width="400">
+	<s:Form width="450">
 		<s:FormItem label="@Resource(bundle = 'messages', key = 'matcher.combobox.label')" >
 			<s:Group>
 				<s:layout>
@@ -724,7 +724,7 @@
 		</s:FormItem>
 		<s:FormItem label="@Resource(bundle = 'messages', key = 'matcher.threshold.label')" 
 					includeIn="threshold">
-			<s:TextInput id="featureThresholdInput" 
+			<s:TextInput id="featureThresholdInput"
 						 includeInLayout.document_pdm="false"
 						 visible.document_pdm="false"
 						 text="@{featureThreshold}"
