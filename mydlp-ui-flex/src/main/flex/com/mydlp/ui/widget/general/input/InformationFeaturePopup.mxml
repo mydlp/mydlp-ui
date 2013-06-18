@@ -565,10 +565,16 @@
 				return "ok";
 			}
 			
+			
 			protected function matcherComboboxChangeHandler(event:IndexChangeEvent): void
 			{
 				refreshButtonState();
 				currentState = (matcherCombobox.selectedItem == null ? 'normal' : matcherCombobox.selectedItem.data);
+				if(currentState != "document_pdm")
+				{
+					if(featureThreshold == null || featureThreshold == "")
+						featureThreshold = "1";
+				}
 			}
 			
 		]]>
