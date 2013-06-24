@@ -8,6 +8,7 @@
 	<fx:Script>
 		<![CDATA[
 			import com.mydlp.ui.domain.IncidentLog;
+			import com.mydlp.ui.domain.IncidentLogFile;
 			import com.mydlp.ui.domain.InformationType;
 			import com.mydlp.ui.domain.Matcher;
 			import com.mydlp.ui.domain.Rule;
@@ -72,7 +73,7 @@
 				return null;
 			}
 			
-			protected function detailButtonClickHandler(event:MouseEvent):void
+			/*protected function detailButtonClickHandler(event:MouseEvent):void
 			{
 				if (SessionUtil.isEnterprise())
 				{
@@ -93,7 +94,7 @@
 				if (log == null) return false;
 				if (log.matchingDetails != null && log.matchingDetails.length > 0) return true;
 				return false;
-			}
+			}*/
 			
 		]]>
 	</fx:Script>
@@ -109,7 +110,7 @@
 		<s:Label id="lblData" text="{getPolicyText(data)}"/>
 	</s:VGroup>
 	
-	<s:Group includeIn="selected" 
+	<!--<s:Group includeIn="selected" 
 			 includeInLayout="{hasMatchingDetails(data)}" visible="{hasMatchingDetails(data)}"
 			 top="0" bottom="0" right="2" width="16" >
 		<s:layout>
@@ -119,6 +120,6 @@
 				  click="detailButtonClickHandler(event)" 
 				  skinClass="com.mydlp.ui.skin.GenerateReportBitmapButton16Skin"
 				  toolTip="@Resource(bundle = 'messages', key = 'log.matchingDetails.tooltip')"/>
-	</s:Group>
+	</s:Group>-->
 	
 </s:GridItemRenderer>
