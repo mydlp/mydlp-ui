@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx"
+		 height="40">
+	
+	<fx:Script>
+		<![CDATA[
+			
+		]]>
+	</fx:Script>
+	
+	
+	<fx:Declarations>
+		<fx:String id="title"/>
+		<fx:String id="element"/>
+	</fx:Declarations>
+	
+	<s:layout>
+		<s:VerticalLayout verticalAlign="middle" horizontalAlign="center"/>
+	</s:layout>
+	
+	<s:Group id="titleGroup" width="100%" height="60%" >
+		<s:Rect width="100%" height="100%">
+			<s:fill><s:SolidColor color="0x66CCFF"/></s:fill>
+		</s:Rect>
+		<s:VGroup width="100%" height="100%" horizontalAlign="center" verticalAlign="middle">
+			<s:Label id="titleLabel" text="{title}"/>
+		</s:VGroup>
+	</s:Group>
+	
+	<s:Label id="elementLabel" text="{element}" height="40%"/>
+	
+</s:Group>

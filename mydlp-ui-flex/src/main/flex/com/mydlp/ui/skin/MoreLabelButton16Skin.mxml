@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<skin:GenericLabelButtonSkin xmlns:fx="http://ns.adobe.com/mxml/2009" 
+						xmlns:s="library://ns.adobe.com/flex/spark" 
+						xmlns:mx="library://ns.adobe.com/flex/mx" 
+						xmlns:skin="com.mydlp.ui.skin.*"
+						buttonHeight="12">
+</skin:GenericLabelButtonSkin>
+	

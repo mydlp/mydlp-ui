@@ -21,80 +21,13 @@
 			import mx.core.FlexGlobals;
 			import mx.events.FlexEvent;
 			
-			protected function getPolicyText(value:*):String {
-				if (value == null) return "";
-				var log:IncidentLog = value as IncidentLog;
-				var labelText:String = "";
-				
-				if (log.informationTypeId != -1)
-				{
-					labelText += LangUtil.getString("messages","log.container.column.policy.informationType") + ": ";
-					labelText += FlexGlobals.topLevelApplication.getITypeLabel(log.informationTypeId);
-				}
-				
-				if (log.matcherMessage != null && log.matcherMessage.length > 0 )
-				{
-					if (labelText != "")
-						labelText += "\n";
-					if (log.matcherMessage.substr(0,5) == "score" )
-					{
-						labelText += "\n" + LangUtil.getString("messages","log.container.column.details.score") + ": ";
-						labelText += log.matcherMessage.substr(6);
-					}
-					else
-					{
-						var sIndex:int = log.matcherMessage.indexOf(" ");
-						var appendix:String = "";
-						var keyAppendix:String = log.matcherMessage;
-						if (sIndex != -1)
-						{
-							appendix = " " + log.matcherMessage.substr(sIndex + 1);
-							keyAppendix = log.matcherMessage.substr(0, sIndex);
-						}
-						
-						labelText += LangUtil.getString("messages","log.container.column.details.reason") + ": ";
-						labelText += LangUtil.getString("messages","log.container.column.details.reason." + keyAppendix);
-						labelText += appendix;
-					}
-				}
-				
-				return labelText;
-			}
 			
-			protected static function findInformationType(rule:Rule,informationTypeId:Number): InformationType
+			protected function detailButtonClickHandler(event:Event):void
 			{
-				if (rule == null || isNaN(informationTypeId)) return null;
-				for each (var i:* in rule.ruleItems)
-				{
-					var ri:RuleItem = i as RuleItem;
-					if (ri.item is InformationType && (ri.item as InformationType).id == informationTypeId)
-						return ri.item as InformationType;
-				}
-				return null;
+				var ldp:IncidentLogDetailPopup = InteractionUtil.newPopup(IncidentLogDetailPopup) as IncidentLogDetailPopup;
+				ldp.incidentLog = data as IncidentLog;
+				ldp.populate();
 			}
-			
-			/*protected function detailButtonClickHandler(event:MouseEvent):void
-			{
-				if (SessionUtil.isEnterprise())
-				{
-					var lmdp:LogMatcherDetailsPopup = InteractionUtil.newPopup(LogMatcherDetailsPopup) as LogMatcherDetailsPopup;
-					lmdp.matcherDetails = (data as IncidentLog).matchingDetails;
-					lmdp.populate();
-				}
-				else
-				{
-					InteractionUtil.newPopup(LogMatcherDetailsNAPopup);
-				}
-			}
-			
-			protected function hasMatchingDetails(value:*): Boolean
-			{
-				if (value == null) return false;
-				var log:IncidentLog = value as IncidentLog;
-				if (log == null) return false;
-				if (log.matchingDetails != null && log.matchingDetails.length > 0) return true;
-				return false;
-			}*/
 			
 		]]>
 	</fx:Script>
@@ -105,21 +38,12 @@
 		<s:State name="selected" />
 	</s:states>
 	
-	<s:VGroup width="100%"
-			  paddingBottom="4" paddingTop="4" paddingLeft="4" paddingRight="4">
-		<s:Label id="lblData" text="{getPolicyText(data)}"/>
-	</s:VGroup>
-	
-	<!--<s:Group includeIn="selected" 
-			 includeInLayout="{hasMatchingDetails(data)}" visible="{hasMatchingDetails(data)}"
-			 top="0" bottom="0" right="2" width="16" >
-		<s:layout>
-			<s:VerticalLayout verticalAlign="middle" horizontalAlign="left"/>
-		</s:layout>
+	<s:VGroup width="100%" horizontalAlign="center">
 		<s:Button id="matchingDetailButton" 
 				  click="detailButtonClickHandler(event)" 
 				  skinClass="com.mydlp.ui.skin.GenerateReportBitmapButton16Skin"
 				  toolTip="@Resource(bundle = 'messages', key = 'log.matchingDetails.tooltip')"/>
-	</s:Group>-->
+		
+	</s:VGroup>
 	
 </s:GridItemRenderer>

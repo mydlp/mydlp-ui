@@ -48,16 +48,6 @@
 				return false;
 			}
 			
-			protected function isRequeueVisible(value:*): Boolean
-			{
-				if (value == null) return false;
-				var log:IncidentLog = value as IncidentLog;
-				if (log.channel == "M" && log.action == "Q" && 
-					log.requeueStatus != null && !log.requeueStatus.isRequeued)
-					return true;
-				return false;
-			}
-			
 			
 			protected function getPolicyText(value:*):String {
 				if (value == null) return "";
@@ -68,63 +58,7 @@
 				labelText += LangUtil.getString("messages","log.container.column.policy.rule") + ": ";
 				
 				labelText += FlexGlobals.topLevelApplication.getRuleLabel(log.ruleId);
-				
-				labelText += "\n" + LangUtil.getString("messages","log.container.column.policy.action") + ": ";
-				
-				switch (log.action)
-				{
-					case "B": labelText += LangUtil.getString("messages","log.container.column.policy.action.block"); break;
-					case "L": labelText += LangUtil.getString("messages","log.container.column.policy.action.log"); break;
-					case "Q": labelText += LangUtil.getString("messages","log.container.column.policy.action.quarantine"); break;
-					case "A": labelText += LangUtil.getString("messages","log.container.column.policy.action.archive"); break;
-					default:
-						if (log.action.substr(0,4) == "CIS ")
-						{
-							labelText += LangUtil.getString("messages","log.container.column.policy.action.custom.irm.seclore");
-							var restStr:String = log.action.substr(4);
-							var hotFolderId:String = "";
-							var customActionName:String = "";
-							var sIndex:int = -1;
-							sIndex = restStr.indexOf(" ");
-							if (sIndex != -1)
-							{
-								hotFolderId = restStr.substr(0, sIndex);
-								customActionName = restStr.substr(sIndex + 1);
-								labelText += " [" + LangUtil.getString("messages","log.container.column.policy.action.custom.irm.seclore.hotFolderId");
-								labelText += ": " + hotFolderId +"] " + customActionName;  
-							}
-						}
-						else
-						{
-							labelText += log.action;
-						}
-						break;
-				}
-				
-				labelText += "\n" + LangUtil.getString("messages","log.container.column.policy.channel") + ": ";
-				
-				switch (log.channel)
-				{
-					case "W": labelText += LangUtil.getString("messages","log.container.column.policy.channel.web"); break;
-					case "R": labelText += LangUtil.getString("messages","log.container.column.policy.channel.removableStorage"); break;
-					case "I": labelText += LangUtil.getString("messages","log.container.column.policy.channel.removableStorageInbound"); break;
-					case "M": labelText += LangUtil.getString("messages","log.container.column.policy.channel.mail"); break;
-					case "P": labelText += LangUtil.getString("messages","log.container.column.policy.channel.printer"); break;
-					case "D": labelText += LangUtil.getString("messages","log.container.column.policy.channel.discovery"); break;
-					case "A": labelText += LangUtil.getString("messages","log.container.column.policy.channel.api"); break;
-					case "RD": labelText += LangUtil.getString("messages","log.container.column.policy.channel.remote_discovery"); break;
-					default: labelText += log.channel; break;
-				}
-				
-				if (log.requeueStatus != null && log.requeueStatus.isRequeued)
-				{
-					if (log.requeueStatus.date != null)
-						labelText += "\n" + LangUtil.getString("messages","log.container.column.policy.requeuedOn") 
-										  + ": " + log.requeueStatus.date.toString();
-					else
-						labelText += "\n" + LangUtil.getString("messages","log.container.column.policy.requeueOnProgress");
-				}
-				
+								
 				return labelText;
 			}
 			
@@ -139,17 +73,7 @@
 					FlexGlobals.topLevelApplication.ruleContainer.gotoRule(selectedRule);
 				}
 			}
-			
-			protected function requeueButtonClickHandler(event:MouseEvent):void
-			{
-				var log:IncidentLog = data as IncidentLog;
-				FlexGlobals.topLevelApplication.logContainer.requeueIncident(log);
-				log.requeueStatus.isRequeued = true;
-				data = log;
-				lblData.text = getPolicyText(data);
-				requeueButton.visible = false;
-			}
-			
+
 		]]>
 	</fx:Script>
 	
@@ -175,12 +99,6 @@
 				   includeInLayout="{isGotoVisible(data)}"
 				   visible="{isGotoVisible(data)}"
 				   click="goToRuleButtonClickHandler(event)" />
-		
-		<s:Button id="requeueButton" skinClass="com.mydlp.ui.skin.RequeueBitmapButton16Skin"
-				  toolTip="@Resource(bundle = 'messages', key = 'log.requeue.tooltip')"
-				  includeInLayout="{isRequeueVisible(data)}"
-				  visible="{isRequeueVisible(data)}"
-				  click="requeueButtonClickHandler(event)" />
 	</s:Group>
 	
 </s:GridItemRenderer>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- http://blog.flexexamples.com/2009/02/13/creating-a-vertical-fxbuttonbar-control-in-flex-gumbo/ -->
+<s:Skin name="CustomButtonBarSkin"
+		xmlns:fx="http://ns.adobe.com/mxml/2009"
+		xmlns:s="library://ns.adobe.com/flex/spark"
+		alpha.disabled="0.5">
+	<s:states>
+		<s:State name="normal" />
+		<s:State name="disabled" />
+	</s:states>
+	
+	<fx:Metadata>
+		<![CDATA[
+		[HostComponent("spark.components.ButtonBar")]
+		]]>
+	</fx:Metadata>
+	
+	<fx:Declarations>
+		<fx:Component id="middleButton" >
+			<s:ButtonBarButton skinClass="spark.skins.spark.ButtonBarMiddleButtonSkin" />
+		</fx:Component>
+	</fx:Declarations>
+	
+	<s:DataGroup id="dataGroup" width="100%" height="100%">
+		<s:layout>
+			<s:VerticalLayout gap="-1"/>
+		</s:layout>
+	</s:DataGroup>
+	
+</s:Skin>

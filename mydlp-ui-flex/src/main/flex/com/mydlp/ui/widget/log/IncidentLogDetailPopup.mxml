@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:TitleWindow xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			   xmlns:s="library://ns.adobe.com/flex/spark" 
+			   xmlns:mx="library://ns.adobe.com/flex/mx"
+			   xmlns:my="http://www.mydlp.com/flex/my"
+			   close="{close()}" 
+			   width="800" height="500"
+			   xmlns:domain="com.mydlp.ui.domain.*"
+			   visible="false"
+			   title="@Resource(bundle = 'messages', key = 'incident.log.detail.title.label')" xmlns:log="com.mydlp.ui.widget.log.*"
+			   >
+	
+	<fx:Script>
+		<![CDATA[
+			import com.mydlp.ui.domain.AuthSecurityRole;
+			import com.mydlp.ui.domain.IncidentLogFile;
+			import com.mydlp.ui.util.InteractionUtil;
+			import com.mydlp.ui.util.LangUtil;
+			import com.mydlp.ui.widget.general.input.IpAddressInput;
+			
+			import mx.core.FlexGlobals;
+			import mx.events.FlexEvent;
+			import mx.events.ItemClickEvent;
+			
+			
+			protected function close(): void
+			{
+				InteractionUtil.closePopup(this);
+			}
+			
+			public function populate():void
+			{
+				generateDate();
+				generateSources();
+				generateDestinations();
+				generatePolicies();
+				generateDetails();
+				logDetailItemContainer.setVisibiltyAllDetailItems();
+				tabbedComponent.populate();
+				this.visible = true;
+			}
+			
+			protected function generateDate():void
+			{
+				logDetailItemContainer.populateItem(IncidentLogDetailItemContainer.DATE, incidentLog.date.toString());	
+			}
+			
+			protected function generateSources():void
+			{
+				if(incidentLog.channel == "RD")
+				{
+					logDetailItemContainer.populateItem(IncidentLogDetailItemContainer.SOURCE_USER, incidentLog.sourceUser);
+				}
+				else
+				{
+					
+					if ((!isNaN(incidentLog.sourceIp)) && (incidentLog.sourceIp != 0))
+					{
+						var ipStr:String = IpAddressInput.numberToIPStr(incidentLog.sourceIp);
+						if (ipStr != "0.0.0.0")
+						{
+							logDetailItemContainer.populateItem(IncidentLogDetailItemContainer.SOURCE_IP, ipStr);
+						}
+					}
+					if (incidentLog.sourceUser != null && incidentLog.sourceUser.length > 0)
+						logDetailItemContainer.populateItem(IncidentLogDetailItemContainer.SOURCE_USER, incidentLog.sourceUser);
+				}
+			}
+			
+			//TODO: Handle long destination strings
+			protected function generateDestinations():void
+			{
+				if(incidentLog.channel == "P")
+				{
+					logDetailItemContainer.populateItem(IncidentLogDetailItemContainer.DESTINATION_PRINTER, incidentLog.destination);
+				}
+				else if(incidentLog.channel == "M")
+				{
+					logDetailItemContainer.populateMailItem(incidentLog.destination);
+				}
+				else if(incidentLog.channel == "R" || incidentLog.channel == "W")
+				{
+					logDetailItemContainer.populateItem(IncidentLogDetailItemContainer.DESTINATION, incidentLog.destination);
+				}
+				else if(incidentLog.channel == "RD" || incidentLog.channel == "D")
+				{
+					logDetailItemContainer.populateItem(IncidentLogDetailItemContainer.DESTINATION_DISCOVERY, incidentLog.destination);
+				}
+				else if(incidentLog.channel == "I")
+				{
+					logDetailItemContainer.populateItem(IncidentLogDetailItemContainer.DESTINATION_INBOUND, incidentLog.destination);
+				}
+			}
+			
+			protected function generatePolicies():void
+			{
+				logDetailItemContainer.populateItem(IncidentLogDetailItemContainer.RULE, FlexGlobals.topLevelApplication.getRuleLabel(incidentLog.ruleId));
+				generateRuleActionLabel();
+				generateRuleChannelLabel();
+			}
+			
+			protected function generateRuleActionLabel():void
+			{
+				switch (incidentLog.action)
+				{
+					case "B": logDetailItemContainer.populateItem(IncidentLogDetailItemContainer.ACTION, LangUtil.getString("messages","log.container.column.policy.action.block")); break;
+					case "L": logDetailItemContainer.populateItem(IncidentLogDetailItemContainer.ACTION, LangUtil.getString("messages","log.container.column.policy.action.log")); break;
+					case "Q": logDetailItemContainer.populateItem(IncidentLogDetailItemContainer.ACTION, LangUtil.getString("messages","log.container.column.policy.action.quarantine")); break;
+					case "A": logDetailItemContainer.populateItem(IncidentLogDetailItemContainer.ACTION, LangUtil.getString("messages","log.container.column.policy.action.archive")); break;
+					default:
+						if (incidentLog.action.substr(0,4) == "CIS ")
+						{
+							logDetailItemContainer.populateItem(IncidentLogDetailItemContainer.ACTION, LangUtil.getString("messages","log.container.column.policy.action.custom.irm.seclore"));
+							var restStr:String = incidentLog.action.substr(4);
+							var hotFolderId:String = "";
+							var customActionName:String = "";
+							var sIndex:int = -1;
+							sIndex = restStr.indexOf(" ");
+							if (sIndex != -1)
+							{
+								hotFolderId = restStr.substr(0, sIndex);
+								customActionName = restStr.substr(sIndex + 1);
+								logDetailItemContainer.populateItem(IncidentLogDetailItemContainer.IRM_SECLORE_HOTFOLDERID, hotFolderId);
+								logDetailItemContainer.populateItem(IncidentLogDetailItemContainer.IRM_SECLORE_CUSTOM_ACTION_NAME, customActionName);
+							}
+						}
+						else
+						{
+							logDetailItemContainer.populateItem(IncidentLogDetailItemContainer.ACTION, incidentLog.action);
+						}
+						break;
+				}
+			}
+			
+			protected function generateRuleChannelLabel():void
+			{
+				switch (incidentLog.channel)
+				{
+					case "W": logDetailItemContainer.populateItem(IncidentLogDetailItemContainer.CHANNEL, LangUtil.getString("messages","log.container.column.policy.channel.web")); break;
+					case "R": logDetailItemContainer.populateItem(IncidentLogDetailItemContainer.CHANNEL, LangUtil.getString("messages","log.container.column.policy.channel.removableStorage")); break;
+					case "I": logDetailItemContainer.populateItem(IncidentLogDetailItemContainer.CHANNEL, LangUtil.getString("messages","log.container.column.policy.channel.removableStorageInbound")); break;
+					case "M": logDetailItemContainer.populateItem(IncidentLogDetailItemContainer.CHANNEL, LangUtil.getString("messages","log.container.column.policy.channel.mail")); break;
+					case "P": logDetailItemContainer.populateItem(IncidentLogDetailItemContainer.CHANNEL, LangUtil.getString("messages","log.container.column.policy.channel.printer")); break;
+					case "D": logDetailItemContainer.populateItem(IncidentLogDetailItemContainer.CHANNEL, LangUtil.getString("messages","log.container.column.policy.channel.discovery")); break;
+					case "A": logDetailItemContainer.populateItem(IncidentLogDetailItemContainer.CHANNEL, LangUtil.getString("messages","log.container.column.policy.channel.api")); break;
+					case "RD": logDetailItemContainer.populateItem(IncidentLogDetailItemContainer.CHANNEL, LangUtil.getString("messages","log.container.column.policy.channel.remote_discovery")); break;
+					default: logDetailItemContainer.populateItem(IncidentLogDetailItemContainer.CHANNEL, incidentLog.channel); break;
+				}
+			}
+			
+			protected function generateDetails():void
+			{
+				if (incidentLog.informationTypeId != -1)
+					logDetailItemContainer.populateItem(IncidentLogDetailItemContainer.DETAIL_IT, FlexGlobals.topLevelApplication.getITypeLabel(incidentLog.informationTypeId));
+				
+				if (incidentLog.matcherMessage != null && incidentLog.matcherMessage.length > 0 )
+				{
+					if (incidentLog.matcherMessage.substr(0,5) == "score" )
+						logDetailItemContainer.populateItem(IncidentLogDetailItemContainer.DETAIL_SCORE, incidentLog.matcherMessage.substr(6));
+					else
+					{
+						var sIndex:int = incidentLog.matcherMessage.indexOf(" ");
+						var appendix:String = "";
+						var keyAppendix:String = incidentLog.matcherMessage;
+						if (sIndex != -1)
+						{
+							appendix = " " + incidentLog.matcherMessage.substr(sIndex + 1);
+							keyAppendix = incidentLog.matcherMessage.substr(0, sIndex);
+						}
+						logDetailItemContainer.populateItem(IncidentLogDetailItemContainer.DETAIL_REASON, LangUtil.getString("messages","log.container.column.details.reason." + keyAppendix)+appendix);
+					}
+				}
+			}
+			
+		]]>
+	</fx:Script>
+	
+	
+	<fx:Declarations>
+		<domain:IncidentLog id="incidentLog"/>
+	</fx:Declarations>
+	
+	<s:layout>
+		<s:VerticalLayout horizontalAlign="center" gap="5"
+						  paddingLeft="8" paddingRight="8"
+						  paddingTop="5" paddingBottom="5"/>
+	</s:layout>
+	
+	
+	<s:Group width="100%" height="50%">
+		<log:IncidentLogDetailItemContainer id="logDetailItemContainer" width="100%" height="100%"
+									logDetailTabbedComponent="{tabbedComponent}"/>
+	</s:Group>
+	
+	<s:SkinnableContainer height="2" width="100%" backgroundColor="black" backgroundAlpha="0.8"/>
+	
+	<log:IncidentLogDetailTabbedComponent id="tabbedComponent" 
+		width="100%" height="50%" maxHeight="240" incidentLog="{incidentLog}"/>
+	
+</s:TitleWindow>

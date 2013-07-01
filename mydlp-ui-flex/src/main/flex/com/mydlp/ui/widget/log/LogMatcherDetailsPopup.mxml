@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<s:TitleWindow xmlns:fx="http://ns.adobe.com/mxml/2009" 
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
 			   xmlns:s="library://ns.adobe.com/flex/spark" 
 			   xmlns:mx="library://ns.adobe.com/flex/mx"
 			   xmlns:my="http://www.mydlp.com/flex/my"
 			   xmlns:input="com.mydlp.ui.widget.general.input.*"
-			   close="{close()}" 
 			   width="400" maxHeight="500"
-			   title="@Resource(bundle = 'messages', key = 'log.matcher.detail.title.label')" xmlns:util="com.mydlp.ui.util.*" xmlns:validators="com.mydlp.ui.validators.*"
-			   visible="false"
-			   >
+			   xmlns:util="com.mydlp.ui.util.*" 
+			   xmlns:validators="com.mydlp.ui.validators.*"
+			   visible="false">
 	
 	<fx:Script>
 		<![CDATA[
@@ -19,15 +18,6 @@
 			import com.mydlp.ui.widget.general.popup.VerticalInputLabel;
 			
 			import mx.controls.Alert;
-			import mx.controls.Label;
-			import mx.managers.PopUpManager;
-			
-			protected var countDict:Object = new Object;
-			
-			protected function close(): void
-			{
-				InteractionUtil.closePopup(this);
-			}
 			
 			public function populate():void
 			{
@@ -72,7 +62,6 @@
 						}
 					}
 				}
-				PopUpManager.centerPopUp(this);
 				this.visible = true;
 			}
 		]]>
@@ -126,6 +115,17 @@
 		<mx:ListCollectionView id="matcherDetails"/>
 	</fx:Declarations>
 	
+	<s:layout>
+		<s:VerticalLayout gap="5"/>
+	</s:layout>
+	
+	<s:Group width="100%">
+		<s:layout>
+			<s:VerticalLayout horizontalAlign="center" verticalAlign="middle"/>
+		</s:layout>
+		<s:Label text="@Resource(bundle = 'messages', key = 'log.matcher.detail.title.label')" fontWeight="bold"/>
+	</s:Group>
+	
 	<s:Scroller width="100%" height="100%" verticalScrollPolicy="auto" horizontalScrollPolicy="off">
 		<s:Group id="matchingDataGroup" width="100%">
 			<s:layout>
@@ -133,4 +133,4 @@
 			</s:layout>
 		</s:Group>
 	</s:Scroller>
-</s:TitleWindow>
+</s:Group>

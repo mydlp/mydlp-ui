@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx"
+		 height="40" xmlns:log="com.mydlp.ui.widget.log.*">
+	
+	<fx:Script>
+		<![CDATA[
+			import com.mydlp.ui.util.LangUtil;
+			
+			[Bindable]
+			protected var element:String;
+			
+			public function populate():void
+			{
+				if(elementsArray != null && elementsArray.length > 0)
+					element = elementsArray.getItemAt(0) as String;
+				
+				if(elementsArray != null && elementsArray.length > 1)
+				{
+					moreButton.includeInLayout = true;
+					moreButton.visible = true;
+				}
+			}
+			
+			protected function onClickHandler(event:MouseEvent):void
+			{
+				var index:Number = 0;
+				switch(title)
+				{
+					case LangUtil.getString('messages', IncidentLogDetailItemContainer.DESTINATION_SMTP_RCPTTO): index = 0; break;
+					case LangUtil.getString('messages', IncidentLogDetailItemContainer.DESTINATION_SMTP_TO): index = 1; break;
+					case LangUtil.getString('messages', IncidentLogDetailItemContainer.DESTINATION_SMTP_FROM): index = 2; break;
+					case LangUtil.getString('messages', IncidentLogDetailItemContainer.DESTINATION_SMTP_CC): index = 3; break;
+					case LangUtil.getString('messages', IncidentLogDetailItemContainer.DESTINATION_SMTP_BCC): index = 4; break;
+					default: index = 0; break;
+				}
+				logDetailTabbedComponent.changeTabAndSelectIndex(index);
+			}
+			
+		]]>
+	</fx:Script>
+	
+	
+	<fx:Declarations>
+		<fx:String id="title"/>
+		<s:ArrayCollection id="elementsArray"/>
+		<log:IncidentLogDetailTabbedComponent id="logDetailTabbedComponent"/>
+	</fx:Declarations>
+	
+	<s:layout>
+		<s:VerticalLayout verticalAlign="middle" horizontalAlign="center"/>
+	</s:layout>
+	
+	<s:Group id="titleGroup" width="100%" height="60%" >
+		<s:Rect width="100%" height="100%">
+			<s:fill><s:SolidColor color="0x66CCFF"/></s:fill>
+		</s:Rect>
+		<s:VGroup width="100%" height="100%" horizontalAlign="center" verticalAlign="middle">
+			<s:Label id="titleLabel" text="{title}"/>
+		</s:VGroup>
+	</s:Group>
+	
+	<s:HGroup horizontalAlign="center" width="100%" height="40%" verticalAlign="middle">
+				
+		<s:Label id="elementLabel" text="{element}" />
+		<s:Button id="moreButton" includeInLayout="false" visible="false"  
+				  skinClass="com.mydlp.ui.skin.MoreLabelButton16Skin"
+				  fontWeight="bold"
+				  label="@Resource(bundle = 'messages', key = 'log.detail.mail.more.button.label')"
+				  click="onClickHandler(event)"/>
+	</s:HGroup>
+	
+	
+</s:Group>

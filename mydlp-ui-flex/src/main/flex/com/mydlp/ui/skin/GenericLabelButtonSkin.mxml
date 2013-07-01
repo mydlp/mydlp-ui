@@ -1,0 +1,62 @@
+<s:SparkButtonSkin xmlns:fx="http://ns.adobe.com/mxml/2009" 
+             xmlns:s="library://ns.adobe.com/flex/spark" 
+             xmlns:fb="http://ns.adobe.com/flashbuilder/2009"
+			 height="{buttonHeight}"
+             alpha.disabled="0.5">
+	
+	<fx:Script fb:purpose="styling">
+		<![CDATA[
+			/* Define the skin elements that should not be colorized.
+			For button, the graphics are colorized but the label is not. */
+			static private const exclusions:Array = ["labelDisplay"];
+			
+			override public function get colorizeExclusions():Array {
+				return exclusions;
+			}
+			
+			override protected function initializationComplete():void {
+				useChromeColor = true;
+				super.initializationComplete();
+			}
+		]]>
+	</fx:Script>
+	
+	<fx:Declarations>
+		<fx:int id="buttonHeight"/>
+	</fx:Declarations>
+     
+    <fx:Metadata>
+        <![CDATA[ 
+        [HostComponent("spark.components.Button")]
+        ]]>
+    </fx:Metadata>
+	
+	<s:states>
+		<s:State name="up" />
+		<s:State name="over" />
+		<s:State name="down" />
+		<s:State name="disabled" />
+	</s:states>
+	
+	<s:Rect includeIn="over, down" 
+		height="100%" width="100%" radiusX="3">
+		<s:fill>
+			<!-- gradient fill colors - default ratios are 0,1 -->
+			<s:LinearGradient rotation="90">
+				<s:GradientEntry color="0xC6D3E7"
+								 color.down="0xCEDBEF"/>
+				<s:GradientEntry color="0xCEDBEF"
+								 color.down="0xDEEBFF"/>
+			</s:LinearGradient>
+		</s:fill>
+	</s:Rect>
+	
+	<s:Group top="1" right="12" bottom="1" left="6">
+		<s:layout>
+			<s:HorizontalLayout verticalAlign="middle"/>
+		</s:layout>
+		<s:Label id="labelDisplay" color.over="0x000000" color.down="0x000000"
+				 verticalAlign="bottom" maxDisplayedLines="1"/>
+	</s:Group>
+	
+</s:SparkButtonSkin>

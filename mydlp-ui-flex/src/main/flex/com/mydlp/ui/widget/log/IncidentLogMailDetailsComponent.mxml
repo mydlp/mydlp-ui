@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:HGroup xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		  xmlns:s="library://ns.adobe.com/flex/spark" 
+		  xmlns:mx="library://ns.adobe.com/flex/mx"
+		  xmlns:domain="com.mydlp.ui.domain.*"
+		  creationComplete="{isRequeued = false}">
+	
+	<fx:Script>
+		<![CDATA[
+			import com.mydlp.ui.util.LangUtil;
+			
+			import mx.collections.ArrayCollection;
+			import mx.collections.ListCollectionView;
+			import mx.controls.Button;
+			import mx.core.FlexGlobals;
+			
+			import spark.events.IndexChangeEvent;
+			
+			[Bindable]
+			protected var rcpttoList:ArrayCollection = new ArrayCollection();
+			[Bindable]
+			protected var toList:ArrayCollection = new ArrayCollection();
+			[Bindable]
+			protected var fromList:ArrayCollection = new ArrayCollection();
+			[Bindable]
+			protected var ccList:ArrayCollection = new ArrayCollection();
+			[Bindable]
+			protected var bccList:ArrayCollection = new ArrayCollection();
+			
+			[Bindable]
+			protected var buttonBarDP:ListCollectionView = 
+				new ArrayCollection(
+					new Array(
+						LangUtil.getString('messages', 'log.detail.mail.button.rcpto.label'),
+						LangUtil.getString('messages', 'log.detail.mail.button.to.label'),
+						LangUtil.getString('messages', 'log.detail.mail.button.from.label'),
+						LangUtil.getString('messages', 'log.detail.mail.button.cc.label'),
+						LangUtil.getString('messages', 'log.detail.mail.button.bcc.label'),
+						LangUtil.getString('messages', 'log.detail.mail.button.requeue.label')
+					)
+				);
+			
+			protected var requeueButton:Button;
+			
+			protected var isRequeued:Boolean = false;
+			
+			public static function startsWith( string:String, pattern:String):Boolean
+			{
+				string  = string.toLowerCase();
+				pattern = pattern.toLowerCase();
+				
+				return pattern == string.substr( 0, pattern.length );
+			}
+			
+			public function populate():void
+			{
+				for each (var o:* in incidentLog.destination.split(", "))
+				{
+					var line:String = o as String;
+					if (startsWith(line,"rcpt to: "))
+						rcpttoList.addItem(line.substr(9));
+					else if (startsWith(line,"to: "))
+						toList.addItem(line.substr(4));
+					else if (startsWith(line,"from: "))
+						fromList.addItem(line.substr(6));
+					else if (startsWith(line,"cc: "))
+						ccList.addItem(line.substr(4));
+					else if (startsWith(line,"bcc: "))
+						bccList.addItem(line.substr(5));
+				}	
+			}
+			
+			public function indexChange(index:Number):void
+			{
+				detailGroup.removeAllElements();
+				if(index == 0)
+				{
+					detailHeader.text = LangUtil.getString('messages', 'log.detail.mail.rcpto');
+					populateDetails(rcpttoList);
+				}
+				else if(index == 1)
+				{
+					detailHeader.text = LangUtil.getString('messages', 'log.detail.mail.to');
+					populateDetails(toList);
+				}
+				else if(index == 2)
+				{
+					detailHeader.text = LangUtil.getString('messages', 'log.detail.mail.from');
+					populateDetails(fromList);
+				}
+				else if(index == 3)
+				{
+					detailHeader.text = LangUtil.getString('messages', 'log.detail.mail.cc');
+					populateDetails(ccList);
+				}
+				else if(index == 4)
+				{
+					detailHeader.text = LangUtil.getString('messages', 'log.detail.mail.bcc');
+					populateDetails(bccList);
+				}
+				else if(index == 5)
+				{
+					detailHeader.text = LangUtil.getString('messages', 'log.detail.mail.requeue');
+					populateRequeueStatus();
+				}
+				else
+				{
+					detailGroup.removeAllElements();
+				}
+			}
+			
+			protected function populateRequeueStatus():void
+			{
+				if(incidentLog.action != "Q")
+				{
+					var label:Label = new Label;
+					label.text = LangUtil.getString('messages', 'log.container.mail.detail.notapplicable.requeue');
+					detailGroup.addElement(label);
+				}
+				else if(incidentLog.requeueStatus  != null && incidentLog.requeueStatus.isRequeued)
+				{
+					var label:Label = new Label;
+					if (incidentLog.requeueStatus.date != null)
+						label.text = LangUtil.getString("messages","log.container.column.policy.requeuedOn") 
+							+ ": " + incidentLog.requeueStatus.date.toString();
+					else
+						label.text = LangUtil.getString("messages","log.container.column.policy.requeueOnProgress");
+					detailGroup.addElement(label);
+				}
+				else if(isRequeued)
+				{
+					var label:Label = new Label;
+					label.text = LangUtil.getString("messages","log.container.column.policy.requeueOnProgress");
+					detailGroup.addElement(label);
+				}
+				else{
+					requeueButton = new Button;
+					requeueButton.toolTip = LangUtil.getString('messages', 'log.requeue.tooltip');
+					requeueButton.includeInLayout = isRequeueVisible();
+					requeueButton.visible = isRequeueVisible();
+					requeueButton.addEventListener(MouseEvent.CLICK, clickHandler);
+					detailGroup.addElement(requeueButton);
+				}
+			}
+			
+			protected function clickHandler(event:MouseEvent):void
+			{
+				FlexGlobals.topLevelApplication.logContainer.requeueIncident(incidentLog);
+				incidentLog.requeueStatus.isRequeued = true;
+				isRequeued = true;
+				requeueButton.visible = false;
+				requeueButton.includeInLayout = false;
+				detailGroup.removeAllElements();
+				populateRequeueStatus();
+			}
+			
+			protected function isRequeueVisible(): Boolean
+			{
+				if (incidentLog == null) return false;
+				if (incidentLog.channel == "M" && incidentLog.action == "Q" && 
+					incidentLog.requeueStatus != null && !incidentLog.requeueStatus.isRequeued && !isRequeued)
+					return true;
+				return false;
+			}
+			
+			protected function populateDetails(itemList:ArrayCollection):void
+			{
+				for each(var item:String in itemList)
+				{
+					var label:Label = new Label;
+					label.text = item;
+					detailGroup.addElement(label);
+				}
+			}
+			
+		]]>
+	</fx:Script>
+	
+	
+	<fx:Declarations>
+		<domain:IncidentLog id="incidentLog"/>
+	</fx:Declarations>
+	
+	<s:ButtonBar id="buttonBar" skinClass="com.mydlp.ui.skin.CustomButtonBarSkin"
+				 dataProvider="{buttonBarDP}" change="{indexChange(event.newIndex)}" height="100%"/>
+	
+	<s:VGroup height="100%"><!--TODO: Add scroller around this container-->
+		
+		<s:Label id="detailHeader" fontWeight="bold"/>
+		
+		<s:VGroup id="detailGroup" />
+	</s:VGroup>
+	
+</s:HGroup>

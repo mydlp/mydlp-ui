@@ -440,14 +440,15 @@
 								  dataField="date"/>
 					<s:GridColumn headerText="@Resource(bundle = 'messages', key = 'log.container.header.source')" 
 								  itemRenderer="com.mydlp.ui.widget.log.IncidentSourceColumnRenderer"/>
-					<s:GridColumn headerText="@Resource(bundle = 'messages', key = 'log.container.header.destination')"
-								  itemRenderer="com.mydlp.ui.widget.log.IncidentDestinationColumnRenderer"/>
+					<s:GridColumn headerText="@Resource(bundle = 'messages', key = 'log.container.header.action')"
+								  itemRenderer="com.mydlp.ui.widget.log.IncidentActionColumnRenderer"/>
+					<s:GridColumn headerText="@Resource(bundle = 'messages', key = 'log.container.header.channel')"
+								  itemRenderer="com.mydlp.ui.widget.log.IncidentChannelColumnRenderer"/>
 					<s:GridColumn headerText="@Resource(bundle = 'messages', key = 'log.container.header.policy')"
 								  itemRenderer="com.mydlp.ui.widget.log.IncidentPolicyColumnRenderer"/>
 					<s:GridColumn headerText="@Resource(bundle = 'messages', key = 'log.container.header.details')"
-								  itemRenderer="com.mydlp.ui.widget.log.IncidentDetailsColumnRenderer"/>
-					<s:GridColumn headerText="@Resource(bundle = 'messages', key = 'log.container.header.files')"
-								  itemRenderer="com.mydlp.ui.widget.log.IncidentFilesColumnRenderer"/>
+								  itemRenderer="com.mydlp.ui.widget.log.IncidentDetailsColumnRenderer"
+								  width="70"/>
 				</s:ArrayList>
 			</s:columns>
 		</s:DataGrid>
