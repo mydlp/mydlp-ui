@@ -3,7 +3,7 @@
 		  xmlns:s="library://ns.adobe.com/flex/spark" 
 		  xmlns:mx="library://ns.adobe.com/flex/mx"
 		  xmlns:domain="com.mydlp.ui.domain.*"
-		  creationComplete="{isRequeued = false}">
+		  creationComplete="onCreationComplete(event)">
 	
 	<fx:Script>
 		<![CDATA[
@@ -14,6 +14,7 @@
 			import mx.collections.ListCollectionView;
 			import mx.controls.Button;
 			import mx.core.FlexGlobals;
+			import mx.events.FlexEvent;
 			
 			import spark.events.IndexChangeEvent;
 			
@@ -174,6 +175,13 @@
 					label.text = item;
 					detailGroup.addElement(label);
 				}
+			}
+			
+			protected function onCreationComplete(event:FlexEvent):void
+			{
+				isRequeued = false;
+				buttonBar.selectedIndex = 0;
+				indexChange(0);
 			}
 			
 		]]>
