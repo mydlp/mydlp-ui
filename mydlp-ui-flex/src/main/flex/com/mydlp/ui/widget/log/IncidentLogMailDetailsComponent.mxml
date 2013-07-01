@@ -7,6 +7,7 @@
 	
 	<fx:Script>
 		<![CDATA[
+			import com.mydlp.ui.skin.RequeueBitmapLabelButton16Skin;
 			import com.mydlp.ui.util.LangUtil;
 			
 			import mx.collections.ArrayCollection;
@@ -135,7 +136,7 @@
 				}
 				else{
 					requeueButton = new Button;
-					requeueButton.setStyle("skinClass", "com.mydlp.ui.skin.RequeueBitmapLabelButton16Skin");
+					requeueButton.setStyle("skinClass", RequeueBitmapLabelButton16Skin);
 					requeueButton.label = LangUtil.getString('messages', 'log.detail.mail.button.requeue.label');
 					requeueButton.toolTip = LangUtil.getString('messages', 'log.requeue.tooltip');
 					requeueButton.includeInLayout = isRequeueVisible();
