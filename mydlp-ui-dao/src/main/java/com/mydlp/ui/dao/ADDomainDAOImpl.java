@@ -7,6 +7,7 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
+import org.hibernate.Query;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.Restrictions;
@@ -251,6 +252,7 @@ public class ADDomainDAOImpl extends AbstractPolicyDAO implements ADDomainDAO {
 				if (key.equals(AD_KEY_USER))
 				{
 					removeGroupMembershipsOfUser(id);
+					removeUserAliases(id);
 				}
 				else if (key.equals(AD_KEY_GROUP))
 				{
@@ -267,16 +269,36 @@ public class ADDomainDAOImpl extends AbstractPolicyDAO implements ADDomainDAO {
 		}
 	}
 	
+	public void removeUserAliases(Integer userId) {
+		Query query = getSession().createSQLQuery(
+				"select distinct aliases_id from ADDomainUser_ADDomainUserAlias where ADDomainUser_id=:userid")
+				.setInteger("userid", userId);
+		@SuppressWarnings("unchecked")
+		List<Object[]> result = query.list();
+		List<Integer> aliasIdList = new ArrayList<Integer>();
+		for (Object[] objects : result) {
+			Integer aliasId = Integer.valueOf(objects[0].toString());
+			aliasIdList.add(aliasId);
+		}
+		for (Integer aliasId : aliasIdList) {
+			getSession().createSQLQuery("delete from ADDomainUser_ADDomainUserAlias where ADDomainUser_id=:userid and aliases_id=:aliasid")
+				.setInteger("userid", userId)
+				.setInteger("aliasid", aliasId)
+				.executeUpdate();
+			getHibernateTemplate().bulkUpdate("delete from ADDomainUserAlias ua where ua.id=?", aliasId);
+		}
+	}
+	
 	public void removeGroupMemberships(Integer groupId) {
 		getSession().createSQLQuery("delete from ADDomainUser_ADDomainGroup where groups_id=:groupid")
-		.setInteger("groupid", groupId)
-		.executeUpdate();
+			.setInteger("groupid", groupId)
+			.executeUpdate();
 	}
 	
 	public void removeGroupMembershipsOfUser(Integer userId) {
 		getSession().createSQLQuery("delete from ADDomainUser_ADDomainGroup where users_id=:userid")
-		.setInteger("userid", userId)
-		.executeUpdate();
+			.setInteger("userid", userId)
+			.executeUpdate();
 	}
 	
 	@Override
