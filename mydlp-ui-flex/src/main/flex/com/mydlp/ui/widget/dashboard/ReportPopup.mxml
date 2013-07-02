@@ -124,7 +124,7 @@
 	
 	<s:Button id="exportPDFButton" skinClass="com.mydlp.ui.skin.PDFBitmapLabelButton24Skin" styleName="fontSize24Style"
 			  label="@Resource(bundle = 'messages', key = 'dashboard.weeklyReport.exportAsPDF.button.label')"
-			  click="exportAsPDF(event)" x="350" y="36"/>
+			  click="exportAsPDF(event)" x="350" y="10"/>
 	
 	<mx:Canvas x="0" y="44" width="589" height="832" id="printedCanvas" backgroundColor="white">
 		
