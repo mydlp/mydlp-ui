@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:GridItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009" 
+					xmlns:s="library://ns.adobe.com/flex/spark" 
+					xmlns:mx="library://ns.adobe.com/flex/mx" 
+					clipAndEnableScrolling="true"
+					width="100%">
+	
+	<fx:Script>
+		<![CDATA[
+			import com.mydlp.ui.domain.IncidentLog;
+			import com.mydlp.ui.domain.Rule;
+			import com.mydlp.ui.util.LangUtil;
+			import com.mydlp.ui.widget.policy.rule.RuleContainer;
+			import com.mydlp.ui.widget.revision.RevisionContainer;
+			
+			import mx.core.FlexGlobals;
+			
+			protected var selectedRule:Rule = null;
+			protected var isDiscovery:Boolean = false;
+						
+			
+			protected function getPolicyText(value:*):String {
+				if (value == null) return "";
+				
+				var log:IncidentLog = value as IncidentLog;
+				var labelText:String = "";
+				
+				
+				
+				labelText += LangUtil.getString("messages","log.container.column.policy.channel") + ": ";
+				
+				switch (log.channel)
+				{
+					case "W": labelText += LangUtil.getString("messages","log.container.column.policy.channel.web"); break;
+					case "R": labelText += LangUtil.getString("messages","log.container.column.policy.channel.removableStorage"); break;
+					case "I": labelText += LangUtil.getString("messages","log.container.column.policy.channel.removableStorageInbound"); break;
+					case "M": labelText += LangUtil.getString("messages","log.container.column.policy.channel.mail"); break;
+					case "P": labelText += LangUtil.getString("messages","log.container.column.policy.channel.printer"); break;
+					case "D": labelText += LangUtil.getString("messages","log.container.column.policy.channel.discovery"); break;
+					case "A": labelText += LangUtil.getString("messages","log.container.column.policy.channel.api"); break;
+					case "RD": labelText += LangUtil.getString("messages","log.container.column.policy.channel.remote_discovery"); break;
+					default: labelText += log.channel; break;
+				}
+				
+				return labelText;
+			}
+			
+			
+		]]>
+	</fx:Script>
+	
+	<s:states>
+		<s:State name="normal" />
+		<s:State name="hovered" />
+		<s:State name="selected" />
+	</s:states>
+	
+	
+	<s:VGroup width="100%"
+			  paddingBottom="4" paddingTop="4" paddingLeft="4" paddingRight="4">
+		<s:Label id="lblData" text="{getPolicyText(data)}"/>
+	</s:VGroup>
+	
+</s:GridItemRenderer>

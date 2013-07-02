@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx"
+		 xmlns:my="http://www.mydlp.com/flex/my"
+		 xmlns:input="com.mydlp.ui.widget.general.input.*"
+		 xmlns:util="com.mydlp.ui.util.*" 
+		 xmlns:validators="com.mydlp.ui.validators.*"
+		 width="800" height="500" xmlns:log="com.mydlp.ui.widget.log.*"
+		 >
+	
+	<fx:Script>
+		<![CDATA[
+			import com.mydlp.ui.util.InteractionUtil;
+			import com.mydlp.ui.util.LangUtil;
+			import com.mydlp.ui.widget.general.popup.HorizontalInputLabel;
+			import com.mydlp.ui.widget.general.popup.VerticalInputLabel;
+			
+			import mx.collections.ArrayCollection;
+			import mx.collections.ListCollectionView;
+			import mx.controls.Alert;
+			import mx.controls.Label;
+			import mx.events.ResizeEvent;
+			
+			public static const DATE:String = "log.container.header.date";
+			
+			public static const SOURCE_TITLE:String ="log.container.header.source";
+			public static const DESTINATION_TITLE:String = "log.container.header.destination";
+			public static const POLICY_TITLE:String = "log.container.header.policy";
+			public static const DETAIL_TITLE:String = "log.container.header.details";
+			
+			public static const SOURCE_IP:String = "log.container.column.source.ip"
+			public static const SOURCE_USER:String = "log.container.column.source.user";
+			
+			public static const DESTINATION_REMOVABLE_STORAGE:String = "log.container.column.destination.removableStorage";
+			public static const DESTINATION_REMOTE_DISCOVERY:String = "log.container.column.destination.remoteDiscovery";
+			public static const DESTINATION_SMTP_RCPTTO:String = "log.container.column.destination.smtp.rpctto";
+			public static const DESTINATION_SMTP_TO:String = "log.container.column.destination.smtp.to";
+			public static const DESTINATION_SMTP_FROM:String = "log.container.column.destination.smtp.from";
+			public static const DESTINATION_SMTP_CC:String = "log.container.column.destination.smtp.cc";
+			public static const DESTINATION_SMTP_BCC:String = "log.container.column.destination.smtp.bcc";
+			
+			public static const ACTION:String = "log.container.column.policy.action";
+			public static const IRM_SECLORE_HOTFOLDERID:String = "log.container.column.policy.action.custom.irm.seclore.hotFolderId";
+			public static const IRM_SECLORE_CUSTOM_ACTION_NAME:String = "log.container.column.policy.action.custom.irm.seclore.customActionName";
+			
+			public static const CHANNEL:String = "log.container.column.policy.channel";
+			
+			public static const DETAIL_IT:String = "log.container.column.policy.informationType"; 
+			public static const DETAIL_SCORE:String = "log.container.column.details.score";
+			public static const DETAIL_REASON:String = "log.container.column.details.reason";
+			
+			public static const DESTINATION_PRINTER:String = "log.container.column.destination.printerName";
+			public static const DESTINATION_DISCOVERY:String = "log.container.column.destination.fullPath";
+			public static const DESTINATION_INBOUND:String = "log.container.column.destination.targetPath";
+			public static const DESTINATION:String = "log.container.column.destination.target";
+			
+			public static const RULE:String = "log.container.column.policy.rule";
+			
+			protected static const PIXELS_PER_CHARACTER:Number = 10;
+			
+			protected var xPosition:Number = 10;
+			protected var yPosition:Number = 20;
+			
+			[Bindable]
+			protected var logDetailItems:ListCollectionView = new ArrayCollection();
+			
+			protected function close(): void
+			{
+				InteractionUtil.closePopup(this);
+			}
+			
+			protected function startsWith( string:String, pattern:String):Boolean
+			{
+				string  = string.toLowerCase();
+				pattern = pattern.toLowerCase();
+				
+				return pattern == string.substr( 0, pattern.length );
+			}
+			
+			public function populateMailItem(destinationString:String):void
+			{
+				var rcpttoList:ArrayCollection = new ArrayCollection();
+				var toList:ArrayCollection = new ArrayCollection();
+				var fromList:ArrayCollection = new ArrayCollection();
+				var ccList:ArrayCollection = new ArrayCollection();
+				var bccList:ArrayCollection = new ArrayCollection();
+				
+				
+				for each (var o:* in destinationString.split(", "))
+				{
+					var line:String = o as String;
+					if (startsWith(line,"rcpt to: "))
+						rcpttoList.addItem(line.substr(9));
+					else if (startsWith(line,"to: "))
+						toList.addItem(line.substr(4));
+					else if (startsWith(line,"from: "))
+						fromList.addItem(line.substr(6));
+					else if (startsWith(line,"cc: "))
+						ccList.addItem(line.substr(4));
+					else if (startsWith(line,"bcc: "))
+						bccList.addItem(line.substr(5));
+				}
+				
+				if(rcpttoList.length > 0)
+				{
+					var clmic:ColoredLogMailItemButtonComponent = new ColoredLogMailItemButtonComponent;
+					clmic.title = LangUtil.getString('messages', DESTINATION_SMTP_RCPTTO);
+					clmic.elementsArray = rcpttoList;
+					clmic.logDetailTabbedComponent = logDetailTabbedComponent;
+					clmic.populate();
+					var componentWidth = calculateMailComponentWidth(clmic.title, rcpttoList);
+					locateLogItem(clmic, componentWidth);
+				}
+				
+				if(toList.length > 0)
+				{
+					var clmic:ColoredLogMailItemButtonComponent = new ColoredLogMailItemButtonComponent;
+					clmic.title = LangUtil.getString('messages', DESTINATION_SMTP_TO);
+					clmic.elementsArray = toList;
+					clmic.logDetailTabbedComponent = logDetailTabbedComponent;
+					clmic.populate();
+					var componentWidth = calculateMailComponentWidth(clmic.title, toList);
+					locateLogItem(clmic, componentWidth);
+				}
+				
+				if(fromList.length > 0)
+				{
+					var clmic:ColoredLogMailItemButtonComponent = new ColoredLogMailItemButtonComponent;
+					clmic.title = LangUtil.getString('messages', DESTINATION_SMTP_FROM);
+					clmic.elementsArray = fromList;
+					clmic.logDetailTabbedComponent = logDetailTabbedComponent;
+					clmic.populate();
+					var componentWidth = calculateMailComponentWidth(clmic.title, fromList);
+					locateLogItem(clmic, componentWidth);
+				}
+				
+				if(ccList.length > 0)
+				{
+					var clmic:ColoredLogMailItemButtonComponent = new ColoredLogMailItemButtonComponent;
+					clmic.title = LangUtil.getString('messages', DESTINATION_SMTP_CC);
+					clmic.elementsArray = ccList;
+					clmic.logDetailTabbedComponent = logDetailTabbedComponent;
+					clmic.populate();
+					var componentWidth = calculateMailComponentWidth(clmic.title, ccList);
+					locateLogItem(clmic, componentWidth);
+				}
+				
+				if(bccList.length > 0)
+				{
+					var clmic:ColoredLogMailItemButtonComponent = new ColoredLogMailItemButtonComponent;
+					clmic.title = LangUtil.getString('messages', DESTINATION_SMTP_BCC);
+					clmic.elementsArray = bccList;
+					clmic.logDetailTabbedComponent = logDetailTabbedComponent;
+					clmic.populate();	
+					var componentWidth = calculateMailComponentWidth(clmic.title, bccList);
+					locateLogItem(clmic, componentWidth);
+				}
+			}
+			
+			public function populateItem(titleMessage:String, element:String):void
+			{
+				var clic:ColoredLogItemComponent = new ColoredLogItemComponent;
+				var title:String = clic.title = LangUtil.getString('messages', titleMessage);
+				clic.element = element;
+				var componentWidth:Number = calculateItemWidth(title, element);
+				locateLogItem(clic, componentWidth);
+			}
+			
+			protected function locateLogItem(item:*, componentWidth:Number):void
+			{
+				item.width = componentWidth;
+				if((xPosition + componentWidth) > this.width)
+					calculateNewPositions(componentWidth);
+				
+				item.x = xPosition;
+				item.y = yPosition;
+				item.visible = false;
+				
+				logDetailItems.addItem(item);
+				calculateNewPositions(componentWidth);
+				this.addElement(item);
+			}
+			
+			public function setVisibiltyAllDetailItems():void
+			{
+				fitComponentsToRow();
+				//for each(var item:ColoredLogItemComponent in logDetailItems)
+				//item.visible = true;
+			}
+			
+			protected function fitComponentsToRow():void
+			{
+				var totalLengths:Number = 0;
+				var componentLengths:Number = 0
+				var slideLength:Number =0; 
+				for each(var logItem:* in logDetailItems)
+				componentLengths += logItem.width;
+				totalLengths = componentLengths + (logDetailItems.length-1)*5;
+				var remainingLength:Number = this.width - totalLengths - 10;
+				
+				for(var i:int = 0; i < logDetailItems.length; i++)
+				{
+					var item:* = logDetailItems.getItemAt(i);
+					var extraWidth:Number = remainingLength * (item.width/componentLengths);
+					item.visible = true;
+					item.width += extraWidth;
+					slideLength += extraWidth;
+					if(i != (logDetailItems.length - 1))
+					{
+						var itemNext:* = logDetailItems.getItemAt(i + 1);
+						itemNext.x += slideLength;
+					}
+				}
+				
+				logDetailItems = new ArrayCollection();
+			}
+			
+			protected function calculateItemWidth(title:String, element:String):Number
+			{
+				if(title.length > element.length)
+					return PIXELS_PER_CHARACTER*(title.length);
+				else
+					return PIXELS_PER_CHARACTER*(element.length);
+			}
+			
+			protected function calculateMailComponentWidth(title:String, list:ArrayCollection):Number
+			{
+				if(list.length > 1)//7 for 'more...' button length
+				{
+					if(title.length > (list.getItemAt(0).length+7))
+						return PIXELS_PER_CHARACTER*(title.length);
+					else
+						return PIXELS_PER_CHARACTER*(list.getItemAt(0).length+7);
+				}
+				else
+				{
+					if(title.length > (list.getItemAt(0).length))
+						return PIXELS_PER_CHARACTER*(title.length);
+					else
+						return PIXELS_PER_CHARACTER*(list.getItemAt(0).length);
+				}
+			}
+			
+			protected function calculateNewPositions(componentWidth:Number):void
+			{
+				if((xPosition + componentWidth) >= this.width)//It means that new row for log detail items.
+				{
+					fitComponentsToRow();
+					xPosition = 10;
+					yPosition += 50;
+				}
+				else //stay in same row.
+					xPosition += (componentWidth + 5);
+			}
+			
+			
+		]]>
+	</fx:Script>
+	
+	
+	<fx:Declarations>
+		<fx:String id="title"/>
+		<fx:Object id="elements"/>
+		<log:IncidentLogDetailTabbedComponent id="logDetailTabbedComponent"/>
+	</fx:Declarations>
+	
+	
+	
+</s:Group>

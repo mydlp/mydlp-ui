@@ -8,29 +8,32 @@ import javax.persistence.ManyToOne;
 @Entity
 public class MatchingDetail extends AbstractEntity{
 	
+	
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 5811373128233949994L;
+	private static final long serialVersionUID = -8833171841101279634L;
 	
-	protected IncidentLog incidentLog;
+	
+	protected IncidentLogFile incidentLogFile;
 	protected String matchingData;
 	protected String matcherFunc;
+	
+	
+	@ManyToOne
+	@JoinColumn(nullable=false)
+	public IncidentLogFile getIncidentLogFile() {
+		return incidentLogFile;
+	}
+	public void setIncidentLogFile(IncidentLogFile incidentLogFile) {
+		this.incidentLogFile = incidentLogFile;
+	}
 	
 	public String getMatcherFunc() {
 		return matcherFunc;
 	}
 	public void setMatcherFunc(String matcherFunc) {
 		this.matcherFunc = matcherFunc;
-	}
-	
-	@ManyToOne
-	@JoinColumn(nullable=false)
-	public IncidentLog getIncidentLog() {
-		return incidentLog;
-	}
-	public void setIncidentLog(IncidentLog incidentLog) {
-		this.incidentLog = incidentLog;
 	}
 	
 	@Lob

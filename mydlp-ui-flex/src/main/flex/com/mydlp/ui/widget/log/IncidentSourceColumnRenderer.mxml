@@ -6,11 +6,15 @@
 	<fx:Script>
 		<![CDATA[
 			import com.mydlp.ui.domain.IncidentLog;
+			import com.mydlp.ui.util.InteractionUtil;
 			import com.mydlp.ui.util.LangUtil;
 			import com.mydlp.ui.widget.general.input.IpAddressInput;
 			
+			protected var incidentLog:IncidentLog = new IncidentLog;
+			
 			protected function getSourceText(value:*):String {
 				var log:IncidentLog = value as IncidentLog;
+				incidentLog = log//
 				var labelText:String = "";
 				if(log.channel == "RD")
 				{
@@ -24,15 +28,15 @@
 						var ipStr:String = IpAddressInput.numberToIPStr(log.sourceIp);
 						if (ipStr != "0.0.0.0")
 						{
-							labelText += LangUtil.getString("messages","log.container.column.source.ip") + ": " + ipStr;
+							labelText += LangUtil.getString("messages","log.container.column.source") + ": " + ipStr;
 						}
 					}
 					if (log.sourceUser != null && log.sourceUser.length > 0)
-						labelText += "\n" + LangUtil.getString("messages","log.container.column.source.user") 
-							+ ": " + log.sourceUser;
+						labelText += "(" + log.sourceUser + ")";
 				}
 				return labelText;
 			}
+			
 		]]>
 	</fx:Script>
 	
@@ -41,5 +45,6 @@
 	</s:layout>
 	
 	<s:Label id="lblData" text='{getSourceText(data)}'/>
+	
 	
 </s:GridItemRenderer>
