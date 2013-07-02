@@ -42,9 +42,10 @@
 					)
 				);
 			
-			protected var requeueButton:Button;
 			
 			protected var isRequeued:Boolean = false;
+			
+			protected var requeueButton:RequeueButtonComponent;
 			
 			public static function startsWith( string:String, pattern:String):Boolean
 			{
@@ -136,10 +137,7 @@
 					detailGroup.addElement(label);
 				}
 				else{
-					requeueButton = new Button;
-					requeueButton.setStyle("skinClass", RequeueBitmapLabelButton16Skin);
-					requeueButton.label = LangUtil.getString('messages', 'log.detail.mail.button.requeue.label');
-					requeueButton.toolTip = LangUtil.getString('messages', 'log.requeue.tooltip');
+					requeueButton = new RequeueButtonComponent;
 					requeueButton.includeInLayout = isRequeueVisible();
 					requeueButton.visible = isRequeueVisible();
 					requeueButton.addEventListener(MouseEvent.CLICK, clickHandler);
