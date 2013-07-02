@@ -82,15 +82,13 @@
 				if(data == null)
 					return "";
 				var logFile:IncidentLogFile = data as IncidentLogFile;
-				var text:String;
-				text = logFile.filename +" [";
+				var text:String = "";
 				if(hasSize(logFile))
-					text += LangUtil.getString('messages', 'log.detail.file.size') + 
-						FileUtil.getHumanReadableSize(getMasterBlueprint(logFile).size);
+					text += " [" +LangUtil.getString('messages', 'log.detail.file.size') + 
+						FileUtil.getHumanReadableSize(getMasterBlueprint(logFile).size) + "]" ;
 				if(hasFileType(logFile))
-					text += " / " + LangUtil.getString('messages', 'log.detail.file.type') + 	
-						getMasterBlueprint(logFile).mimeType;
-				text += "]";
+					text += " [" + LangUtil.getString('messages', 'log.detail.file.type') + 	
+						getMasterBlueprint(logFile).mimeType + "]";
 				return text;
 			}
 			
@@ -100,9 +98,10 @@
 	<s:Group width="100%" height="100%" toolTip=" " toolTipCreate="createCustomToolTip(event)" >
 		<s:layout>
 			<s:HorizontalLayout verticalAlign="middle"
-								paddingLeft="4" paddingRight="4"
-								paddingTop="4" paddingBottom="4" gap="2"/>
+								paddingLeft="8" paddingRight="4"
+								paddingTop="5" paddingBottom="5" gap="2"/>
 		</s:layout>
+		<s:Label text="{data.filename}" fontWeight="bold"/>
 		<s:Label text="{getText(data)}" width="100%"/>	
 	</s:Group>
 	
