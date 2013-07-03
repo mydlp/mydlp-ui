@@ -84,10 +84,10 @@
 				var logFile:IncidentLogFile = data as IncidentLogFile;
 				var text:String = "";
 				if(hasSize(logFile))
-					text += " [" +LangUtil.getString('messages', 'log.detail.file.size') + 
+					text += " [" +LangUtil.getString('messages', 'log.detail.file.size') + " " +
 						FileUtil.getHumanReadableSize(getMasterBlueprint(logFile).size) + "]" ;
 				if(hasFileType(logFile))
-					text += " [" + LangUtil.getString('messages', 'log.detail.file.type') + 	
+					text += " [" + LangUtil.getString('messages', 'log.detail.file.type') + " " + 	
 						getMasterBlueprint(logFile).mimeType + "]";
 				return text;
 			}
