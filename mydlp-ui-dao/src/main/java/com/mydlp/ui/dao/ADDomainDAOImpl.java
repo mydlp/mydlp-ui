@@ -348,11 +348,18 @@ public class ADDomainDAOImpl extends AbstractPolicyDAO implements ADDomainDAO {
 		for (ADDomain domain : getADDomains()) {
 			domainIdStrList.add(domain.getId().toString());
 		}
-		@SuppressWarnings("unchecked")
-		List<ADDomainItem> ghostItems = getHibernateTemplate().find(
-				"select i from ADDomainItem i where i.domainId " +
-				"not in (" + StringUtils.join(domainIdStrList, ", ") + ")");
-		removeDomainItems(ghostItems);
+		String domainIdStr = StringUtils.join(domainIdStrList, ", ");
+		while (true) {
+			Query q = getSession().createQuery("select i from ADDomainItem i where i.domainId " + "not in (" + domainIdStr + ")");
+			q.setMaxResults(1);
+			@SuppressWarnings("unchecked")
+			List<ADDomainItem> ghostItems = q.list();
+			if (ghostItems == null || ghostItems.size() == 0)
+			{
+				break;
+			}
+			removeDomainItems(ghostItems);
+		}
 	}
 
 }
