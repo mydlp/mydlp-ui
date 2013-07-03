@@ -1113,7 +1113,10 @@
 			{
 				return ruleObject is MailRule &&
 					(
-						(sourceItem is Domain && sourceItem.coupledInventoryItem.nameKey != DOMAIN_ALL)|| 
+						(sourceItem is Domain && 
+							(	sourceItem.coupledInventoryItem.nameKey != DOMAIN_ALL && 
+								sourceItem.coupledInventoryItem.nameKey != DESTINATION_HASBCC)
+						) || 
 						sourceItem is RuleUser
 					);
 			}

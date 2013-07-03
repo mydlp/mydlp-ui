@@ -3,7 +3,7 @@ package com.mydlp.ui.schema.granules;
 import com.mydlp.ui.domain.Config;
 import com.mydlp.ui.schema.AbstractGranule;
 
-public class _001_00200_Config_Discover_RFS extends AbstractGranule {
+public class _001_00205_Config_Discover_RFS extends AbstractGranule {
 
 	@Override
 	protected void callback() {
