@@ -71,6 +71,8 @@
 					else if (startsWith(line,"bcc: "))
 						bccList.addItem(line.substr(5));
 				}	
+				if(incidentLog.sourceUser != null && incidentLog.sourceUser.length > 0)
+					fromList.addItem("<" + incidentLog.sourceUser + ">");
 			}
 			
 			public function indexChange(index:Number):void
