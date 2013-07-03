@@ -172,6 +172,13 @@ public class ADEnumServiceImpl implements ADEnumService {
 					adDomainDAO.removeDomainItems(itemsToRemove);
 				}
 			});
+			transactionTemplate.execute(new TransactionCallbackWithoutResult() {
+				@Override
+				protected void doInTransactionWithoutResult(
+						TransactionStatus arg0) {
+					adDomainDAO.cleanupGhostEntries();
+				}
+			});
 			logger.info("Finalizing process.", domain.getDomainName());
 		} catch (Throwable e) {
 			logger.error("Error occured", e);

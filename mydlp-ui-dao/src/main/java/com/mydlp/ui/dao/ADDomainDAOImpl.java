@@ -286,8 +286,7 @@ public class ADDomainDAOImpl extends AbstractPolicyDAO implements ADDomainDAO {
 				.createSQLQuery(
 						"select distinct aliases_id from ADDomainUser_ADDomainUserAlias where ADDomainUser_id=:userid")
 				.setInteger("userid", userId);
-		@SuppressWarnings("unchecked")
-		List<Object[]> result = query.list();
+		List<?> result = query.list();
 		List<Integer> aliasIdList = new ArrayList<Integer>();
 		for (Object i : result) {
 			Integer aliasId = null;
