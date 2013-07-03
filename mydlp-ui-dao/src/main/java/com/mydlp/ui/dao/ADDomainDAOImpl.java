@@ -244,6 +244,7 @@ public class ADDomainDAOImpl extends AbstractPolicyDAO implements ADDomainDAO {
 		itemsToRemove.put(AD_KEY_NOREL, new TreeSet<Integer>());
 
 		for (ADDomainItem adDomainItem : items) {
+			logger.error("to delete id: " + adDomainItem.getId());
 			Set<Integer> groupSet = null;
 			if (adDomainItem instanceof ADDomainUser) {
 				groupSet = itemsToRemove.get(AD_KEY_USER);
@@ -252,6 +253,7 @@ public class ADDomainDAOImpl extends AbstractPolicyDAO implements ADDomainDAO {
 			} else if (adDomainItem instanceof ADDomainOU) {
 				groupSet = itemsToRemove.get(AD_KEY_OU);
 			} else if (adDomainItem instanceof ADDomainRoot) {
+				logger.error("root: " + adDomainItem.getId());
 				groupSet = itemsToRemove.get(AD_KEY_OU);
 			} else if (adDomainItem instanceof ADDomainItem || adDomainItem instanceof ADDomainItemGroup ) {
 				groupSet = itemsToRemove.get(AD_KEY_NOREL);
