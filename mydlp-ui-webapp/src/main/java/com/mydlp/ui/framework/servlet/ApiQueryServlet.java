@@ -40,9 +40,14 @@ public class ApiQueryServlet implements HttpRequestHandler {
 				ByteBuffer data = NIOUtil.toByteBuffer(req.getInputStream());
 				
 				String filename= req.getParameter("filename");
+				String user = req.getParameter("user");
 				if (filename == null)
 				{
 					filename = "api-noname";
+				}
+				if(user == null)
+				{
+					user = "api-nouser";
 				}
 				String ipAddress = req.getRemoteAddr();
 				returnStr = thriftService.apiQuery(ipAddress, filename, data);
