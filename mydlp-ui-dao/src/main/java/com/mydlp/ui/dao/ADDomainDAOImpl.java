@@ -223,7 +223,8 @@ public class ADDomainDAOImpl extends AbstractPolicyDAO implements ADDomainDAO {
 	protected static final String AD_KEY_USER = "user";
 	protected static final String AD_KEY_OU = "ou";
 	protected static final String AD_KEY_GROUP = "group";
-	protected static final String AD_KEY_NOREL = "norel";
+	protected static final String AD_KEY_ITEM = "_item";
+	protected static final String AD_KEY_ITEM_GROUP = "_itemGroup";
 
 	protected void removeByParentId(Integer id) {
 		List<ADDomainItem> itemsOfOU = getChildrenOfById(id);
@@ -241,23 +242,24 @@ public class ADDomainDAOImpl extends AbstractPolicyDAO implements ADDomainDAO {
 		itemsToRemove.put(AD_KEY_USER, new TreeSet<Integer>());
 		itemsToRemove.put(AD_KEY_OU, new TreeSet<Integer>());
 		itemsToRemove.put(AD_KEY_GROUP, new TreeSet<Integer>());
-		itemsToRemove.put(AD_KEY_NOREL, new TreeSet<Integer>());
+		itemsToRemove.put(AD_KEY_ITEM, new TreeSet<Integer>());
+		itemsToRemove.put(AD_KEY_ITEM_GROUP, new TreeSet<Integer>());
 
 		for (ADDomainItem adDomainItem : items) {
-			logger.error("to delete id: " + adDomainItem.getId());
 			Set<Integer> groupSet = null;
 			if (adDomainItem instanceof ADDomainUser) {
 				groupSet = itemsToRemove.get(AD_KEY_USER);
 			} else if (adDomainItem instanceof ADDomainGroup) {
 				groupSet = itemsToRemove.get(AD_KEY_GROUP);
 			} else if (adDomainItem instanceof ADDomainOU) {
-				groupSet = itemsToRemove.get(AD_KEY_OU);
+				groupSet = itemsToRemove.get(AD_KEY_ITEM_GROUP);
 			} else if (adDomainItem instanceof ADDomainRoot) {
-				logger.error("root: " + adDomainItem.getId());
-				groupSet = itemsToRemove.get(AD_KEY_OU);
-			} else if (adDomainItem instanceof ADDomainItem || adDomainItem instanceof ADDomainItemGroup ) {
-				groupSet = itemsToRemove.get(AD_KEY_NOREL);
-			}
+				groupSet = itemsToRemove.get(AD_KEY_ITEM_GROUP);
+			} else if (adDomainItem instanceof ADDomainItemGroup) {
+				groupSet = itemsToRemove.get(AD_KEY_ITEM_GROUP);
+			} else if (adDomainItem instanceof ADDomainItem) {
+				groupSet = itemsToRemove.get(AD_KEY_ITEM);
+			} 
 
 			if (groupSet != null) {
 				groupSet.add(adDomainItem.getId());
@@ -279,13 +281,12 @@ public class ADDomainDAOImpl extends AbstractPolicyDAO implements ADDomainDAO {
 					removeUserAliases(id);
 				} else if (key.equals(AD_KEY_GROUP)) {
 					removeGroupMemberships(id);
-				} else if (key.equals(AD_KEY_OU)) {
+				} else if (key.equals(AD_KEY_ITEM_GROUP)) {
 					removeByParentId(id);
-				} else if (key.equals(AD_KEY_NOREL)) {
+				} else if (key.equals(AD_KEY_ITEM)) {
 					// do nothing
 				}
 
-				logger.error("Delete ItemId: " + id);
 				getHibernateTemplate().bulkUpdate(
 						"delete from ADDomainItem di where di.id=?", id);
 			}
@@ -361,8 +362,6 @@ public class ADDomainDAOImpl extends AbstractPolicyDAO implements ADDomainDAO {
 			{
 				break;
 			}
-			logger.error("Domain Str: " + domainIdStr);;
-			logger.error("ItemId: " + ghostItems.get(0).getId());
 			removeDomainItems(ghostItems);
 		}
 	}
