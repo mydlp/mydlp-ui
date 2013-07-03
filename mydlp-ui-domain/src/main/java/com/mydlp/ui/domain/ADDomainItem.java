@@ -55,7 +55,6 @@ public class ADDomainItem extends AbstractEntity {
 		this.parent = parent;
 	}
 
-	@Index(name="domainIdIndex")
 	@Column(nullable=false)
 	public Integer getDomainId() {
 		return domainId;
