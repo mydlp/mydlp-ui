@@ -70,8 +70,8 @@
 				  skinClass="com.mydlp.ui.skin.DownloadBitmapLabelButton16Skin"
 				  click="{navigateToURL(new URLRequest ('download?id=' + incidentLogFileList.selectedItem.id), '_blank')}"
 				  visible="{incidentLogFileList.selectedItem.content != null &amp;&amp; incidentLogFileList.selectedItem != null}"/>
-		<s:Scroller width="100%" height="100%" verticalScrollPolicy="auto" horizontalScrollPolicy="off">
-			<s:VGroup id="matchingDataGroup" width="100%"/>
-		</s:Scroller>
+		
+		<s:VGroup id="matchingDataGroup" width="100%"/>
+		
 	</s:VGroup>
 </s:HGroup>

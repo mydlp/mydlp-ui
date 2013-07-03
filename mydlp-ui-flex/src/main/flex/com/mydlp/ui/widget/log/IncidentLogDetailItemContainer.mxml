@@ -264,7 +264,4 @@
 		<fx:Object id="elements"/>
 		<log:IncidentLogDetailTabbedComponent id="logDetailTabbedComponent"/>
 	</fx:Declarations>
-	
-	
-	
 </s:Group>

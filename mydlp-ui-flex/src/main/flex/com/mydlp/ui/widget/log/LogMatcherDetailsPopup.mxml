@@ -4,7 +4,7 @@
 			   xmlns:mx="library://ns.adobe.com/flex/mx"
 			   xmlns:my="http://www.mydlp.com/flex/my"
 			   xmlns:input="com.mydlp.ui.widget.general.input.*"
-			   width="400" maxHeight="500"
+			   width="400" maxHeight="240"
 			   xmlns:util="com.mydlp.ui.util.*" 
 			   xmlns:validators="com.mydlp.ui.validators.*"
 			   visible="false">
