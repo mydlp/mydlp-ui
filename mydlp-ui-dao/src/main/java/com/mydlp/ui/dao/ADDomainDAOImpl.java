@@ -223,6 +223,7 @@ public class ADDomainDAOImpl extends AbstractPolicyDAO implements ADDomainDAO {
 	protected static final String AD_KEY_USER = "user";
 	protected static final String AD_KEY_OU = "ou";
 	protected static final String AD_KEY_GROUP = "group";
+	protected static final String AD_KEY_NOREL = "norel";
 
 	protected void removeByParentId(Integer id) {
 		List<ADDomainItem> itemsOfOU = getChildrenOfById(id);
@@ -240,6 +241,7 @@ public class ADDomainDAOImpl extends AbstractPolicyDAO implements ADDomainDAO {
 		itemsToRemove.put(AD_KEY_USER, new TreeSet<Integer>());
 		itemsToRemove.put(AD_KEY_OU, new TreeSet<Integer>());
 		itemsToRemove.put(AD_KEY_GROUP, new TreeSet<Integer>());
+		itemsToRemove.put(AD_KEY_NOREL, new TreeSet<Integer>());
 
 		for (ADDomainItem adDomainItem : items) {
 			Set<Integer> groupSet = null;
@@ -251,6 +253,8 @@ public class ADDomainDAOImpl extends AbstractPolicyDAO implements ADDomainDAO {
 				groupSet = itemsToRemove.get(AD_KEY_OU);
 			} else if (adDomainItem instanceof ADDomainRoot) {
 				groupSet = itemsToRemove.get(AD_KEY_OU);
+			} else if (adDomainItem instanceof ADDomainItem || adDomainItem instanceof ADDomainItemGroup ) {
+				groupSet = itemsToRemove.get(AD_KEY_NOREL);
 			}
 
 			if (groupSet != null) {
@@ -275,6 +279,8 @@ public class ADDomainDAOImpl extends AbstractPolicyDAO implements ADDomainDAO {
 					removeGroupMemberships(id);
 				} else if (key.equals(AD_KEY_OU)) {
 					removeByParentId(id);
+				} else if (key.equals(AD_KEY_NOREL)) {
+					// do nothing
 				}
 
 				getHibernateTemplate().bulkUpdate(
@@ -342,8 +348,6 @@ public class ADDomainDAOImpl extends AbstractPolicyDAO implements ADDomainDAO {
 		for (ADDomain domain : getADDomains()) {
 			domainIdStrList.add(domain.getId().toString());
 		}
-		logger.error(				"select i from ADDomainItem i where i.domainId " +
-				"not in (" + StringUtils.join(domainIdStrList, ", ") + ")");
 		@SuppressWarnings("unchecked")
 		List<ADDomainItem> ghostItems = getHibernateTemplate().find(
 				"select i from ADDomainItem i where i.domainId " +
