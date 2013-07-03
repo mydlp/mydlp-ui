@@ -7,6 +7,7 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Query;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Disjunction;
@@ -17,19 +18,22 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.mydlp.ui.domain.ADDomain;
+import com.mydlp.ui.domain.ADDomainAlias;
 import com.mydlp.ui.domain.ADDomainGroup;
 import com.mydlp.ui.domain.ADDomainItem;
 import com.mydlp.ui.domain.ADDomainItemGroup;
 import com.mydlp.ui.domain.ADDomainOU;
 import com.mydlp.ui.domain.ADDomainRoot;
 import com.mydlp.ui.domain.ADDomainUser;
+import com.mydlp.ui.domain.ADDomainUserAlias;
 import com.mydlp.ui.domain.AbstractEntity;
 
 @Repository("adDomainDAO")
 @Transactional
 public class ADDomainDAOImpl extends AbstractPolicyDAO implements ADDomainDAO {
-	
-	private static Logger logger = LoggerFactory.getLogger(ADDomainDAOImpl.class);
+
+	private static Logger logger = LoggerFactory
+			.getLogger(ADDomainDAOImpl.class);
 
 	@Override
 	@Transactional(readOnly = false)
@@ -48,7 +52,19 @@ public class ADDomainDAOImpl extends AbstractPolicyDAO implements ADDomainDAO {
 	@Override
 	@Transactional(readOnly = false)
 	public void remove(AbstractEntity domainObj) {
-		getHibernateTemplate().delete(domainObj);
+		if (domainObj == null)
+			return;
+
+		if (domainObj instanceof ADDomain
+				|| domainObj instanceof ADDomainUserAlias
+				|| domainObj instanceof ADDomainAlias) {
+			getHibernateTemplate().delete(domainObj);
+		} else if (domainObj instanceof ADDomainRoot) {
+			removeByParentId(domainObj.getId());
+			getHibernateTemplate().delete(domainObj);
+		} else if (domainObj instanceof ADDomainItem) {
+			removeDomainItem((ADDomainItem) domainObj);
+		}
 	}
 
 	@Override
@@ -77,12 +93,11 @@ public class ADDomainDAOImpl extends AbstractPolicyDAO implements ADDomainDAO {
 	public List<ADDomainItem> getChildrenOf(ADDomainItemGroup domainItemGroup) {
 		return getChildrenOfById(domainItemGroup.getId());
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public List<ADDomainItem> getChildrenOfById(Integer parentID) {
 		DetachedCriteria criteria = DetachedCriteria.forClass(
-				ADDomainItem.class).add(
-				Restrictions.eq("parent.id", parentID));
+				ADDomainItem.class).add(Restrictions.eq("parent.id", parentID));
 		return getHibernateTemplate().findByCriteria(criteria);
 	}
 
@@ -208,105 +223,132 @@ public class ADDomainDAOImpl extends AbstractPolicyDAO implements ADDomainDAO {
 	protected static final String AD_KEY_USER = "user";
 	protected static final String AD_KEY_OU = "ou";
 	protected static final String AD_KEY_GROUP = "group";
-	
-	protected void removeOU(Integer id) {
+
+	protected void removeByParentId(Integer id) {
+		List<ADDomainItem> itemsOfOU = getChildrenOfById(id);
+		removeDomainItems(itemsOfOU);
+	}
+
+	public void removeDomainItem(ADDomainItem item) {
+		List<ADDomainItem> items = new ArrayList<ADDomainItem>();
+		items.add(item);
+		removeDomainItems(items);
+	}
+
+	public void removeDomainItems(List<ADDomainItem> items) {
 		Map<String, Set<Integer>> itemsToRemove = new TreeMap<String, Set<Integer>>();
 		itemsToRemove.put(AD_KEY_USER, new TreeSet<Integer>());
 		itemsToRemove.put(AD_KEY_OU, new TreeSet<Integer>());
 		itemsToRemove.put(AD_KEY_GROUP, new TreeSet<Integer>());
-		
-		List<ADDomainItem> itemsOfOU = getChildrenOfById(id);
-		for (ADDomainItem adDomainItem : itemsOfOU) {
+
+		for (ADDomainItem adDomainItem : items) {
 			Set<Integer> groupSet = null;
-			if (adDomainItem instanceof ADDomainUser) 
-			{
+			if (adDomainItem instanceof ADDomainUser) {
 				groupSet = itemsToRemove.get(AD_KEY_USER);
-			} 
-			else if (adDomainItem instanceof ADDomainGroup) 
-			{
+			} else if (adDomainItem instanceof ADDomainGroup) {
 				groupSet = itemsToRemove.get(AD_KEY_GROUP);
-			} 
-			else if (adDomainItem instanceof ADDomainOU) 
-			{
+			} else if (adDomainItem instanceof ADDomainOU) {
+				groupSet = itemsToRemove.get(AD_KEY_OU);
+			} else if (adDomainItem instanceof ADDomainRoot) {
 				groupSet = itemsToRemove.get(AD_KEY_OU);
 			}
-			
-			if (groupSet != null)
-			{
+
+			if (groupSet != null) {
 				groupSet.add(adDomainItem.getId());
-			}
-			else
-			{
-				logger.error("Cannot remove domain category for item. Clazz: " + adDomainItem.getClass().getSimpleName());
+			} else {
+				logger.error("Cannot remove domain category for item. Clazz: "
+						+ adDomainItem.getClass().getSimpleName());
 			}
 		}
-		
+
 		removeDomainItems(itemsToRemove);
 	}
-	
-	
+
 	@Override
 	public void removeDomainItems(Map<String, Set<Integer>> itemsToRemove) {
 		for (String key : itemsToRemove.keySet()) {
 			for (Integer id : itemsToRemove.get(key)) {
-				if (key.equals(AD_KEY_USER))
-				{
+				if (key.equals(AD_KEY_USER)) {
 					removeGroupMembershipsOfUser(id);
 					removeUserAliases(id);
-				}
-				else if (key.equals(AD_KEY_GROUP))
-				{
+				} else if (key.equals(AD_KEY_GROUP)) {
 					removeGroupMemberships(id);
+				} else if (key.equals(AD_KEY_OU)) {
+					removeByParentId(id);
 				}
-				else if (key.equals(AD_KEY_OU))
-				{
-					removeOU(id);
-				}
-				
+
 				getHibernateTemplate().bulkUpdate(
 						"delete from ADDomainItem di where di.id=?", id);
 			}
 		}
 	}
-	
+
 	public void removeUserAliases(Integer userId) {
-		Query query = getSession().createSQLQuery(
-				"select distinct aliases_id from ADDomainUser_ADDomainUserAlias where ADDomainUser_id=:userid")
+		Query query = getSession()
+				.createSQLQuery(
+						"select distinct aliases_id from ADDomainUser_ADDomainUserAlias where ADDomainUser_id=:userid")
 				.setInteger("userid", userId);
-		@SuppressWarnings("unchecked")
-		List<Object[]> result = query.list();
+		List<?> result = query.list();
 		List<Integer> aliasIdList = new ArrayList<Integer>();
-		for (Object[] objects : result) {
-			Integer aliasId = Integer.valueOf(objects[0].toString());
+		for (Object i : result) {
+			Integer aliasId = null;
+			if (i instanceof Object[]) {
+				Object[] objects = (Object[]) i;
+				aliasId = Integer.valueOf(objects[0].toString());
+			} else if (i instanceof Integer) {
+				aliasId = (Integer) i;
+			}
+			if (aliasId == null)
+				continue;
 			aliasIdList.add(aliasId);
 		}
 		for (Integer aliasId : aliasIdList) {
-			getSession().createSQLQuery("delete from ADDomainUser_ADDomainUserAlias where ADDomainUser_id=:userid and aliases_id=:aliasid")
-				.setInteger("userid", userId)
-				.setInteger("aliasid", aliasId)
-				.executeUpdate();
-			getHibernateTemplate().bulkUpdate("delete from ADDomainUserAlias ua where ua.id=?", aliasId);
+			getSession()
+					.createSQLQuery(
+							"delete from ADDomainUser_ADDomainUserAlias where ADDomainUser_id=:userid and aliases_id=:aliasid")
+					.setInteger("userid", userId)
+					.setInteger("aliasid", aliasId).executeUpdate();
+			getHibernateTemplate().bulkUpdate(
+					"delete from ADDomainUserAlias ua where ua.id=?", aliasId);
 		}
 	}
-	
+
 	public void removeGroupMemberships(Integer groupId) {
-		getSession().createSQLQuery("delete from ADDomainUser_ADDomainGroup where groups_id=:groupid")
-			.setInteger("groupid", groupId)
-			.executeUpdate();
+		getSession()
+				.createSQLQuery(
+						"delete from ADDomainUser_ADDomainGroup where groups_id=:groupid")
+				.setInteger("groupid", groupId).executeUpdate();
 	}
-	
+
 	public void removeGroupMembershipsOfUser(Integer userId) {
-		getSession().createSQLQuery("delete from ADDomainUser_ADDomainGroup where users_id=:userid")
-			.setInteger("userid", userId)
-			.executeUpdate();
+		getSession()
+				.createSQLQuery(
+						"delete from ADDomainUser_ADDomainGroup where users_id=:userid")
+				.setInteger("userid", userId).executeUpdate();
 	}
-	
+
 	@Override
 	public void removeGroupMember(Integer groupId, Integer userId) {
-		getSession().createSQLQuery("delete from ADDomainUser_ADDomainGroup where users_id=:userid and groups_id=:groupid")
-					.setInteger("userid", userId)
-					.setInteger("groupid", groupId)
-					.executeUpdate();
+		getSession()
+				.createSQLQuery(
+						"delete from ADDomainUser_ADDomainGroup where users_id=:userid and groups_id=:groupid")
+				.setInteger("userid", userId).setInteger("groupid", groupId)
+				.executeUpdate();
+	}
+
+	@Override
+	public void cleanupGhostEntries() {
+		List<String> domainIdStrList = new ArrayList<String>();
+		for (ADDomain domain : getADDomains()) {
+			domainIdStrList.add(domain.getId().toString());
+		}
+		logger.error(				"select i from ADDomainItem i where i.domainId " +
+				"not in (" + StringUtils.join(domainIdStrList, ", ") + ")");
+		@SuppressWarnings("unchecked")
+		List<ADDomainItem> ghostItems = getHibernateTemplate().find(
+				"select i from ADDomainItem i where i.domainId " +
+				"not in (" + StringUtils.join(domainIdStrList, ", ") + ")");
+		removeDomainItems(ghostItems);
 	}
 
 }

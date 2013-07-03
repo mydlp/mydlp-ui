@@ -44,4 +44,6 @@ public interface ADDomainDAO {
 	public void removeDomainItems(Map<String, Set<Integer>> itemsToRemove);
 
 	public void removeGroupMember(Integer groupId, Integer userId);
+	
+	public void cleanupGhostEntries();
 }
