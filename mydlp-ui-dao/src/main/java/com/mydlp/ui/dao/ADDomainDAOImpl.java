@@ -358,6 +358,8 @@ public class ADDomainDAOImpl extends AbstractPolicyDAO implements ADDomainDAO {
 			{
 				break;
 			}
+			logger.error("Domain Str: " + domainIdStr);;
+			logger.error("ItemId: " + ghostItems.get(0).getId());
 			removeDomainItems(ghostItems);
 		}
 	}
