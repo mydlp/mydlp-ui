@@ -191,11 +191,11 @@ public class MyDLPUIThriftServiceImpl implements MyDLPUIThriftService {
 	}
 
 	@Override
-	public String apiQuery(final String ipAddress, final String filename, final ByteBuffer data) {
+	public String apiQuery(final String ipAddress, final String filename, final String user, final ByteBuffer data) {
 		return call(new ThriftCall<String>() {
 			@Override
 			public String execute(MyDLPUIThriftConnection thriftConnection) throws TException {
-				return thriftConnection.client.apiQuery(ipAddress, filename, data);
+				return thriftConnection.client.apiQuery(ipAddress, filename, user, data);
 			}
 		});
 	}

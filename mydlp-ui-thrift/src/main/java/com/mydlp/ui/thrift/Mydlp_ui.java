@@ -46,7 +46,7 @@ public class Mydlp_ui {
 
     public LicenseObject getLicense() throws org.apache.thrift.TException;
 
-    public String apiQuery(String Ipaddress, String Filename, ByteBuffer Data) throws org.apache.thrift.TException;
+    public String apiQuery(String Ipaddress, String Filename, String User, ByteBuffer Data) throws org.apache.thrift.TException;
 
     public void startDiscoveryOnDemand(int RuleId) throws org.apache.thrift.TException;
 
@@ -92,7 +92,7 @@ public class Mydlp_ui {
 
     public void getLicense(org.apache.thrift.async.AsyncMethodCallback<AsyncClient.getLicense_call> resultHandler) throws org.apache.thrift.TException;
 
-    public void apiQuery(String Ipaddress, String Filename, ByteBuffer Data, org.apache.thrift.async.AsyncMethodCallback<AsyncClient.apiQuery_call> resultHandler) throws org.apache.thrift.TException;
+    public void apiQuery(String Ipaddress, String Filename, String User, ByteBuffer Data, org.apache.thrift.async.AsyncMethodCallback<AsyncClient.apiQuery_call> resultHandler) throws org.apache.thrift.TException;
 
     public void startDiscoveryOnDemand(int RuleId, org.apache.thrift.async.AsyncMethodCallback<AsyncClient.startDiscoveryOnDemand_call> resultHandler) throws org.apache.thrift.TException;
 
@@ -377,17 +377,18 @@ public class Mydlp_ui {
       throw new org.apache.thrift.TApplicationException(org.apache.thrift.TApplicationException.MISSING_RESULT, "getLicense failed: unknown result");
     }
 
-    public String apiQuery(String Ipaddress, String Filename, ByteBuffer Data) throws org.apache.thrift.TException
+    public String apiQuery(String Ipaddress, String Filename, String User, ByteBuffer Data) throws org.apache.thrift.TException
     {
-      send_apiQuery(Ipaddress, Filename, Data);
+      send_apiQuery(Ipaddress, Filename, User, Data);
       return recv_apiQuery();
     }
 
-    public void send_apiQuery(String Ipaddress, String Filename, ByteBuffer Data) throws org.apache.thrift.TException
+    public void send_apiQuery(String Ipaddress, String Filename, String User, ByteBuffer Data) throws org.apache.thrift.TException
     {
       apiQuery_args args = new apiQuery_args();
       args.setIpaddress(Ipaddress);
       args.setFilename(Filename);
+      args.setUser(User);
       args.setData(Data);
       sendBase("apiQuery", args);
     }
@@ -942,9 +943,9 @@ public class Mydlp_ui {
       }
     }
 
-    public void apiQuery(String Ipaddress, String Filename, ByteBuffer Data, org.apache.thrift.async.AsyncMethodCallback<apiQuery_call> resultHandler) throws org.apache.thrift.TException {
+    public void apiQuery(String Ipaddress, String Filename, String User, ByteBuffer Data, org.apache.thrift.async.AsyncMethodCallback<apiQuery_call> resultHandler) throws org.apache.thrift.TException {
       checkReady();
-      apiQuery_call method_call = new apiQuery_call(Ipaddress, Filename, Data, resultHandler, this, ___protocolFactory, ___transport);
+      apiQuery_call method_call = new apiQuery_call(Ipaddress, Filename, User, Data, resultHandler, this, ___protocolFactory, ___transport);
       this.___currentMethod = method_call;
       ___manager.call(method_call);
     }
@@ -952,11 +953,13 @@ public class Mydlp_ui {
     public static class apiQuery_call extends org.apache.thrift.async.TAsyncMethodCall {
       private String Ipaddress;
       private String Filename;
+      private String User;
       private ByteBuffer Data;
-      public apiQuery_call(String Ipaddress, String Filename, ByteBuffer Data, org.apache.thrift.async.AsyncMethodCallback<apiQuery_call> resultHandler, org.apache.thrift.async.TAsyncClient client, org.apache.thrift.protocol.TProtocolFactory protocolFactory, org.apache.thrift.transport.TNonblockingTransport transport) throws org.apache.thrift.TException {
+      public apiQuery_call(String Ipaddress, String Filename, String User, ByteBuffer Data, org.apache.thrift.async.AsyncMethodCallback<apiQuery_call> resultHandler, org.apache.thrift.async.TAsyncClient client, org.apache.thrift.protocol.TProtocolFactory protocolFactory, org.apache.thrift.transport.TNonblockingTransport transport) throws org.apache.thrift.TException {
         super(client, protocolFactory, transport, resultHandler, false);
         this.Ipaddress = Ipaddress;
         this.Filename = Filename;
+        this.User = User;
         this.Data = Data;
       }
 
@@ -965,6 +968,7 @@ public class Mydlp_ui {
         apiQuery_args args = new apiQuery_args();
         args.setIpaddress(Ipaddress);
         args.setFilename(Filename);
+        args.setUser(User);
         args.setData(Data);
         args.write(prot);
         prot.writeMessageEnd();
@@ -1485,7 +1489,7 @@ public class Mydlp_ui {
 
       protected apiQuery_result getResult(I iface, apiQuery_args args) throws org.apache.thrift.TException {
         apiQuery_result result = new apiQuery_result();
-        result.success = iface.apiQuery(args.Ipaddress, args.Filename, args.Data);
+        result.success = iface.apiQuery(args.Ipaddress, args.Filename, args.User, args.Data);
         return result;
       }
     }
@@ -8535,17 +8539,20 @@ public class Mydlp_ui {
 
     private static final org.apache.thrift.protocol.TField IPADDRESS_FIELD_DESC = new org.apache.thrift.protocol.TField("Ipaddress", org.apache.thrift.protocol.TType.STRING, (short)1);
     private static final org.apache.thrift.protocol.TField FILENAME_FIELD_DESC = new org.apache.thrift.protocol.TField("Filename", org.apache.thrift.protocol.TType.STRING, (short)2);
-    private static final org.apache.thrift.protocol.TField DATA_FIELD_DESC = new org.apache.thrift.protocol.TField("Data", org.apache.thrift.protocol.TType.STRING, (short)3);
+    private static final org.apache.thrift.protocol.TField USER_FIELD_DESC = new org.apache.thrift.protocol.TField("User", org.apache.thrift.protocol.TType.STRING, (short)3);
+    private static final org.apache.thrift.protocol.TField DATA_FIELD_DESC = new org.apache.thrift.protocol.TField("Data", org.apache.thrift.protocol.TType.STRING, (short)4);
 
     public String Ipaddress; // required
     public String Filename; // required
+    public String User; // required
     public ByteBuffer Data; // required
 
     /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
     public enum _Fields implements org.apache.thrift.TFieldIdEnum {
       IPADDRESS((short)1, "Ipaddress"),
       FILENAME((short)2, "Filename"),
-      DATA((short)3, "Data");
+      USER((short)3, "User"),
+      DATA((short)4, "Data");
 
       private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
 
@@ -8564,7 +8571,9 @@ public class Mydlp_ui {
             return IPADDRESS;
           case 2: // FILENAME
             return FILENAME;
-          case 3: // DATA
+          case 3: // USER
+            return USER;
+          case 4: // DATA
             return DATA;
           default:
             return null;
@@ -8614,6 +8623,8 @@ public class Mydlp_ui {
           new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
       tmpMap.put(_Fields.FILENAME, new org.apache.thrift.meta_data.FieldMetaData("Filename", org.apache.thrift.TFieldRequirementType.DEFAULT, 
           new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
+      tmpMap.put(_Fields.USER, new org.apache.thrift.meta_data.FieldMetaData("User", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+          new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
       tmpMap.put(_Fields.DATA, new org.apache.thrift.meta_data.FieldMetaData("Data", org.apache.thrift.TFieldRequirementType.DEFAULT, 
           new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING          , true)));
       metaDataMap = Collections.unmodifiableMap(tmpMap);
@@ -8626,11 +8637,13 @@ public class Mydlp_ui {
     public apiQuery_args(
       String Ipaddress,
       String Filename,
+      String User,
       ByteBuffer Data)
     {
       this();
       this.Ipaddress = Ipaddress;
       this.Filename = Filename;
+      this.User = User;
       this.Data = Data;
     }
 
@@ -8643,6 +8656,9 @@ public class Mydlp_ui {
       }
       if (other.isSetFilename()) {
         this.Filename = other.Filename;
+      }
+      if (other.isSetUser()) {
+        this.User = other.User;
       }
       if (other.isSetData()) {
         this.Data = org.apache.thrift.TBaseHelper.copyBinary(other.Data);
@@ -8658,6 +8674,7 @@ public class Mydlp_ui {
     public void clear() {
       this.Ipaddress = null;
       this.Filename = null;
+      this.User = null;
       this.Data = null;
     }
 
@@ -8706,6 +8723,30 @@ public class Mydlp_ui {
     public void setFilenameIsSet(boolean value) {
       if (!value) {
         this.Filename = null;
+      }
+    }
+
+    public String getUser() {
+      return this.User;
+    }
+
+    public apiQuery_args setUser(String User) {
+      this.User = User;
+      return this;
+    }
+
+    public void unsetUser() {
+      this.User = null;
+    }
+
+    /** Returns true if field User is set (has been assigned a value) and false otherwise */
+    public boolean isSetUser() {
+      return this.User != null;
+    }
+
+    public void setUserIsSet(boolean value) {
+      if (!value) {
+        this.User = null;
       }
     }
 
@@ -8761,6 +8802,14 @@ public class Mydlp_ui {
         }
         break;
 
+      case USER:
+        if (value == null) {
+          unsetUser();
+        } else {
+          setUser((String)value);
+        }
+        break;
+
       case DATA:
         if (value == null) {
           unsetData();
@@ -8780,6 +8829,9 @@ public class Mydlp_ui {
       case FILENAME:
         return getFilename();
 
+      case USER:
+        return getUser();
+
       case DATA:
         return getData();
 
@@ -8798,6 +8850,8 @@ public class Mydlp_ui {
         return isSetIpaddress();
       case FILENAME:
         return isSetFilename();
+      case USER:
+        return isSetUser();
       case DATA:
         return isSetData();
       }
@@ -8832,6 +8886,15 @@ public class Mydlp_ui {
         if (!(this_present_Filename && that_present_Filename))
           return false;
         if (!this.Filename.equals(that.Filename))
+          return false;
+      }
+
+      boolean this_present_User = true && this.isSetUser();
+      boolean that_present_User = true && that.isSetUser();
+      if (this_present_User || that_present_User) {
+        if (!(this_present_User && that_present_User))
+          return false;
+        if (!this.User.equals(that.User))
           return false;
       }
 
@@ -8880,6 +8943,16 @@ public class Mydlp_ui {
           return lastComparison;
         }
       }
+      lastComparison = Boolean.valueOf(isSetUser()).compareTo(typedOther.isSetUser());
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+      if (isSetUser()) {
+        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.User, typedOther.User);
+        if (lastComparison != 0) {
+          return lastComparison;
+        }
+      }
       lastComparison = Boolean.valueOf(isSetData()).compareTo(typedOther.isSetData());
       if (lastComparison != 0) {
         return lastComparison;
@@ -8921,7 +8994,14 @@ public class Mydlp_ui {
               org.apache.thrift.protocol.TProtocolUtil.skip(iprot, field.type);
             }
             break;
-          case 3: // DATA
+          case 3: // USER
+            if (field.type == org.apache.thrift.protocol.TType.STRING) {
+              this.User = iprot.readString();
+            } else { 
+              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, field.type);
+            }
+            break;
+          case 4: // DATA
             if (field.type == org.apache.thrift.protocol.TType.STRING) {
               this.Data = iprot.readBinary();
             } else { 
@@ -8953,6 +9033,11 @@ public class Mydlp_ui {
         oprot.writeString(this.Filename);
         oprot.writeFieldEnd();
       }
+      if (this.User != null) {
+        oprot.writeFieldBegin(USER_FIELD_DESC);
+        oprot.writeString(this.User);
+        oprot.writeFieldEnd();
+      }
       if (this.Data != null) {
         oprot.writeFieldBegin(DATA_FIELD_DESC);
         oprot.writeBinary(this.Data);
@@ -8980,6 +9065,14 @@ public class Mydlp_ui {
         sb.append("null");
       } else {
         sb.append(this.Filename);
+      }
+      first = false;
+      if (!first) sb.append(", ");
+      sb.append("User:");
+      if (this.User == null) {
+        sb.append("null");
+      } else {
+        sb.append(this.User);
       }
       first = false;
       if (!first) sb.append(", ");
