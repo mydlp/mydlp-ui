@@ -165,6 +165,7 @@ public class ADEnumServiceImpl implements ADEnumService {
 					itemsToRemove);
 			logger.info("Starting populating groups.", domain.getDomainName());
 			enumerateMemberships(domain, memberships);
+			logger.info("Removing items from database.", domain.getDomainName());
 			transactionTemplate.execute(new TransactionCallbackWithoutResult() {
 				@Override
 				protected void doInTransactionWithoutResult(
@@ -172,6 +173,7 @@ public class ADEnumServiceImpl implements ADEnumService {
 					adDomainDAO.removeDomainItems(itemsToRemove);
 				}
 			});
+			logger.info("Cleaning up orphan entries.", domain.getDomainName());
 			transactionTemplate.execute(new TransactionCallbackWithoutResult() {
 				@Override
 				protected void doInTransactionWithoutResult(
