@@ -249,6 +249,8 @@ public class ADDomainDAOImpl extends AbstractPolicyDAO implements ADDomainDAO {
 				groupSet = itemsToRemove.get(AD_KEY_GROUP);
 			} else if (adDomainItem instanceof ADDomainOU) {
 				groupSet = itemsToRemove.get(AD_KEY_OU);
+			} else if (adDomainItem instanceof ADDomainRoot) {
+				groupSet = itemsToRemove.get(AD_KEY_OU);
 			}
 
 			if (groupSet != null) {
