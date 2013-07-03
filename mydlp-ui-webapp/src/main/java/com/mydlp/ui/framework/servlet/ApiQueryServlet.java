@@ -50,7 +50,7 @@ public class ApiQueryServlet implements HttpRequestHandler {
 					user = "api-nouser";
 				}
 				String ipAddress = req.getRemoteAddr();
-				returnStr = thriftService.apiQuery(ipAddress, filename, data);
+				returnStr = thriftService.apiQuery(ipAddress, filename, user, data);
 			}
 			else
 			{
