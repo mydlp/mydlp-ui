@@ -283,6 +283,7 @@ public class ADDomainDAOImpl extends AbstractPolicyDAO implements ADDomainDAO {
 					// do nothing
 				}
 
+				logger.error("Delete ItemId: " + id);
 				getHibernateTemplate().bulkUpdate(
 						"delete from ADDomainItem di where di.id=?", id);
 			}
