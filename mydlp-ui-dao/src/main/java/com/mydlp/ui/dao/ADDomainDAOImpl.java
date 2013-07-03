@@ -342,6 +342,8 @@ public class ADDomainDAOImpl extends AbstractPolicyDAO implements ADDomainDAO {
 		for (ADDomain domain : getADDomains()) {
 			domainIdStrList.add(domain.getId().toString());
 		}
+		logger.error(				"select i from ADDomainItem i where i.domainId " +
+				"not in (" + StringUtils.join(domainIdStrList, ", ") + ")");
 		@SuppressWarnings("unchecked")
 		List<ADDomainItem> ghostItems = getHibernateTemplate().find(
 				"select i from ADDomainItem i where i.domainId " +
