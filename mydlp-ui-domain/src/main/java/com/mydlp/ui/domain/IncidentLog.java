@@ -86,7 +86,7 @@ public class IncidentLog extends AbstractEntity {
 	public void setSourceUser(String sourceUser) {
 		this.sourceUser = sourceUser;
 	}
-	@Column(length=16384)
+	@Column(length=16383)
 	public String getDestination() {
 		return destination;
 	}
