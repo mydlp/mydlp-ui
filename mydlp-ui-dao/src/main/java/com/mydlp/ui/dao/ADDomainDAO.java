@@ -7,6 +7,7 @@ import java.util.Set;
 import com.mydlp.ui.domain.ADDomain;
 import com.mydlp.ui.domain.ADDomainItem;
 import com.mydlp.ui.domain.ADDomainItemGroup;
+import com.mydlp.ui.domain.ADDomainOU;
 import com.mydlp.ui.domain.ADDomainRoot;
 import com.mydlp.ui.domain.AbstractEntity;
 
@@ -26,6 +27,8 @@ public interface ADDomainDAO {
 	public List<ADDomain> getADDomains();
 	
 	public List<ADDomainItem> getFilteredADDomains(String  searchString);
+	
+	public List<ADDomainOU> getFilteredADOUs(String searchString);
 	
 	public List<ADDomainItem> getChildrenOf(ADDomainItemGroup domainItemGroup);
 	

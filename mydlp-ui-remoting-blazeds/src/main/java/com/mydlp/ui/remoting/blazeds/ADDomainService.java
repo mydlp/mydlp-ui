@@ -6,6 +6,7 @@ import org.springframework.security.access.annotation.Secured;
 
 import com.mydlp.ui.domain.ADDomain;
 import com.mydlp.ui.domain.ADDomainItem;
+import com.mydlp.ui.domain.ADDomainOU;
 import com.mydlp.ui.domain.AuthSecurityRole;
 
 @Secured({AuthSecurityRole.ROLE_ADMIN, AuthSecurityRole.ROLE_SUPER_ADMIN})
@@ -18,6 +19,8 @@ public interface ADDomainService {
 	public List<ADDomain> getADDomains();
 	
 	public List<ADDomainItem> getFilteredADDomains(String searchString);
+	
+	public List<ADDomainOU> getFilteredADOUs(String searchString);
 	
 	public String testConnection(ADDomain adDomain);
 	

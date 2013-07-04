@@ -200,6 +200,23 @@ public class ADDomainDAOImpl extends AbstractPolicyDAO implements ADDomainDAO {
 
 		return result;
 	}
+	
+	@Override
+	public List<ADDomainOU> getFilteredADOUs(String searchString) {
+		DetachedCriteria criteria = DetachedCriteria
+				.forClass(ADDomainOU.class);
+		Disjunction disjunction = Restrictions.disjunction();
+		disjunction.add(Restrictions.sqlRestriction("(1=0)")); // defaults to
+																// false
+		disjunction.add(Restrictions.ilike("name", "%" + searchString + "%"));
+		// disjunction2.add(Restrictions.ilike("distinguishedName", "%" +
+		// searchString + "%"));
+		criteria = criteria.add(disjunction);
+
+		@SuppressWarnings("unchecked")
+		List<ADDomainOU> result = getHibernateTemplate().findByCriteria(criteria);
+		return result;
+	}
 
 	@Override
 	public ADDomainItem findByDistinguishedName(ADDomain domain,
@@ -350,5 +367,7 @@ public class ADDomainDAOImpl extends AbstractPolicyDAO implements ADDomainDAO {
 				"not in (" + StringUtils.join(domainIdStrList, ", ") + ")");
 		removeDomainItems(ghostItems);
 	}
+
+	
 
 }
