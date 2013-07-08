@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
-		 xmlns:s="library://ns.adobe.com/flex/spark" 
-		 implements="mx.core.IToolTip"
-		 xmlns:mx="library://ns.adobe.com/flex/mx" 
-		 width="100%" height="100%"
-		 >
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009"
+		 xmlns:s="library://ns.adobe.com/flex/spark"
+		 xmlns:mx="library://ns.adobe.com/flex/mx"
+		 width="100%" >
 	
 	<fx:Script>
 		<![CDATA[
@@ -69,39 +67,22 @@
 		]]>
 	</fx:Script>
 	
-	<!--<s:Rect left="0" right="0" top="0" bottom="0">
-		<s:fill>
-			<s:SolidColor color="0xFFFFFF" />
-		</s:fill>
-	</s:Rect>
 	
-	<s:Rect left="0" right="0" top="0" bottom="0">
-		<s:stroke>
-			<s:LinearGradientStroke rotation="90" weight="3">
-				<s:GradientEntry color="0x00679E"/>
-				<s:GradientEntry color="0x33A0D2"/>
-			</s:LinearGradientStroke>
-		</s:stroke>
-	</s:Rect>-->
+	<s:layout>
+		<s:VerticalLayout gap="0" paddingBottom="4" paddingLeft="4" paddingRight="4"
+						  paddingTop="4"/>
+	</s:layout>
 	
-	<s:Group top="3" bottom="3" left="3" right="3">
-		
-		<s:layout>
-			<s:VerticalLayout gap="2" 
-							  paddingBottom="6" paddingTop="6"
-							  paddingLeft="4" paddingRight="4"/>
-		</s:layout>
-		
-		<s:Label fontWeight="bold" text="@Resource(bundle = 'messages', key = 'log.container.content.download.label')"/>
-		<mx:Text id="filenameLabel" includeInLayout="false" visible="false"
-			text="{LangUtil.getString('messages', 'log.container.content.filename.label') + ': ' + logFile.filename}"/>
-		<mx:Text id="sizeLabel" includeInLayout="false" visible="false" 
-			text="{LangUtil.getString('messages', 'log.container.content.size.label') + ': ' + FileUtil.getHumanReadableSize(getMasterBlueprint(logFile).size)}"/>
-		<mx:Text id="typeLabel" includeInLayout="false" visible="false"  
-			text="{LangUtil.getString('messages', 'log.container.content.type.label') + ': ' + getMasterBlueprint(logFile).mimeType}"/>
-		<mx:Text id="hashLabel" includeInLayout="false" visible="false"  
-			text="{LangUtil.getString('messages', 'log.container.content.md5hash.label') + ': ' + getMasterBlueprint(logFile).md5Hash}"/>
-	
-	</s:Group>
+	<s:Label fontWeight="bold"
+			 text="@Resource(bundle = 'messages', key = 'log.container.content.download.label')"/>
+	<mx:Text id="filenameLabel" visible="false" includeInLayout="false"
+			 text="{LangUtil.getString('messages', 'log.container.content.filename.label') + ': ' + logFile.filename}"/>
+	<mx:Text id="sizeLabel" visible="false" includeInLayout="false"
+			 text="{LangUtil.getString('messages', 'log.container.content.size.label') + ': ' + FileUtil.getHumanReadableSize(getMasterBlueprint(logFile).size)}"/>
+	<mx:Text id="typeLabel" visible="false" includeInLayout="false"
+			 text="{LangUtil.getString('messages', 'log.container.content.type.label') + ': ' + getMasterBlueprint(logFile).mimeType}"/>
+	<mx:Text id="hashLabel" visible="false" includeInLayout="false"
+			 text="{LangUtil.getString('messages', 'log.container.content.md5hash.label') + ': ' + getMasterBlueprint(logFile).md5Hash}"/>
+
 
 </s:Group>

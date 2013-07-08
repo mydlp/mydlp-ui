@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:HGroup xmlns:fx="http://ns.adobe.com/mxml/2009" 
 		  xmlns:s="library://ns.adobe.com/flex/spark" 
-		  xmlns:mx="library://ns.adobe.com/flex/mx" maxHeight="180" xmlns:domain="com.mydlp.ui.domain.*"
-		  creationComplete="onCreationComplete(event)">
+		  xmlns:mx="library://ns.adobe.com/flex/mx" 
+		  xmlns:domain="com.mydlp.ui.domain.*"
+		  creationComplete="onCreationComplete(event)"
+		  width="100%"
+		  height="100%">
 	
 	<fx:Script>
 		<![CDATA[
@@ -28,12 +31,20 @@
 					var iftt:IncidentFileDownloadButtonToolTip = new IncidentFileDownloadButtonToolTip;
 					iftt.logFile = event.item as IncidentLogFile;
 					iftt.populate();
-					matchingDataGroup.addElement(iftt);
+					detailsDataGroup.addElement(iftt);
 					
 					var lmdp:LogMatcherDetailsPopup = new LogMatcherDetailsPopup;
 					lmdp.matcherDetails = (event.item as IncidentLogFile).matchingDetails;
 					lmdp.populate();
 					matchingDataGroup.addElement(lmdp);
+					
+					fileDataGroup.visible=true;
+					fileDataGroup.includeInLayout=true;
+				}
+				else
+				{
+					fileDataGroup.visible=false;
+					fileDataGroup.includeInLayout=false;
 				}
 			}
 		]]>
@@ -67,15 +78,18 @@
 	
 	<mx:VRule width="2" height="100%" strokeColor="0xAEBBCF" alpha="1.0"/>
 	
-	<s:VGroup id="fileDataGroup" width="55%" height="100%" horizontalAlign="left" gap="5">
+	<s:VGroup id="fileDataGroup" width="55%" height="100%" includeInLayout="false" visible="false">
 		<s:Button id="downloadButton" label="@Resource(bundle = 'messages', key = 'log.incident.file.download.label')"
 				  includeInLayout="{FlexGlobals.topLevelApplication.hasRole(AuthSecurityRole.ROLE_SUPER_ADMIN) 
 				  || FlexGlobals.topLevelApplication.hasRole(AuthSecurityRole.ROLE_AUDITOR)}"
 				  skinClass="com.mydlp.ui.skin.DownloadBitmapLabelButton16Skin"
 				  click="{navigateToURL(new URLRequest ('download?id=' + incidentLogFileList.selectedItem.id), '_blank')}"
 				  visible="{incidentLogFileList.selectedItem.content != null &amp;&amp; incidentLogFileList.selectedItem != null}"/>
-		
-		<s:VGroup id="matchingDataGroup" width="100%"/>
-		
+		<mx:HRule width="100%" height="1" strokeColor="0xAEBBCF" alpha="1.0"/>
+		<s:VGroup id="detailsDataGroup" width="100%" />
+		<mx:HRule width="100%" height="1" strokeColor="0xAEBBCF" alpha="1.0"/>
+		<s:Scroller width="100%" height="100%" verticalScrollPolicy="on" horizontalScrollPolicy="off">
+			<s:VGroup id="matchingDataGroup" width="100%" />
+		</s:Scroller>
 	</s:VGroup>
 </s:HGroup>

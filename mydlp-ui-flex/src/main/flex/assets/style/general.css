@@ -47,6 +47,10 @@ s|FormItem {
 	skinClass: ClassReference("com.mydlp.ui.skin.GenericFormItemSkin");
 }
 
+s|ButtonBar {
+	skinClass: ClassReference("com.mydlp.ui.skin.GenericButtonBarSkin");
+}
+
 .fontSize24Style{
 	fontSize: "24"
 }
