@@ -192,7 +192,7 @@
 									logDetailTabbedComponent="{tabbedComponent}"/>
 	</s:Group>
 	
-	<s:SkinnableContainer height="2" width="100%" backgroundColor="black" backgroundAlpha="0.8"/>
+	<s:SkinnableContainer height="1" width="100%" backgroundColor="0xAEBBCF" backgroundAlpha="1.0"/>
 	
 	<log:IncidentLogDetailTabbedComponent id="tabbedComponent" 
 		width="100%" height="50%" incidentLog="{incidentLog}"/>

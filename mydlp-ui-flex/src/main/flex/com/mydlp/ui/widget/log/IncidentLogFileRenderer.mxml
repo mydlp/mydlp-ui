@@ -6,65 +6,9 @@
 				click="onItemClick(event)">
 	<fx:Script>
 		<![CDATA[
-			import com.mydlp.ui.domain.AbstractLogFileBlueprint;
-			import com.mydlp.ui.domain.AuthSecurityRole;
 			import com.mydlp.ui.domain.IncidentLogFile;
-			import com.mydlp.ui.util.FileUtil;
-			import com.mydlp.ui.util.InteractionUtil;
-			import com.mydlp.ui.util.LangUtil;
-			import com.mydlp.ui.util.SessionUtil;
 			
-			import mx.controls.Alert;
-			import mx.core.FlexGlobals;
 			import mx.events.ItemClickEvent;
-			import mx.events.ToolTipEvent;
-			
-			protected function getMasterBlueprint(l:IncidentLogFile): AbstractLogFileBlueprint {
-				if (l == null) return null;
-				if (l.content != null) return l.content;
-				if (l.blueprint != null) return l.blueprint;
-				return null;
-			}
-			
-			protected function hasFileType(l:IncidentLogFile): Boolean {
-				var master:AbstractLogFileBlueprint = getMasterBlueprint(l);
-				return master != null && master.mimeType != null && master.mimeType.length > 0;
-			}
-			
-			protected function hasSize(l:IncidentLogFile): Boolean {
-				var master:AbstractLogFileBlueprint = getMasterBlueprint(l);
-				return master != null && !isNaN(master.size) && master.size > 0;
-			}
-			
-			protected function createCustomToolTip(event:ToolTipEvent):void
-			{
-				var toolTip:IncidentFileDownloadButtonToolTip = new IncidentFileDownloadButtonToolTip();
-				toolTip.logFile = data as IncidentLogFile;
-				event.toolTip = toolTip;
-			}
-			
-			protected function detailButtonClickHandler(event:MouseEvent):void
-			{
-				if (SessionUtil.isEnterprise())
-				{
-					var lmdp:LogMatcherDetailsPopup = InteractionUtil.newPopup(LogMatcherDetailsPopup) as LogMatcherDetailsPopup;
-					lmdp.matcherDetails = (data as IncidentLogFile).matchingDetails;
-					lmdp.populate();
-				}
-				else
-				{
-					InteractionUtil.newPopup(LogMatcherDetailsNAPopup);
-				}
-			}
-			
-			protected function hasMatchingDetails(value:*): Boolean
-			{
-				if (value == null) return false;
-				var logFile:IncidentLogFile = value as IncidentLogFile;
-				if (logFile == null) return false;
-				if (logFile.matchingDetails != null && logFile.matchingDetails.length > 0) return true;
-				return false;
-			}
 			
 			protected function onItemClick(event:MouseEvent):void
 			{
@@ -77,32 +21,16 @@
 				dispatchEvent(e);
 			}
 			
-			protected function getText(data:*):String
-			{
-				if(data == null)
-					return "";
-				var logFile:IncidentLogFile = data as IncidentLogFile;
-				var text:String = "";
-				if(hasSize(logFile))
-					text += " [" +LangUtil.getString('messages', 'log.detail.file.size') + " " +
-						FileUtil.getHumanReadableSize(getMasterBlueprint(logFile).size) + "]" ;
-				if(hasFileType(logFile))
-					text += " [" + LangUtil.getString('messages', 'log.detail.file.type') + " " + 	
-						getMasterBlueprint(logFile).mimeType + "]";
-				return text;
-			}
-			
 		]]>
 	</fx:Script>
 	
-	<s:Group width="100%" height="100%" toolTip=" " toolTipCreate="createCustomToolTip(event)" >
+	<s:Group width="100%" height="100%">
 		<s:layout>
 			<s:HorizontalLayout verticalAlign="middle"
 								paddingLeft="8" paddingRight="4"
 								paddingTop="5" paddingBottom="5" gap="2"/>
 		</s:layout>
 		<s:Label text="{data.filename}" fontWeight="bold"/>
-		<s:Label text="{getText(data)}" width="100%"/>	
 	</s:Group>
 	
 </s:ItemRenderer>

@@ -38,12 +38,15 @@
 		<s:State name="selected" />
 	</s:states>
 	
-	<s:VGroup width="100%" horizontalAlign="center">
-		<s:Button id="matchingDetailButton" 
-				  click="detailButtonClickHandler(event)" 
-				  skinClass="com.mydlp.ui.skin.GenerateReportBitmapButton16Skin"
-				  toolTip="@Resource(bundle = 'messages', key = 'log.matchingDetails.tooltip')"/>
-		
-	</s:VGroup>
+	<s:layout>
+		<s:VerticalLayout paddingBottom="2" paddingTop="2" paddingLeft="4" paddingRight="4" verticalAlign="middle"/>
+	</s:layout>
+	
+	<s:Button id="matchingDetailButton" 
+			  click="detailButtonClickHandler(event)" 
+			  skinClass="com.mydlp.ui.skin.GenerateReportBitmapButton16Skin"
+			  toolTip="@Resource(bundle = 'messages', key = 'log.matchingDetails.tooltip')"/>
+	
+	
 	
 </s:GridItemRenderer>

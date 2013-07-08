@@ -19,7 +19,7 @@
 			protected var isDiscovery:Boolean = false;
 			
 			
-		
+			
 			
 			
 			protected function getPolicyText(value:*):String {
@@ -72,10 +72,11 @@
 		<s:State name="selected" />
 	</s:states>
 	
+	<s:layout>
+		<s:VerticalLayout paddingBottom="2" paddingTop="2" paddingLeft="4" paddingRight="4" verticalAlign="middle"/>
+	</s:layout>
 	
-	<s:VGroup width="100%"
-			  paddingBottom="4" paddingTop="4" paddingLeft="4" paddingRight="4">
-		<s:Label id="lblData" text="{getPolicyText(data)}"/>
-	</s:VGroup>
+	<s:Label id="lblData" text="{getPolicyText(data)}"/>
+	
 	
 </s:GridItemRenderer>

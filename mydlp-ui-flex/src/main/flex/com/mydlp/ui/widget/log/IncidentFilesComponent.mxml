@@ -25,7 +25,11 @@
 				matchingDataGroup.removeAllElements();
 				if(event.index != -1)
 				{
-					matchingDataGroup.removeAllElements();
+					var iftt:IncidentFileDownloadButtonToolTip = new IncidentFileDownloadButtonToolTip;
+					iftt.logFile = event.item as IncidentLogFile;
+					iftt.populate();
+					matchingDataGroup.addElement(iftt);
+					
 					var lmdp:LogMatcherDetailsPopup = new LogMatcherDetailsPopup;
 					lmdp.matcherDetails = (event.item as IncidentLogFile).matchingDetails;
 					lmdp.populate();
@@ -39,10 +43,10 @@
 		<domain:IncidentLog id="incidentLog"/>
 	</fx:Declarations>
 	
-	<s:Group width="50%" height="100%">			
+	<s:Group width="45%" height="100%">			
 		
 		<s:Group id="incidentFileGroup" width="100%" height="100%">
-			<s:List id="incidentLogFileList" dataProvider="{incidentLog.files}"
+			<s:List id="incidentLogFileList" dataProvider="{incidentLog.files}" borderVisible="false"
 					includeInLayout="{incidentLog.files != null &amp;&amp; incidentLog.files.length != 0}"
 					visible="{incidentLog.files != null &amp;&amp; incidentLog.files.length != 0}"
 					itemRenderer="com.mydlp.ui.widget.log.IncidentLogFileRenderer"
@@ -61,9 +65,9 @@
 		</s:Group>
 	</s:Group>
 	
-	<mx:VRule width="2" height="100%" strokeColor="0x000000"/>
+	<mx:VRule width="2" height="100%" strokeColor="0xAEBBCF" alpha="1.0"/>
 	
-	<s:VGroup id="fileDataGroup" width="50%" height="100%" horizontalAlign="center">
+	<s:VGroup id="fileDataGroup" width="55%" height="100%" horizontalAlign="left" gap="5">
 		<s:Button id="downloadButton" label="@Resource(bundle = 'messages', key = 'log.incident.file.download.label')"
 				  includeInLayout="{FlexGlobals.topLevelApplication.hasRole(AuthSecurityRole.ROLE_SUPER_ADMIN) 
 				  || FlexGlobals.topLevelApplication.hasRole(AuthSecurityRole.ROLE_AUDITOR)}"

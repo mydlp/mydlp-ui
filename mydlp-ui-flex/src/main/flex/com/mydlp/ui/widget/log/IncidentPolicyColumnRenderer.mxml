@@ -58,7 +58,7 @@
 				labelText += LangUtil.getString("messages","log.container.column.policy.rule") + ": ";
 				
 				labelText += FlexGlobals.topLevelApplication.getRuleLabel(log.ruleId);
-								
+				
 				return labelText;
 			}
 			
@@ -73,7 +73,7 @@
 					FlexGlobals.topLevelApplication.ruleContainer.gotoRule(selectedRule);
 				}
 			}
-
+			
 		]]>
 	</fx:Script>
 	
@@ -83,11 +83,11 @@
 		<s:State name="selected" />
 	</s:states>
 	
+	<s:layout>
+		<s:HorizontalLayout paddingBottom="2" paddingTop="2" paddingLeft="4" paddingRight="4" verticalAlign="middle"/>
+	</s:layout>
 	
-	<s:VGroup width="100%"
-			  paddingBottom="4" paddingTop="4" paddingLeft="4" paddingRight="4">
-		<s:Label id="lblData" text="{getPolicyText(data)}"/>
-	</s:VGroup>
+	<s:Label id="lblData" text="{getPolicyText(data)}" width="100%"/>
 	
 	<s:Group includeIn="selected"
 			 top="0" bottom="0" right="2" width="16" >

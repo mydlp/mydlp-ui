@@ -41,7 +41,7 @@
 	</fx:Script>
 	
 	<s:layout>
-		<s:VerticalLayout paddingBottom="4" paddingTop="4" paddingLeft="4"/>
+		<s:VerticalLayout paddingBottom="2" paddingTop="2" paddingLeft="4" verticalAlign="middle"/>
 	</s:layout>
 	
 	<s:Label id="lblData" text='{getSourceText(data)}'/>

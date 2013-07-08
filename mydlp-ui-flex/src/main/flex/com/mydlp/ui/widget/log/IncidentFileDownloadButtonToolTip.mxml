@@ -31,30 +31,45 @@
 				return null;
 			}
 			
-			protected function hasFilename(l:IncidentLogFile): Boolean {
-				return l != null && l.filename != null && l.filename.length > 0;
+			protected function hasFilename(): Boolean {
+				return logFile != null && logFile.filename != null && logFile.filename.length > 0;
 			}
 			
-			protected function hasFileType(l:IncidentLogFile): Boolean {
-				var master:AbstractLogFileBlueprint = getMasterBlueprint(l);
+			protected function hasFileType(): Boolean {
+				var master:AbstractLogFileBlueprint = getMasterBlueprint(logFile);
 				return master != null && master.mimeType != null && master.mimeType.length > 0;
 			}
 			
-			protected function hasSize(l:IncidentLogFile): Boolean {
-				var master:AbstractLogFileBlueprint = getMasterBlueprint(l);
+			protected function hasSize(): Boolean {
+				var master:AbstractLogFileBlueprint = getMasterBlueprint(logFile);
 				return master != null && !isNaN(master.size) && master.size > 0;
 			}
 			
-			protected function hasHash(l:IncidentLogFile): Boolean {
-				var master:AbstractLogFileBlueprint = getMasterBlueprint(l);
+			protected function hasHash(): Boolean {
+				var master:AbstractLogFileBlueprint = getMasterBlueprint(logFile);
 				return master != null && master.md5Hash != null && master.md5Hash.length > 0;
+			}
+			
+			public function populate():void
+			{
+				filenameLabel.includeInLayout = hasFilename();
+				filenameLabel.visible = hasFilename();
+				
+				sizeLabel.includeInLayout = hasSize();
+				sizeLabel.visible = hasSize();
+				
+				typeLabel.includeInLayout = hasFileType();
+				typeLabel.visible = hasFileType();
+				
+				hashLabel.includeInLayout = hasHash();
+				hashLabel.visible = hasHash();
 			}
 			
 			
 		]]>
 	</fx:Script>
 	
-	<s:Rect left="0" right="0" top="0" bottom="0">
+	<!--<s:Rect left="0" right="0" top="0" bottom="0">
 		<s:fill>
 			<s:SolidColor color="0xFFFFFF" />
 		</s:fill>
@@ -67,24 +82,24 @@
 				<s:GradientEntry color="0x33A0D2"/>
 			</s:LinearGradientStroke>
 		</s:stroke>
-	</s:Rect>
+	</s:Rect>-->
 	
 	<s:Group top="3" bottom="3" left="3" right="3">
 		
 		<s:layout>
-			<s:VerticalLayout gap="4" 
+			<s:VerticalLayout gap="2" 
 							  paddingBottom="6" paddingTop="6"
 							  paddingLeft="4" paddingRight="4"/>
 		</s:layout>
 		
 		<s:Label fontWeight="bold" text="@Resource(bundle = 'messages', key = 'log.container.content.download.label')"/>
-		<s:Label includeInLayout="{hasFilename(logFile)}" visible="{hasFilename(logFile)}"
+		<mx:Text id="filenameLabel" includeInLayout="false" visible="false"
 			text="{LangUtil.getString('messages', 'log.container.content.filename.label') + ': ' + logFile.filename}"/>
-		<s:Label includeInLayout="{hasSize(logFile)}" visible="{hasSize(logFile)}" 
+		<mx:Text id="sizeLabel" includeInLayout="false" visible="false" 
 			text="{LangUtil.getString('messages', 'log.container.content.size.label') + ': ' + FileUtil.getHumanReadableSize(getMasterBlueprint(logFile).size)}"/>
-		<s:Label includeInLayout="{hasFileType(logFile)}" visible="{hasFileType(logFile)}"  
+		<mx:Text id="typeLabel" includeInLayout="false" visible="false"  
 			text="{LangUtil.getString('messages', 'log.container.content.type.label') + ': ' + getMasterBlueprint(logFile).mimeType}"/>
-		<s:Label includeInLayout="{hasHash(logFile)}" visible="{hasHash(logFile)}"  
+		<mx:Text id="hashLabel" includeInLayout="false" visible="false"  
 			text="{LangUtil.getString('messages', 'log.container.content.md5hash.label') + ': ' + getMasterBlueprint(logFile).md5Hash}"/>
 	
 	</s:Group>
