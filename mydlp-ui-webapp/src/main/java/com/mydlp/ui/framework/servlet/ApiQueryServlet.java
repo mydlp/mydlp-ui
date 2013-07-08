@@ -40,7 +40,7 @@ public class ApiQueryServlet implements HttpRequestHandler {
 				ByteBuffer data = NIOUtil.toByteBuffer(req.getInputStream());
 				
 				String filename= req.getParameter("filename");
-				String user = req.getParameter("user");
+				String user = req.getParameter("username");
 				if (filename == null)
 				{
 					filename = "api-noname";
