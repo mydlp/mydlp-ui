@@ -76,6 +76,17 @@
 				otherDataFormats = new ArrayCollection();
 				
 				if (dataFormats != null)
+					if(dataFormats.length == 0)
+					{
+						for each(var d:Object in allDataFormats)
+						{
+							if((d as DataFormat).nameKey != null && (d as DataFormat).nameKey ==  "dataFormat.all.label")
+							{
+								dataFormats.addItem(d);
+								break;
+							}
+						}
+					}
 					for each (var ndf:Object in allDataFormats)
 					{
 						var addFlag:Boolean = true;
