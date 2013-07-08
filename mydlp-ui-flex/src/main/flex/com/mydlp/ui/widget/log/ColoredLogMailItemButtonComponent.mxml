@@ -29,8 +29,8 @@
 				switch(title)
 				{
 					case LangUtil.getString('messages', IncidentLogDetailItemContainer.DESTINATION_SMTP_RCPTTO): index = 0; break;
-					case LangUtil.getString('messages', IncidentLogDetailItemContainer.DESTINATION_SMTP_TO): index = 1; break;
-					case LangUtil.getString('messages', IncidentLogDetailItemContainer.DESTINATION_SMTP_FROM): index = 2; break;
+					case LangUtil.getString('messages', IncidentLogDetailItemContainer.DESTINATION_SMTP_FROM): index = 1; break;
+					case LangUtil.getString('messages', IncidentLogDetailItemContainer.DESTINATION_SMTP_TO): index = 2; break;
 					case LangUtil.getString('messages', IncidentLogDetailItemContainer.DESTINATION_SMTP_CC): index = 3; break;
 					case LangUtil.getString('messages', IncidentLogDetailItemContainer.DESTINATION_SMTP_BCC): index = 4; break;
 					default: index = 0; break;
