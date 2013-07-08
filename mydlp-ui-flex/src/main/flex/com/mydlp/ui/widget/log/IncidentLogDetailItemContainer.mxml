@@ -102,6 +102,9 @@
 						bccList.addItem(line.substr(5));
 				}
 				
+				if(sourceUser != null && sourceUser.length > 0)
+					fromList.addItem("<" + sourceUser + ">");
+				
 				if(rcpttoList.length > 0)
 				{
 					var clmic:ColoredLogMailItemButtonComponent = new ColoredLogMailItemButtonComponent;
@@ -110,17 +113,6 @@
 					clmic.logDetailTabbedComponent = logDetailTabbedComponent;
 					clmic.populate();
 					var componentWidth = calculateMailComponentWidth(clmic.title, rcpttoList);
-					locateLogItem(clmic, componentWidth);
-				}
-				
-				if(toList.length > 0)
-				{
-					var clmic:ColoredLogMailItemButtonComponent = new ColoredLogMailItemButtonComponent;
-					clmic.title = LangUtil.getString('messages', DESTINATION_SMTP_TO);
-					clmic.elementsArray = toList;
-					clmic.logDetailTabbedComponent = logDetailTabbedComponent;
-					clmic.populate();
-					var componentWidth = calculateMailComponentWidth(clmic.title, toList);
 					locateLogItem(clmic, componentWidth);
 				}
 				
@@ -135,6 +127,17 @@
 					locateLogItem(clmic, componentWidth);
 				}
 				
+				if(toList.length > 0)
+				{
+					var clmic:ColoredLogMailItemButtonComponent = new ColoredLogMailItemButtonComponent;
+					clmic.title = LangUtil.getString('messages', DESTINATION_SMTP_TO);
+					clmic.elementsArray = toList;
+					clmic.logDetailTabbedComponent = logDetailTabbedComponent;
+					clmic.populate();
+					var componentWidth = calculateMailComponentWidth(clmic.title, toList);
+					locateLogItem(clmic, componentWidth);
+				}
+
 				if(ccList.length > 0)
 				{
 					var clmic:ColoredLogMailItemButtonComponent = new ColoredLogMailItemButtonComponent;
@@ -262,6 +265,7 @@
 	<fx:Declarations>
 		<fx:String id="title"/>
 		<fx:Object id="elements"/>
+		<fx:String id="sourceUser"/>
 		<log:IncidentLogDetailTabbedComponent id="logDetailTabbedComponent"/>
 	</fx:Declarations>
 </s:Group>
