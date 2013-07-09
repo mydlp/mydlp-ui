@@ -75,13 +75,13 @@
 	
 	<s:Label fontWeight="bold"
 			 text="@Resource(bundle = 'messages', key = 'log.container.content.download.label')"/>
-	<mx:Text id="filenameLabel" visible="false" includeInLayout="false"
-			 text="{LangUtil.getString('messages', 'log.container.content.filename.label') + ': ' + logFile.filename}"/>
-	<mx:Text id="sizeLabel" visible="false" includeInLayout="false"
+	<mx:Text id="filenameLabel" visible="false" includeInLayout="false" maxWidth="400"
+			 text="{LangUtil.getString('messages', 'log.container.content.filename.label') + ': ' + logFile.filename}" />
+	<mx:Text id="sizeLabel" visible="false" includeInLayout="false" maxWidth="400"
 			 text="{LangUtil.getString('messages', 'log.container.content.size.label') + ': ' + FileUtil.getHumanReadableSize(getMasterBlueprint(logFile).size)}"/>
-	<mx:Text id="typeLabel" visible="false" includeInLayout="false"
+	<mx:Text id="typeLabel" visible="false" includeInLayout="false" maxWidth="400"
 			 text="{LangUtil.getString('messages', 'log.container.content.type.label') + ': ' + getMasterBlueprint(logFile).mimeType}"/>
-	<mx:Text id="hashLabel" visible="false" includeInLayout="false"
+	<mx:Text id="hashLabel" visible="false" includeInLayout="false" maxWidth="400"
 			 text="{LangUtil.getString('messages', 'log.container.content.md5hash.label') + ': ' + getMasterBlueprint(logFile).md5Hash}"/>
 
 
