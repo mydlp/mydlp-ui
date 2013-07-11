@@ -34,7 +34,7 @@
 				asaiList.validateNow();
 			}
 			
-			protected function getFilteredADDomainsHandler(event:ResultEvent): void
+			protected function getFilteredADGroupsHandler(event:ResultEvent): void
 			{
 				adDomains = event.result as ListCollectionView;
 				filteredADOUUsers.validateNow();
@@ -46,7 +46,7 @@
 	<fx:Declarations>
 		<mx:ListCollectionView id="authorityScopeADItems" />
 		<my:remote id="re" destination="adDomainBRS">
-			<my:method name="getFilteredADOUs" result="getFilteredADDomainsHandler(event)" />
+			<my:method name="getFilteredADGroups" result="getFilteredADGroupsHandler(event)" />
 		</my:remote>
 	</fx:Declarations>
 	
@@ -67,15 +67,14 @@
 				</s:layout>
 				
 				<s:Label text="@Resource(bundle = 'messages', key = 'inventory.adDomainItem.search.label')"/>
-				<s:Group>
-					
+				<s:Group width="100%">
 					<s:layout>
 						<s:HorizontalLayout gap="5"/>
 					</s:layout>
 					
-					<s:TextInput id="searchInput"/>
+					<s:TextInput id="searchInput" width="100%"/>
 					
-					<s:Button id="searchButton" click="{re.getFilteredADOUs(searchInput.text);}" enabled="{searchInput.text.length &gt; 2}"
+					<s:Button id="searchButton" click="{re.getFilteredADGroups(searchInput.text);}" enabled="{searchInput.text.length &gt; 2}"
 							  label="@Resource(bundle = 'messages', key = 'inventory.adDomainItem.search.button.label')"/>
 				</s:Group>
 				

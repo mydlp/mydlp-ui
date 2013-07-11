@@ -143,7 +143,7 @@
 			</s:layout>
 					
 			<s:Label text="@Resource(bundle = 'messages', key = 'inventory.adDomainItem.search.label')"/>
-			<s:TextInput id="searchInput"/>
+			<s:TextInput id="searchInput" width="100%"/>
 			
 			<s:Button id="searchButton" click="onClickSearchButton(event)" enabled="{searchInput.text.length &gt; 2}"
 					  label="@Resource(bundle = 'messages', key = 'inventory.adDomainItem.search.button.label')"/>

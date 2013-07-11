@@ -155,9 +155,10 @@ public class ADDomainDAOImpl extends AbstractPolicyDAO implements ADDomainDAO {
 		criteria = criteria.add(disjunction);
 
 		@SuppressWarnings("unchecked")
-		List<ADDomainItem> result1 = getHibernateTemplate().findByCriteria(
-				criteria);
-
+		List<ADDomainItem> result1 = criteria.getExecutableCriteria(getSession())
+			.setMaxResults(25)
+			.list();
+		
 		DetachedCriteria criteria2 = DetachedCriteria
 				.forClass(ADDomainOU.class);
 		Disjunction disjunction2 = Restrictions.disjunction();
@@ -169,8 +170,9 @@ public class ADDomainDAOImpl extends AbstractPolicyDAO implements ADDomainDAO {
 		criteria2 = criteria2.add(disjunction2);
 
 		@SuppressWarnings("unchecked")
-		List<ADDomainItem> result2 = getHibernateTemplate().findByCriteria(
-				criteria2);
+		List<ADDomainItem> result2 = criteria2.getExecutableCriteria(getSession())
+				.setMaxResults(25)
+				.list();
 
 		// DetachedCriteria subquery =
 		// DetachedCriteria.forClass(ADDomainUser.class, "aliases");
@@ -191,8 +193,9 @@ public class ADDomainDAOImpl extends AbstractPolicyDAO implements ADDomainDAO {
 		criteria3 = criteria3.add(disjunction3);
 
 		@SuppressWarnings("unchecked")
-		List<ADDomainItem> result3 = getHibernateTemplate().findByCriteria(
-				criteria3);
+		List<ADDomainItem> result3 = criteria3.getExecutableCriteria(getSession())
+				.setMaxResults(25)
+				.list();
 
 		result.addAll(result1);
 		result.addAll(result2);
@@ -202,19 +205,42 @@ public class ADDomainDAOImpl extends AbstractPolicyDAO implements ADDomainDAO {
 	}
 	
 	@Override
-	public List<ADDomainOU> getFilteredADOUs(String searchString) {
+	public List<ADDomainItem> getFilteredADGroups(String searchString) {
+		List<ADDomainItem> result = new ArrayList<ADDomainItem>();
+		
 		DetachedCriteria criteria = DetachedCriteria
-				.forClass(ADDomainOU.class);
+				.forClass(ADDomainGroup.class);
 		Disjunction disjunction = Restrictions.disjunction();
 		disjunction.add(Restrictions.sqlRestriction("(1=0)")); // defaults to
 																// false
 		disjunction.add(Restrictions.ilike("name", "%" + searchString + "%"));
-		// disjunction2.add(Restrictions.ilike("distinguishedName", "%" +
+		// disjunction.add(Restrictions.ilike("distinguishedName", "%" +
 		// searchString + "%"));
 		criteria = criteria.add(disjunction);
 
 		@SuppressWarnings("unchecked")
-		List<ADDomainOU> result = getHibernateTemplate().findByCriteria(criteria);
+		List<ADDomainItem> result1 = criteria.getExecutableCriteria(getSession())
+			.setMaxResults(25)
+			.list();
+		
+		DetachedCriteria criteria2 = DetachedCriteria
+				.forClass(ADDomainOU.class);
+		Disjunction disjunction2 = Restrictions.disjunction();
+		disjunction2.add(Restrictions.sqlRestriction("(1=0)")); // defaults to
+																// false
+		disjunction2.add(Restrictions.ilike("name", "%" + searchString + "%"));
+		// disjunction2.add(Restrictions.ilike("distinguishedName", "%" +
+		// searchString + "%"));
+		criteria2 = criteria2.add(disjunction2);
+
+		@SuppressWarnings("unchecked")
+		List<ADDomainItem> result2 = criteria2.getExecutableCriteria(getSession())
+				.setMaxResults(25)
+				.list();
+
+		result.addAll(result1);
+		result.addAll(result2);
+
 		return result;
 	}
 

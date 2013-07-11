@@ -23,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.mydlp.ui.domain.ADDomain;
 import com.mydlp.ui.domain.ADDomainAlias;
+import com.mydlp.ui.domain.ADDomainGroup;
 import com.mydlp.ui.domain.ADDomainItem;
 import com.mydlp.ui.domain.ADDomainOU;
 import com.mydlp.ui.domain.ADDomainRoot;
@@ -116,6 +117,13 @@ public class IncidentLogDAOImpl extends AbstractLogDAO implements IncidentLogDAO
 			} else if (item instanceof ADDomainOU) {
 				ADDomainOU adOU = (ADDomainOU) item;
 				for (ADDomainItem child: adOU.getChildren())
+					if (child instanceof ADDomainUser)
+						disjunction.add(Property.forName("sourceUser").in(
+								getUPNs((ADDomainUser)child)
+							));
+			} else if (item instanceof ADDomainGroup) {
+				ADDomainGroup adGroup = (ADDomainGroup) item;
+				for (ADDomainItem child: adGroup.getUsers())
 					if (child instanceof ADDomainUser)
 						disjunction.add(Property.forName("sourceUser").in(
 								getUPNs((ADDomainUser)child)

@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import com.mydlp.ui.dao.ADDomainDAO;
 import com.mydlp.ui.domain.ADDomain;
 import com.mydlp.ui.domain.ADDomainItem;
-import com.mydlp.ui.domain.ADDomainOU;
 import com.mydlp.ui.domain.ADDomainRoot;
 import com.mydlp.ui.service.ADEnumService;
 
@@ -71,8 +70,8 @@ public class ADDomainBRSImpl implements ADDomainService
 	}
 
 	@Override
-	public List<ADDomainOU> getFilteredADOUs(String searchString) {
-		return adDomainDAO.getFilteredADOUs(searchString);
+	public List<ADDomainItem> getFilteredADGroups(String searchString) {
+		return adDomainDAO.getFilteredADGroups(searchString);
 	}
 	
 
