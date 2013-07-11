@@ -464,16 +464,16 @@
 			
 			public function disableAddRule(): void
 			{
-				addRuleButtonBottom.enabled = false;
-				addRuleButtonTop.enabled = false;
-				addRuleButtonFirst.enabled = false;
+				if (addRuleButtonBottom != null) addRuleButtonBottom.enabled = false;
+				if (addRuleButtonTop != null) addRuleButtonTop.enabled = false;
+				if (addRuleButtonFirst != null)addRuleButtonFirst.enabled = false;
 			}
 			
 			public function enableAddRule(): void
 			{
-				addRuleButtonBottom.enabled = true;
-				addRuleButtonTop.enabled = true;
-				addRuleButtonFirst.enabled = true;
+				if (addRuleButtonBottom != null) addRuleButtonBottom.enabled = true;
+				if (addRuleButtonTop != null) addRuleButtonTop.enabled = true;
+				if (addRuleButtonFirst != null) addRuleButtonFirst.enabled = true;
 			}
 			
 			public function hideFiltered():void
