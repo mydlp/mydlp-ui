@@ -23,7 +23,10 @@
 			protected function generateInventoryItem():InventoryItem
 			{
 				var i:InventoryItem = new InventoryItem();
-				i.category = FlexGlobals.topLevelApplication.discoveryContainer.inventoryTree.myInventoryTree.selectedItem;
+				if(isDiscoveryTab)
+					i.category = FlexGlobals.topLevelApplication.discoveryContainer.inventoryTree.myInventoryTree.selectedItem;
+				else
+					i.category = FlexGlobals.topLevelApplication.policyContainer.inventoryTree.myInventoryTree.selectedItem;
 				return i;
 			}
 			
