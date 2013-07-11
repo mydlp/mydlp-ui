@@ -79,17 +79,17 @@
 			
 			protected var discoveryReport:DiscoveryReport;
 			
-			protected static const SOURCES_ALL:String = "inventory.networks.all";
+			public static const SOURCES_ALL:String = "inventory.networks.all";
 			
-			protected static const ITYPE_ALL:String = "informationType.predefined.all";
+			public static const ITYPE_ALL:String = "informationType.predefined.all";
 			
-			protected static const DOMAIN_ALL:String = "inventory.domain.all";
+			public static const DOMAIN_ALL:String = "inventory.domain.all";
 			
-			protected static const DESTINATION_HASBCC:String = "inventory.mail.hasBcc";
+			public static const DESTINATION_HASBCC:String = "inventory.mail.hasBcc";
 			
-			protected static const DIRECTORY_ALL:String = "inventory.fileSystemDirectory.all";
+			public static const DIRECTORY_ALL:String = "inventory.fileSystemDirectory.all";
 			
-			protected static const APPLICATION_ALL:String = "inventory.applicationName.all";
+			public static const APPLICATION_ALL:String = "inventory.applicationName.all";
 			
 			[Bindable]
 			protected var sourceDataProvider:ArrayCollection = new ArrayCollection();

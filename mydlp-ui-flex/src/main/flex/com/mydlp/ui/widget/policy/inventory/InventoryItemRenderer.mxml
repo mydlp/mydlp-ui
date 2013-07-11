@@ -7,16 +7,22 @@
 		<![CDATA[
 			import avmplus.getQualifiedClassName;
 			
+			import com.mydlp.ui.domain.ApplicationName;
+			import com.mydlp.ui.domain.Domain;
+			import com.mydlp.ui.domain.FileSystemDirectory;
 			import com.mydlp.ui.domain.InformationType;
 			import com.mydlp.ui.domain.InventoryBase;
 			import com.mydlp.ui.domain.InventoryCategory;
 			import com.mydlp.ui.domain.InventoryGroup;
 			import com.mydlp.ui.domain.InventoryItem;
+			import com.mydlp.ui.domain.RemoteStorage;
 			import com.mydlp.ui.domain.Rule;
 			import com.mydlp.ui.util.InteractionUtil;
 			import com.mydlp.ui.util.LangUtil;
 			import com.mydlp.ui.util.ReflectionUtil;
+			import com.mydlp.ui.util.SessionUtil;
 			import com.mydlp.ui.widget.general.popup.NewInventoryItemDialog;
+			import com.mydlp.ui.widget.policy.rule.RuleBoxRenderer;
 			
 			import mx.collections.ArrayCollection;
 			import mx.collections.ListCollectionView;
@@ -29,6 +35,52 @@
 			
 			public static const USERDEFINED_NAMEKEY:String = "inventory.userDefined";
 			
+			public static function isCloneEnabled(i:*): Boolean
+			{
+				if (i == null)
+				{
+					return false;
+				}
+				
+				if (! (i is InventoryItem))
+				{
+					return false;
+				}
+				
+				var ii:InventoryItem = (i as InventoryItem);
+				if (ii == null)
+				{
+					return false;
+				}
+				
+				if (ii.item == null)
+				{
+					return false;
+				}
+				
+				if (	ii.nameKey == RuleBoxRenderer.APPLICATION_ALL ||
+						ii.nameKey == RuleBoxRenderer.DESTINATION_HASBCC ||
+						ii.nameKey == RuleBoxRenderer.DIRECTORY_ALL ||
+						ii.nameKey == RuleBoxRenderer.DOMAIN_ALL ||
+						ii.nameKey == RuleBoxRenderer.ITYPE_ALL ||
+						ii.nameKey == RuleBoxRenderer.SOURCES_ALL
+					)
+				{
+					return false;
+				}
+				if (!SessionUtil.isEnterprise()) {
+					if (	ii.item is Domain ||
+							ii.item is FileSystemDirectory ||
+							ii.item is RemoteStorage ||
+							ii.item is ApplicationName
+						) 
+					{
+						return false;
+					}
+				}
+				
+				return true;
+			}
 			
 			public static function isAddEnabled(i:*): Boolean
 			{
@@ -154,8 +206,8 @@
 					  InteractionUtil.newEditDialog(ReflectionUtil.cloneDomainObject(treeListData.item));
 					  event.stopPropagation();
 					  }"
-					  includeInLayout="{treeListData.item is InventoryItem}"
-					  visible="{treeListData.item is InventoryItem}" 
+					  includeInLayout="{isCloneEnabled(treeListData.item)}"
+					  visible="{isCloneEnabled(treeListData.item)}" 
 					  toolTip="@Resource(key='inventoryItem.copyButton.tooltip.label', bundle='messages')"/>
 			<s:Button styleName="editButtonStyle" 
 					  click="{
