@@ -47,6 +47,7 @@
 			import com.mydlp.ui.widget.dashboard.DashboardContainer;
 			import com.mydlp.ui.widget.dashboard.NoLicenseDashboardContainer;
 			import com.mydlp.ui.widget.endpoint.EndpointStatusContainer;
+			import com.mydlp.ui.widget.license.LicenseContainer;
 			import com.mydlp.ui.widget.log.LogContainer;
 			import com.mydlp.ui.widget.objects.ObjectsContainer;
 			import com.mydlp.ui.widget.option.OptionContainer;
@@ -120,6 +121,8 @@
 			public var endpointStatusContainer:EndpointStatusContainer = null;
 			[Bindable] 
 			public var revisionContainer:RevisionContainer = null;
+			[Bindable] 
+			public var licenseContainer:LicenseContainer = null;
 			
 			protected var disableScreenTimer:Timer = null;
 			
@@ -270,7 +273,7 @@
 					topToolbar.installButton.includeInLayout = false;
 					topToolbar.installButton.visible = false;
 				}
-				for(var i:int = 0; i < 8; i++)
+				for(var i:int = 0; i < 9; i++)
 				{
 					var navigatorContent:NavigatorContent = new NavigatorContent();
 					navigatorContent.creationPolicy = "none";
@@ -362,6 +365,14 @@
 						element = new RevisionContainer();
 						revisionContainer = element;
 					}
+					
+					else if(i == 8 && hasAnyAdminRole())
+					{
+						navigatorContent.label = LangUtil.getString("messages", "maintab.license");
+						element = new LicenseContainer();
+						licenseContainer = element;
+						licenseContainer.licenseObject = license;
+					}
 						
 					if(element != null)
 					{
@@ -402,7 +413,16 @@
 			
 			protected function getLicenseHandler(event:ResultEvent):void
 			{
-				license = event.result as LicenseInformation;
+				/**This following line is original. Comment out for development**/
+				//license = event.result as LicenseInformation;
+				/**for developmetn**/
+				var licenseInformation:LicenseInformation = new LicenseInformation;
+				licenseInformation.administrativeUserCount = 1;
+				licenseInformation.licenseType = LicenseInformation.ENTERPRISE_LICENSE;
+				licenseInformation.userCount = 100;
+				licenseInformation.expirationDate = 1404172800;
+				license = licenseInformation;
+				/**end of development**/
 				re.getCurrentUser();
 			}
 			
