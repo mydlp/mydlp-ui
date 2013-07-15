@@ -14,6 +14,7 @@
 			import com.mydlp.ui.domain.MatchingDetail;
 			import com.mydlp.ui.util.InteractionUtil;
 			import com.mydlp.ui.util.LangUtil;
+			import com.mydlp.ui.util.SessionUtil;
 			import com.mydlp.ui.widget.general.popup.InputLabel;
 			import com.mydlp.ui.widget.general.popup.VerticalInputLabel;
 			
@@ -21,44 +22,54 @@
 			
 			public function populate():void
 			{
-				if(matcherDetails == null || matcherDetails.length == 0)
+				if(!SessionUtil.isEnterprise())
+				{
+					nagroup.includeInLayout = true;
+					nagroup.visible = true;
+					
+					matchingGroup.includeInLayout = false;
+					matchingGroup.visible = false;
+				}
+					
+				else if(matcherDetails == null || matcherDetails.length == 0)
 				{
 					var l:Label = new Label();
 					l.setStyle("fontWeight", "bold");
 					l.text = LangUtil.getString('messages', 'log.matcher.detail.none.label');
 					matchingDataGroup.addElement(l);
 				}
-				
-				for(var i:int = 0; i < matcherDefinitions.length; i++)
-				{
-					var count:int = 0;
-					var matcherDetailLabels:ListCollectionView = new ArrayCollection();
-					for(var j:int = 0; j < matcherDetails.length; j++)
+				else {
+					for(var i:int = 0; i < matcherDefinitions.length; i++)
 					{
-						if((matcherDetails[j] as MatchingDetail).matcherFunc == (matcherDefinitions[i] as MatcherDefinition).data)
+						var count:int = 0;
+						var matcherDetailLabels:ListCollectionView = new ArrayCollection();
+						for(var j:int = 0; j < matcherDetails.length; j++)
 						{
-							var matcherDetailsLabel:MatcherDetailsLabel = new MatcherDetailsLabel();
-							matcherDetailsLabel.data = (matcherDetails[j] as MatchingDetail).matchingData;
-							matcherDetailLabels.addItem(matcherDetailsLabel);
-							count++;
+							if((matcherDetails[j] as MatchingDetail).matcherFunc == (matcherDefinitions[i] as MatcherDefinition).data)
+							{
+								var matcherDetailsLabel:MatcherDetailsLabel = new MatcherDetailsLabel();
+								matcherDetailsLabel.data = (matcherDetails[j] as MatchingDetail).matchingData;
+								matcherDetailLabels.addItem(matcherDetailsLabel);
+								count++;
+							}
 						}
-					}
-					if(count > 0)
-					{
-						var matcherLabel:MatcherLabel = new MatcherLabel();
-						matcherLabel.matcher = LangUtil.getString('messages', 'log.matcher.detail.' + (matcherDefinitions[i] as MatcherDefinition).data + '.label');
-						if ((matcherDefinitions[i] as MatcherDefinition).data == "pdm_match")
+						if(count > 0)
 						{
-							matcherLabel.count = -1;
-						}
-						else
-						{
-							matcherLabel.count = count;
-						}
-						matchingDataGroup.addElement(matcherLabel);
-						for each(var e:MatcherDetailsLabel in matcherDetailLabels)
-						{
-							matchingDataGroup.addElement(e);
+							var matcherLabel:MatcherLabel = new MatcherLabel();
+							matcherLabel.matcher = LangUtil.getString('messages', 'log.matcher.detail.' + (matcherDefinitions[i] as MatcherDefinition).data + '.label');
+							if ((matcherDefinitions[i] as MatcherDefinition).data == "pdm_match")
+							{
+								matcherLabel.count = -1;
+							}
+							else
+							{
+								matcherLabel.count = count;
+							}
+							matchingDataGroup.addElement(matcherLabel);
+							for each(var e:MatcherDetailsLabel in matcherDetailLabels)
+							{
+								matchingDataGroup.addElement(e);
+							}
 						}
 					}
 				}
@@ -119,16 +130,39 @@
 		<s:VerticalLayout gap="5"/>
 	</s:layout>
 	
-	<s:Group width="100%">
-		<s:layout>
-			<s:VerticalLayout paddingLeft="10" verticalAlign="middle"/>
-		</s:layout>
-		<s:Label text="@Resource(bundle = 'messages', key = 'log.matcher.detail.title.label')" fontWeight="bold"/>
-	</s:Group>
+	<s:VGroup verticalAlign="middle" horizontalAlign="center" width="100%" height="100%"
+			  paddingLeft="10" paddingRight="10" paddingTop="10" paddingBottom="10" gap="10" id="nagroup"
+			  includeInLayout="false" visible="false">
+		
+		<s:RichEditableText editable="false" width="100%" textAlign="center"
+							focusEnabled="false" fontSize="12" fontWeight="bold">
+			<s:textFlow>
+				<s:TextFlow fontSize="12" fontWeight="bold" textAlign="center">
+					<s:p>
+						{LangUtil.getString('messages','log.matcher.detail.na.message.label')} <s:br />
+						{LangUtil.getString('messages','community_to_enterprise.message')} <s:a href="https://secure.mydlp.com">secure.mydlp.com</s:a>
+					</s:p>
+				</s:TextFlow>
+			</s:textFlow>
+		</s:RichEditableText>
+		<mx:Image alpha="0.55"
+				  source="@Embed('/assets/images/ss_matchingdetails.jpg')"
+				  maintainAspectRatio="true"/>
+	</s:VGroup>
 	
-	<s:Group id="matchingDataGroup" width="100%">
-		<s:layout>
-			<s:VerticalLayout gap="2" paddingLeft="10" verticalAlign="middle"/>
-		</s:layout>
-	</s:Group>
+	<s:VGroup id="matchingGroup" width="100%">
+		
+		<s:Group width="100%">
+			<s:layout>
+				<s:VerticalLayout paddingLeft="10" verticalAlign="middle"/>
+			</s:layout>
+			<s:Label text="@Resource(bundle = 'messages', key = 'log.matcher.detail.title.label')" fontWeight="bold"/>
+		</s:Group>
+		
+		<s:Group id="matchingDataGroup" width="100%">
+			<s:layout>
+				<s:VerticalLayout gap="2" paddingLeft="10" verticalAlign="middle"/>
+			</s:layout>
+		</s:Group>
+	</s:VGroup>
 </s:Group>
