@@ -1,44 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<s:TitleWindow xmlns:fx="http://ns.adobe.com/mxml/2009" 
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
 			   xmlns:s="library://ns.adobe.com/flex/spark" 
 			   xmlns:mx="library://ns.adobe.com/flex/mx"
-			   close="titlewindow1_closeHandler(event)" 
-			   width="400" maxHeight="700"
-			   title="@Resource(bundle = 'messages', key = 'log.matcher.detail.na.title.label')" 
-			   visible="true"
+			   width="400" maxHeight="700" 
+			   visible="true" xmlns:layout="org.alivepdf.layout.*"
 			   >
 	<fx:Script>
 		<![CDATA[
 			import com.mydlp.ui.util.InteractionUtil;
 			import com.mydlp.ui.util.LangUtil;
 			
-			import mx.events.CloseEvent;
-			
-			protected function titlewindow1_closeHandler(event:CloseEvent):void
-			{
-				InteractionUtil.closePopup(this);
-			}
-			
 		]]>
 	</fx:Script>
 	
 	
-	<s:VGroup verticalAlign="middle" horizontalAlign="center" width="100%" height="100%"
-			  paddingLeft="10" paddingRight="10" paddingTop="10" paddingBottom="10" gap="10">
-		<mx:Image alpha="0.55"
-				  source="@Embed('/assets/images/ss_matchingdetails.jpg')"
-				  maintainAspectRatio="true"/>
+	<s:layout>
+		<s:VerticalLayout verticalAlign="middle" horizontalAlign="center"
+						  paddingLeft="10" paddingRight="10" paddingTop="10" paddingBottom="10" gap="10"/> 
+	</s:layout> 
 		<s:RichEditableText editable="false" width="100%" textAlign="center"
-							focusEnabled="false" fontSize="18" fontWeight="bold">
+							focusEnabled="false" fontSize="12" fontWeight="bold">
 			<s:textFlow>
-				<s:TextFlow fontSize="18" fontWeight="bold" textAlign="center">
+				<s:TextFlow fontSize="12" fontWeight="bold" textAlign="center">
 					<s:p>
-						{LangUtil.getString('messages','log.matcher.detail.na.message.label')} <s:br />
+						{LangUtil.getString('messages','log.mail.detail.na.message.label')} <s:br />
 						{LangUtil.getString('messages','community_to_enterprise.message')} <s:a href="https://secure.mydlp.com">secure.mydlp.com</s:a>
 					</s:p>
 				</s:TextFlow>
 			</s:textFlow>
 		</s:RichEditableText>
-	</s:VGroup>
 	
-</s:TitleWindow>
+</s:Group>

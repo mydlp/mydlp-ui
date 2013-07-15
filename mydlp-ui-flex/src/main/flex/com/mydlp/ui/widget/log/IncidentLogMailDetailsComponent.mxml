@@ -11,6 +11,7 @@
 		<![CDATA[
 			import com.mydlp.ui.skin.RequeueBitmapLabelButton16Skin;
 			import com.mydlp.ui.util.LangUtil;
+			import com.mydlp.ui.util.SessionUtil;
 			
 			import mx.collections.ArrayCollection;
 			import mx.collections.ListCollectionView;
@@ -44,10 +45,11 @@
 					)
 				);
 			
-			
 			protected var isRequeued:Boolean = false;
 			
 			protected var requeueButton:RequeueButtonComponent;
+			
+			protected var naComponent:LogMatcherDetailsNAPopup = new LogMatcherDetailsNAPopup;
 			
 			public static function startsWith( string:String, pattern:String):Boolean
 			{
@@ -88,22 +90,34 @@
 				else if(index == 1)
 				{
 					detailHeader.text = LangUtil.getString('messages', 'log.detail.mail.from');
-					populateDetails(fromList);
+					if(SessionUtil.isEnterprise())
+						populateDetails(fromList);
+					else
+						detailGroup.addElement(naComponent);
 				}
 				else if(index == 2)
 				{
 					detailHeader.text = LangUtil.getString('messages', 'log.detail.mail.to');
-					populateDetails(toList);
+					if(SessionUtil.isEnterprise())
+						populateDetails(toList);
+					else
+						detailGroup.addElement(naComponent);
 				}
 				else if(index == 3)
 				{
 					detailHeader.text = LangUtil.getString('messages', 'log.detail.mail.cc');
-					populateDetails(ccList);
+					if(SessionUtil.isEnterprise())
+						populateDetails(ccList);
+					else
+						detailGroup.addElement(naComponent);
 				}
 				else if(index == 4)
 				{
 					detailHeader.text = LangUtil.getString('messages', 'log.detail.mail.bcc');
-					populateDetails(bccList);
+					if(SessionUtil.isEnterprise())
+						populateDetails(bccList);
+					else
+						detailGroup.addElement(naComponent);
 				}
 				else if(index == 5)
 				{
