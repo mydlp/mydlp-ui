@@ -19,7 +19,7 @@
 			import mx.managers.PopUpManager;
 			import mx.rpc.events.ResultEvent;
 			
-
+			
 			public var timerBlicker:Timer = new Timer(1000*60);
 			
 			protected function onCreationComplete(event:FlexEvent):void
@@ -29,6 +29,7 @@
 			
 			public function licenseChangeHandler():void
 			{
+				controlAvailableSeat();
 				if(!(FlexGlobals.topLevelApplication.license is LicenseInformation))
 				{
 					this.currentState = "nolicense";
@@ -44,18 +45,48 @@
 				{
 					expirationDate.setStyle("color", "#ff9955");
 					textBlicker.play();
-					FlexGlobals.topLevelApplication.dashboardContainer.currentState="softLimit";
-					FlexGlobals.topLevelApplication.dashboardContainer.addLicenseElements("softlimit");
+					FlexGlobals.topLevelApplication.licenseContainer.currentState="softLimit";
+					FlexGlobals.topLevelApplication.licenseContainer.addLicenseElements("softlimit");
 				}
 				else if(SessionUtil.isExpirationDateNear())
 				{
 					expirationDate.setStyle("color", "#ffcc00");
 					textBlicker.play();
-					FlexGlobals.topLevelApplication.dashboardContainer.currentState="near";
-					FlexGlobals.topLevelApplication.dashboardContainer.addLicenseElements("near");
+					FlexGlobals.topLevelApplication.licenseContainer.currentState="near";
+					FlexGlobals.topLevelApplication.licenseContainer.addLicenseElements("near");
 				}
 				timerBlicker.addEventListener(TimerEvent.TIMER, blickingFinishHandler);
 				timerBlicker.start();	
+			}
+			
+			protected function controlAvailableSeat():void
+			{
+				var l:LicenseInformation = FlexGlobals.topLevelApplication.license as LicenseInformation;
+				if(l == null)
+					return;
+				var alertEdge:Number = int(l.userCount * 0.9);
+				if(l.numberOfAllocatedSeats > l.userCount)
+				{
+					availableSeatAlert.text = LangUtil.getString('messages', 'dashboard.license.seat.exceed');
+					setAsAlertVisible();
+				}
+				else if(l.numberOfAllocatedSeats >= alertEdge)
+				{
+					availableSeatAlert.text = LangUtil.getString('messages', 'dashboard.license.seat.criticalEdge');
+					setAsAlertVisible();
+				}
+			}
+			
+			protected function setAsAlertVisible():void
+			{
+				if(!SessionUtil.isHardLimit())
+				{
+					seperator.includeInLayout = true;
+					seperator.visible = true;
+					
+					availableSeatAlert.includeInLayout = true;
+					availableSeatAlert.visible = true;
+				}
 			}
 			
 			protected function blickingFinishHandler(event:TimerEvent):void
@@ -117,23 +148,35 @@
 		
 		<s:Label includeIn="default" id="lbl" text="{LangUtil.getString('messages','dashboard.license.licenseType.' + FlexGlobals.topLevelApplication.license.licenseType)}"  
 				 width="100%" fontSize="18" fontWeight="bold" textAlign="center"/>
+		<s:Label includeIn="default" id="userEmail" text="{LangUtil.getString('messages','dashboard.license.userEmail') + FlexGlobals.topLevelApplication.license.userEmail}"  
+				 width="100%" fontSize="18" fontWeight="bold" textAlign="center"/>
 		<s:Label includeIn="default" id="expirationDate" text="{
 				 LangUtil.getString('messages','dashboard.license.expirationDate') + ( 
-				 	(FlexGlobals.topLevelApplication.license as LicenseInformation).expirationDate == 0 ? 
-						 LangUtil.getString('messages','dashboard.license.unlimited') 
-						 : dateFormatter.format(expirationToDate()) )}" 
+				 (FlexGlobals.topLevelApplication.license as LicenseInformation).expirationDate == 0 ? 
+				 LangUtil.getString('messages','dashboard.license.unlimited') 
+				 : dateFormatter.format(expirationToDate()) )}" 
 				 fontSize="18" fontWeight="bold" textAlign="center" width="100%"/>
 		<s:Label includeIn="default" id="userCount"  text="{
 				 LangUtil.getString('messages','dashboard.license.userCount') + (
-				 	(FlexGlobals.topLevelApplication.license as LicenseInformation).userCount == 0 ? 
-					 	LangUtil.getString('messages','dashboard.license.unlimited') 
-					 	: FlexGlobals.topLevelApplication.license.userCount)}" 
+				 (FlexGlobals.topLevelApplication.license as LicenseInformation).userCount == 0 ? 
+				 LangUtil.getString('messages','dashboard.license.unlimited') 
+				 : FlexGlobals.topLevelApplication.license.userCount)}" 
 				 fontSize="18" fontWeight="bold" textAlign="center" width="100%"/>
 		<s:Label includeIn="default" id="administrativeUserCount" text="{
 				 LangUtil.getString('messages','dashboard.license.administrativeUserCount') + (
-					 (FlexGlobals.topLevelApplication.license as LicenseInformation).administrativeUserCount == 0 ? 
-						 LangUtil.getString('messages','dashboard.license.unlimited')
-						 : FlexGlobals.topLevelApplication.license.administrativeUserCount)}"
+				 (FlexGlobals.topLevelApplication.license as LicenseInformation).administrativeUserCount == 0 ? 
+				 LangUtil.getString('messages','dashboard.license.unlimited')
+				 : FlexGlobals.topLevelApplication.license.administrativeUserCount)}"
 				 fontSize="18" fontWeight="bold" textAlign="center" width="100%"/>
+		<s:Label includeIn="default" id="numberOfAllocatedSeats" text="{
+				 LangUtil.getString('messages','dashboard.license.numberOfAllocatedSeats') + (
+				 (FlexGlobals.topLevelApplication.license as LicenseInformation).numberOfAllocatedSeats == 0 ? 
+				 LangUtil.getString('messages','dashboard.license.unlimited')
+				 : FlexGlobals.topLevelApplication.license.numberOfAllocatedSeats)}"
+				 fontSize="18" fontWeight="bold" textAlign="center" width="100%"/>
+		<s:SkinnableContainer id="seperator" includeInLayout="false" visible="false" 
+							  height="1" width="100%" backgroundColor="0xAEBBCF" backgroundAlpha="1.0"/>
+		<s:Label id="availableSeatAlert" includeInLayout="false" visible="false" 
+				 fontSize="18" fontWeight="bold" textAlign="center" width="100%" color="#ffcc00"/> 
 	</s:Group>
 </s:Group>

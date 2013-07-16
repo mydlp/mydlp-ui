@@ -94,6 +94,12 @@ public class LicenseServiceImpl implements LicenseService {
 			saveFlag = true;
 		}
 		
+		if(!thriftResult.user_email.equals(currentLicense.getUserEmail()))
+		{
+			currentLicense.setUserEmail(thriftResult.user_email);
+			saveFlag = true;
+		}
+		
 		if (saveFlag) {
 			licenseInformationDAO.saveLicense(currentLicense);
 		}

@@ -284,7 +284,7 @@
 					{
 						navigatorContent.label = LangUtil.getString("messages", "maintab.dashboard");
 						element = new DashboardContainer();
-						if(currentState == "nolicense")
+						/*if(currentState == "nolicense")
 						{
 							element = new NoLicenseDashboardContainer();
 							noLicenseDashboardContainer = element;
@@ -292,10 +292,15 @@
 							licenseType.visible = false;
 						}
 						else
-						{
+						{*/
 							element = new DashboardContainer();
 							dashboardContainer = element;
-							if (SessionUtil.isEnterprise())
+							if(currentState == "nolicense")
+							{
+								licenseType.text = "";
+								licenseType.visible = false;
+							}
+							else if (SessionUtil.isEnterprise())
 							{
 								licenseType.text = "Enterprise Edition";
 							}
@@ -304,9 +309,9 @@
 								licenseType.text = "Community Edition";
 							}
 							licenseType.visible = true;
-						}
+						//}
 					}
-					else if(i == 1 && hasAnyAdminRole())
+					else if(i == 1 && hasAnyAdminRole() && currentState != "nolicense")
 					{
 						navigatorContent.label = LangUtil.getString("messages", "maintab.policy");
 						element = new PolicyContainer();
@@ -315,7 +320,7 @@
 						ruleContainer = policyContainer.ruleContainer;
 						inventoryTree = policyContainer.inventoryTree;						
 					}
-					else if(i == 2 && hasAnyAdminRole())
+					else if(i == 2 && hasAnyAdminRole() && currentState != "nolicense")
 					{
 						navigatorContent.label = LangUtil.getString("messages", "maintab.discovery");
 						if (SessionUtil.isEnterprise())
@@ -335,13 +340,13 @@
 							inventoryTreeDiscovery = discoveryContainer.inventoryTree;
 						}
 					}
-					else if(i == 3 && ( hasAnyAdminRole() || hasRole(AuthSecurityRole.ROLE_CLASSIFIER) ) )
+					else if(i == 3 && ( hasAnyAdminRole() || hasRole(AuthSecurityRole.ROLE_CLASSIFIER) )  && currentState != "nolicense")
 					{
 						navigatorContent.label = LangUtil.getString("messages", "maintab.objects");
 						element = new ObjectsContainer;
 						objectsContainer = element;
 					}
-					else if(i == 4 && hasAnyAdminRole())
+					else if(i == 4 && hasAnyAdminRole() && currentState != "nolicense")
 					{
 						navigatorContent.label = LangUtil.getString("messages", "maintab.options");
 						element = new OptionContainer();
@@ -353,13 +358,13 @@
 						element = new LogContainer();
 						logContainer = element;
 					}
-					else if(i == 6 && hasAnyAdminRole())
+					else if(i == 6 && hasAnyAdminRole()&& currentState != "nolicense")
 					{
 						navigatorContent.label = LangUtil.getString("messages", "maintab.endpointStatus");
 						element = new EndpointStatusContainer;
 						endpointStatusContainer = element;
 					}
-					else if(i == 7 && hasAnyAdminRole())
+					else if(i == 7 && hasAnyAdminRole() && currentState != "nolicense")
 					{
 						navigatorContent.label = LangUtil.getString("messages", "maintab.revisions");
 						element = new RevisionContainer();
@@ -379,10 +384,10 @@
 						navigatorContent.addElement(element);
 						vs.addElement(navigatorContent);
 					}
-					
-					if(currentState == "nolicense")
-						break;
 				}
+				
+				if(currentState == "nolicense")
+					tapBar.selectedIndex = 2;
 				
 			}
 			
@@ -420,7 +425,9 @@
 				licenseInformation.administrativeUserCount = 1;
 				licenseInformation.licenseType = LicenseInformation.ENTERPRISE_LICENSE;
 				licenseInformation.userCount = 100;
-				licenseInformation.expirationDate = 1404172800;
+				licenseInformation.expirationDate = 1367366400;
+				licenseInformation.numberOfAllocatedSeats = 102;
+				licenseInformation.userEmail = "ozgen@mydlp.com";
 				license = licenseInformation;
 				/**end of development**/
 				re.getCurrentUser();

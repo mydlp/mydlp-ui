@@ -8,8 +8,26 @@
 	
 	<fx:Script>
 		<![CDATA[
+			import com.mydlp.ui.domain.AuthSecurityRole;
+			import com.mydlp.ui.domain.AuthUser;
+			import com.mydlp.ui.util.SessionUtil;
+			import com.mydlp.ui.widget.dashboard.LicenseDayInformation;
 			
+			import mx.core.FlexGlobals;
+			public function addLicenseElements(licenseState:String):void
+			{
+				this.currentState = licenseState;
+				var licenseDayInformation:LicenseDayInformation = new LicenseDayInformation();
+				licenseGroup.addElement(licenseDayInformation);
+			}
 			
+			protected function isAdmin():Boolean
+			{
+				var currentUser:AuthUser = FlexGlobals.topLevelApplication.user as AuthUser;
+				if(currentUser.hasRole(AuthSecurityRole.ROLE_ADMIN) || currentUser.hasRole(AuthSecurityRole.ROLE_SUPER_ADMIN))
+					return true;
+				else return false;
+			}
 		]]>
 	</fx:Script>
 	
@@ -17,28 +35,25 @@
 		<fx:Object id="licenseObject"/>
 	</fx:Declarations>
 	
+	<s:states>
+		<s:State name="default" />
+		<s:State name="nolicense" />
+		<s:State name="softLimit"/>
+		<s:State name="near"/>
+	</s:states>
 	
 	
 	<s:layout>
-		<s:VerticalLayout horizontalAlign="center" />
+		<s:VerticalLayout horizontalAlign="center" verticalAlign="middle"/>
 	</s:layout>
 	
-	<s:VGroup height="15%" width="100%" horizontalAlign="center">
-		<dashboard:LicenseBox id="licenseBox"/>
+	<s:VGroup id="licenseGroup" height="15%" width="100%" horizontalAlign="center">
+		<dashboard:LicenseBox id="licenseBox" currentState.nolicense="nolicense" currentState="default"/>
+		<s:Spacer height="5%"/>
+		<dashboard:LicenseDayInformation includeInLayout="{SessionUtil.isHardLimit()}"/>
+		<s:Spacer height="5%" />
+		<dashboard:LicenseKeyEntrance includeInLayout="{isAdmin() &amp;&amp; SessionUtil.isHardLimit()}"/>
 	</s:VGroup>
-	
-	<s:HGroup height="55%" width="100%" id="userGroup">
-		<s:VGroup id="endpointGroup" width="50%" height="100%">
-			
-		</s:VGroup>
-		<s:VGroup id="mailGroup" width="50%" height="100%">
-			
-		</s:VGroup>
-	</s:HGroup>
-	
-	<s:HGroup id="remoteStorageGroup" height="30%" width="100%" >
-		
-	</s:HGroup>
 	
 	
 </s:SkinnableContainer>
