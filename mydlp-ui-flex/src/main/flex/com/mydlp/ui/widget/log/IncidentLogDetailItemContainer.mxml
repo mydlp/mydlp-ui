@@ -13,6 +13,7 @@
 		<![CDATA[
 			import com.mydlp.ui.util.InteractionUtil;
 			import com.mydlp.ui.util.LangUtil;
+			import com.mydlp.ui.util.SessionUtil;
 			import com.mydlp.ui.widget.general.popup.HorizontalInputLabel;
 			import com.mydlp.ui.widget.general.popup.VerticalInputLabel;
 			
@@ -116,7 +117,7 @@
 					locateLogItem(clmic, componentWidth);
 				}
 				
-				if(fromList.length > 0)
+				if(fromList.length > 0 && SessionUtil.isEnterprise())
 				{
 					var clmic:ColoredLogMailItemButtonComponent = new ColoredLogMailItemButtonComponent;
 					clmic.title = LangUtil.getString('messages', DESTINATION_SMTP_FROM);
@@ -127,7 +128,7 @@
 					locateLogItem(clmic, componentWidth);
 				}
 				
-				if(toList.length > 0)
+				if(toList.length > 0 && SessionUtil.isEnterprise())
 				{
 					var clmic:ColoredLogMailItemButtonComponent = new ColoredLogMailItemButtonComponent;
 					clmic.title = LangUtil.getString('messages', DESTINATION_SMTP_TO);
@@ -138,7 +139,7 @@
 					locateLogItem(clmic, componentWidth);
 				}
 
-				if(ccList.length > 0)
+				if(ccList.length > 0 && SessionUtil.isEnterprise())
 				{
 					var clmic:ColoredLogMailItemButtonComponent = new ColoredLogMailItemButtonComponent;
 					clmic.title = LangUtil.getString('messages', DESTINATION_SMTP_CC);
@@ -149,7 +150,7 @@
 					locateLogItem(clmic, componentWidth);
 				}
 				
-				if(bccList.length > 0)
+				if(bccList.length > 0 && SessionUtil.isEnterprise())
 				{
 					var clmic:ColoredLogMailItemButtonComponent = new ColoredLogMailItemButtonComponent;
 					clmic.title = LangUtil.getString('messages', DESTINATION_SMTP_BCC);
