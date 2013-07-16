@@ -12,7 +12,7 @@ package com.mydlp.ui.util
 	{
 		
 		public static function isEnterprise():Boolean {
-			return false;
+			return true;
 		}
 		
 		public static function isLicenseAvailable():Boolean {

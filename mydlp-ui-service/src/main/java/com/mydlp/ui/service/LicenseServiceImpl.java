@@ -88,6 +88,12 @@ public class LicenseServiceImpl implements LicenseService {
 			saveFlag = true;
 		}
 		
+		if(thriftResult.number_of_allocated_seats != currentLicense.getNumberOfAllocatedSeats())
+		{
+			currentLicense.setNumberOfAllocatedSeats(thriftResult.number_of_allocated_seats);
+			saveFlag = true;
+		}
+		
 		if (saveFlag) {
 			licenseInformationDAO.saveLicense(currentLicense);
 		}
