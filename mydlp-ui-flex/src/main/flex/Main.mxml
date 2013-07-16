@@ -419,8 +419,8 @@
 			protected function getLicenseHandler(event:ResultEvent):void
 			{
 				/**This following line is original. Comment out for development**/
-				//license = event.result as LicenseInformation;
-				/**for developmetn**/
+				license = event.result as LicenseInformation;
+				/**for developmetn
 				var licenseInformation:LicenseInformation = new LicenseInformation;
 				licenseInformation.administrativeUserCount = 1;
 				licenseInformation.licenseType = LicenseInformation.ENTERPRISE_LICENSE;
@@ -429,7 +429,7 @@
 				licenseInformation.numberOfAllocatedSeats = 102;
 				licenseInformation.userEmail = "ozgen@mydlp.com";
 				license = licenseInformation;
-				/**end of development**/
+				end of development**/
 				re.getCurrentUser();
 			}
 			
