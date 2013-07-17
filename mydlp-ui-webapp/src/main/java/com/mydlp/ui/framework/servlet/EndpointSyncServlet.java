@@ -32,20 +32,24 @@ public class EndpointSyncServlet implements HttpRequestHandler {
 	private static Logger logger = LoggerFactory.getLogger(EndpointSyncServlet.class);
 	private static Logger errorLogger = LoggerFactory.getLogger("IERROR");
 	
+	private static final Charset charset = Charset.forName("ISO-8859-1");
+
 	protected static final int MAX_CONTENT_LENGTH = 10*1024*1024;
+	
+	protected static final String NO_AVAILABLE_SEAT = "no-available-seat";
 
 	@Autowired
 	protected MyDLPUIThriftService thriftService;
-	
+
 	@Autowired
 	protected EndpointStatusDAO endpointStatusDAO;
-	
+
 	@Autowired
 	protected EndpointSyncService endpointSyncService;
-	
+
 	@Autowired 
 	protected PayloadProcessService payloadProcessService;
-	
+
 	@Override
 	public void handleRequest(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
@@ -55,26 +59,36 @@ public class EndpointSyncServlet implements HttpRequestHandler {
 			{
 				ByteBuffer chunk = NIOUtil.toByteBuffer(req.getInputStream());
 				SyncObject syncObject = payloadProcessService.toSyncObject(chunk);
-				
+
 				String ruleTableUniqId = req.getParameter("rid");
 				String userH = req.getParameter("uh");
 				String ipAddress = req.getRemoteAddr();
-				
+
 				try {
 					Map<String,String> endpointMeta = 
 							thriftService.registerUserAddress(
 									syncObject.getEndpointId(), 
 									ipAddress, userH, 
 									syncObject.getPayload());
+					String isAcceptedS = endpointMeta.get("is_acceptable");
+					Boolean isAccepted = Boolean.FALSE;
+					if(isAcceptedS.equals("yes"))
+						isAccepted = Boolean.TRUE;
 					endpointSyncService.asyncRegisterEndpointMeta(endpointMeta, syncObject.getEndpointId(), ipAddress, userH);
+
+					ByteBuffer thriftResponse = null;
+					if(isAccepted)
+						thriftResponse= thriftService.getRuletable(
+							syncObject.getEndpointId(),	ruleTableUniqId);
+					else
+						thriftResponse = charset.encode(CharBuffer.wrap(NO_AVAILABLE_SEAT));
+
+					if (thriftResponse != null) {
+						syncObject.setPayload(thriftResponse);
+						responseBuffer = payloadProcessService.toByteBuffer(syncObject);
+					}
 				} catch (Throwable e) {
 					logger.error("Runtime error occured when reading request payload", e);
-				}
-				ByteBuffer thriftResponse = thriftService.getRuletable(
-						syncObject.getEndpointId(),	ruleTableUniqId);
-				if (thriftResponse != null) {
-					syncObject.setPayload(thriftResponse);
-					responseBuffer = payloadProcessService.toByteBuffer(syncObject);
 				}
 			}
 			else 
@@ -91,22 +105,22 @@ public class EndpointSyncServlet implements HttpRequestHandler {
 		catch (Throwable e) {
 			logger.error("Runtime error occured", e);
 		}
-		
+
 		if (responseBuffer == null)
 			responseBuffer = getErrorResponse();
-		
+
 		WritableByteChannel channel = Channels.newChannel(resp.getOutputStream());
-        channel.write(responseBuffer);
-        channel.close();
+		channel.write(responseBuffer);
+		channel.close();
 	}
 
 
 	protected ByteBuffer getErrorResponse() {
 		return Charset.forName("ISO-8859-1").encode(CharBuffer.wrap("error"));
 	}
-	
+
 	protected ByteBuffer getInvalidResponse() {
 		return Charset.forName("ISO-8859-1").encode(CharBuffer.wrap("invalid"));
 	}
-	 
+
 }
