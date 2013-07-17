@@ -62,9 +62,10 @@
 			protected function controlAvailableSeat():void
 			{
 				var l:LicenseInformation = FlexGlobals.topLevelApplication.license as LicenseInformation;
-				if(l == null)
+				if(l == null || l.userCount == 0)
 					return;
 				var alertEdge:Number = int(l.userCount * 0.9);
+		
 				if(l.numberOfAllocatedSeats > l.userCount)
 				{
 					availableSeatAlert.text = LangUtil.getString('messages', 'dashboard.license.seat.exceed');
