@@ -24,6 +24,7 @@
 			import com.mydlp.ui.domain.RuleUserStatic;
 			import com.mydlp.ui.domain.WebServer;
 			import com.mydlp.ui.util.FilterDataDescriptor;
+			import com.mydlp.ui.util.SessionUtil;
 			
 			import mx.collections.ArrayCollection;
 			import mx.collections.ListCollectionView;
@@ -83,7 +84,8 @@
 				else if(item.item is FileSystemDirectory || item.item is RemoteStorageWindowsShare ||
 					item.item is RemoteStorageFTPFS ||
 					item.item is RemoteStorageNFS || item.item is RemoteStorageSSHFS ||
-					item.item is WebServer)
+					item.item is WebServer ||
+					(item.item is Domain && item.nameKey == "inventory.mail.hasBcc" && !SessionUtil.isEnterprise()))
 					return false;
 				else
 					return true;
