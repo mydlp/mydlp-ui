@@ -60,16 +60,23 @@
 							if ((matcherDefinitions[i] as MatcherDefinition).data == "pdm_match")
 							{
 								matcherLabel.count = -1;
+								matchingDataGroup.addElement(matcherLabel);
+								for each(var e:MatcherDetailsLabel in matcherDetailLabels)
+								{
+									matchingDataGroup.addElement(e);
+								}
 							}
 							else
 							{
 								matcherLabel.count = count;
+								matchingDataGroup.addElement(matcherLabel);
+								for(var t:int = 0; t < count; t++)
+								{
+									matchingDataGroup.addElement(matcherDetailLabels.getItemAt(t) as MatcherDetailsLabel);
+								}
 							}
-							matchingDataGroup.addElement(matcherLabel);
-							for each(var e:MatcherDetailsLabel in matcherDetailLabels)
-							{
-								matchingDataGroup.addElement(e);
-							}
+							
+							
 						}
 					}
 				}
