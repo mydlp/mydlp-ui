@@ -50,9 +50,11 @@
 	<s:VGroup id="licenseGroup" height="15%" width="100%" horizontalAlign="center">
 		<dashboard:LicenseBox id="licenseBox" currentState.nolicense="nolicense" currentState="default"/>
 		<s:Spacer height="5%"/>
-		<dashboard:LicenseDayInformation includeInLayout="{SessionUtil.isHardLimit()}"/>
+		<dashboard:LicenseDayInformation includeInLayout="{SessionUtil.isHardLimit()}"
+										 visible="{SessionUtil.isHardLimit()}"/>
 		<s:Spacer height="5%" />
-		<dashboard:LicenseKeyEntrance includeInLayout="{isAdmin() &amp;&amp; SessionUtil.isHardLimit()}"/>
+		<dashboard:LicenseKeyEntrance includeInLayout="{isAdmin() &amp;&amp; SessionUtil.isHardLimit()}"
+									  visible="{isAdmin() &amp;&amp; SessionUtil.isHardLimit()}"/>
 	</s:VGroup>
 	
 	
