@@ -2,13 +2,26 @@
 <s:ItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009" 
 				xmlns:s="library://ns.adobe.com/flex/spark" 
 				xmlns:mx="library://ns.adobe.com/flex/mx"
-				creationComplete="{data = data as IncidentLogFile}"
+				creationComplete="onCreationComplete()"
 				click="onItemClick(event)">
 	<fx:Script>
 		<![CDATA[
 			import com.mydlp.ui.domain.IncidentLogFile;
 			
 			import mx.events.ItemClickEvent;
+			
+			protected function onCreationComplete():void
+			{
+				data = data as IncidentLogFile;
+				if(data != null && itemIndex == 0)
+				{
+					this.selected = true;
+					var e:ItemClickEvent = new ItemClickEvent(ItemClickEvent.ITEM_CLICK, true);
+					e.item = data;
+					e.index = 0;
+					dispatchEvent(e);
+				}
+			}
 			
 			protected function onItemClick(event:MouseEvent):void
 			{
