@@ -31,6 +31,7 @@ public class LicenseObject implements org.apache.thrift.TBase<LicenseObject, Lic
   private static final org.apache.thrift.protocol.TField IS_VALID_FIELD_DESC = new org.apache.thrift.protocol.TField("is_valid", org.apache.thrift.protocol.TType.BOOL, (short)6);
   private static final org.apache.thrift.protocol.TField NUMBER_OF_ALLOCATED_SEATS_FIELD_DESC = new org.apache.thrift.protocol.TField("number_of_allocated_seats", org.apache.thrift.protocol.TType.I64, (short)7);
   private static final org.apache.thrift.protocol.TField USER_EMAIL_FIELD_DESC = new org.apache.thrift.protocol.TField("user_email", org.apache.thrift.protocol.TType.STRING, (short)8);
+  private static final org.apache.thrift.protocol.TField LOGO_KEY_FIELD_DESC = new org.apache.thrift.protocol.TField("logo_key", org.apache.thrift.protocol.TType.STRING, (short)9);
 
   public String license_type; // required
   public long number_of_users; // required
@@ -40,6 +41,7 @@ public class LicenseObject implements org.apache.thrift.TBase<LicenseObject, Lic
   public boolean is_valid; // required
   public long number_of_allocated_seats; // required
   public String user_email; // required
+  public String logo_key; // required
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements org.apache.thrift.TFieldIdEnum {
@@ -50,7 +52,8 @@ public class LicenseObject implements org.apache.thrift.TBase<LicenseObject, Lic
     IS_TRIAL((short)5, "is_trial"),
     IS_VALID((short)6, "is_valid"),
     NUMBER_OF_ALLOCATED_SEATS((short)7, "number_of_allocated_seats"),
-    USER_EMAIL((short)8, "user_email");
+    USER_EMAIL((short)8, "user_email"),
+    LOGO_KEY((short)9, "logo_key");
 
     private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
 
@@ -81,6 +84,8 @@ public class LicenseObject implements org.apache.thrift.TBase<LicenseObject, Lic
           return NUMBER_OF_ALLOCATED_SEATS;
         case 8: // USER_EMAIL
           return USER_EMAIL;
+        case 9: // LOGO_KEY
+          return LOGO_KEY;
         default:
           return null;
       }
@@ -148,6 +153,8 @@ public class LicenseObject implements org.apache.thrift.TBase<LicenseObject, Lic
         new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.I64)));
     tmpMap.put(_Fields.USER_EMAIL, new org.apache.thrift.meta_data.FieldMetaData("user_email", org.apache.thrift.TFieldRequirementType.DEFAULT, 
         new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
+    tmpMap.put(_Fields.LOGO_KEY, new org.apache.thrift.meta_data.FieldMetaData("logo_key", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+        new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
     org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(LicenseObject.class, metaDataMap);
   }
@@ -163,7 +170,8 @@ public class LicenseObject implements org.apache.thrift.TBase<LicenseObject, Lic
     boolean is_trial,
     boolean is_valid,
     long number_of_allocated_seats,
-    String user_email)
+    String user_email,
+    String logo_key)
   {
     this();
     this.license_type = license_type;
@@ -180,6 +188,7 @@ public class LicenseObject implements org.apache.thrift.TBase<LicenseObject, Lic
     this.number_of_allocated_seats = number_of_allocated_seats;
     setNumber_of_allocated_seatsIsSet(true);
     this.user_email = user_email;
+    this.logo_key = logo_key;
   }
 
   /**
@@ -199,6 +208,9 @@ public class LicenseObject implements org.apache.thrift.TBase<LicenseObject, Lic
     this.number_of_allocated_seats = other.number_of_allocated_seats;
     if (other.isSetUser_email()) {
       this.user_email = other.user_email;
+    }
+    if (other.isSetLogo_key()) {
+      this.logo_key = other.logo_key;
     }
   }
 
@@ -222,6 +234,7 @@ public class LicenseObject implements org.apache.thrift.TBase<LicenseObject, Lic
     setNumber_of_allocated_seatsIsSet(false);
     this.number_of_allocated_seats = 0;
     this.user_email = null;
+    this.logo_key = null;
   }
 
   public String getLicense_type() {
@@ -410,6 +423,30 @@ public class LicenseObject implements org.apache.thrift.TBase<LicenseObject, Lic
     }
   }
 
+  public String getLogo_key() {
+    return this.logo_key;
+  }
+
+  public LicenseObject setLogo_key(String logo_key) {
+    this.logo_key = logo_key;
+    return this;
+  }
+
+  public void unsetLogo_key() {
+    this.logo_key = null;
+  }
+
+  /** Returns true if field logo_key is set (has been assigned a value) and false otherwise */
+  public boolean isSetLogo_key() {
+    return this.logo_key != null;
+  }
+
+  public void setLogo_keyIsSet(boolean value) {
+    if (!value) {
+      this.logo_key = null;
+    }
+  }
+
   public void setFieldValue(_Fields field, Object value) {
     switch (field) {
     case LICENSE_TYPE:
@@ -476,6 +513,14 @@ public class LicenseObject implements org.apache.thrift.TBase<LicenseObject, Lic
       }
       break;
 
+    case LOGO_KEY:
+      if (value == null) {
+        unsetLogo_key();
+      } else {
+        setLogo_key((String)value);
+      }
+      break;
+
     }
   }
 
@@ -505,6 +550,9 @@ public class LicenseObject implements org.apache.thrift.TBase<LicenseObject, Lic
     case USER_EMAIL:
       return getUser_email();
 
+    case LOGO_KEY:
+      return getLogo_key();
+
     }
     throw new IllegalStateException();
   }
@@ -532,6 +580,8 @@ public class LicenseObject implements org.apache.thrift.TBase<LicenseObject, Lic
       return isSetNumber_of_allocated_seats();
     case USER_EMAIL:
       return isSetUser_email();
+    case LOGO_KEY:
+      return isSetLogo_key();
     }
     throw new IllegalStateException();
   }
@@ -618,6 +668,15 @@ public class LicenseObject implements org.apache.thrift.TBase<LicenseObject, Lic
       if (!(this_present_user_email && that_present_user_email))
         return false;
       if (!this.user_email.equals(that.user_email))
+        return false;
+    }
+
+    boolean this_present_logo_key = true && this.isSetLogo_key();
+    boolean that_present_logo_key = true && that.isSetLogo_key();
+    if (this_present_logo_key || that_present_logo_key) {
+      if (!(this_present_logo_key && that_present_logo_key))
+        return false;
+      if (!this.logo_key.equals(that.logo_key))
         return false;
     }
 
@@ -717,6 +776,16 @@ public class LicenseObject implements org.apache.thrift.TBase<LicenseObject, Lic
         return lastComparison;
       }
     }
+    lastComparison = Boolean.valueOf(isSetLogo_key()).compareTo(typedOther.isSetLogo_key());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetLogo_key()) {
+      lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.logo_key, typedOther.logo_key);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
     return 0;
   }
 
@@ -796,6 +865,13 @@ public class LicenseObject implements org.apache.thrift.TBase<LicenseObject, Lic
             org.apache.thrift.protocol.TProtocolUtil.skip(iprot, field.type);
           }
           break;
+        case 9: // LOGO_KEY
+          if (field.type == org.apache.thrift.protocol.TType.STRING) {
+            this.logo_key = iprot.readString();
+          } else { 
+            org.apache.thrift.protocol.TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
         default:
           org.apache.thrift.protocol.TProtocolUtil.skip(iprot, field.type);
       }
@@ -837,6 +913,11 @@ public class LicenseObject implements org.apache.thrift.TBase<LicenseObject, Lic
     if (this.user_email != null) {
       oprot.writeFieldBegin(USER_EMAIL_FIELD_DESC);
       oprot.writeString(this.user_email);
+      oprot.writeFieldEnd();
+    }
+    if (this.logo_key != null) {
+      oprot.writeFieldBegin(LOGO_KEY_FIELD_DESC);
+      oprot.writeString(this.logo_key);
       oprot.writeFieldEnd();
     }
     oprot.writeFieldStop();
@@ -885,6 +966,14 @@ public class LicenseObject implements org.apache.thrift.TBase<LicenseObject, Lic
       sb.append("null");
     } else {
       sb.append(this.user_email);
+    }
+    first = false;
+    if (!first) sb.append(", ");
+    sb.append("logo_key:");
+    if (this.logo_key == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.logo_key);
     }
     first = false;
     sb.append(")");
