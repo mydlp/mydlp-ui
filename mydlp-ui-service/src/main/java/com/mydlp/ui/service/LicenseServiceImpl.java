@@ -87,6 +87,11 @@ public class LicenseServiceImpl implements LicenseService {
 			currentLicense.setExpirationDate(thriftResult.expiration_date);
 			saveFlag = true;
 		}
+		if(thriftResult.logo_key != currentLicense.getLogoKey())
+		{
+			currentLicense.setLogoKey(thriftResult.logo_key);
+			saveFlag = true;
+		}
 		
 		if (saveFlag) {
 			licenseInformationDAO.saveLicense(currentLicense);

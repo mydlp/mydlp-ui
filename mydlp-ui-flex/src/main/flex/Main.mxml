@@ -125,6 +125,9 @@
 			
 			protected var enableScreenTimer:Timer = null;
 			
+			[Embed('/assets/images/logo_xvasion_220x70.png')]
+			protected var logo:Class;
+			
 			public function disableScreen(): void
 			{
 				this.enabled = false;
@@ -362,7 +365,7 @@
 						element = new RevisionContainer();
 						revisionContainer = element;
 					}
-						
+					
 					if(element != null)
 					{
 						navigatorContent.addElement(element);
@@ -403,6 +406,12 @@
 			protected function getLicenseHandler(event:ResultEvent):void
 			{
 				license = event.result as LicenseInformation;
+				if(license != null && license.logoKey != null && license.logoKey == "xvasion")
+				{
+					productLogo.source = logo; 
+				}
+				productLogo.includeInLayout = true;
+				productLogo.visible = true;
 				re.getCurrentUser();
 			}
 			
@@ -592,7 +601,7 @@
 				{
 					labelText += "id(" + value + ")";
 				}
-			
+				
 				return labelText;
 			}
 			
@@ -645,7 +654,7 @@
 						trace(event.fault.faultString);
 						faultHandler(event);
 					}
-				, entity ));
+					, entity ));
 			}
 			
 			public function removeEntity(entity:*): void
@@ -664,7 +673,7 @@
 					}
 					, entity ));
 			}
-						
+			
 		]]>
 	</fx:Script>
 	
@@ -693,7 +702,7 @@
 			<my:method name="getInventory" result="getInventoryHandler(event)"/>
 		</my:remote>
 	</fx:Declarations>
-
+	
 	<s:states>
 		
 		<s:State name="none" />
@@ -713,8 +722,13 @@
 		</s:Rect>
 		
 		<s:Group top="2" left="24" height="70" width="400" >
-			<s:BitmapImage top="0" left="0" source="@Embed('/assets/images/logo_220x70.png')" />
-			<s:Label top="14" left="230" id="licenseType" fontSize="17" fontWeight="bold" visible="false"/>
+			<s:layout>
+				<s:HorizontalLayout gap="5"/>
+			</s:layout>
+			<s:BitmapImage includeInLayout="false" visible="false" id="productLogo" top="0" left="0" source="@Embed('/assets/images/logo_220x70.png')" />
+			<s:Group height="100%">			
+				<s:Label id="licenseType" top="53" fontSize="17" fontWeight="bold" visible="false"/>
+			</s:Group>
 		</s:Group>
 		
 		<s:BitmapImage bottom="32" right="32"

@@ -18,6 +18,7 @@ public class LicenseInformation extends AbstractEntity {
 	protected long userCount;
 	protected long administrativeUserCount;
 	protected String licenseType;
+	protected String logoKey;
 
 	public long getExpirationDate() {
 		return expirationDate;
@@ -42,6 +43,12 @@ public class LicenseInformation extends AbstractEntity {
 	}
 	public void setLicenseType(String licenseType) {
 		this.licenseType = licenseType;
+	}
+	public String getLogoKey() {
+		return logoKey;
+	}
+	public void setLogoKey(String logoKey) {
+		this.logoKey = logoKey;
 	}
 
 }
