@@ -29,6 +29,7 @@ public class LicenseObject implements org.apache.thrift.TBase<LicenseObject, Lic
   private static final org.apache.thrift.protocol.TField EXPIRATION_DATE_FIELD_DESC = new org.apache.thrift.protocol.TField("expiration_date", org.apache.thrift.protocol.TType.I64, (short)4);
   private static final org.apache.thrift.protocol.TField IS_TRIAL_FIELD_DESC = new org.apache.thrift.protocol.TField("is_trial", org.apache.thrift.protocol.TType.BOOL, (short)5);
   private static final org.apache.thrift.protocol.TField IS_VALID_FIELD_DESC = new org.apache.thrift.protocol.TField("is_valid", org.apache.thrift.protocol.TType.BOOL, (short)6);
+  private static final org.apache.thrift.protocol.TField LOGO_KEY_FIELD_DESC = new org.apache.thrift.protocol.TField("logo_key", org.apache.thrift.protocol.TType.STRING, (short)7);
 
   public String license_type; // required
   public long number_of_users; // required
@@ -36,6 +37,7 @@ public class LicenseObject implements org.apache.thrift.TBase<LicenseObject, Lic
   public long expiration_date; // required
   public boolean is_trial; // required
   public boolean is_valid; // required
+  public String logo_key; // required
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements org.apache.thrift.TFieldIdEnum {
@@ -44,7 +46,8 @@ public class LicenseObject implements org.apache.thrift.TBase<LicenseObject, Lic
     ADMINISTRATIVE_USERS((short)3, "administrative_users"),
     EXPIRATION_DATE((short)4, "expiration_date"),
     IS_TRIAL((short)5, "is_trial"),
-    IS_VALID((short)6, "is_valid");
+    IS_VALID((short)6, "is_valid"),
+    LOGO_KEY((short)7, "logo_key");
 
     private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
 
@@ -71,6 +74,8 @@ public class LicenseObject implements org.apache.thrift.TBase<LicenseObject, Lic
           return IS_TRIAL;
         case 6: // IS_VALID
           return IS_VALID;
+        case 7: // LOGO_KEY
+          return LOGO_KEY;
         default:
           return null;
       }
@@ -133,6 +138,8 @@ public class LicenseObject implements org.apache.thrift.TBase<LicenseObject, Lic
         new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.BOOL)));
     tmpMap.put(_Fields.IS_VALID, new org.apache.thrift.meta_data.FieldMetaData("is_valid", org.apache.thrift.TFieldRequirementType.DEFAULT, 
         new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.BOOL)));
+    tmpMap.put(_Fields.LOGO_KEY, new org.apache.thrift.meta_data.FieldMetaData("logo_key", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+        new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
     org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(LicenseObject.class, metaDataMap);
   }
@@ -146,7 +153,8 @@ public class LicenseObject implements org.apache.thrift.TBase<LicenseObject, Lic
     long administrative_users,
     long expiration_date,
     boolean is_trial,
-    boolean is_valid)
+    boolean is_valid,
+    String logo_key)
   {
     this();
     this.license_type = license_type;
@@ -160,6 +168,7 @@ public class LicenseObject implements org.apache.thrift.TBase<LicenseObject, Lic
     setIs_trialIsSet(true);
     this.is_valid = is_valid;
     setIs_validIsSet(true);
+    this.logo_key = logo_key;
   }
 
   /**
@@ -176,6 +185,9 @@ public class LicenseObject implements org.apache.thrift.TBase<LicenseObject, Lic
     this.expiration_date = other.expiration_date;
     this.is_trial = other.is_trial;
     this.is_valid = other.is_valid;
+    if (other.isSetLogo_key()) {
+      this.logo_key = other.logo_key;
+    }
   }
 
   public LicenseObject deepCopy() {
@@ -195,6 +207,7 @@ public class LicenseObject implements org.apache.thrift.TBase<LicenseObject, Lic
     this.is_trial = false;
     setIs_validIsSet(false);
     this.is_valid = false;
+    this.logo_key = null;
   }
 
   public String getLicense_type() {
@@ -336,6 +349,30 @@ public class LicenseObject implements org.apache.thrift.TBase<LicenseObject, Lic
     __isset_bit_vector.set(__IS_VALID_ISSET_ID, value);
   }
 
+  public String getLogo_key() {
+    return this.logo_key;
+  }
+
+  public LicenseObject setLogo_key(String logo_key) {
+    this.logo_key = logo_key;
+    return this;
+  }
+
+  public void unsetLogo_key() {
+    this.logo_key = null;
+  }
+
+  /** Returns true if field logo_key is set (has been assigned a value) and false otherwise */
+  public boolean isSetLogo_key() {
+    return this.logo_key != null;
+  }
+
+  public void setLogo_keyIsSet(boolean value) {
+    if (!value) {
+      this.logo_key = null;
+    }
+  }
+
   public void setFieldValue(_Fields field, Object value) {
     switch (field) {
     case LICENSE_TYPE:
@@ -386,6 +423,14 @@ public class LicenseObject implements org.apache.thrift.TBase<LicenseObject, Lic
       }
       break;
 
+    case LOGO_KEY:
+      if (value == null) {
+        unsetLogo_key();
+      } else {
+        setLogo_key((String)value);
+      }
+      break;
+
     }
   }
 
@@ -408,6 +453,9 @@ public class LicenseObject implements org.apache.thrift.TBase<LicenseObject, Lic
 
     case IS_VALID:
       return Boolean.valueOf(isIs_valid());
+
+    case LOGO_KEY:
+      return getLogo_key();
 
     }
     throw new IllegalStateException();
@@ -432,6 +480,8 @@ public class LicenseObject implements org.apache.thrift.TBase<LicenseObject, Lic
       return isSetIs_trial();
     case IS_VALID:
       return isSetIs_valid();
+    case LOGO_KEY:
+      return isSetLogo_key();
     }
     throw new IllegalStateException();
   }
@@ -500,6 +550,15 @@ public class LicenseObject implements org.apache.thrift.TBase<LicenseObject, Lic
       if (!(this_present_is_valid && that_present_is_valid))
         return false;
       if (this.is_valid != that.is_valid)
+        return false;
+    }
+
+    boolean this_present_logo_key = true && this.isSetLogo_key();
+    boolean that_present_logo_key = true && that.isSetLogo_key();
+    if (this_present_logo_key || that_present_logo_key) {
+      if (!(this_present_logo_key && that_present_logo_key))
+        return false;
+      if (!this.logo_key.equals(that.logo_key))
         return false;
     }
 
@@ -579,6 +638,16 @@ public class LicenseObject implements org.apache.thrift.TBase<LicenseObject, Lic
         return lastComparison;
       }
     }
+    lastComparison = Boolean.valueOf(isSetLogo_key()).compareTo(typedOther.isSetLogo_key());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetLogo_key()) {
+      lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.logo_key, typedOther.logo_key);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
     return 0;
   }
 
@@ -643,6 +712,13 @@ public class LicenseObject implements org.apache.thrift.TBase<LicenseObject, Lic
             org.apache.thrift.protocol.TProtocolUtil.skip(iprot, field.type);
           }
           break;
+        case 7: // LOGO_KEY
+          if (field.type == org.apache.thrift.protocol.TType.STRING) {
+            this.logo_key = iprot.readString();
+          } else { 
+            org.apache.thrift.protocol.TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
         default:
           org.apache.thrift.protocol.TProtocolUtil.skip(iprot, field.type);
       }
@@ -678,6 +754,11 @@ public class LicenseObject implements org.apache.thrift.TBase<LicenseObject, Lic
     oprot.writeFieldBegin(IS_VALID_FIELD_DESC);
     oprot.writeBool(this.is_valid);
     oprot.writeFieldEnd();
+    if (this.logo_key != null) {
+      oprot.writeFieldBegin(LOGO_KEY_FIELD_DESC);
+      oprot.writeString(this.logo_key);
+      oprot.writeFieldEnd();
+    }
     oprot.writeFieldStop();
     oprot.writeStructEnd();
   }
@@ -713,6 +794,14 @@ public class LicenseObject implements org.apache.thrift.TBase<LicenseObject, Lic
     if (!first) sb.append(", ");
     sb.append("is_valid:");
     sb.append(this.is_valid);
+    first = false;
+    if (!first) sb.append(", ");
+    sb.append("logo_key:");
+    if (this.logo_key == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.logo_key);
+    }
     first = false;
     sb.append(")");
     return sb.toString();
