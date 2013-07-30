@@ -29,6 +29,10 @@
 				detailsDataGroup.removeAllElements();
 				if(event.index != -1)
 				{
+					incidentLogFileList.invalidateDisplayList();
+					incidentLogFileList.selectedIndex = event.index;
+					incidentLogFileList.validateNow();
+					
 					var iftt:IncidentFileDownloadButtonToolTip = new IncidentFileDownloadButtonToolTip;
 					iftt.logFile = event.item as IncidentLogFile;
 					iftt.populate();
