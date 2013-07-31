@@ -484,6 +484,7 @@
 				addRuleButtonTop.includeInLayout = true;
 				filteredLabel.visible = false;
 				filteredLabel.includeInLayout = false;
+				enableAddRule();
 			}
 			
 			public function showFiltered():void
