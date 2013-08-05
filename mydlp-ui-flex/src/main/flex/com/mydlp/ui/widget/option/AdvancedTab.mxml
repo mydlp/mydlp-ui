@@ -4,6 +4,11 @@
 					 xmlns:mx="library://ns.adobe.com/flex/mx"
 					 xmlns:option="com.mydlp.ui.widget.option.*"
 					 xmlns:domain="com.mydlp.ui.domain.*" xmlns:input="com.mydlp.ui.widget.general.input.*">
+	<fx:Script>
+		<![CDATA[
+			public var optionContainer:OptionContainer = null;
+		]]>
+	</fx:Script>
 	
 	<fx:Declarations>
 		<domain:Config id="maximumObjectSize"/>	
@@ -21,6 +26,9 @@
 		<domain:Config id="autoDistributionNodes"/>
 		<domain:Config id="thriftServerPoolSize"/>
 		<domain:Config id="thriftEndpointPoolSize"/>
+		<domain:Config id="ocrNumberOfThreads"/>
+		<domain:Config id="ocrMaxProcessingAge"/>
+		<domain:Config id="ocrMaxWaitingQueueSize"/>
 	</fx:Declarations>
 	<s:VGroup width="100%" height="100%" gap="10">
 		<s:HGroup width="100%" height="100%">
@@ -79,6 +87,17 @@
 				</s:FormItem>
 				<s:FormItem label="{queryCacheMaximumSize.label}">
 					<s:TextInput width="100%" text="@{queryCacheMaximumSize.value}"/>
+				</s:FormItem>
+				<s:FormItem label="{ocrNumberOfThreads.label}">
+					<s:TextInput width="100%" text="@{ocrNumberOfThreads.value}"/>
+				</s:FormItem>
+				<s:FormItem label="{ocrMaxProcessingAge.label}">
+					<input:GenericSettingsInputWidget  isSize="false" settingValue="@{ocrMaxProcessingAge.value}" minValue="0"
+													   optionContainer="{optionContainer}" width="100%" textInputWidth="100"
+													   unit="{GenericSettingsInputWidget.UNIT_S}"/>
+				</s:FormItem>
+				<s:FormItem label="{ocrMaxWaitingQueueSize.label}">
+					<s:TextInput width="100%" text="@{ocrMaxWaitingQueueSize.value}"/>
 				</s:FormItem>
 			</s:Form>		
 		</s:HGroup>
