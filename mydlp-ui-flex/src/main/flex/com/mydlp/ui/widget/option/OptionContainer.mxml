@@ -121,7 +121,8 @@
 					else if (config.key == "ocr_number_of_threads") advancedTab.ocrNumberOfThreads = config;
 					else if (config.key == "ocr_max_processing_age") advancedTab.ocrMaxProcessingAge = config;
 					else if (config.key == "ocr_waiting_queue_size") advancedTab.ocrMaxWaitingQueueSize = config;
-
+					else if (config.key == "ocr_cache_cleanup_interval") advancedTab.ocrCacheCleaunupInterval = config;
+					
 					else if (config.key == "log_level") epTab.logLevel = config;
 					else if (config.key == "log_limit") epTab.logLimit = config;
 					else if (config.key == "printer_prefix") epTab.printerPrefix = config;
