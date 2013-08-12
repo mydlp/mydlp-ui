@@ -20,14 +20,14 @@ public class _001_00320_Config_OCR extends AbstractGranule {
 		waitingQueueSize.setKey("ocr_waiting_queue_size");
 		waitingQueueSize.setValue("100");
 
-		Config cacheCleanupInterval = new Config();
-		cacheCleanupInterval.setKey("ocr_cache_cleanup_interval");
-		cacheCleanupInterval.setValue("900000");
+		Config ocrActive = new Config();
+		ocrActive.setKey("ocr_active");
+		ocrActive.setValue("false");
 
 		getHibernateTemplate().saveOrUpdate(numberOfThreads);
 		getHibernateTemplate().saveOrUpdate(maxProcessingAge);
 		getHibernateTemplate().saveOrUpdate(waitingQueueSize);
-		getHibernateTemplate().saveOrUpdate(cacheCleanupInterval);
+		getHibernateTemplate().saveOrUpdate(ocrActive);
 	}
 
 }

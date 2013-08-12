@@ -29,6 +29,7 @@
 		<domain:Config id="ocrNumberOfThreads"/>
 		<domain:Config id="ocrMaxProcessingAge"/>
 		<domain:Config id="ocrMaxWaitingQueueSize"/>
+		<domain:Config id="ocrActive"/>
 	</fx:Declarations>
 	<s:VGroup width="100%" height="100%" gap="10">
 		<s:HGroup width="100%" height="100%">
@@ -88,6 +89,10 @@
 				<s:FormItem label="{queryCacheMaximumSize.label}">
 					<s:TextInput width="100%" text="@{queryCacheMaximumSize.value}"/>
 				</s:FormItem>
+				<s:FormItem label="{ocrActive.label}">
+					<s:CheckBox id="ocrActiveCheckBox" selected="{ocrActive.value == 'true'}" 
+								change="{ocrActive.value = ocrActiveCheckBox.selected ? 'true' : 'false'}"/>
+				</s:FormItem>
 				<s:FormItem label="{ocrNumberOfThreads.label}">
 					<s:TextInput width="100%" text="@{ocrNumberOfThreads.value}"/>
 				</s:FormItem>
@@ -98,7 +103,8 @@
 				</s:FormItem>
 				<s:FormItem label="{ocrMaxWaitingQueueSize.label}">
 					<s:TextInput width="100%" text="@{ocrMaxWaitingQueueSize.value}"/>
-				</s:FormItem>			
+				</s:FormItem>	
+				
 			</s:Form>		
 		</s:HGroup>
 	</s:VGroup>
