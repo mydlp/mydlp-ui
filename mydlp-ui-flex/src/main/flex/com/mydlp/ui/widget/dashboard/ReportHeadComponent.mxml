@@ -1,10 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
 		 xmlns:s="library://ns.adobe.com/flex/spark" 
-		 xmlns:mx="library://ns.adobe.com/flex/mx" width="100%" height="100%">
+		 xmlns:mx="library://ns.adobe.com/flex/mx" width="100%" height="100%"
+		 creationComplete="onCreationComplete(event)">
 	<fx:Script>
 		<![CDATA[
+			import com.mydlp.ui.domain.LicenseInformation;
 			import com.mydlp.ui.util.LangUtil;
+			
+			import mx.core.FlexGlobals;
+			import mx.events.FlexEvent;
+			
+			[Embed('/assets/images/logo_xvasion_220x70.png')]
+			protected var logo:Class;
 			
 			protected function getReportDate():String
 			{
@@ -14,6 +22,18 @@
 				reportDate += dateFormatter.format(date);
 				return reportDate;
 			}
+			
+			protected function onCreationComplete(event:FlexEvent):void
+			{
+				var license:LicenseInformation = FlexGlobals.topLevelApplication.license as LicenseInformation;
+				if(license != null && license.logoKey != null && license.logoKey == "xvasion")
+				{
+					productLogo.source = logo; 
+				}
+				productLogo.includeInLayout = true;
+				productLogo.visible = true;
+			}
+			
 		]]>
 	</fx:Script>
 	<fx:Declarations>
@@ -24,7 +44,8 @@
 		<s:VerticalLayout gap="10" horizontalAlign="center"/>
 	</s:layout>
 	
-	<s:BitmapImage source="@Embed('/assets/images/logo_314x124.png')" scaleX="0.75" scaleY="0.75"/>
+	<s:BitmapImage id="productLogo" source="@Embed('/assets/images/logo_314x124.png')" scaleX="0.75" scaleY="0.75"
+				   includeInLayout="false" visible="false"/>
 	
 	<s:Label fontSize="18" text="@Resource(bundle = 'messages', key = 'dashboard.weeklyReport.page.title.label')"/>
 	
