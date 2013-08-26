@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.mydlp.ui.dao.LicenseInformationDAO;
 import com.mydlp.ui.domain.LicenseInformation;
+import com.mydlp.ui.service.LicenseLogoInformation;
 import com.mydlp.ui.service.LicenseService;
 
 @Service("licenseInformationBRS")
@@ -20,7 +21,12 @@ public class LicenseInformationBRSImpl implements LicenseInformationService{
 	
 	@Override
 	public LicenseInformation getLicense() {
-		return licenseInformationDAO.getLicense();
+		LicenseInformation l = licenseInformationDAO.getLicense();
+		if(l != null && l.getLogoKey() == "xvasion")
+			LicenseLogoInformation.licenseLogoKey = "static/images/logo_xvasion_220x70.png";
+		else
+			LicenseLogoInformation.licenseLogoKey = "static/images/logo.png";
+		return l;
 	}
 
 	@Override

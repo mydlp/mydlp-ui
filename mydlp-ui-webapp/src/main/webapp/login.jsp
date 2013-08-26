@@ -1,4 +1,4 @@
-<%@ page isELIgnored ="false" %> 
+<%@ page isELIgnored ="false" language="java" %> 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <html>
@@ -16,9 +16,12 @@
   </head>
  
   <body onload='document.f.j_username.focus();'>
+  	
+  	<jsp:useBean id="licenseInfo" class="com.mydlp.ui.service.LicenseLogoInformation" />
+  	
     <center>
       <a href="http://www.mydlp.com" target="_blank">
-        <img src="static/images/logo.png" />
+        <img src=<jsp:getProperty name="licenseInfo" property="licenseLogoKey" /> />
       </a>
 
       <h3>Login with Username and Password</h3>
