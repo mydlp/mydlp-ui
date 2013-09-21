@@ -23,7 +23,7 @@ DISCONNECT
 /*C3*/SET SCHEMA PUBLIC
 CONNECT USER SA
 INSERT INTO INCIDENTLOG VALUES(1,'2012-12-19 11:21:00.000000007','www.mydlp.com',1,'score=5',-1,'B','W',167772191,'test@mydlphq.local','-1',TRUE, NULL)
-INSERT INTO INCIDENTLOG VALUES(2,'2012-12-19 11:21:00.000000007','www.mydlp.com',2,'score=4',1,'B','W',167772191,'test@mydlphq.local','-1',TRUE, NULL)
+INSERT INTO INCIDENTLOG VALUES(2,'2012-12-19 11:21:00.000000007','www.mydlp.com',2,'score=4',1,'B','D',167772191,'test@mydlphq.local','-1',TRUE, NULL)
 INSERT INTO INCIDENTLOG VALUES(3,'2012-12-19 11:21:00.000000007','www.mydlp.com',3,'score=5',1,'Q','W',167772191,'test@mydlphq.local','-1',TRUE, NULL)
 INSERT INTO INCIDENTLOG VALUES(4,'2012-12-19 11:21:00.000000007','www.mydlp.com',3,'score=5',-1,'L','W',167772191,'test@mydlphq.local','-1',TRUE, NULL)
 INSERT INTO INCIDENTLOG VALUES(5,'2012-12-19 11:21:00.000000007','rcpt to: <test@mydlp.com>, to: <test@mydlp.com>, from: <test2@mydlp.com>',4,'score=5',1,'A','M',167772191,'test@mydlphq.local','-1',TRUE, NULL)
