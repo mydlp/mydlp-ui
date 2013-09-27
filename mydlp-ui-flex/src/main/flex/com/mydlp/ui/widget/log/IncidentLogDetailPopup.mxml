@@ -103,7 +103,14 @@
 			{
 				switch (incidentLog.action)
 				{
-					case "B": logDetailItemContainer.populateItem(IncidentLogDetailItemContainer.ACTION, LangUtil.getString("messages","log.container.column.policy.action.block")); break;
+					case "B": 
+						switch (incidentLog.channel)
+						{
+							case "D": 	logDetailItemContainer.populateItem(IncidentLogDetailItemContainer.ACTION, LangUtil.getString("messages","log.container.column.policy.action.delete")); break;
+							case "RD": 	logDetailItemContainer.populateItem(IncidentLogDetailItemContainer.ACTION, LangUtil.getString("messages","log.container.column.policy.action.delete")); break;
+							default: 	logDetailItemContainer.populateItem(IncidentLogDetailItemContainer.ACTION, LangUtil.getString("messages","log.container.column.policy.action.block")); break;
+						};
+						break;
 					case "L": logDetailItemContainer.populateItem(IncidentLogDetailItemContainer.ACTION, LangUtil.getString("messages","log.container.column.policy.action.log")); break;
 					case "Q": logDetailItemContainer.populateItem(IncidentLogDetailItemContainer.ACTION, LangUtil.getString("messages","log.container.column.policy.action.quarantine")); break;
 					case "A": logDetailItemContainer.populateItem(IncidentLogDetailItemContainer.ACTION, LangUtil.getString("messages","log.container.column.policy.action.archive")); break;
