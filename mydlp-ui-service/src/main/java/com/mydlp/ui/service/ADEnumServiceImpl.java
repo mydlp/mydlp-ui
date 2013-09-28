@@ -569,11 +569,12 @@ public class ADEnumServiceImpl implements ADEnumService {
 
 				for (ADDomainUserAlias adDomainUserAlias : aliasesToSave) {
 					if (!userAliases.remove(adDomainUserAlias.getUserAlias())) {
-						aliasesToSave.remove(adDomainUserAlias);
 						aliasesToDelete.add(adDomainUserAlias);
 						saveFlag = true;
 					}
 				}
+				
+				aliasesToSave.removeAll(aliasesToDelete);
 
 				for (String aliasStr : userAliases) {
 					ADDomainUserAlias uaObj = new ADDomainUserAlias();
