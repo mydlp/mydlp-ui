@@ -246,7 +246,7 @@ public class ADEnumServiceImpl implements ADEnumService {
 				});
 
 		if (userObject == null) {
-			logger.info("Cannot find userObject for dn '" + userDN + "'.");
+			// logger.info("Cannot find userObject for dn '" + userDN + "'.");
 			return;
 		}
 

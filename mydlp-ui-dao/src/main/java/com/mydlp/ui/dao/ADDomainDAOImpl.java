@@ -12,6 +12,7 @@ import org.hibernate.Query;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.exception.ConstraintViolationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
@@ -155,10 +156,9 @@ public class ADDomainDAOImpl extends AbstractPolicyDAO implements ADDomainDAO {
 		criteria = criteria.add(disjunction);
 
 		@SuppressWarnings("unchecked")
-		List<ADDomainItem> result1 = criteria.getExecutableCriteria(getSession())
-			.setMaxResults(25)
-			.list();
-		
+		List<ADDomainItem> result1 = criteria
+				.getExecutableCriteria(getSession()).setMaxResults(25).list();
+
 		DetachedCriteria criteria2 = DetachedCriteria
 				.forClass(ADDomainOU.class);
 		Disjunction disjunction2 = Restrictions.disjunction();
@@ -170,9 +170,8 @@ public class ADDomainDAOImpl extends AbstractPolicyDAO implements ADDomainDAO {
 		criteria2 = criteria2.add(disjunction2);
 
 		@SuppressWarnings("unchecked")
-		List<ADDomainItem> result2 = criteria2.getExecutableCriteria(getSession())
-				.setMaxResults(25)
-				.list();
+		List<ADDomainItem> result2 = criteria2
+				.getExecutableCriteria(getSession()).setMaxResults(25).list();
 
 		// DetachedCriteria subquery =
 		// DetachedCriteria.forClass(ADDomainUser.class, "aliases");
@@ -193,9 +192,8 @@ public class ADDomainDAOImpl extends AbstractPolicyDAO implements ADDomainDAO {
 		criteria3 = criteria3.add(disjunction3);
 
 		@SuppressWarnings("unchecked")
-		List<ADDomainItem> result3 = criteria3.getExecutableCriteria(getSession())
-				.setMaxResults(25)
-				.list();
+		List<ADDomainItem> result3 = criteria3
+				.getExecutableCriteria(getSession()).setMaxResults(25).list();
 
 		result.addAll(result1);
 		result.addAll(result2);
@@ -203,11 +201,11 @@ public class ADDomainDAOImpl extends AbstractPolicyDAO implements ADDomainDAO {
 
 		return result;
 	}
-	
+
 	@Override
 	public List<ADDomainItem> getFilteredADGroups(String searchString) {
 		List<ADDomainItem> result = new ArrayList<ADDomainItem>();
-		
+
 		DetachedCriteria criteria = DetachedCriteria
 				.forClass(ADDomainGroup.class);
 		Disjunction disjunction = Restrictions.disjunction();
@@ -219,10 +217,9 @@ public class ADDomainDAOImpl extends AbstractPolicyDAO implements ADDomainDAO {
 		criteria = criteria.add(disjunction);
 
 		@SuppressWarnings("unchecked")
-		List<ADDomainItem> result1 = criteria.getExecutableCriteria(getSession())
-			.setMaxResults(25)
-			.list();
-		
+		List<ADDomainItem> result1 = criteria
+				.getExecutableCriteria(getSession()).setMaxResults(25).list();
+
 		DetachedCriteria criteria2 = DetachedCriteria
 				.forClass(ADDomainOU.class);
 		Disjunction disjunction2 = Restrictions.disjunction();
@@ -234,9 +231,8 @@ public class ADDomainDAOImpl extends AbstractPolicyDAO implements ADDomainDAO {
 		criteria2 = criteria2.add(disjunction2);
 
 		@SuppressWarnings("unchecked")
-		List<ADDomainItem> result2 = criteria2.getExecutableCriteria(getSession())
-				.setMaxResults(25)
-				.list();
+		List<ADDomainItem> result2 = criteria2
+				.getExecutableCriteria(getSession()).setMaxResults(25).list();
 
 		result.addAll(result1);
 		result.addAll(result2);
@@ -302,7 +298,7 @@ public class ADDomainDAOImpl extends AbstractPolicyDAO implements ADDomainDAO {
 				groupSet = itemsToRemove.get(AD_KEY_ITEM_GROUP);
 			} else if (adDomainItem instanceof ADDomainItem) {
 				groupSet = itemsToRemove.get(AD_KEY_ITEM);
-			} 
+			}
 
 			if (groupSet != null) {
 				groupSet.add(adDomainItem.getId());
@@ -319,21 +315,51 @@ public class ADDomainDAOImpl extends AbstractPolicyDAO implements ADDomainDAO {
 	public void removeDomainItems(Map<String, Set<Integer>> itemsToRemove) {
 		for (String key : itemsToRemove.keySet()) {
 			for (Integer id : itemsToRemove.get(key)) {
-				if (key.equals(AD_KEY_USER)) {
-					removeGroupMembershipsOfUser(id);
-					removeUserAliases(id);
-				} else if (key.equals(AD_KEY_GROUP)) {
-					removeGroupMemberships(id);
-				} else if (key.equals(AD_KEY_ITEM_GROUP)) {
-					removeByParentId(id);
-				} else if (key.equals(AD_KEY_ITEM)) {
-					// do nothing
+				try {
+					if (key.equals(AD_KEY_USER)) {
+						removeGroupMembershipsOfUser(id);
+						removeUserAliases(id);
+					} else if (key.equals(AD_KEY_GROUP)) {
+						removeGroupMemberships(id);
+					} else if (key.equals(AD_KEY_ITEM_GROUP)) {
+						removeByParentId(id);
+					} else if (key.equals(AD_KEY_ITEM)) {
+						// do nothing
+					}
+					getHibernateTemplate().bulkUpdate(
+							"delete from ADDomainItem di where di.id=?", id);
+				} catch (ConstraintViolationException e) {
+					String label = null;
+					try {
+						label = getDNById(id);
+					} catch (Throwable t) {
+						logger.error("Error occurred when getting DN", t);
+					}
+					if (label == null)
+						label = "dbId = " + id;
+					logger.info("Cannot delete AD item (" + label + ") because it is currently used in policy.");
+				} catch (Throwable t) {
+					logger.error("Error occurred", t);
 				}
-
-				getHibernateTemplate().bulkUpdate(
-						"delete from ADDomainItem di where di.id=?", id);
 			}
 		}
+	}
+
+	protected String getDNById(Integer itemId) {
+		Query query = getSession().createSQLQuery(
+				"select distinguishedName from ADDomainItem where id=:itemid")
+				.setInteger("itemid", itemId);
+		List<?> result = query.list();
+		for (Object i : result) {
+			String dn = null;
+			if (i instanceof Object[]) {
+				Object[] objects = (Object[]) i;
+				if (objects[0] != null)
+					dn = objects[0].toString();
+			}
+			return dn;
+		}
+		return null;
 	}
 
 	public void removeUserAliases(Integer userId) {
@@ -397,18 +423,17 @@ public class ADDomainDAOImpl extends AbstractPolicyDAO implements ADDomainDAO {
 		}
 		String domainIdStr = StringUtils.join(domainIdStrList, ", ");
 		while (true) {
-			Query q = getSession().createQuery("select i from ADDomainItem i where i.domainId " + "not in (" + domainIdStr + ")");
+			Query q = getSession().createQuery(
+					"select i from ADDomainItem i where i.domainId "
+							+ "not in (" + domainIdStr + ")");
 			q.setMaxResults(1);
 			@SuppressWarnings("unchecked")
 			List<ADDomainItem> ghostItems = q.list();
-			if (ghostItems == null || ghostItems.size() == 0)
-			{
+			if (ghostItems == null || ghostItems.size() == 0) {
 				break;
 			}
 			removeDomainItems(ghostItems);
 		}
 	}
-
-	
 
 }
