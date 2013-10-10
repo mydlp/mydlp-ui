@@ -51,6 +51,7 @@ public class LicenseInformation extends AbstractEntity {
 	}
 	public void setLogoKey(String logoKey) {
 		this.logoKey = logoKey;
+	}
 	public long getNumberOfAllocatedSeats() {
 		return numberOfAllocatedSeats;
 	}

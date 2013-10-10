@@ -424,13 +424,6 @@
 				/**This following line is original. Comment out for development**/
 				license = event.result as LicenseInformation;
 
-				if(license != null && license.logoKey != null && license.logoKey == "xvasion")
-				{
-					productLogo.source = logo; 
-				}
-				productLogo.includeInLayout = true;
-				productLogo.visible = true;
-
 				//for developmetn
 				/**var licenseInformation:LicenseInformation = new LicenseInformation;
 				licenseInformation.administrativeUserCount = 1;
@@ -441,6 +434,13 @@
 				licenseInformation.userEmail = "ozgen@mydlp.com";
 				license = licenseInformation;**/
 				//end of development
+				
+				if(license != null && license.logoKey != null && license.logoKey == "xvasion")
+				{
+					productLogo.source = logo; 
+				}
+				productLogo.includeInLayout = true;
+				productLogo.visible = true;
 
 				re.getCurrentUser();
 			}
