@@ -113,7 +113,7 @@
 			{
 				this.currentState = licenseState;
 				var licenseDayInformation:LicenseDayInformation = new LicenseDayInformation();
-				licenseGroup.addElement(licenseDayInformation);
+				//licenseGroup.addElement(licenseDayInformation);
 				/*
 				if(isAdmin())
 				{
@@ -152,15 +152,15 @@
 		<s:HorizontalLayout horizontalAlign="center" />
 	</s:layout>
 	
-	<s:Group width="400" height="100%" id="licenseGroup" includeIn="default, softLimit, near">
+	<!--<s:Group width="400" height="100%" id="licenseGroup" includeIn="default, softLimit, near">
 		<s:layout>
 			<s:VerticalLayout verticalAlign="middle" horizontalAlign="center" gap="20"/>
 		</s:layout>
 		<s:Spacer height="12%" />
 		<dashboard:LicenseBox id="licenseBox" currentState.nolicense="nolicense" currentState="default"/>
 		<s:Spacer height="2%" />
-	</s:Group>
-	<s:VGroup width="100%" height="100%" paddingTop="20" gap="20" includeIn="default, softLimit, near">
+	</s:Group>-->
+	<s:VGroup width="100%" height="100%" paddingLeft="20" paddingTop="20" gap="20" includeIn="default, softLimit, near">
 		<s:HGroup gap="30">
 			<s:Button skinClass="com.mydlp.ui.skin.AddBitmapLabelButton24Skin" 
 					  label="@Resource(key='dashboard.additem', bundle='messages')"

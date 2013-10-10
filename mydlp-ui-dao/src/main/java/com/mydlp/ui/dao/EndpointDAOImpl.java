@@ -31,7 +31,7 @@ public class EndpointDAOImpl extends AbstractPolicyDAO implements
 		Integer realId = e.getId();
 		e.setEndpointAlias("E" + String.format("%07d", realId));
 		getHibernateTemplate().saveOrUpdate(e);
-		endpointStatusDAO.upToDateEndpoint(e.getEndpointAlias(), null, null, null, null, null, null);
+		endpointStatusDAO.upToDateEndpoint(e.getEndpointAlias(), null, null, null, null, null, null, true);
 		return "EPKEY_" + e.getEndpointId() + "_" + e.getEndpointSecret();
 	}
 	

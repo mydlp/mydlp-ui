@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:SkinnableContainer xmlns:fx="http://ns.adobe.com/mxml/2009" 
+					  xmlns:s="library://ns.adobe.com/flex/spark" 
+					  xmlns:mx="library://ns.adobe.com/flex/mx"
+					  xmlns:my="http://www.mydlp.com/flex/my"
+					  xmlns:util="com.mydlp.ui.util.*" 
+					  width="100%" height="100%" xmlns:dashboard="com.mydlp.ui.widget.dashboard.*">
+	
+	<fx:Script>
+		<![CDATA[
+			import com.mydlp.ui.domain.AuthSecurityRole;
+			import com.mydlp.ui.domain.AuthUser;
+			import com.mydlp.ui.util.SessionUtil;
+			import com.mydlp.ui.widget.dashboard.LicenseDayInformation;
+			
+			import mx.core.FlexGlobals;
+			public function addLicenseElements(licenseState:String):void
+			{
+				this.currentState = licenseState;
+				var licenseDayInformation:LicenseDayInformation = new LicenseDayInformation();
+				licenseGroup.addElement(licenseDayInformation);
+			}
+			
+			protected function isAdmin():Boolean
+			{
+				var currentUser:AuthUser = FlexGlobals.topLevelApplication.user as AuthUser;
+				if(currentUser.hasRole(AuthSecurityRole.ROLE_ADMIN) || currentUser.hasRole(AuthSecurityRole.ROLE_SUPER_ADMIN))
+					return true;
+				else return false;
+			}
+		]]>
+	</fx:Script>
+	
+	<fx:Declarations>
+		<fx:Object id="licenseObject"/>
+	</fx:Declarations>
+	
+	<s:states>
+		<s:State name="default" />
+		<s:State name="nolicense" />
+		<s:State name="softLimit"/>
+		<s:State name="near"/>
+	</s:states>
+	
+	
+	<s:layout>
+		<s:VerticalLayout horizontalAlign="center" verticalAlign="middle"/>
+	</s:layout>
+	
+	<s:VGroup id="licenseGroup" height="15%" width="100%" horizontalAlign="center">
+		<dashboard:LicenseBox id="licenseBox" currentState.nolicense="nolicense" currentState="default"/>
+		<s:Spacer height="5%"/>
+		<dashboard:LicenseDayInformation includeInLayout="{SessionUtil.isHardLimit()}"
+										 visible="{SessionUtil.isHardLimit()}"/>
+		<s:Spacer height="5%" />
+		<dashboard:LicenseKeyEntrance includeInLayout="{isAdmin() &amp;&amp; SessionUtil.isHardLimit()}"
+									  visible="{isAdmin() &amp;&amp; SessionUtil.isHardLimit()}"/>
+	</s:VGroup>
+	
+	
+</s:SkinnableContainer>

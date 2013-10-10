@@ -19,6 +19,8 @@ public class LicenseInformation extends AbstractEntity {
 	protected long administrativeUserCount;
 	protected String licenseType;
 	protected String logoKey;
+	protected long numberOfAllocatedSeats;
+	protected String userEmail;
 
 	public long getExpirationDate() {
 		return expirationDate;
@@ -49,6 +51,17 @@ public class LicenseInformation extends AbstractEntity {
 	}
 	public void setLogoKey(String logoKey) {
 		this.logoKey = logoKey;
+	public long getNumberOfAllocatedSeats() {
+		return numberOfAllocatedSeats;
+	}
+	public void setNumberOfAllocatedSeats(long numberOfAllocatedSeats) {
+		this.numberOfAllocatedSeats = numberOfAllocatedSeats;
+	}
+	public String getUserEmail() {
+		return userEmail;
+	}
+	public void setUserEmail(String userEmail) {
+		this.userEmail = userEmail;
 	}
 
 }

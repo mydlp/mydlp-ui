@@ -27,7 +27,7 @@ public class EndpointStatusDAOImpl extends AbstractLogDAO implements
 	protected ConfigDAO configDAO;
 
 	@Override
-	public void upToDateEndpoint(String endpointAlias, String ipAddress, String hostname, String username, String osName, String version, Boolean discoverInProg) {
+	public void upToDateEndpoint(String endpointAlias, String ipAddress, String hostname, String username, String osName, String version, Boolean discoverInProg, Boolean isAccepted) {
 		DetachedCriteria criteria = DetachedCriteria.forClass(
 				EndpointStatus.class).add(
 				Restrictions.eq("endpointAlias", endpointAlias));
@@ -40,8 +40,13 @@ public class EndpointStatusDAOImpl extends AbstractLogDAO implements
 			endpointStatus.setEndpointAlias(endpointAlias);
 			endpointStatus.setFirstAppeared(new Date());
 		}
-		endpointStatus.setIsUpToDate(true);
-		endpointStatus.setLastUpdate(new Date());
+		if(isAccepted)
+		{
+			endpointStatus.setIsUpToDate(true);
+			endpointStatus.setLastUpdate(new Date());
+		}
+		else
+			endpointStatus.setIsUpToDate(false);
 		if (endpointStatus.getIpAddress() == null)
 			endpointStatus.setIpAddress(ipAddress);
 		else {
