@@ -832,7 +832,7 @@
 							var regExpValidator5:RegExpValidator = new RegExpValidator();
 							regExpValidator5.source = textInput;
 							regExpValidator5.property = "text";
-							regExpValidator5.expression = "^[\\w\\.-_]{1,255}@[\\w\\.-]{1,255}$";
+							regExpValidator5.expression = "^[\\w\\._-]{1,255}@[\\w\\.-]{1,255}$";
 							ErrorTipManager.registerValidator(regExpValidator5);
 							validators.push(regExpValidator5);
 						}
