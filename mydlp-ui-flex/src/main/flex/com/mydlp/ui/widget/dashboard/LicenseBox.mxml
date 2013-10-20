@@ -87,6 +87,9 @@
 					
 					availableSeatAlert.includeInLayout = true;
 					availableSeatAlert.visible = true;
+					
+					numberOfAllocatedSeats.includeInLayout = true;
+					numberOfAllocatedSeats.visible = true;
 				}
 			}
 			
@@ -169,11 +172,8 @@
 				 LangUtil.getString('messages','dashboard.license.unlimited')
 				 : FlexGlobals.topLevelApplication.license.administrativeUserCount)}"
 				 fontSize="18" fontWeight="bold" textAlign="center" width="100%"/>
-		<s:Label includeIn="default" id="numberOfAllocatedSeats" text="{
-				 LangUtil.getString('messages','dashboard.license.numberOfAllocatedSeats') + (
-				 (FlexGlobals.topLevelApplication.license as LicenseInformation).numberOfAllocatedSeats == 0 ? 
-				 LangUtil.getString('messages','dashboard.license.unlimited')
-				 : FlexGlobals.topLevelApplication.license.numberOfAllocatedSeats)}"
+		<s:Label  id="numberOfAllocatedSeats" includeInLayout="false" visible="false"  text="{
+				 LangUtil.getString('messages','dashboard.license.numberOfAllocatedSeats') + FlexGlobals.topLevelApplication.license.numberOfAllocatedSeats}"
 				 fontSize="18" fontWeight="bold" textAlign="center" width="100%"/>
 		<s:SkinnableContainer id="seperator" includeInLayout="false" visible="false" 
 							  height="1" width="100%" backgroundColor="0xAEBBCF" backgroundAlpha="1.0"/>
