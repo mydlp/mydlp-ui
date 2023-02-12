@@ -2,5 +2,12 @@
 Requirements:
 =======================
 
-Maven 3
+Maven 3.0+ (install here: https://maven.apache.org/download.cgi)
 
+Windows:
+  Install .NET Framework 3.5 
+  
+  Running UI:
+  1. Clone project from github
+  2. Open project in Microsoft Visual Studio 
+  3. Run
